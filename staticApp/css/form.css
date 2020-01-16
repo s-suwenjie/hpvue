@@ -1,0 +1,189 @@
+@charset "UTF-8";
+
+.af_split{
+    height: 0.4267rem;
+}
+
+.af_split_bottom{
+    height:1.7467rem;
+}
+
+.af_block{
+    margin: 0.2133rem 0.2133rem 0 0.2133rem;
+    background-color: #FFFFFF;
+    border: 0.0267rem solid #BFBFBF;
+    border-radius: 0.4267rem;
+}
+
+.af_title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.4533rem;
+    padding: 0.4267rem;
+    border-bottom: 0.0267rem solid #BFBFBF;
+}
+
+.af_title_name{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.af_title_operate{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.af_controls{
+    padding-top: 0.4267rem;
+}
+
+/* form 页面操作区 */
+.af_operate{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1.32rem;
+    background-color: #FFFFFF;
+    border-radius: 0.4267rem 0.4267rem 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0.0533rem 0 0.2133rem #04203b;
+    z-index: 99;
+}
+
+.af_operate_height{
+    height: 1.3333rem;
+}
+
+
+
+
+/* form控件主元素 */
+.afc_main{
+    display: flex;
+    flex-direction: column;
+}
+
+/* form 控件标题*/
+.afc_title{
+    font-size:0.3733rem;
+    margin: 0 0.4267rem 0.1067rem 0.4267rem;
+}
+
+.afc_upload{
+    margin-left: 0.3267rem;
+}
+
+.afc_upload_content{
+    height: 1.12rem;
+    line-height: 1.12rem;
+    border: 0.0267rem solid #49a9ea;
+    border-radius: 0.2133rem;
+    background-color: #76C8FF;
+    color:#FFF;
+    display: flex;
+    flex-direction: row;
+    font-size: 0.4533rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.afc_upload_content_touch{
+    background-color: #49a9ea;
+}
+
+.afc_upload_content>.content{
+    flex: 1;
+    font-size: 0.4533rem;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.afc_upload_content>input[type='text']{
+    height: 1rem;
+    text-indent: 0.1067rem;
+    border-radius: 0.1067rem;
+}
+
+.afc_upload_content>.ac_icon{
+    color:#FFF;
+}
+
+.afc_upload_more_operate{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+}
+
+.afc_upload_more_operate_main{
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.afc_upload_more_operate_pop{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #000;
+    opacity: 0.6;
+    z-index: 999;
+}
+
+.afc_upload_more_operate_area{
+    background-color: #FFFFFF;
+    border-radius: 0.4267rem 0.4267rem 0 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.4533rem;
+}
+
+.afc_upload_more_operate_area>.btn{
+    padding: 0.4267rem 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.afc_upload_more_operate_area>.b_border{
+    border-bottom: 0.0267rem solid #DEDEDE;
+
+}
+
+.afc_upload_more_operate_area>.b_radius{
+    border-radius: 0.4267rem 0.4267rem 0 0;
+}
+
+.afc_upload_more_operate_split{
+    height: 0.2133rem;
+    background-color: #DEDEDE;
+    width: 100%;
+}
+
+.afc_error{
+    font-size: 0.32rem;
+    margin: 0.0533rem 0.4267rem 0.2133rem 0.4267rem;
+    color: #F00;
+    height: 0.4rem;
+}

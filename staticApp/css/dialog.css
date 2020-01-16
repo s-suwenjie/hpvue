@@ -1,0 +1,167 @@
+@charset "UTF-8";
+.a_mask{
+    z-index: 99999990;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+}
+
+.a_mask_show{
+    opacity:0.7;
+    transition: all .5s;
+}
+
+.a_mask_hide{
+    opacity:0;
+    transition: all .5s;
+}
+
+.a_dialog_toast{
+    display: inline-flex;
+    flex-direction: column;
+    background-color:#fff;
+    position: relative;
+    border-radius: 0.2133rem;
+    margin-top: 35vh;
+    color: #333;
+    max-width: 80vw;
+    opacity: 1;
+}
+
+.a_dialog_toast_hide{
+    opacity: 0;
+    transition: all .5s;
+}
+
+.a_dialog_toast_main{
+    display: flex;
+    flex-direction: row;
+}
+
+.a_dialog_toast_main_content{
+    flex: 1;
+    padding: 0.85rem 0.85rem 0.85rem 0.1067rem;
+    font-size: 0.4533rem;
+}
+
+.a_dialog_toast_main_i{
+    padding-left: 0.85rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 0.7467rem;
+}
+
+.a_dialog_toast_main>.ok{
+    color: #64b63b;
+}
+
+.a_dialog_toast_main>.warn{
+    color: #e49305;
+}
+
+.a_dialog_toast_main>.error{
+    color: #FF0000;
+}
+
+.a_dialog_confirm{
+    display: flex;
+    flex-direction: column;
+    background-color:#fff;
+    position: relative;
+    border-radius: 0.2133rem;
+    margin: 30vh 0.88rem 0 0.88rem;
+    color: #333;
+}
+
+.a_dialog_confirm_content{
+    padding: 0.85rem;
+    border-bottom: 0.0267rem solid #BFBFBF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.4533rem;
+}
+
+.a_dialog_confirm_operate{
+    display: flex;
+    flex-direction: row;
+}
+
+.a_dialog_confirm_operate>.item{
+    height: 1.4rem;
+    font-size: 0.4533rem;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 0.0267rem solid #BFBFBF;
+}
+
+.a_dialog_confirm_operate>.a_dialog_button_touch{
+    background-color: #c9e2f3;
+}
+
+.a_dialog_confirm_operate>.a_dialog_button_touch:first-child{
+    background-color: #c9e2f3;
+    border-radius: 0 0 0 0.2133rem;
+}
+
+.a_dialog_confirm_operate>.a_dialog_button_touch:last-child{
+    background-color: #c9e2f3;
+    border-radius: 0 0 0.2133rem 0;
+}
+
+.a_dialog_confirm_operate>.item:last-child{
+    border-right: 0;
+}
+
+.a_dialog_confirm_operate>.primary{
+    color: #49a9ea;
+}
+
+.a_dialog_url_main{
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 0.4267rem);
+    width: calc(100vw - 0.4267rem);
+    margin: 0.2133rem;
+    position: relative;
+    background-color:#fff;
+    border-radius: 0.4267rem;
+    position: relative;
+}
+
+.a_dialog_head{
+    height: 1.12rem;
+    border-bottom: 0.0267rem solid #BFBFBF;
+    display: flex;
+    flex-direction: row;
+}
+
+.a_dialog_head>.btn{
+    width: 1.12rem;
+    line-height: 1.12rem;
+    font-size: 0.4533rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.a_dialog_head>.title{
+    flex: 1;
+    font-size: 0.4533rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.a_dialog_url{
+    flex: 1;
+}

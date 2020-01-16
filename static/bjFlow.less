@@ -1,0 +1,397 @@
+@charset "UTF-8";
+
+.dsFlexSb{
+  display: flex;
+  justify-content: space-between;
+}
+.stepContainer{
+  width: 1000px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  padding-bottom: 30px;
+}
+
+.stepContainer .step{
+  display: flex;
+  flex-direction: row;
+}
+
+.stepContainer .step .left{
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.stepContainer .step .left>.line{
+  width: 1px;
+  border: 1px solid #49a9ea;
+  flex: 1;
+  margin-left: 248px;
+  background-color: #49a9ea;
+}
+.stepContainer .step .left .content{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.stepContainer .step .left .content .text{
+  flex: 1;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.stepContainer .step .left .content .circle{
+  width: 24px;
+  height: 24px;
+  margin: 2px;
+  border-radius: 50%;
+}
+
+.stepContainer .step .right{
+  flex: 1;
+  min-height: 80px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px 0;
+  padding-left: 10px;
+}
+
+/*第一个审批*/
+.approversTit{
+  margin-left: -55px !important;
+  em{
+    width: 55px !important;
+  }
+}
+
+.approvers{
+  margin-left: 0 !important;
+  width: 82px;
+  height: auto;
+  border: 2px dashed #49a9ea;
+  float: left;
+}
+
+.allowApprovers{
+  height: auto !important;
+  float: left;
+  margin-left: 20px;
+  padding-right: 10px;
+}
+
+.auditStatus {
+  width: 100% !important;
+  padding: 10px 0 !important;
+  text-align: center !important;
+  margin: 0 !important;
+  .statusList{
+    span{
+      margin: 0 5px;
+    }
+  }
+}
+
+.pendingApplication{
+  background-color: transparent;
+}
+.auditStatus{
+  background-color: transparent;
+}
+
+.mainCont{
+  background-color: #fff;
+}
+
+.allowApprovers p {
+  line-height: 30px;
+  white-space: nowrap;
+  span{
+    display: inline-block;
+    width: 15px;
+    height: 16px;
+    margin-left: 5px;
+    -webkit-background-size: contain;
+    background-size: contain;
+    vertical-align: middle;
+  }
+  .subComputer{
+    background: url("/StaticImage/publicImage/ratifyApplyflow/sub_computer.svg") no-repeat center center;
+  }
+  .subMobile{
+    width: 15px;
+    height: 21px;
+    background: url("/StaticImage/publicImage/ratifyApplyflow/sub_mobile.png") no-repeat center center;
+  }
+}
+
+.allowApprovers p img{
+  width: 15px;
+  height: 16px;
+  margin-left: 5px;
+}
+.allowApprovers p em:first-child{
+  display: inline-block;
+  width: 70px;
+  text-align: right;
+}
+
+.approvers {
+  margin-left: 40px;
+  width: 82px;
+  height: auto;
+  border: 2px dashed #49a9ea;
+  float: left;
+  overflow-x: hidden;
+}
+.officialSealBox{
+  .approvers p {
+    span{
+      width: 14px !important;
+      height: 14px !important;
+    }
+  }
+}
+
+.approvers p {
+  font-size: 14px;
+  color: #333;
+  line-height: 30px;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  em{
+    display: inline-block;
+    width: 56px;
+    text-align: right;
+  }
+  span{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-left: 5px;
+    -webkit-background-size: contain;
+    background-size: contain;
+    vertical-align: middle;
+    visibility: hidden;
+  }
+  .appAllow{
+    background: url("/StaticImage/publicImage/publicIcon/appAllow.svg") no-repeat center center;
+    visibility: visible;
+  }
+  .appRefuse{
+    background: url("/StaticImage/publicImage/publicIcon/appRefuse.svg") no-repeat center center;
+    visibility: visible;
+  }
+}
+.approvers p:hover {
+  background-color: #C1E2F8;
+}
+.allowApprovers {
+  height: 84px;
+  float: left;
+  margin-left: 20px;
+  padding-right: 10px;
+}
+.subList {
+  margin: 20px auto 0;
+  border-radius: 8px;
+  background-color: #fff;
+  width: 1003px;
+}
+.subTit {
+  padding: 15px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #dedede;
+}
+.subTitInfo .name {
+  font-size: 16px;
+  color: #333;
+}
+.subTitInfo .date {
+  font-size: 14px;
+  color: #666;
+}
+
+/*新增公章部分*/
+.officialSeal{
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  border: 2px dashed #49a9ea;
+  border-bottom: none;
+}
+.officialSeal:last-child{
+  border-bottom: 2px dashed #49a9ea;
+}
+.officialSealTit{
+  width: 215px;
+  height: initial;
+  border-right: 2px dashed #49a9ea;
+  display: flex;
+  flex-direction: column;
+  span{
+    font-size: 14px;
+    color: #333;
+  }
+}
+.officialSealCon{
+  width: 105px;
+}
+
+/*边框由虚线转变成实线*/
+.bdAll {
+  border: 2px solid #49a9ea;
+}
+/*拒绝后手机图标颜色改变*/
+.allowApprovers p .mobileRefuse{
+  width: 15px;
+  height: 21px;
+  background: url("/StaticImage/publicImage/ratifyApplyflow/sub_mobileRefuse.svg") no-repeat center center;
+}
+/*拒绝后电脑图标颜色改变*/
+.allowApprovers p .computerRefuse{
+  background: url("/StaticImage/publicImage/ratifyApplyflow/sub_computerRefuse.svg") no-repeat center center;
+}
+/*审批通过图标*/
+.stepContainer .step .left .content .flowAllow{
+  background: #49a9ea url("/StaticImage/publicImage/publicIcon/allowIcon.svg") no-repeat center center;
+  -webkit-background-size: 60% 60%;
+  background-size: 60% 60%;
+}
+/*审批过程中图标*/
+.stepContainer .step .left .content .flowProcess{
+  background: #c1e2f8 url("/StaticImage/publicImage/publicIcon/processIcon.svg") no-repeat center center;
+  -webkit-background-size: 60% 60%;
+  background-size: 60% 60%;
+}
+/*审批过程中图标背景颜色*/
+.stepContainer .step .left .content .flowRefuse{
+  background-color: #dedede;
+}
+/*未审批图标背景颜色*/
+.stepContainer .step .left .content .process{
+  background-color: #c1e2f8;
+}
+/*驳回图标*/
+.stepContainer .step .left .content .flowReject{
+  background: #c1e2f8 url("/StaticImage/publicImage/publicIcon/rejectIcon.svg") no-repeat center center;
+  -webkit-background-size: 50% 50%;
+  background-size: 50% 50%;
+}
+/*驳回图标背景颜色*/
+.stepContainer .step .left .content .flowReject{
+  background-color: #f00;
+}
+/*驳回横线*/
+.stepContainer .step .left .content .RejectLine{
+  border: 1px solid #f00 !important;
+  background-color: #f00;
+}
+/*驳回上竖线改变颜色*/
+.stepContainer .step .left .content .line{
+  height: 1px;
+  width: 60px;
+  border: 1px solid #49a9ea;
+  background-color: #49a9ea;
+}
+
+/*拒绝审批横线隐藏(不消失)*/
+.stepContainer .step .left .content .lineRefuse{
+  visibility: hidden;
+}
+/*审批过程未抵达中上下连接线*/
+.stepContainer .step .left .processLine{
+  border: 1px solid #dedede !important;
+  background-color: #dedede !important;
+}
+/*审批过程拒绝中上下连接线*/
+.stepContainer .step .left .RejectLine{
+  border: 1px solid #f00 !important;
+  background-color: #f00 !important;
+}
+
+/*拒绝审批后单个批准人外框变成红色*/
+.stepContainer .step .right .borderReject{
+  border: 2px dashed #f00;
+}
+/*拒绝审批后全部批准人外框变成红色*/
+.stepContainer .step .right .borderRejectAll{
+  border: 2px solid #f00;
+}
+
+/*允许盖章单选*/
+.borderofficialSeal{
+  border-right: 2px dashed #49a9ea;
+  background-color: #49a9ea;
+}
+/*允许盖章多选*/
+.borderofficialSealAll{
+  border-right: 2px solid #49a9ea;
+  background-color: #49a9ea;
+}
+/*拒绝盖章单选*/
+.borderofficialSealReject{
+  border-right: 2px dashed #f00;
+  background-color: #f00;
+}
+/*拒绝盖章多选*/
+.borderofficialSealRejectAll{
+  border-right: 2px solid #f00;
+  background-color: #f00;
+}
+
+.officialSeal{
+  .officialSealCon{
+    span{
+      visibility: visible;
+    }
+  }
+}
+
+/*人在公司*/
+.personOn{
+  background: url("/StaticImage/publicImage/ratifyApplyflow/personOnIcon.svg") no-repeat center center;
+}
+/*人不在公司*/
+.personOff{
+  background: url("/StaticImage/publicImage/ratifyApplyflow/personOffIcon.svg") no-repeat center center;
+}
+
+/*章在公司*/
+.sealOn{
+  background: url("/StaticImage/publicImage/ratifyApplyflow/sealOnIcon.svg") no-repeat center center;
+}
+/*章不在公司*/
+.sealOff{
+  background: url("/StaticImage/publicImage/ratifyApplyflow/sealOffIcon.svg") no-repeat center center;
+}
+
+
+
+
+.reasonTxt{
+  text-align: right;
+  em{
+    text-align: right !important;
+    white-space: nowrap;
+    vertical-align: top;
+    color: #666;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  em:last-child{
+    display: inline-block;
+    width: 170px;
+    white-space: normal;
+    text-align: left !important;
+  }
+}

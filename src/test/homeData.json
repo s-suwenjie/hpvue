@@ -1,0 +1,534 @@
+{
+  "loginName": "程序员",
+  "headImg": "",
+  "menuData": [
+    {
+      "id": "10D01190-870C-47EF-B389-982FF1EF6B61",
+      "name": "个人办公",
+      "namespace": "/PersonalOffice/",
+      "url": "/PersonalOffice/",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/9b661194-a34e-4b6d-8574-1eefcd7a2bfa.png",
+      "btnChoiced": 0
+    },
+    {
+      "id": "0D0C5A49-7F5A-46EA-B311-238F2FF1A12C",
+      "name": "日程任务",
+      "namespace": "",
+      "url": "",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/397c154b-9ece-4fab-a1a5-683883afad30.png",
+      "btnChoiced": 0
+    },
+    {
+      "id": "A5EA5F0E-A7FA-4109-84B2-7630DC89C442",
+      "name": "信息交流",
+      "namespace": "",
+      "url": "",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/b94da23b-bfed-4166-a0f7-e33a6ff187ac.png",
+      "btnChoiced": 0
+    },
+    {
+      "id": "30CC62EF-E085-402F-9C46-6BCAC30A21E9",
+      "name": "业务管理",
+      "namespace": "/BasicData/",
+      "url": "/BasicData/",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/e9431217-4063-4703-845f-44c54aade8e3.png",
+      "btnChoiced": 0
+    },
+    {
+      "id": "6557FD7D-6578-48EF-8252-16F1C00EEA31",
+      "name": "财务管理",
+      "namespace": "/Finance/",
+      "url": "/Finance/",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/e7ebf975-3ec0-45cf-87ff-c4bc64bf0455.png",
+      "btnChoiced": 1
+    },
+    {
+      "id": "95065356-93FF-4FEE-A24F-82D310C3DCEB",
+      "name": "投资管理",
+      "namespace": "/Investment/",
+      "url": "/Investment/",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/db1b8794-f785-4cd1-b0b7-c08f4fa3976d.png",
+      "btnChoiced": 0
+    },
+    {
+      "id": "F82D4AEF-A34B-4131-9DD5-614BF3F1B8FB",
+      "name": "知识管理",
+      "namespace": "/Knowledge/",
+      "url": "/Knowledge/",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/f76a87f5-44b6-4579-9d7d-3a3b440899b8.png",
+      "btnChoiced": 0
+    },
+    {
+      "id": "8E811129-0644-4D59-97C4-8EECB329DD12",
+      "name": "档案管理",
+      "namespace": "/Certificate/",
+      "url": "/Certificate/",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/b3cdc35a-4ee1-4d8e-896b-201b1f47b86c.png",
+      "btnChoiced": 0
+    },
+    {
+      "id": "044637E7-7500-4A8D-B5CC-5BF5DD9B97F1",
+      "name": "综合行政",
+      "namespace": "/Serve/",
+      "url": "/Serve/",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/36fbc758-0f38-480f-8b31-58f660b25e73.png",
+      "btnChoiced": 0
+    },
+    {
+      "id": "3F46A1B1-148C-48DD-A70F-DCBC4019E0D8",
+      "name": "人力资源",
+      "namespace": "/PersonnelManagement/",
+      "url": "/PersonnelManagement/",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/64152fa2-5600-40ae-b05b-682e3ccb6d12.png",
+      "btnChoiced": 0
+    },
+    {
+      "id": "73D4AF5A-7B14-49A5-85AE-538CB1E84749",
+      "name": "综合管理",
+      "namespace": "",
+      "url": "",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/49b83825-4c20-4507-b573-f82e2d08f390.png",
+      "btnChoiced": 0
+    },
+    {
+      "id": "971DA02E-C405-4540-8114-786D7B7E89C0",
+      "name": "系统",
+      "namespace": "/SystemManager/",
+      "url": "/SystemManager/",
+      "category": 0,
+      "icon": "/Uploadfile/TopMenu/49256b4f-8762-428d-803e-0061e5a0af27.png",
+      "btnChoiced": 0
+    }
+  ],
+  "leftData": [
+    {
+      "id": "15E2656A-B4F1-483A-AEF7-123A2DACFF50",
+      "name": "账号",
+      "open": 0,
+      "detail": [
+        {
+          "id": "F935D951-2D51-400C-A317-B717AFAE3CD9",
+          "name": "对公账号",
+          "url": "/Fin/publicAccountManager",
+          "namespace": "Fin",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/e8bffc6f-fbf1-4e23-8d92-c8ecad482f75.svg",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        },
+        {
+          "id": "70F133E5-63CC-492F-B0FA-0E774D4AAD79",
+          "name": "对私账号",
+          "url": "/Fin/privateAccountManager",
+          "namespace": "Fin",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/1690199f-0ab6-4639-b500-f5cb73a35d85.svg",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        }
+      ]
+    },
+    {
+      "id": "CAD3BBF3-AD24-49AD-8104-98149FBB8CFF",
+      "name": "财务管理Test",
+      "open": 1,
+      "detail": [
+        {
+          "id": "1CFF8C6D-70D6-463F-BE04-6EF6B6AD08B0",
+          "name": "VUE3",
+          "url": "/vue/aaa/ccc",
+          "namespace": "vue",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/a47d2ba6-7717-4298-b46b-7d8b8ed411df.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 2
+        },
+        {
+          "id": "5AEC229E-02CD-4C81-B40D-7DCA6F96DDC0",
+          "name": "VUE2",
+          "url": "/vue/aaa/bbb",
+          "namespace": "vue",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/31b9aa94-0efe-4592-8a58-d5078adcb981.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 2
+        },
+        {
+          "id": "601B3D12-7575-4F70-81B5-51099FFEC841",
+          "name": "收支明细管理1",
+          "url": "/Fin/bankDetailManager",
+          "namespace": "Fin",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/48ab093c-9cec-4a5b-853a-a6e5fff4b78c.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        },
+        {
+          "id": "957AB524-80AD-4F97-921D-8D45DBDE7C4C",
+          "name": "VUE",
+          "url": "/vue/aaa/aaa",
+          "namespace": "vue",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/d5a505f3-788e-4db0-8508-0e448b98d44a.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 2
+        },
+        {
+          "id": "9E62AD6E-09EC-4B3C-993C-220FBF6BB9D0",
+          "name": "税号管理",
+          "url": "/OA/unitTaxManager?systemname=税号管理",
+          "namespace": "OA",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/4bc53575-c53d-4548-89c3-430ad1eb1a48.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        },
+        {
+          "id": "AD997315-FA1C-4FE5-95D5-CC2BFDFEEEDD",
+          "name": "VUE1",
+          "url": "/vue/home",
+          "namespace": "vue",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/746a264d-54a9-4930-a1ec-9a398654c452.png",
+          "open": 1,
+          "leftChoicedOn": 1,
+          "currentLanguage": 2,
+          "language": 2
+        },
+        {
+          "id": "DEC2DAD4-EA76-4863-B26E-CB37B147F3A5",
+          "name": "对公账号管理",
+          "url": "/Fin/publicAccountManager",
+          "namespace": "Fin",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/a14c1648-f67d-4f7e-89d8-b4229eb0261d.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        },
+        {
+          "id": "F3569EDF-0E56-402D-89C1-C5BA8B60166A",
+          "name": "基金管理",
+          "url": "/Fund/fundManager",
+          "namespace": "Fund",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/14ec0347-57f4-4648-a48e-7894454ec5a6.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        },
+        {
+          "id": "F8282A5E-C21B-465D-9349-AC7DBB700013",
+          "name": "对私账号管理",
+          "url": "/Finance/Business/PrivateAccountManager.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/9e99a98e-0b04-4d0b-a038-40f3b138081a.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "7C0B84FD-8DFE-4D6E-BCBA-48E6C9E93365",
+          "name": "对私账号管理1",
+          "url": "/Fin/privateAccountManager",
+          "namespace": "Fin",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/9a392194-bbb0-4fd9-8775-6312adc877a6.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        },
+        {
+          "id": "AEB99C2E-300F-4700-A68B-E3BBE97B6140",
+          "name": "收支明细管理",
+          "url": "/Finance/Business/BankDetailManager.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/62c3f166-0c02-4981-8c2f-fbd7e4ec0dad.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "8A4304B2-BAE6-4631-84C3-2F02AE7D25CA",
+          "name": "今日资金动态",
+          "url": "/Finance/Business/BankDetailTodayDynamic.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/d99756ca-7220-4da0-8e41-7c79a658f383.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "2109A969-59AA-4CE9-817F-C71B21950149",
+          "name": "金融产品管理",
+          "url": "/Finance/Products/ProductManager.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/04d76ca2-e138-459b-b51b-ab188cc0cadb.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "264600A3-2277-47E5-9198-816880A37BF1",
+          "name": "今日资金动态1",
+          "url": "/Fin/capitalTrendsToday",
+          "namespace": "Fin",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/c51813ba-0639-4270-9795-4f612563f73d.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        },
+        {
+          "id": "F752ECDE-5B8F-4BD5-9508-4708D1606FE1",
+          "name": "报销管理",
+          "url": "/PersonalOffice/Reimburse/ReimburseData.aspx?systemtopname=财务管理&systemleftname=财务管理Test",
+          "namespace": "PersonalOffice",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/1d2c4b68-bd22-4418-a69a-26b1bd15f105.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "FA9534FE-BEA2-468B-ADE6-60A906173E34",
+          "name": "借款管理",
+          "url": "/Finance/BorrowMoney/BorrowManager.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/cc2bac95-fdcf-4197-bae1-f37a12bb41f5.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "D7A5E576-5FA5-446B-B867-B9CE5761A0D9",
+          "name": "备用金管理",
+          "url": "/PersonalOffice/PersonalOffice/ImprestData.aspx?systemtopname=财务管理&systemleftname=财务管理Test",
+          "namespace": "PersonalOffice",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/fbe38e54-bcff-4f57-9498-2b09977adf5a.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "975A529E-25B7-4D34-8773-6C3D477F1D45",
+          "name": "股权投资管理",
+          "url": "/Investment/Invests/InvestManager.aspx",
+          "namespace": "Investment",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/555d7074-a2d3-47a0-9880-d5335e0c1db2.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "0492EBAA-3871-44CA-9957-552A5400A44D",
+          "name": "开票通知",
+          "url": "/Finance/Business/NoticeOpenInvoiceManager.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/64934f90-925f-4d7a-aac2-b8ce33e50e74.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "DE635B49-7693-49EF-8764-79F9FD94D75D",
+          "name": "开票试算",
+          "url": "/Finance/Business/OpenInvoiceTrialManager.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/0252e706-ee48-49be-838a-7cc946679a9b.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "46921DAA-65C4-4131-B8FB-32B5B4C2F741",
+          "name": "开票管理",
+          "url": "/Finance/Business/OpenInvoiceManager.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/c285245f-286e-4b12-a491-46a3bd52f8f2.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "E6D53230-E909-4362-A09D-C0C0A235560B",
+          "name": "发票管理",
+          "url": "/Finance/Business/InvoiceManager.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/fd9a613a-16f5-4ff1-9bef-9b9cadf1bead.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "69F6DBFF-D804-4E98-9997-828D3FAF5524",
+          "name": "电子发票管理",
+          "url": "/Finance/ElectronicInvoices/ElectronicInvoiceManager.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/2b33e9fc-b8da-48cd-a803-fe78dcb2d6d3.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "38E45CFD-F015-4DE8-BA54-4E5371582539",
+          "name": "年度费用统计",
+          "url": "/Finance/Reimburse/ReimburseStatistical.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/3b7630f6-db1c-47c8-9511-78964a1be01b.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "E369C069-16B6-4848-B51E-BB5F89548773",
+          "name": "个税申报管理",
+          "url": "/Wage/Business/IndividualTaxInfoManager.aspx?systemtopname=财务管理&systemleftname=财务管理Test",
+          "namespace": "Wage",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/ffabab3d-748f-4c0d-8ea0-1200e6f5f0c3.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "1F8B6630-6BC5-4861-B69F-80D852F00CF9",
+          "name": "支票管理",
+          "url": "/Finance/Check/ChecksManager.aspx",
+          "namespace": "Finance",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/b686e02a-48a6-439f-bbcd-e19b7d84bd63.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 0
+        },
+        {
+          "id": "19554B86-F973-486C-AC81-BC0BFC645B83",
+          "name": "付款申请",
+          "url": "/OA/paymentRequestManager?systemname=付款申请",
+          "namespace": "OA",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/8ee3ace3-ae06-4c63-a86a-5531033a14f6.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        },
+        {
+          "id": "1BC42D6E-4CB8-446C-9E01-401107C4E7B8",
+          "name": "审批",
+          "url": "/OA/approvalManager?systemname=审批",
+          "namespace": "OA",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/97bc81b2-621e-44a0-a6db-997501f3792e.png",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        }
+      ]
+    },
+    {
+      "id": "4FCCBBEE-3000-447D-BA38-916415D9C545",
+      "name": "资金",
+      "open": 0,
+      "detail": [
+        {
+          "id": "F0F6176A-A137-453B-9262-0B065DBD3CE9",
+          "name": "收款",
+          "url": "/Fin/bankDetailManager",
+          "namespace": "Fin",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/7901a705-2cf1-479c-97cf-56c2c69f9467.svg",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        },
+        {
+          "id": "D30204B6-3E4D-48A2-A199-9C024EB6604D",
+          "name": "付款",
+          "url": "/Fin/_bankDetailManager?menuType=1",
+          "namespace": "Fin",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/81d80d02-080d-46a8-91e7-e27c3f122645.svg",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        },
+        {
+          "id": "667B8619-EAB7-4523-AF90-9CBBA114708D",
+          "name": "存款",
+          "url": "/Fin/capitalTrendsToday",
+          "namespace": "Fin",
+          "outOrIn": 1,
+          "icon": "/UploadFile/LeftMenu/b7d5d0bc-e348-40fc-86ff-568e3ff04616.svg",
+          "open": 0,
+          "leftChoicedOn": 0,
+          "currentLanguage": 2,
+          "language": 1
+        }
+      ]
+    }
+  ],
+  "guid123456789": "2D5765DD-3DEE-446A-8834-EED0E44384FD"
+}

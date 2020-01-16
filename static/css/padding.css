@@ -1,0 +1,37 @@
+@charset "UTF-8";
+.p2{
+  padding: 2px !important;
+}
+
+.p4{
+  padding: 4px !important;
+}
+
+.pt4{
+  padding-top: 4px !important;
+}
+
+.pl4{
+  padding-left: 4px !important;
+}
+
+.pl5{
+  padding-left: 5px !important;
+}
+
+.pl10{
+  padding-left: 10px !important;
+}
+
+.pr10{
+  padding-right: 10px !important;
+}
+
+.ti10{
+  text-indent: 10px;
+}
+
+.pb0{
+  padding-bottom: 0px !important;
+}
+

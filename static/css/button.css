@@ -1,0 +1,119 @@
+@charset "UTF-8";
+.b_main{
+    display: inline-flex;
+    align-items: center;
+    padding: 0 10px;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #BFBFBF;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 14px;
+    background: #FFFFFF;
+    color: #333;
+    white-space: nowrap;
+}
+
+.b_one{
+
+}
+
+.b_two{
+    border: 1px solid #49a9ea;
+    background-color: #49a9ea;
+    color: #FFF;
+}
+
+.b_three{
+    border: 1px solid #49a9ea;
+    background-color: #FFFFFF;
+    color: #49a9ea;
+}
+
+.b_four{
+    border: 1px solid #49a9ea;
+    background-color: #FFFFFF;
+    color: #333333;
+}
+
+.b_ten{
+    border: 1px solid #FF0000;
+    background-color: #FFFFFF;
+    color: #FF0000;
+}
+
+
+.b_one_flicker {
+    border: 1px solid #66c0ff;
+    background-color: #66c0ff;
+    color: #fff;
+}
+
+.b_two_flicker {
+    border: 1px solid #BFBFBF;
+    background-color: #FFFFFF;
+    color: #333;
+}
+
+.b_three_flicker {
+    border: 1px solid #66c0ff;
+    background-color: #66c0ff;
+    color: #fff;
+}
+
+.b_four_flicker {
+    border: 1px solid #66c0ff;
+    background-color: #66c0ff;
+    color: #fff;
+}
+
+.b_ten_flicker {
+    border: 1px solid #FF0000;
+    background-color: #e25440;
+    color: #fff;
+}
+
+
+.b_one_hover{
+    background-color: #49a9ea;
+    color: #FFF;
+    border: 1px solid #1479d7;
+}
+
+.b_two_hover{
+    background-color: #1479d7;
+    color: #FFF;
+    border: 1px solid #1479d7;
+}
+
+.b_three_hover{
+    background-color: #1479d7;
+    color: #FFF;
+    border: 1px solid #1479d7;
+}
+
+.b_four_hover{
+    background-color: #1479d7;
+    color: #FFF;
+    border: 1px solid #1479d7;
+}
+
+.b_ten_hover{
+    background-color: #FF0000;
+    color: #FFF;
+    border: 1px solid #FF0000;
+}
+
+
+
+.b_error_flicker{
+    border: 1px solid #FF0000;
+    background-color: #FF0000;
+    color: #fff;
+}
+
+
+
+
+

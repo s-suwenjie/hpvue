@@ -1,0 +1,91 @@
+@charset "UTF-8";
+.chooseDiv {
+  width: 1200px;
+  padding-left: 5px;
+  display: inline-block;
+  position: relative;
+}
+.FilterBox {
+  height: 38px;
+  float: left;
+  margin: 3px 5px;
+  overflow: hidden;
+  border: 2px solid #329EE7;
+  display: flex;
+  padding: 5px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.FilterBox .btn {
+  margin: 0 5px 0 0;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  padding: 0px 20px;
+  font-size: 14px;
+  border: 1px solid #99cff5;
+  background-color: #FFF;
+  cursor: pointer;
+  color: #999;
+}
+.FilterBox .btn:hover {
+  background-color: #49a9ea !important;
+  color: #fff !important;
+}
+.FilterBox .choice {
+  border: 1px solid #49a9ea;
+  position: relative;
+}
+.FilterBox .choice:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-bottom: 25px solid #49a9ea;
+  border-left: 30px solid transparent;
+}
+.FilterBox .choice:before {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 6px;
+  background: transparent;
+  bottom: 6px;
+  right: 2px;
+  border: 3px solid white;
+  border-top: none;
+  border-right: none;
+  -webkit-transform: rotate(-55deg);
+  -ms-transform: rotate(-55deg);
+  transform: rotate(-55deg);
+  z-index: 9;
+}
+.FilterBoxTitle {
+  float: left;
+  height: 38px;
+  line-height: 38px;
+  padding-left: 3px;
+  font-size: 14px;
+}
+.FilterBoxLetter {
+  height: 30px;
+  margin: 5px 0;
+}
+.filterIpt {
+  margin-right: 20px;
+}
+.iptDate {
+  width: 150px;
+  height: 38px;
+  position: relative;
+}
+.filterBtn {
+  margin-top: 10px;
+}
+.FilterBox {
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}

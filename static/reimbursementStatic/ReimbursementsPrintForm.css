@@ -1,0 +1,317 @@
+
+/*有票报销无分页*/
+.divA
+{
+    margin: 0 auto;
+    width: 794px;
+    height: 472px;
+    background-image: url('./Images/costdemoA.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: relative;
+}
+
+/*有票报销有分页*/
+.divB
+{
+    margin: 0 auto;
+    width: 794px;
+    height: 472px;
+    background-image: url('./Images/costdemoB.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: relative;
+}
+
+/*无票报销无分页*/
+.divC
+{
+    margin: 0 auto;
+    width: 794px;
+    height: 472px;
+    background-image: url('./Images/costdemoC.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: relative;
+}
+
+/*无票报销有分页*/
+.divD
+{
+    margin: 0 auto;
+    width: 794px;
+    height: 472px;
+    background-image: url('./Images/costdemoD.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: relative;
+}
+
+/**
+.divA div
+{
+    border: 1px solid red;
+}
+.divB div
+{
+    border: 1px solid red;
+}
+.divC div
+{
+    border: 1px solid red;
+}
+.divD div
+{
+    border: 1px solid red;
+}
+ **/
+
+.CodeImgA
+{
+    position: absolute;
+    left: 23px;
+    top: 17px;
+}
+
+.CodeImgB
+{
+    position: absolute;
+    right: 25px;
+    top: 17px;
+}
+
+.UnitCodeA
+{
+    position: absolute;
+    left: 584px;
+    top: 36px;
+    font-size: 13px;
+    width: 40px;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+}
+
+.UnitCodeB
+{
+    position: absolute;
+    left: 161px;
+    top: 36px;
+    font-size: 13px;
+    width: 40px;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+}
+
+.CodeBeforeA
+{
+    position: absolute;
+    left: 684px;
+    top: 36px;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    width: 80px;
+    text-align: right;
+}
+
+.CodeAfterA
+{
+    position: absolute;
+    left: 684px;
+    top: 56px;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+    width: 80px;
+    text-align: right;
+}
+
+
+.CodeBeforeB
+{
+    position: absolute;
+    left: 75px;
+    top: 36px;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    width: 80px;
+    text-align: left;
+}
+
+.CodeAfterB
+{
+    position: absolute;
+    left: 75px;
+    top: 56px;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+    width: 80px;
+    text-align: left;
+}
+
+.DepartmentA
+{
+    position: absolute;
+    left: 95px;
+    top: 71px;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    width: 120px;
+}
+
+.PageA
+{
+    position: absolute;
+    left: 680px;
+    top: 69px;
+    font-size: 11px;
+    height: 20px;
+    line-height: 20px;
+    width: 60px;
+    text-align: center;
+}
+
+.Year
+{
+    position: absolute;
+    left: 303px;
+    top: 71px;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    width: 40px;
+}
+.Month
+{
+    position: absolute;
+    left: 373px;
+    top: 71px;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    width: 40px;
+}
+.Day
+{
+    position: absolute;
+    left: 428px;
+    top: 71px;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    width: 40px;
+}
+
+.RemarkDetail
+{
+    position: absolute;
+    left: 504px;
+    top: 108px;
+    font-size: 12px;
+    height: 122px;
+    width: 251px;
+    padding: 5px;
+}
+
+.ContentDetail
+{
+    position: absolute;
+    left: 23px;
+    top: 152px;
+    font-size: 12px;
+    height: 176px;
+    width: 421px;
+}
+
+.DetailUse
+{
+    width: 313px;
+    padding: 3px;
+    height: 37px;
+    line-height: 14px;
+}
+
+.DetailMoney
+{
+    width: 95px;
+    text-align: right;
+    padding: 3px;
+    height: 37px;
+    line-height: 37px;
+}
+
+.Total
+{
+    position: absolute;
+    left: 342px;
+    top: 329px;
+    font-size: 12px;
+    height: 44px;
+    line-height: 44px;
+    width: 102px;
+    text-align:right;
+}
+
+.TotalBig
+{
+    position: absolute;
+    left: 105px;
+    top: 376px;
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    width: 322px;
+}
+
+.PrettyCash
+{
+    position: absolute;
+    left: 505px;
+    top: 376px;
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    width: 60px;
+    text-align:center;
+}
+
+.RePrettyCash
+{
+    position: absolute;
+    left: 665px;
+    top: 376px;
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    width: 80px;
+    text-align:center;
+}
+
+.PageMoney
+{
+    position: absolute;
+    left: 655px;
+    top: 415px;
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    width: 110px;
+    text-align:right;
+}
+
+.PageIndex
+{
+    position: absolute;
+    left: 655px;
+    top: 433px;
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    width: 110px;
+    text-align:right;
+}

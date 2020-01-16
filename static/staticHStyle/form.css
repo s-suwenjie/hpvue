@@ -1,0 +1,1908 @@
+.DetailedContentDiv
+{
+    width: 1002px;
+    word-break: break-all;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 0 15px 110px 15px;
+}
+.DetailedContentBNDiv
+{
+    width: 1002px;
+    word-break: break-all;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.DetailedContentDivPop
+{
+    width: calc(100% - 30px);
+    word-break: break-all;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 0 15px 110px 15px;
+    background-color: #fff;
+    opacity: .2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+/*琛ㄥ崟閿佸畾鐘舵€侀伄缃╁眰*/
+.LockImg
+{
+    position: fixed;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    opacity: 0.2;
+    z-index: 9999999;
+    margin-left:-100px;
+}
+.DetailedTitle
+{
+    width: 1000px;
+    height: 40px;
+    font-size: 18px;
+    margin: 0 auto;
+    border: 1px solid #45acf1;
+    background-color: #86cefe;
+    line-height: 40px;
+    text-align: center;
+    color: #1064a2;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    letter-spacing: 5px;
+}
+.TitleDiv
+{
+    width: 970px;
+    height: 35px;
+    font-family: "寰蒋闆呴粦";
+    font-size: 16px;
+    font-weight: bold;
+    color: #252525;
+    padding-left: 30px;
+    margin-bottom: 10px;
+    line-height: 35px;
+    background: url(Images/zi.png) no-repeat 0px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.TitleDivDown
+{
+    background: url(Images/zidown.png) no-repeat 0px;
+}
+/*琛ㄥ崟琛ㄦ牸*/
+.FormList
+{
+    width: 1000px;
+    height: auto;
+    border: solid #89c9df; /* 璁剧疆杈规灞炴€э紱鏍峰紡(solid=瀹炵嚎)銆侀鑹�(#999=鐏�) */
+    border-width: 1px 0px 0px 1px; /* 璁剧疆杈规鐘剁矖缁嗭細涓� 鍙� 涓� 宸� = 瀵瑰簲锛�1px 0 0 1px */
+    overflow: hidden;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    border-collapse: collapse;
+}
+.FormList table td
+{
+    border: solid #89c9df;
+    border-width: 0px 1px 1px 0px;
+    padding: 0 3px;
+    font-size: 14px;
+    color: #000;
+    height: 60px;
+    font-family: "寰蒋闆呴粦";
+    vertical-align: middle;
+    position: relative;
+}
+.FormListDiv
+{
+    margin-bottom: 10px;
+}
+.FormListDiv td
+{
+    height: 32px !important;
+    line-height: 32px !important;
+}
+
+.SelectInput
+{
+    font-size: 12px;
+    height: 32px !important;
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    line-height: 32px !important;
+    vertical-align: middle;
+}
+
+.SelectInputLine
+{
+    font-size: 12px;
+    height: 26px !important;
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    line-height: 26px !important;
+    vertical-align: middle;
+}
+
+.FormListDiv input
+{
+    width: 99%;
+    height: 24px !important;
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    line-height: 20px !important;
+    vertical-align: middle;
+}
+.TableListDiv td
+{
+    height: 32px !important;
+    line-height: 32px !important;
+}
+.TableListDiv input
+{
+    width: 99.3%;
+    height: 24px !important;
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    line-height: 20px !important;
+}
+.trcolor
+{
+    background-color: #d5d5d5;
+}
+/*闅旇鎹㈣壊---Form椤�*/
+/*琛ㄦ牸瀹藉害瀹氫箟*/
+.TDwidthA
+{
+    width: 110px;
+}
+.TDwidthA span
+{
+    line-height: 20px;
+}
+.TDwidthB
+{
+    width: 390px;
+
+
+    display: flex;
+   align-items: center;
+}
+.TDwidthC
+{
+    width: 165px;
+    height: 30px !important;
+    line-height: 30px !important;
+}
+.TDwidthD
+{
+    width: 10px;
+    height: 30px !important;
+    line-height: 30px !important;
+}
+.TDuser
+{
+    border-right: none !important;
+}
+.Tdcolor
+{
+    background-color: #CEE7F8;
+    text-align: right;
+}
+.Tdcolor span
+{
+    margin-right: 5px;
+}
+.Textcolor
+{
+    background-color: #E8E7E7;
+}
+.Textcolor input
+{
+    width: 210px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    margin-left: 3px;
+    padding: 0 3px;
+    line-height: 30px;
+}
+
+.divInput
+{
+    width: 210px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    margin-left: 3px;
+    padding: 0 3px;
+    line-height: 30px;
+    font-size: 12px;
+    float:left;
+}
+
+.Textcolor img
+{
+    border: none;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.Textarea
+{
+    width: 715px;
+    height: 40px;
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    margin-left: 3px;
+    padding: 0 3px;
+    line-height: 20px;
+}
+.SelectBoxList
+{
+    background: url(Images/textList.png) no-repeat right;
+    cursor: pointer;
+}
+.SelectDate
+{
+    background: url(Images/datePicker.gif) no-repeat right;
+    background-color: #fff;
+    cursor: pointer;
+}
+.SelectEditList
+{
+    background: url(Images/textEditList.png) no-repeat right;
+    cursor: pointer;
+}
+.SelectEnglishList
+{
+    background: url(Images/English.png) no-repeat right;
+    cursor: pointer;
+}
+.SelectChineseList
+{
+    background: url(Images/Chinese.png) no-repeat right;
+    cursor: pointer;
+}
+.inputSelectEditList
+{
+    background: url(Images/textSelectEditList.png) no-repeat right;
+    cursor: pointer;
+}
+.kg
+{
+    background: url(Images/kg.png) no-repeat right;
+}
+.rmb
+{
+    background: url(Images/rmb.png) no-repeat left;
+    text-align: right;
+}
+.percentage
+{
+    background: url(Images/Percentage.png) no-repeat right;
+}
+.FoldDown
+{
+    cursor:pointer;
+    border:1px solid #89C9DF;
+    height:22px;
+    background: url(Images/FoldDown.png) no-repeat center;
+    font-size:12px;
+    line-height:22px;
+    text-align:center;
+    margin-bottom:5px;
+}
+
+.FoldUp
+{
+    cursor:pointer;
+    border:1px solid #89C9DF;
+    height:22px;
+    background: url(Images/FoldUp.png) no-repeat center;
+    font-size:12px;
+    line-height:22px;
+    text-align:center;
+    margin-bottom:5px;
+}
+.xgpwd
+{
+    line-height: 60px;
+    margin-left: 5px;
+    color: #9B9B9B;
+    text-decoration: underline;
+    font-size: 13px;
+}
+.xgpwd:hover
+{
+    text-decoration: underline;
+}
+.xgpwd:link
+{
+    color: #9B9B9B;
+    text-decoration: underline;
+}
+.xgpwd:visited
+{
+    color: #9B9B9B;
+    text-decoration: underline;
+}
+/*绯荤粺鐢ㄦ埛琛ㄥ崟涓� 鏉冮檺绠＄悊 琛ㄦ牸鏍峰紡*/
+.ddd
+{
+    background-color: #D1D1D1 !important;
+    border: 1px solid #BCBCBC !important;
+    color: #666 !important;
+}
+.UserList
+{
+    width: 1000px;
+    height: auto;
+    border: solid #B9B9B9; /* 璁剧疆杈规灞炴€э紱鏍峰紡(solid=瀹炵嚎)銆侀鑹�(#999=鐏�) */
+    border-width: 1px 0px 0px 1px; /* 璁剧疆杈规鐘剁矖缁嗭細涓� 鍙� 涓� 宸� = 瀵瑰簲锛�1px 0 0 1px */
+    overflow: hidden;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    border-collapse: collapse;
+}
+.UserList table th
+{
+    border: solid #C1C1C1;
+    border-width: 0px 1px 1px 0px;
+    background-color: #CEE7F8;
+    padding: 0 3px;
+    font-size: 14px;
+    color: #000;
+    height: 30px;
+    line-height: 30px;
+    font-family: "寰蒋闆呴粦";
+    vertical-align: middle;
+    position: relative;
+    text-align: left;
+    font-weight: normal;
+}
+.UserList table th span
+{
+    margin-left: 10px;
+    font-weight: bold;
+}
+.UserList table td span
+{
+    margin-left: 10px;
+    color: #696969;
+}
+.UserList table th img
+{
+    margin-top: 2px;
+}
+.UserList table td
+{
+    border: solid #B9B9B9;
+    border-width: 0px 1px 1px 0px;
+    padding: 0 3px;
+    font-size: 14px;
+    color: #000;
+    height: 60px;
+    line-height: 60px;
+    font-family: "寰蒋闆呴粦";
+    vertical-align: middle;
+    position: relative;
+}
+.tdpower
+{
+    background-color: #D3D3D3;
+    cursor: pointer;
+}
+/*鏂囨湰妗嗗脊鍑哄垪琛ㄩ€夋嫨*/
+.SelectDateList
+{
+    background: url(Images/DialogImage/dateList.png) no-repeat right;
+    cursor: pointer;
+}
+/*鏃ユ湡寮瑰嚭鍒楄〃閫夋嫨*/
+.SelectReadonly
+{
+    background-color: #E8EAED !important;
+}
+.SelectBoxDays
+{
+    background: url(Images/DialogImage/days.png) no-repeat right;
+    cursor: pointer;
+}
+/*鏂囨湰妗嗘棩鏈熼€夋嫨*/
+.InputError
+{
+    background-color: #FFCCCC !important;
+    border: 1px solid #FF0000 !important;
+}
+.InputErrorBg
+{
+    background-color: #FFCCCC !important;
+}
+.Error
+{
+    background-color: #FFCCCC !important;
+    border-color: #FF0000 !important;
+}
+
+/*鏂囨湰妗嗚緭鍏ラ敊璇牱寮�*/
+.FormList table td input
+{
+    vertical-align: middle;
+    font-size: 12px;
+}
+.FormList table td label
+{
+    vertical-align: middle;
+}
+.input_over
+{
+    background-color: #f4ffd4 !important;
+}
+.Newsbox
+{
+    width: 20px !important;
+}
+.Textcolor label
+{
+    margin-right: 15px;
+    font-size: 16px;
+    color: #9f764e;
+}
+/*閿欒鎻愮ず鏂囧瓧鏄剧ず鏍峰紡*/
+.TipsDiv
+{
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    color: #555;
+    padding-left: 26px;
+    border: 1px solid #E5C3C4;
+    background: #FFEAEA url(Images/loginImg/Tipserror.png) no-repeat 5px center;
+    border-radius: 3px;
+    float: right;
+    margin-right: 46px;
+}
+.TipsDivList
+{
+    width: 60px;
+    height: 24px;
+    line-height: 24px;
+    padding-left: 24px;
+    color: #555;
+    border: 1px solid #E5C3C4;
+    background: #FFEAEA url(Images/loginImg/Tipserror.png) no-repeat 5px center;
+    border-radius: 3px;
+    float: right;
+}
+.IBtn
+{
+    border: solid 1px #ccc;
+    color: #333;
+    height: 28px;
+    line-height: 25px;
+    font-size: 16px;
+    font-family: Comic Sans MS, Arial Unicode MS,骞煎渾 ,寰蒋闆呴粦 ,榛戜綋,Verdana;
+    width: 60px !important;
+    vertical-align: middle;
+    background-color: #bfd6e8 !important;
+    cursor: pointer;
+}
+
+/*搴曢儴鍥哄畾鎸夐挳*/
+.outFixed
+{
+    width: 100%;
+    height: 101px;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    z-index: 99999;
+    background-color: #EDEDED;
+}
+.bottomfixed_top
+{
+    width: 100%;
+    height: 30px;
+    border-top: 1px solid #cfcece;
+    text-align: center;
+    padding: 20px 0;
+}
+.bottomfixed
+{
+    width: 100%;
+    height: 30px;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    z-index: 99999;
+    background-color: #EDEDED;
+}
+.bottomfixed_under
+{
+    width: 100%;
+    height: 30px; /*background-color:#dddddd;*/
+    border-top: 1px solid #ddd;
+}
+.bottomfixed_under span
+{
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #868686;
+    line-height: 30px;
+    margin: 0 20px;
+}
+
+.nobtn
+{
+    padding-bottom: 30px;
+}
+.nobtn .outFixed
+{
+    height: 31px;
+}
+.nobtn .bottomfixed_top
+{
+    display: none;
+}
+/*Form閲岀殑鎸夐挳鍏叡鏍峰紡*/
+.FormButton
+{
+    width: auto;
+    padding: 0 10px;
+    border: 1px solid #a2a2a2;
+    border-radius: 4px;
+    background: linear-gradient(0deg, #f1effa, #e8e9ed);
+    font-size: 14px !important;
+    font-family: 寰蒋闆呴粦 !important;
+    color: #5988a6;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 30px;
+    height: 30px;
+    margin-left: 4px;
+}
+.FormButton img
+{
+    vertical-align: middle;
+}
+.FormButton span
+{
+    vertical-align: middle;
+    margin-left: 5px;
+}
+.FormButton span b
+{
+    color: #f00;
+    font-weight: normal;
+    width: 60px;
+}
+.FormButtonHover
+{
+    color: #fdfdfd;
+    border: 1px solid #037dca;
+    background: linear-gradient(0deg, #1ea0ff, #77c6ff);
+}
+
+.editButton
+{
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.editButton img
+{
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.inputDiv
+{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    position: absolute;
+    font-size: 100px;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    z-index: 9999999;
+}
+
+.Flicker
+{
+    color: #fdfdfd;
+    border: 1px solid #037dca;
+    background: linear-gradient(0deg, #1ea0ff, #77c6ff);
+}
+.FormButtonOn
+{
+    color: #fdfdfd;
+    border: 1px solid #A16A18;
+    background: linear-gradient(0deg, #E9B730, #E9B730);
+}
+.FormButtonError
+{
+    color: #fdfdfd;
+    border: 1px solid #9D0505;
+    background: linear-gradient(0deg, #C40505, #C40505);
+}
+.FormButtonError span b
+{
+    color: #fff;
+    font-weight: normal;
+}
+.Savewidth
+{
+    width: 142px;
+}
+.mar6px
+{
+    margin-left: 6px;
+}
+/*閫夋嫨鏍峰紡*/
+.contactDiv
+{
+    width: 715px;
+    height: auto;
+    min-height: 30px;
+    float: left;
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    margin-left: 3px;
+    padding: 0 3px;
+    line-height: 30px;
+    cursor: pointer;
+}
+.contactDiv input
+{
+    border: 0;
+    cursor: pointer;
+    background-color: transparent;
+}
+.contactDiv li
+{
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin: 5px 3px 0 0;
+    padding: 0 .5em;
+    background: #48A5E5;
+    border-radius: 2px;
+    color: #fff;
+    cursor: pointer;
+}
+.remove-h
+{
+    margin-left: 5px;
+    font-weight: bold;
+}
+.contactDiv input
+{
+    width: 120px;
+}
+
+/**鍥剧墖涓婁紶鎷栨嫿鎸夐挳**/
+/*鍙€夋嫨鐪佸競鍖虹殑鍦板潃妗�*/
+.SelectAddress
+{
+    width: 720px;
+    height: 60px;
+    float: left;
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    margin: 3px 0 3px 3px;
+    padding: 0px;
+}
+.SelectAddress input
+{
+    float: left;
+    width: 100%;
+    height: 19px;
+    line-height: 19px;
+    border: 0px;
+    font-size: 12px;
+    margin: 0px;
+    padding: 0px;
+    text-indent: 3px;
+}
+.SelectAddress textarea
+{
+    width: 100%;
+    cursor: pointer;
+    height: 40px;
+    background-color: #fff;
+    line-height: 20px;
+    border: 0px solid #000000;
+    font-size: 12px;
+    text-indent: 3px;
+}
+/*鍙€夋嫨鐪佸競鍖虹殑鍦板潃妗�*/
+.file
+{
+    position: relative;
+    display: inline-block;
+    padding: 0px 14px 0px 10px;
+    overflow: hidden;
+    text-decoration: none;
+    border: 1px solid #a2a2a2;
+    border-radius: 4px;
+    background: linear-gradient(0deg, #f1effa, #e8e9ed);
+    font-size: 14px !important;
+    font-family: 寰蒋闆呴粦 !important;
+    color: #5988a6;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 30px;
+    height: 30px;
+}
+.file img
+{
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+}
+.file span
+{
+    vertical-align: middle;
+    margin-left: 4px;
+}
+.file input
+{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.file:hover
+{
+    color: #fdfdfd;
+    border: 1px solid #037dca;
+    background: linear-gradient(0deg, #1ea0ff, #77c6ff);
+}
+/**鍥剧墖涓婁紶鎷栨嫿鍖哄煙**/
+.uploadDiv
+{
+    float: left;
+    border: 1px dashed #C0C0C0;
+    border-radius: 2px;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+    background: #e7e7e7 url(Images/noimg.jpg) no-repeat center center;
+    vertical-align: middle;
+}
+.spanplan
+{
+    width: 60px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 13px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -30px;
+    margin-top: -10px;
+    color: #000;
+    display: none;
+}
+.upbtn
+{
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 39px;
+}
+.upbtnNormal
+{
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 12px;
+}
+.spantip
+{
+    color: #999;
+    font-size: 12px;
+    margin-left: 10px;
+    float: left;
+}
+.ImgBox
+{
+    width: 100%;
+    height: 100%;
+    background-color: #e7e7e7;
+}
+.ImgBox img
+{
+    max-height: 100%;
+    max-width: 100%;
+    cursor: pointer;
+}
+.uploadDiv input
+{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    font-size: 100px;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+/**寰俊绫诲埆**/
+.RegionBox
+{
+    width: auto;
+    height: auto;
+    float: left;
+    cursor: pointer;
+}
+.ImgDiv
+{
+    width: auto;
+    height: 60px;
+    float: left;
+    display: inline-block;
+    vertical-align: middle;
+}
+.ImgDiv img
+{
+    height: 60px;
+    display: inline-block;
+    vertical-align: middle;
+}
+/**鐏拌壊鍥剧墖閫変腑瀵瑰彿鏍峰紡闅愯棌**/
+.Graystyle .markDiv
+{
+    display: none;
+}
+.Graystyle .TextDiv span
+{
+    color: #8E8E8E !important;
+}
+.TextDiv
+{
+    width: auto;
+    height: 60px;
+    float: left;
+    line-height: 90px;
+    font-size: 16px;
+    font-weight: bold;
+    position: relative;
+    font-family: "寰蒋闆呴粦";
+    margin-left: 5px;
+}
+.markDiv
+{
+    width: 17px;
+    height: 12px;
+    position: absolute;
+    background: url(Images/mark.png) no-repeat center center;
+    bottom: 8px;
+    left: 50%;
+    margin-left: -8px;
+    z-index: 999;
+}
+
+/*甯﹀嚭鏁版嵁纭  input杈规姗欒壊澶栧彂鍏�*/
+.ensureinput
+{
+    border: 1px solid #f8721c !important;
+    box-shadow: 0px 0px 6px #ee7305 !important;
+}
+
+
+/********杩涘害鏉′唬鐮�********/
+.stepMain
+{
+    width: 1000px;
+    height: auto;
+    padding: 20px 0;
+    margin: 0 auto;
+    font-size: 16px;
+    color: #fff;
+    line-height: 42px;
+}
+.stepMain span
+{
+    font-family: "寰蒋闆呴粦";
+    color: #fff;
+}
+/*杩涘害鏂囧瓧*/
+.stepMain b
+{
+    font-family: Arail;
+    font-style: normal;
+    color: #aaaaaa;
+    font-size: 20px;
+}
+/*杩涘害搴忓彿*/
+.stepMain span a
+{
+    font-size: 14px;
+    color: #fff;
+    text-decoration: none;
+}
+.stepMain span a:hover
+{
+    font-size: 14px;
+    color: #fff;
+    text-decoration: underline;
+}
+.span1
+{
+    margin-left: 30px;
+    line-height: 20px;
+    width: 120px;
+    display: block;
+    text-align: center;
+}
+.stepOn
+{
+    width: 150px;
+    height: 42px;
+    float: left;
+    background-image: url(Images/progressA.png);
+    text-align: center;
+}
+/*杩涘害褰╄壊*/
+.stepOn span
+{
+    font-family: "寰蒋闆呴粦";
+    color: #fff;
+    display: block;
+    width: 105px;
+    margin-left: 40px;
+    margin-top: 10px;
+}
+/*杩涘害鏂囧瓧*/
+.stepNo
+{
+    width: 150px;
+    height: 42px;
+    float: left;
+    background-image: url(Images/progressB.png);
+    text-align: center;
+    position: relative;
+}
+/*杩涘害鐏拌壊*/
+.stepNo div
+{
+    width: 42px;
+    height: 42px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    line-height: 42px;
+    text-align: center;
+}
+.stepNo span
+{
+    font-family: "寰蒋闆呴粦";
+    color: #000;
+    display: block;
+    width: 105px;
+    margin-left: 40px;
+    margin-top: 10px;
+}
+/*杩涘害鏂囧瓧*/
+.stepTwo
+{
+    width: 150px;
+    height: 42px;
+    float: left;
+    background-image: url(Images/progressC.png);
+    text-align: center;
+}
+/*杩涘害鐏拌壊*/
+.stepTwo span
+{
+    font-family: "寰蒋闆呴粦";
+    color: #fff;
+    display: block;
+    width: 105px;
+    margin-left: 40px;
+    margin-top: 10px;
+}
+/*杩涘害鏂囧瓧*/
+.stepThree
+{
+    width: 150px;
+    height: 42px;
+    float: left;
+    background-image: url(Images/progressD.png);
+    text-align: center;
+}
+/*褰撳墠杩涘害*/
+.stepThree span
+{
+    font-family: "寰蒋闆呴粦";
+    color: #fff;
+    display: block;
+    width: 105px;
+    margin-left: 40px;
+    margin-top: 10px;
+}
+/*杩涘害鏂囧瓧*/
+.linkOne
+{
+    width: 20px;
+    height: 42px;
+    background: url(Images/linkOne.jpg) no-repeat 0;
+    float: left;
+}
+/*褰╄壊鏉�*/
+.linkTwo
+{
+    width: 20px;
+    height: 42px;
+    background: url(Images/linkTwo.jpg) no-repeat 0;
+    float: left;
+}
+/*鐏拌壊绾�*/
+.linkThree
+{
+    width: 20px;
+    height: 42px;
+    background: url(Images/linkThree.jpg) no-repeat 0;
+    float: left;
+}
+/*鍗婂僵鍗婄伆*/
+.longlinkOne
+{
+    width: 870px;
+    height: 25px;
+    background: url(Images/longlinkOne.png) no-repeat 0;
+    float: left;
+    margin-left: 65px;
+}
+/*褰╄壊鏉�*/
+.longlinkTwo
+{
+    width: 870px;
+    height: 25px;
+    background: url(Images/longlinkTwo.png) no-repeat 0;
+    float: left;
+    margin-left: 65px;
+}
+/*鐏拌壊绾�*/
+.longlinkThree
+{
+    width: 870px;
+    height: 25px;
+    background: url(Images/longlinkThree.png) no-repeat 0;
+    float: left;
+    margin-left: 75px;
+}
+/*鍗婂僵鍗婄伆*/
+
+/*杩涘害鏉¤鎯�*/
+.Process_ScreenCondition /*绛涢€夋寜閽�*/
+{
+    position: relative;
+}
+.Process_ScreenCondition:hover .ProcessArrow /*鍑虹幇绛涢€夋浣�*/
+{
+    display: block;
+}
+.ProcessArrow /*绛涢€夋浣�*/
+{
+    display: none;
+    cursor: pointer;
+}
+.ProcessArrowbg /*绛涢€夋绠ご*/
+{
+    position: absolute;
+    z-index: 99999;
+    top: -4px;
+    left: 40px;
+    width: 97px;
+    height: 8px;
+    background: url(Images/screenBottom.png) no-repeat;
+}
+.ProcessArrowbox /*绛涢€夋*/
+{
+    position: absolute;
+    left: 35px;
+    bottom: 46px;
+    z-index: 9999;
+    width: auto;
+    height: auto;
+    min-height: 85px;
+    border-radius: 5px;
+    background-color: #fff;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px #000;
+    color: #000;
+    text-align: center;
+    font-size: 15px;
+    font-family: @寰蒋闆呴粦;
+}
+
+.TDrelative
+{
+    position: relative;
+}
+
+.AddRow
+{
+    width: 9px;
+    height: 9px;
+    background-image: url(Images/addrow.png);
+    position: absolute;
+    z-index: 9999;
+    bottom: 1px;
+    right: 1px;
+    cursor: pointer;
+}
+
+
+.AddRow24
+{
+    width: 24px;
+    height: 24px;
+    background-image: url(Images/addrow.png);
+    background-repeat:no-repeat;
+    background-position: center center;
+    position: absolute;
+    z-index: 9999;
+    bottom: 1px;
+    right: 1px;
+    cursor: pointer;
+}
+
+.TelDiv
+{
+    display: flex;
+    flex-direction: row;
+    float: left;
+    height: 29px;
+    line-height: 29px;
+    margin: 5px 3px 0 0;
+    padding: 0 .5em;
+    background: #48A5E5;
+    border-radius: 2px;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom:3px;
+}
+
+.TelDiv .close
+{
+    margin-left:10px;
+}
+
+
+.Width1300
+{
+    width: 1300px;
+}
+
+.BgWhite
+{
+    background-color: White;
+}
+
+
+.BigButton
+{
+    width: auto;
+    padding: 0 10px;
+    border: 1px solid #a2a2a2;
+    border-radius: 4px;
+    background: linear-gradient(0deg, #f1effa, #e8e9ed);
+    font-size: 14px !important;
+    font-family: 寰蒋闆呴粦 !important;
+    color: #5988a6;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 20px;
+    height: 170px;
+    width: 250px;
+    margin-left: 20px;
+}
+
+.BigButtonSpan
+{
+    height: 30px;
+    width: 250px;
+    margin-left: 20px;
+    display: inline-block;
+}
+
+.BigButton div
+{
+    background-image: url(Images/Download.png);
+    background-position: center top;
+    background-repeat: no-repeat;
+    height: 124px;
+}
+
+.BigButton:Hover
+{
+    color: #fdfdfd;
+    border: 1px solid #037dca;
+    background: linear-gradient(0deg, #1ea0ff, #77c6ff);
+}
+
+.BigButton:Hover div
+{
+    background-image: url(Images/DownloadHover.png);
+    background-position: center top;
+    background-repeat: no-repeat;
+    height: 124px;
+}
+
+.ImgShowDiv
+{
+    width: 800px;
+    height: 300px;
+    border: 3px dashed #CCCCCC;
+}
+
+.ImgShowDivError
+{
+    border-color: #FF0000;
+}
+
+.ImgShowDivM
+{
+    float: left;
+    width: 280px;
+    height: 210px;
+    border: 3px dashed #CCCCCC;
+}
+
+.ImgShowDivD
+{
+    float: left;
+    width: 432px;
+    height: 270px;
+    border: 3px dashed #CCCCCC;
+}
+
+.divError
+{
+    float: left;
+    margin-left: 5px;
+    border: 1px solid #FF0000;
+    background-color: #FFC5C5;
+    color: #FF0000;
+    height: 35px;
+    line-height: 35px;
+    padding: 0px 5px;
+}
+
+.OverseasBankLogo
+{
+    height: 55px;
+    margin-left:10px;
+}
+
+.OverseasBankLogoSelect
+{
+    border: 3px solid Blue;
+    margin-left:20px;
+    margin-right:20px;
+}
+
+.BankLogo
+{
+    width: 25px;
+    height: 25px;
+    border-bottom: 3px solid #FFFFFF;
+}
+
+.BankLogoSelect
+{
+    border-bottom: 3px solid Blue;
+}
+
+.btnUploadDiv
+{
+    position: relative;
+}
+
+.btnUploadDiv input
+{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.uploadReName input
+{
+    border: 0px;
+}
+
+.TextBox_flicker input
+{
+    border: 1px solid red;
+}
+
+.CheckTemplate
+{
+    background: url(Images/CheckTemplate.png);
+    background-repeat: no-repeat;
+    width: 846px;
+    height: 299px;
+    position: relative;
+}
+
+#divDetailInvoice
+{
+    width: 800px;
+    height: 480px;
+    position: fixed;
+    overflow: hidden;
+    top: 50%;
+    left: 50%;
+    margin-left: -430px;
+    margin-top: -300px;
+    padding: 6px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0px 0px 6px #333;
+    z-index: 99999;
+}
+#divDetailInvoice img
+{
+    width: 800px;
+    height: 480px;
+}
+
+.divReal
+{
+    line-height:20px;
+    background: url(Images/real.png);
+    background-repeat:no-repeat;
+    background-position:left center;
+}
+
+.divDifference
+{
+    line-height:20px;
+    background: url(Images/difference.png);
+    background-repeat:no-repeat;
+    background-position:left center;
+}
+
+.divCalculate
+{
+    line-height:20px;
+    background: url(Images/calculate.png);
+    background-repeat:no-repeat;
+    background-position:left center;
+}
+
+
+.divItem
+{
+    height:30px;
+    line-height:30px;
+    font-size: 13px;
+    color: #000;
+    font-family:"寰蒋闆呴粦";
+}
+
+.divItemTopBorder
+{
+    border-top:2px solid #93BEE2;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.divItemTopBorderBlod
+{
+    border-top:4px solid #93BEE2;
+    margin-bottom:40px;
+    font-weight:bold;
+}
+
+
+
+
+.SelectModelDiv
+{
+    padding:40px 20px;
+    border:1px solid #A8CBE7;
+    float:left;
+    margin:20px 0px 0px 20px;
+    background-color:#CEE7F8;
+    position:relative;
+}
+
+.SelectModelDiv:Hover
+{
+    background-color:#B8D1E2;
+    cursor:pointer;
+}
+
+.SelectModelDiv a
+{
+    position:absolute;
+    bottom:3px;
+    right:3px;
+    font-size:12px;
+    color:#EC5AE5;
+}
+
+.SelectModelDiv a:Hover
+{
+    color:#BB29B4;
+}
+
+.GeneralItem
+{
+    background-color:#BFBFBF;
+    border:1px solid #9E9E9E;
+    padding:5px;
+    cursor:pointer;
+}
+
+.SelectItem
+{
+    background-color:#2C94DB;
+    border:1px solid #00448B;
+    color:#FFFFFF;
+    padding:5px;
+}
+
+.tab{width:1000px;}
+.tab ul{list-style:none;height:42px;line-height:42px; border-bottom:5px #49A8EA solid;}
+.tab ul li{background:#FFF;cursor:pointer;float:left;list-style:none height:29px; line-height:31px;padding:5px 20px;margin:0px 3px; border:1px solid #49A8EA; border-bottom:1px solid #49A8EA;box-sizing:border-box;border-radius:5px 5px 0px 0px;}
+.tab ul li.on{background-color:#49A8EA;color: #FFFFFF;}
+.tab ul li a{background-color:#49A8EA;color: #FFFFFF;}
+.tab ul li img{ vertical-align:middle};
+.tab .FormListDiv{width:1000px; line-height:24px;border-top:none;box-sizing:border-box;}
+
+.Copytextarea
+{
+    overflow: hidden;display: block; width:1000px; background-color: #FFFFFF; line-height: 25px; font-size: 16px; min-height: 200px;
+}
+
+.FormNavigation{
+    display: flex;
+    flex-direction: row;
+}
+.FormNavigationMenu{
+    position: fixed;
+    margin-left:20px;
+    margin-top:20px;
+    width:180px;
+    height:calc(100vh - 140px);
+    border-right: 5px solid #49A8EA;
+}
+.FormNavigationMenu ul{
+    list-style:none;
+}
+.FormNavigationMenu ul li{
+    margin-top:5px;
+    height:40px;
+    line-height:40px;
+    border:2px solid #49A8EA;
+    border-right:0px;
+    background-color: #FFFFFF;
+    box-sizing:border-box;
+    border-radius:5px 0px 0px 5px;
+    text-align: center;
+    cursor: pointer;
+}
+.FormNavigationMenu ul li.selectOn{
+    background-color: #49A8EA;
+    color: #FFFFFF;
+}
+.FormNavigationMenu ul li.error{
+    background: linear-gradient(0deg, #C40505, #C40505);
+    color: #FFFFFF;
+    border-color: #9D0505;
+}
+.FormNavigationContent{
+    margin-left: 200px;
+    margin-top: 20px;
+}
+
+
+.RedTopRight
+{
+    background: url(Images/RedTopRight.png);
+    background-repeat:no-repeat;
+    background-position:right top;
+}
+
+.RedBottomRight
+{
+    background: url(Images/RedBottomRight.png);
+    background-repeat:no-repeat;
+    background-position:right bottom;
+}
+
+.tdTip img
+{
+    float:left;
+    margin-top:6px;
+}
+
+.divCalculationFormula
+{
+    width:100%; height:120px;  background:#FFFFFF; z-index:99999; position:fixed; top:0px; border-bottom:2px solid #CCCCCC; display:flex;flex-direction: row;align-items: flex-start;
+}
+
+.divCalculationFormula .Content
+{
+    flex: 1;word-wrap: break-word;line-height:28px;
+    height: 120px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.divCalculationFormula .Del
+{
+    width:40px; text-align:left; cursor:pointer;padding-top: 45px;
+    display:flex;flex-direction: column;
+    padding-left: 10px;
+
+}
+.FirstCut{
+    border-bottom: 5px solid #49A8EA;
+    margin-bottom: 10px;
+}
+.FirstCut ul li{
+    background-color:#FFFFFF;
+    line-height: 30px;
+    display: inline-block;
+    border: 2px solid #49A8EA;
+    border-bottom:0px;
+    height: 30px;
+    width: 130px;
+    text-align: center;
+    border-radius: 5px 5px 0px 0px;
+    cursor:pointer;
+}
+.FirstCut ul li.FirstCutSelected{
+    background-color:#49A8EA;
+    color:#FFFFFF;
+}
+.SecoundCut{
+    border-bottom: 5px solid #49A8EA;
+    margin-bottom: 10px;
+}
+.SecoundCut ul li{
+    background-color:#FFFFFF;
+    line-height: 30px;
+    display: inline-block;
+    border: 2px solid #49A8EA;
+    border-bottom:0px;
+    height: 30px;
+    width: 130px;
+    text-align: center;
+    border-radius: 5px 5px 0px 0px;
+    cursor:pointer;
+}
+.SecoundCut ul li.SecoundCutSelected{
+    background-color:#49A8EA;
+    color:#FFFFFF;
+}
+.ThirdCut{
+    border-bottom: 5px solid #49A8EA;
+    margin-bottom: 10px;
+}
+.ThirdCut ul li{
+    background-color:#FFFFFF;
+    line-height: 30px;
+    display: inline-block;
+    border: 2px solid #49A8EA;
+    border-bottom:0px;
+    height: 30px;
+    width: 130px;
+    text-align: center;
+    border-radius: 5px 5px 0px 0px;
+    cursor:pointer;
+}
+.ThirdCut ul li.ThirdCutSelected{
+    background-color:#49A8EA;
+    color:#FFFFFF;
+}
+#img_Show{
+    top: 100px;
+    left: 80px;
+    position: absolute;
+    z-index: 100000;
+    box-sizing: content-box;
+    pointer-events: none;
+    border: 1px dashed #878787;
+    background-color:white;
+    /* 2600*1650 */
+    width: 650px;
+    height: 412px;
+}
+#grantFund_IconA{
+    width: 650px;
+    height: 412px;
+    cursor:auto;
+}
+#grantFund_imgImgUrl{
+    width:650px;
+    height:412px;
+}
+
+/*褰撳墠瀹℃壒鑺傜偣*/
+#startDialog_flicker{
+    height: 42px;
+    width: 150px;
+    background-image: url(Images/messageRemindA.png);
+    <<<<<<< .mine
+    animation: flicker 1000ms infinite;;
+    -moz-animation: flicker 1000ms infinite;;	/* Firefox */
+    -webkit-animation: flicker 1000ms infinite;;	/* Safari 鍜� Chrome */
+    -o-animation: flicker 1000ms infinite;;	/* Opera */
+||||||| .r132
+animation: flicker 1500ms infinite;;
+    -moz-animation: flicker 1500ms infinite;;	/* Firefox */
+    -webkit-animation: flicker 1500ms infinite;;	/* Safari 鍜� Chrome */
+    -o-animation: flicker 1500ms infinite;;	/* Opera */
+=======
+animation: flicker 2000ms infinite;;
+    -moz-animation: flicker 2000ms infinite;;	/* Firefox */
+    -webkit-animation: flicker 2000ms infinite;;	/* Safari 鍜� Chrome */
+    -o-animation: flicker 2000ms infinite;;	/* Opera */
+>>>>>>> .r133
+}
+@keyframes flicker
+{
+    from {background-image: url(Images/messageRemindA.png);}
+    50% {
+        opacity: 0.3;
+    }
+    to {opacity: 1.0;}
+}
+@-moz-keyframes flicker /* Firefox */
+{
+    from {background-image: url(Images/messageRemindA.png);}
+    50% {
+        opacity: 0.3;
+    }
+    to {opacity: 1.0;}
+}
+
+@-webkit-keyframes flicker /* Safari 鍜� Chrome */
+{
+    from {background-image: url(Images/messageRemindB.png);}
+    50% {
+        opacity: 0.3;
+    }
+    to {opacity: 1.0;}
+}
+
+@-o-keyframes flicker /* Opera */
+{
+    from {background-image: url(Images/messageRemindA.png);}
+    50% {
+        opacity: 0.3;
+    }
+    to {opacity: 1.0;}
+}
+
+#showMessageCase{
+    width: 450px;
+    height: 400px;
+    background-color: #ececec;
+    overflow:auto;
+}
+
+.EveryMessageCase{
+    position: relative;
+    margin-top: 25px;
+}
+
+.ChatMessage_A,.ChatMessage_B{
+    position: relative;
+    padding:10px;
+    width:140px;
+    height: auto;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+.ChatMessage_A{
+    background-color: rgba(200, 228, 252, 0.91);
+    margin-left: 205px;
+}
+.ChatMessage_B{
+    background-color: white;
+    margin-left: 90px;
+}
+
+.ChatMessage_A:before,.ChatMessage_B:before{
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    top: 5px;
+    border-top: 13px solid transparent;
+    border-bottom: 13px solid transparent;
+}
+.ChatMessage_A:before{
+    left: 95%;
+    border-left: 26px solid rgba(200, 228, 252, 0.91);
+}
+.ChatMessage_B:before{
+    right: 95%;
+    border-right: 26px solid white;
+}
+
+.MessageContent{
+    width:auto;
+    height: auto;
+    font-size: 15px;
+}
+.PersonInfoCase_A,.PersonInfoCase_B{
+    position: absolute;
+    width:52px;
+    height: 52px;
+}
+.PersonInfoCase_A{
+    left:85%;
+}
+.PersonInfoCase_B{
+    left: 5%;
+}
+.PersonAvatar_Icon{
+    position: absolute;
+    left: 18%;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+}
+.PersonName{
+    position: absolute;
+    top: 30px;
+    left: 15%;
+    width: 40px;
+    font-size:10px;
+}
+.PersonName{
+    position: absolute;
+}
+
+#divideLine{
+    width: 450px;
+    height: 30px;
+    background-color: white;
+}
+
+#messageInputCase{
+    width: 450px;
+    height: 130px;
+    background-color: #fff;
+}
+
+#inputFrame{
+    position: absolute;
+    left: 20px;
+    bottom: 45px;
+    width: 410px;
+    height: 85px;
+    text-align: left;
+    font-size: 17px;
+}
+
+#sendMessage{
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 70px;
+    height: 25px;
+    background-color: #c9c9c9;
+    border-radius: 3px;
+    color: #515151;
+    text-align: center;
+}
+
+#sendMessage:hover{
+    width: 70px;
+    height: 25px;
+    background-color: #0b7cca;;
+    border-radius: 3px;
+    color: #ffffff;
+}
+
+.contrastIcon{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-left: 5px;
+    background: url("/StaticImage/bwImg/publicIcon/contrastIcon.svg") no-repeat center center;
+    -webkit-background-size: contain;
+    background-size: contain;
+    cursor: pointer;
+}
+.contrastErrorIcon{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-left: 5px;
+    background: url("/StaticImage/bwImg/publicIcon/contrastErrorIcon.svg") no-repeat center center;
+    -webkit-background-size: contain;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.invoiceBox{
+    width: 400px;
+    height: 40px;
+    position: absolute;
+    z-index: 999;
+    top: -30px;
+    left: 0;
+    overflow: hidden;
+    background-color: #fff;
+}
+.invoice{
+    background-repeat: no-repeat;
+
+    transform: scale(0.5);
+    position: absolute;
+    z-index: 999;
+    left: -245px;
+}
+
+.contrastIcon:hover.invoiceBox{
+    display: block;
+}
+
+.selectIpt{
+    position: relative;
+    width: 190px !important;
+    border-right: none !important;
+}
+.selectIpt+p{
+    margin-left: 25px;
+}
+.selectBox{
+    position: absolute;
+    top: 14px;
+    left: 6px;
+    width: 218px;
+    height: 32px;
+    background-color: #E8EAED;
+    border: 1px solid #C0C0C0;
+    outline: none;
+    cursor: pointer;
+}
+.selectBox option{
+    font-size: 16px;
+}
+
+.tdTextarea textarea{
+    float: left;
+}
+.tdTextarea p{
+    float: left;
+    margin-top: 13px;
+}
+
+.errorDiv{
+    display: block;
+    color: #f00;
+    font-size: 14px;
+    margin-left: 5px;
+
+}

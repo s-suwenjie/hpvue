@@ -1,0 +1,312 @@
+@charset "UTF-8";
+.fundCharts {
+  width: 100%;
+  padding-bottom: 0.85333333rem;
+  border-bottom: 1px dashed #bfbfbf;
+  display: flex;
+  align-items: center;
+}
+.fundCharts .chartsImg {
+  width: 1.81333333rem;
+  height: 1.81333333rem;
+}
+.fundCharts .chartsInfo {
+  height: 1.28rem;
+  margin-left: 0.21333333rem;
+}
+.fundCharts .chartsInfo .chartInfoDetail {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.fundCharts .chartsInfo .chartInfoDetail .dot {
+  min-width: 0.37333333rem;
+  min-height: 0.37333333rem;
+  border-radius: 50%;
+  margin-right: 0.26666667rem;
+}
+.fundCharts .chartsInfo .chartInfoDetail .txt {
+  font-size: 0.42666667rem;
+  color: #333;
+  white-space: nowrap;
+  line-height: 0.69333333rem;
+}
+.fundCharts .chartsInfo .chartInfoDetail .moneyDiv {
+  width: 100%;
+  text-align: right;
+}
+.fundCharts .chartsInfo .chartInfoDetail .moneyDiv .money {
+  font-size: 0.42666667rem;
+}
+.fundHist {
+  width: 100%;
+  padding-bottom: 1.2rem;
+}
+.fundHist .histInfoBox {
+  margin-top: 0.26666667rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.fundHist .histInfoBox .histInfo {
+  display: flex;
+}
+.fundHist .histInfoBox .histInfo .histInfoDetail {
+  display: flex;
+  align-items: center;
+}
+.fundHist .histInfoBox .histInfo .histInfoDetail .rect {
+  width: 0.42666667rem;
+  height: 0.16rem;
+  margin-right: 0.10666667rem;
+}
+.fundHist .histInfoBox .histInfo .histInfoDetail .txt {
+  font-size: 0.37333333rem;
+  color: #333;
+}
+.fundHist .histInfoBox .histInfo .histInfoDetail:last-child {
+  margin-left: 0.42666667rem;
+}
+.histCharts {
+  margin: 0.42666667rem 0;
+}
+.abscissalLine {
+  width: 6.4rem;
+  height: 2px;
+  background-color: #bfbfbf;
+  margin-left: 1.28rem;
+  position: relative;
+}
+.abscissalLine:before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid #bfbfbf;
+  position: absolute;
+  top: -0.233333rem;
+  right: -0.2rem;
+}
+.shortLine {
+  margin-left: 2.45333333rem;
+  display: flex;
+}
+.shortLine p {
+  width: 0.05333333rem;
+  height: 0.13333333rem;
+  background-color: #bfbfbf;
+  margin-right: 0.85333333rem;
+}
+.shortZiseLine {
+  margin-left: 2.45333333rem;
+  display: flex;
+  position: absolute;
+  z-index: 1;
+}
+.shortZiseLine p {
+  width: 0.05333333rem;
+  border-right: 1px dashed #bfbfbf;
+  opacity: 0.7;
+  margin-right: 0.85333333rem;
+}
+.shortSize {
+  margin-left: 2.45333333rem;
+  display: flex;
+}
+.shortSize p {
+  width: 0.64rem;
+  height: 0.64rem;
+  font-size: 0.32rem;
+  color: #333;
+  margin-right: 0.26666667rem;
+  transform: rotate(-45deg);
+}
+.abscissa {
+  display: inline-block;
+  float: right;
+  font-size: 0.37333333rem;
+  color: #333;
+  margin-top: -0.3rem;
+  margin-right: 0.3rem;
+}
+.ordinateName {
+  width: 1.6rem;
+  float: left;
+}
+.ordinateName p {
+  display: flex;
+  align-items: center;
+  width: 1.6rem;
+  height: 1.54666667rem;
+  margin-top: 0.53333333rem;
+}
+.ordinateName p span {
+  font-size: 0.37333333rem;
+  color: #333;
+}
+.ordinateName p img {
+  width: 0.42666667rem;
+  height: 0.42666667rem;
+  margin-right: 0.08rem;
+}
+.ordinateLine {
+  float: left;
+  width: 2px;
+  background-color: #bfbfbf;
+  margin-top: -0.35rem;
+  position: relative;
+}
+.ordinateLine:before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 10px solid #bfbfbf;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  position: absolute;
+  bottom: -0.2rem;
+  left: -0.22rem;
+}
+.ordinateLine:after {
+  content: "银行";
+  font-size: 0.37333333rem;
+  color: #333;
+  position: absolute;
+  white-space: nowrap;
+  bottom: -0.72rem;
+  left: -0.32rem;
+}
+.ordinateConLine {
+  height: 1.54666667rem;
+  margin-top: 0.53333333rem;
+}
+.ordinateConLine div {
+  display: flex;
+  margin-bottom: 0.05333333rem;
+}
+.ordinateConLine div span {
+  font-size: 0.37333333rem;
+}
+.ordinateConLine div .ordinateRect {
+  display: flex;
+  height: 0.42666667rem;
+  border-radius: 0 2px 2px 0;
+  margin-right: 0.10666667rem;
+}
+.ordinateContent {
+  height: 100%;
+  position: absolute;
+  z-index: 9;
+  left: 2.06rem;
+}
+.ordinateBlance {
+  font-size: 0.32rem;
+  margin-top: 0.10666667rem;
+  margin-left: 0.10666667rem;
+  display: flex;
+  align-items: center;
+}
+.ordinateBlance span:first-child {
+  margin-left: 0.1rem;
+}
+.ordinateBlance span:last-child {
+  font-style: italic;
+}
+/* m_fundDynamicsView */
+.app_alert {
+  z-index: 2;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 70%;
+  height: 85%;
+  border-radius: 0.21333333rem 0px 0px 0.21333333rem;
+  background-color: #ffffff;
+}
+.alert_top {
+  width: 100%;
+  height: 0.85333333rem;
+  position: relative;
+  background-color: #49a9ea;
+  border-radius: 0.21333333rem 0px 0px 0px;
+}
+.app_aller_del {
+  position: absolute;
+  top: 0.24rem;
+  left: 0.24rem;
+  color: #fff;
+  font-size: 0.42666667rem;
+}
+.app_table {
+  width: 100%;
+  font-size: 0.37333333rem;
+}
+.app_table_tr:nth-of-type(odd) {
+  background: #f3f3f3;
+}
+.app_table_tr:nth-of-type(even) {
+  background: #fff;
+}
+.app_table_tr {
+  height: 0.77333333rem;
+  display: flex;
+  align-items: center;
+  background: #fff;
+}
+.app_table_tr span {
+  margin-right: 0.24rem;
+  color: #333333;
+}
+.app_table_th {
+  display: flex;
+  align-items: center;
+  background: #d4ecfc;
+  height: 0.77333333rem;
+}
+.app_table_th span {
+  margin-left: 0.24rem;
+  color: #666666;
+}
+.alert_bottom {
+  width: 100%;
+  position: absolute;
+  bottom: 0.82666667rem;
+}
+.app_main_btn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.app_alert_btn {
+  height: 0.8rem;
+  line-height: 0.8rem;
+  box-sizing: border-box;
+  font-size: 0.37333333rem;
+  color: #666;
+  margin-right: 0.53333333rem;
+  background-color: #fff;
+  border-radius: 0.10666667rem;
+  border: solid 0.02666667rem #bfbfbf;
+  padding: 0 0.2rem;
+  margin-bottom: 0.2rem;
+}
+.app_alert_main {
+  padding: 0.21333333rem;
+}
+.app_alert_title {
+  margin-bottom: 0.21333333rem;
+  font-size: 0.37333333rem;
+  color: #999999;
+}
+.hidden {
+  position: absolute;
+  right: -99%;
+}
+.app_table_tr_money {
+  width: 33%;
+  text-align: right;
+}
+.app_table_tr_img {
+  margin: 0 0.26666667rem;
+}
+/*# sourceMappingURL=fundDynamisc.css.map */

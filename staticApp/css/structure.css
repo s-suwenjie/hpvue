@@ -1,0 +1,396 @@
+@charset "UTF-8";
+.app_main {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+.app_scroll {
+  flex: 1;
+  /*margin: 0 auto;*/
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+  height: 100%;
+}
+.app_scroll .app_topTip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  font-size: 0.37333333rem;
+  height: 0.69333333rem;
+  line-height: 0.42666667rem;
+  margin-top: 0.16rem;
+}
+.app_scroll .app_topTip img {
+  width: 0.42666667rem;
+  margin-right: 0.10666667rem;
+}
+.app_scroll .app_topTip dd {
+  color: #888;
+  margin-right: 0.10666667rem;
+}
+.app_scroll .app_topTip span {
+  color: #888;
+}
+.app_scroll .app_topTip .app_topIcon_change {
+  transform: rotate(180deg);
+  transition: transform 0.3s;
+  margin-bottom: 0.10666667rem;
+}
+.app_scroll .app_scroll_wrapper {
+  transition-timing-function: ease-out;
+  z-index: 2;
+  position: relative;
+  padding-bottom: 0.42666667rem;
+}
+.app_scroll .app_scroll_wrapper .app_empty {
+  margin-top: 1.70666667rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.app_scroll .app_scroll_wrapper .app_empty img {
+  width: 50%;
+}
+.app_scroll .app_scroll_wrapper .app_empty span {
+  font-size: 0.45333333rem;
+  color: #888;
+  margin-top: 0.21333333rem;
+}
+.app_scroll .app_scroll_wrapper .app_bottomTip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  font-size: 0.37333333rem;
+  height: 0.69333333rem;
+  line-height: 0.42666667rem;
+}
+.app_scroll .app_scroll_wrapper .app_bottomTip img {
+  width: 0.42666667rem;
+  margin-right: 0.10666667rem;
+}
+.app_scroll .app_scroll_wrapper .app_bottomTip span {
+  color: #888;
+}
+.app_scroll .app_scroll_scrollbar {
+  position: absolute;
+  right: 3px;
+  top: 1%;
+  z-index: 50;
+  width: 5px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  transition-timing-function: ease-out;
+  opacity: 1;
+  transition: all 0.5s;
+}
+.app_scroll .app_scroll_scrollbar .app_scroll_scrollbar_drag {
+  transition-duration: 1000ms;
+  height: 5px;
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  left: 0;
+  top: 0;
+}
+.app_scroll .app_scroll_scrollbar_hide {
+  opacity: 0;
+}
+.structure_top_tap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #FFF;
+  display: flex;
+  flex-direction: row;
+  z-index: 99;
+}
+.structure_top_tap_height {
+  height: 1.52rem;
+}
+.structure_top_tap_menu {
+  flex: 1;
+  font-size: 0.45333333rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.42666667rem 0;
+  border-bottom: 0.02666667rem solid #bfbfbf;
+}
+.structure_top_tap_menu_select {
+  color: #49a9ea;
+  border-bottom: 0.08rem solid #49a9ea;
+}
+.rgtStructure {
+  float: right;
+}
+.structure_main {
+  background-color: #fff;
+  border-radius: 0.21333333rem;
+  margin: 0.21333333rem 0.21333333rem 0 0.21333333rem;
+  border: 0.02666667rem solid #bfbfbf;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.structure_main .app_table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  display: table;
+  background-color: #FFFFFF;
+  border-radius: 0.21333333rem;
+}
+.structure_main .app_table .select_width {
+  width: 1.01333333rem;
+}
+.structure_main .app_table th {
+  color: #fff;
+  vertical-align: middle;
+  font-size: 0.37333333rem;
+  height: 1.17333333rem;
+  line-height: 1.17333333rem;
+  background: linear-gradient(0deg, #49a9ea, #66c0ff);
+  white-space: nowrap;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+.structure_main .app_table th:first-child {
+  border-radius: 0.21333333rem 0 0 0;
+}
+.structure_main .app_table th:last-child {
+  border-radius: 0 0.21333333rem 0 0;
+}
+.structure_main .app_table th:before {
+  display: inline-block;
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0.34666667rem;
+  height: 0.48rem;
+  border-right: 0.02666667rem solid #fff;
+}
+.structure_main .app_table th:last-child:before {
+  content: '';
+  border-right: none !important;
+}
+.structure_main .app_table tbody {
+  background-color: #FFFFFF;
+}
+.structure_main .app_table tbody tr {
+  height: 1.17333333rem;
+  line-height: 1.17333333rem;
+}
+.structure_main .app_table td {
+  font-size: 0.37333333rem;
+  color: #666666;
+  overflow: hidden;
+  white-space: nowrap;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  box-shadow: -0.02666667rem 0 0 0 #bfbfbf inset, 0 0.02666667rem 0 0 #bfbfbf;
+}
+.structure_main .app_table td:last-child {
+  box-shadow: 0 0 0 0 #bfbfbf inset, 0 0.02666667rem 0 0 #bfbfbf;
+}
+.structure_main_touch {
+  box-shadow: 0 0 0.21333333rem #1489d7;
+}
+.structure_main_title {
+  font-size: 0.45333333rem;
+  color: #333333;
+  padding: 0.42666667rem;
+  border-bottom: 0.02666667rem solid #bfbfbf;
+}
+.structure_main_content {
+  padding-top: 0.42666667rem;
+  margin: 0 0.42666667rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.structure_main_operate {
+  padding: 0.42666667rem 0;
+  border-top: 0.02666667rem dashed #BFBFBF;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+/* App带角标的菜单按钮 */
+.app_view_menu_main {
+  width: 2.88rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.64rem;
+}
+.app_view_menu_main img {
+  width: 0.85333333rem;
+}
+.app_view_menu_main span {
+  font-size: 0.37333333rem;
+  margin-top: 0.21333333rem;
+}
+.app_view_menu_main .num {
+  font-size: 0.32rem;
+  position: absolute;
+  top: -0.05333333rem;
+  left: 1.6rem;
+  color: #fff;
+  background-color: #f00;
+  border-radius: 50%;
+  min-width: 0.48rem;
+  height: 0.48rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: normal;
+  padding: 0.10666667rem 0.16rem;
+  z-index: 99;
+}
+/* view页面标题加内容*/
+.app_view_c_main {
+  width: 100%;
+  height: 100%;
+  padding-bottom: 0.42666667rem;
+  font-size: 0.37333333rem;
+  display: flex;
+  flex-direction: row;
+  line-height: 0.50666667rem;
+}
+.app_view_c_main .title {
+  color: #888;
+  width: 2.61333333rem;
+}
+.app_view_c_main .contentTitle {
+  color: #333;
+  flex: 1;
+  text-align: left;
+}
+.app_view_c_main .content {
+  color: #333;
+  flex: 1;
+  text-align: right;
+}
+.app_view_detail_main {
+  width: 100%;
+  line-height: 0.58666667rem;
+  font-size: 0.37333333rem;
+  color: #888888;
+  padding-bottom: 0.42666667rem;
+  display: flex;
+  flex-direction: column;
+}
+.app_view_detail_main .more {
+  font-size: 0.37333333rem;
+  color: #49a9ea;
+  margin-left: 0.21333333rem;
+  white-space: nowrap;
+  text-align: right;
+}
+.app_view_child {
+  border: 0.02666667rem dashed #BFBFBF;
+  border-top: none;
+  width: 100%;
+  margin-bottom: 0.42666667rem;
+  border-radius: 0 0 0.21333333rem 0.21333333rem;
+}
+.app_view_child .child_title {
+  background-color: #d4ecfc;
+  border-radius: 0 0 0.21333333rem 0.21333333rem;
+  font-size: 0.37333333rem;
+  padding: 0.21333333rem 0 0.21333333rem 0.21333333rem;
+  color: #666;
+}
+.app_view_child .child_content {
+  display: flex;
+  flex-direction: column;
+  padding: 0.42666667rem 0.21333333rem 0 0.21333333rem;
+}
+.app_refresh_loading {
+  position: relative;
+  left: 0;
+  top: 0;
+  right: 0;
+}
+.app_refresh_loading_tip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.32rem;
+  color: #999;
+  padding-bottom: 0.21333333rem;
+}
+.app_refresh_loading_content {
+  overflow: scroll;
+}
+.app_approval_result {
+  position: absolute;
+}
+.app_approval_result img {
+  width: 100%;
+  opacity: 0.6;
+}
+.app_left {
+  text-indent: 0.21333333rem;
+}
+.app_center {
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.app_fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+.app_select {
+  color: #999999;
+  font-size: 0.48rem;
+  cursor: pointer;
+}
+.app_selected {
+  color: #49a9ea;
+}
+.app_td_split_color {
+  background-color: #F3F3F3;
+}
+.app_touch {
+  background-color: #A8D6F7;
+}
+.app_disable {
+  background-color: #d9d9d9;
+  border: 1px solid #bfbfbf;
+}
+.app_view_split16 {
+  height: 0.42666667rem;
+  width: 100%;
+}
+.app_view_transition3 {
+  transition: transform 0.5s;
+}
+/*# sourceMappingURL=structure.css.map */

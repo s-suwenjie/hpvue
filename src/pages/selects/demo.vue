@@ -1,0 +1,186 @@
+<template>
+    <div class="aaa">
+      name:{{name}}<br>
+      phone:{{phone}}
+      <br>
+      <br>
+      <br>
+      <!--<div style="width: 1205px;  background: #FFFFFF; ">
+        <div style="margin: 10px;display: flex;flex-direction: row; flex-wrap: wrap;">
+          <yhm-view-list-block @call="rightMenuEvent" :item="item" :menu="menu" :psd="psd" category-value="0" category="0" code="123456789123456789" color="#FF0000">
+            <yhm-view-psd :psd="psd" value="0"></yhm-view-psd>
+          </yhm-view-list-block>
+          <yhm-view-list-block @call="rightMenuEvent" :item="item" :menu="menu" :psd="psd" category-value="1" category="1" code="123456789123456790" color="#00FF00">22</yhm-view-list-block>
+          <yhm-view-list-block @call="rightMenuEvent" :item="item" :menu="menu" :psd="psd" category-value="0" category="2" code="1234567891234567" color="#0000FF">33</yhm-view-list-block>
+          <yhm-view-list-block @call="rightMenuEvent" :item="item" :menu="menu" :psd="psd" category-value="1" category="3" code="1234567891234568" color="#FF0000">44</yhm-view-list-block>
+        </div>
+      </div>-->
+      <br>
+      <yhm-app-view-control title="申请日期" content="1900-01-01" type="date"></yhm-app-view-control>
+      <br>
+      {{details}}<br>
+      carDamage:{{carDamage}}<br>
+      threeResponsibilities:{{threeResponsibilities}}<br>
+      driver:{{driver}}<br>
+      scratch:{{scratch}}<br>
+      specify:{{specify}}<br>
+      passenger:{{passenger}}<br>
+      selfGlass:{{selfGlass}}<br>
+      glass:{{glass}}<br>
+      actualMoney:{{actualMoney}}
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <!--//车上人员乘客
+      passenger:'',
+      //自店承保玻璃险
+      selfGlass:'',-->
+      <!--<yhm-form-zh-select-text tip-before="value" tip-after="phone" @call="selectName" :before="name" before-id="name" :after="phone" after-id="phone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="100"></yhm-form-zh-select-text>
+      <yhm-form-date title="日期" :value="workDate" id="workDate"></yhm-form-date>-->
+      <yhm-form-text title="金额" type="number" :decimal-places="2" tip="money" :value="actualMoney" id="actualMoney"></yhm-form-text>
+      <yhm-form-select-insurance :is-content="true"
+                                 title="商业险种"
+                                 :psd="psd"
+                                 :car-damage-value="carDamage" car-damage-id="carDamage"
+                                 :three-responsibilities-list="threeResponsibilitiesList" :three-responsibilities-value="threeResponsibilities" three-responsibilities-id="threeResponsibilities"
+                                 :driver-value="driver" driver-id="driver"
+                                 :scratch-list="scratchList" :scratch-value="scratch" scratch-id="scratch"
+                                 :glass-list="glassList" :glass-value="glass" glass-id="glass"
+                                 :specify-value="specify" specify-id="specify"
+                                 :passenger-value="passenger" passenger-id="passenger"
+                                 :self-glass-value="selfGlass" self-glass-id="selfGlass"
+                                 :value="details" id="details" rule="#"></yhm-form-select-insurance>
+      <yhm-form-zh-select-more @click="selectPlan" :min="min" category="date" title="部门分配" :total="actualMoney" :value="details" text-width="82" id="details" rule="#" rule-item="R3000"></yhm-form-zh-select-more>
+      <!--<yhm-date-panel :show="show" id="workDate" :value="workDate" min="2019-11-12" max="2020-01-21"></yhm-date-panel>-->
+      <br>
+      <br>
+    </div>
+
+</template>
+
+<script>
+  import { accMul, accAdd, guid, formatDate,formatTime } from '@/assets/common.js'
+  export default {
+    name: 'myApprovalManager',
+    provide(){
+      return{
+        p____page:this
+      }
+    },
+    data(){
+      return{
+        min:'2019-12-30',
+        show:true,
+        item:{id:'1'},
+        //workDate:'2019-09-10',
+        workDate:'',
+        actualMoney:'3000',
+
+
+        //选择的商业险项目
+        details:[],
+        //商业险种
+        psd:[{showName: "车损", num: "0", code: "CarDamage", img: "1"},
+          {showName: "三责", num: "1", code: "ThreeResponsibilities", img: "2"},
+          {showName: "盗抢", num: "2", code: "", img: "0"},
+          {showName: "车上人员司机", num: "3", code: "Driver", img: "1"},
+          {showName: "不计免赔", num: "4", code: "", img: "0"},
+          {showName: "划痕", num: "5", code: "Scratch", img: "2"},
+          {showName: "玻璃", num: "6", code: "Glass", img: "2"},
+          {showName: "自然", num: "7", code: "", img: "0"},
+          {showName: "无法找到第三方", num: "8", code: "", img: "0"},
+          {showName: "涉水", num: "9", code: "", img: "0"},
+          {showName: "指定特约店维修险", num: "10", code: "Specify", img: "1"},
+          {showName: "新增设备", num: "11", code: "", img: "0"},
+          {showName: "车上人员乘客", num: "12", code: "Passenger", img: "1"},
+          {showName: "三责假日限额翻倍险", num: "13", code: "", img: "0"},
+          {showName: "自店承保玻璃险", num: "14", code: "SelfGlass", img: "1"},
+          {showName: "发动机特别损失险", num: "15", code: "", img: "0"},
+          {showName: "驾意险", num: "16", code: "", img: "0"}],
+
+        //车损
+        carDamage:'',
+        //三责险选择内容
+        threeResponsibilitiesList:[
+          {showName: "5万", num: "0", code: "", img: ""},
+          {showName: "10万", num: "1", code: "", img: ""},
+          {showName: "15万", num: "2", code: "", img: ""},
+          {showName: "20万", num: "3", code: "", img: ""},
+          {showName: "30万", num: "4", code: "", img: ""},
+          {showName: "40万", num: "5", code: "", img: ""},
+          {showName: "50万", num: "6", code: "", img: ""},
+          {showName: "100万", num: "7", code: "", img: ""},
+          {showName: "200万", num: "8", code: "", img: ""}
+        ],
+        //三责险
+        threeResponsibilities:'',
+        //司机
+        driver:'',
+        //划痕选择内容
+        scratchList:[
+          {showName: "2000", num: "0", code: "", img: ""},
+          {showName: "5000", num: "1", code: "", img: ""},
+          {showName: "10000", num: "2", code: "", img: ""},
+          {showName: "20000", num: "3", code: "", img: ""}
+        ],
+        //划痕
+        scratch:'',
+        //玻璃险选择内容
+        glassList:[
+          {showName: "国产", num: "0", code: "", img: ""},
+          {showName: "进口", num: "1", code: "", img: ""}
+        ],
+        //玻璃险
+        glass:'',
+        //指定特约店维修险
+        specify:'',
+        //车上人员乘客
+        passenger:'',
+        //自店承保玻璃险
+        selfGlass:'',
+
+
+        name:'',
+        // psd:[{
+        //   num:'0',showName:'万元版',img:'aaa',code:'#FF0000'
+        // },{
+        //   num:'1',showName:'千元版',img:'aaa',code:'#00FF00'
+        // }],
+        phone:'',
+        menu:['添加','删除删除删除删除删除'],
+        p____rule:[]
+      }
+    },
+    methods : {
+      selectPlan(val){
+        this.min = val
+        let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.details.length, 1000)))
+
+        let item = {
+          id: guid(),
+          insertDate: formatTime(insertDate),
+          ownerID: this.id,
+          selectID: val,
+          selectValue: val,
+          value: ''
+        }
+        if (this.details.length > 0) {
+          this.details[this.details.length - 1].value = ''
+        }
+        this.details.push(item)
+      },
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>

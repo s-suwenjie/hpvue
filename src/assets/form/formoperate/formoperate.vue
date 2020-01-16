@@ -1,0 +1,49 @@
+<template>
+  <div class="f_operate">
+    <div v-show="isNotShowOperate" class="btn">
+      <slot name="btn"></slot>
+    </div>
+    <div class="info">
+      <div>
+        <p>首次添加：<span>{{createName}}</span></p>
+        <p>时间：<span>{{insertDate}}</span></p>
+      </div>
+      <div>
+        <p>最后修改：<span>{{updateName}}</span></p>
+        <p>时间：<span>{{updateDate}}</span></p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'yhm-formoperate',
+    props:{
+      isNotShowOperate:{
+        type:Boolean,
+        default:true
+      },
+      createName:{
+        type:String,
+        default:""
+      },
+      insertDate:{
+        type:String,
+        default:"当前时间"
+      },
+      updateName:{
+        type:String,
+        default:""
+      },
+      updateDate:{
+        type:String,
+        default:"当前时间"
+      }
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>
