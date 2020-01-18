@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { guid } from '@/assets/common.js'
+  import { guid,accAdd } from '@/assets/common.js'
   export default {
     name: 'yhm-app-scroll',
     inject: ["p____page"],
@@ -69,10 +69,30 @@
         scrollWidth: '', // 滚动条背景宽度
         scrollRatio: '', // 滚动比例
         startTime: '', // 触摸开始时间
-        endTime: '' // 触摸结束时间
+        endTime: '', // 触摸结束时间
+        maxHeight:0,
+        distanceArray:[],    //间隔
+        max:0,
+        min:0,
+        selectIndex:0,
+        isMove:false,
       };
     },
     props:{
+      isNavigation:{
+        type:Boolean,
+        default:false
+      },
+      selectNavigation:{
+        type:String,
+        default:''
+      },
+      selectNavigationList:{
+        type:Array,
+        default:function() {
+            return []
+        }
+      },
       isAllowRefresh:{
         type:Boolean,
         default:true
@@ -123,7 +143,6 @@
         type:String,
         default:'刷新成功'
       },
-
       pullUpTitle:{
         type:String,
         default:'正在加载'
@@ -138,9 +157,10 @@
         let wrapper = el.firstChild
         let screenHeight = document.documentElement.clientHeight || document.body.clientHeight
         let elHeight = el.clientHeight < screenHeight ? el.clientHeight : screenHeight
+        this.min = elHeight - wrapper.clientHeight
         // console.log("screenHeight：" + screenHeight)
         // console.log("elHeight：" + elHeight)
-        // console.log("elHeight：" + elHeight)
+        // console.log("elHeight：" + wrapper.clientHeight)
         // console.log("wrapper.offsetHeight：" + wrapper.offsetHeight)
         this.scrollHeight = elHeight * 0.98
         this.maxDistance = wrapper.offsetHeight - elHeight
@@ -149,7 +169,98 @@
         }
         this.scrollRatio = this.scrollHeight / wrapper.offsetHeight
       },
+      initDistanceArray(){
+        if(this.distanceArray.length === 0){
+          let el = this.$el.firstChild
+          let start = el.childNodes[0].getBoundingClientRect().y
+          for(let i = 0; i < el.childNodes.length; i++){
+            let node = el.childNodes[i]
+            let val = (node.getBoundingClientRect().y - start) * -1
+            if(val < 0) {
+              this.distanceArray.push(val)
+            }
+          }
+        }
+      },
+      initNavigation(){
+        console.log(this.distance)
+        if(this.distance > this.max){
+          this.distance = this.max
+        }
+        if(this.distance < this.min){
+          this.distance = this.min
+        }
+        this.initDistanceArray()
+        // let el = this.$el.firstChild
+        // // console.log("this.distance:" + this.distance)
+        //
+        // if(this.distanceArray.length === 0){
+        //   let start = el.childNodes[0].getBoundingClientRect().y
+        //   for(let i = 0; i < el.childNodes.length; i++){
+        //     let node = el.childNodes[i]
+        //     let val = (node.getBoundingClientRect().y - start) * -1
+        //     if(val < 0) {
+        //       this.distanceArray.push(val)
+        //     }
+        //   }
+        // }
+
+        for(let i = 0; i < this.distanceArray.length; i++){
+          let distance = this.distanceArray[i]
+          if(distance < this.distance){
+            this.selectIndex = i
+            break
+          }
+        }
+        // console.log(this.distanceArray)
+        // for(let i = 0; i < el.childNodes.length; i++){
+        //   let node = el.childNodes[i]
+        //
+        //   console.log(node.getBoundingClientRect())
+
+          // height = accAdd(height,node.clientHeight)
+          // //console.log('height:'+(height * -1))
+          // if(height * -1 < this.distance){
+          //   selectIndex = i
+          //   break
+          // }
+        // }
+
+        // el.childNodes.forEach(function (node,i) {
+        //
+        //   console.log('height:'+(height * -1))
+        // })
+        // console.log('selectIndex:'+this.selectIndex)
+        // console.log("==========================")
+      },
+      initNavigationSelect(selectVal){
+        if(this.isNavigation && !this.isMove){
+          let selectIndex = 0
+          for (let i = 0; i < this.selectNavigationList.length; i++){
+            if(this.selectNavigationList[i].title === selectVal){
+              selectIndex = i
+              break
+            }
+          }
+          this.$el.firstChild.style.transitionDuration = '1000ms'
+          if(selectIndex === 0){
+            this.distance = 0
+            this.hisdistance = 0
+          }
+          else{
+            this.initDistanceArray()
+            let val = this.distanceArray[selectIndex-1]
+            if(val < this.min){
+              val = this.min
+            }
+            this.distance = val
+            this.hisdistance = val
+            console.log(11111111111)
+          }
+        }
+      },
       touchStart () {
+        this.isMove = false
         // 触摸坐标
         this.start.Y = event.touches[0].clientY;
         this.startTime = new Date().getTime();
@@ -159,19 +270,28 @@
         this.token = guid()
         this.scrollbar = true       //按下的时候显示滚动条
         this.isSourcePosition = this.hisdistance === 0  //判断按下的时候是否在原位
+
       },
       touchMove () {
+        this.isMove = true
         this.scrollbar = true
         let self = this;
-        event.preventDefault();
-        self.$el.firstChild.style.transitionDuration = '0ms';
-        self.$el.lastChild.children[0].style.transitionDuration = '0ms';
+        event.preventDefault()
+        self.$el.firstChild.style.transitionDuration = '0ms'
+        self.$el.lastChild.children[0].style.transitionDuration = '0ms'
         // 滑动时候的坐标
-        this.move.Y = event.touches[0].clientY;
+        this.move.Y = event.touches[0].clientY
         // 滑动距离
-        let tance = this.move.Y - this.start.Y; // 本次滑动距离;
-        this.distance = this.hisdistance + tance; // 页面滑动距离(上一次滑动距离 + 本次滑动距离)
+        let tance = this.move.Y - this.start.Y // 本次滑动距离;
 
+        console.log('tance:'+tance)
+        console.log('this.hisdistance:'+this.hisdistance)
+        console.log('this.distance:'+this.distance)
+
+        this.distance = this.hisdistance + tance // 页面滑动距离(上一次滑动距离 + 本次滑动距离)
+        if(this.isNavigation){
+          this.initNavigation()
+        }
 
         if(this.pullDownRefreshUrl) {
           //下拉刷新效果
@@ -253,7 +373,9 @@
         }
 
         this.distance = this.hisdistance + (this.move.Y - this.start.Y) * self.speed;
-
+        if(this.isNavigation){
+          this.initNavigation()
+        }
 
         if (self.distance >= 0) {
           self.hisdistance = 0; // 清除上一次滑动距离
@@ -328,6 +450,7 @@
         self.move.Y = 0;
         this.timeoutEvent = setTimeout(() => {
           this.scrollbar = false
+          this.isMove = false
         },timeout)
       }
     },
@@ -358,6 +481,12 @@
       pageIndexValue(value){
         let js = "this.p____page.pageIndex = " + value
         eval(js);
+      },
+      selectIndex(value){
+        this.$emit("call",value)
+      },
+      selectNavigation(value){
+        this.initNavigationSelect(value)
       }
     }
   }

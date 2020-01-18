@@ -128,7 +128,7 @@
     font-size: 12/@rem;
     color: #333;
     margin-right: 10/@rem;
-    transform: rotate(-45deg);
+    transform: rotate(-30deg);
   }
 }
 
@@ -292,8 +292,8 @@
   align-items: center;
 }
 .app_alert_btn{
-  height: 30/@rem;
-  line-height: 30/@rem;
+  height: 35/@rem;
+  line-height: 35/@rem;
   box-sizing: border-box;
   font-size: 14/@rem;
   color: #666;
@@ -301,7 +301,7 @@
   background-color: #fff;
   border-radius: 4/@rem;
   border: solid 1/@rem #bfbfbf;
-  padding: 0 0.2rem;
+  padding: 0 0.3rem;
   margin-bottom: 0.2rem;
 }
 .app_alert_main{
@@ -315,6 +315,7 @@
 .hidden{
   position: absolute;
   right: -99%;
+  transition: all 1s;
 }
 .app_table_tr_money{
   width: 33%;
@@ -322,4 +323,9 @@
 }
 .app_table_tr_img{
   margin:0 10/@rem;
+}
+.active{
+  background-color:#49a9ea;
+  color:#fff;
+  border: 1/@rem solid #49a9ea;
 }

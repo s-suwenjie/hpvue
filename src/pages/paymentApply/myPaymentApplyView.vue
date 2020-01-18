@@ -1,5 +1,5 @@
 <template>
-  <div class="f_main">
+  <div class="f_main mb35">
     <yhm-view-body>
       <template #title>基本信息</template>
       <template #body>
@@ -173,6 +173,7 @@
         isApproval: true,
         empty: false,
         isFinish: '',
+        isChecks: '',
         isChecksList:[],
         appropriationMoney:[],
         isAppropriationMoney:false,

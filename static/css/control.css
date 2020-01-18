@@ -196,6 +196,8 @@
   min-height: 22px;
   line-height: 22px;
   font-size: 12px;
+  color: #333;
+
 }
 
 .c_content_div{
@@ -770,10 +772,15 @@
   justify-content: center;
   align-items: center;
   background-color: #FFFFFF;
-  position: absolute !important;
+  position: fixed !important;
   z-index: 999999;
   box-shadow: 0 0 20px #000000;
   border-radius: 10px;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
 }
 .preview_showImg>img{
   max-width: 100%;

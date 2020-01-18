@@ -8,41 +8,49 @@
           <span class="icon-arrow top_data_icon" ></span>
         </div>
       </div>
-      <div class="main flex">
-        <div class="main_left main_center">
-<!--          <div class="main_top left">-->
-<!--            <div class="img">-->
-<!--              <span class="img_test" v-show="!directionShow">支出</span>-->
-<!--              <img src="../../../static/staticImage/unit/disbursement.svg" class="rotateAgainst" width="46px" height="76px" alt="支出"  v-show="!directionShow">-->
-<!--              <span class="img_test" style="color: #49a9ea;" v-show="directionShow">收入</span>-->
-<!--              <img src="../../../static/staticImage/unit/income.svg" class="img_right rotateJust" width="46px" height="76px" alt="收入" v-show="directionShow">-->
 
-<!--            </div>-->
-<!--          </div>    -->
+      <div class="main flex">
+
+        <div class="main_left main_center">
+            <div class="img">
+              <span class="img_test" v-show="!directionShow">支出</span>
+              <img src="../../../static/staticImage/unit/disbursement.svg" class="rotateAgainst main_img" alt="支出"  v-show="!directionShow">
+              <span class="img_test" style="color: #49a9ea;" v-show="directionShow">收入</span>
+              <img src="../../../static/staticImage/unit/income.svg" class="img_right rotateJust main_img" alt="收入" v-show="directionShow">
+            </div>
+            <p class="main_left_money" style="color: #f00;" v-show="!directionShow" v-html="tenThousandFormatShow(money)"></p>
+          <p class="main_left_money" style="color: #49a9ea;" v-show="directionShow" v-html="tenThousandFormatShow(money)"></p>
         </div>
+
         <div class="main_right main_center">
           <p>当前余额</p><span v-html="tenThousandFormatShow(money)"></span>
           <p>交易后余额</p><span v-html="tenThousandFormatShow(money)"></span>
         </div>
       </div>
-      <yhm-app-structure-menu-group title="我的审批">
 
-      </yhm-app-structure-menu-group>
+      <div>
+        <yhm-app-structure-menu-group>
+            <yhm-app-view-control title="事由" :content="12" ></yhm-app-view-control>
+            <yhm-app-view-control title="凭证" :content="123" ></yhm-app-view-control>
+            <yhm-app-view-control title="备注" :content="123" ></yhm-app-view-control>
+        </yhm-app-structure-menu-group>
+      </div>
+
     </div>
 </template>
 
 <script>
-  import { managermixin } from '@/assets/manager.js'
+  import { appformmixin } from '@/assetsApp/app_form.js'
   import appswipe from '../common/appswipe'
   export default {
     name: 'bankDetailCashierView',
-    mixins: [managermixin],
-
+    mixins: [appformmixin],
     components:{
       appswipe
     },
     data(){
       return{
+        directionShow:true,
         money:'367896123',
         list: [
           {
@@ -143,10 +151,53 @@
     border-radius: 8/@rem;
     border: solid 1/@rem #bfbfbf;
   }
+  .main_img{
+    width: 46/@rem;
+    height: 76/@rem;
+  }
 }
 .flex{
   display: flex;
   align-items: center;
+}
+.main_left_money{
+  font-size: 14/@rem;
+  text-align: center;
+}
+.rotateAgainst{
+  transform:rotate(-7deg);
+  -ms-transform:rotate(-7deg); 	/* IE 9 */
+  -moz-transform:rotate(-7deg); 	/* Firefox */
+  -webkit-transform:rotate(-7deg); /* Safari 和 Chrome */
+  -o-transform:rotate(-7deg); 	/* Opera */
+}
+.rotateJust{
+  transform:rotate(7deg);
+  -ms-transform:rotate(7deg); 	/* IE 9 */
+  -moz-transform:rotate(7deg); 	/* Firefox */
+  -webkit-transform:rotate(7deg); /* Safari 和 Chrome */
+  -o-transform:rotate(7deg); 	/* Opera */
+}
+.img{
+  width: 73/@rem;
+  height: 76/@rem;
+  position: relative;
+  margin: 12/@rem auto 8/@rem auto;
+  background: url("../../../static/staticImage/unit/money.svg") no-repeat;
+  background-size: 73/@rem 76/@rem;
+
+  .img_right{
+    position: absolute;
+    right: 0;
+  }
+  .img_test{
+    color: #f00;
+    font-size: 14/@rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
 }
 
 </style>

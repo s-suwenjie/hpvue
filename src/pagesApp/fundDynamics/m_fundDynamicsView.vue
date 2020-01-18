@@ -7,7 +7,7 @@
       <yhm-app-structure-menu-group title="我的审批" :content-show="false">
         <template #rgtStructure>
           <div style="display: flex;justify-content: space-between;">
-            <yhm-app-button @call="alertShow=true,shadeShow=true,hideShow=false" value="展开筛选" icon="" category="two"></yhm-app-button>
+            <yhm-app-button @call="leftAlert=true" value="展开筛选" icon="" category="two"></yhm-app-button>
             <yhm-app-button  value="资金日报" icon="" category="five"></yhm-app-button>
           </div>
         </template>
@@ -27,41 +27,43 @@
           <yhm-app-view-control title="今日资金总额" :content="amountMoney" type="money" style="padding:0 0.25rem;text-align: left"></yhm-app-view-control>
         </yhm-app-structure-group-operate>
       </yhm-app-structure-menu-group>
-      <div class="a_mask a_mask_show" v-if="shadeShow" style="z-index: 1;"></div>
-      <div class="app_alert" v-show="alertShow" :class="{'hidden':hideShow}" style="transition: all 0.5s">
-        <div class="alert_top">
-          <span class="i-btn-del app_aller_del" @click="shadeShow=false,hideShow=true" ></span>
-        </div>
-        <div class="app_alert_main">
+      <appfiltrate v-show="leftAlert" @click="leftAlert=!leftAlert" :hide-show="!leftAlert" >
           <p class="app_alert_title">活跃度</p>
           <div class="app_main_btn">
-            <span v-for="(item,index) in livenessList" :key="index" @click="livenessClick(index,item)" class="app_alert_btn liveness">{{item}}</span>
+            <span v-for="(item,index) in livenessList" :key="index" @click="livenessClick(index)" :class="{active:index==liveness}" class="app_alert_btn liveness">{{item}}</span>
           </div>
           <p class="app_alert_title">账户分类</p>
           <div style="margin-bottom: 0.3rem;" class="app_main_btn">
-            <span v-for="(item,index) in accountList" :key="index" @click="accountClick(index,item)" class="app_alert_btn account">{{item}}</span>
+            <span v-for="(item,index) in accountList" :key="index" @click="accountClick(index,item)" :class="{active:index==account}" class="app_alert_btn account">{{item}}</span>
           </div>
-        </div>
         <div class="alert_bottom" style="display: flex;justify-content: center;">
           <yhm-app-button  value="重置" @call="reset()" icon="" category="five" style="border: 1px solid #666;margin-right:0.75rem;"></yhm-app-button>
           <yhm-app-button  value="确定" @call="confirm(liveness,livenessList[liveness],account,accountList[account])" icon="" category="two"></yhm-app-button>
         </div>
-      </div>
+      </appfiltrate>
+
     </div>
   </div>
 </template>
 
 <script>
   import { appviewmixin } from '@/assetsApp/app_view.js'
+  import appfiltrate from '../common/appfiltrate'
   export default {
     name: 'm_fundDynamicsView',
     mixins:[appviewmixin],
+    components:{
+      appfiltrate
+    },
     data(){
       return{
+        leftAlert:false,
+        liveness:0,
+        livenessList:['活跃','不活跃','全部'],
+        account:0,
+        accountList:['现金账户','网银账户','网络账户','Pos账号','全部'],
         money:'1233123123',
-        hideShow:false,//弹窗收回的动画
-        alertShow:false,//弹窗
-        shadeShow:false,//遮罩层
+        active: 0,
         amountMoney:'32131',
         'list':[
           {
@@ -82,43 +84,28 @@
             'bankLogo': '360C8A55-80AD-46D8-B4E6-F3A474D2D616.png',
           },
         ],
-        liveness:'',
-        livenessList:['活跃','不活跃','全部'],
-        account:'',
-        accountList:['现金账户','网银账户','网络账户','Pos账号','全部'],
-        style:{'background-color':'#49a9ea','color':'#ffffff'},//未选中的按钮样式
-        checkedStyle:{'background-color':'#fff','color':'#666'},//选中的按钮样式
       }
     },
     methods:{
       confirm(livenessIndex,livenessItem,accountIndex,accountItem){//点击确定后 返回选中索引与值
-        this.shadeShow=false
-        this.hideShow=true
+        this.leftAlert=false
         // this.list = []
+        console.log( livenessIndex,livenessItem,accountIndex,accountItem)
       },
       reset(){//重置选择
-        this.tacitlyApprove()//选中数组中 全部
-        $('.liveness').css(this.checkedStyle)//清除其它选中样式
-        $('.account').css(this.checkedStyle)
         this.liveness = this.livenessList.length-1//重置索引值
         this.account = this.accountList.length-1
       },
-      clickAddCss(className,index){//点击添加选中样式
-        $('.'+className).css(this.checkedStyle)
-        $('.'+className).eq(index).css(this.style)
-      },
       livenessClick(index,item){//获取选中索引以及值
-        this.liveness=index
-        this.clickAddCss('liveness',index)
+        this.liveness = index
       },
       accountClick(index,item){//获取选中索引以及值
-        this.account=index
-        this.clickAddCss('account',index)
+        this.account = index
       },
       tacitlyApprove(){//默认选中全部
         this.$nextTick(()=>{
-          $('.liveness').eq(this.livenessList.length-1).css(this.style)
-          $('.account').eq(this.accountList.length-1).css(this.style)
+          this.liveness = this.livenessList.length-1//重置索引值
+          this.account = this.accountList.length-1
         })
       }
     },
@@ -131,4 +118,5 @@
 
 <style scoped lang="less">
   @import "../../../static/appStatic/fundDynamisc.css";
+
 </style>

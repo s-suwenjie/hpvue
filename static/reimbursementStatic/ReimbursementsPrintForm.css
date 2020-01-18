@@ -1,11 +1,10 @@
-
 /*有票报销无分页*/
 .divA
 {
     margin: 0 auto;
     width: 794px;
     height: 472px;
-    background-image: url('./Images/costdemoA.jpg');
+    background-image: url('Images/costdemoA.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     position: relative;
@@ -17,7 +16,7 @@
     margin: 0 auto;
     width: 794px;
     height: 472px;
-    background-image: url('./Images/costdemoB.jpg');
+    background-image: url('Images/costdemoB.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     position: relative;
@@ -29,7 +28,7 @@
     margin: 0 auto;
     width: 794px;
     height: 472px;
-    background-image: url('./Images/costdemoC.jpg');
+    background-image: url('Images/costdemoA.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     position: relative;
@@ -41,12 +40,68 @@
     margin: 0 auto;
     width: 794px;
     height: 472px;
-    background-image: url('./Images/costdemoD.jpg');
+    background-image: url('Images/costdemoB.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     position: relative;
 }
-
+.aPerson
+{
+	position: absolute;
+    left: 440px;
+    top: 339px;
+    font-size: 12px;
+    height: 18px;
+    width: 120px;
+}
+.bPerson
+{
+	position: absolute;
+    left: 669px;
+    top: 339px;
+    font-size: 12px;
+    height: 18px;
+    width: 120px;
+}
+.cPerson
+{
+	position: absolute;
+    left: 440px;
+    top: 362px;
+    font-size: 12px;
+    height: 18px;
+    width: 120px;
+}
+.dPerson
+{
+	position: absolute;
+    left: 669px;
+    top: 362px;
+    font-size: 12px;
+    height: 18px;
+    width: 120px;
+}
+.branchDetail
+{
+	width: 290px;
+    text-align: center;
+}
+.remark
+{
+	text-align: center;
+	width: 165px;
+}
+.returnMoney
+{
+	position: absolute;
+    left: 453px;
+    top: 412px;
+    font-size: 12px;
+    height: 18px;
+    line-height: 30px;
+    width: 80px;
+    text-align: center;
+}
 /**
 .divA div
 {
@@ -69,15 +124,15 @@
 .CodeImgA
 {
     position: absolute;
-    left: 23px;
-    top: 17px;
+    left: 40px;
+    top: 12px;
 }
 
 .CodeImgB
 {
     position: absolute;
     right: 25px;
-    top: 17px;
+    top: 10px;
 }
 
 .UnitCodeA
@@ -156,8 +211,8 @@
 .DepartmentA
 {
     position: absolute;
-    left: 95px;
-    top: 71px;
+    left: 110px;
+    top: 66px;
     font-size: 12px;
     height: 20px;
     line-height: 20px;
@@ -167,8 +222,8 @@
 .PageA
 {
     position: absolute;
-    left: 680px;
-    top: 69px;
+    left: 676px;
+    top: 66px;
     font-size: 11px;
     height: 20px;
     line-height: 20px;
@@ -179,8 +234,8 @@
 .Year
 {
     position: absolute;
-    left: 303px;
-    top: 71px;
+    left: 320px;
+    top: 66px;
     font-size: 12px;
     height: 20px;
     line-height: 20px;
@@ -189,8 +244,8 @@
 .Month
 {
     position: absolute;
-    left: 373px;
-    top: 71px;
+    left: 372px;
+    top: 66px;
     font-size: 12px;
     height: 20px;
     line-height: 20px;
@@ -199,8 +254,8 @@
 .Day
 {
     position: absolute;
-    left: 428px;
-    top: 71px;
+    left: 413px;
+    top: 66px;
     font-size: 12px;
     height: 20px;
     line-height: 20px;
@@ -210,35 +265,36 @@
 .RemarkDetail
 {
     position: absolute;
-    left: 504px;
-    top: 108px;
+    left: 515px;
+    top: 100px;
     font-size: 12px;
     height: 122px;
-    width: 251px;
+    width: 235px;
     padding: 5px;
+	text-align: right;
 }
 
 .ContentDetail
 {
     position: absolute;
-    left: 23px;
-    top: 152px;
+    left: 36px;
+    top: 115px;
     font-size: 12px;
-    height: 176px;
-    width: 421px;
+    height: 207px;
+    width: 725px;
 }
 
 .DetailUse
 {
-    width: 313px;
+    width: 145px;
     padding: 3px;
-    height: 37px;
-    line-height: 14px;
+    height: 49px;
+    line-height: 16px;
 }
 
 .DetailMoney
 {
-    width: 95px;
+    width: 113px;
     text-align: right;
     padding: 3px;
     height: 37px;
@@ -248,70 +304,70 @@
 .Total
 {
     position: absolute;
-    left: 342px;
-    top: 329px;
+    left: 189px;
+    top: 325px;
     font-size: 12px;
-    height: 44px;
-    line-height: 44px;
-    width: 102px;
+    height: 66px;
+    line-height: 70px;
+    width: 115px;
     text-align:right;
 }
 
 .TotalBig
 {
     position: absolute;
-    left: 105px;
-    top: 376px;
+    left: 123px;
+    top: 393px;
     font-size: 12px;
-    height: 30px;
-    line-height: 30px;
-    width: 322px;
+    height: 48px;
+    line-height: 48px;
+    width: 182px;
 }
 
 .PrettyCash
 {
     position: absolute;
-    left: 505px;
-    top: 376px;
+    left: 370px;
+    top: 390px;
     font-size: 12px;
-    height: 30px;
-    line-height: 30px;
-    width: 60px;
-    text-align:center;
+    height: 25px;
+    line-height: 35px;
+    width: 60px;   
+    text-align:center; 
 }
 
 .RePrettyCash
-{
+{                 
     position: absolute;
-    left: 665px;
-    top: 376px;
+    left: 530px;
+    top: 390px;
     font-size: 12px;
-    height: 30px;
-    line-height: 30px;
-    width: 80px;
-    text-align:center;
+    height: 25px;
+    line-height: 35px;
+    width: 60px;   
+    text-align:center;   
 }
 
 .PageMoney
 {
     position: absolute;
-    left: 655px;
-    top: 415px;
+    left: 650px;
+    top: 438px;
     font-size: 12px;
     height: 30px;
     line-height: 30px;
-    width: 110px;
-    text-align:right;
+    width: 110px;   
+    text-align:right;   
 }
 
 .PageIndex
-{
+{                     
     position: absolute;
-    left: 655px;
-    top: 433px;
+    left: 650px;
+    top: 452px;
     font-size: 12px;
     height: 30px;
     line-height: 30px;
-    width: 110px;
-    text-align:right;
+    width: 110px;   
+    text-align:right;   
 }

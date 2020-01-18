@@ -18,6 +18,7 @@
   list-style: none;
   padding: 0;
   height: 100%;
+  width: 100%;
 
   .app_topTip{
     position: absolute;
@@ -129,9 +130,14 @@
   left: 0;
   right: 0;
   background: #FFF;
+  height: 57/@rem;
+  z-index: 99;
+  border-bottom:1/@rem solid #bfbfbf;
+}
+
+.structure_top_tap_content{
   display: flex;
   flex-direction: row;
-  z-index: 99;
 }
 
 .structure_top_tap_height{
@@ -148,11 +154,34 @@
   border-bottom:1/@rem solid #bfbfbf;
 }
 
-.structure_top_tap_menu_select{
-  color: #49a9ea;
-  border-bottom:3/@rem solid #49a9ea;
+.structure_top_tap_menu_customize{
+  white-space: nowrap;
+  font-size: 17/@rem;
+  padding: 16/@rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+.structure_top_tap_menu_select{
+  color: #49a9ea;
+  position: relative;
+}
+
+.structure_top_tap_menu_select:before{
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 4/@rem;
+  background-color: #49a9ea;
+  bottom: 0/@rem;
+  left: 0;
+  z-index: 99;
+}
+.structure_main_location{
+  float: right;
+  color: #4bb414;
+}
 .rgtStructure{
   float: right;
 }

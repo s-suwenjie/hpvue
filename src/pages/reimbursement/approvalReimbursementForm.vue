@@ -35,8 +35,8 @@
               <yhm-manager-td :value="item.subject"></yhm-manager-td>
               <yhm-manager-td-money :value="item.actualMoney"></yhm-manager-td-money>
               <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
-              <yhm-manager-td-center :value="item.invoiceCategoryName"></yhm-manager-td-center>
-              <yhm-manager-td :value="item.remark" ></yhm-manager-td>
+              <yhm-manager-td-center @click="listView(item)" :value="item.invoiceCategoryName" color="#49a9ea"></yhm-manager-td-center>
+              <yhm-manager-td :value="item.remark" @click="listView(item)" color="#49a9ea"></yhm-manager-td>
               <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
               <yhm-manager-td-operate>
                 <yhm-manager-td-operate-button :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>

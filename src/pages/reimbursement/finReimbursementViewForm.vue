@@ -29,14 +29,14 @@
             <yhm-managerth style="width: 120px" title="审批状态"></yhm-managerth>
           </template>
           <template #listBody>
-            <tr v-for="(item,index) in detail" :class="{InterlacBg:index%2!=0}" :key="index">
+            <tr v-for="(item,index) in detail" :class="[{InterlacBg:index%2!=0},{formListDelLine: item.isFinish === '1' && item.state > '0'}]" :key="index">
               <yhm-manager-td-look @click="listView(item.id)"></yhm-manager-td-look>
               <yhm-manager-td :value="item.subject"></yhm-manager-td>
               <yhm-manager-td-money :value="item.actualMoney"></yhm-manager-td-money>
               <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
               <yhm-manager-td-center @click="listView(item.id)" :value="item.invoiceCategoryName" color="#49a9ea"></yhm-manager-td-center>
-              <yhm-manager-td-center :value="item.remark"></yhm-manager-td-center>
-              <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
+              <yhm-manager-td-center @click="listView(item.id)" :value="item.remark" color="#49a9ea"></yhm-manager-td-center>
+              <yhm-manager-td-center :value="item.stateVal" :color="item.rejectColor"></yhm-manager-td-center>
             </tr>
           </template>
           <template #empty>

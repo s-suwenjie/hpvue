@@ -119,7 +119,7 @@
   font-size: 0.32rem;
   color: #333;
   margin-right: 0.26666667rem;
-  transform: rotate(-45deg);
+  transform: rotate(-30deg);
 }
 .abscissa {
   display: inline-block;
@@ -278,8 +278,8 @@
   align-items: center;
 }
 .app_alert_btn {
-  height: 0.8rem;
-  line-height: 0.8rem;
+  height: 0.93333333rem;
+  line-height: 0.93333333rem;
   box-sizing: border-box;
   font-size: 0.37333333rem;
   color: #666;
@@ -287,7 +287,7 @@
   background-color: #fff;
   border-radius: 0.10666667rem;
   border: solid 0.02666667rem #bfbfbf;
-  padding: 0 0.2rem;
+  padding: 0 0.3rem;
   margin-bottom: 0.2rem;
 }
 .app_alert_main {
@@ -301,6 +301,7 @@
 .hidden {
   position: absolute;
   right: -99%;
+  transition: all 1s;
 }
 .app_table_tr_money {
   width: 33%;
@@ -308,5 +309,10 @@
 }
 .app_table_tr_img {
   margin: 0 0.26666667rem;
+}
+.active {
+  background-color: #49a9ea;
+  color: #fff;
+  border: 0.02666667rem solid #49a9ea;
 }
 /*# sourceMappingURL=fundDynamisc.css.map */

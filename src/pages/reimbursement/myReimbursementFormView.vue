@@ -36,7 +36,7 @@
               <yhm-manager-td-money :value="item.actualMoney"></yhm-manager-td-money>
               <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
               <yhm-manager-td-center @click="listView(item.id)" :value="item.invoiceCategoryName" color="#49a9ea"></yhm-manager-td-center>
-              <yhm-manager-td-center :value="item.remark"></yhm-manager-td-center>
+              <yhm-manager-td-center :value="item.remark" @click="listView(item.id)" color="#49a9ea"></yhm-manager-td-center>
               <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
             </tr>
           </template>

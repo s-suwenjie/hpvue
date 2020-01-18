@@ -5,18 +5,17 @@
         内容 {{ index }}
       </van-tab>
     </van-tabs>
+    <TabBar></TabBar>
 
-    <van-tabbar v-model="batActive">
-      <van-tabbar-item icon="home-o">分类</van-tabbar-item>
-      <van-tabbar-item icon="friends-o">消息</van-tabbar-item>
-      <van-tabbar-item icon="setting-o">我的</van-tabbar-item>
-    </van-tabbar>
   </div>
 </template>
 <script>
+
+import TabBar from './common/appTabBar'
   export default {
     name: 'About',
     components: {
+      TabBar
     },
     props: {},
     data(){

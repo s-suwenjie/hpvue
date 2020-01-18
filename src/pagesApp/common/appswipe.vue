@@ -33,7 +33,7 @@
 <script>
   import { managermixin } from '@/assets/manager.js'
   export default {
-    name: 'swipe',
+    name: 'appswipe',
     mixins:[managermixin],
     data(){
       return{
@@ -167,7 +167,7 @@
     }
   }
 </script>
-<style lang="less">
+<style lang="less" scoped>
   @rem: 375/10rem;
   .active{
     padding-right: 48/@rem !important;

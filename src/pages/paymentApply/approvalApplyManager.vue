@@ -366,7 +366,7 @@
         let url = '/approvalApplyView?id=' + item.id + '&isApproval='+item.isApproval+ '&isPrint='+item.isPrint+ '&approval='+item.approval
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '630',
+          height: '650',
           url: url,
           title: title,
           closeCallBack: (data) => {

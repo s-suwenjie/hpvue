@@ -284,6 +284,22 @@
   color: #49a9ea;
 }
 
+/* form 删除线 */
+.formListDelLine{
+  position: relative;
+}
+.formListDelLine>td:after{
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width: 1000px;
+  height: 2px;
+  left: 25px;
+  background-color: #f00;
+  z-index: 9;
+  margin-top: -18px;
+}
+
 /* manager删除线 */
 .listDelLine{
   position: relative;

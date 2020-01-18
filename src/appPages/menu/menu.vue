@@ -23,13 +23,13 @@
     },
     methods:{
       gotoPaymentPlan(){
-        window.location = "/homeApp/m_myPaymentPlanManager?pageTableName=43"
+        // window.location = "/homeApp/m_myPaymentPlanManager?pageTableName=43"
+        this.$router.push("/homeApp/m_myPaymentPlanManager?pageTableName=43")
       },
       gotoPaymentApply(){
         window.location = "/homeApp/m_paymentApplyManager?pageTableName=45"
       },
       gotoReimbursement(){
-        // window.location = "/Com/m_approvalManager?pageTableName=40"
         this.$router.push("/homeApp/m_reimbursementManager?pageTableName=40")
       },
       gotoPurchase(){
@@ -43,7 +43,6 @@
         url: '/PersonOffice/approvalManagerAllNumber',
         loading:'0',
         call: (data) => {
-          console.log(data)
           this.paymentPlan = data.payPlan
           this.paymentApply = data.payment
           this.reimbursement = data.reimbursements

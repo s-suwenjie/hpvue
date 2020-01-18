@@ -1,5 +1,5 @@
 <template>
-    <div class="app_view_menu_main" @touchend="touchEndEvent">
+    <div class="app_view_menu_main" @touchstart="touchStartEvent" @touchmove="touchMoveEvent" @touchend="touchEndEvent">
       <img :src="url" alt="">
       <span>{{name}}</span>
       <i v-show="getShowNum" class="num">{{num}}</i>
@@ -9,6 +9,11 @@
 <script>
   export default {
     name: 'yhm-app-menu',
+    data(){
+      return{
+        isMove:false
+      }
+    },
     props:{
       name:{
         type:String,
@@ -24,8 +29,16 @@
       }
     },
     methods:{
+      touchStartEvent(){
+        this.isMove = false
+      },
+      touchMoveEvent(){
+        this.isMove = true
+      },
       touchEndEvent(){
-        this.$emit("call")
+        if(!this.isMove) {
+          this.$emit("call")
+        }
       }
     },
     computed : {

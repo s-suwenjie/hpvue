@@ -1,5 +1,5 @@
 import Qs from 'qs'
-import { guid } from '@/assets/common.js'
+import { guid , formatDateHtml,tenThousandFormatHtml,tenThousandFormat} from '@/assets/common.js'
 const appformmixin = {
   provide(){
     return{
@@ -15,6 +15,9 @@ const appformmixin = {
     }
   },
   methods:{
+    tenThousandFormatShow(data){
+      return tenThousandFormatHtml(data)
+    },
     setQuery2Value(key){
       let query = Qs.parse(location.search.substring(1))
       let js = 'let val = query.' + key + '; if(val) this.' + key + ' = val;'

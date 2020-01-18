@@ -99,7 +99,7 @@ AjaxRequest.prototype.requestMobile = function () {
   requestInstance.post(this.url,this.data).then(function (data) {
     if(data.type === 9){
       //处理登录问题
-      
+      window.location
     }
     else {
       if (ajaxRequest.successCall) {

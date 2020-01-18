@@ -1,5 +1,5 @@
 <template>
-  <div class="f_main mb16">
+  <div class="f_main mb35">
     <yhm-view-body>
       <template #title>基本信息</template>
       <template #body>

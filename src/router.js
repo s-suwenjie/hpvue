@@ -354,9 +354,13 @@ import m_rejectForm from './pagesApp/common/rejectForm.vue'
 
 /* 移动端 - 测试菜单 */
 import m_menu  from './pagesApp/m_menu'
+
 /* 移动端 - 测试导航菜单 */
 import m_menuBar  from './pagesApp/m_menuBar'
 import m_menuBars  from './pagesApp/m_menuBars'
+
+import m_tab  from './pagesApp/m_tab'
+
 /* 移动端 - 付款计划 */
 import m_myPaymentPlanManager from './pagesApp/paymentPlan/m_myPaymentPlanManager'
 import m_myPaymentPlanView from './pagesApp/paymentPlan/m_myPaymentPlanView'
@@ -681,6 +685,7 @@ export default new Router({
         { path: '/homeApp/m_menuBar', name: 'm_menuBar',component: m_menuBar,meta: {title: '测试导航菜单'}},
         { path: '/homeApp/m_menuBars', name: 'm_menuBars',component: m_menuBars,meta: {title: '测试导航菜单副本'}},
 
+        { path: '/homeApp/m_tab', name: 'm_tab',component: m_tab,meta: {title: '测试菜单'}},
       ]
     },
 

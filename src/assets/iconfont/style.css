@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?c26xw7');
-  src:  url('fonts/icomoon.eot?c26xw7#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?c26xw7') format('truetype'),
-    url('fonts/icomoon.woff?c26xw7') format('woff'),
-    url('fonts/icomoon.svg?c26xw7#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?r3ntcn');
+  src:  url('fonts/icomoon.eot?r3ntcn#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?r3ntcn') format('truetype'),
+    url('fonts/icomoon.woff?r3ntcn') format('woff'),
+    url('fonts/icomoon.svg?r3ntcn#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-saveNY:before {
+  content: "\e991";
+  color: #606060;
+}
 .icon-list:before {
   content: "\e98b";
   color: #606060;
