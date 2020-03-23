@@ -10,6 +10,7 @@
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
         <yhm-managerth  title="车牌号"></yhm-managerth>
+        <yhm-managerth  title="车主"></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in content"
@@ -22,7 +23,8 @@
             @mouseout="mouseoutEvent">
 
           <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
-          <yhm-manager-td :value="item.plate"></yhm-manager-td>
+          <yhm-manager-td-center :value="item.plate"></yhm-manager-td-center>
+          <yhm-manager-td :value="item.carOwner"></yhm-manager-td>
         </tr>
       </template>
       <template #empty>
@@ -44,6 +46,7 @@
     data(){
       return{
         plate:'',
+        carOwnerID:'',
       }
     },
     methods: {
@@ -52,7 +55,7 @@
           width: '1050',
           height: '600',
           title: '添加车辆信息',
-          url: '/repairWorkForm',
+          url: '/vehicleForm',
           closeCallBack: (data)=>{
             this.initPageData(false)
           }
@@ -63,12 +66,12 @@
         if (initValue) {
           // 页面初始化是需要的参数
           params = {
-            personID:this.personID
+            carOwnerID:this.carOwnerID
           }
         } else {
           // 页面非初始化时需要的参数
           params = {
-            personID:this.personID
+            carOwnerID:this.carOwnerID
           }
         }
         this.init({
@@ -83,7 +86,7 @@
       }
     },
     created () {
-      this.setQuery2Value('personID')
+      this.setQuery2Value('carOwnerID')
     }
 
   }

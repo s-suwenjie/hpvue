@@ -93,7 +93,7 @@
         },
         menuTabOn: 4,
         details:[
-          {id:'1', name: '付款计划',path:'/home/myManager/paymentPlanManager'},
+          {id:'1', name: '付款计划',path:'/home/myPaymentPlanManager'},
           {id:'2', name: '付款申请',path:'/home/myManager/paymentApplyManager'},
           {id:'3', name: '报销',path:'/home/myManager/reimbursementManager'},
           {id:'4', name: '采购计划',path:'/home/myPurchaseManager'},

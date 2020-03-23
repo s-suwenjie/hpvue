@@ -2,7 +2,7 @@
   <div v-if="show" :style="getWidth" class="c_main" :class="{c_main_m:category === 'm'}" v-validator="validatorEvent">
     <div v-if="getShowTip" :style="getTipStyle" class="c_tip" :class="{c_tip_m:category === 'm'}">
       <div>
-        {{txt|format(tip)}}
+        {{txt|format(tip,tipRule)}}
         <span v-show="txt !== '' && this.tip === 'money'">{{getTxtBig}}</span>
         <img :style="getTipArrowLeft" src="./images/arrow.png">
       </div>
@@ -11,7 +11,7 @@
     type:{{type}}<br>-->
     <div @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box" :class="{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_disable:noEdit === '1'}">
       <span v-if="beforeIcon != ''" @click="getFocus" class="c_icon" :class="[beforeIcon,{c_icon_m:category === 'm'}]"></span>
-      <input v-if="noEdit !== '1'" :maxlength="maxLength" ref="txt" class="c_content" v-model="txt" :style="getTxtWidth" :class="{pl10:beforeIcon == '',pr10:afterIcon == '',c_content_m:category === 'm'}" :type="type" :placeholder="placeholder" @input="inputEvent" @focus="focusEvent" @keydown.enter="keyDownEnter" @click.stop @blur="blurEvent" @change="changeEvent"/>
+      <input v-if="noEdit !== '1'" :maxlength="maxNum" ref="txt" class="c_content" v-model="txt" :style="getTxtWidth" :class="{pl10:beforeIcon == '',pr10:afterIcon == '',c_content_m:category === 'm'}" :type="type" :placeholder="placeholder" @input="inputEvent" @focus="focusEvent" @keydown.enter="keyDownEnter" @click.stop @blur="blurEvent" @change="changeEvent"/>
       <div v-if="noEdit === '1'" class="c_content_show" :style="getTxtWidth" :class="{pl10:beforeIcon == '',pr10:afterIcon == '',c_content_show_m:category === 'm'}">
         {{txt}}
         <template v-if="txt === ''">
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-  import {verify,tenThousandFormat,number2chinese,accAdd} from '@/assets/common.js'
+  import {verify,tenThousandFormat,number2chinese,accAdd,formatPhone,formatCustomizeTip} from '@/assets/common.js'
   export default {
     name: "yhm-text",
     inject: ["p____page"],
@@ -37,7 +37,8 @@
         mouseOver:false,
         error:false,
         repeatErrorMessage:this.repeatMessage,
-        errorTipMessage:""
+        errorTipMessage:"",
+        maxNum:this.maxLength
       }
     },
     props:{
@@ -110,6 +111,10 @@
         default:""
       },
       tip:{
+        type:String,
+        default:""
+      },
+      tipRule:{
         type:String,
         default:""
       },
@@ -288,12 +293,18 @@
       }
     },
     filters:{
-      format(data,category){
+      format(data,category,rule){
         if(category === "value"){
           return data;
         }
         else if(category === "money"){
           return tenThousandFormat(data);
+        }
+        else if(category === 'phone'){
+          return formatPhone(data)
+        }
+        else if(category === 'customize'){
+          return formatCustomizeTip(data,rule)
         }
         return data
       }
@@ -417,6 +428,11 @@
           }
         }
       }
+    },
+    created : function() {
+        if(this.tip === 'phone'){
+          this.maxNum = '11'
+        }
     }
   }
 </script>

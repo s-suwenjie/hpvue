@@ -174,6 +174,8 @@ Vue.use(selectbody)
 import formselectbox from '@/assets/formselectbox/formselectbox.js'
 Vue.use(formselectbox)
 
+import selectrgtbox from '@/assets/selectrgtbox/selectrgtbox.js'
+Vue.use(selectrgtbox)
 
 import formradiobutton from '@/assets/formradiobutton/formradiobutton.js'
 Vue.use(formradiobutton)
@@ -189,6 +191,9 @@ import commonbutton from '@/assets/commonbutton/commonbutton.js'
 Vue.use(commonbutton)
 import managerth from '@/assets/managerth/managerth.js'
 Vue.use(managerth)
+
+import managerthcheck from '@/assets/manager/th/managerthcheck/managerthcheck.js'
+Vue.use(managerthcheck)
 
 import dialogbutton from '@/assets/dialogbutton/dialogbutton.js'
 Vue.use(dialogbutton)

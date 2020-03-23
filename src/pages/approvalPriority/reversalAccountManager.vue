@@ -7,6 +7,7 @@
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/reversalAccountManager'}">冲账人员</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/boardFeesManager'}">董事会费人员</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/approvalPersonaliseManager'}">审批定制</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/insuranceProcessManager'}">保险审批制定</router-link>
       </template>
       <template #operate>
         <yhm-commonbutton value="添加人员" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>

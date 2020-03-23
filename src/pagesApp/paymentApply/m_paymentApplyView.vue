@@ -175,7 +175,6 @@
       document.querySelector('body').setAttribute('style', 'margin: 0 auto; width: 100%; background:#f3f3f3; overflow-x: hidden;height: 100%;');
       this.setQuery2Value('isFinishBack')
       this.setQuery2Value('isApproval')
-      console.log(this.isApproval)
       if(this.isApproval==='2'){
         this.resultShow = false
       } else{

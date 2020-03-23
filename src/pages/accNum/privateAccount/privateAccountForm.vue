@@ -7,15 +7,40 @@
         <yhm-form-radio @call="categoryEvent" title="账户分类" :select-list="categoryList" :value="category" id="category" rule="R0000" :no-edit="isEditBl "></yhm-form-radio>
         <yhm-form-radio :show="isIntBank && isNtwork" title="银行卡类型" :select-list="bankCartCategoryList" :value="bankCartCategor" id="bankCartCategor" rule="R0000" :no-edit="isEditBl"></yhm-form-radio>
         <yhm-form-select :show="isIntBank && isNtwork" title="开户行"   @click="selectEvent" :value="bank" id="bank" rule="R0000" :no-edit='1'></yhm-form-select>
-        <yhm-form-select title="户名" tip="person" rule="R0000" @click="selectUnit" :value="person" id="person" :no-edit="isEdit"></yhm-form-select>
+        <yhm-form-select title="户名" :noClick="isPerson" tip="person" rule="R0000" @click="selectUnit" :value="person" id="person" :no-edit="isEdit"></yhm-form-select>
         <yhm-form-text :show="isCash" @repeatverify="repeatverifyAccountEvent" ref="account" title="账号" :value="account" id="account"  rule="R0000" tip="account"></yhm-form-text>
         <yhm-form-radio :show="isCash" @call="isThirdPartEvent" title="户名类型" :select-list="isThirdPartPsd"  :value="isThirdPart" id="isThirdPart" rule="R0000" :no-edit="isEditBl"></yhm-form-radio>
         <yhm-form-text :show="isCash" tip="value" ref="thirdPartName" title="其他" subtitle="账户户名" :value="thirdPartName" id="thirdPartName" :no-edit="isEdit" :rule="isRule"></yhm-form-text>
         <yhm-form-radio :show="isNetwork" title="网络" subtitle="账户类型" :select-list="webAccountTypelist"  :value="webAccountType" id="webAccountType" rule="R0000" :no-edit="isEditBl"></yhm-form-radio>
         <yhm-formupload :show="isNetwork" :ownerID="id" :value="fileList" id="fileList" title="收款二维码上传" tag="privateAccount" subtitle="" multiple="multiple" :no-edit="isEditBl" ></yhm-formupload>
-
       </template>
     </yhm-formbody>
+    <yhm-form-list-edit :show="isList">
+      <template #title>重复账户信息</template>
+      <template #listHead>
+        <yhm-managerth style="width: 38px;background: linear-gradient(0deg, #ec6603, #a24906);" title="查看"></yhm-managerth>
+        <yhm-managerth title="户名" style="background: linear-gradient(0deg, #ec6603, #a24906);"></yhm-managerth>
+        <yhm-managerth style="width: 170px;background: linear-gradient(0deg, #ec6603, #a24906);" title="账号"></yhm-managerth>
+        <yhm-managerth style="width: 230px;background: linear-gradient(0deg, #ec6603, #a24906);" title="开户行"></yhm-managerth>
+        <yhm-managerth style="width: 100px;background: linear-gradient(0deg, #ec6603, #a24906);" title="账户状态"></yhm-managerth>
+        <yhm-managerth style="width: 150px;background: linear-gradient(0deg, #ec6603, #a24906);" title="操作"></yhm-managerth>
+      </template>
+      <template #listBody>
+        <tr v-for="(item,index) in list" :key="index" :class="{InterlacBg:index%2!==0}">
+          <yhm-manager-td-look @click="lookPublic(item)"></yhm-manager-td-look>
+          <yhm-manager-td :value="item.person"></yhm-manager-td>
+          <yhm-manager-td :value="item.account"></yhm-manager-td>
+          <yhm-manager-td :value="item.bank"></yhm-manager-td>
+          <yhm-manager-td v-show="item.state === 0" value="正常  "></yhm-manager-td>
+          <yhm-manager-td v-show="item.state === 1" value="休眠"></yhm-manager-td>
+          <yhm-manager-td v-show="item.state === 2" value="销户"></yhm-manager-td>
+          <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button v-show="item.state === 0 && isUrl" @click="select(item)" style="color:#ec6603" value="选择"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.state === 1" @click="recoveryUse(item)" style="color:#ec6603" value="恢复使用"></yhm-manager-td-operate-button>
+          </yhm-manager-td-operate>
+        </tr>
+      </template>
+    </yhm-form-list-edit>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn >
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
@@ -34,31 +59,21 @@
       return{
         id:'',
         ownerID:'',
-
         categoryList:[],        //账户分类
         category:'',             //账户分类
-
         bankCartCategoryList:[], //银行卡类型
         bankCartCategor:'',        //银行卡类型
-
         webAccountTypelist:[],   //网络账户类型
         webAccountType:'',      //网络账户类型
-
         bank:'',                   //开户行
         bankID:'',                 //开户行ID
-
         fileList:[],              //上传
-
         person:'',                //户名
         personID:'',              //户名ID
-
         remark:'',               //账号ID
-
         isThirdPartPsd:[],       //户名类型
         isThirdPart:'',         //户名类型
-
         account:'',            //账号
-
         thirdPartName:'',   //其他账户户名
 
         isIntBank: true,   //网银
@@ -70,12 +85,30 @@
         isNtwork: true,
         isNStwork: true,
         isRule: '',
+
+        list:[],
+        isList:false,
+
+        url:'',//0是在对公账账户模块进入   ''是选择页面进入
+        isUrl:false,
+        isPerson:false,//
       }
     },
     created () {
       this.setQuery2Value('id')
+      this.setQuery2Value('url')
+      this.setQuery2Value('personID')
+      let param={}
+      if(this.personID){
+        this.isPerson=true
+        param={
+          personID:this.personID,
+        }
+
+      }
       this.init({
         url: '/Fin/initPrivateAccountFormJson',
+        data:param,
         all: (data) => {
           /* 公共 无论查看和添加返回数据 */
           this.categoryList = data.categoryPsd.list
@@ -89,7 +122,9 @@
 
           this.isThirdPartPsd = data.isThirdPartPsd.list
           this.isThirdPart = data.isThirdPartPsd.value
-
+          if(this.personID){
+            this.person=data.person
+          }
           if(this.category === '1'){
             this.isIntBank = true
             this.isNetwork = false
@@ -128,6 +163,43 @@
       })
     },
     methods:{
+      select(item){
+        if(item.personID===this.personID){
+          this.$dialog.setReturnValue(item)
+          this.$dialog.close()
+        }else{
+          this.$dialog.alert({
+            tipValue: '请选择所选人账户',
+            alertImg: 'error',
+          })
+        }
+      },
+      //恢复账户使用
+      recoveryUse(item){
+        this.$dialog.confirm({
+          width: 300,
+          tipValue: '确定继续使用?',
+          btnValueOk: '确定',
+          alertImg: 'warn',
+          okCallBack: (data) => {
+            this.ajaxJson({
+              url: "/Fin/privateAccountRecoveryUse",
+              data: {
+                id: item.id,
+              },
+              loading: "0",
+              call: (data) => {
+                this.$dialog.alert({
+                  tipValue: data.message,
+                  closeCallBack: () => {
+                    this.$dialog.close()
+                  }
+                })
+              }
+            })
+          }
+        })
+      },
       repeatverifyAccountEvent(){
         this.ajaxJson({
           url:"/Fin/verifyPrivateAccountJson",
@@ -139,8 +211,24 @@
           },
           loading:"0",
           call:(data) =>{
+            if(this.url===''){
+              this.isUrl=true
+            }
             if(data.type !== 0){//说明存在，调用控件验证显示规则
               this.$refs.account.errorEvent("该账号已存在")
+              this.ajaxJson({
+                url:"/Fin/getPrivateAccountInformation",
+                data:{
+                  id:data.id,
+                },
+                loading:"0",
+                call:(information) =>{
+                  this.list=information
+                  if(this.list.length>0){
+                    this.isList=true
+                  }
+                },
+              })
             }
           }
         })

@@ -80,7 +80,7 @@ export default {
       content: [],
       month: new Date().getMonth() + 1,
       year: new Date().getFullYear(),
-      planDate: new Date().getFullYear() + '-' + (new Date().getMonth() + 1)
+      planDate: ''
     }
   },
   methods: {
@@ -124,7 +124,7 @@ export default {
       this.initDate()
     },
     backNowMon(){
-      this.planDate = new Date().getFullYear() + '-' + (new Date().getMonth() + 1)
+      this.planDate = new Date().getFullYear() + '-' + ((new Date().getMonth() + 1) < 10 ? 0 :'') + (new Date().getMonth() + 1)
       this.initDate()
     },
     view (dateAndTime, sumMoney) {
@@ -141,6 +141,7 @@ export default {
     }
   },
   created () {
+    this.planDate = this.year + '-' + (this.month<10?0:'') + this.month
     this.initDate()
   }
 }

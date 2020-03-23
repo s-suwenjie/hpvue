@@ -4,7 +4,7 @@
       <template #title>基本信息</template>
       <template #body>
         <yhm-view-control title="收款方" :content="otherUnit" @click="unitView()" color="#49a9ea" style="cursor: pointer;"></yhm-view-control>
-        <yhm-view-control title="是否支票支付" :content="isChecks" :psd="isChecksList"></yhm-view-control>
+        <yhm-view-control title="支付方式" :content="isChecks" :psd="isChecksList"></yhm-view-control>
         <yhm-view-control title="是否关联" :content="isRelevance" @click="planView()" :psd="isRelevanceList" v-show="isRelevance==='0'" color="#49a9ea"></yhm-view-control>
         <yhm-view-control title="是否关联" content="计划外" color="#8000FF" v-show="isRelevance==='1'"></yhm-view-control>
         <yhm-view-control title="计划事件" :content="name" v-show="planIn"></yhm-view-control>
@@ -35,6 +35,7 @@
           <yhm-view-control title="支付金额" :content="money" type="money" color="#f00"></yhm-view-control>
           <yhm-view-control title="金额大写" :content="capitalMoney"></yhm-view-control>
           <yhm-view-control category="3" title="部门分配" type="text-money" v-show="branchShow" v-if="branchList.length>='1'" :content="branchList"></yhm-view-control>
+          <yhm-view-control title="是否分批拨付" :content="isAllocation" :psd="isAllocationList"></yhm-view-control>
           <yhm-view-control category="3" title="分批拨付" type="date-money" :content="allocationList" v-if="allocationList.length !== 0"></yhm-view-control>
           <yhm-view-control title="备注" :content="remark" v-if="remark!==''"></yhm-view-control>
         </yhm-view-tab-content>
@@ -72,7 +73,7 @@
             <yhm-managerth style="width: 80px" title="收支方向"></yhm-managerth>
             <yhm-managerth style="width: 130px" title="事由"></yhm-managerth>
             <yhm-managerth style="width: 120px" title="交易金额"></yhm-managerth>
-            <yhm-managerth style="width: 210px" title="备注"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="备注"></yhm-managerth>
           </template>
           <template #listBody>
             <tr v-for="(item,index) in bankDetailList" :class="{InterlacBg:index%2!=0}" :key="index">
@@ -90,13 +91,14 @@
         </yhm-view-tab-list>
         <yhm-view-tab-list :customize="true"  v-show="tabState[3].select"  v-if="isAppropriationMoney">
           <template #listHead>
-            <yhm-managerth style="width: 170px" title="账号"></yhm-managerth>
-            <yhm-managerth style="width: 170px" title="对方账号"></yhm-managerth>
+            <yhm-managerth style="width: 150px" title="账号"></yhm-managerth>
+            <yhm-managerth style="width: 150px" title="对方账号"></yhm-managerth>
             <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
             <yhm-managerth style="width: 80px" title="收支方向"></yhm-managerth>
             <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
             <yhm-managerth style="width: 120px" title="交易金额"></yhm-managerth>
-            <yhm-managerth style="width: 210px" title="备注"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="备注"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="凭证"></yhm-managerth>
           </template>
           <template #listBody>
             <tr v-for="(item,index) in appropriationMoney" :class="{InterlacBg:index%2!=0}" :key="index">
@@ -107,6 +109,7 @@
               <yhm-manager-td :value="item.subject"></yhm-manager-td>
               <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
               <yhm-manager-td :value="item.remark"></yhm-manager-td>
+              <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.storeName" :tag="'bankDetail'" ></yhm-manager-td-image>
             </tr>
           </template>
         </yhm-view-tab-list>
@@ -215,7 +218,10 @@ export default {
 
       appropriationMoney:[],
       isAppropriationMoney:false,
-      allocationList: []
+      allocationList: [],
+
+      isAllocationList: [],
+      isAllocation: '',
     }
   },
   methods: {
@@ -364,6 +370,9 @@ export default {
         this.listCategoryList = data.listCategoryPsd.list
         this.bankDetailList = data.bankDetailList
         this.allocationList = data.allocationList
+
+        this.isAllocation = data.isAllocation
+        this.isAllocationList = data.isAllocationPsd.list
 
         this.isChecksList = data.isChecksPsd.list
         this.isChecks = data.isChecks

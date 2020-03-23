@@ -16,6 +16,9 @@
         <router-link class="menuTabDiv" :to="{path:'/home/approvalPrettyCashs'}">备用金
           <i class="noticeNum" v-if="prettyCashsNum!=0">{{prettyCashsNum}}</i>
         </router-link>
+        <router-link class="menuTabDiv  " :to="{path:'/home/approvalInsuranceManager'}">保险审批
+          <!--          <i class="noticeNum" v-if="prettyCashsNum!=='0'">{{prettyCashsNum}}</i>-->
+        </router-link>
       </template>
 
       <!--操作区-->
@@ -29,7 +32,8 @@
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
           <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" all="0" :content="listIsFinish"></yhm-radiofilter>
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="是否支票支付" all="1" :content="listIsChecks"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isAllocation')" title="是否分批拨付" all="1" :content="listIsAllocation"></yhm-radiofilter>
         </div>
       </template>
 
@@ -39,7 +43,7 @@
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth title="收款方" value="id"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="申请人"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="是否支票支付" value="isChecks"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="支付方式" value="isChecks"></yhm-managerth>
         <yhm-managerth style="width: 110px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="事由"></yhm-managerth>
@@ -68,7 +72,7 @@
           <yhm-manager-td-center :value="item.subject"></yhm-manager-td-center>
           <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" :value-object="item" @mouseout="tableTipHideEvent" :value="item.money"></yhm-manager-td-money>
           <yhm-manager-td-center :value="item.code" :class="{priority:item.isPriority === '1'}"></yhm-manager-td-center>
-          <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
+          <yhm-manager-td-state :value="item.stateVal" @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button :tip-category="0"  @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" v-show="item.isPrint === '1' " :no-click="item.nature === '2'" @click="printFund(item)" value="打印单据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '2'" value="待上传发票"  :no-click="true" ></yhm-manager-td-operate-button>
@@ -77,7 +81,8 @@
             <yhm-manager-td-operate-button v-show="item.isApproval === '4'" value="查看票样"  @click="viewCheck(item)" class="icon i-viewCheck" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '4'" value="支票作废"  @click="toVoidCheck(item)" class="icon i-toVoidCheck" color="#f00"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isChecks === '1'&&item.isApproval!=='4'" :no-click="item.isApproval==='4'" @click="selectChecksDetail(item)" value="支票填开" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isPrint === '1' && item.isChecks !== '1'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isPrint === '1' && item.isChecks !== '1' && item.isApproval!=='5' && item.isApproval!=='6'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.isApproval==='6'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
 <!--            <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isPrint === '1'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>-->
             <yhm-manager-td-operate-button v-show="(item.isApproval === '1' || item.isPrint !== '1') && item.isPrint === '0'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="(item.isApproval === '0' && item.isPrint === '1') || item.isPrint === '0'" :no-click="item.isApproval!=='0'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
@@ -126,6 +131,11 @@
           list: []
         },
 
+        isAllocation: '',
+        listIsAllocation: {
+          value: '',
+          list: []
+        },
         stateBefore: '0', // 默认选择状态为可以选择，1为不可以选择
         listIsFinish: {
           value: '',
@@ -155,6 +165,27 @@
       }
     },
     methods: {
+      //查看拨付资金  往来明细 凭证
+      storeName(item){
+        if(item.length>0){
+          if (item.image === "0") {
+            //查看文件
+            var url = "/UploadFile/" + this.tag + "/" + item.storeName;
+            window.open(url)
+          } else {
+            //查看图片
+            var imgArr = [];
+            for (var i = 0; i < item.length; i++) {
+              var temp = item[i];
+              if (temp.image === "1") {
+                imgArr.push("/UploadFile/" + temp.tag + "/" + temp.storeName);
+              }
+            }
+            var index = imgArr.indexOf("/UploadFile/" + item.tag + "/" + item.storeName) + 2;
+            this.$dialog.preview(imgArr, index)
+          }
+        }
+      },
       /* 入账*/
       accEntry(item){
         this.$dialog.OpenWindow({
@@ -380,9 +411,6 @@
       },
 
       initPageData (initValue) {
-
-
-
         let params = {}
 
         if (initValue) {
@@ -393,7 +421,8 @@
         } else {
           params = {
             isFinish: this.listIsFinish.value,
-            isChecks:this.listIsChecks.value
+            isChecks:this.listIsChecks.value,
+            isAllocation: this.listIsAllocation.value
           }
         }
         this.init({
@@ -409,6 +438,7 @@
             this.listIsFinish = data.isFinishPsd
             this.isChecksList = data.isChecksPsd.list
             this.listIsChecks = data.isChecksPsd
+            this.listIsAllocation = data.isAllocationPsd
           }
         })
 

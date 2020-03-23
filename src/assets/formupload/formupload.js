@@ -5,3 +5,5 @@ export default {
     Vue.component(formupload.name, formupload);
   }
 }
+
+

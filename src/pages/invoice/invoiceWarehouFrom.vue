@@ -84,7 +84,6 @@
     methods:{
       selectInvoiceCategory(){
         if(this.invoiceCategory==='0'&&this.invoiceCategory0==='0'){
-          alert(this.invoiceCategory+'-----'+this.invoiceCategory0)
           this.isInit = false
         }else if(this.invoiceCategory==='1'&&this.invoiceCategory1==='0'){
           this.isInit = false

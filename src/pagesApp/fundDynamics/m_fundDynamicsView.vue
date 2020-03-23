@@ -48,7 +48,7 @@
 
 <script>
   import { appviewmixin } from '@/assetsApp/app_view.js'
-  import appfiltrate from '../common/appfiltrate'
+  import appfiltrate from '../common/appFiltrate'
   export default {
     name: 'm_fundDynamicsView',
     mixins:[appviewmixin],
@@ -90,7 +90,7 @@
       confirm(livenessIndex,livenessItem,accountIndex,accountItem){//点击确定后 返回选中索引与值
         this.leftAlert=false
         // this.list = []
-        console.log( livenessIndex,livenessItem,accountIndex,accountItem)
+        // console.log( livenessIndex,livenessItem,accountIndex,accountItem)
       },
       reset(){//重置选择
         this.liveness = this.livenessList.length-1//重置索引值

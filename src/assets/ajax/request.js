@@ -44,11 +44,12 @@ const AjaxUpload = function (options) {
 }
 
 const AjaxRequest = function(options){
-  this.url = "";
-  this.data = "";
-  this.category = "0",
-  this.successCall = null;
-  this.progressCall = null;
+  this.url = ""
+  this.data = ""
+  this.category = "0"
+  this.successCall = null
+  this.errorCall = null
+  this.progressCall = null
 }
 
 AjaxRequest.prototype.init = function(options){
@@ -66,6 +67,7 @@ AjaxRequest.prototype.init = function(options){
   this.category = options && options.category || "0"
   loading = options && options.loading || "1"
   this.successCall = options && options.call || null;
+  this.errorCall = options && options.errorCall || null;
   this.progressCall = options && options.progressCall || null;
   return true;
 }
@@ -129,13 +131,18 @@ AjaxRequest.prototype.request = function () {
       }
     }
   }).catch(function (data) {
-    let width = accMul(data.toString().length,10);
     that.$dialog.close()
-    that.$dialog.alert({
-      tipValue:data,
-      alertImg:"error",
-      width:width
-    })
+    if(ajaxRequest.errorCall){
+      ajaxRequest.errorCall()
+    }
+    else {
+      let width = accMul(data.toString().length,10);
+      that.$dialog.alert({
+        tipValue: data,
+        alertImg: "error",
+        width: width
+      })
+    }
   })
 }
 

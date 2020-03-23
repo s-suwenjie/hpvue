@@ -14,7 +14,7 @@
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
         <yhm-managerth title="单位名称"></yhm-managerth>
-        <yhm-managerth width="120" title="统一社会信用代码"></yhm-managerth>
+        <yhm-managerth width="160" title="统一社会信用代码"></yhm-managerth>
         <yhm-managerth width="150" title="公司电话"></yhm-managerth>
         <yhm-managerth width="120" title="常用单位"></yhm-managerth>
       </template>
@@ -40,7 +40,7 @@
         <span class="m_listNoData" v-show="content.length === 0">暂时没有数据</span>
       </template>
       <template #pager>
-        <yhm-pagination :pager="pager" isPageSize="false" @initData="initPageData(false)"></yhm-pagination>
+        <yhm-pagination is-not-right :pager="pager" isPageSize="false" @initData="initPageData(false)"></yhm-pagination>
         <yhm-commonbutton class="mr0" icon="i-complete" value="确定" category="two" @call="selectConfirmEvent()"></yhm-commonbutton>
       </template>
     </yhm-select-body>

@@ -6,6 +6,8 @@
         <yhm-commonbutton v-if="getName(['49'])" value="添加" icon="btnAdd" @call="selectAddOpenBank"></yhm-commonbutton>
         <yhm-commonbutton v-if="getName(['89'])" value="添加" icon="btnAdd" @call="selectAddOpenColour"></yhm-commonbutton>
         <yhm-commonbutton v-if="getName(['90'])" value="添加" icon="btnAdd" @call="selectAddOpenBrand"></yhm-commonbutton>
+        <yhm-commonbutton v-if="getName(['91'])" value="添加" icon="btnAdd" @call="selectAddOpenModel"></yhm-commonbutton>
+        <yhm-commonbutton v-if="getName(['92'])" value="添加" icon="btnAdd" @call="selectAddOpenVersion"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" id="searchStr" @call="initData"></yhm-managersearch>
       </template>
 
@@ -47,6 +49,12 @@
         </template>
         <template v-if="getName(['90'])">
           <yhm-managerth title="车辆品牌"></yhm-managerth>
+        </template>
+        <template v-if="getName(['91'])">
+          <yhm-managerth title="车型"></yhm-managerth>
+        </template>
+        <template v-if="getName(['92'])">
+          <yhm-managerth title="型号"></yhm-managerth>
         </template>
 
       </template>
@@ -111,6 +119,8 @@
       return {
         categoryBefore: '0', // 单位按钮是否可以切换(0表示能切换,1表示不能切换)
         name: '',
+        value12: '',
+        brandOwnerID:'',
       }
     },
     methods: {
@@ -130,7 +140,7 @@
           width: '1050',
           height: '400',
           title: '添加车辆颜色',
-          url: '/openColourForm',
+          url: '/dicForm089',
           closeCallBack: (data)=>{
             this.initPageData(false)
           }
@@ -141,7 +151,29 @@
           width: '1050',
           height: '400',
           title: '添加车辆品牌',
-          url: '/openBrandForm',
+          url: '/dicForm090',
+          closeCallBack: (data)=>{
+            this.initPageData(false)
+          }
+        })
+      },
+      selectAddOpenModel(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '400',
+          title: '添加车型',
+          url: '/saveModelForm',
+          closeCallBack: (data)=>{
+            this.initPageData(false)
+          }
+        })
+      },
+      selectAddOpenVersion(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '400',
+          title: '添加车型',
+          url: '/saveVersionForm?brandOwnerID='+this.brandOwnerID,
           closeCallBack: (data)=>{
             this.initPageData(false)
           }
@@ -161,12 +193,14 @@
         if (initValue) {
           // 页面初始化是需要的参数
           params = {
-            name: this.name
+            name: this.name,
+            value12: this.value12
           }
         } else {
           // 页面非初始化时需要的参数
           params = {
-            name: this.name
+            name: this.name,
+            value12: this.value12
           }
         }
         this.init({
@@ -188,6 +222,8 @@
     created () {
       this.setQuery2Value('categoryBefore')
       this.setQuery2Value('name')
+      this.setQuery2Value('value12')
+      this.setQuery2Value('brandOwnerID')
 
     },
     computed: {

@@ -31,6 +31,9 @@
       content:{
         type:[String,Array],
         required: true,
+        default:function () {
+          return []
+        }
       },
       psd:{
         type:Array,

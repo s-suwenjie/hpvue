@@ -100,15 +100,24 @@
         })
       },
       selectAddEvent () {
+        let personID=''
+        if(this.personID!==''){
+          personID='&personID='+this.personID
+        }
         this.$dialog.OpenWindow({
           width: 1050,
           height: 692,
-          url: '/privateAccountForm?id=',
+          url: '/privateAccountForm?id='+personID,
           title: '添加对私账户',
           closeCallBack: (data) => {
             if (data) {
-              this.searchStr = data
-              this.initPageData(false)
+              if(data.personID===''){
+                this.searchStr = data
+                this.initPageData(false)
+              }else{
+                this.$dialog.setReturnValue(data)
+                this.$dialog.close()
+              }
             }
           }
         })

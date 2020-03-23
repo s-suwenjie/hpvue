@@ -35,6 +35,7 @@
     inject: ["p____page"],
     data () {
       return {
+        key:0,
         isEnd:false,
         pageIndexValue:this.pageIndex,
         param:this.params,
@@ -150,8 +151,23 @@
     },
     mounted () {
       this.initStyle()
+      window.addEventListener('beforeunload', e => this.beforeunloadFn(e))
+    },
+    destroyed() {//监听离开事件
+      this.enabledScroll()//重新启用原生滚动条
+      window.removeEventListener('beforeunload', e => this.beforeunloadFn(e))
     },
     methods: {
+      enabledScroll () {//启用滚动条
+        document.querySelector("html").classList.remove("lock");
+        window.removeEventListener("mousewheel", this.forbidScroll);
+        window.removeEventListener("touchmove", this.forbidScroll, { passive: false });
+      },
+      forbidScroll() {//禁用滚动条
+        document.querySelector("html").classList.add("lock");
+        window.addEventListener("mousewheel", this.forbidScroll);
+        window.addEventListener("touchmove", this.forbidScroll, { passive: false });
+      },
       initStyle(){
         let el = this.$el
         let wrapper = el.firstChild
@@ -183,7 +199,7 @@
         }
       },
       initNavigation(){
-        console.log(this.distance)
+        // console.log(this.distance)
         if(this.distance > this.max){
           this.distance = this.max
         }
@@ -255,7 +271,7 @@
             }
             this.distance = val
             this.hisdistance = val
-            console.log(11111111111)
+            // console.log(11111111111)
           }
         }
       },
@@ -284,9 +300,9 @@
         // 滑动距离
         let tance = this.move.Y - this.start.Y // 本次滑动距离;
 
-        console.log('tance:'+tance)
-        console.log('this.hisdistance:'+this.hisdistance)
-        console.log('this.distance:'+this.distance)
+        // console.log('tance:'+tance)
+        // console.log('this.hisdistance:'+this.hisdistance)
+        // console.log('this.distance:'+this.distance)
 
         this.distance = this.hisdistance + tance // 页面滑动距离(上一次滑动距离 + 本次滑动距离)
         if(this.isNavigation){
@@ -465,6 +481,12 @@
         return this.flows === 3
       }
     },
+    created(){
+      this.forbidScroll()//禁用原生滚动条
+      // document.querySelector('body').addEventListener('touchmove', function(e) {
+      //   e.preventDefault()
+      // }, {passive: false})
+    },
     watch:{
       initLoadFinish(newVal){
         if(this.isAllowRefresh) {
@@ -491,5 +513,20 @@
     }
   }
 </script>
+<style lang="less" scoped>
+  .lock {
+    overflow: hidden;
+    touch-action: none;
+  }
 
+  .lock body {
+    overflow: hidden;
+    touch-action: none;
+    margin-right: 17px;
+  }
+
+  .lock.mobile body {
+    margin-right: 0;
+  }
+</style>
 

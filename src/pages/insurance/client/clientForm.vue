@@ -6,12 +6,10 @@
         <yhm-form-select  title="负责人" tip="value" @click="principalEvent" :value="principal" id="principal" rule="R0000"></yhm-form-select>
         <yhm-form-radio  title="客户状态"  width="1" :select-list="stateList" :value="state" id="state"></yhm-form-radio>
         <yhm-form-zh-select-text tip-before="value" tip-after="phone" @call="contactEvent" :before="name" before-id="name" :after="phone" after-id="phone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="100"></yhm-form-zh-select-text>
-        <yhm-form-select  title="车牌号" tip="value" @click="plateEvent" :value="plate" id="plate" rule="R0000"></yhm-form-select>
-
+        <yhm-form-select  title="车牌号" tip="value"   @click="plateEvent" :value="plate" id="plate" rule="R0000"></yhm-form-select>
         <yhm-form-select  title="车主" tip="value" @click="carOwnerEvent" :value="carOwner" id="carOwner" rule="R0000" :no-click="isEdit" ></yhm-form-select>
-
-        <yhm-form-upload-image title="行车证信息"  discription="点击图标或拖拽图片上传"  :value="drivingLicense" id="drivingLicense" rule="#"></yhm-form-upload-image>
-        <yhm-form-text placeholder=""  title="身份证号" subtitle="" :value="idNo" id="idNo" rule="R5000"></yhm-form-text>
+        <yhm-form-upload-image title="行车证信息"  discription="点击图标或拖拽图片上传" tag="drivingLicense" :value="drivingLicense" id="drivingLicense" rule="#"></yhm-form-upload-image>
+        <yhm-form-text placeholder="" tip="value"  title="身份证号" subtitle="" :value="idNo" id="idNo" rule="R5000"></yhm-form-text>
         <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber" rule="R0000"></yhm-form-text>
         <yhm-form-date title="登记日期"  :value="registerDate" id="registerDate " position="u"  rule="R0000"></yhm-form-date>
         <yhm-form-text placeholder="" title="发动机号" subtitle="" :value="engineNumber" id="engineNumber" rule="R0000"></yhm-form-text>
@@ -22,7 +20,11 @@
       <template #title>保险信息</template>
       <template #control>
         <yhm-form-radio title="往年" subtitle="投保公司"  width="1" :select-list="lastYearUnitList" :value="lastYearUnit" id="lastYearUnit"></yhm-form-radio>
-        <yhm-form-date title="交强险" subtitle="到期日"  :value="forceEndDate" id="forceEndDate " position="u"  rule="R0000"></yhm-form-date>
+        <yhm-form-date title="交强险" subtitle="到期日"  :value="forceEndDate" id="forceEndDate " position="u"  rule="R0000">
+          <div class="formBoxIcon" @click="dateClick">
+            <span id="capitalType" class="iconYuan i-yuan"></span>
+          </div>
+        </yhm-form-date>
         <yhm-form-date title="商业险" subtitle="到期日"  :value="businessEndDate" id="businessEndDate " position="u"  rule="R0000"></yhm-form-date>
         </template>
     </yhm-formbody>
@@ -64,23 +66,26 @@
         forceEndDate:'',  //交强险到期日
         businessEndDate:'', //商业险到期日
 
-        assort:'',
+        isAssort:'',
         isEdit:false
 
       }
     },
     methods: {
+      dateClick(){
+        this.businessEndDate=this.forceEndDate
+      },
       //选择车牌号
       plateEvent(){
           this.$dialog.OpenWindow({
             width: 950,
             height: 603,
-            url: '/selectPlate',
+            url: '/selectPlate?carOwnerID=' + this.contactPersonID,
             title: '选择车牌号',
             closeCallBack: (data) => {
               if (data) {
                 this.plate = data.plate
-                this.assort=data.assort
+                this.isAssort=data.assort
                 this.vehicleID = data.id
                 this.carOwner=data.carOwner
                 this.carOwnerID=data.carOwnerID
@@ -93,8 +98,8 @@
                   this.isEdit=true
                 }else {
                   this.isEdit =false
+                  this.isAssort = 1
                 }
-
               }
             }
           })
@@ -117,7 +122,7 @@
       },
       //选择车主
       carOwnerEvent () {
-        if (this.assort === 1){
+        if (this.isAssort === 1){
           this.$dialog.OpenWindow({
             width: 950,
             height: 692,
@@ -145,7 +150,6 @@
             }
           })
         }
-
       },
       //选择联系人
       contactEvent() {
@@ -156,19 +160,63 @@
           title: '选择联系人',
           closeCallBack: (data) => {
             if (data) {
+              this.carOwnerID=''
+              this.plate = ''
+              this.vehicleID =''
+              this.carOwner = ''
+              this.drivingLicense =''
+              this.frameNumber = ''
+              this.engineNumber = ''
+              this.registerDate = ''
+              if (this.carOwnerID ===''){
+                this.isEdit =false
+              }else {
+                this.isEdit =true
+              }
+
               this.contactPersonID=data.id
               this.name = data.name
               this.phone = data.phone
               this.idNo=data.idNo
-
+              this.plateAllEvent()
             }
           }
         })
       },
+      plateAllEvent(){
+        this.ajaxJson({
+          url: '/Basic/getByPlateAll?id=' + this.contactPersonID,
+          call: (data)=>{
+            if(data){
+             if (data.length ===1){
+              for(let i in data){
+
+                this.carOwnerID=data[i].carOwnerID
+                this.plate = data[i].plate
+                this.vehicleID = data[i].id
+                this.carOwner = data[i].carOwner
+                this.drivingLicense = data[i].drivingLicense
+                this.frameNumber = data[i].frameNumber
+                this.engineNumber = data[i].engineNumber
+                this.registerDate = data[i].registerDate
+
+                if(data.carOwnerID !== ''){
+                  this.isEdit=true
+                }else {
+                  this.isEdit =false
+                  this.isAssort = 1
+                }
+              }
+             }
+            }
+
+          }
+        })
+      },
       //添加
-      save() {
+       save () {
         if (this.validator()) {
-          let params = {
+        let params = {
             id: this.id,
             principalID:this.principalID, //负责人ID
             state:this.state,     //客户状态
@@ -199,7 +247,7 @@
                     this.$dialog.close()
                   }
                 })
-              }else if(data.type === 1){
+              }else{
                 this.$dialog.alert({
                   alertImg:'warn',
                   tipValue: data.message
@@ -224,12 +272,6 @@
         },
         look: (data) => {
           /* 需要查看的数据 */
-
-          this.stateList = data.statePsd.list
-          this.state = data.statePsd.value
-          this.lastYearUnitList = data.lastYearUnitPsd.list
-          this.lastYearUnit = data.lastYearUnitPsd.value
-
 
           this.principalID =data.principalID //负责人ID
           this.principal= data.principal //负责人
@@ -261,3 +303,5 @@
 <style scoped>
 
 </style>
+
+

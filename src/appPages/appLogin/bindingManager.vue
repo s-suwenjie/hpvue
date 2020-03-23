@@ -41,7 +41,6 @@
 <script>
   import Qs from 'qs'
   import { guid } from '@/assets/common.js'
-  import '@/assets/fontSize.js'
 
   export default {
     name: 'bindingManager',

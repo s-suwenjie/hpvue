@@ -1,5 +1,6 @@
 <template>
   <div class="f_main">
+
     <yhm-view-body>
       <template #title>报销明细</template>
       <template #body>
@@ -11,10 +12,15 @@
       </template>
     </yhm-view-body>
     <div class="f_split"></div>
+    <div class="i-left fs48b colorFFF" title="上一条" v-show="isLeftID"  @click="leftStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: absolute;  bottom: 100px;z-index: 9999;display:flex;justify-content:center;align-items:center;">
+    </div>
+    <div class="i-right fs48b colorFFF" title="下一条" v-show="isRightID" @click="rightStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: absolute;  bottom: 100px;right:0px;z-index: 9999;display:flex;justify-content:center;align-items:center;">
+    </div>
     <yhm-view-tab>
       <template #tab>
         <yhm-view-tab-button :list="tabState" :index="0">事件信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1" v-if="noPrettyCashMoney">备用金信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="2" v-if="noBankDetail">拨款信息</yhm-view-tab-button>
       </template>
 
       <template #content>
@@ -35,7 +41,7 @@
               <yhm-manager-td-money :value="item.actualMoney"></yhm-manager-td-money>
               <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
               <yhm-manager-td-center @click="listView(item.id)" :value="item.invoiceCategoryName" color="#49a9ea"></yhm-manager-td-center>
-              <yhm-manager-td-center @click="listView(item.id)" :value="item.remark" color="#49a9ea"></yhm-manager-td-center>
+              <yhm-manager-td :tip="true" node-class-name="f_main" @click="listView(item.id)" :value="item.remark" color="#49a9ea"></yhm-manager-td>
               <yhm-manager-td-center :value="item.stateVal" :color="item.rejectColor"></yhm-manager-td-center>
             </tr>
           </template>
@@ -73,6 +79,33 @@
             <yhm-view-control type="money" title="实际金额"  :content="invoiceMoney" color="#4BB414"></yhm-view-control>
           </template>
         </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[2].select" v-if="noBankDetail">
+          <template #listHead>
+            <yhm-managerth style="width: 150px" title="账号"></yhm-managerth>
+            <yhm-managerth style="width: 150px" title="对方账号"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
+            <yhm-managerth style="width: 80px" title="收支方向"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="交易金额"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="备注"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="凭证"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in bankDetail" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td :value="item.selfAccount"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
+              <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
+              <yhm-manager-td :value="item.subject"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td :value="item.remark"></yhm-manager-td>
+              <yhm-manager-td-image :tip="true" width="850" height="600" left="50" type="files" :value="item.storeName" :tag="'bankDetail'" ></yhm-manager-td-image>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData"  v-show="bankDetail.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
 
@@ -92,7 +125,7 @@
     mixins: [formmixin],
     data () {
       return {
-        tabState:[{select:true},{select:false}],
+        tabState:[{select:true},{select:false},{select:false}],
         content: {},
         bcc: 0,
         detail: {}, // 列表数据
@@ -121,9 +154,24 @@
         prettyCashOffListShow:false,
         prettyCashsList:[],
         getPrettyCashs:'1',
+
+        noBankDetail:false,
+        bankDetail:[],
+
+        isLeftID:false,//延长按钮
+        leftID:'',//上一条ID
+        isRightID:false,//延长按钮
+        rightID:'',//下一条ID
       }
     },
     methods: {
+      leftStrip(){
+        window.location='/reimbursementViewForm?id='+this.leftID
+
+      },
+      rightStrip(){
+        window.location='/reimbursementViewForm?id='+this.rightID
+      },
       listView (id) { //查看
         if (id) {
           this.$dialog.OpenWindow({
@@ -180,7 +228,10 @@
             if(this.relevanceID){
               this.reimbursementsDetailIsAutoAdd()
             }
-
+            this.bankDetail=data.bankDetail
+            if(this.bankDetail.length>0){
+              this.noBankDetail=true
+            }
           },
           add: (data) => {
             /* 需要添加的数据 */
@@ -191,11 +242,31 @@
             this.empty = this.detail.length === 0
           }
         })
+      },
+      selectedList() {
+        let params = {
+          id: this.id
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedID',
+          data: params,
+          call: (data) => {
+            //finReimbursementViewFormSelect
+            if(data.leftID!==""){
+              this.leftID=data.leftID
+              this.isLeftID=true
+            }
+            if(data.rightID!==""){
+              this.rightID=data.rightID
+              this.isRightID=true
+            }
+          }
+        })
       }
     },
     created () {
       this.initData()
-
+      this.selectedList()
     }
   }
 </script>

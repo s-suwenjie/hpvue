@@ -74,7 +74,7 @@
         }
         this.init({
           initValue: initValue,
-          url: '/Com/SelectDicValue',
+          url: '/Com/selectDicJson',
           data: params,
           all: (data) => {
             // 不管是不是初始化都需要执行的代码
@@ -87,6 +87,7 @@
     },
     created () {
       this.setQuery2Value('personID')
+
     }
   }
 </script>

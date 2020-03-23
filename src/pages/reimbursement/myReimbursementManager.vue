@@ -15,14 +15,16 @@
         <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()" category="one"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
-        <!--      <div @click="selectPerson" style="display: inline-block; width: 120px; height: 30px; border: 1px solid #49A8EA;">选择联系人</div>-->
+
+        <yhm-commonbutton value="打开选中信息" @click="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
       </template>
 
       <!--筛选区-->
       <template #choose>
 
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="状态" all="0" :content="listState"></yhm-radiofilter>
           <yhm-radiofilter @initData="initChoose('isPrettyCashOff')" title="是否核销" :content="listIsPrettyCashOff"></yhm-radiofilter>
         </div>
       </template>
@@ -32,10 +34,10 @@
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="申请日期" value="lastDate"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="是否核销" value="isPrettyCashOff"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="报销方式" value="isPrettyCashOff"></yhm-managerth>
         <yhm-managerth title="事由"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="报销金额" value="money"></yhm-managerth>
-        <yhm-managerth style="width: 70px" title="倒计时" value="day"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="提交天数" value="day"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="编号" value="code"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="状态" value="state"></yhm-managerth>
         <yhm-managerth style="width: 200px;" title="操作"></yhm-managerth>
@@ -54,7 +56,7 @@
           <yhm-manager-td-center :value="item.day+'天'" v-else-if="item.day>2&&item.day<=5" style="color:#0511a5;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #f00;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
-          <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
+          <yhm-manager-td-state :value="item.stateVal"  @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
 
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button v-show="item.isPrint === '1'" @click="printFund(item)" value="打印单据" icon="i-btn-print" color="#7307dc"></yhm-manager-td-operate-button>
@@ -69,10 +71,40 @@
       <template #empty>
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>
+
+      <template #total>
+        <div class="listTotalCrente m_list w620">
+          <div class="listTotalLeft">
+            <span class="test"></span>
+            <span class="test">金额</span>
+            <span class="test">条数</span>
+          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
+            <thead>
+            <tr>
+              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="已拨款" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="未拨款" ></yhm-managerth>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <yhm-manager-td-money @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+            </tr>
+            <tr>
+              <yhm-manager-td-rgt @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </template>
+
       <!--分页控件-->
       <template #pager>
         <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
       </template>
+
     </yhm-managerpage>
   </div>
 </template>
@@ -115,7 +147,7 @@
         isPrettyCashOffList:[],
         menuTabOn: 2,
         details:[
-          {id:'1', name: '付款计划',path:'/home/myManager/paymentPlanManager'},
+          {id:'1', name: '付款计划',path:'/home/myPaymentPlanManager'},
           {id:'2', name: '付款申请',path:'/home/myManager/paymentApplyManager'},
           {id:'3', name: '报销',path:'/home/myManager/reimbursementManager'},
           {id:'4', name: '采购计划',path:'/home/myPurchaseManager'},
@@ -134,9 +166,94 @@
         tableTipInfo:[],
         causetbSwitch: false,
         subjectList: {},
+        dateType:'',
+        dateTypeList: {
+          value: '',
+          list: [{showName:"本周", num: "0", code: "", img: ""},{showName:"本月", num: "1", code: "", img: ""},{showName:"本季度", num: "2", code: "", img: ""},{showName:"本年", num: "3", code: "", img: ""},]
+        },
+        contentTotal:[],
       }
     },
     methods: {
+      //汇总部分筛选
+      totalClick(item){
+        if(item.isFinish==='-1'){
+          this.listState.value = ''
+        } else if(item.isFinish==='0'){
+          this.listState.value = '0'
+        } else if(item.isFinish==='1'){
+          this.listState.value = '1'
+        }
+        this.pageIndex=1
+        this.initPageData()
+      },
+      //查看拨付资金  往来明细 凭证
+      storeName(item){
+        if(item.length>0){
+          if (item.image === "0") {
+            //查看文件
+            var url = "/UploadFile/" + this.tag + "/" + item.storeName;
+            window.open(url)
+          } else {
+            //查看图片
+            var imgArr = [];
+            for (var i = 0; i < item.length; i++) {
+              var temp = item[i];
+              if (temp.image === "1") {
+                imgArr.push("/UploadFile/" + temp.tag + "/" + temp.storeName);
+              }
+            }
+            var index = imgArr.indexOf("/UploadFile/" + item.tag + "/" + item.storeName) + 2;
+            this.$dialog.preview(imgArr, index)
+          }
+        }
+      },
+      selectedSum(){
+        let params={
+          selectValue:this.selectValue
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            if(data.type===0){
+              this.ajaxJson({
+                url: '/PersonOffice/getReimbursementManagerTotal',
+                data:params,
+                call:(information) =>{
+                  this.contentTotal = information
+                }
+              })
+            }
+          }
+        })
+      },
+      //打开选中信息
+      selectedList(){
+        let params={
+          selectValue:this.selectValue
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            //finReimbursementViewFormSelect
+            if(data.type===0){
+              this.$dialog.OpenWindow({
+                width: '1050',
+                height: '620',
+                title: '查看选中信息',
+                url: '/reimbursementFormView?id='+data.val,
+                closeCallBack: (dataTwo)=>{
+                  if(dataTwo){
+
+                  }
+                }
+              })
+            }
+          }
+        })
+      },
       /* 删除按钮 */
       del(item){
         this.$dialog.confirm({
@@ -251,7 +368,8 @@
         } else {
           params = {
             state: this.listState.value,
-            isPrettyCashOff: this.listIsPrettyCashOff.value
+            isPrettyCashOff: this.listIsPrettyCashOff.value,
+            dateType:this.dateTypeList.value
           }
         }
         this.init({
@@ -260,6 +378,7 @@
           data:params,
           all:(data) =>{
             //不管是不是初始化都需要执行的代码
+            this.contentTotal = data.total
           },
           init:(data)=>{
             //初始化时需要执行的代码
@@ -432,5 +551,11 @@
   .icon-checkbox{
     font-size: 18px;
   }
-
+  .listTotalLeft span:nth-child(1),.listTotalLeft span:nth-child(2){
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .listTotalLeft span:nth-child(3){
+    border-right: 0;
+  }
 </style>

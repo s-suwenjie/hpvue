@@ -18,13 +18,16 @@
         <!--      <div @click="selectPerson" style="display: inline-block; width: 120px; height: 30px; border: 1px solid #49A8EA;">选择联系人</div>-->
 <!--        <yhm-commonbutton value="上传发票" icon="btnAdd" :flicker="true" @call="addInvoice()" category="one"></yhm-commonbutton>-->
 <!--        <yhm-commonbutton value="弹框" icon="btnAdd" :flicker="true" @call="uploadInvoice()" category="one"></yhm-commonbutton>-->
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" all="0" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
+
       </template>
 
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" all="0" :content="listState"></yhm-radiofilter>
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="是否支票支付" all="1" :content="listIsChecks"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isAllocation')" title="是否分批拨付" all="1" :content="listIsAllocation"></yhm-radiofilter>
         </div>
       </template>
 
@@ -33,14 +36,14 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth title="收款方" value="id"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="是否支票支付" value="isChecks"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="支付方式" value="isChecks"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 110px" title="计划申请金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 220px;" title="编号" value="code"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="状态" value="state"></yhm-managerth>
-        <yhm-managerth style="width: 200px;" title="操作"></yhm-managerth>
+        <yhm-managerth style="width: 300px;" title="操作"></yhm-managerth>
 
       </template>
 
@@ -64,7 +67,7 @@
           <yhm-manager-td-center :value="item.subject"></yhm-manager-td-center>
           <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" :value-object="item" @mouseout="tableTipHideEvent" :value="item.money"></yhm-manager-td-money>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
-          <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
+          <yhm-manager-td-state :value="item.stateVal" @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
 
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button v-show="item.isPrint !== '1' && item.track !== '-1' && item.track !== '0' && item.track !== '1'" :no-click="item.state!=='0' || item.isFinish === '1'" @click="submit(item)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
@@ -76,6 +79,8 @@
             <yhm-manager-td-operate-button :no-click="item.isFinish !== '0' || item.state === '0'" @click="urge(item)" value="催促" icon="i-btn-urge" color="#2AA70B"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.state !== '0' || item.isFinish === '1'" @click="del(item)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
 
+            <yhm-manager-td-operate-button v-show="item.isAllocationMoney === '1'" @click="allocationEvent(item)" icon="i-allocation" value="分批拨付" color="#fd6802"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.isAllocationMoney === '2'" @click="allocationViewEvent(item)" icon="i-allocationView" value="查看分批拨付" color="#fd6802"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
 
          <!-- <td class="tdPSty operation">
@@ -129,6 +134,11 @@
           value: '',
           list: []
         },
+        isAllocation: '',
+        listIsAllocation: {
+          value: '',
+          list: []
+        },
 
         stateBefore: '0', // 默认选择状态为可以选择，1为不可以选择
         listState: {
@@ -137,14 +147,18 @@
         },
         menuTabOn: 1,
         details:[
-          {id:'1', name: '付款计划',path:'/home/myManager/paymentPlanManager'},
+          {id:'1', name: '付款计划',path:'/home/myPaymentPlanManager'},
           {id:'2', name: '付款申请',path:'/home/myManager/paymentApplyManager'},
           {id:'3', name: '报销',path:'/home/myManager/reimbursementManager'},
           {id:'4', name: '采购计划',path:'/home/myPurchaseManager'},
           {id:'5', name: '备用金',path:'/home/prettyCashsManager'},
           {id:'6', name: '补签字',path:'/home/myManager/signatureManager'},
         ],
-
+        dateType:'',
+        dateTypeList: {
+          value: '',
+          list: [{showName:"本周", num: "0", code: "", img: ""},{showName:"本月", num: "1", code: "", img: ""},{showName:"本季度", num: "2", code: "", img: ""},{showName:"本年", num: "3", code: "", img: ""},]
+        },
         tableTip: false,
         tableTipControl: {},
         tableTipColumnInfo:[
@@ -160,6 +174,54 @@
       }
     },
     methods: {
+      storeName(item){
+        if(item.length>0){
+          if (item.image === "0") {
+            //查看文件
+            var url = "/UploadFile/" + this.tag + "/" + item.storeName;
+            window.open(url)
+          } else {
+            //查看图片
+            var imgArr = [];
+            for (var i = 0; i < item.length; i++) {
+              var temp = item[i];
+              if (temp.image === "1") {
+                imgArr.push("/UploadFile/" + temp.tag + "/" + temp.storeName);
+              }
+            }
+            var index = imgArr.indexOf("/UploadFile/" + item.tag + "/" + item.storeName) + 2;
+            this.$dialog.preview(imgArr, index)
+          }
+        }
+      },
+      /* 查看分批拨付 */
+      allocationViewEvent(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '550',
+          title: '分批拨付',
+          url: '/batchAllocationForm?ownerID=' + item.id + '&isAllocationMoney=' + item.isAllocationMoney,
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      /* 分批拨付 */
+      allocationEvent(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '550',
+          title: '分批拨付',
+          url: '/batchAllocationForm?ownerID=' + item.id + '&isAllocationMoney=' + item.isAllocationMoney,
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       // uploadInvoice(){
       //   this.$dialog.OpenWindow({
       //     width: '1205',
@@ -373,7 +435,9 @@
         } else {
           params = {
             state: this.listState.value,
-            isChecks:this.listIsChecks.value
+            isChecks:this.listIsChecks.value,
+            isAllocation: this.listIsAllocation.value,
+            dateType: this.dateTypeList.value,
           }
         }
         this.init({
@@ -390,6 +454,7 @@
             this.listState = data.statePsd
             this.isChecksList = data.isChecksPsd.list
             this.listIsChecks = data.isChecksPsd
+            this.listIsAllocation = data.isAllocationPsd
           }
         })
       },

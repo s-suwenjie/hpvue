@@ -1,5 +1,5 @@
-<template>
-  <div class="ac_main" v-validator="validatorEvent" v-click-control-outside="blurContorlEvent">
+<template xmlns:v-select-val="http://www.w3.org/1999/xhtml">
+  <div class="ac_main" v-validator="validatorEvent" @click="focusContorlEvent()" v-click-control-outside="blurContorlEvent">
     <div v-show="panelShow" class="ac_date_select_panel">
       <div class="ac_date_select_panel_main">
         <div class="ac_date_select_pop" @touchend.self="touchEndClosePanelEvent"></div>
@@ -138,9 +138,17 @@
       }
     },
     methods:{
+      focusContorlEvent(){
+        this.$nextTick(() =>{
+          this.$emit("focus")//返回时间选择器的打开事件
+        })
+      },
       //失去焦点事件
       blurContorlEvent(){
         this.touchStyle = false
+        this.$nextTick(() =>{
+          this.$emit("blur",this.txt)//选择时间后返回关闭事件 以及选中的时间
+        })
       },
       leftSlide(){
         //左划上一年
@@ -236,7 +244,7 @@
         this.touchStyle = false
       },
       clickEvent(){
-        window.document.body.style.overflow = "hidden";
+        // window.document.body.style.overflow = "hidden";
         this.dateArr = getPanelDatesApp(this.selectYear,this.selectMonth)
         this.panelShow = true
       },

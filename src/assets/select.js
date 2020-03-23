@@ -12,6 +12,7 @@ const selectmixin = {
       left:0,
       top:0,
       selectType: '0', // 单选还是多选,0单选,1多选
+      allCheck:false,  // 是否全部选中
       content: [], // 页面数据
       empty: false, // 页面数据是否为空
       selectValue: [], // 选中的值：单选
@@ -125,9 +126,34 @@ const selectmixin = {
     }
   },
   watch: {
+    'pager.pageIndex':{
+      handler: function (val, oldval) {
+        this.allCheck = false
+      }
+    },
     selectValue: {
       handler: function (val, oldval) {
         this.pager.selectCount = val.length
+        //判断当前页数据是否全选
+        let check = true
+        for(let i in this.content){
+          let id = this.content[i].id
+          let sign = false
+          if(this.selectValue.length > 0){
+            for (var j = 0; j < this.selectValue.length; j++){
+              if(Object.keys(this.selectValue[j])[0] === id){
+                sign = true
+              }
+            }
+          }
+          if(!sign){
+            check = false
+          }
+        }
+        this.allCheck = check
+        if(this.totalMethod){
+          this.totalMethod()
+        }
       },
       deep: true
     }

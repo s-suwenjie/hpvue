@@ -132,7 +132,7 @@
 }
 
 .ac_date_select_pop{
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
@@ -151,7 +151,7 @@
     background-color: #FFFFFF;
     border: 0.0267rem solid #BFBFBF;
     border-radius: 0.4267rem;
-    top:0;
+    top:50%;
     bottom: 0;
     height: 11rem;
     margin: auto;
@@ -166,7 +166,7 @@
     z-index: 999999;
     /*border: 0.0267rem solid #BFBFBF;*/
     border-radius: 0.4267rem;
-    top:0;
+    top: 50%;
     bottom: 0;
     height: 9rem;
     margin: auto;

@@ -261,14 +261,7 @@
 
 
 <style lang="less" scoped>
-  @import "../../static/staticHStyle/common.css";
-  @import "../../static/staticHStyle/manager.css";
-  @import "../../static/staticHStyle/chooseBtn.css";
-  @import "../../static/common.css";
-  @import "../../static/select.css";
-  @import "../../static/tbStyle.css";
-  @import "../../static/global.css";
-  @import "../../static/test.css";
+
 
   .topMenuClass span {
     background-color: #fff;

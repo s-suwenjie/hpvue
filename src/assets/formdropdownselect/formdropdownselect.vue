@@ -7,7 +7,7 @@
       </div>
       <div class="content">
         <div @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="box" :class="{error:error,hover:mouseStyle,boxWidth:getWidth,focus:focusStyle}">
-          <div v-click-control-outside="closeSelectPanel" @mouseout="mouseoutLeftEvent" @mouseover="mouseoverLeftEvent" @click="dropdownEvent" class="left" :style="{width:dropdownwidth + 'px'}" :class="{hover:mouseLeftOver,c_disable:noClick,c_disable:noBeforeClick}">
+          <div v-click-control-outside="closeSelectPanel" @mouseout="mouseoutLeftEvent" @mouseover="mouseoverLeftEvent" @click="dropdownEvent" class="left" :style="{width:dropdownwidth + 'px'}" :class="{hover:mouseLeftOver,c_disable:noClick}">
             <div class="txt">{{getSelectValue}}</div>
             <div class="dropdownicon" :class="{dropdowniconRotate:focusStyle}"></div>
             <div v-show="focusStyle" class="items">
@@ -15,7 +15,7 @@
               <div v-for="(item,index) in selectList" :key="index" @click.stop="selectItemEvent(item.num)" :class="{selected:defaultSelectValue === item.num}">{{item.showName}}</div>
             </div>
           </div>
-          <div @click="selectEvent" @mouseout="mouseoutRightEvent" @mouseover="mouseoverRightEvent" class="right" :class="{hover:mouseRightOver,c_disable:noClick}">
+          <div @click="selectEvent('o')" @mouseout="mouseoutRightEvent" @mouseover="mouseoverRightEvent" class="right" :class="{hover:mouseRightOver,c_disable:noClick}">
             <div class="txt">{{defaultTxt}}</div>
             <div class="selecticon"></div>
           </div>
@@ -175,19 +175,19 @@
         selectItemEvent(item){
           if(this.defaultSelectValue != item) {
             this.$nextTick(() =>{
-              this.selectEvent();
+              this.selectEvent('i');
             })
           }
           this.defaultSelectValue = item
           this.focusStyle = false
         },
-        selectEvent(){
+        selectEvent(op){
           if(!this.noClick) {
             this.error = false
             // var js = "this.p____page." + this.id + " = \"\""
             // eval(js);
             this.$nextTick(() => {
-              this.$emit("select")
+              this.$emit("select",op)
             })
           }
         },

@@ -7,7 +7,6 @@
 </template>
 
 <script>
-  // import '@/static/fontSize'
   export default {
     name: 'correct',
     created() {

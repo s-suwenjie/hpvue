@@ -100,7 +100,7 @@ export default {
       },
       menuTabOn:'0',
       details:[
-        {id:'1', name: '付款计划',path:'/home/myManager/paymentPlanManager'},
+        {id:'1', name: '付款计划',path:'/home/myPaymentPlanManager'},
         {id:'2', name: '付款申请',path:'/home/myManager/paymentApplyManager'},
         {id:'3', name: '报销',path:'/home/myManager/reimbursementManager'},
         {id:'4', name: '采购计划',path:'/home/myPurchaseManager'},
@@ -153,7 +153,7 @@ export default {
         this.$dialog.OpenWindow({
           width: '1050',
           height: '520',
-          url: '/PaymentPlanForm?id=' + item.id,
+          url: '/myPaymentPlanForm?id=' + item.id,
           title: '查看付款计划信息',
           closeCallBack: (data) => {
             if (data) {
@@ -187,7 +187,7 @@ export default {
       this.$dialog.OpenWindow({
         width: 1050,
         height: 520,
-        url: '/PaymentPlanForm',
+        url: '/myPaymentPlanForm',
         title: '添加付款计划信息',
         closeCallBack: (data) => {
           if (data) {

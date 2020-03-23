@@ -17,14 +17,17 @@
 <!--        <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>-->
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
 
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态"  :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
       </template>
 
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态"  :content="listState"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('branchID')" title="部门"  :content="branchList"></yhm-radiofilter>
           <yhm-radiofilter :before="isRelevanceBefore" @initData="initChoose('isRelevance')" title="是否关联"   :content="listisRelevance"></yhm-radiofilter>
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="是否支票支付" all="1" :content="listIsChecks"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isAllocation')" title="是否分批拨付" all="1" :content="listIsAllocation"></yhm-radiofilter>
         </div>
       </template>
 
@@ -34,7 +37,7 @@
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 70px" title="申请人" value="person"></yhm-managerth>
         <yhm-managerth title="收款方"  value="id"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="是否支票支付" value="isChecks"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="支付方式" value="isChecks"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 70px" title="倒计时" value="day"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="事由"></yhm-managerth>
@@ -51,9 +54,9 @@
             :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item)"></yhm-manager-td-look>
-          <yhm-manager-td-center :value="item.person"></yhm-manager-td-center>
+          <yhm-manager-td-center @click="lookPerson(item)" :value="item.person"></yhm-manager-td-center>
           <yhm-manager-td :tip="true" @click="unitView(item)" :value="item.otherUnit" color="#7307dc" v-show="item.ownerID!==''"></yhm-manager-td>
-          <yhm-manager-td :tip="true" :value="item.otherUnit"  v-show="item.ownerID==''"></yhm-manager-td>
+          <yhm-manager-td :tip="true" @click="unitView(item)" :value="item.otherUnit"  v-show="item.ownerID==''"></yhm-manager-td>
           <yhm-manager-td-psd :value="item.isChecks" :list="isChecksList"></yhm-manager-td-psd>
           <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.day+'天'" v-if="item.day<=7" style="color:#f00;font-weight: bold"></yhm-manager-td-center>
@@ -63,7 +66,7 @@
           <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" :value-object="item" @mouseout="tableTipHideEvent" :value="item.money"></yhm-manager-td-money>
 
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
-          <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
+          <yhm-manager-td-state :value="item.stateVal" @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-center :value="item.lastOperatorPerson"></yhm-manager-td-center>
           <yhm-manager-td-date :value="item.lastOperatorDate"></yhm-manager-td-date>
         </tr>
@@ -138,6 +141,12 @@
           list: []
         },
 
+        isAllocation: '',
+        listIsAllocation: {
+          value: '',
+          list: []
+        },
+
         tableTip: false,
         tableTipColumnInfo: [],
         tableTipControl: {},
@@ -156,9 +165,41 @@
           list: []
         },
 
+        branchID:'',
+        branchList: {
+          value: '',
+          list: []
+        },
+
+        dateType:'',
+        dateTypeList: {
+          value: '',
+          list: [{showName:"本周", num: "0", code: "", img: ""},{showName:"本月", num: "1", code: "", img: ""},{showName:"本季度", num: "2", code: "", img: ""},{showName:"本年", num: "3", code: "", img: ""},]
+        },
       }
     },
     methods: {
+      //查看拨付资金  往来明细 凭证
+      storeName(item){
+        if(item.length>0){
+          if (item.image === "0") {
+            //查看文件
+            var url = "/UploadFile/" + this.tag + "/" + item.storeName;
+            window.open(url)
+          } else {
+            //查看图片
+            var imgArr = [];
+            for (var i = 0; i < item.length; i++) {
+              var temp = item[i];
+              if (temp.image === "1") {
+                imgArr.push("/UploadFile/" + temp.tag + "/" + temp.storeName);
+              }
+            }
+            var index = imgArr.indexOf("/UploadFile/" + item.tag + "/" + item.storeName) + 2;
+            this.$dialog.preview(imgArr, index)
+          }
+        }
+      },
       totalClick(item){
         if(item.val==='总数'){
           this.listState.value = ''
@@ -216,6 +257,19 @@
           }
         })
       },
+      lookPerson(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/personView?id=' + item.otherUnitID,
+          title:'查看联系人信息',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       unitView(item){
         if(item.personOrUnit==='0'){
           this.$dialog.OpenWindow({
@@ -256,7 +310,10 @@
           params = {
             state: this.listState.value,
             isRelevance:this.listisRelevance.value,
-            isChecks:this.listIsChecks.value
+            isChecks:this.listIsChecks.value,
+            isAllocation: this.listIsAllocation.value,
+            branchID: this.branchList.value,
+            dateType: this.dateTypeList.value,
           }
         }
         this.init({
@@ -270,6 +327,9 @@
             this.reject = this.total[2]
             this.contentTotal = data.total
 
+            if(!this.branchList.value){
+              this.branchList = data.branchList
+            }
             //不管是不是初始化都需要执行的代码
           },
           init: (data) => {
@@ -279,6 +339,7 @@
             this.listIsChecks = data.isChecksPsd
             this.listState = data.statePsd
             this.listisRelevance = data.isRelevancePsd
+            this.listIsAllocation = data.isAllocationPsd
           }
         })
       },

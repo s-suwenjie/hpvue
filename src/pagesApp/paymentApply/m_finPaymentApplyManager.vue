@@ -7,9 +7,9 @@
     </yhm-app-structure-top-tap>
 
     <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="url" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">
-      <appSearch @blur="blurEvent"  @focus="focusEvent" :list="shortcutSearchContent" @keyup.enter="keyupEvent"  :leftAlert="leftAlert" :search="search">
-        <span class="search_btn" @click="reset,leftAlert=true">筛选</span>
-      </appSearch>
+
+      <appSearch @change="change" @alertShow="rightAlert=true,key+=1" :list="shortcutSearchContent" ></appSearch>
+
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish)" v-for="(item) in content" :key="item.id">
         <yhm-app-view-control :contentTitle="item.person" :content="item.lastDate" type="date"></yhm-app-view-control>
         <yhm-app-view-detail>
@@ -23,42 +23,44 @@
           ，<span :style="{'color':item.stateColor}">{{item.stateVal}}</span>
         </yhm-app-view-detail>
       </yhm-app-structure-menu-group>
-
-      <appfiltrate v-show="leftAlert" @click="leftAlert=!leftAlert" :hide-show="!leftAlert" >
-        <p class="app_alert_title">是否核销:</p>
-        <div class="app_main_btn">
-          <span v-for="(item,index) in isChecksList" :key="index" @click="livenessClick(item.num)" :class="{active:index==isChecks}" class="app_alert_btn liveness">{{item.showName}}</span>
-        </div>
-
-        <div class="alert_bottom" style="display: flex;justify-content: center;">
-          <yhm-app-button  value="重置" @call="reset()" icon="" category="five" style="border: 1px solid #666;margin-right:0.75rem;"></yhm-app-button>
-          <yhm-app-button  value="确定" @call="confirm(isChecks,isChecksList[isChecks])" icon="" category="two"></yhm-app-button>
-        </div>
-      </appfiltrate>
-
     </yhm-app-scroll>
+    <appfiltrate :alert-show="rightAlert" @close="rightAlert=false,key+=1" >
+      <appRadiofilter :list="isChecksList" title="是否发票支付" :key="key" @change="radioChange"></appRadiofilter>
+      <appRadiofilter :list="isRelevanceList" title="是否关联" :key="key+10" @change="radioChange2"></appRadiofilter>
+      <div class="alert_bottom">
+        <yhm-app-button  value="重置" @call="reset()" icon="" category="five" style="border: 1px solid #666;margin-right:0.75rem;"></yhm-app-button>
+        <yhm-app-button  value="确定" @call="confirm(isChecks,isRelevance)" icon="" category="two"></yhm-app-button>
+      </div>
+    </appfiltrate>
   </div>
 </template>
 
 <script>
   import { appmanagermixin } from '@/assetsApp/app_manager.js'
   import appSearch from '../common/appSearch'
-  import appfiltrate from '../common/appfiltrate'
+  import appfiltrate from '../common/appFiltrate'
+  import appRadiofilter from '../common/appRadiofilter'
+
   export default {
     name: 'm_finReimbursementManager',
     mixins: [appmanagermixin],
     components:{
       appSearch,
-      appfiltrate
+      appfiltrate,
+      appRadiofilter
     },
     data(){
       return{
-        search:'',
-        leftAlert:false,
+        rightAlert:false,//筛选弹窗
+        key: 0,//用来刷新组件状态 点击重置按钮时刷新默认状态
+        searchStr:'',
         searchFrequentlyShow:false,
         shortcutSearchContent: [],
-        isChecks:0,
+        resets:false,
+        isChecks:'',
         isChecksList:[],
+        isRelevance:'',
+        isRelevanceList:[],
         isFinish:'1',
         url:'/PersonOffice/m_getPaymentManagerAll',
         params:{
@@ -68,23 +70,28 @@
       }
     },
     methods:{
-      confirm(livenessIndex,livenessItem){//点击确定后 返回选中索引与值
-        this.leftAlert=false
-        console.log( livenessIndex,livenessItem)
+      radioChange(index,item){//用户选择后触发 可接收选中的索引值以及类别
+        this.isChecks=index
+      },
+      radioChange2(index,item){
+        this.isRelevance=index
+      },
+      change(value){//搜索 从组件接收value值 用户执行操作时触发当前事件
+        this.searchStr = value
+        this.initPageData(false)
+      },
+      confirm(index,index2){//点击确定后 返回选中索引与值
+        this.rightAlert=false
+        this.isChecks = index
+        this.initPageData()
       },
       reset(){//重置选择
-        this.isChecks = this.isChecksList.length-1//重置索引值
-      },
-      livenessClick(index,item){//获取选中索引以及值
-        this.isChecks = index
-      },
-      tacitlyApprove(){//默认选中全部
-        this.$nextTick(()=>{
-          this.isChecks =this.isChecksList.length-1//重置索引值
-        })
+        this.isChecks = ''
+        this.isRelevance = ''
+        this.key+=1//刷新组件
       },
       backEvent(){
-        this.$router.push('/homeApp/m_menu')
+        this.$router.push('/homeApp/m_myApprovalManager')
       },
       //跳转到进行中页面
       waitEvent(){
@@ -121,13 +128,16 @@
           // 页面初始化是需要的参数
           params = {
             isFinish:this.isFinish,
-            searchStr: this.search
+            searchStr: this.searchStr,
           }
         } else {
           // 页面非初始化时需要的参数
           params = {
             isFinish:this.isFinish,
-            searchStr: this.search
+            searchStr: this.searchStr,
+            isChecks:this.isChecks,
+            isRelevance:this.isRelevance
+
           }
         }
         this.init({
@@ -144,7 +154,9 @@
           init: (data) => {
             // 初始化时需要执行的代码
             this.isChecksList = data.isChecksPsd.list
-            this.isChecksList.push({num:this.isChecksList.length+'',showName:'全部'})
+            this.isRelevanceList = data.isRelevancePsd.list
+            // this.reset()
+
           }
         })
       }

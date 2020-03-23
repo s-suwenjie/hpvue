@@ -84,8 +84,8 @@
             <span>实际金额：</span>
             <span v-html="tenThousandFormatShow(actualMoney)"></span>
           </p>
-          <p>
-          </p>
+          <!-- 占位p标签 -->
+          <p></p>
         </div>
       </template>
     </yhm-form-list-show>

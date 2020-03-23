@@ -68,4 +68,14 @@
 .fs24b:before{
     font-size: 24px !important;
 }
+.fs48b:before{
+    font-size: 48px !important;
+}
+.opacity3:before{
+    opacity: 0.3 !important;
+}
+.colorFFF:before{
+    color: #FFF !important;
+}
+
 

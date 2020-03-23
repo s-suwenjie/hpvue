@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?r3ntcn');
-  src:  url('fonts/icomoon.eot?r3ntcn#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?r3ntcn') format('truetype'),
-    url('fonts/icomoon.woff?r3ntcn') format('woff'),
-    url('fonts/icomoon.svg?r3ntcn#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?71m3ib');
+  src:  url('fonts/icomoon.eot?71m3ib#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?71m3ib') format('truetype'),
+    url('fonts/icomoon.woff?71m3ib') format('woff'),
+    url('fonts/icomoon.svg?71m3ib#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-partialPayment:before {
+  content: "\e992";
+  color: #606060;
+}
+.icon-viewPayments:before {
+  content: "\e993";
+  color: #606060;
+}
 .icon-saveNY:before {
   content: "\e991";
   color: #606060;
@@ -80,6 +88,10 @@
 .icon-nextLevel:before {
   content: "\e947";
   color: #fff;
+}
+.icon-uniE994:before {
+  content: "\e994";
+  color: #606060;
 }
 .icon-help:before {
   content: "\e95e";

@@ -7,7 +7,7 @@
         <yhm-form-radio title="品牌" :select-list="brandList" :value="brand" id="brand"></yhm-form-radio>
         <yhm-form-radio title="收支方向" @call="contentTC" :no-edit="isDirectionEdit" :before="direction_state" :select-list="directionList" :value="direction" id="direction"></yhm-form-radio>
         <yhm-form-date title="交易日期" :value="cccurDate" id="cccurDate" position="b" rule="R0000"></yhm-form-date>
-        <yhm-form-select title="我方" subtitle="账户信息" @click="selectaccount" :value="selfAccount" v-if="isSelfAcc" id="selfAccount" width="1" rule="R0000" tip="value"></yhm-form-select>
+        <yhm-form-select title="我方" subtitle="账户信息" @click="selectaccount" :no-click="isSelectaccount" :value="selfAccount" v-if="isSelfAcc" id="selfAccount" width="1" rule="R0000" tip="value"></yhm-form-select>
         <yhm-form-text title="我方" subtitle="账户信息" :value="selfAccount" v-if="!isSelfAcc" id="selfAccount" rule="R0000" no-edit="1"></yhm-form-text>
         <yhm-form-text title="当前余额" :value="message" id="message" no-edit="1"></yhm-form-text>
         <yhm-form-text title="交易金额" :value="money" ref="money" id="money" rule="R3000" @input="calcTrAfterMoney" :no-edit="isMoney"></yhm-form-text>
@@ -57,13 +57,14 @@
         <yhm-form-radio title="有无" subtitle="手续费" :select-list="feeTypepsd" :value="feeType" id="feeType" rule="R0000" @call="feeTypeA"></yhm-form-radio>
         <yhm-form-text title="手续费" subtitle="金额" :value="fee" id="fee" :no-edit="HandlingFee"></yhm-form-text>
         <yhm-form-text title="凭证号" :value="voucherNo" id="voucherNo" width="1"></yhm-form-text>
-
-        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传凭证" tag="payment" subtitle="" multiple="multiple"></yhm-formupload>
-<!--        <yhm-form-upload-image title="上传凭证"  discription="点击图标或拖拽图片上传" tag="payment" :value="fileList" id="fileList" rule="#"></yhm-form-upload-image>-->
-
+        <yhm-form-upload-image title="上传凭证" @mouseover="lookImg" tag="bankDetail" discription="点击图标或拖拽图片上传" :value="img" id="img" rule=""></yhm-form-upload-image>
+        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传文件" tag="payment" subtitle="" multiple="multiple"></yhm-formupload>
       </template>
     </yhm-formbody>
-
+    <div id="lookImg" class="preview_showImg" @click="isLookImg" v-show="tipShow">
+      <div style="position: absolute;  bottom: 350px;color: #FF0000;font-size: 100px; opacity: 0.6;">点击消失</div>
+      <img :src="getUrl">
+    </div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="拨付资金" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
@@ -93,6 +94,7 @@
         cccurDate: '',//交易日期
         selfAccountID: '',//我方账户Id
         selfAccount: '',//我方账户说明
+        isSelectaccount: false,
         bankLogo: '',//银行LOGO
         money: '0',//交易金额
         balance: '0',//交易余额
@@ -137,11 +139,42 @@
         isOtherAcc: false,
         isCauseIn: true,
         isMoney: '1',
-        calcTrMoney: ''
+        calcTrMoney: '',
+        oldMoney: '',
+
+        img:'',
+        tipShow:false,
+        getUrl:'',
+        bankDetailImg:[],
       }
     },
     methods: {
+      lookImg(){
+        if(this.img){
+          this.tipShow=true;
+          this.getUrl='/UploadFile/bankDetail/'+this.img;
+        }
+      },
+      isLookImg(){
+        if(this.tipShow){
+          this.tipShow=false;
+        }
+      },
       calcTrAfterMoney(){
+
+        let oldMoney = parseFloat(this.oldMoney)
+        let money = parseFloat(this.money)
+        if(money > oldMoney){
+          this.$dialog.alert({
+            width: '350',
+            alertImg: 'error',
+            tipValue: '交易金额必须小于等于原始金额！！！',
+            closeCallBack: ()=>{
+              this.money = ''
+            }
+          })
+        }
+
         this.calcMoney()
       },
       //选择多事由(单行操作)
@@ -452,7 +485,20 @@
         if(parseFloat(this.calcTrMoney) < money){
           aa = false
         }
-
+        if(this.img){
+          let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.detail.length, 1000)))
+          let item = {
+            id: guid(),
+            insertDate: formatTime(insertDate),
+            ownerID: this.id,
+            category:'',
+            tag: 'bankDetail',
+            showName:this.img,
+            storeName:this.img,
+            suffix: (this.img.split('.')[(this.img.split('.').length)-1]).toUpperCase(),
+          }
+          this.bankDetailImg.push(item)
+        }
         if(!aa){
           this.$dialog.alert({
             width: '300',
@@ -487,7 +533,8 @@
             voucherNo: this.voucherNo,//凭证号
             files: this.fileList,//上传文件
             useMoney: this.autoCalcIpt,//多事由计算金额
-            subjectList: this.detail//多事由
+            subjectList: this.detail,//多事由
+            bankDetailImg:this.bankDetailImg,//上传凭证集合
           }
           this.$dialog.confirm({
             alertImg: 'warn',
@@ -560,6 +607,7 @@
           this.cccurDate = data.cccurDate //交易日期
 
           this.money = data.money//交易金额
+          this.oldMoney = data.money
           this.calcTrMoney = data.money
           this.balance = data.balance//交易余额
 
@@ -593,6 +641,10 @@
             /* 支票入账 */
           }else if(this.bankDetailType === '6'){
             this.ownerID = data.ownerID
+          }
+          if (data.selfAccountID!==''&&data.selfAccount!==''){
+            this.isSelectaccount=true
+            this.message=data.currentBalance
           }
 
           if(this.ownerSys === '2'){

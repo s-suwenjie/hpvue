@@ -67,14 +67,18 @@
         isBankName: false,
         aLineOnShow: 0,
         showBank: '',
+
+        jointLineNumberUrl:'',//联行号地址
+
         isOnShow: false
+
       }
     },
     methods:{
 
       /* 查询联行号 */
       jointNum(){
-        window.open('http://www.wt520.wang/')
+        window.open(this.jointLineNumberUrl)
       },
       /* 验证重复项 */
       repeatverifyAccountEvent(){
@@ -230,10 +234,21 @@
 
           }
         })
+      },
+      getJointLineNumberUrl(){
+        this.ajaxJson({
+          url: '/Com/getJointLineNumberUrl',
+          call: (data)=>{
+            if(data.type === 0){
+              this.jointLineNumberUrl=data.val
+            }
+          }
+        })
       }
     },
     created () {
       this.initData()
+      this.getJointLineNumberUrl()
     }
   }
 </script>

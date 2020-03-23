@@ -4,7 +4,7 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-radio title="付款性质" @call="showPayment" :select-list="natureList" :value="nature" id="nature" width="1"></yhm-form-radio>
-        <yhm-form-radio title="支票支付" v-show="isChecksHidden" :select-list="isChecksList" :value="isChecks" id="isChecks" @call="checkEvent"></yhm-form-radio>
+        <yhm-form-radio title="支付方式" v-show="isChecksHidden" :select-list="isChecksList" :value="isChecks" id="isChecks" @call="checkEvent"></yhm-form-radio>
         <yhm-form-drop-down-select :no-before-click="isNoBeforeClick" title="收款方" width="1" @select="selectUnit" :select-list="personOrUnitList"  :selectValue="personOrUnit" selectid="personOrUnit" :value="otherUnit" id="otherUnit" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>
         <!--        <yhm-form-drop-down-select title="付款事由" width="1" @select="selectCause" :select-list="ownerSysPsd" :selectValue="ownerSys" selectid="ownerSys" :value="subject" id="subject" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>-->
         <!--        <yhm-form-select title="收款单位" tip="value" rule="R0000" @click="selectUnit" :value="otherUnit" id="otherUnit"></yhm-form-select>-->
@@ -87,15 +87,14 @@
       <template #control  >
         <yhm-form-text title="支付金额" tip="money" before-icon="rmb" :value="money" id="money" rule="R3000" :no-edit="isInvoice" placeholder="请输入数字" error-message="纯数字输入"></yhm-form-text>
         <yhm-form-text title="金额大写" :value="capitalMoney" id="capitalMoney" rule="R0000" no-edit="1"></yhm-form-text>
-
         <yhm-form-drop-down-select :show="isCause" title="付款事由" width="1" @select="selectCause" :select-list="ownerSysPsd" :selectValue="ownerSys" selectid="ownerSys" :value="subject" id="subject" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>
 <!--        <yhm-form-radio :show="PrepaidHiddenA" title="用途代码" @call="initCode" width="1" :select-list="useNumList" :value="useNum" id="useNum" :no-edit="disable"></yhm-form-radio>-->
         <yhm-form-date title="最迟" @call="initCode" subtitle="付款日期" :min="nowDate" :value="lastDate" id="lastDate" position="r" rule="R0000"></yhm-form-date>
         <yhm-form-text title="编号" :value="message" id="code" rule="R0000" no-edit="1"></yhm-form-text>
-
-        <yhm-form-zh-select-more :show="isAllocation" @click="moneyAllocation" :min="min" category="date" title="分批拨付" :total="actualMoney" :value="allocationList" text-width="82" id="allocationList"></yhm-form-zh-select-more>
+        <yhm-form-radio title="是否" subtitle="分批拨付" :select-list="isAllocationList" :value="isAllocation" id="isAllocation" @call="allocationEvent"></yhm-form-radio>
+        <yhm-form-text title="首次" subtitle="拨付金额" @blur="isAllocationBlur" :show="isAllocationShow" tip="money" before-icon="rmb" :value="allocationMoney" id="allocationMoney" rule="R3000" placeholder="请输入数字" error-message="纯数字输入"></yhm-form-text>
+<!--        <yhm-form-zh-select-more @input="isAllocationBlur" :show="isAllocationShow" :before-edit="true" @click="moneyAllocation" :min="min" category="date" title="首次" subtitle="拨付金额" :total="actualMoney" :value="allocationList" text-width="82" id="allocationList"></yhm-form-zh-select-more>-->
         <yhm-form-zh-select-more :show="isBrand" @click="selectDeparment" title="部门分配" :total="money" :value="branchList" id="branchList" rule="#" rule-item="R3000" ></yhm-form-zh-select-more>
-
         <yhm-form-textarea title="备注" :value="remark" id="remark"></yhm-form-textarea>
       </template>
     </yhm-formbody>
@@ -213,16 +212,17 @@ export default {
       min: formatDate(new Date()),
       sumBankDetailMoney:'',//选择收支明细总金额,
 
-
       isLastDate: true,
       isCode: true,
-      isAllocation: true,
-      isOtherAccount: false
+      isAllocationShow: true,
+      isOtherAccount: false,
+      isAllocationList: [],
+      isAllocation: '',
+      moneyAllocationList: [],
+      allocationMoney: ''
     }
   },
   created () {
-
-    /* 初始化一条纸质发票 */
 
     this.init({
       url: '/PersonOffice/initPaymentForm',
@@ -254,9 +254,19 @@ export default {
 
         this.listCategoryList = data.listCategoryPsd.list
         this.isBankList = this.nature === '4' || this.nature === '5';
+        this.isAllocationList = data.isAllocationPsd.list
+        this.isAllocation = data.isAllocationPsd.value
+
         if(this.nature === '4'||this.nature === '5'){
           this.isInvoice='1'
         }
+
+        if(this.isAllocation === '0'){
+          this.isAllocationShow = false
+        }else{
+          this.isAllocationShow = true
+        }
+
         if(this.isRelevance === '1'){
           this.eventShowA = false
           this.eventShowB = true
@@ -299,6 +309,10 @@ export default {
         this.invoiceDetails = data.paymentInvoice
         this.branchList = data.branchList
 
+        for(let i in this.allocationList){
+          this.allocationMoney = this.allocationList[i].value
+        }
+
         this.isCause = this.nature !== '2';
         this.isBrand = !(this.nature === '2' || this.nature === '4' || this.nature === '5');
 
@@ -329,27 +343,61 @@ export default {
           this.isChecksHidden=false
         }
 
-
         if(this.nature === '2'){
           this.isCause = false
           this.isLastDate = false
           this.isCode = false
-          this.isAllocation = false
+          // this.isAllocationShow = false
           this.isBrand = false
           this.isUpFile = false
         }else{
           this.isCause = true
           this.isLastDate = true
           this.isCode = true
-          this.isAllocation = true
+          // this.isAllocationShow = true
           this.isBrand = true
           this.isUpFile = true
         }
-
       }
     })
   },
   methods: {
+    isAllocationBlur(){
+      if(this.money && this.isAllocation === '1'){
+        let money = parseFloat(this.money)
+        let allocationMoney = parseFloat(this.allocationMoney)
+        if(allocationMoney > money){
+          this.$dialog.alert({
+            width: '400',
+            alertImg: 'error',
+            tipValue: '首次拨付金额必须小于等于支付金额！！！',
+            closeCallBack: ()=>{
+              this.allocationMoney = ''
+            }
+          })
+        }else{
+          let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.allocationList.length, 1000)))
+          this.allocationList = []     // 添加新数据前清空原有数据
+          let item = {
+            id: guid(),
+            insertDate: formatTime(insertDate),
+            ownerID: this.id,
+            workDate: this.lastDate,
+            value: this.allocationMoney,
+            isFinish: '0'
+          }
+          this.allocationList.push(item)
+        }
+      }
+    },
+    /* 是否分批拨付 */
+    allocationEvent(){
+      if(this.isAllocation === '0'){
+        this.isAllocationShow = false
+      }else{
+        this.isAllocationShow = true
+      }
+    },
     /* 支票支付 */
     checkEvent(){
       this.otherUnit = ''
@@ -833,23 +881,17 @@ export default {
         this.otherAccount = ''
         this.isChecksHidden = false
 
-
         /* 内部互转时 */
-
         this.isCause = false
         this.isLastDate = false
         this.isCode = false
-        this.isAllocation = false
+        // this.isAllocationShow = false
         this.isBrand = false
-
-
       }else{
-
-
         this.isCause = true
         this.isLastDate = true
         this.isCode = true
-        this.isAllocation = true
+        // this.isAllocationShow = true
         this.isBrand = true
 
         this.isNoBeforeClick = false
@@ -879,7 +921,7 @@ export default {
           this.message=''
           this.money=''
           this.isInvoice = '1'   //选择电子发票的时候,支付金额禁止输入
-        }else if(this.nature==='0'){
+        }else if(this.nature==='0'||this.nature==='6'){
           this.isChecksHidden = true
           this.isAddBankDetail = false
           this.isBankList = false //清空收支明细
@@ -1098,7 +1140,6 @@ export default {
                 }else{
                   this.isOtherAccount = false
                 }
-
               }
             }else{
               if(data.idNo === "" && data.phone=== ""){
@@ -1414,7 +1455,8 @@ export default {
           branchList: this.branchList,
           bankDetailList: this.bankDetailList,
           allocationList: this.allocationList,
-          isChecks:this.isChecks
+          isChecks:this.isChecks,
+          isAllocation: this.isAllocation
 
         }
         this.ajaxJson({
@@ -1588,7 +1630,8 @@ export default {
           branchList: this.branchList,
           bankDetailList: this.bankDetailList,
           allocationList: this.allocationList,
-          isChecks:this.isChecks
+          isChecks:this.isChecks,
+          isAllocation: this.isAllocation
           // state:0,
         }
         this.ajaxJson({

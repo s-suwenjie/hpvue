@@ -306,17 +306,11 @@
           })
         }
       },
-
-
     },
 
     watch: {
       detail () { // 监听列表是否有数据
-        if (this.detail.length == 0) {
-          this.empty = true
-        } else {
-          this.empty = false
-        }
+        this.empty = this.detail.length === 0;
       },
       unitID () {
         this.otherAccountID = ''

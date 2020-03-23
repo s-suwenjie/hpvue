@@ -3,10 +3,10 @@
       <yhm-formbody>
         <template #title>基本信息</template>
         <template #control>
-          <yhm-form-text :show="isCheckNum" title="支票号码" :value="checkNum" id="checkNum" rule="R9000"></yhm-form-text>
-          <yhm-form-text :show="isCheckFir" :title="isFirWord?'首张':''" subtitle="支票号码" :value="checkFir" id="checkFir" rule="R9000"></yhm-form-text>
+          <yhm-form-text :show="isCheckNum" title="支票号码" :value="checkNum" id="checkNum" placeholder="请输入支票右上角16位数字，无需空格" error-message="位数不够" rule="R9000"></yhm-form-text>
+          <yhm-form-text :show="isCheckFir" :title="isFirWord?'首张':''" subtitle="支票号码" placeholder="请输入支票右上角16位数字，无需空格" error-message="位数不够" :value="checkFir" id="checkFir" rule="R9000"></yhm-form-text>
           <yhm-form-text :show="isCheckSheet" title="支票张数" :value="checkSheet" id="checkSheet" rule="R1300" :max-length="3"></yhm-form-text>
-          <yhm-form-text :show="isCheckLast" title="末张" subtitle="支票号码" :value="checkLast" id="checkLast" rule="R9000"></yhm-form-text>
+          <yhm-form-text :show="isCheckLast" title="末张" subtitle="支票号码" :value="checkLast" error-message="位数不够" placeholder="请输入支票右上角16位数字，无需空格" id="checkLast" rule="R9000"></yhm-form-text>
         </template>
       </yhm-formbody>
       <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">

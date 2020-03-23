@@ -1,5 +1,4 @@
 @charset "UTF-8";
-
 .ab_main{
     height: 0.9867rem;
     line-height: 0.9867rem;
@@ -80,5 +79,10 @@
     border: 0.0267rem solid #49a9ea;
 }
 
-
+.ab_six{
+    background-color: #49a9ea;
+    color: #FFF;
+    width: 96%;
+    border-radius: 0.45rem;
+}
 

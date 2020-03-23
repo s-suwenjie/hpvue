@@ -1,20 +1,17 @@
-<template>
+  <template>
   <div class="f_main">
     <yhm-formbody>
-      <template #title></template>
+      <template #title>基本信息</template>
       <template #control>
         <yhm-form-text title="事件描述" :value="name" id="name" rule="R0000"></yhm-form-text>
         <yhm-form-radio title="品牌" submitvalue="brandObject" :ownerID="id" :select-list="brandList" :value="brand" id="brand" rule="#"></yhm-form-radio>
-
         <yhm-form-drop-down-select title="事件类型" width="1" @select="selectCause" :select-list="categoryList" :selectValue="category" selectid="category" :value="cause" id="cause" rule="R0000"></yhm-form-drop-down-select>
-
-<!--        <yhm-form-radio title="用途代码" @call="initCode" width="1" :select-list="useNumList" :value="useNum" id="useNum"></yhm-form-radio>-->
         <yhm-form-date title="最迟" @call="initCode" subtitle="付款日期" :min="nowDate" :value="lastDate" id="lastDate" position="r" rule="R0000"></yhm-form-date>
         <yhm-form-text title="付款金额" tip="money" before-icon="rmb" :value="money" id="money" rule="R3000"></yhm-form-text>
         <yhm-form-text title="编号" :value="code" id="code" rule="R0000" no-edit="1"></yhm-form-text>
         <yhm-form-radio title="生成申请" :select-list="isAutoList" :value="isAuto" id="isAuto"></yhm-form-radio>
 
-        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="支持单据" tag="paymentPlan" subtitle="" multiple="multiple"></yhm-formupload>
+        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="支持单据" tag="paymentPlan" multiple="multiple"></yhm-formupload>
 
         <yhm-form-list-edit v-if="false">
           <template #title>发票明细</template>
@@ -82,33 +79,35 @@ export default {
   mixins: [formmixin],
   data () {
     return {
-      otherUnitID: '',
-      otherAccountID: '',
-      name: '', // 涵盖事件
-      ownerID: '',
-      category: '', // 事件类型,
-      causeID: '', // 事由ID(事件)
-      cause: '', // 事由文字(事件)
+      otherUnitID: '',                //添加时有地址栏获取
+      otherAccountID: '',             //添加时有地址栏获取
+      ownerID: '',                    //添加时有地址栏获取
+      personOrUnit: '',               //添加时有地址栏获取
+      name: '',                       //事件描述
+      brand: '',                      //品牌
+      brandList: [],                  //品牌明细
+      category: '',                   //事件类型,
+      categoryList: [],               //事件类型明细
+      causeID: '',                    //事由ID(事件)
+      cause: '',                      //事由文字(事件)
+      nowDate: formatDate(new Date()),//当前日期
+      lastDate: '',                   //最迟付款日期
+      money: '',                      //付款金额
+      code: '',                       //编号
+      isAuto: '0',                    //生成申请
+      isAutoList: [],                 //生成申请的选项明细
+      unitID: '',                     //操作人所属单位，可能用于确定审批流程
 
-      brand: '', // 所属品牌
-      brandList: [],
+
       useNum: '0', // 用途代码
-      lastDate: '',
-      money: '', // 付款金额
-      code: '', // 编号
       subjectCode: '', // 编号
-      isAuto: '0',
-      categoryList: [],
       useNumList: [],
-      isAutoList: [],
       causeNum: '',
-      nowDate: formatDate(new Date()),
       fileList: [],
       state: '0',
       isFinish: '0',
-      unitID: '',
       approvalHtml: '',
-      personOrUnit: '',
+
       otherUnit: '',
       isLook: true,
       isBtn: true,
@@ -126,7 +125,6 @@ export default {
     }
   },
   created () {
-
     this.setQuery2Value('ownerID')
     this.setQuery2Value('otherUnitID')
     this.setQuery2Value('personOrUnit')
@@ -170,6 +168,31 @@ export default {
     })
   },
   methods: {
+    /*初始化编号*/
+    initCode () {
+      if (this.lastDate !== '' && this.causeID !== '') {
+        let params = {
+          otherUnitID: this.otherUnitID,
+          causeID: this.causeID,
+          lastDate: this.lastDate,
+          id: this.id
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/initPaymentPlanDetailCode',
+          data: params,
+          loading: '0',
+          call: (data) => {
+            if (data.type === 0) {
+              this.code = data.message
+              this.unitID = data.html
+            } else {
+
+            }
+          }
+        })
+      }
+    },
+
 
     /* 计算实报金额 */
     calcActualMoney(item){
@@ -364,29 +387,7 @@ export default {
         }
       })
     },
-    initCode () {
-      if (this.lastDate !== '') {
-        let params = {
-          otherUnitID: this.otherUnitID,
-          //useNum: this.subjectCode,
-          causeID: this.causeID,
-          lastDate: this.lastDate,
-          id: this.ownerID
-        }
-        this.ajaxJson({
-          url: '/PersonOffice/initPaymentPlanDetailCode',
-          data: params,
-          loading: '0',
-          call: (data) => {
-            if (data.type === 0) {
-              this.code = data.message
-              this.unitID = data.html
-            } else {
-            }
-          }
-        })
-      }
-    },
+
     btnAddSave(){
       if (this.validator()) {
         let params = {
@@ -483,7 +484,12 @@ export default {
         return false
       }
     },
-    selectCause () {
+    resetCause(op,catetory){
+      if(op === 'i'){
+        this.category = catetory === '0'?'1':'0'
+      }
+    },
+    selectCause (op) {
       var name = '65'
       if (this.category == '1') {
         name = '63'
@@ -509,6 +515,10 @@ export default {
             this.subjectCode = data.value11
             this.initCode()
             this.cause = dicName
+          }
+          else{
+            //说明没有选中需要重置类型
+            this.resetCause(op,this.category)
           }
         }
       })

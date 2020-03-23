@@ -171,9 +171,10 @@
     },
     watch:{
       value:{
+
         handler:function(newVal,oldVal){
           var js = "this.p____page." + this.submitValue + ".splice(0,this.p____page." + this.submitValue + ".length)"
-          eval(js);
+          // eval(js);
           for(var i = 0; i < newVal.length; i++){
             var insertDate = new Date(accAdd(new Date().getTime(),accMul(i,1000)));
             var temp = {
@@ -183,8 +184,8 @@
               tableName: this.tableName + '',
               value:newVal[i]
             }
-            js = "this.p____page." + this.submitValue + ".push(temp)"
-            eval(js);
+            // var js = "this.p____page." + this.submitValue + ".push(temp)"
+            // eval(js);
           }
         },
         deep: true

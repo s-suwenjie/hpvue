@@ -7,7 +7,7 @@
       </div>
       <div class="c_main">
         <div class="c_main_upload">
-          <yhm-upload @call="uploadImg" :tag="tag" title="上传图片">
+          <yhm-upload @call="uploadImg" @mouseoverEvent="mouseoverEvent" @mouseoutEvent="mouseoutEvent" :tag="tag" title="上传图片">
             <div class="c_image_main" :class="getBig">
               <div class="c_image fs18b" :class="[getDefaultStyle,{c_error:error,red:error}]">
                 <div class="box">
@@ -110,7 +110,17 @@
         }
         this.error = !result
         return result;
-      }
+      },
+      mouseoverEvent(){
+        this.$nextTick(() => {
+          this.$emit("mouseover",this.getUrl)
+        })
+      },
+      mouseoutEvent(){
+        this.$nextTick(() => {
+          this.$emit("mouseout",this.getUrl)
+        })
+      },
     },
     computed:{
       getDefaultStyle(){

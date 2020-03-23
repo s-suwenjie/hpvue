@@ -99,7 +99,8 @@
           title = '添加对公账号'
           // 设置页面标记为添加
           isAdd = true
-          url='/publicAccountForm?id='
+          //0是在对公账账户模块进入   ''是选择页面进入
+          url='/publicAccountForm?id=&url=0'
         }
         this.$dialog.OpenWindow({
           width: 1050,

@@ -1,4 +1,5 @@
 @charset "UTF-8";
+
 /*日期选择框*/
 .i-input-date:before{
   font-family: 'icomoon' !important;
@@ -708,14 +709,44 @@
   content: "\e98f";
 }
 
+.i-yellowWarn:before{
+  font-family: 'icomoon' !important;
+  content: "\e98c";
+}
+
 /* 延期核销  */
 .i-delay:before{
   font-family: 'icomoon' !important;
   content: "\e990";
 }
 
+/* 更换联系人 */
+.i-replace:before{
+  font-family: 'icomoon' !important;
+  content: "\e994";
+}
 /* 暂不提交  */
 .i-noSub:before{
   font-family: 'icomoon' !important;
   content: "\e991";
+}
+
+
+/* 分批拨付  -  分批拨付查看*/
+.i-allocation:before{
+  font-family: 'icomoon' !important;
+  content: "\e993";
+}
+
+.i-allocationView:before{
+  font-family: 'icomoon' !important;
+  content: "\e992";
+}
+.i-right:before {
+  font-family: 'icomoon' !important;
+  content: "\e90b";
+}
+.i-left:before {
+  font-family: 'icomoon' !important;
+  content: "\e90c";
 }

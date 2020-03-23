@@ -1,6 +1,6 @@
 <template>
     <div>
-      <van-tabbar v-model="batActive">
+      <van-tabbar v-model="batActive" style="z-index:2;">
         <van-tabbar-item>
           <span>分类</span>
           <img
@@ -30,7 +30,16 @@
 </template>
 
 <script>
+  import { ImagePreview,Tabbar, TabbarItem ,Tab,Tabs} from 'vant'
+  import 'vant/lib/index.css';
   export default {
+    components: {
+      [Tab.name]: Tab,
+      [Tabs.name]: Tabs,
+      [Tabbar.name]: Tabbar,
+      [TabbarItem.name]: TabbarItem,
+      [ImagePreview.name]: ImagePreview,
+    },
     name: 'appTabBar',
     data(){
       return{
@@ -39,7 +48,33 @@
     }
   }
 </script>
-
+<style lang="less">/*适配vant下tabbar组件(不能使用自动适配,pc端会乱)*/
+@rem:375/10rem;
+.van-tabbar-item__icon img{
+  height: 19/@rem !important;
+}
+.van-tabbar{
+  border-radius: 8/@rem 8/@rem 0 0;
+  height: 50/@rem !important;
+  border-top: 1/@rem solid #bfbfbf;
+}
+.van-tabbar-item--active{
+  color: #49A9EA !important;
+}
+.van-tabbar-item{
+  height: 50/@rem;
+  font-size: 12/@rem;
+  .van-tabbar-item__text{
+    font-size: 12/@rem;
+  }
+  .van-tabbar-item__icon{
+    margin-bottom: 2/@rem;
+  }
+}
+.van-tabbar-item__icon i{
+  font-size: 19/@rem;
+}
+</style>
 <style scoped>
 
 </style>

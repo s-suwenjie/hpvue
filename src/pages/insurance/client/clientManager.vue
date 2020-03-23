@@ -9,6 +9,7 @@
       <template #operate>
         <yhm-commonbutton  value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData(false)"></yhm-managersearch>
+        <yhm-commonbutton style="margin-left: 30px" value="批量更换负责人" icon="replace"  @call="replace()"></yhm-commonbutton>
       </template>
       <!--数据表头-->
       <template #listHead>
@@ -30,18 +31,18 @@
       <template #listBody>
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
-          <yhm-manager-td-look @click="add(item.id)"></yhm-manager-td-look>
+          <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.name"></yhm-manager-td>
           <yhm-manager-td :value="item.phone"></yhm-manager-td>
-          <yhm-manager-td :value="item.stateVal"></yhm-manager-td>
+          <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
           <yhm-manager-td :value="item.lastYearUnitVal"></yhm-manager-td>
           <yhm-manager-td-date :value="item.forceEndDate"></yhm-manager-td-date>
           <yhm-manager-td-date :value="item.businessEndDate"></yhm-manager-td-date>
-          <yhm-manager-td :value="item.drivingLicense"></yhm-manager-td>
+          <yhm-manager-td-image :tip="true" width="850" height="500" :value="item.drivingLicense" tag="drivingLicense"></yhm-manager-td-image>
           <yhm-manager-td :value="item.principal"></yhm-manager-td>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button  @click="replacePrincipal(item.id)" value="更换负责人" icon="replace" ></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="replacePrincipal(item.id)" value="更换负责人" icon="i-replace"  color="#0033FF" ></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -59,6 +60,7 @@
 </template>
 
 <script>
+  import {accAdd,accMul} from '@/assets/common.js'
   import { managermixin } from '@/assets/manager.js'
   export default {
     name: 'clientManager',
@@ -68,91 +70,153 @@
         id :'',
         principal:'', //负责人
         principalID:'', //负责人ID
-
       }
     },
     methods:{
-      //添加
-      add (id) {
-        // 默认设置页面标记是查看
-        var isAdd = false
-        // 默认设置页面标题为查看信息
-        var title = '查看客户信息信息'
-        if (!id) { // 当id不存在的时候
-          // 设置id为空
-          id = ''
-          // 设置页面标题为添加信息
-          title = '添加客户信息信息'
-          // 设置页面标记为添加
-          isAdd = true
-        }
+      replace(){
+        if (this.selectValue.length ===0){
+          this.$dialog.alert({
+            tipValue:'至少选择一条信息!!!',
+            alertImg: 'warn',
+            width:'300'
+          })
+        }else  if(this.selectValue.length ===1){
+          //操作一条
+          let arr=[]
+          for(let i = 0;i<this.selectValue.length; i++){
+            let key = this.selectValue[i]
+            arr += key + '☆'
+          }
+          if (arr.length > 0) {
+            arr = arr.substr(0, arr.length - 1);
+          }
+          this.initTrackMany(arr)
+        }else  if (this.selectValue.length >1) {
+          //操作多条
+          let arr=[]
+          for(let i = 0;i<this.selectValue.length; i++){
+            let key = this.selectValue[i]
+            arr += key + '☆'
+          }
+          if (arr.length > 0) {
+            arr = arr.substr(0, arr.length - 1);
+          }
+          this.initTrackMany(arr)
+          }
+      },
+      //多选客户是否有人已被跟踪信息
+      initTrackMany(arr){
+        //-->打开更换负责人页面
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 692,
+          url: '/selectPerson?category=0&categoryBefore=1',
+          title: '更换负责人',
+          closeCallBack: (data) => {
+            if (data) {
+              this.principalID=data.id
+              this.principal = data.name
+              this.$dialog.refresh()
+              let params = {
+                id:arr,
+                principalID:this.principalID, //负责人ID
+
+              }
+              //-->具体操作
+              this.ajaxJson({
+                url: '/Insurance/replacePrincipalMany',
+                data: params,
+                call: (data) => {
+                  if (data.type === 0) {
+                    this.$dialog.alert({
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                        this.initPageData(false)
+                      }
+                    })
+                  }else if(data.type === 1){
+                    this.$dialog.alert({
+                      alertImg:'warn',
+                      tipValue: data.message
+                    })
+                  }
+                }
+              })
+            }
+          }
+        })
+      },
+
+      listView(item){
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '800',
-          url:'/clientForm?id=' + id,
-          title:title,
-          closeCallBack:(data) =>{
+          height: '650',
+          url: '/clientView?id=' + item.id,
+          title: '查看客户信息',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      //添加
+      add () {
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/clientForm',
+          title: '添加客户信息',
+          closeCallBack: (data) => {
             if (data) {
-              if (isAdd) {
-                this.lastData = data//接收子页面传的值
-              }
+              this.lastData = data
               this.initPageData(false)
               /*false->非初始化=>!import  true->初始化*/
             }
           }
         })
       },
+
       replacePrincipal(id){
         this.id = id
-        this.$dialog.confirm({
-          width: 300,
-          tipValue: '是否更换负责人?',
-          btnValueOk: '确定',
-          alertImg: 'warn',
-          okCallBack: (data) => {
-            let params = {
-              id: id,
-            }
-            this.$dialog.OpenWindow({
-              width: 950,
-              height: 692,
-              url: '/selectPerson?category=0&categoryBefore=1',
-              title: '更换负责人',
-              closeCallBack: (data) => {
-                if (data) {
-                  this.principalID=data.id
-                  this.principal = data.name
-                  this.$dialog.refresh()
-                  let params = {
-                    id:this.id,
-                    principalID:this.principalID, //负责人ID
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 692,
+          url: '/selectPerson?category=0&categoryBefore=1&id=' + this.id,
+          title: '更换负责人',
+          closeCallBack: (data) => {
+            if (data) {
+              this.principalID=data.id
+              this.principal = data.name
+              this.$dialog.refresh()
+              let params = {
+                id:this.id,
+                principalID:this.principalID, //负责人ID
 
-                  }
-                  this.ajaxJson({
-                    url: '/Insurance/replacePrincipal',
-                    data: params,
-                    call: (data) => {
-                      if (data.type === 0) {
-                        this.$dialog.alert({
-                          tipValue: data.message,
-                          closeCallBack: () => {
-                            this.initPageData(false)
-                          }
-                        })
-                      }else if(data.type === 1){
-                        this.$dialog.alert({
-                          alertImg:'warn',
-                          tipValue: data.message
-                        })
-                      }
-                    }
-                  })
-                }
               }
-            })
+              //-->具体操作
+              this.ajaxJson({
+                url: '/Insurance/replacePrincipal',
+                data: params,
+                call: (data) => {
+                  if (data.type === 0) {
+                    this.$dialog.alert({
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                        this.initPageData(false)
+                      }
+                    })
+                  }else if(data.type === 1){
+                    this.$dialog.alert({
+                      alertImg:'warn',
+                      tipValue: data.message
+                    })
+                  }
+                }
+              })
+            }
           }
         })
-
       },
       //搜索
       initPageData (initValue) {

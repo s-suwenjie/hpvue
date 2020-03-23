@@ -45,7 +45,6 @@
     mixins: [formmixin],
     data(){
       return {
-        id:'',
         ownerID:'',
         name: '',
         workDate: formatDate(new Date()),
@@ -217,9 +216,8 @@
 
       },
       save(){
-
         let aa = true
-        if(parseInt(this.actualQuantity) < parseInt(this.quantity)){
+        if(parseInt(this.actualQuantity) !== parseInt(this.quantity)){
           aa = false
         }
 
@@ -227,7 +225,7 @@
           this.$dialog.alert({
             width: '300',
             alertImg: 'warn',
-            tipValue: '数量不够',
+            tipValue: '请保证实际数量和购买数量一致',
             closeCallBack: ()=>{
 
             }
@@ -276,7 +274,34 @@
                 this.$dialog.alert({
                   tipValue: data.message,
                   closeCallBack: (data)=>{
-                    this.$dialog.close()
+                    this.$dialog.confirm({
+                      alertImg: 'warn',
+                      tipValue: '确定入库？',
+                      okCallBack: ()=>{
+                        let params = {
+                          id: this.id
+                        }
+                        this.ajaxJson({
+                          url: '/Bill/checksStockIn',
+                          data: params,
+                          call: (data)=>{
+                            if(data.type === 0){
+                              this.$dialog.alert({
+                                tipValue: data.message,
+                                closeCallBack: ()=>{
+                                  this.$dialog.close()
+                                }
+                              })
+                            }else {
+                              this.$dialog.alert({
+                                alertImg: 'error',
+                                tipValue: data.message
+                              })
+                            }
+                          }
+                        })
+                      }
+                    })
                   }
                 })
               }else{

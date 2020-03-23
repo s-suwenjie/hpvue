@@ -62,6 +62,8 @@
     mixins: [selectmixin],
     data() {
       return {
+
+
         categoryBefore: '0', // 单位按钮是否可以切换(0表示能切换,1表示不能切换)
         listCategory: { // 接受单位筛选数据
           value: '',

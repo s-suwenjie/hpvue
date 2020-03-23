@@ -9,12 +9,14 @@ const managermixin = {
   data(){
     return{
       /*固定属性*/
+      isSelected:false,//显示选中信息  按钮
       sortTh: [], // 排序表头，固定写法，如需其他逻辑，表头需要排序的话，这个是必须的
       choose: false, // 选择区域是否打开
       content: [], // 接收列表数据
       empty: true, // 列表数据是否为空
       shortcutSearchContent: [], // 查询历史TOP5
       lastData: '', // 最后添加的记录
+      allCheck:false,
       selectValue: [], // 选中的记录
       searchStr: '', // 搜索字符串
       orderColumn: 'insertDate', // 排序的列
@@ -106,9 +108,39 @@ const managermixin = {
 
   },
   watch: {
+    content:{
+      handler: function (val, oldval) {
+        let check = true
+        for(let i = 0; i < val.length; i++){
+          if(this.selectValue.indexOf(val[i].id) === -1){
+            check = false
+            break
+          }
+        }
+        this.allCheck = check
+      },
+      deep: true
+    },
     selectValue: {
       handler: function (val, oldval) {
         this.pager.selectCount = val.length
+        let check = true
+        for(let i = 0; i < this.content.length; i++){
+          if(val.indexOf(this.content[i].id) === -1){
+            check = false
+            break
+          }
+        }
+        this.allCheck = check
+        if(this.selectedSum) {
+          this.selectedSum()
+          if (this.selectValue.length > 0) {
+            this.isSelected = true
+          } else {
+            this.isSelected = false
+            this.initPageData(false)
+          }
+        }
       },
       deep: true
     }

@@ -40,7 +40,7 @@
       <slot name="colorTip"></slot>
     </div>
     <div v-if="!customize" class="m_list mt10" :class="{w620: totalTable,mr40:totalRgt}">
-
+      <slot name="total"></slot>
       <div class="listTotalCrente">
         <slot name="listTotalLeft"></slot>
         <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">

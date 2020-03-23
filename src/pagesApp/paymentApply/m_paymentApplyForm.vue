@@ -6,8 +6,9 @@
       <router-link class="topNav" :to="{path: '/homeApp/m_paymentApplySubed'}">已提交</router-link>
       <router-link class="topNav topNavChoice" :to="{path: '/homeApp/m_paymentApplyForm'}">添加</router-link>
     </div>
-    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish">
-      <yhm-app-form-body v-if="false">
+<!--    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish">-->
+    <div style="overflow: auto">
+      <yhm-app-form-body v-if="true">
         <template #title>基本信息</template>
         <template #controls>
           <yhm-app-form-radio-button title="付款性质" @click="natureEvent" :value="nature" id="nature" :list="natureList"></yhm-app-form-radio-button>
@@ -34,7 +35,8 @@
 
         </template>
       </yhm-app-form-body>
-    </yhm-app-scroll>
+      </div>
+<!--    </yhm-app-scroll>-->
   </div>
 </template>
 
@@ -133,7 +135,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 44/@rem;
+  height: 88/@rem;
   box-shadow: 0 1px 0 0 #bfbfbf;
   position: relative;
   .topNav{

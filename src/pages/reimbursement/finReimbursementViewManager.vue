@@ -15,7 +15,9 @@
         <yhm-table-tip :show="tableTip" :content="tableTipInfo" :column="tableTipColumnInfo" :mouse-control="tableTipControl"></yhm-table-tip>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
-        <!--      <div @click="selectPerson" style="display: inline-block; width: 120px; height: 30px; border: 1px solid #49A8EA;">选择联系人</div>-->
+        <div @click="selectedList" v-show="isSelected" class="b_main one b_one mr5b">打开选中信息</div>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
       </template>
 
       <!--筛选区-->
@@ -28,11 +30,11 @@
 
       <!--数据表头-->
       <template #listHead>
-        <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
+        <yhm-managerth-check :check="allCheck" style="width: 40px;"></yhm-managerth-check>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="申请人" value="name"></yhm-managerth>
         <yhm-managerth style="width: 150px" title="申请日期" value="workDate"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="是否核销" value="isPrettyCashOff"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="报销方式" value="isPrettyCashOff"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="提交天数" value="day"></yhm-managerth>
         <yhm-managerth title="事由"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="报销金额" value="money"></yhm-managerth>
@@ -78,7 +80,7 @@
 
       </template>
       <template #listTotalLeft>
-        <div class="listTotalLeft">
+        <div class=" listTotalLeft">
           <span class="test"></span>
           <span class="test">金额</span>
           <span class="test">条数</span>
@@ -91,7 +93,6 @@
           <tr>
             <yhm-manager-td-rgt @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
           </tr>
-
       </template>
     </yhm-managerpage>
   </div>
@@ -143,9 +144,60 @@
         tableTipInfo:[],
         causetbSwitch: false,
         subjectList: {},
+
+        dateType:'',
+        dateTypeList: {
+          value: '',
+          list: [{showName:"本周", num: "0", code: "", img: ""},{showName:"本月", num: "1", code: "", img: ""},{showName:"本季度", num: "2", code: "", img: ""},{showName:"本年", num: "3", code: "", img: ""},]
+        },
       }
     },
     methods: {
+      selectedSum(){
+        let params={
+          selectValue:this.selectValue
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            if(data.type===0){
+              this.ajaxJson({
+                url: '/PersonOffice/finReimbursementManagerTotal',
+                data:params,
+                call:(information) =>{
+                  this.contentTotal = information
+                }
+              })
+            }
+          }
+        })
+      },
+      selectedList(){
+        let params={
+          selectValue:this.selectValue
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            //finReimbursementViewFormSelect
+            if(data.type===0){
+              this.$dialog.OpenWindow({
+                width: '1050',
+                height: '620',
+                title: '查看选中信息',
+                url: '/reimbursementViewForm?id='+data.val,
+                closeCallBack: (dataTwo)=>{
+                  if(dataTwo){
+
+                  }
+                }
+              })
+            }
+          }
+        })
+      },
       totalClick(item){
         if(item.val==='总数'){
           this.listState.value = ''
@@ -156,6 +208,7 @@
         } else if(item.val==='驳回'){
           this.listState.value = '2'
         }
+        this.pageIndex=1
         this.initPageData()
       },
       /* 小标格显示 */
@@ -201,9 +254,19 @@
             state:''
           }
         } else {
-          params = {
-            state: this.listState.value,
-            isPrettyCashOff: this.listIsPrettyCashOff.value
+          if(this.selectValue.length>0){
+            params = {
+              state: this.listState.value,
+              isPrettyCashOff: this.listIsPrettyCashOff.value,
+              dateType : this.dateTypeList.value,
+              isSelectValue:'1'
+            }
+          }else{
+            params = {
+              state: this.listState.value,
+              isPrettyCashOff: this.listIsPrettyCashOff.value,
+              dateType : this.dateTypeList.value,
+            }
           }
         }
         this.init({
@@ -212,7 +275,9 @@
           data:params,
           all:(data) =>{
             //不管是不是初始化都需要执行的代码
-            this.contentTotal = data.total
+            if(this.selectValue.length==0){
+              this.contentTotal = data.total
+            }
           },
           init:(data)=>{
             //初始化时需要执行的代码
@@ -232,14 +297,7 @@
         }
       }
     },
-    watch: {
-      selectValue: {
-        handler: function (val, oldval) {
-          this.pager.selectCount = val.length
-        },
-        deep: true
-      }
-    },
+
     created () {
     }
   }

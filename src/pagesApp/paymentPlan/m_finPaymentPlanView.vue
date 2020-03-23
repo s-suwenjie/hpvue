@@ -48,7 +48,7 @@
         isFinish:'0',
         rejectDetail:'',
         files:[],
-        content:[]
+        content:''
       }
     },
     methods: {

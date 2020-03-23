@@ -36,7 +36,9 @@
           <span @click="nextSelectMonthYear" class="dp_icon i-btn-next-year"></span>
         </div>
         <div class="dp_middle">
-          <div v-for="(item,index) in date.selectMonths" :key="index" @click="selectMonthed(item)" class="yearMonth" :class="{current:getSelectCurrentMonth(item)}">{{item}}月</div>
+          <div v-for="(item,index) in date.selectMonths" :key="index" @click="selectMonthed(item)" class="yearMonth" :class="{current:getSelectCurrentMonth(item)}">
+            {{item}}月
+          </div>
         </div>
       </div>
     </div>

@@ -43,6 +43,9 @@
       getChecked(){
         return this.p____page.checkSelect(this.value.id)
       }
+    },
+    created () {
+      // console.log(this)
     }
   }
 </script>

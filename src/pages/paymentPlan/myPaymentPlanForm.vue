@@ -4,7 +4,6 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-drop-down-select :no-click="isSelect" title="收款方" width="1" @select="selectUnit" :select-list="personOrUnitList" :selectValue="personOrUnit" selectid="personOrUnit" :value="name" id="name" rule="R0000"></yhm-form-drop-down-select>
-<!--        <yhm-form-select @click="selectUnit" title="收款单位" tip="value" :value="otherUnit" id="otherUnit" rule="R0000"></yhm-form-select>-->
       </template>
     </yhm-formbody>
     <div class="f_split"></div>
@@ -90,8 +89,8 @@ export default {
       if (this.validator()) {
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '570',
-          url: '/PaymentPlanDetailForm?otherUnitID=' + this.otherUnitID + '&ownerID=' + this.id + '&personOrUnit=' + this.personOrUnit +  '&otherAccountID=' + this.otherAccountID,
+          height: '575',
+          url: '/myPaymentPlanDetailForm?otherUnitID=' + this.otherUnitID + '&ownerID=' + this.id + '&personOrUnit=' + this.personOrUnit +  '&otherAccountID=' + this.otherAccountID,
           title: '添加事件信息',
           closeCallBack: (data) => {
             this.$dialog.setReturnValue(this.id)
@@ -117,13 +116,18 @@ export default {
         })
       } else {
         this.$dialog.alert({
-          tipValue: '请选择收款单位',
+          tipValue: '请选择收款方',
           alertImg: 'error',
-          width: '320'
+          width: '250'
         })
       }
     },
-    selectUnit () {
+    resetPersonOrUnit(op,personOrUnit){
+      if(op === 'i'){
+        this.personOrUnit = personOrUnit
+      }
+    },
+    selectUnit (op) {
       if(this.personOrUnit === '0'){
         this.$dialog.OpenWindow({
           width: '950',
@@ -139,6 +143,10 @@ export default {
                 this.name = data.name
                 this.otherUnitID = data.id
               }
+            }
+            else{
+              //说明没有选中需要重置类型
+              this.resetPersonOrUnit(op,'1')
             }
           }
         })
@@ -157,6 +165,10 @@ export default {
                 this.name = data.name
                 this.otherUnitID = data.id
               }
+            }
+            else{
+              //说明没有选中需要重置类型
+              this.resetPersonOrUnit(op,'0')
             }
           }
         })
@@ -253,7 +265,7 @@ export default {
         this.$dialog.OpenWindow({
           width: 1050,
           height: 570,
-          url: '/PaymentPlanDetailForm?id=' + id,
+          url: '/myPaymentPlanDetailForm?id=' + id,
 
           title: '查看付款计划详情信息',
 

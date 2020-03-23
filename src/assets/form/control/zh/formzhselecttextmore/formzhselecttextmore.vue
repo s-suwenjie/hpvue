@@ -11,7 +11,7 @@
           <div class="c_content c_m_content">
             <div class="c_m_item" v-for="(item,index) in value" :key="index" @click.stop>
               <span class="c_m_item_title" >{{item.selectValue}}</span>
-              <yhm-text ref="txtControl" :no-edit="getLastNoEdit(index)" :before-icon="inputBeforeIcon" :value="getLastValue(index,item.value)" :id="getID(index)" category="m" :width="textWidth" :rule="ruleItem" :class="{mr10:noEdit}"></yhm-text>
+              <yhm-text ref="txtControl" @input="inputEvent" :no-edit="getLastNoEdit(index)" :before-icon="inputBeforeIcon" :value="getLastValue(index,item.value)" :id="getID(index)" category="m" :width="textWidth" :rule="ruleItem" :class="{mr10:noEdit}"></yhm-text>
               <span v-if="!noEdit" class="c_icon c_icon_delete ml10 mr10 fs15 delete" @click.self="deleteItem(item)"></span>
             </div>
 
@@ -118,9 +118,19 @@
       show: {
         type: Boolean,
         default: true
+      },
+      beforeEdit: {
+        type: Boolean,
+        default: false,
       }
     },
+
     methods:{
+      inputEvent(){
+        this.$nextTick(()=>{
+          this.$emit("input")
+        })
+      },
       //初始化验证事件
       validatorEvent(category){
         if(this.rule !== "") {
@@ -205,10 +215,17 @@
       },
       getLastNoEdit(){
         return function (index) {
-          if(this.noEdit){
-            return '1'
+
+          if(!this.beforeEdit){
+            if(this.noEdit){
+              return '1'
+            }
+            return (this.total !== '' && index === this.value.length - 1)?'1':''
+          }else{
+            return ''
           }
-          return (this.total !== '' && index === this.value.length - 1)?'1':''
+
+
         }
       },
       getLastValue(){

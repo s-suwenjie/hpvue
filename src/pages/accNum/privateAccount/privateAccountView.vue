@@ -55,9 +55,9 @@
       editBtn(){
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '500',
+          height: '700',
           title: '编辑对私账号信息',
-          url: '/privateAccountForm?id=' + this.id,
+          url: '/privateAccountForm?id=' + this.id+'&url=0',
           closeCallBack: (data)=>{
             if(data){
               this.$dialog.setReturnValue(this.id)

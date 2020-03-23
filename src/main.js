@@ -7,10 +7,24 @@ import Axios from 'axios'
 import '@/assets/index.js'
 import '@/assetsApp/index.js'
 import VueClipboard from 'vue-clipboard2'
-import { ImagePreview,Tabbar, TabbarItem ,Tab,Tabs} from 'vant'
-import 'vant/lib/index.css';
-Vue.use(ImagePreview).use(Tabbar).use(TabbarItem).use(Tab).use(Tabs)
 Vue.use(VueClipboard)
+// import { ImagePreview,Tabbar, TabbarItem ,Tab,Tabs} from 'vant'
+// import 'vant/lib/index.css';
+// Vue.use(ImagePreview).use(Tabbar).use(TabbarItem).use(Tab).use(Tabs)
+
+
+import "../staticApp/global.css";
+
+
+import "../static/staticHStyle/common.css";
+import "../static/staticHStyle/manager.css";
+import "../static/staticHStyle/chooseBtn.css";
+import "../static/common.css";
+import "../static/select.css";
+import "../static/tbStyle.css";
+import "../static/global.css";
+import "../static/test.css";
+import "../static/bjFlow.css";
 
 Vue.prototype.$ = $
 Vue.prototype.$ajax = Axios
@@ -30,3 +44,14 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+
+/*
+*
+*
+* gotoOrderSystem(){
+        this.$router.push("/homeApp/m_orderSystemMenu?isFinish=1&id=1")
+      },
+*
+*
+* */

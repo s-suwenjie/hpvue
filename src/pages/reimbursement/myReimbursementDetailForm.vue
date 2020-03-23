@@ -58,6 +58,11 @@
         <yhm-form-date ref="startDate" placeholder="*选填" placeholder-color="#A35227" color="#A35227" :max="endDate" title="费用" subtitle="开始日期" :value="startDate" id="startDate" position="u"></yhm-form-date>
         <yhm-form-date ref="endDate" placeholder="*选填" placeholder-color="#A35227" color="#A35227" :min="startDate" title="费用" subtitle="结束日期" :value="endDate" id="endDate" position="u"></yhm-form-date>
         <yhm-form-zh-select-more @click="selectDeparment" title="部门分配" :total="actualMoney" :value="branchList" id="branchList" rule="#" rule-item="R3000"></yhm-form-zh-select-more>
+        <yhm-form-textarea :show="isNoInvoiceReason" title="无票原因" :value="noInvoiceReason" id="noInvoiceReason">
+          <div class="formBoxIcon" @click="noInvoiceReasonEvent">
+            <span class="i-help"></span>
+          </div>
+        </yhm-form-textarea>
         <yhm-form-textarea title="备注" :value="remark" id="remark"></yhm-form-textarea>
 
         <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="支持单据" tag="reimbursementDetailForm" subtitle="" multiple="multiple"></yhm-formupload>
@@ -65,6 +70,10 @@
       </template>
     </yhm-formbody>
 
+
+    <div class="noInvoiceBox" v-show="isNoInvoiceReasonList">
+      <p>无票理由</p>
+    </div>
 
     <div class="invoiceImgView" v-show="viewImgShow">
       <img :src="viewImg" alt="">
@@ -128,11 +137,18 @@
         isElLook: false,
         minWorkDate: '',
         files: [],
-        fileList: []
+        fileList: [],
+        noInvoiceReason: '',
+        isNoInvoiceReason: false,
+        isNoInvoiceReasonList: false
       }
     },
 
     methods: {
+      /* 无票原因 */
+      noInvoiceReasonEvent(){
+        this.isNoInvoiceReasonList = !this.isNoInvoiceReasonList
+      },
       listView(item){
         this.$dialog.OpenWindow({
           width: 1050,
@@ -330,6 +346,11 @@
           //   this.electronicInvoiceBtn = true
           // }
         }
+        // if(this.invoiceCategory === '2'){
+        //   this.isNoInvoiceReason = true
+        // }else{
+        //   this.isNoInvoiceReason = false
+        // }
       },
       //部门分配
       selectDeparment(){
@@ -443,62 +464,72 @@
       selectInvoiceOperate(){
 
         this.$dialog.OpenWindow({
-          url:'/selectElectronicInvoice?state=0&relevanceID=' + this.id + "&relevanceType=1",
+          url:'/selectElectronicInvoice?state=0&relevanceID=' + this.id + "&relevanceType=1" + "&selectType=1" ,
           width: "1000",
           height: "650",
           title: '选择电子发票',
-          closeCallBack: (data)=>{
-            if(data) {
-              let isInvoiceID=true
-              for(let i=0;i<this.invoiceDetails.length;i++){
-                let invoiceID=this.invoiceDetails[i].invoiceID
-                if(data.id===invoiceID){
-                  isInvoiceID=false
-                }
-              }
-              if(isInvoiceID){
-                if(!this.invoiceDetails[0].invoiceID){
-                  let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.invoiceDetails.length, 1000)))
-                  for (let i in this.invoiceDetails) {
-                    this.invoiceDetails[i].id = guid()
-                    this.invoiceDetails[i].insertDate = formatTime(insertDate)
-                    this.invoiceDetails[i].ownerID = this.id
-                    this.invoiceDetails[i].code = data.num
-                    this.invoiceDetails[i].workDate = data.openDate
-                    this.invoiceDetails[i].category = '0'
-                    this.invoiceDetails[i].quantity = '1'
-                    this.invoiceDetails[i].money = data.totalMoney
-                    this.invoiceDetails[i].remark = data.remark
-                    this.invoiceDetails[i].url = data.imgUrl
-                    this.invoiceDetails[i].pdfUrl = data.pdfUrl
-                    this.invoiceDetails[i].isPdf = '1'
-                    this.invoiceDetails[i].invoiceID = data.id
+          closeCallBack: (datakkk)=>{
+            if(datakkk) {
+              for(let i in datakkk){
+
+                let data = datakkk[i]
+
+                // 判断电子发票是否有重复项
+                let isInvoiceID=true
+                for(let i=0;i<this.invoiceDetails.length;i++){
+                  let invoiceID=this.invoiceDetails[i].invoiceID
+                  if(data.id===invoiceID){
+                    isInvoiceID=false
                   }
-                }else{
-                  let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.invoiceDetails.length, 1000)))
-                  this.invoiceDetails.push({
-                    id: guid(),
-                    insertDate: formatTime(insertDate),
-                    ownerID: this.id,
-                    code: data.num,
-                    workDate: data.openDate,
-                    category: '0',
-                    quantity: '1',
-                    money: data.totalMoney,
-                    remark: data.remark,
-                    url: data.imgUrl,
-                    pdfUrl: data.pdfUrl,
-                    isPdf: '1',
-                    invoiceID: data.id
-                  })
                 }
-                this.isElLook = false
-                this.isElectronicInvoice = '1'
-                this.isElectronicInvoice = true
-                // this.maxWorkDate = data.openDate
-                this.invoiceMoney = data.totalMoney
-                this.invoiceCount = '1'
-                this.calculationInvoiceMoney()
+
+                if(isInvoiceID){
+                  if(!this.invoiceDetails[0].invoiceID){
+                    let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.invoiceDetails.length, 1000)))
+                    for (let i in this.invoiceDetails) {
+                      this.invoiceDetails[i].id = guid()
+                      this.invoiceDetails[i].insertDate = formatTime(insertDate)
+                      this.invoiceDetails[i].ownerID = this.id
+                      this.invoiceDetails[i].code = data.num
+                      this.invoiceDetails[i].workDate = data.openDate
+                      this.invoiceDetails[i].category = '0'
+                      this.invoiceDetails[i].quantity = '1'
+                      this.invoiceDetails[i].money = data.totalMoney
+                      this.invoiceDetails[i].actualMoney = data.totalMoney
+                      this.invoiceDetails[i].remark = data.remark
+                      this.invoiceDetails[i].url = data.imgUrl
+                      this.invoiceDetails[i].pdfUrl = data.pdfUrl
+                      this.invoiceDetails[i].isPdf = '1'
+                      this.invoiceDetails[i].invoiceID = data.id
+                    }
+                  }else{
+                    let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.invoiceDetails.length, 1000)))
+                    this.invoiceDetails.push({
+                      id: guid(),
+                      insertDate: formatTime(insertDate),
+                      ownerID: this.id,
+                      code: data.num,
+                      workDate: data.openDate,
+                      category: '0',
+                      quantity: '1',
+                      money: data.totalMoney,
+                      actualMoney: data.totalMoney,
+                      remark: data.remark,
+                      url: data.imgUrl,
+                      pdfUrl: data.pdfUrl,
+                      isPdf: '1',
+                      invoiceID: data.id
+                    })
+                  }
+                  this.isElLook = false
+                  this.isElectronicInvoice = '1'
+                  this.isElectronicInvoice = true
+                  // this.maxWorkDate = data.openDate
+                  this.invoiceMoney = data.totalMoney
+                  this.invoiceCount = '1'
+                  this.calculationInvoiceMoney()
+                  this.calculationActualMoneyEvent();
+                }
               }
             }
           }
@@ -633,6 +664,9 @@
           tipValue: '删除成功！！！',
           closeCallBack: ()=>{
             this.invoiceDetails.splice(index, 1)
+
+            this.calculationInvoiceMoney()
+            this.calculationActualMoneyEvent();
             if(this.invoiceDetails.length === 0){
               this.isElectronicInvoice = false
               this.maxWorkDate = formatDate(new Date())
@@ -689,6 +723,7 @@
             prettyCashMoney: this.prettyCashMoney,
             files: this.fileList
           }
+
           this.ajaxJson({
             url: '/PersonOffice/saveReimbursementDetail',
             data: params,

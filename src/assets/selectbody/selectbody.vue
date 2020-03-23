@@ -2,8 +2,13 @@
   <div>
     <div class="f_area" v-if="chooseBg">
       <div class="f_flex_column">
-        <div class="s_operate" :class="{pb0:!choose}">
-          <slot name="operate"></slot>
+        <div class="s_operate " :class="{pb0:!choose}">
+          <div style="display: flex">
+            <slot name="operate"></slot>
+          </div>
+          <div>
+            <slot name="operatergt"></slot>
+          </div>
         </div>
         <div v-if="choose" class="s_choose">
           <slot name="choose"></slot>

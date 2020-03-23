@@ -13,8 +13,9 @@
     <div class="f_split"></div>
     <yhm-view-tab>
       <template #tab>
-        <yhm-view-tab-button :list="tabState" :index="0">事件信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="0">报销明细</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1" v-if="noPrettyCashMoney">备用金信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="2" v-if="noBankDetail">拨款信息</yhm-view-tab-button>
       </template>
 
       <template #content>
@@ -36,7 +37,7 @@
               <yhm-manager-td-money :value="item.actualMoney"></yhm-manager-td-money>
               <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
               <yhm-manager-td-center @click="listView(item)" :value="item.invoiceCategoryName" color="#49a9ea"></yhm-manager-td-center>
-              <yhm-manager-td :value="item.remark" @click="listView(item)" color="#49a9ea"></yhm-manager-td>
+              <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.remark" @click="listView(item)" color="#49a9ea"></yhm-manager-td>
               <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
               <yhm-manager-td-operate>
                 <yhm-manager-td-operate-button :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
@@ -78,6 +79,33 @@
             <yhm-view-control type="money" title="实际金额"  :content="invoiceMoney" color="#4BB414"></yhm-view-control>
           </template>
         </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[2].select" v-if="noBankDetail">
+          <template #listHead>
+            <yhm-managerth style="width: 150px" title="账号"></yhm-managerth>
+            <yhm-managerth style="width: 150px" title="对方账号"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
+            <yhm-managerth style="width: 80px" title="收支方向"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="交易金额"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="备注"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="凭证"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in bankDetail" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td :value="item.selfAccount"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
+              <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
+              <yhm-manager-td :value="item.subject"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td :value="item.remark"></yhm-manager-td>
+              <yhm-manager-td-image :tip="true" width="850" height="600" left="50" type="files" :value="item.storeName" :tag="'bankDetail'" ></yhm-manager-td-image>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData"  v-show="bankDetail.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" v-show="handleButton" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate" >
@@ -96,7 +124,7 @@
     mixins: [formmixin],
     data(){
       return{
-        tabState:[{select:true},{select:false}],
+        tabState:[{select:true},{select:false},{select:false}],
         content: [],
         detail: [],
         money: '0',
@@ -119,6 +147,9 @@
         prettyCashOffListShow:false,
         prettyCashsList:[],
         getPrettyCashs:'1',
+
+        noBankDetail:false,
+        bankDetail:[],
       }
     },
     methods:{
@@ -295,13 +326,14 @@
           url: '/PersonOffice/getReimbursementApprovalByID',
           all: (data) => {
             /* 公共 无论查看和添加返回数据 */
-            var figure = 0
-            var sum
-            for (let i = 0; i < data.list.length; i++) {
-              figure += parseFloat(data.list[i].invoiceMoney)
-              sum = figure.toFixed(2)
-            }
-            this.invoiceMoney = sum
+            // var figure = 0
+            // var sum
+            // for (let i = 0; i < data.list.length; i++) {
+            //   figure += parseFloat(data.list[i].invoiceMoney)
+            //   sum = figure.toFixed(2)
+            // }
+            // this.invoiceMoney = sum
+            this.invoiceMoney=data.actualMoneyY
             this.content = data
             this.name = this.content.name
             this.workDate = this.content.workDate
@@ -327,6 +359,11 @@
               this.noPrettyCashMoney=true
             }
             this.prettyCashsList=data.prettyCashsList
+
+            this.bankDetail=data.bankDetail
+            if(this.bankDetail.length>0){
+              this.noBankDetail=true
+            }
           },
           add: (data) => {
             /* 需要添加的数据 */

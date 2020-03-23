@@ -44,7 +44,7 @@
           <yhm-manager-td-money :value="item.totalMoney"></yhm-manager-td-money>
           <yhm-manager-td :tip="true" :value="item.otherName"></yhm-manager-td>
           <yhm-manager-td-center :value="item.person"></yhm-manager-td-center>
-          <yhm-manager-td-image :value="item.imgUrl" :tip="true" width="850" height="500" left="-30" tag="ElectronicInvoice"></yhm-manager-td-image>
+          <yhm-manager-td-image :value="item.imgUrl" :tip="true" width="1000" height="600" left="-130" tag="ElectronicInvoice"></yhm-manager-td-image>
           <yhm-manager-td-psd :value="item.state" :list="stateItems"></yhm-manager-td-psd>
           <yhm-manager-td-operate>
 

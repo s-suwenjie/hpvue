@@ -142,8 +142,8 @@
       add () {
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '500',
-          url:'/privateAccountForm',
+          height: '700',
+          url:'/privateAccountForm?&url=0',
           title:'添加对私账号',
           closeCallBack:(data) =>{
             if (data) {

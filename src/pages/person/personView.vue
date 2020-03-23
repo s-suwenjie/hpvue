@@ -232,7 +232,12 @@
       this.initData()
       this.viewTabList()
       this.setQuery2Value('videoUrl')
-    }
+    },
+    watch:{
+      content(){
+        this.empty = this.content.length === 0;
+      }
+    },
   }
 </script>
 

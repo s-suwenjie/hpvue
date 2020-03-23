@@ -60,7 +60,7 @@
               <img @mouseover.self="showSource('totalMoneyShow')" @mouseout.self="hideSource('totalMoneyShow')" src="../../../static/css/images/contrastIcon.svg">
             </div>
           </yhm-form-text>
-          <yhm-formimage :tip="true" width="850" height="550" left="-510" top="-300" rule="#" title="发票照片" :big="1" :value="'/UploadFile/electronicInvoice/' + imgUrl" id="url"></yhm-formimage>
+          <yhm-formimage :tip="true" width="1000" height="650" rule="#" title="发票照片" :big="1" :value="'/UploadFile/electronicInvoice/' + imgUrl" id="url"></yhm-formimage>
           <yhm-form-text title="开票单位" :value="otherName" id="otherName">
             <div class="vs">
               <div v-if="otherNameShow" class="invoice category0" :style="getVs(otherNamePosition,1)"></div>
@@ -148,7 +148,6 @@
         checkTrue:'0',
         isMove:'0',
         state:'0',
-
 
         uploadShow:true,//是否显示上传
         showTxt:'点击或者拖拽上传PDF格式发票',
@@ -263,11 +262,35 @@
               this.imgUrl = targetFilePath
             }
             else{
-              this.$dialog.alert({
-                tipValue:'电子发票解析失败',
-                alertImg:'error'
+              this.$dialog.confirm({
+                tipValue:'电子发票解析失败，您可以选择手动添加电子发票',
+                btnValueOk:'手动添加电子发票',
+                width:'500',
+                okCallBack:() => {
+                  this.uploadShow = false
+                  this.pdfUrl = sourceFilePath
+                  this.imgUrl = targetFilePath
+                },
+                cancelCallBack:() => {
+                  window.location.reload()
+                }
               })
             }
+          },
+          errorCall:() => {
+            this.$dialog.confirm({
+              tipValue:'电子发票解析失败，您可以选择手动添加电子发票',
+              btnValueOk:'手动添加电子发票',
+              width:'500',
+              okCallBack:() => {
+                this.uploadShow = false
+                this.pdfUrl = sourceFilePath
+                this.imgUrl = targetFilePath
+              },
+              cancelCallBack:() => {
+                window.location.reload()
+              }
+            })
           }
         })
       },

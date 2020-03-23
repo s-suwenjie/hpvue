@@ -1,22 +1,28 @@
 <template>
-  <div class="Pager">
-    <nobr>
-      <a :class="this.getPageFirstDisabled" href="javascript:void(0);" @click="gotoFirst" class="PageButton">首页</a>
-      <a :class="this.getPagePrevDisabled" href="javascript:void(0);" @click="gotoPrev" class="PageButton">&lt;&lt;</a>
-      <a v-for="(item,index) in this.getShowPageContent" :key="index" href="javascript:void(0);" @click="gotoDesignation(item)" class="PageButton" :class="{PageButtonHover:item == pager.pageIndex}">{{item}}</a>
-      <a :class="this.getPageNextDisabled" href="javascript:void(0);" @click="gotoNext" class="PageButton">&gt;&gt;</a>
-      <a :class="this.getPageLastDisabled" href="javascript:void(0);" @click="gotoLast" class="PageButton">末页</a>
-      <span class="PageSpan">当前第
-        <input type="text" class="PageTextBox" @keyup.enter="reInitDataPrev" @blur="reInitData" @input="pageIndexEvent" v-model="pageIndex"/>
-        页<button class="managerGo" type="button">Go</button>
-        每页
-        <input v-if="isPageSize == 'true'" type="text" class="PageTextBox" @keyup.enter="reInitDataPrev" @blur="reInitData" @input="pageSizeEvent" v-model="pageSize" />
-        <span v-else>
-          &nbsp;{{pageSize}}&nbsp;
+  <div>
+    <div class="Pager">
+      <nobr>
+        <a :class="this.getPageFirstDisabled" href="javascript:void(0);" @click="gotoFirst" class="PageButton">首页</a>
+        <a :class="this.getPagePrevDisabled" href="javascript:void(0);" @click="gotoPrev" class="PageButton">&lt;&lt;</a>
+        <a v-for="(item,index) in this.getShowPageContent" :key="index" href="javascript:void(0);" @click="gotoDesignation(item)" class="PageButton" :class="{PageButtonHover:item == pager.pageIndex}">{{item}}</a>
+        <a :class="this.getPageNextDisabled" href="javascript:void(0);" @click="gotoNext" class="PageButton">&gt;&gt;</a>
+        <a :class="this.getPageLastDisabled" href="javascript:void(0);" @click="gotoLast" class="PageButton">末页</a>
+        <span class="PageSpan">当前第
+          <input type="text" class="PageTextBox" @keyup.enter="reInitDataPrev" @blur="reInitData" @input="pageIndexEvent" v-model="pageIndex"/>
+          页<button class="managerGo" type="button">Go</button>
+          每页
+          <input v-if="isPageSize == 'true'" type="text" class="PageTextBox" @keyup.enter="reInitDataPrev" @blur="reInitData" @input="pageSizeEvent" v-model="pageSize" />
+          <span v-else>
+            &nbsp;{{pageSize}}&nbsp;
+          </span>
+          条记录，共{{this.getPageCount}}页{{pager.total}}条记录<span v-if="isSelectInfo">当前选中&nbsp;<span id="PagerSelectCount" style="color:red;">{{pager.selectCount}}</span>&nbsp;条记录</span>。
         </span>
-        条记录，共{{this.getPageCount}}页{{pager.total}}条记录<span v-if="isSelectInfo">当前选中&nbsp;<span id="PagerSelectCount" style="color:red;">{{pager.selectCount}}</span>&nbsp;条记录</span>。
-      </span>
-    </nobr>
+      </nobr>
+    </div>
+    <div class="PagerRight" v-if="!isNotRight">
+      <div @click="gotoDesignation(getPrev)" class="left i-leftArrow fs18b" v-if="getPrev > 0"></div>
+      <div @click="gotoDesignation(getNext)" class="right i-rightArrow fs18b" v-if="getNext <= getPageCount"></div>
+    </div>
   </div>
 </template>
 
@@ -35,6 +41,10 @@ export default {
     }
   },
   props:{
+    isNotRight:{
+      type: Boolean,
+      default: false
+    },
     isSelectInfo:{
       type: Boolean,
       default: true
@@ -127,6 +137,16 @@ export default {
     }
   },
   computed:{
+    //上一页
+    getPrev(){
+      let index = accAdd(this.pager.pageIndex,-1)
+      return index
+    },
+    //下一页
+    getNext(){
+      let index = accAdd(this.pager.pageIndex,1)
+      return index
+    },
     //获取页码总数
     getPageCount(){
       return this.pager.total == 0 ? 1 : this.pager.total % this.pager.pageSize == 0 ? parseInt(this.pager.total / this.pager.pageSize):parseInt(this.pager.total / this.pager.pageSize) + 1;
@@ -189,6 +209,60 @@ export default {
 </script>
 
 <style scoped>
+  .PagerRight{
+    float: right;
+    display: flex;
+    height: 40px;
+    width: 60px;
+    margin-right: 10px;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .PagerRight>.left{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+
+  .PagerRight>.left:before{
+    color: #c700df;
+  }
+
+  .PagerRight>.left:hover{
+    background-color: #c700df;
+  }
+  .PagerRight>.left:hover:before{
+    color: #FFFFFF;
+  }
+
+
+  .PagerRight>.right{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+
+  .PagerRight>.right:before{
+    color: #49a9ea;
+  }
+
+  .PagerRight>.right:hover{
+    background-color: #49a9ea;
+  }
+  .PagerRight>.right:hover:before{
+    color: #FFFFFF;
+  }
+
+
   .Pager {
     vertical-align: middle;
     padding: 8px 10px 10px 0;

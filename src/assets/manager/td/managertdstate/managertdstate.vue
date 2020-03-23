@@ -1,6 +1,6 @@
 <template>
   <td>
-    <div class="md_center" :style="getStateColor">
+    <div @click="clickEvent" class="md_center" :style="getStateColor">
       <p class="stateImg" :class="stateImg"></p>
       {{value|formats(format,emptyValue,isEmpty)}}
     </div>
@@ -48,6 +48,11 @@
         }else{
             return data
         }
+      }
+    },
+    methods:{
+      clickEvent(){
+        this.$emit("click")
       }
     },
     computed: {

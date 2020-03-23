@@ -18,6 +18,9 @@
         </router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/approvalPrettyCashs'}">备用金
         </router-link>
+        <router-link class="menuTabDiv  " :to="{path:'/home/approvalInsuranceManager'}">保险审批
+          <!--          <i class="noticeNum" v-if="prettyCashsNum!=='0'">{{prettyCashsNum}}</i>-->
+        </router-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -63,7 +66,7 @@
             <yhm-manager-td-operate-button v-show="item.approval === '4'&&item.isApproval === '0'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '0'&& item.approval !== '4' && item.isApproval === '0' && item.state !== '15'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state !== '15'" v-show="item.isApproval === '0'&& item.approval !== '4' && item.isApproval === '0' && item.state !== '15'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state === '15'" v-show="item.state === '15'" @click="rejectEvent(item)" value="备用金退款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state === '15'" v-show="item.state === '15'&&item.isChecks!=='1'" @click="refundMoney(item)" value="备用金退款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -108,6 +111,17 @@
       }
     },
     methods:{
+      refundMoney(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          title: '备用金退款',
+          url: '/bankDetailForm?ownerID=' + item.id +'&bankDetailType=7&directionBefore=1',
+          closeCallBack: (data)=>{
+            this.initPageData(false)
+          }
+        })
+      },
       /* 拨付资金 */
       approFund(item){
         if(item.approval === '4'){

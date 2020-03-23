@@ -101,14 +101,24 @@
         })
       },
       selectAddEvent () {
+        let unitID=''
+        if(this.unitID!==''){
+          unitID='&unitID='+this.unitID
+        }
         this.$dialog.OpenWindow({
           width: 1050,
           height: 692,
-          url: '/publicAccountForm?id=',
+          url: '/publicAccountForm?id='+unitID,
           title: '添加对公账户',
           closeCallBack: (data) => {
             if (data) {
-              this.initData()
+              if(data.unitID===''){
+                this.searchStr = data
+                this.initData(false)
+              }else{
+                this.$dialog.setReturnValue(data)
+                this.$dialog.close()
+              }
             }
           }
         })

@@ -17,6 +17,9 @@
         <router-link class="menuTabDiv" :to="{path:'/home/approvalPrettyCashs'}">备用金
           <i class="noticeNum" v-if="prettyCashsNum!= 0">{{prettyCashsNum}}</i>
         </router-link>
+        <router-link class="menuTabDiv  " :to="{path:'/home/approvalInsuranceManager'}">保险审批
+          <!--          <i class="noticeNum" v-if="prettyCashsNum!=='0'">{{prettyCashsNum}}</i>-->
+        </router-link>
       </template>
 
       <template #operate>
@@ -39,14 +42,14 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="申请时间" value="workDate"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="是否核销" value="isPrettyCashOff"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="报销方式" value="isPrettyCashOff"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="申请人" value="name"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="申请金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 80px" title="提交天数" value="day"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="批次号" value="code"></yhm-managerth>
-        <yhm-managerth title="事由"></yhm-managerth>
+        <yhm-managerth style="width: 260px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="状态" value="state"></yhm-managerth>
-        <yhm-managerth style="width: 220px;" title="操作"></yhm-managerth>
+        <yhm-managerth title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -69,10 +72,14 @@
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button v-show="item.isPrint === '1' " :no-click="item.state !== '-1' && item.isFinish === '1'" @click="printFund(item)" value="打印单据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-show="item.category === '4'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.category === '4'&&item.isChecks1 === '0'&&item.isChecks2 === '0'&&item.isChecks3 === '0'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.state === '-1' && item.isFinish === '0' && item.isPrint === '1'" @click="repayment(item)" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="(item.isApproval !== '0' || item.isPrint !== '1') && item.isPrint === '0'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="(item.isApproval === '0' && item.isPrint === '1') || item.isPrint === '0'" :no-click="item.isApproval!=='0' || item.okSingle !== '0'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
+
+            <yhm-manager-td-operate-button v-show="item.isChecks1 === '1'" :no-click="item.isApproval==='4'" @click="refundMoney(item)" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.isChecks2 === '1'" :no-click="item.isApproval==='4'" @click="repayment(item)" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.isChecks3 === '1'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -123,6 +130,17 @@
       }
     },
     methods: {
+      refundMoney(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          title: '备用金退款',
+          url: '/bankDetailForm?ownerID=' + item.prettyCashsID +'&bankDetailType=7&directionBefore=1',
+          closeCallBack: (data)=>{
+            this.initPageData(false)
+          }
+        })
+      },
       /* 确认还款 */
       repayment(item){
         this.$dialog.OpenWindow({

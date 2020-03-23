@@ -81,7 +81,6 @@
             this.getRelativeNode(this.$el)
             this.left = rect.left - this.x
             this.$nextTick(() => {
-
               let tipRect = this.$refs.tip.getBoundingClientRect()
               this.top = rect.top - this.y - tipRect.height - 8
             })

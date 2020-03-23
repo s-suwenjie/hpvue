@@ -144,6 +144,7 @@
   }
 </script>
 <style lang="less">/*适配vant下tabbar组件(不能使用自动适配,pc端会乱)*/
+
 @rem:375/10rem;
 .van-tabbar{
   border-radius: 8/@rem 8/@rem 0 0;

@@ -59,7 +59,8 @@
         var isAdd = false
         // 默认设置页面标题为查看信息
         var title = '查看对公账号信息'
-        var url='/publicAccountForm?id=' + this.id
+        //0是在对公账账户模块进入   ''是选择页面进入
+        var url='/publicAccountForm?id=' + this.id+'&url=0'
         this.$dialog.OpenWindow({
           width: 1050,
           height: 750,

@@ -3,7 +3,7 @@
     <yhm-formbody>
       <template #control>
         <yhm-form-radio :no-edit="isCategory" @call="isRelevanceEvent" title="账户类型" :select-list="categoryList" width="1" :value="category" id="category" rule="R0000"></yhm-form-radio>
-        <yhm-form-select title="户名" tip="value" @click="selectUnit" :value="name" id="name" rule="R0000" ></yhm-form-select>
+        <yhm-form-select title="户名" :noClick="isUnit" tip="value" @click="selectUnit" :value="name" id="name" rule="R0000" ></yhm-form-select>
         <yhm-form-radio @call="stateListEvent" title="账户状态" :select-list="stateList" :value="state" id="state" rule="R0000"></yhm-form-radio>
 
 
@@ -11,11 +11,11 @@
         <yhm-form-radio :show="isNetType"  title="网络" subtitle="账户类型" :select-list="webAccountTypelist" :value="webAccountType" id="webAccountType" rule="R0000"></yhm-form-radio>
 
         <yhm-form-select :show="isSetAcc" @click="selectSettlementAccount" title="结算账户" tip="value"  :value="settlementAccount" id="settlementAccount" rule="R0000"></yhm-form-select>
-        <yhm-form-text @repeatverify="repeatverifyAccountEvent"  ref="account"  :title="accountTitle" :value="account" id="account"  rule="R0000" tip="posName"></yhm-form-text>
+        <yhm-form-text @repeatverify="repeatverifyAccountEvent"  ref="account"  :title="accountTitle" :value="account" id="account"  rule="R0000" :tip="tip" :tip-rule="tipRule"></yhm-form-text>
         <yhm-form-radio :show="isAccNature" title="账户性质" :select-list="natureList"  :value="nature" id="nature" rule="R0000" width="1"></yhm-form-radio>
         <yhm-form-text :show="isAccMan" title="客户经理" tip="value" :value="customerManager" id="customerManager" rule="R0000"></yhm-form-text>
 <!--        <yhm-form-select :show="isAccMan" title="客户经理" tip="value" @click="managerEvent" :value="customerManagerName" id="customerManagerName" rule="R0000"></yhm-form-select>-->
-        <yhm-form-text :show="isPhone" title="联系电话"  :value="managerTel" id="managerTel" width="1"></yhm-form-text>
+        <yhm-form-text :show="isPhone" tip="phone" title="联系电话"  :value="managerTel" id="managerTel" width="1"></yhm-form-text>
 
         <!--<yhm-form-text :show="isPosAcc" @repeatverify="repeatverifyAccountEvent"  ref="account" tip="account" title="账号" subtitle="POS机别名" :value="account" id="account" rule="R0000"></yhm-form-text>-->
 <!--        <yhm-form-text :show="posNameShow" tip="remark" title="POS机费率" subtitle="万分之多少" :value="probability" id="probability"  rule="R0000"></yhm-form-text>-->
@@ -49,6 +49,32 @@
 
       </template>
     </yhm-formbody>
+    <yhm-form-list-edit :show="isList">
+      <template #title>重复账户信息</template>
+      <template #listHead>
+        <yhm-managerth style="width: 38px;background: linear-gradient(0deg, #ec6603, #a24906);" title="查看"></yhm-managerth>
+        <yhm-managerth title="户名" style="background: linear-gradient(0deg, #ec6603, #a24906);"></yhm-managerth>
+        <yhm-managerth style="width: 170px;background: linear-gradient(0deg, #ec6603, #a24906);" title="账号"></yhm-managerth>
+        <yhm-managerth style="width: 230px;background: linear-gradient(0deg, #ec6603, #a24906);" title="开户行"></yhm-managerth>
+        <yhm-managerth style="width: 100px;background: linear-gradient(0deg, #ec6603, #a24906);" title="账户状态"></yhm-managerth>
+        <yhm-managerth style="width: 150px;background: linear-gradient(0deg, #ec6603, #a24906);" title="操作"></yhm-managerth>
+      </template>
+      <template #listBody>
+        <tr v-for="(item,index) in list" :key="index" :class="{InterlacBg:index%2!==0}">
+          <yhm-manager-td-look @click="lookPublic(item)"></yhm-manager-td-look>
+          <yhm-manager-td :value="item.name"></yhm-manager-td>
+          <yhm-manager-td :value="item.account"></yhm-manager-td>
+          <yhm-manager-td :value="item.bank"></yhm-manager-td>
+          <yhm-manager-td v-show="item.state === '0'" value="正常  "></yhm-manager-td>
+          <yhm-manager-td v-show="item.state === '1'" value="休眠"></yhm-manager-td>
+          <yhm-manager-td v-show="item.state === '2'" value="销户"></yhm-manager-td>
+          <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button v-show="item.state === '0' && isUrl" @click="select(item)" style="color:#ec6603" value="选择"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.state === '1'" @click="recoveryUse(item)" value="恢复使用"></yhm-manager-td-operate-button>
+          </yhm-manager-td-operate>
+        </tr>
+      </template>
+    </yhm-form-list-edit>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn >
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
@@ -76,6 +102,8 @@
         bank:'',         //开户行
         bankID:'',       //开户行ID
         account:'',      //账号
+        tip:'customize',
+        tipRule:'44444',
         natureList:[],    //账户性质
         nature:'',       //账户性质
         customerManager:'',     //客户经理
@@ -105,13 +133,30 @@
         isSetAcc: false,   //结算账户
         isPosAcc: false,
         posNameShow: false,
-        accountTitle: '账号'
+        accountTitle: '账号',
+
+        list:[],
+        isList:false,
+
+        url:'',//0是在对公账账户模块进入   ''是选择页面进入
+        isUrl:false,
+        isUnit:false,
       }
     },
     created () {
       this.setQuery2Value('id')
+      this.setQuery2Value('url')
+      this.setQuery2Value('unitID')
+      let param={}
+      if(this.unitID){
+        this.isUnit=true
+        param={
+          unitID:this.unitID,
+        }
+      }
       this.init({
         url: '/Fin/publicAccountVueForm',
+        data:param,
         all: (data) => {
           /* 公共 无论查看和添加返回数据 */
           this.categoryList = data.categoryPsd.list
@@ -122,6 +167,10 @@
           this.nature = data.naturePsd.value
           this.webAccountTypelist = data.webAccountTypePsd.list
           this.webAccountType = data.webAccountTypePsd.value
+
+          if(this.unitID){
+            this.name=data.name
+          }
         },
         add: (data) => {
           /* 需要添加的数据 */
@@ -143,6 +192,7 @@
           this.categoryUnit = data.categoryUnit
           this.categoryList = data.categoryPsd.list
           this.category = data.categoryPsd.value
+          this.tipRule = data.accountEcho
 
           this.isRelevanceEvent ()
           if(this.categoryUnit === '1'){
@@ -155,6 +205,17 @@
       })
     },
     methods: {
+      select(item){
+        if(item.unitID===this.unitID){
+          this.$dialog.setReturnValue(item)
+          this.$dialog.close()
+        }else{
+          this.$dialog.alert({
+            tipValue: '请选择所选单位账户',
+            alertImg: 'error',
+          })
+        }
+      },
       stateListEvent(){ //账户状态
         if(this.state === '1'){
           this.state = '0'
@@ -162,7 +223,26 @@
           this.state = '0'
         }
       },
+      //恢复账户使用
+      recoveryUse(item){
+        this.ajaxJson({
+          url: "/Fin/publicAccountRecoveryUse",
+          data: {
+            id: item.id,
+          },
+          loading: "0",
+          call: (data) => {
+            this.$dialog.alert({
+              tipValue: data.message,
+              closeCallBack: () => {
+                this.$dialog.close()
+              }
+            })
+          }
+        })
+      },
       repeatverifyAccountEvent(){ //账号
+        this.isList=false
         this.ajaxJson({
           url:"/Fin/verifyAccountVue ",
           data:{
@@ -173,8 +253,24 @@
           },
           loading:"0",
           call:(data) =>{
+            if(this.url===''){
+              this.isUrl=true
+            }
             if(data.type !== 1){//说明存在，调用控件验证显示规则
               this.$refs.account.errorEvent("该账号已存在")
+              this.ajaxJson({
+                url:"/Fin/getPublicAccountInformation",
+                data:{
+                  id:data.id,
+                },
+                loading:"0",
+                call:(information) =>{
+                  this.list=information
+                  if(this.list.length>0){
+                    this.isList=true
+                  }
+                },
+              })
             }
           }
         })
@@ -268,6 +364,7 @@
           title: '选择开户行',
           closeCallBack: (data) => {
             if (data) {
+              this.tipRule = data.value4
               this.bank = data.showName
               this.bankID = data.id
             }
@@ -276,6 +373,7 @@
       },
       isRelevanceEvent () { //账户分类点击事件
         if(this.category === '0'){
+          this.tip = 'value'
           this.isAccNature = false
           this.isAccMan = false
           this.isPhone = false
@@ -283,6 +381,7 @@
           this.isNewBank = false
           this.isCategory = true
         } else if(this.category === '1'){
+          this.tip = 'customize'
           this.isNewBank = true
           this.isNetType = false
           this.isAccNature = true
@@ -308,6 +407,7 @@
           this.accountTitle='账号'
 
         }else if (this.category === '2') {
+          this.tip = 'value'
           this.isNewBank = false
           this.isNetType = true
           this.isAccNature = false
@@ -321,6 +421,7 @@
           this.empty = false
           this.accountTitle='账号'
         } else{
+          this.tip = 'value'
           this.isNetType = false
           this.isNewBank = false
           this.isAccMan = false

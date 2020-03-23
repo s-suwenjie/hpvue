@@ -89,7 +89,6 @@ function formatDate(date){
 //格式化中文日期
 function formatCnDate(date)
 {
-
   var date = new Date(date);
   var year = date.getFullYear()
   var month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
@@ -362,6 +361,44 @@ function formatPhone (data) {
   }
   return result
 }
+
+/******************** 按规则回显 ************************/
+function formatCustomizeTip (val,rule) {
+  let index = 0,end = rule.length - 1
+  for(let i = 0; i < rule.length; i++){
+    index = accAdd(rule[i],index)
+    if(val.length <= index){
+      end = i
+      break
+    }
+  }
+  let result = '',next = 0
+  index = 0
+  for(let i = 0; i <= end; i++){
+    next = index
+    index = accAdd(rule[i],index)
+
+    if(i === end){
+      if(i == 0){
+        result = val
+      }
+      else{
+        console.log('next:'+next)
+        console.log('val.length:'+val.length)
+        result += ' ' + val.substring(next,val.length)
+      }
+    }
+    else{
+      if(result !== ''){
+        result += ' '
+      }
+      result += val.substring(next,index)
+    }
+  }
+  return result
+}
+
+
 export{
-  accMul,accAdd,guid,selectClick,selectdbClick,selectConfirm,selectComputedSelected,verify,formatDate,number2chinese,formatCnDate,tenThousandFormat,formatDateHtml,tenThousandFormatHtml,formatTime,formatPhone
+  accMul,accAdd,guid,selectClick,selectdbClick,selectConfirm,selectComputedSelected,verify,formatDate,number2chinese,formatCnDate,tenThousandFormat,formatDateHtml,tenThousandFormatHtml,formatTime,formatPhone,formatCustomizeTip
 }

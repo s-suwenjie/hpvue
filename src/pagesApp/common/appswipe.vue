@@ -1,13 +1,15 @@
 <template>
   <div>
     <div class="public">
-      <div class="carousel">
+      <div class="carousel" :style="{width:mainWidth+'rem'}">
           <ul class="swiper_center" ref="swiperCenter">
             <li v-for="(item, index) in list" :key="index"
                @touchstart="touchStart($event)"
                @touchmove="touchMove($event)"
                 @change="touChange"
-               class="swiper_main" >
+               class="swiper_main"
+                :style="{width:mainWidth+'rem'}"
+               >
               <div class="swiper_main_test">
                 <div class="swiper_main_center">
                   <span>
@@ -23,7 +25,7 @@
     </div>
     <div class="atPresent">
       <ul class="atPresent_center" ref="atPresentCenter">
-        <li v-for="(item, index) in list" @click="clickActive(index)" :class="{active:index==ins}" ref="actives" :key="index"></li>
+        <li v-for="(item, index) in list" @click="clickActive(index,'0')" :class="{active:index==ins}" ref="actives" :key="index"></li>
       </ul>
     </div>
 
@@ -39,9 +41,11 @@
       return{
         startX: '',
         moveX: '',
-        active: 0,
-        ins:0,
+        active: 0,//图片滚动索引值
+        ins:0,//指示器索引值
         flag:true,//判断只执行一次变量
+        timer:'',
+
       }
     },
     props: {
@@ -55,11 +59,19 @@
       },
       mainWidth: {//要滚动的子元素宽度的rem 注:按照一倍图计算rem值
         type: Number,
-        default: 8
+        default: 9
       },
       indicatorWidth:{//单个指示器的宽度
         type: Number,
         default: 0.7
+      },
+      autoScroll:{//是否开启图片自动滚动
+        type:Boolean,
+        default:false
+      },
+      chillTime:{//图片自动滚动的时间 单位毫秒
+        type:Number,
+        default:3000
       },
       list: {
         type: Array,
@@ -68,15 +80,28 @@
         }
       },
     },
-      methods: {
+    mounted() {//监听页面刷新 注册事件
+      clearInterval(this.timer);
+      window.addEventListener('beforeunload', e => this.beforeunloadFn(e))
+    },
+    destroyed() {//监听用户离开当前页面 卸载事件
+      clearInterval(this.timer);//离开时关闭自动轮播定时器 防止定时器叠加,无限循环
+      window.removeEventListener('beforeunload', e => this.beforeunloadFn(e))
+    },
+    methods: {
+        beforeunloadFn (e) {},//在生命周期中定义事件
         touChange(active){//当图片发生移动时 返回当前索引值
           this.$nextTick(()=>{
             this.$emit('change',active)
           })
         },
-        clickActive(index) {//用户点击指示器时添加动画
+        clickActive(index,num) {//用户点击指示器时添加动画
           this.ins=index
           this.backlate('active',index)//通过用户点击的索引值 绑定图片位置
+          if(num=='0'){
+            clearInterval(this.timer);//用户点击指示器关闭轮播 便于查看
+          }
+          // console.log(index)
         },
         //图片移动
         backlate (direction,index) {//direction为用户触摸的方向
@@ -110,7 +135,7 @@
               this.active = index
             }
             let a = this.active * this.mainWidth
-            console.log(a, this.active)
+            // console.log(a, this.active)
             if (this.active == 0) {
               a = 0
             } else if (this.active == this.list.length) {//当前索引为数组最后一个时 循环滚动
@@ -155,14 +180,22 @@
           // console.log('起始坐标',this.startX,'结束坐标',this.moveX,'最终',this.moveX-this.startX)
         },
       },
-
     created () {
       this.$nextTick(()=>{
-        console.log(this.list)
         let distance = this.list.length * this.mainWidth
+
         this.$refs.swiperCenter.style.width = distance +'rem'//根据当前条数来生成ul的宽度
         this.$refs.swiperCenter.style.transition = this.animationTime+'s'//设置动画过渡时间
         this.$refs.atPresentCenter.style.width = (this.list.length * this.indicatorWidth) +'rem'//整体指示器的宽度
+        console.log(this.autoScroll)
+        if(this.autoScroll){//自动轮播
+         this.timer = setInterval(()=>{
+            this.active++
+            this.ins++
+            this.clickActive(this.active)//同步图片与指示器位置
+            console.log(this.active)
+          },this.chillTime)
+        }
       })
     }
   }
@@ -235,12 +268,10 @@
   }
   .carousel {
     overflow: hidden;
-    width: 300/@rem;
     height: 90/@rem;
     position: relative;
   }
     .swiper_main{
-      width: 300/@rem;
       float: left;
       height:100%;
       box-sizing: border-box;

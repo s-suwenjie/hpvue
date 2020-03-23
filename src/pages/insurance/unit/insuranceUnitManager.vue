@@ -7,10 +7,48 @@
       <!--操作区-->
       <template #operate>
         <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
-        <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
+        <!--<yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>-->
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
       </template>
 
+      <!--数据表头-->
+      <template #listHead>
+        <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
+        <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
+        <yhm-managerth  style="width: 100px;"  title="别名" value="shortName"></yhm-managerth>
+        <yhm-managerth  title="保险公司名称" value="unit"></yhm-managerth>
+        <yhm-managerth style="width: 220px;" title="发票类型" value="billingTypeVal"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="新车费率" value="newRate"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="旧车费率" value="oldRate"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="客户费率" value="clientRate"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="操作"></yhm-managerth>
+      </template>
+
+      <!--数据明细-->
+      <template #listBody>
+        <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
+          <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
+          <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
+          <yhm-manager-td :value="item.shortName"></yhm-manager-td>
+          <yhm-manager-td :value="item.unit"></yhm-manager-td>
+          <yhm-manager-td :value="item.billingTypeVal"></yhm-manager-td>
+          <yhm-manager-td-rgt  :value="item.newRate===''?'------':item.newRate +'  %'"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.oldRate===''?'------':item.oldRate+'  %'" ></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.clientRate===''?'------':item.clientRate+'  %'" ></yhm-manager-td-rgt>
+          <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button  @click="editBtn(item)" value="编辑" icon="i-btn-applicationSm"  color="#0033FF"></yhm-manager-td-operate-button>
+          </yhm-manager-td-operate>
+        </tr>
+      </template>
+
+      <!--数据空提示-->
+      <template #empty>
+        <span class="m_listNoData" v-show="empty">暂时没有数据</span>
+      </template>
+      <!--分页控件-->
+      <template #pager>
+        <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
+      </template>
 
     </yhm-managerpage>
   </div>
@@ -27,11 +65,37 @@
       }
     },
     methods:{
+      editBtn(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          title: '编辑保险信息',
+          url: '/insuranceUnitForm?id=' + item.id,
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      listView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '570',
+          url: '/insuranceUnitView?id=' + item.id,
+          title: '查看保险信息',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       //添加保险公司
       add() {
         this.$dialog.OpenWindow({
           width: 1050,
-          height: 720,
+          height: 700,
           url:'/insuranceUnitForm',
           title:'添加保险公司',
           closeCallBack:(data) =>{
@@ -39,6 +103,27 @@
               this.lastData = data//接收子页面传的值
               this.initPageData(false)
             }
+          }
+        })
+      },
+      //搜索
+      initPageData (initValue) {
+        let params = {}
+
+        if (initValue) {
+          params = {}
+        } else {
+          params = {}
+        }
+        this.init({
+          initValue:initValue,
+          url: '/Basic/getUnitInsuranceManager',
+          data:params,
+          all:(data) =>{
+            //不管是不是初始化都需要执行的代码
+          },
+          init:(data)=>{
+            //初始化时需要执行的代码
           }
         })
       },

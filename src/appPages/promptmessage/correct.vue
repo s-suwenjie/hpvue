@@ -8,11 +8,10 @@
 
 <script>
   import Qs from 'qs'
-  // import '@/static/fontSize'
   export default {
-    name: 'correct',
-
-    name: 'correct',
+    // name: 'correct',
+    //
+    // name: 'correct',
     name: 'correct',
     data(){
       return{

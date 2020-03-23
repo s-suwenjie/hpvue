@@ -1,7 +1,7 @@
 <template>
   <div class="f_main">
     <yhm-formbody>
-      <template #title>添加车辆版本</template>
+      <template #title>添加车辆版本123</template>
       <template #control>
         <yhm-form-select title="车型" tip="value" :value="model" id="model" rule="R0000" @click="selectModel"></yhm-form-select>
         <yhm-form-text placeholder=""  @repeatverify="nameVerifyEvent" ref="version"  title="车辆版本" subtitle="" :value="version" id="version" rule="R0000"></yhm-form-text>
