@@ -109,10 +109,10 @@
               data: params,
               call: (data) => {
                 if(data.type === 0){
-                  this.$dialog.setReturnValue("123")
                   this.$dialog.alert({
                     tipValue: data.message,
                     closeCallBack: () => {
+                      this.$dialog.setReturnValue(this.id)
                       this.$dialog.close()
                     }
                   })

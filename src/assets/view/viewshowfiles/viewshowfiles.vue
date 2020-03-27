@@ -19,6 +19,7 @@
       clickEvent(){
         if(this.item.image === '1'){
           let index = this.getImages.indexOf('/UploadFile/' + this.item.tag + '/' + this.item.storeName)
+          console.log(this.getImages)
           this.$dialog.preview(this.getImages, index + 1)
         }
         else{

@@ -11,10 +11,10 @@
               <yhm-app-button @call="selectYearOrMonthEvent" category="four" class="amr0 aml0" :value="getValue"></yhm-app-button>
             </div>
             <div>
-              <yhm-app-button @call="backCurrentData" category="two" class="amr0 aml0" value="返回当天"></yhm-app-button>
+              <yhm-app-button v-show="isBackDay" @call="backCurrentData" category="two" class="amr0 aml0" value="返回当天"></yhm-app-button>
             </div>
           </div>
-          <div v-show="!selectPanelShow" class="ac_date_select_body" v-left-slide="leftSlide" v-right-slide="rightSlide" v-top-slide="upSlide" v-bottom-slide="downSlide">
+          <div v-show="!selectPanelShow && isMonthShow" class="ac_date_select_body" v-left-slide="leftSlide" v-right-slide="rightSlide" v-top-slide="upSlide" v-bottom-slide="downSlide">
             <div class="ac_date_select_column">
               <div>日</div>
               <div>一</div>
@@ -34,10 +34,12 @@
               <yhm-app-button @call="selectYearOrMonthCloseEvent" category="ten" class="amr0 aml0" value="关闭"></yhm-app-button>
             </div>
             <div>
-              <yhm-app-button @call="selectYearOrMonthSelectEvent" category="two" class="amr0 aml0" value="确定选择"></yhm-app-button>
+              <yhm-app-button v-show="isConfirm" @call="selectYearOrMonthSelectEvent" category="two" class="amr0 aml0" value="确定选择"></yhm-app-button>
+              <yhm-app-button v-show="isBackMonth" @call="backCurrentMonth" category="two" class="amr0 aml0" value="返回当月"></yhm-app-button>
+
             </div>
           </div>
-          <div v-show="selectPanelShow" class="ac_date_select_body">
+          <div v-show="selectPanelShow || isMonthPanelShow" class="ac_date_select_body">
             <div class="ac_date_select_column">
               <span class="ac_date_select_column_year">年份</span>
               <span class="ac_date_select_column_month">月份</span>
@@ -55,6 +57,13 @@
               </span>
             </div>
           </div>
+
+          <div v-show="isSelectMonth">
+
+
+
+          </div>
+
         </div>
         <div v-show="helpShow" class="ac_date_select_help_content" @touchend="touchEndHelpCloseEvent" @touchmove.prevent>
           <img src="./images/guide.svg">
@@ -66,7 +75,7 @@
       <div class="txt amr4">
         {{txt}}
       </div>
-      <div class="txt" :class="{weekend:getWeekend(txt)}">
+      <div v-show="isWeekShow" class="txt" :class="{weekend:getWeekend(txt)}">
         {{getWeek(txt)}}
       </div>
     </div>
@@ -100,7 +109,16 @@
         years:[],                                          //快速选择年份
         selectMoreYear:'',                                   //选择年份的中间年份
         error:false,
-        errorTipMessage:this.emptyMessage                     //为空提示语
+        errorTipMessage:this.emptyMessage,                     //为空提示语,
+
+
+        isSelectMonth: false,
+        isMonthShow: true,
+        isMonthPanelShow: false,
+        isBackDay: true,
+        isBackMonth: false,
+        isConfirm: true,
+        isWeekShow: true,
       }
     },
     props: {
@@ -135,6 +153,10 @@
       show:{
         type:Boolean,
         default:true
+      },
+      type: {
+        type: String,
+        default: 'date'
       }
     },
     methods:{
@@ -185,12 +207,29 @@
         this.selectYear = getCurrentYear()
         this.selectMonth = getCurrentMonth()
       },
+      //返回当月
+      backCurrentMonth(){
+
+      },
       //选择年份
       chooseYearEvent(item){
         this.chooseYear = item
       },
       //选择月份
       chooseMonthEvent(item){
+
+        if(this.type === 'month'){
+          if(this.getIsRange(item)) {
+            this.txt = this.chooseYear + '-' + (item < 10 ? '0': '') + item;
+            this.verification()
+            this.panelShow = false
+            this.blurContorlEvent()
+            this.$nextTick(() =>{
+              this.$emit("call",this.txt)
+            })
+          }
+        }
+
         this.chooseMonth = item
       },
       /*显示帮助*/
@@ -226,10 +265,16 @@
       },
       //关闭选择年份月份面板
       selectYearOrMonthCloseEvent(){
+        if(this.type === 'month'){
+          this.panelShow = false
+        }
         this.selectPanelShow = false
+
       },
       //确认选择的年份和月份
       selectYearOrMonthSelectEvent(){
+
+
         this.selectMonth = this.chooseMonth
         this.selectYear = this.chooseYear
         this.selectPanelShow = false
@@ -247,6 +292,30 @@
         // window.document.body.style.overflow = "hidden";
         this.dateArr = getPanelDatesApp(this.selectYear,this.selectMonth)
         this.panelShow = true
+
+
+        if(this.type === 'month'){
+          this.selectPanelShow = false;
+          this.isSelectMonth = true;
+          this.isMonthShow = false;
+          this.isMonthPanelShow = true;
+
+          this.isBackDay = false;
+          this.selectYear = new Date().getFullYear();
+          this.selectMonth = new Date().getMonth() + 1;
+
+
+          this.selectMoreYear = this.selectYear
+          this.chooseYear = this.selectYear
+          this.years = getYearsByChooseYear(this.chooseYear)
+          this.chooseMonth = this.selectMonth
+          this.selectPanelShow = true
+
+          this.isConfirm = false
+          this.isBackMonth = true;
+          this.isWeekShow = false;
+        }
+
       },
       //验证
       verification() {
@@ -277,6 +346,10 @@
           result = result + '0'
         }
         result = result + this.selectMonth + '月'
+        // if(this.type === 'month'){
+        //   result = this.value
+        // }
+
         return result
       },
       //获取是否周末
@@ -335,7 +408,13 @@
         //执行form控件中的错误显示
         this.$emit("formVerification",this.error,this.errorTipMessage)
       }
+    },
+    created () {
+      if(this.type === 'month'){
+        this.isWeekShow = false
+      }
     }
+
   }
 </script>
 

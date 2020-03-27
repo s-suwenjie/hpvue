@@ -213,6 +213,8 @@
       }
     },
     created(){
+
+      //仅限谷歌浏览器使用登陆
       let userAgent = navigator.userAgent
       let ua = window.navigator.userAgent.toLowerCase();
 

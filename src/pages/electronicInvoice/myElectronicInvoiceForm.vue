@@ -151,6 +151,7 @@
 
         uploadShow:true,//是否显示上传
         showTxt:'点击或者拖拽上传PDF格式发票',
+
       }
     },
     methods:{
@@ -267,9 +268,13 @@
                 btnValueOk:'手动添加电子发票',
                 width:'500',
                 okCallBack:() => {
+
+                  this.manualInvoice()
+
                   this.uploadShow = false
                   this.pdfUrl = sourceFilePath
                   this.imgUrl = targetFilePath
+
                 },
                 cancelCallBack:() => {
                   window.location.reload()
@@ -283,6 +288,13 @@
               btnValueOk:'手动添加电子发票',
               width:'500',
               okCallBack:() => {
+
+                this.manualInvoice()
+
+                this.uploadShow = false
+                this.pdfUrl = sourceFilePath
+                this.imgUrl = targetFilePath
+
                 this.uploadShow = false
                 this.pdfUrl = sourceFilePath
                 this.imgUrl = targetFilePath
@@ -293,6 +305,44 @@
             })
           }
         })
+      },
+      manualInvoice(){
+
+        this.openDateShow = false
+
+        let openDatePosition = '-2140,-120,700,365,-50,-555'
+        this.openDatePosition = openDatePosition.split(',')
+
+        let codePosition = '-2140,-120,700,365,-50,-555'
+        this.codePosition = codePosition.split(',')
+
+        let numPosition = '-2140,-120,700,365,-50,-555'
+        this.numPosition = numPosition.split(',')
+
+        let selfNamePosition = '-190,-450,1150,335,-40,-665'
+        this.selfNamePosition = selfNamePosition.split(',')
+
+        let selfCodePosition = '-190,-450,1150,335,-40,-830'
+        this.selfCodePosition = selfCodePosition.split(',')
+
+        let moneyPosition = '-2270,-1190,750,225,-15,-565'
+        this.moneyPosition = moneyPosition.split(',')
+
+        let taxPosition = '-2270,-1190,750,225,-15,-565'
+        this.taxPosition = taxPosition.split(',')
+
+        let totalMoneyPosition = '-2270,-1190,750,225,-15,-565'
+        this.totalMoneyPosition = totalMoneyPosition.split(',')
+
+        let otherNamePosition = '-190,-1380,1150,335,-40,-670'
+        this.otherNamePosition = otherNamePosition.split(',')
+
+        let otherCodePosition = '-190,-1380,1150,335,-40,-828'
+        this.otherCodePosition = otherCodePosition.split(',')
+
+        let remarkPosition = '-90,-750,990,465,-350,-1125'
+        this.remarkPosition = remarkPosition.split(',')
+
       },
       save(op){
         if(this.validator()){
@@ -384,15 +434,23 @@
           }
           let width = arr[2]
           let height = arr[3]
-          if(op === 1){
-            width = 570
+          let top = arr[4]
+          let left = arr[5]
+
+          if(arr.length === 4){
+            if(op === 1){
+              width = 570
+            }
+            else if (op == 2){
+              height = 410
+            }
+            return 'background: url(\'/UploadFile/electronicInvoice/' + this.imgUrl + '\');background-position:' + arr[0] + 'px ' + arr[1] + 'px; width:' + width + 'px;height:' + height + 'px;'
+          }else{
+            return 'background: url(\'/UploadFile/electronicInvoice/' + this.imgUrl + '\');background-position:' + arr[0] + 'px ' + arr[1] + 'px; width:' + width + 'px;height:' + height + 'px; top:' + top + 'px;left:' + left + 'px;'
+
           }
-          else if (op == 2){
-            height = 410
-          }
-          return 'background: url(\'/UploadFile/electronicInvoice/' + this.imgUrl + '\');background-position:' + arr[0] + 'px ' + arr[1] + 'px; width:' + width + 'px;height:' + height + 'px;'
         }
-      }
+      },
     },
     created () {
       this.init({
@@ -445,6 +503,7 @@
           this.state = data.state
         }
       })
+
     }
   }
 </script>

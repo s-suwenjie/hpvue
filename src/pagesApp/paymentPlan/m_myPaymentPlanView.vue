@@ -7,11 +7,11 @@
 
     <yhm-app-scroll :empty="false" :init-load-finish="loadFinish">
       <yhm-app-structure-menu-group title="基本信息">
-        <yhm-app-view-control title="收款方" :content="content.otherUnit"></yhm-app-view-control>
-        <yhm-app-view-control title="付款金额" :content="content.planMoney" type="money" color="#4BB414"></yhm-app-view-control>
+        <yhm-app-view-control title="收款方" :content="otherUnit"></yhm-app-view-control>
+        <yhm-app-view-control title="付款金额" :content="planMoney" type="money" color="#4BB414"></yhm-app-view-control>
         <yhm-app-approval-result v-show="!getShowOperate" :category="getState" :left="3.5" :top="0.5"></yhm-app-approval-result>
       </yhm-app-structure-menu-group>
-      <yhm-app-structure-menu-group title="事件信息" v-for="(item,index) in details" :key="item" @click="toggle(index)" :index="index" :length="details.length">
+      <yhm-app-structure-menu-group title="事件信息" v-for="(item,index) in details" :key="index" @click="toggle(index)" :index="index" :length="details.length">
           <yhm-app-view-control title="事件描述" :content="item.name"></yhm-app-view-control>
           <yhm-app-view-control title="品牌" :content="item.branch" :psd="item.brandPsd.list"></yhm-app-view-control>
           <yhm-app-view-control title="事件类型" :content="item.cause" class="eventType"></yhm-app-view-control>
@@ -22,9 +22,9 @@
           <p class="app_files" style=" word-wrap: break-word;word-break: normal;">文件:
             <span v-for="(items,index) in item.files" :key="index" class="imgName" @click="imgSkip(items)">{{items.showName}}</span>
           </p>
-        <yhm-app-structure-group-operate >
-            <yhm-app-button @call="rejectEvent(1,item.id)"  v-if="getShowOperate" value="驳回" category="ten"></yhm-app-button>
-            <yhm-app-button @call="adoptEvent(1,item.id)"  v-if="getShowOperate" value="通过" category="two"></yhm-app-button>
+        <yhm-app-structure-group-operate  :class="'paumentPlan'+index" v-show="details.length==1?false:true">
+            <yhm-app-button @call="rejectEvent(1,item.id,index)"  v-if="getShowOperate" value="驳回" category="ten"></yhm-app-button>
+            <yhm-app-button @call="adoptEvent(1,item.id,index)"  v-if="getShowOperate" value="通过" category="two"></yhm-app-button>
           </yhm-app-structure-group-operate>
       </yhm-app-structure-menu-group>
     </yhm-app-scroll>
@@ -46,6 +46,8 @@
     mixins: [appviewmixin],
     data(){
       return{
+        otherUnit:'',
+        planMoney:'',
         category:'',     //流程类型
         isFinishBack:'1',
         person:'',
@@ -112,38 +114,52 @@
         })
       },
       /* 通过 */
-      adoptEvent(type,id){
+      adoptEvent(type,id,index){
         this.$appDialog.confirm({
           tipValue: '是否通过?',
           okCallBack: (data) => {
             let kind = ''
             let ID = ''
+            let location = '0'
             if(type===1){//单个提交
               ID = id
               kind = '2'
+              location = '1'
             }else{//全部提交
               ID = this.id
               kind = '1'
+              location = '0'
             }
             let params = {
               id: ID,
               kind: kind,
-              tableName: 43,
-              tableDetailName: 44,
+              tableName: '43',
+              tableDetailName: '44',
+              location:location,
             }
             this.ajaxJson({
               url: '/PersonOffice/m_approvalYesVue',
               data: params,
+              loading:"0",
               call: (data)=>{
                 if(data.type === 0){
-                  this.$appDialog.toast({
-                    tipValue: data.message,
-                    closeCallBack: () => {
-                      ////结束刷新页面
-                      this.isFinish = '1'
-                      this.state = -1
-                    }
-                  })
+                  if(type==1){
+                    this.$appDialog.toast({
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                      }
+                    })
+                    $(".paumentPlan"+index).css("display","none");
+                  }else{
+                    this.$appDialog.toast({
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                        ////结束刷新页面
+                        this.isFinish = '1'
+                        this.state = -1
+                      }
+                    })
+                  }
                 }else if(data.type === 1){
                   this.$appDialog.toast({
                     tipValue: data.message,
@@ -157,7 +173,7 @@
                     alertImg: 'error',
                     closeCallBack: () => {
                       ////结束刷新页面
-
+                      $(".paumentPlan"+index).css("display","none");
                     }
                   })
                 }
@@ -176,6 +192,8 @@
         url: '/PersonOffice/m_getApprovalPaymentPlanById',
         call:(data)=> {
           this.content = data
+          this.otherUnit=data.otherUnit
+          this.planMoney=data.planMoney
           this.state = data.state
           this.category = data.category
           this.details = data.list

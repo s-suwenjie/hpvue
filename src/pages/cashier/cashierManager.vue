@@ -20,8 +20,8 @@
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="所属类型" value="category"></yhm-managerth>
-        <yhm-managerth title="投保公司" value="insuredUnitShowName"></yhm-managerth>
-        <yhm-managerth title="收入/支出" value="direction"></yhm-managerth>
+        <yhm-managerth style="width: 300px;" title="投保公司" value="insuredUnitShowName"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="收支方向" value="direction"></yhm-managerth>
         <yhm-managerth title="金额"  value="money"></yhm-managerth>
         <yhm-managerth title="此条交易剩余金额"  value="bankMoney"></yhm-managerth>
         <yhm-managerth title="编号" value="money"></yhm-managerth>
@@ -35,12 +35,15 @@
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.categoryVal"></yhm-manager-td>
           <yhm-manager-td :value="item.insuredUnitShowName"></yhm-manager-td>
-          <yhm-manager-td :value="item.directionVal"></yhm-manager-td>
-          <yhm-manager-td :value="item.money"></yhm-manager-td>
-          <yhm-manager-td :value="item.bankMoney"></yhm-manager-td>
+          <yhm-manager-td-direction :direction="item.direction" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
+          <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.bankMoney"></yhm-manager-td-money>
           <yhm-manager-td :value="item.number"></yhm-manager-td>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button  @click="approFund(item)" :value="item.direction==='0'?'收款':'拨付资金'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-if="item.cashierOperation==='3'?true:false"  @click="approFund(item)" :value="'收款(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-if="item.cashierOperation==='2'?true:false"  @click="approFund(item)" :value="'代付(保险公司)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-if="item.cashierOperation==='1'?true:false"  @click="approFund(item)" :value="'返利(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -69,6 +72,10 @@
           value: '', //默认为空
           list: []
         },
+        cashierOperation:'',
+        isCollection:false,
+        isPayFor:false,
+        isCashBack:false,
 
       }
     },
@@ -88,15 +95,29 @@
       },
       /* 拨付资金 */
       approFund(item){
+        if (item.direction=== '0'){
           this.$dialog.OpenWindow({
             width: '1050',
             height: '690',
-            title: '拨付资金',
-            url: '/cashierBankDetailForm?cashierMoney='+item.money +'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney,
+            title: '收款(客户)',
+            url: '/cashierBankDetailPrivateForm?cashierMoney='+item.money +'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney,
             closeCallBack: (data)=>{
               this.initPageData(false)
             }
           })
+        } else {
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '690',
+            title: '拨付资金',
+            url: '/cashierBankDetailForm?cashierMoney='+item.money +'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney
+            +'&insuredUnitAccountID='+item.insuredUnitAccountID+'&insuredUnitAccount='+item.insuredUnitAccount,
+            closeCallBack: (data)=>{
+              this.initPageData(false)
+            }
+          })
+        }
+
       },
       initPageData (initValue) {
         let params = {}
@@ -120,6 +141,8 @@
           init:(data)=>{
             //初始化时需要执行的代码
             this.listCategory=data.categoryPsd
+
+
           }
         })
       },

@@ -218,9 +218,22 @@
     created () {
       this.setQuery2Value('ownerID')
       this.setQuery2Value('id')
+      let params = {
+        ownerID: this.ownerID
+      }
       this.init({
         url: '/Insurance/initTrackForm',
+        data: params,
         all: (data) => {
+          this.businessMoney=data.businessMoney
+          this.fileList = data.files
+          this.travelTaxMoney=data.travelTaxMoney
+          this.forceMoney=data.forceMoney
+          this.totalMoney=data.totalMoney
+          this.remark=data.remark
+          this.level=data.level
+          this.nextDate=data.nextDate
+          this.planDate=data.planDate
 
           this.categoryList = data.categoryPsd.list
           this.category = data.categoryPsd.value
@@ -238,17 +251,46 @@
           this.feedback=data.feedbackPsd.value
 
           this.levelEvent()  //初始化默认潜客日期为7天
-
           //跟踪用户默认当前用户
           this.trackPerson=this.createName
           this.trackPersonID=data.personID
+
+          if (this.remark!==''){  //当不是第一次跟踪信息时
+
+            this.trackPerson=data.trackPerson
+            this.trackPersonID=data.trackPersonID
+
+            if (this.category === '0'){
+              this.isIntention=true //购买意向
+              this.isIsQuote=true   //是否报价
+              this.isBusinessMoney=true //商业险报价
+              this.isTravelTaxMoney=true  //车船税报价
+              this.isForceMoney=true  //交强险报价
+              this.isTotalMoney=true  //报价总额
+              this.isRemark=true  //过程记录
+              this.isLevel=true //潜客级别
+              this.isNextDate=true  //下次跟踪日期
+              this.isPlanDate=true  //预计到店日
+              this.isTrackPerson=true  //跟踪人员
+            }else{
+              this.isIntention=false //购买意向
+              this.isIsQuote=false   //是否报价
+              this.isBusinessMoney=false //商业险报价
+              this.isTravelTaxMoney=false  //车船税报价
+              this.isForceMoney=false  //交强险报价
+              this.isTotalMoney=false  //报价总额
+
+            }
+          }
+
+
         },
         add: (data) => {
           /* 需要添加的数据 */
         },
         look: (data) => {
           /* 需要查看的数据 */
-          this.id=data.id
+            this.id=data.id
             this.businessMoney=data.businessMoney
             this.fileList = data.files
             this.travelTaxMoney=data.travelTaxMoney

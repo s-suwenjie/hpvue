@@ -42,7 +42,6 @@ Vue.use(viewdatemoney)
 import viewshowfiles from '@/assets/view/viewshowfiles/viewshowfiles.js'
 Vue.use(viewshowfiles)
 
-
 import tabletip from '@/assets/control/tabletip/tabletip.js'
 Vue.use(tabletip)
 

@@ -59,8 +59,9 @@
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton value="通过"  icon="i-edit" :flicker="false" @call="editBtn()"></yhm-commonbutton>
-        <yhm-commonbutton value="驳回"  icon="i-edit" :flicker="false" @call="downBtn()"></yhm-commonbutton>
+        <yhm-commonbutton v-if="button" value="通过"  icon="i-edit" :flicker="false" @call="editBtn()"></yhm-commonbutton>
+        <yhm-commonbutton v-if="button" value="驳回"  icon="i-edit" :flicker="false" @call="downBtn()"></yhm-commonbutton>
+        <yhm-commonbutton v-if="byButton" value="已通过"  icon="i-edit" :flicker="false" @call="shutDown()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
   </div>
@@ -143,24 +144,32 @@
         insuredUnit: '',
         insuredUnitList: '',
         discountList:[],
+        button:true,
+        byButton:false,
 
       }
     },
     methods:{
+      shutDown(){
+        /*点击已驳回关闭view页面*/
+        this.$dialog.close()
+      },
       //驳回审批
-      downBtn(item){
+      downBtn(){
         if(this.id){
           this.$dialog.OpenWindow({
             width: 1050,
             height: 720,
             title: '驳回理由',
-            url: '/insuranceRejectReason?category=12' +'&id=' + item.id,
+            url: '/insuranceRejectReason?category=12' +'&id=' + this.id,
             closeCallBack: (data)=>{
-              this.initPageData(false)
+              this.initData()
+              this.$dialog.setReturnValue(this.id)
+              this.$dialog.close()
+
             }
           })
         }
-
       },
       editBtn(){
         this.$dialog.confirm({
@@ -181,7 +190,8 @@
                     tipValue: data.message,
                     closeCallBack: (data) => {
                       this.$dialog.setReturnValue(this.id)
-                      this.$dialog.close()
+                      this.button=false
+                      this.byButton=true
                     }
                   })
                 } else {

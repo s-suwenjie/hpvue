@@ -4,7 +4,8 @@
         <yhm-app-structure-top-tap-menu @call="backEvent" title="返回"></yhm-app-structure-top-tap-menu>
         <yhm-app-structure-top-tap-menu :select="true" title="报销明细"></yhm-app-structure-top-tap-menu>
       </yhm-app-structure-top-tap>
-      <yhm-app-scroll :empty="false" :init-load-finish="loadFinish" :is-allow-refresh="false">
+      <div style="overflow: auto;">
+<!--      <yhm-app-scroll :empty="false" :init-load-finish="loadFinish" :is-allow-refresh="false">-->
         <yhm-app-structure-menu-group title="基本信息">
           <yhm-app-view-control title="申请人" :content="name"></yhm-app-view-control>
           <yhm-app-view-control title="申请日期" :content="workDate" ></yhm-app-view-control>
@@ -44,12 +45,14 @@
             </div>
           </yhm-app-view-child>
 
-              <yhm-app-structure-group-operate >
-              <yhm-app-button @call="rejectEvent(1,item.id)"  v-if="getShowOperate" value="驳回" category="ten"></yhm-app-button>
-              <yhm-app-button @call="adoptEvent(1,item.id)"  v-if="getShowOperate" value="通过" category="two"></yhm-app-button>
+              <yhm-app-structure-group-operate  :class="'reimbursenebt'+index"  v-show="details.length==1?false:true">
+              <yhm-app-button @call="rejectEvent(1,item.id,index)"  v-if="getShowOperate" value="驳回" category="ten"></yhm-app-button>
+              <yhm-app-button @call="adoptEvent(1,item.id,index)"  v-if="getShowOperate" value="通过" category="two"></yhm-app-button>
               </yhm-app-structure-group-operate>
         </yhm-app-structure-menu-group>
-      </yhm-app-scroll>
+        <div style="width: 100%;height: 0.2rem;"></div>
+    </div>
+<!--      </yhm-app-scroll>-->
       <yhm-app-form-operate v-if="getShowOperate">
         <yhm-app-button @call="rejectEvent(0)" value="驳回" category="ten"></yhm-app-button>
         <yhm-app-button @call="adoptEvent(0)" value="通过" category="two"></yhm-app-button>
@@ -58,9 +61,8 @@
 </template>
 
 <script>
-
+  import { ImagePreview }from 'vant';
   import { appviewmixin } from '@/assetsApp/app_view.js'
-  import { ImagePreview } from 'vant';
   export default {
     name: 'm_approvalReimbursementView',
     mixins:[appviewmixin],
@@ -107,48 +109,59 @@
         this.$router.push("/homeApp/m_reimbursementManager?isFinish=" + this.isFinishBack)
       },
       //通过事件
-      adoptEvent(type,id){
+      adoptEvent(type,id,index){
         this.$appDialog.confirm({
           tipValue: '是否通过?',
           okCallBack: (data) => {
             let kind = ''
             let ID = ''
-            if(type===1){//单个提交
-              // kind = '2'
-              ID = id
-            }else{//全部提交
-              ID = this.id
-            }
+            let location = '0'
             if(type===1){//单个提交
               kind = '2'
-            }else{
+              ID = id
+              location = '1'
+            }else{//全部提交
               kind = '1'
+              ID = this.id
+              location = '0'
             }
             let params = {
               id: ID,
               kind: kind,
               tableName: '40',
               tableDetailName: '41',
-              location: '1',
+              location:location,
             }
+
             this.ajaxJson({
               url: '/PersonOffice/m_approvalYesVue',
               data: params,
+              loading:"0",
               call: (data)=>{
                 if(data.type === 0){
-                  this.$appDialog.toast({
-                    tipValue: data.message,
-                    closeCallBack: () => {
-                      ////结束刷新页面
-                      this.isFinish = '1'
-                      this.state = -1
-                    }
-                  })
+                  if(type==1){
+                    this.$appDialog.toast({
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                      }
+                    })
+                    $(".reimbursenebt"+index).css("display","none");
+                  }else{
+                    this.$appDialog.toast({
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                        ////结束刷新页面
+                        this.isFinish = '1'
+                        this.state = -1
+                      }
+                    })
+                  }
                 }else if(data.type === 1){
                   this.$appDialog.toast({
                     tipValue: data.message,
                     alertImg: 'error',
                     closeCallBack: () => {
+
                     }
                   })
                 } else if(data.type === 2){
@@ -156,6 +169,7 @@
                     tipValue: data.message,
                     alertImg: 'error',
                     closeCallBack: () => {
+                      $(".reimbursenebt"+index).css("display","none");
                       ////结束刷新页面
 
                     }

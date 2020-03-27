@@ -12,7 +12,7 @@
         <yhm-form-text v-if="isPrettyMoneyCash"  no-edit=1 title="备用金" subtitle="核销金额" :value="prettyCashMoney" id="prettyCashMoney" tip="prettyCashMoney" before-icon="rmb" rule="R0000"></yhm-form-text>
       </template>
     </yhm-formbody>
-    <yhm-form-list-edit :show="isPrettyMoneyCash">
+    <yhm-form-list-edit :show="isPrettyMoneyCash" style="margin-top: 15px;">
       <template #title>备用金明细</template>
       <template #operate>
         <yhm-commonbutton :show="selectPrettyCashsShow" value="选择备用金" icon="btnAdd" @call="selectPrettyCashs"></yhm-commonbutton>
@@ -22,6 +22,7 @@
         <yhm-managerth style="width: 150px" title="申请日期"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="金额"></yhm-managerth>
         <yhm-managerth title="事由"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="发票类型"></yhm-managerth>
         <yhm-managerth style="width: 150px" title="预计核销日期"></yhm-managerth>
         <yhm-managerth style="width: 200px" title="备注"></yhm-managerth>
         <yhm-managerth style="width: 40px" title="操作"></yhm-managerth>
@@ -31,7 +32,12 @@
           <yhm-manager-td-look @click="prettyCashsView(item)"></yhm-manager-td-look>
           <yhm-form-td-date width="150" :no-edit="getPrettyCashs" :list="prettyCashsList" listid="prettyCashsList" :value="item" id="workDate" rule="R0000"></yhm-form-td-date>
           <yhm-form-td-textbox width="100" :no-edit="getPrettyCashs" position="u" :list="prettyCashsList" listid="prettyCashsList" :value="item" id="money" rule="R0000"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="280" :no-edit="getPrettyCashs" position="u" :list="prettyCashsList" listid="prettyCashsList" :value="item" id="subject" rule="R0000"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="175" :no-edit="getPrettyCashs" position="u" :list="prettyCashsList" listid="prettyCashsList" :value="item" id="subject" rule="R0000"></yhm-form-td-textbox>
+
+          <yhm-form-td-textbox  width="100" :no-edit="getPrettyCashs" position="u" :list="prettyCashsList" listid="prettyCashsList" :value="item" id="invoiceCategory" rule="R0000"></yhm-form-td-textbox>
+<!--          <yhm-form-td-textbox v-if="invoiceCategory === '1'" width="100" :no-edit="getPrettyCashs" position="u" :list="prettyCashsList" listid="prettyCashsList" :value="item" id="invoiceCategory" rule="R0000"></yhm-form-td-textbox>-->
+<!--          <yhm-form-td-radio width="100" :no-edit="getPrettyCashs" :list="prettyCashsList" listid="prettyCashsList" :value="item" :select-list="invoiceCategoryList"></yhm-form-td-radio>-->
+
           <yhm-form-td-date width="150" :no-edit="getPrettyCashs" :list="prettyCashsList" listid="prettyCashsList" :value="item" id="estimateDate" rule="R0000"></yhm-form-td-date>
           <yhm-form-td-textbox width="200" :no-edit="getPrettyCashs" position="u" :list="prettyCashsList" listid="prettyCashsList" :value="item" id="remark" rule="R0000"></yhm-form-td-textbox>
           <yhm-form-td-delete :no-click="getPrettyCashsShow" width="40" :list="prettyCashsList" :value="item" :del-click="true" @click="delPrettyCashs(index,item)"></yhm-form-td-delete>
@@ -138,7 +144,11 @@
         isPrettyCashsEmpty:true,
         getPrettyCashsShow:false,
         getPrettyCashs:'1',
-        isGetPrettyCash: false
+        isGetPrettyCash: false,
+        isSelectPrettyCash: '',
+        subject: '',
+        subjectID: '',
+        invoiceCategoryList: []
       }
     },
     methods: {
@@ -219,6 +229,7 @@
         })
       },
       selectIsPrettyCashOff(){
+
         if(this.isPrettyCashOff==='0'){
           this.isPrettyMoneyCash=false
           this.prettyCashsList=[]
@@ -244,6 +255,7 @@
         })
       },
       selectPrettyCashs(){
+
         this.$dialog.OpenWindow({
           width: 950,
           height: 603,
@@ -251,6 +263,9 @@
           title: '选择备用金',
           closeCallBack: (data) => {
             if (data) {
+              this.isSelectPrettyCash = data.invoiceCategory
+              this.subject = data.subject
+              this.subjectID = data.subjectID
               let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.prettyCashsList.length, 1000)))
               this.prettyCashsList.push({
                 id: guid(),
@@ -262,6 +277,7 @@
                 subject:data.subject,
                 estimateDate:data.estimateDate,
                 remark:data.remark,
+                invoiceCategory: data.invoiceCategory === '0'?'有票':'无票'
               })
               this.prettyCashMoney=data.money
               this.isPrettyCashsEmpty=false
@@ -274,7 +290,7 @@
         this.$dialog.OpenWindow({
           width: 1050,
           height: 840,
-          url: '/reimbursementDetailForm?ownerID='+this.id + '&relevanceID=' +this.relevanceID +'&relevanceType=' +this.relevanceType +'&parentCode=' +this.code + '&parentWorkDate=' +this.workDate+'&isPrettyCashOff='+this.isPrettyCashOff ,
+          url: '/reimbursementDetailForm?ownerID='+this.id + '&relevanceID=' +this.relevanceID +'&relevanceType=' +this.relevanceType +'&parentCode=' +this.code + '&parentWorkDate=' +this.workDate+'&isPrettyCashOff='+this.isPrettyCashOff + '&isSelectPrettyCash='+this.isSelectPrettyCash + '&subjectID='+this.subjectID,
           title: '添加报销明细',
           closeCallBack: (data) => {
             this.$dialog.setReturnValue(this.id)
@@ -577,6 +593,19 @@
             this.approvalMoney = this.content.approvalMoney
             this.isPrettyCashOffList = data.isPrettyCashOffPsd.list
             this.isPrettyCashOff = data.isPrettyCashOffPsd.value
+            // this.invoiceCategoryList = data.invoiceCategoryPsd.list
+            // this.isPrettyCashOff = data.isPrettyCashOff
+
+
+
+            // for(let i in data.list){
+            //   if(data.list[i].invoiceCategory === '2'){
+            //     this.isSelectPrettyCash = '1'
+            //   }
+            // }
+
+
+
 
             if(this.content.state != '0'){
               this.btmShow = false
@@ -590,8 +619,25 @@
               this.reimbursementsDetailIsAutoAdd()
             }
             if(data.isPrettyCashOff==='1'){
-              this.prettyCashsList=data.prettyCashsList
-              this.isPrettyMoneyCash=true
+              // this.prettyCashsList = data.prettyCashsList
+
+              for(let i in data.prettyCashsList){
+                this.prettyCashsList.push({
+                  id: data.prettyCashsList[i].id,
+                  insertDate: data.prettyCashsList[i].insertDate,
+                  ownerID: data.prettyCashsList[i].ownerID,
+                  prettyCashsID: data.prettyCashsList[i].prettyCashsID,
+                  workDate: data.prettyCashsList[i].workDate,
+                  money: data.prettyCashsList[i].money,
+                  subject: data.prettyCashsList[i].subject,
+                  estimateDate: data.prettyCashsList[i].estimateDate,
+                  remark: data.prettyCashsList[i].remark,
+                  invoiceCategory: data.prettyCashsList[i].invoiceCategory === '0' ? '有票' : '无票',
+                })
+              }
+
+
+              this.isPrettyMoneyCash = true
               if(this.prettyCashsList.length>0){
                 this.isPrettyCashsEmpty=false
               }
@@ -628,6 +674,13 @@
           this.getIsPrettyCashOff = true
           this.selectPrettyCashsShow = false
           this.getPrettyCashsShow = true
+        }
+      },
+      prettyCashsList(){
+        if(this.prettyCashsList.length>0){
+          for(let i in this.prettyCashsList){
+            this.isSelectPrettyCash = this.prettyCashsList[i].invoiceCategory === '无票'?'1':'0'
+          }
         }
       }
     }

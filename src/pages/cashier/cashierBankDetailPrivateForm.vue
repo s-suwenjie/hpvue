@@ -5,7 +5,7 @@
       <template #control>
         <yhm-form-radio title="分类" :select-list="ownerSysList" :value="ownerSys" id="ownerSys" @call="contentTT" :no-edit="true"></yhm-form-radio>
         <yhm-form-radio title="品牌" :select-list="brandList" :value="brand" id="brand"></yhm-form-radio>
-        <yhm-form-radio title="收支方向" @call="contentTC" :no-edit="true" :before="direction_state" :select-list="directionList" :value="direction" id="direction"></yhm-form-radio>
+        <yhm-form-radio title="收支方向" @call="contentTC"  :no-edit="true" :before="direction_state" :select-list="directionList" :value="direction" id="direction"></yhm-form-radio>
         <yhm-form-date title="交易日期" :value="cccurDate" id="cccurDate" position="b" rule="R0000"></yhm-form-date>
         <yhm-form-select title="我方" subtitle="账户信息" @click="selectaccount" :value="selfAccount" v-if="isSelfAcc" id="selfAccount" width="1" rule="R0000" tip="value"></yhm-form-select>
         <yhm-form-text title="我方" subtitle="账户信息" :value="selfAccount" v-if="!isSelfAcc" id="selfAccount" rule="R0000" no-edit="1"></yhm-form-text>
@@ -63,7 +63,7 @@
 
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton value="拨付资金" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
+        <yhm-commonbutton value="收款" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
 
@@ -76,7 +76,7 @@
   import { formmixin } from '@/assets/form.js'
 
   export default {
-    name: 'cashierBankDetailForm',
+    name: 'cashierBankDetailPrivateForm',
     mixins: [formmixin],
     data () {
       return {
@@ -128,6 +128,7 @@
         isCause: false,
         isSelfAcc: true,
         directionBefore: '',
+
         isMoreCause: false,
         isAddBtn: true,
         isOtherAcc: false,
@@ -136,9 +137,6 @@
         calcTrMoney: '',
         bankID:'',
         bankOwnerID:'',
-        insuredUnitAccountID:'',
-        insuredUnitAccount:'',
-
       }
     },
     methods: {
@@ -326,7 +324,7 @@
               }
               this.selfAccountID = data.id
               if (this.accountID) {
-                  this.ajaxJson({
+                this.ajaxJson({
                   url: '/Fin/getAccountBalanceVue',
                   data: params,
                   call: (data) => {
@@ -489,7 +487,7 @@
           this.$dialog.confirm({
             alertImg: 'warn',
             btnValueOk: '确定',
-            tipValue: '确定拨付资金?',
+            tipValue: '确定收款(客户)?',
             okCallBack: ()=>{
               let dataParams = {
                 id:this.bankID,
@@ -525,7 +523,7 @@
                       }
                     })
                   }else{
-                      //第一次请求失败
+                    //第一次请求失败
                     this.$dialog.alert({
                       alertImg: 'error',
                       tipValue: data.message,
@@ -544,23 +542,12 @@
     created () {
       this.setQuery2Value('ownerID')
       this.setQuery2Value('bankDetailType')
-      this.setQuery2Value('directionBefore')
       this.setQuery2Value('bankID')
       this.setQuery2Value('bankOwnerID')
       this.setQuery2Value('cashierMoney')
       this.setQuery2Value('cashierDirection')
       this.setQuery2Value('bankMoney')
-      this.setQuery2Value('insuredUnitAccountID')
-      this.setQuery2Value('insuredUnitAccount')
-      // if(this.bankDetailType === '0'){
-      //   this.isMoney = ''
-      // }
 
-
-      if(this.directionBefore === '1'){
-
-        this.isCause = true
-      }
       let params = {
         ownerID: this.ownerID,
         bankDetailType: this.bankDetailType,
@@ -611,7 +598,6 @@
             this.message = data.currentBalance////我方账户余额
             this.calcMoney()
           }else if(this.bankDetailType === '3'){
-
             this.isCause = true
             this.isOtherAcc = true
           }else if(this.bankDetailType === '4'){
@@ -634,8 +620,6 @@
           this.direction=this.cashierDirection
           this.money=this.bankMoney
           this.calcTrMoney =this.bankMoney
-          this.otherAccount=this.insuredUnitAccount
-          this.otherAccountID=this.insuredUnitAccountID
         },
         add: (data) => {
           /* 需要添加的数据 */

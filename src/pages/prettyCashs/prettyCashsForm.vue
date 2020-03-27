@@ -6,13 +6,22 @@
 <!--        <yhm-form-text title="所属单位" no-edit="1" :value="unit" id="unit" rule="R0000"></yhm-form-text>-->
         <yhm-form-text title="申请人" no-edit="1" :value="person" id="person" rule="R0000"></yhm-form-text>
         <yhm-form-radio title="业务相关" @call="getCode" :select-list="isTravelList"  :value="isTravel" id="isTravel" rule="R0000"></yhm-form-radio>
+
+        <yhm-form-radio title="发票类型" :select-list="invoiceCategoryList"  :value="invoiceCategory" id="invoiceCategory" rule="R0000"></yhm-form-radio>
+
         <yhm-form-date title="申请日期" @call="getCode" :max="maxWorkDate" :value="workDate" id="workDate" rule="R0000" :no-edit="true"></yhm-form-date>
+
         <yhm-form-radio title="选择天数" @call="selectDateEvent" :select-list="selectDateList" :value="selectDate" id="selectDate" rule="R0000"></yhm-form-radio>
-        <yhm-form-date title="预计归还/" subtitle="核销时间" :min="minEstimateDate" :value="estimateDate" id="estimateDate" rule="R0000" position="r"></yhm-form-date>
+        <yhm-form-date title="预计归还/" subtitle="核销时间" :min="minEstimateDate" :value="estimateDate" id="estimateDate" rule="R0000" position="b"></yhm-form-date>
+
         <yhm-form-text title="申请金额" @change="getCode" tip="money" before-icon="rmb" :value="money" id="money" rule="R3000" placeholder="请输入数字" error-message="纯数字输入"></yhm-form-text>
+
         <yhm-form-text title="申请编号" no-edit="1" :value="code" id="code" rule="R0000"></yhm-form-text>
         <yhm-form-select title="事由" :value="subject" id="subject" @click="selectSubject" rule="R0000"></yhm-form-select>
         <yhm-form-textarea title="事由说明" :value="remark" id="remark"></yhm-form-textarea>
+
+        <yhm-formupload :ownerID="id" :value="list" id="list" title="上传文件" tag="prettyCashs" subtitle="" multiple="multiple"></yhm-formupload>
+
       </template>
     </yhm-formbody>
     <div v-html="approvalHtml"></div>
@@ -42,6 +51,8 @@
         code:'',
         isTravel:'',
         isTravelList:[],
+        invoiceCategory: '',
+        invoiceCategoryList: [],
         money:'',
         remark:'',
         isAdd:'',
@@ -52,6 +63,7 @@
         minEstimateDate:formatDate(new Date()),
         approvalHtml: '',
         selectDate: '',
+        list: [],
         selectDateList: [
           {
             showName: "7天",
@@ -68,6 +80,12 @@
           {
             showName: "30天",
             num: "2",
+            code: "#bb262b",
+            img: ''
+          },
+          {
+            showName: "其他",
+            num: "3",
             code: "#bb262b",
             img: ''
           }
@@ -121,6 +139,8 @@
             subjectID:this.subjectID,//事由
             estimateDate:this.estimateDate,
             remark:this.remark,
+            invoiceCategory: this.invoiceCategory,
+            list: this.list,
           }
           this.ajaxJson({
             url: '/PersonOffice/prettyCashsSave',
@@ -179,6 +199,7 @@
         }
       },
       save(){
+
         let a = this.validator()
         if(a){
           let params = {
@@ -195,7 +216,10 @@
             subjectID:this.subjectID,//事由
             estimateDate:this.estimateDate,
             remark:this.remark,
+            invoiceCategory: this.invoiceCategory,
+            list: this.list,
           }
+
           this.ajaxJson({
             url: '/PersonOffice/prettyCashsSave',
             data: params,
@@ -273,6 +297,8 @@
           all: (data)=>{
             this.isTravel=data.isTravelPsd.value
             this.isTravelList=data.isTravelPsd.list
+            this.invoiceCategory = data.invoiceCategoryPsd.value
+            this.invoiceCategoryList = data.invoiceCategoryPsd.list
             this.unit = data.unit
             this.unitID=data.unitID
           },
@@ -290,6 +316,7 @@
             this.remark=data.remark
             this.approvalHtml = data.approvalHtml
             this.estimateDate = data.estimateDate
+            this.list = data.list
           }
         })
       }

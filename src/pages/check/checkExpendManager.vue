@@ -33,11 +33,19 @@
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 370px;" title="所属银行" value="unitName"></yhm-managerth>
-        <yhm-managerth style="width: 190px;" title="支票号码" value="code"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="支票类型" value="category"></yhm-managerth>
+
+        <yhm-managerth style="width: 100px" title="使用人"></yhm-managerth>
+        <yhm-managerth style="width: 140px" title="开票时间"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="开票金额"></yhm-managerth>
+        <yhm-managerth title="收款单位"></yhm-managerth>
+
+        <yhm-managerth style="width: 140px;" title="所属银行" value="unitName"></yhm-managerth>
+        <yhm-managerth style="width: 140px;" title="支票号码" value="code"></yhm-managerth>
+        <yhm-managerth style="width: 90px;" title="支票类型" value="category"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="入库日期" value="workDate"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="支票状态" value="state"></yhm-managerth>
+
+
         <yhm-managerth style="width: 130px;" title="状态变更日期" value="workDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="操作"></yhm-managerth>
       </template>
@@ -47,6 +55,12 @@
         <tr v-for="(item,index) in content" :key="index" :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0},{grayColor: item.state === '1'}]">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item)"></yhm-manager-td-look>
+
+          <yhm-manager-td-center :value="item.usePerson"></yhm-manager-td-center>
+          <yhm-manager-td-date :value="item.openDate"></yhm-manager-td-date>
+          <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+          <yhm-manager-td :value="item.other"></yhm-manager-td>
+
           <yhm-manager-td-logo :value="item.bankName" :logo="item.bankLogo" tag="BankLogo" :center="true"></yhm-manager-td-logo>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
           <yhm-manager-td-psd :value="item.category" :list="categoryList"></yhm-manager-td-psd>
@@ -418,9 +432,9 @@
     width: 160px;
     right: -88px;
     top: 11px;
-    padding: 15px 0px;
+    padding: 15px 0;
     display: none;
-    box-shadow: 0px 0px 5px black;
+    box-shadow: 0 0 5px black;
     background-color: #FFFFFF;
     border-radius: 8px;
   }
@@ -436,7 +450,7 @@
   }
 
   .hover_operate:hover .kailong{display: block;}
-  .icon{margin:2.5px 3px 0px 0px;}
+  .icon{margin:2.5px 3px 0 0;}
   .hover_operate p{padding:5px 15px;}
 
   .hover_operate p:nth-child(2){color: #49a9ea !important;}/*入账*/

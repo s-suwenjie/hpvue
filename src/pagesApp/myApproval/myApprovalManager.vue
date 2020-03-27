@@ -1,13 +1,13 @@
 <template>
   <div>
     <yhm-app-structure-menu-group title="我的审批" v-if="myApprovalShow">
-      <yhm-app-menu :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[0].menu" :key="index" v-if="routerList[index].id==item.id&&routerList[index].state=='1'" :url="item.imgUrl" :num="cornerMark[index]"></yhm-app-menu>
+      <yhm-app-menu :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[0].menu" :key="index" v-show="routerList[index].id==item.id&&routerList[index].state=='1'" :url="item.imgUrl" :num="cornerMark[index]"></yhm-app-menu>
     </yhm-app-structure-menu-group>
     <yhm-app-structure-menu-group title="财务" v-if="financeShow">
-      <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[1].menu" :key="index"  :id="item.id" :class="finance[index].id"  :url="item.imgUrl"></yhm-app-menu>
-<!--      <yhm-app-menu @call="gotoFundDynamicsCharts" name="资金动态" url="/UploadFile/m_image/menu/fundDynamicsCharts.svg" :num="prettyCashs"></yhm-app-menu>-->
-<!--      <yhm-app-menu @call="gotoOrderSystem" name="点餐系统" url="/UploadFile/m_image/menu/orderSystem.svg"></yhm-app-menu>-->
-<!--      <yhm-app-menu @call="gotoParticular" name="收支明细" url="/UploadFile/m_image/menu/fundDynamicsCharts.svg"></yhm-app-menu>-->
+      <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[1].menu" :key="index" v-show="financeList[index]==item.id&&finance[index]=='1'"  :url="item.imgUrl"></yhm-app-menu>
+<!--      <yhm-app-menu @call="goto('/homeApp/m_fundDynamicsChartView','0')" name="资金动态" url="/UploadFile/m_image/menu/fundDynamicsCharts.svg" :num="prettyCashs"></yhm-app-menu>-->
+<!--      <yhm-app-menu @call="goto('/homeApp/m_orderSystemMenu','0')" name="点餐系统" url="/UploadFile/m_image/menu/orderSystem.svg"></yhm-app-menu>-->
+<!--      <yhm-app-menu @call="goto('/homeApp/m_bankDetailCashierView','0')" name="收支明细" url="/UploadFile/m_image/menu/fundDynamicsCharts.svg"></yhm-app-menu>-->
     </yhm-app-structure-menu-group>
 <!--    <yhm-app-structure-top-tap :list="topMenu" :select-item="selectMenu" :is-scroll="true">-->
 <!--      <yhm-app-structure-top-tap-menu :list="topMenu" :select-item="selectMenu" v-for="(item,index) in topMenu" :key="index" @call="backEvent(item.title)" :title="item.title" :is-scroll="true"></yhm-app-structure-top-tap-menu>-->
@@ -37,6 +37,10 @@
       return{
         routerList:[{ id:'' },{ id:'' },{ id:'' },{ id:'' }],
         finance:[{ id:'' },{ id:'' },{ id:'' }],
+        prettyCashs:'',
+        // routerList: [],
+        // finance:  [],
+        financeList:[],
         myApprovalShow:true,
         financeShow:true,
         myApproval:[],
@@ -107,8 +111,12 @@
       }
     },
     methods:{
-      goto(item){//跳转
+      goto(item,index){//跳转
+        console.log(item,index)
         this.$router.push(item.url)
+        if(index=='0'){
+          this.$router.push(item)
+        }
       },
       num(arr,index){//计算某个值在数组中出现的最多和出现次数
         let obj = {};
@@ -128,43 +136,76 @@
             maxStr = i;
           }
         }
-        if(index=='0'){
-          if(maxStr=='0'&&maxValue=='4'){
-            this.myApprovalShow = false
-          }
-        }else if(index=='1'){
-          if(maxStr=='0'&&maxValue=='3'){
-            this.financeShow = false
-          }
-        }
+        let arrs = []
+        arrs.push(maxStr)
+        arrs.push(maxValue)
+        return arrs
+        // if(index=='0'){
+        //   console.log('index 0',maxStr,maxValue)
+        //
+        //   if(maxStr=='0'&&maxValue=='4'){
+        //     this.myApprovalShow = false
+        //   }
+        // }
+        // if(index=='1'){
+        //   console.log('index 1',maxStr,maxValue)
+        //
+        //   if(maxStr=='0'&&maxValue=='3'){
+        //     console.log(maxStr,maxValue)
+        //     this.financeShow = false
+        //   }
+        // }
       },
       routerListData(){
+        setTimeout(()=>{this.$dialog.close()},100)
         this.ajaxJson({
           url: '/SysManager/m_getPurviewUsers',
+          loading:"0",
           call: (data) => {
+            this.finance = []
+            this.routerList = []
             this.routerList = data
+            let arr = []
             for (let i=0; i<=data.length; i++){
               if(i<='3'){
                 this.myApproval.push(data[i].state)
                 this.num(this.myApproval,'0')
+                arr =this.num(this.myApproval,'0')
+                // console.log(i,'操作',this.myApproval)
+                setTimeout(()=> {
+                  if(arr[0].maxStr=='0'&&arr[1].maxValue=='4'){
+                    this.myApprovalShow = false
+                  }else {this.myApprovalShow = true}
+                  // console.log(this.num(this.myApproval, '0'))
+                },0)
               }
               if(i>'3'&&i<'7'){
                 this.finance.push(data[i].state)
+                this.financeList.push(data[i].id)
+                // console.log(i,'财务',this.finance,this.financeList)
                 this.num(this.finance,'1')
+                arr = this.num(this.finance,'1')
+                setTimeout(()=>{
+                  if(arr[0].maxStr=='0'&&arr[1].maxValue=='3'){
+                    this.financeShow = false
+                  }else{this.financeShow = true}
+                  // console.log(this.num(this.finance,'1'))
+                },0)
               }
             }
           }
         })
-      }
+
+      },
     },
     created () {
       this.routerListData()
       setTimeout(() => {
         this.loadFinish = !this.loadFinish
-      },200)
+      },0)
       this.ajaxJson({
         url: '/PersonOffice/m_approvalManagerAllNumber',
-        loading:'0',
+        loading:"0",
         call: (data) => {
           let menuNum = this.topMenu[0].menu
           for(let i in menuNum){

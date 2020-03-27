@@ -19,7 +19,7 @@
           <i class="noticeNum" v-if="prettyCashsNum!=='0'">{{prettyCashsNum}}</i>
         </router-link>
         <router-link class="menuTabDiv  menuTabActive" :to="{path:'/home/approvalInsuranceManager'}">保险审批
-          <!--          <i class="noticeNum" v-if="prettyCashsNum!=='0'">{{prettyCashsNum}}</i>-->
+            <i class="noticeNum" v-if="insuranceNum!='0'">{{insuranceNum}}</i>
         </router-link>
       </template>
       <!--操作区-->
@@ -37,14 +37,14 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth  title="车牌号" value="plate"></yhm-managerth>
-        <yhm-managerth  title="联系人" value="contactName"></yhm-managerth>
+        <yhm-managerth  style="width: 150px;"  title="车牌号" value="plate"></yhm-managerth>
+        <yhm-managerth  style="width: 150px;"  title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth  title="被保险人" value="beinsuredName"></yhm-managerth>
         <yhm-managerth  title="投保日期" value="insuredDate"></yhm-managerth>
         <yhm-managerth  title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth  title="投保类型" value="insuredTypeVal"></yhm-managerth>
-        <yhm-managerth  title="保费合计" value="premiumsTotal"></yhm-managerth>
-        <yhm-managerth  title="实收金额" value="receivedMoney"></yhm-managerth>
+        <yhm-managerth  style="width: 120px;"  title="投保类型" value="insuredTypeVal"></yhm-managerth>
+        <yhm-managerth  style="width: 120px;"  title="保费合计" value="premiumsTotal"></yhm-managerth>
+        <yhm-managerth  style="width: 120px;"  title="实收金额" value="receivedMoney"></yhm-managerth>
         <yhm-managerth  style="width: 120px;" title="操作"></yhm-managerth>
       </template>
 
@@ -59,8 +59,8 @@
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
-          <yhm-manager-td-rgt :value="item.premiumsTotal"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.receivedMoney"></yhm-manager-td-rgt>
+          <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button @click="editBtn(item.id)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="downBtn(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
@@ -92,6 +92,12 @@
           list: []
         },
         insuredUnitList:[],
+        payPlanNum: '',
+        paymentNum: '',
+        reimburseNum: '',
+        purchaseNum: '',
+        prettyCashsNum:'',
+        insuranceNum:'',
       }
     },
     methods:{
@@ -166,6 +172,17 @@
       },
       //搜索
       initPageData (initValue) {
+        this.ajaxJson({
+          url: '/PersonOffice/approvalManagerAllNumber',
+          call: (data)=>{
+            this.payPlanNum = data.payPlan
+            this.paymentNum = data.payment
+            this.reimburseNum = data.reimbursements
+            this.purchaseNum = data.purchase
+            this.prettyCashsNum = data.prettyCashs
+            this.insuranceNum=data.insurance
+          }
+        })
         let params = {}
 
         if (initValue) {

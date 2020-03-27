@@ -5,7 +5,7 @@
       <template #control>
         <yhm-form-radio title="车辆分类" :select-list="categoryList" :value="category" id="category" @call="categoryEvent"></yhm-form-radio>
         <yhm-form-radio title="车辆类型" :select-list="vehicleTypeList" :value="vehicleType" id="vehicleType" @call="vehicleTypeEvent"></yhm-form-radio>
-        <yhm-form-text placeholder=""  title="汽车排量" subtitle="" :show="isDisplacement" :value="displacement" id="displacement" ></yhm-form-text>
+        <yhm-form-text placeholder=""  title="汽车排量" subtitle="" :show="isDisplacement" :value="displacement" id="displacement" rule="R0000"></yhm-form-text>
         <yhm-form-radio  title="所属类型" v-if="isAssort" :select-list="assortList" :value="assort" id="assort"></yhm-form-radio>
         <yhm-form-text placeholder="" @repeatverify="nameVerifyEvent" ref="plate"  title="车牌号" subtitle="" :show="isHide" :value="plate" id="plate" rule="R8000"></yhm-form-text>
         <yhm-form-select title="车辆颜色" tip="value" :value="color" id="color"  @click="selectColour"></yhm-form-select>

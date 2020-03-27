@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const Timestamp = new Date().getTime();
 module.exports = {
   publicPath: '/',
   configureWebpack:{
@@ -7,12 +8,12 @@ module.exports = {
         $:"jquery",
         jQuery:"jquery",
         "windows.jQuery":"jquery"
-      })
-    ]
+      }),
+    ],
+    output: {
+      filename: `[name].js?v=${Timestamp}`,
+      chunkFilename: `[name].js?v=${Timestamp}`,
+    },
+
   },
-  chainWebpack: config => {
-    config
-      .plugin('webpack-bundle-analyzer')
-      .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
-  }
 }

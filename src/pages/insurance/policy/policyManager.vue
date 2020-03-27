@@ -42,8 +42,8 @@
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
-          <yhm-manager-td-rgt :value="item.premiumsTotal"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.receivedMoney"></yhm-manager-td-rgt>
+          <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
         </tr>
       </template>

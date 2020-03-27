@@ -1,5 +1,6 @@
 <template>
     <div class="">
+<!--      <div class="shade" v-show="carNum"></div>-->
       <yhm-app-structure-top-tap>
         <yhm-app-structure-top-tap-menu @call="backEvent" title="返回"></yhm-app-structure-top-tap-menu>
         <yhm-app-structure-top-tap-menu :select="true" title="点餐系统"></yhm-app-structure-top-tap-menu>
@@ -11,20 +12,34 @@
             <span class="autoOrderStr">自主点餐</span>
             <span class="autoOrderBtn radio_button_icon" :class="{'i-btn-check-number':isAutoChecks}"></span>
           </div>
-          <div class="guessOrder">
-            <div @click="guessOrderEvent">
-              <span class="guessOrderStr">代客点餐</span>
-              <span class="guessOrderBtn radio_button_icon" :class="{'i-btn-check-number':isGuessChecks}"></span>
+          <div v-for="(item,index) in list" :key="index">
+            <div class="guessOrders" >
+              <span class="guessOrderStr" @click="guessOrderEvent(index)">代客点餐</span>
+              <span class="guessOrderBtn radio_button_icon" v-if="index==0" @click="guessOrderEvent(index)" :class="{'i-btn-check-number':isGuessChecks}"></span>
+              <span class="icon-delete2 systemMenuIcon"  v-else @click="cancel(index)"></span>
             </div>
-            <div class="guessOrderNum">
-              <div class="">
-                <p @click="guessNumEvent(index)" v-for="(item,index) in 8" :key="index" :class="{guessNumChoice: guessNumOn === index}">{{index+1}}</p>
-                <input type="text" maxlength="5" v-model="guessNum"  @input="guessIptEvent($event)" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')">
+            <div class="guessOrder guessIndex" ref="guessOrderShow">
+              <div class="guessOrderInput" v-show="guessOrderShow">
+                <input type="number" style="background-color: #fff" :value="item.phone" placeholder="输入联系人" ref="phoneInput"  @blur="phoneValue(index)">
+                <appLicencePlate class="guessSelector" :plate-show="plateShow" v-model="carNum" @input="selectArr">
+                  <input type="text" readonly style="width: 100%;background-color: #fff" :value="item.plate" ref="plateInput" @blur="plateValue(index),plateShow==false" placeholder="输入车牌号">
+                </appLicencePlate>
               </div>
-              <p>
-              </p>
+              <div class="guessOrderNum" v-show="guessOrderShow">
+                <div class="">
+                  <p @click="guessNumEvent(indexs,index)" v-for="(indexs) in 8" :key="indexs" :class="{guessNumChoice: list[index].number === indexs}">{{indexs}}</p>
+                  <input type="number" maxlength="5" v-model="item.number" @input="guessIptEvent($event)" onkeyup="item.number=value.replace(/^(0+)|[^\d]+/g,'')">
+                </div>
+                <p>
+                </p>
+              </div>
+              <div class="guessOrderBottom" v-show="guessOrderShow" v-if="index == list.length-1">
+                <div class="guessOrderBtn" @click="add(index,item.plate)">添加</div>
+                <hr>
+              </div>
             </div>
           </div>
+
         </div>
         <div class="orderEdBtn" v-if="isOrderEd">已点餐</div>
         <div class="orderBtn" @click="orderMenuEvent" v-if="isOrderMenu">我要点餐</div>
@@ -51,17 +66,36 @@
       <div class="orderBtmTip">
         <p>注：最晚于 10：00 前完成点餐服务、逾期将点餐失败</p>
       </div>
-
+      <appToast type="text" text="联系人或车牌号必填其中之一" v-show="toast"></appToast>
     </div>
 </template>
 
 <script>
+  import appLicencePlate from '../common/appLicencePlate'
   import { appviewmixin } from '@/assetsApp/app_view.js'
+  import appToast from '../common/appToast'
+
   export default {
     name: 'm_orderSystemMenu',
     mixins: [appviewmixin],
+    components: {
+      appLicencePlate,
+      appToast
+    },
     data (){
       return{
+        toast:false,
+        plateShow:false,
+        list:[
+          {
+            phone:'',
+            plate:'',
+            number:'1'
+          },
+        ],
+        index:0,
+        value:'',
+        carNum:false,
         guessNum: 1,
         guessNumOn: 0,
         isAutoChecks: true,
@@ -73,20 +107,50 @@
         isOrderCon: true,
         isOrderImg: false,
         isMask: false,
-        isCancelCon: false
+        isCancelCon: false,
+
+        guessOrderShow:false,
+
       }
     },
     methods: {
+      phoneValue(index){
+        this.index = index
+        this.$nextTick(()=>{
+          this.list[index].phone = this.$refs.phoneInput[index].value
+        })
+      },
+      plateValue(index){
+        this.index = index
+      },
+      selectArr(value){
+        if(value==undefined){return}
+        if(typeof value=='object'){
+          this.list[this.index].plate = value.join('')
+        }else{
+          this.list[this.index].plate = value
+        }
+      },
+      cancel(index){
+        this.list.splice(index, 1)
+        console.log(this.list)
+      },
+      add(index,item){
+        this.list[index].plate = item
+        this.list.push({phone:'',plate:'',number:'1'})
+      },
       //返回我的审批页面
       backEvent () {
-        this.$router.push("/homeApp/m_myApprovalManager?isFinish=1&id=1")
+        this.$router.go(-1);
+        // this.$router.push("/homeApp/m_myApprovalManager?isFinish=1&id=1")
       },
       historyEvent(){
         this.$router.push("/homeApp/m_orderSystemHistory?isFinish=1&id=1")
       },
-      guessNumEvent(index){
-        this.guessNum = index + 1
-        this.guessNumOn = index
+      guessNumEvent(indexs,index){
+        this.guessNum = indexs + 1
+        this.guessNumOn = indexs
+        this.list[index].number = indexs
         this.isGuessChecks = true
       },
       guessIptEvent(event){
@@ -99,6 +163,7 @@
         }
       },
       autoOrderEvent(){
+        // this.$refs.guessOrderShow[index].display = 'none'
         // this.isAutoChecks = true
         // this.guessNumOn = 0
         // this.guessNum = '1'
@@ -106,15 +171,37 @@
         this.isAutoChecks = !this.isAutoChecks
 
       },
-      guessOrderEvent(){
+      guessOrderEvent(index){
+        // if( document.getElementsByClassName("guess"+index).css("display")==='none'){
+        //   alert()
+        // }
+          // if( document.getElementById("div").css("display")==='block')
+        // console.log(index,this.$refs.guessOrderShow[index].display)
+
         // this.isAutoChecks = false
+        // if(index!=='0'){
+        //   return
+        // }
         this.isGuessChecks = !this.isGuessChecks
         if(this.isGuessChecks === false){
+          this.guessOrderShow = !this.guessOrderShow
           this.guessNum = '1'
           this.guessNumOn = 0
+        }else{
+          this.guessOrderShow = !this.guessOrderShow
+          // console.log(this.isGuessChecks)
+
         }
       },
       orderMenuEvent(){
+        console.log(this.list[0].phone,this.list[0].plate)
+        if(this.list[0].phone==''&&this.list[0].plate==''){
+          this.toast = true
+          setTimeout(()=>{
+            this.toast = false
+          },2800)
+          return
+        }
         // this.isOrderTip = true
 
         /*
@@ -156,6 +243,7 @@
     },
     created () {
       this.$nextTick(()=>{
+        // this.guessOrderShow = false
       })
     }
   }
@@ -163,6 +251,77 @@
 
 <style scoped lang="less">
   @rem: 375/10rem;
+  .systemMenuIcon{
+    font-size: 18/@rem;
+    display: flex;
+    align-items: center;
+  }
+  .shade{
+    position: fixed;
+    width: 100%;
+    height: 30rem;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: black;
+    z-index: 1;
+    opacity: 0.6;
+  }
+  .guessSelector{
+    margin: 0;
+    width: 49%;
+
+    .guessInput{
+      width:100%;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+    }
+  }
+  .guessOrder{
+    .guessOrderInput{
+      margin: 0 50/@rem !important;
+      display: flex;
+      justify-content: space-around;
+      margin:auto;
+      input::-webkit-input-placeholder{
+        color: #bfbfbf;
+      }
+      input{
+        width: 48%;
+        height: 24.5/@rem;
+        text-indent: 12/@rem;
+        box-sizing: border-box;
+        font-size: 12/@rem;
+
+        border-radius: 4/@rem;
+        background-color: #f3f3f3;
+        border:1/@rem solid #bfbfbf;
+      }
+    }
+  }
+  .guessOrders{
+    padding: 0 12/@rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .guessOrderBottom{
+    flex: 1;
+    .guessOrderBtn{
+      margin: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius:8/@rem;
+      background: #f3f3f3;
+      margin-bottom: -16/@rem;
+      color:#49a9ea;
+      border:1/@rem solid #49a9ea;
+      width: 60/@rem;
+      font-size: 14/@rem;
+      height: 32.5/@rem;
+    }
+  }
   .history{
     position: absolute;
     font-size: 12/@rem;
@@ -185,6 +344,7 @@
     justify-content: space-between;
   }
   .guessOrder{
+
     div{
     display: flex;
     align-items: center;
@@ -206,6 +366,7 @@
     align-items: center;
   }
   .guessOrderNum{
+    display: none;
     margin: 20/@rem 44/@rem 0;
     div{
       display: flex;
@@ -253,7 +414,7 @@
     color: #fff;
     font-size: 16/@rem;
     border-radius: 8/@rem;
-    margin: 24/@rem 16/@rem 0;
+    margin: 46/@rem 16/@rem 0;
     padding: 12/@rem 0;
   }
   .orderEdBtn{
@@ -359,10 +520,9 @@
     }
   }
   .orderBtmTip{
-    position: absolute;
-    right: 0;
-    left: 0;
-    margin-top: 2.2rem;
+    margin-bottom: 30/@rem;
+
+    margin-top: 10/@rem;
     font-size: 14/@rem;
     color: #999;
     text-align: center;

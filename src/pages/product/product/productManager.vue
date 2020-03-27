@@ -70,7 +70,7 @@
         this.$dialog.OpenWindow({
           width: 950,
           height: 603,
-          url: '/selectModel?ownerID=62DB5123-6D8E-4CBD-A9C4-06A1B232784F',
+          url: '/selectProductModel?ownerID=62DB5123-6D8E-4CBD-A9C4-06A1B232784F',
           title: '选择商品信息',
           closeCallBack: (data) => {
             if (data) {

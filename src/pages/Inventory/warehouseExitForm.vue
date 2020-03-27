@@ -154,7 +154,7 @@
         this.$dialog.OpenWindow({
           width: 950,
           height: 603,
-          url: '/selectModel?ownerID=' + item.productID,
+          url: '/selectProductModel?ownerID=' + item.productID,
           title: '选择商品规格型号信息',
           closeCallBack: (data) => {
             if (data) {

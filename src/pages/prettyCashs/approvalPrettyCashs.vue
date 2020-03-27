@@ -32,6 +32,8 @@
         <div v-show="choose" class="buttonBody mptZero">
           <yhm-radiofilter  @initData="initChoose('isFinish')" title="完成状态" all="0" :content="isFinishPsd"></yhm-radiofilter>
           <yhm-radiofilter  @initData="initChoose('isTravel')" title="业务相关" :content="isTravelPsd"></yhm-radiofilter>
+          <yhm-radiofilter  @initData="initChoose('isTravel')" title="发票类型" :content="invoiceCategoryPsd"></yhm-radiofilter>
+
         </div>
       </template>
       <template #listHead>
@@ -43,6 +45,8 @@
         <yhm-managerth style="width: 120px;" title="申请金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="预计核销日期" value="estimateDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
+
+        <yhm-managerth style="width: 100px;" title="发票类型"></yhm-managerth>
 
         <yhm-managerth title="事由" value="subjectID"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="状态" value=""></yhm-managerth>
@@ -60,6 +64,9 @@
           <yhm-manager-td-center :value="item.day+'天'" v-if="item.day<=2" style="color:#2c920b;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else-if="item.day>2&&item.day<=5" style="color:#0511a5;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #f00;font-weight: bold"></yhm-manager-td-center>
+
+          <yhm-manager-td-psd :value="item.invoiceCategory" :list="invoiceCategoryList"></yhm-manager-td-psd>
+
           <yhm-manager-td :value="item.subject"></yhm-manager-td>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
@@ -104,10 +111,15 @@
           value: '',
           list: []
         },
+        invoiceCategoryPsd: {
+          value: '',
+          list: []
+        },
         payPlanNum: '',
         paymentNum: '',
         reimburseNum: '',
         purchaseNum: '',
+        invoiceCategoryList: []
       }
     },
     methods:{
@@ -216,7 +228,8 @@
         } else {
           params = {
             isFinish: this.isFinishPsd.value,
-            isTravel: this.isTravelPsd.value
+            isTravel: this.isTravelPsd.value,
+            invoiceCategory: this.invoiceCategoryPsd.value
           }
         }
         this.init({
@@ -228,6 +241,8 @@
           init:(data)=>{
             this.isFinishPsd = data.isFinishPsd
             this.isTravelPsd = data.isTravelPsd
+            this.invoiceCategoryPsd = data.invoiceCategoryPsd
+            this.invoiceCategoryList = data.invoiceCategoryPsd.list
           }
         })
         this.ajaxJson({

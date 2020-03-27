@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <div> <p>当前选中 <span>{{selectCount}}</span> 条, 共计 <span  v-html="getTxt(allMoney)"></span> 元 </p> </div>
+    <div> <p>当前选中 <span class="selectCount">{{selectCount}}</span> 条, 共计 <span  v-html="getTxt(allMoney)"></span> 元 </p> </div>
 
   </div>
 </template>
@@ -39,5 +39,9 @@
 <style scoped lang="less">
   .rgt{
     float: right;
+  }
+  .selectCount{
+    color: #f00;
+    font-size: 24px;
   }
 </style>

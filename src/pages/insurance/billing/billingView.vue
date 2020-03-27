@@ -18,9 +18,8 @@
     <div class="f_split"></div>
     <yhm-view-tab>
       <template #tab>
-        <yhm-view-tab-button :list="tabState" :index="0" @click="listDetail(true)">跟踪信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="0">保险信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1">赠送信息</yhm-view-tab-button>
-
       </template>
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
@@ -228,6 +227,9 @@
               this.isbusinessStart=true
             }else {
               this.isbusinessStart=false
+            }
+            if (data.submit==='0' ||data.submit==='1'){
+              this.isState=false
             }
           },
 

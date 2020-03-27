@@ -18,7 +18,7 @@
           <i class="noticeNum" v-if="prettyCashsNum!=0">{{prettyCashsNum}}</i>
         </router-link>
         <router-link class="menuTabDiv  " :to="{path:'/home/approvalInsuranceManager'}">保险审批
-          <!--          <i class="noticeNum" v-if="prettyCashsNum!=='0'">{{prettyCashsNum}}</i>-->
+                    <i class="noticeNum" v-if="insuranceNum!='0'">{{insuranceNum}}</i>
         </router-link>
       </template>
 
@@ -119,6 +119,7 @@
         reimburseNum: '',
         purchaseNum: '',
         prettyCashsNum:'',
+        insuranceNum:'',
 
         tableTip:false,         //记录表格是否显示
         tableTipControl:{},
@@ -185,6 +186,7 @@
             this.reimburseNum = data.reimbursements
             this.purchaseNum = data.purchase
             this.prettyCashsNum = data.prettyCashs
+            this.insuranceNum=data.insurance
           }
         })
 

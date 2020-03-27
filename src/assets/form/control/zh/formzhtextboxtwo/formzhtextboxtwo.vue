@@ -1,7 +1,7 @@
 <template>
   <div v-if="show" class="fc_main" v-validator="validatorEvent">
     <div class="fc_box">
-      <div class="fc_title">
+      <div class="fc_title" :style="{color: color}">
         <div>{{title}}</div>
         <div v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
@@ -128,6 +128,10 @@
       show: {
         type: Boolean,
         default: true
+      },
+      color: {
+        type: String,
+        default: '#333'
       }
     },
     methods:{

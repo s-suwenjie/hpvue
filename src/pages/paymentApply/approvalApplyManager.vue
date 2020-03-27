@@ -17,7 +17,7 @@
           <i class="noticeNum" v-if="prettyCashsNum!=0">{{prettyCashsNum}}</i>
         </router-link>
         <router-link class="menuTabDiv  " :to="{path:'/home/approvalInsuranceManager'}">保险审批
-          <!--          <i class="noticeNum" v-if="prettyCashsNum!=='0'">{{prettyCashsNum}}</i>-->
+                    <i class="noticeNum" v-if="insuranceNum!=='0'">{{insuranceNum}}</i>
         </router-link>
       </template>
 
@@ -75,12 +75,12 @@
           <yhm-manager-td-state :value="item.stateVal" @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button :tip-category="0"  @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" v-show="item.isPrint === '1' " :no-click="item.nature === '2'" @click="printFund(item)" value="打印单据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-show="item.isApproval === '2'" value="待上传发票"  :no-click="true" ></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.isApproval === '2'&&item.isFinish !== '1'" value="待上传发票"  :no-click="true" ></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '3'" value="查看发票"  @click="viewInvoice(item)"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '4'" value="支票入账"  @click="accEntry(item)" class="icon i-accEntry" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '4'" value="查看票样"  @click="viewCheck(item)" class="icon i-viewCheck" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '4'" value="支票作废"  @click="toVoidCheck(item)" class="icon i-toVoidCheck" color="#f00"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isChecks === '1'&&item.isApproval!=='4'" :no-click="item.isApproval==='4'" @click="selectChecksDetail(item)" value="支票填开" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isChecks === '1'&&item.isApproval!=='4'&&item.isApproval !== '2'&&item.isApproval !== '3'" :no-click="item.isApproval==='4'" @click="selectChecksDetail(item)" value="支票填开" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isPrint === '1' && item.isChecks !== '1' && item.isApproval!=='5' && item.isApproval!=='6'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval==='6'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
 <!--            <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isPrint === '1'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>-->
@@ -147,6 +147,7 @@
         reimburseNum: '',
         purchaseNum: '',
         prettyCashsNum:'',
+        insuranceNum:'',
 
         tableTip: false,
         tableTipControl: {},
@@ -536,6 +537,7 @@
           this.reimburseNum = data.reimbursements
           this.purchaseNum = data.purchase
           this.prettyCashsNum = data.prettyCashs
+          this.insuranceNum=data.insurance
         }
       })
     }

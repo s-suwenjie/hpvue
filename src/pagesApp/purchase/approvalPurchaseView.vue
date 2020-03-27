@@ -4,8 +4,8 @@
       <yhm-app-structure-top-tap-menu @call="backEvent" title="返回"></yhm-app-structure-top-tap-menu>
       <yhm-app-structure-top-tap-menu :select="true" title="采购信息明细"></yhm-app-structure-top-tap-menu>
     </yhm-app-structure-top-tap>
-
-    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish">
+    <div style="overflow: auto;">
+<!--    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish">-->
       <yhm-app-structure-menu-group title="基本信息">
         <yhm-app-view-control title="申请人" style="white-space: nowrap;" :content="person"></yhm-app-view-control>
         <yhm-app-view-control title="申请日期" :content="workDate" type="date"></yhm-app-view-control>
@@ -27,8 +27,9 @@
           <yhm-app-view-control title="建议品牌" :content="item.remark"></yhm-app-view-control>
         </yhm-app-view-child>
       </yhm-app-structure-menu-group>
-    </yhm-app-scroll>
-
+      <div style="width: 100%;height: 0.2rem;"></div>
+<!--    </yhm-app-scroll>-->
+    </div>
     <yhm-app-form-operate v-if="getShowOperate">
       <yhm-app-button @call="rejectEvent" value="驳回" category="ten"></yhm-app-button>
       <yhm-app-button @call="adoptEvent" value="通过" category="two"></yhm-app-button>

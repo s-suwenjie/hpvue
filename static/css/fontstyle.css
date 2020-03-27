@@ -750,3 +750,9 @@
   font-family: 'icomoon' !important;
   content: "\e90c";
 }
+
+/*同步*/
+.i-synchronize:before {
+  font-family: 'icomoon' !important;
+  content: "\e995";
+}

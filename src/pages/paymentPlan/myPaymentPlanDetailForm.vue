@@ -498,7 +498,7 @@ export default {
         width: 950,
         height: 604,
         url: '/selectDic?name=' + name,
-        title: '选择理由',
+        title: '选择事由',
         closeCallBack: (data) => {
           let dicName
           if (data) {

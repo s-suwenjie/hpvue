@@ -4,10 +4,10 @@
       <template #title>报销明细</template>
       <template #body>
         <yhm-view-control title="申请人" :content="name"></yhm-view-control>
-        <yhm-view-control title="申请日期" :content="workDate"></yhm-view-control>
+        <yhm-view-control title="申请日期" :content="workDate" type="date"></yhm-view-control>
         <yhm-view-control title="报销编号" :content="code"></yhm-view-control>
         <yhm-view-control title="是否核销" :content="isPrettyCashOff" :psd="isPrettyCashOffList"></yhm-view-control>
-        <yhm-view-control  title="核销金额" v-if="noPrettyCashMoney" :content="prettyCashMoney"></yhm-view-control>
+        <yhm-view-control  title="核销金额" v-if="noPrettyCashMoney" :content="prettyCashMoney" type="money"></yhm-view-control>
       </template>
     </yhm-view-body>
     <div class="f_split"></div>

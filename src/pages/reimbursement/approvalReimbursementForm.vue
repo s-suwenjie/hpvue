@@ -4,10 +4,10 @@
       <template #title>报销明细</template>
       <template #body>
         <yhm-view-control category="5" title="申请人" :content="name"></yhm-view-control>
-        <yhm-view-control  title="交易日期" :content="workDate"></yhm-view-control>
+        <yhm-view-control  title="交易日期" :content="workDate" type="date"></yhm-view-control>
         <yhm-view-control  title="报销编号" :content="code"></yhm-view-control>
         <yhm-view-control title="是否核销" :content="isPrettyCashOff" :psd="isPrettyCashOffList"></yhm-view-control>
-        <yhm-view-control  title="核销金额" v-if="noPrettyCashMoney" :content="prettyCashMoney"></yhm-view-control>
+        <yhm-view-control  title="核销金额" v-if="noPrettyCashMoney" :content="prettyCashMoney" type="money"></yhm-view-control>
       </template>
     </yhm-view-body>
     <div class="f_split"></div>
@@ -110,8 +110,13 @@
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" v-show="handleButton" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate" >
         <template #btn >
-          <yhm-commonbutton value="通过" :flicker="true" @call="tableAdoptEvent()" icon="i-btm-applicationSm" class="btnIcon"></yhm-commonbutton>
-          <yhm-commonbutton value="驳回" @call="tableRejectEvent()" icon="i-btn-turnDown" class="btnIcon btnIconColor"></yhm-commonbutton>
+          <yhm-commonbutton v-show="state !== '9'" value="通过" :flicker="true" @call="tableAdoptEvent()" icon="i-btm-applicationSm" class="btnIcon"></yhm-commonbutton>
+          <yhm-commonbutton v-show="state !== '9'" value="驳回" @call="tableRejectEvent()" icon="i-btn-turnDown" class="btnIcon btnIconColor"></yhm-commonbutton>
+          <yhm-commonbutton v-show="isChecks1 === '1'" @call="refundMoney" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
+          <yhm-commonbutton v-show="isChecks2 === '1'" @call="repayment()" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-commonbutton>
+          <yhm-commonbutton v-show="isChecks3 === '1'" @call="approFund()" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
+          <yhm-commonbutton v-show="isChecks1 === '3'&&isChecks2 === '3'&&isChecks3 === '3'&&isFinish === '0'" :no-click="item.isApproval==='4'" @call="writeOff()" value="确认核销" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
+          <yhm-commonbutton v-show="state === '4'&&isChecks1 === '0'&&isChecks2 === '0'&&isChecks3 === '0'" @call="approFund()" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
         </template>
       </yhm-formoperate>
   </div>
@@ -150,9 +155,88 @@
 
         noBankDetail:false,
         bankDetail:[],
+        item: '',
+
+        state:'',
+        isChecks1:'',
+        isChecks2:'',
+        isChecks3:'',
+        prettyCashsID:'',
       }
     },
     methods:{
+      approFund(){
+        if (this.isPrettyCashOff === '0'){
+          this.$dialog.OpenWindow({
+            width: '650',
+            height: '300',
+            title: '拨付资金',
+            url: '/approvalReimbursementFund?id='+this.id,
+            closeCallBack: (data)=>{
+              if(data){
+                this.initData()
+              }
+            }
+          })
+        }else{
+          //备用金拨付资金
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '740',
+            url: '/bankDetailForm?ownerID=' + this.id + '&bankDetailType=6&directionBefore=1',
+            title: '拨付资金',
+            closeCallBack: (data) => {
+              if(data){
+                this.initData()
+              }
+            }
+          })
+        }
+      },
+      writeOff(){
+        let params={
+          id:this.id,
+          prettyCashsID:this.prettyCashsID
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/writeOffPrettyCashMoney',
+          data: params,
+          call: (data) => {
+            this.$dialog.alert({
+              tipValue: data.message,
+              closeCallBack: () => {
+                this.initData()
+              }
+            })
+          }
+        })
+      },
+      refundMoney(){
+        alert(this.prettyCashsID)
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          title: '备用金退款',
+          url: '/bankDetailForm?ownerID=' + this.prettyCashsID +'&bankDetailType=7&directionBefore=1',
+          closeCallBack: (data)=>{
+            this.initData()
+          }
+        })
+      },
+      /* 确认还款 */
+      repayment(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '740',
+          title: '还款',
+          url: '/bankDetailForm?ownerID=' + this.id + '&bankDetailType=3',
+          closeCallBack: (data) => {
+            if(data){
+              this.initData()
+            }
+          }
+        })
+      },
       prettyCashsView(item){
         let url='/prettyCashsView?id='+item.prettyCashsID
         this.$dialog.OpenWindow({
@@ -162,7 +246,7 @@
           url:url,
           closeCallBack: (data)=>{
             if(data){
-              this.initPageData(false)
+              this.initData()
             }
           }
         })
@@ -364,6 +448,12 @@
             if(this.bankDetail.length>0){
               this.noBankDetail=true
             }
+
+            this.state = data.state
+            this.isChecks1 = data.isChecks1
+            this.isChecks2 = data.isChecks2
+            this.isChecks3 = data.isChecks3
+            this.prettyCashsID = data.prettyCashsID
           },
           add: (data) => {
             /* 需要添加的数据 */

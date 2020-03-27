@@ -22,8 +22,8 @@
         <yhm-form-date title="交强险" subtitle="结束日期" :min="forceStartDate"  v-if="isforceStart" :value="forceEndDate" id="forceEndDate " position="u"  rule="R0000"></yhm-form-date>
         <yhm-form-text placeholder="" v-if="isforceStart" title="交强险金额" subtitle="" @input="isaMoney" :value="forceMoney" id="forceMoney" ></yhm-form-text>
         <yhm-form-text placeholder="" v-if="isvehicle" title="车船税金额" subtitle="" @input="isaMoney" :value="vehicleMoney" id="vehicleMoney" ></yhm-form-text>
-        <yhm-form-date title="商业险" subtitle="开始日期" @call="businessDate" v-if="isbusinessStart"  :value="businessStartDate" id="businessStartDate " position="t"  rule="R0000"></yhm-form-date>
-        <yhm-form-date title="商业险" subtitle="结束日期" :min="businessStartDate" v-if="isbusinessStart"  :value="businessEndDate" id="businessEndDate " position="t"  rule="R0000"></yhm-form-date>
+        <yhm-form-date title="商业险" subtitle="开始日期" @call="businessDate" v-if="isbusinessStart"  :value="businessStartDate" id="businessStartDate " position="u"  rule="R0000"></yhm-form-date>
+        <yhm-form-date title="商业险" subtitle="结束日期" :min="businessStartDate" v-if="isbusinessStart"  :value="businessEndDate" id="businessEndDate " position="u"  rule="R0000"></yhm-form-date>
         <yhm-form-radio title="投保公司" subtitle=""  width="1" :select-list="insuredUnitList" :value="insuredUnit" id="insuredUnit"></yhm-form-radio>
 
         <yhm-form-select-insurance  title="商业险种" :is-content="true" v-if="isbusinessStart"
@@ -293,6 +293,7 @@
           this.receivedMoney=''
         }
         if (a.indexOf("2") != -1){
+          this.isTotal='0'
           this.isbusinessStart=true
           this.cash='0'
           this.isCashObject()
@@ -414,7 +415,7 @@
             tipValue: '因为优惠点数超出保险公司提供的点数、所以此条数据需要经过领导审批?',
             btnValueOk: '确定',
             okCallBack: ()=>{
-              if (this.validator()) {
+              if (true) {
                 let params = {
                   id: this.id,
                   process:this.hide,
@@ -460,9 +461,6 @@
                   glass:this.glass,
                   discountList: this.discountList
                 }
-
-
-
                 this.ajaxJson({
                   url: '/Insurance/preserveBilling',
                   data: params,
@@ -533,6 +531,7 @@
               glass:this.glass,
               discountList: this.discountList
             }
+
             this.ajaxJson({
               url: '/Insurance/preserveBilling',
               data: params,
@@ -569,7 +568,7 @@
               if (this.validator()) {
                 let params = {
                   id: this.id,
-                  process:this.hide,
+                  process:'1',
                   plate:this.plate,
                   plateID:this.plateID,
                   insuredDate:this.insuredDate,
@@ -612,9 +611,6 @@
                   glass:this.glass,
                   discountList: this.discountList
                 }
-
-
-
                 this.ajaxJson({
                   url: '/Insurance/saveBilling',
                   data: params,
@@ -639,10 +635,10 @@
             }
           })
         }else{
-          if (this.validator()) {
+          if (this.validator()) {  //不需要审批
             let params = {
               id: this.id,
-              process:this.hide,
+              process:'0',
               plate:this.plate,
               plateID:this.plateID,
               insuredDate:this.insuredDate,

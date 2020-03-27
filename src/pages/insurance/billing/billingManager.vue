@@ -10,8 +10,10 @@
         <yhm-table-tip :show="tableTip" :content="tableTipInfo" :column="tableTipColumnInfo" :mouse-control="tableTipControl"></yhm-table-tip>
         <yhm-commonbutton  value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
+        <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData(false)"></yhm-managersearch>
       </template>
       <!--筛选区-->
+
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
           <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('insuredUnit')" title=" 保险公司" :content="listInsuredUnit"></yhm-radiofilter>
@@ -46,8 +48,8 @@
           <yhm-manager-td-date :value="item.insuredDate"  @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-date>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
-          <yhm-manager-td-rgt :value="item.premiumsTotal"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.receivedMoney"></yhm-manager-td-rgt>
+          <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
           <yhm-manager-td :value="item.status===''?item.causeList[0].insuranceFormulatorName:'-----'"></yhm-manager-td>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
@@ -94,7 +96,6 @@
         ],
         tableTipInfo:[],
 
-
       }
     },
     methods:{
@@ -107,6 +108,7 @@
            okCallBack: (data) => {
              let params = {
                id: item.id,
+               process:item.process,
              }
              this.ajaxJson({
                url: '/Insurance/submitBilling',

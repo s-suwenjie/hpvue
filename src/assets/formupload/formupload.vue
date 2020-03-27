@@ -34,6 +34,7 @@
 
 <script>
   import {guid,accAdd,accMul,formatTime} from '@/assets/common.js'
+  // import { photoCompress , getImageBase64 } from '../zipImg.js'
   export default {
     name: 'yhm-formupload',
     inject: ["p____page"],
@@ -192,7 +193,7 @@
           storeName:message[2],
           suffix:message[0],
           image:img,
-          isEdit:"0"
+          isEdit:"0",
         })
         if(img === '1'){
           this.imageArr.push({

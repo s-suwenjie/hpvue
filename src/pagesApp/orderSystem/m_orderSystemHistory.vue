@@ -1,6 +1,5 @@
 <template>
   <div class="">
-
     <yhm-app-structure-top-tap>
       <yhm-app-structure-top-tap-menu @call="backEvent" title="返回订餐"></yhm-app-structure-top-tap-menu>
       <yhm-app-structure-top-tap-menu :select="true" title="历史记录"></yhm-app-structure-top-tap-menu>
@@ -9,10 +8,9 @@
         <div class="calendar">
           <div class="calendarTop">
             <div class="calendarBtnLft" @click="prevMonthEvent">上一月</div>
+<!--            <yhm-app-form-date-box title="" :value="calendarIpt" id="calendarIpt" type="month"></yhm-app-form-date-box>-->
 
-            <yhm-app-form-date-box title="" :value="calendarIpt" id="calendarIpt" type="month"></yhm-app-form-date-box>
-
-<!--            <input type="text" readonly class="calendarIpt" v-model="calendarIpt">-->
+            <input type="text" @click="appTime()" readonly class="calendarIpt" v-model="calendarIpt">
 
 
             <div class="calendarBtnRgt" @click="nextMonthEvent">下一月</div>
@@ -53,17 +51,23 @@
           {{item.year}} {{item.time}} {{item.category}}
         </div>
       </div>
+    <appTimeSelector :appTimeShow.sync="appTimeShow" @timeChange="changeEvent"></appTimeSelector>
   </div>
 </template>
 
 <script>
   import { appviewmixin } from '@/assetsApp/app_view.js'
   import { accAdd } from '../../assets/common'
+  import appTimeSelector from '../common/appTimeSelector'
   export default {
     name: 'm_orderSystemHistory',
     mixins: [appviewmixin],
+    components:{
+      appTimeSelector
+    },
     data(){
       return{
+        appTimeShow:false,
         calendarIpt: '',
         month: new Date().getMonth() + 1,
         year: new Date().getFullYear(),
@@ -445,7 +449,16 @@
       }
     },
     methods: {
+      appTime(){
+        this.appTimeShow = !this.appTimeShow
+        console.log(this.appTimeShow)
+      },
+      changeEvent(value){
+        this.calendarIpt = value
+        console.log('1',value)
+      },
       backEvent () {
+        // this.$router.go(-1);
         this.$router.push("/homeApp/m_orderSystemMenu")
       },
       /* 上一个月 */
@@ -473,6 +486,20 @@
         this.calendarIpt = newYear + '-' + (newMonth<10?'0':'') + newMonth
       },
     },
+    watch: {
+      'search.input': {
+        handler (value) {
+          if (this.timer) {
+            clearTimeout(this.timer)
+          }
+          this.timer = setTimeout(() => {
+            this.getList();
+          }, 1000)
+
+        },
+        deep: true
+      }
+    },
     created () {
       this.calendarIpt = this.year +'-'+ (this.month<10?'0':'') + this.month;
       document.querySelector('body').setAttribute('style', 'background-color:#eee;');
@@ -483,6 +510,24 @@
 
 <style scoped lang="less">
   @rem: 375/10rem;
+  div#previewImg{
+    background: #eeeeee;
+    width: 400px;
+    height: 300px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+  }
+  #previewImg img{
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
+  #upload{
+    margin-bottom: 20px;
+  }
+
+
   .calendarTop{
     margin-top: 12/@rem;
     display: flex;

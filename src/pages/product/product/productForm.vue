@@ -4,10 +4,6 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-text title="商品名称" @repeatverify="nameVerifyEvent" ref="name" :value="name" id="name"></yhm-form-text>
-        <yhm-form-select title="计量单位" :value="unit" id="unit" @clear="clearUnit" @click="selectUnit"></yhm-form-select>
-        <yhm-form-text title="商品名称" :value="name" id="name"></yhm-form-text>
-        <yhm-form-select title="计量单位" :value="unit" id="unit" @clear="clearUnit" @click="selectUnit"></yhm-form-select>
-        <yhm-form-text title="商品名称" :value="name" id="name" rule="R0000"></yhm-form-text>
         <yhm-form-select title="计量单位" :value="unit" id="unit" @clear="clearUnit" @click="selectUnit" rule="R0000"></yhm-form-select>
       </template>
     </yhm-formbody>
@@ -180,7 +176,7 @@
             url: '/Basic/saveProduct',
             data: params,
             call: (data) => {
-              if (data.type == 0) {
+              if (data.type === 0) {
                 this.$dialog.setReturnValue(this.id)
                 this.$dialog.alert({
                   tipValue: data.message,

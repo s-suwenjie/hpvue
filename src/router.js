@@ -135,6 +135,7 @@ export default new Router({
     { path: '/selectPage', name: 'selectPage.vue',component: ()=> import('./test/selectPage') ,meta: {title: '页面测试'}},
     { path: '/selectProduct', name: 'selectProduct.vue',component: ()=> import('./pages/product/product/selectProduct') },
     { path: '/selectModel', name: 'selectModel.vue',component: ()=> import('./pages/selects/selectModel') },
+    { path: '/selectProductModel', name: 'selectProductModel.vue',component: ()=> import('./pages/product/model/selectProductModel') },
     { path: '/selectFormPlate', name: 'selectFormPlate.vue',component: ()=> import('./pages/insurance/billing/selectFormPlate') },
 
 
@@ -297,7 +298,7 @@ export default new Router({
 
     { path: '/cashierView', name: 'cashierView.vue',component: ()=> import('./pages/cashier/cashierView') },
     { path: '/cashierBankDetailForm', name: 'cashierBankDetailForm.vue',component: ()=> import('./pages/cashier/cashierBankDetailForm') },
-
+    { path: '/cashierBankDetailPrivateForm', name: 'cashierBankDetailPrivateForm.vue', component: ()=> import('./pages/cashier/cashierBankDetailPrivateForm') },
     { path: '/trackForm', name: 'trackForm.vue',component: ()=> import('./pages/basic/track/trackForm') },
     { path: '/trackView', name: 'trackView.vue',component: ()=> import('./pages/basic/track/trackView') },
     { path: '/trackFormView', name: 'trackFormView.vue',component: ()=> import('./pages/basic/track/trackFormView') },
@@ -346,6 +347,7 @@ export default new Router({
 
         { path: '/homeApp/m_orderSystemMenu', name: 'm_orderSystemMenu',component:()=> import('./pagesApp/orderSystem/m_orderSystemMenu'), meta: {title: '点餐系统'}},
         { path: '/homeApp/m_orderSystemHistory', name: 'm_orderSystemHistory',component:()=> import('./pagesApp/orderSystem/m_orderSystemHistory'), meta: {title: '历史记录'}},
+        { path: '/homeApp/m_orderStatistics', name: 'm_orderStatistics',component:()=> import('./pagesApp/orderSystem/m_orderStatistics'), meta: {title: '订餐统计'}},
 
         { path: '/homeApp/m_rejectForm', name: 'm_rejectForm',component: ()=> import('./pagesApp/common/rejectForm.vue') ,meta: {title: '驳回理由'}},
 

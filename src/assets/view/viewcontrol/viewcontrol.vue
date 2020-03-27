@@ -5,6 +5,11 @@
       <div v-if="getFiles" class="v_content">
         <yhm-view-show-files v-for="(item,index) in content" :key="index" :content="content" :item="item"></yhm-view-show-files>
       </div>
+
+      <div v-if="getsmFiles" class="v_content">
+        <div class="v_f_show" @click="imgClickEvent"><span class="mr3b" :class="getType"></span> <span v-html="getSmShow"></span> </div>
+      </div>
+
       <div v-if="getTextMoney" class="v_content">
         <yhm-view-text-money v-for="(item,index) in content" :key="index" :item="item"></yhm-view-text-money>
       </div>
@@ -49,9 +54,18 @@
       color:{
         type:String,
         default:'#333'
+      },
+      tag: {
+        type: String,
+        default: ''
       }
     },
     methods : {
+      imgClickEvent(){
+        let index = this.getImages.indexOf('/UploadFile/' + this.tag + '/' + this.content)
+
+        this.$dialog.preview(this.getImages,index + 1)
+      },
       clickEvent(){
         this.$emit("click")
       },
@@ -65,6 +79,22 @@
       }
     },
     computed:{
+
+      getImages(){
+        let imgArr = []
+        imgArr.push("/UploadFile/" + this.tag + '/' + this.content)
+        return imgArr
+      },
+      getType(){
+        return 'i-btn-image'
+      },
+
+      getSmShow(){
+        let fir = this.content.indexOf('_') + 1;
+        let last = this.content.indexOf('.');
+
+        return this.content.substring(fir, last)
+      },
       getMoney(){
         return this.type === 'money'
       },
@@ -73,6 +103,9 @@
       },
       getFiles(){
         return this.type === 'files'
+      },
+      getsmFiles(){
+        return this.type === 'smfiles'
       },
       getTextMoney(){
         return this.type === 'text-money'

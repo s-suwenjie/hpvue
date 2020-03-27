@@ -52,9 +52,9 @@
       <template #title></template>
       <template #control>
 <!--        <yhm-form-date title="发生日期" :value="workDate" :min="minDate" :max="maxWorkDate" id="workDate" position="b" rule="R0000"></yhm-form-date>-->
-        <yhm-form-zh-text-two :show="!noInvoice" :no-edit="true" tip-before="money" tip-after="value" :before="invoiceMoney" before-id="invoiceMoney" :after="invoiceCount" after-id="invoiceCount" title="发票金额" before-icon="rmb" after-title="发票张数"></yhm-form-zh-text-two>
-        <yhm-form-text ref="actualMoney" :less-equal="invoiceMoney" less-equal-message="实际金额必须小于等于发票金额" title="实际金额" :no-edit=isActualMoney tip="money" before-icon="rmb" :value="actualMoney" id="actualMoney" rule="R3000"></yhm-form-text>
-
+        <yhm-form-zh-text-two :show="!noInvoice" color="#fd6802" :no-edit="true" tip-before="money" tip-after="value" :before="invoiceMoney" before-id="invoiceMoney" :after="invoiceCount" after-id="invoiceCount" title="发票金额" before-icon="rmb" after-title="发票张数"></yhm-form-zh-text-two>
+        <yhm-form-text ref="actualMoney" color="#0e9d51" :less-equal="invoiceMoney" less-equal-message="实际金额必须小于等于发票金额" title="实际金额" :no-edit=isActualMoney tip="money" before-icon="rmb" :value="actualMoney" id="actualMoney" rule="R3000"></yhm-form-text>
+<!--        0e9d51-->
         <yhm-form-date ref="startDate" placeholder="*选填" placeholder-color="#A35227" color="#A35227" :max="endDate" title="费用" subtitle="开始日期" :value="startDate" id="startDate" position="u"></yhm-form-date>
         <yhm-form-date ref="endDate" placeholder="*选填" placeholder-color="#A35227" color="#A35227" :min="startDate" title="费用" subtitle="结束日期" :value="endDate" id="endDate" position="u"></yhm-form-date>
         <yhm-form-zh-select-more @click="selectDeparment" title="部门分配" :total="actualMoney" :value="branchList" id="branchList" rule="#" rule-item="R3000"></yhm-form-zh-select-more>
@@ -140,7 +140,7 @@
         fileList: [],
         noInvoiceReason: '',
         isNoInvoiceReason: false,
-        isNoInvoiceReasonList: false
+        isNoInvoiceReasonList: false,
       }
     },
 
@@ -309,6 +309,35 @@
       },
       //发票类型切换事件
       invoiceTypeEvent(old){
+
+      if(this.isPrettyCashOff === '1'){
+        if(this.isSelectPrettyCash === '1'){
+          if(this.invoiceCategory !== '2'){
+            this.$dialog.alert({
+              width: '280',
+              tipValue: '当前备用金为无票！！！',
+              alertImg: 'error',
+              closeCallBack: ()=>{
+                this.invoiceCategory = '2'
+              }
+            })
+            return
+          }
+        }else{
+          if(this.invoiceCategory === '2'){
+            this.$dialog.alert({
+              width: '280',
+              tipValue: '当前备用金有发票！！！',
+              closeCallBack: () => {
+                this.invoiceCategory = old
+                this.invoiceTypeEvent();
+              }
+            })
+          }
+        }
+      }
+
+
         if(this.invoiceCategory === '0' || this.invoiceCategory === '1'){
           this.addInvoiceShow = true
           this.electronicInvoiceBtn = false
@@ -824,6 +853,9 @@
 
       //初始化页面传递参数
       this.setQuery2Value('isPrettyCashOff')
+      this.setQuery2Value('isSelectPrettyCash')
+      // this.setQuery2Value('subject')
+      this.setQuery2Value('subjectID')
       this.setQuery2Value('ownerID')
       this.setQuery2Value('relevanceID')
       this.setQuery2Value('relevanceType')
@@ -831,6 +863,24 @@
       this.setQuery2Value('parentWorkDate')
       this.setQuery2Value('ID')
       this.setQuery2Value('edit')
+
+
+      if(this.subjectID){
+
+        let params = {
+          id: this.subjectID
+        }
+        this.init({
+          url: '/Com/getDicVueByID',
+          data: params,
+          all: (data)=>{
+            this.subjectID = data.id
+            this.subject = data.value2
+          }
+        })
+      }
+
+
 
       /* 限定开票日期 */
       this.initMaxWorkDate()
@@ -853,7 +903,7 @@
         url: '/personOffice/initReimbursementDetailForm',
         data:params,
         all: (data) =>{
-          this.invoiceCategory = data.invoiceCategoryPsd.value
+          // this.invoiceCategory = data.invoiceCategoryPsd.value
           this.invoiceCategoryList = data.invoiceCategoryPsd.list
           this.type = data.typePsd.value
           this.typeList = data.typePsd.list
@@ -861,9 +911,9 @@
           this.listCategoryList = data.listCategoryPsd.list
           this.unitID = data.unitID
           this.minDate = data.minDate
-          if(this.isPrettyCashOff === '1'){
-            this.isPrettyMoneyCash = true
-          }
+          // if(this.isPrettyCashOff === '1'){
+          //   this.isPrettyMoneyCash = true
+          // }
 
         },
         add: (data) => {
@@ -925,6 +975,14 @@
 
         }
       })
+
+      if(this.isPrettyCashOff === '0' || this.isSelectPrettyCash === '0'){
+        this.invoiceCategory = '0'
+      }else{
+        this.invoiceCategory = '2'
+        this.invoiceTypeEvent();
+        this.invoiceDetails = []
+      }
 
 
     },

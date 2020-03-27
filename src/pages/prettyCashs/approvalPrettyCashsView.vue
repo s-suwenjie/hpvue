@@ -5,6 +5,7 @@
       <template #body>
         <yhm-view-control title="所属单位" :content="unit"></yhm-view-control>
         <yhm-view-control title="申请人员" :content="person"></yhm-view-control>
+        <yhm-view-control title="发票类型" :content="invoiceCategory" :psd="invoiceCategoryList"></yhm-view-control>
         <yhm-view-control type="date" title="申请日期" :content="workDate"></yhm-view-control>
         <yhm-view-control title="业务相关" :psd="isTravelList" :content="isTravel"></yhm-view-control>
         <yhm-view-control type="money" title="申请金额" :content="money"></yhm-view-control>
@@ -12,6 +13,7 @@
         <yhm-view-control title="事由" :content="subject"></yhm-view-control>
         <yhm-view-control title="预计核销日期" type="date"  :content="estimateDate"></yhm-view-control>
         <yhm-view-control title="备注" :content="remark" v-if="remark!==''"></yhm-view-control>
+        <yhm-view-control title="文件" :content="list" type="files" v-if="list.length !== 0"></yhm-view-control>
       </template>
     </yhm-view-body>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -47,7 +49,10 @@
         state:'',
         isApproval:'',
         approval:'',
-        estimateDate: ''
+        estimateDate: '',
+        list: [],
+        invoiceCategory: '',
+        invoiceCategoryList: [],
       }
     },
     methods:{
@@ -60,7 +65,10 @@
             title: '拨付资金',
             url: '/bankDetailForm?ownerID=' + this.id +'&bankDetailType=' + '5' + '&directionBefore=1',
             closeCallBack: (data)=>{
-              this.initPageData(false)
+
+              if(data){
+                this.initData()
+              }
             }
           })
         }else{
@@ -140,6 +148,7 @@
             this.isTravelList=data.isTravelPsd.list
             this.unit = data.unit
             this.unitID=data.unitID
+            this.invoiceCategoryList = data.invoiceCategoryPsd.list
           },
           add: (data)=>{
 
@@ -155,6 +164,8 @@
             this.remark=data.remark
             this.state=data.state
             this.estimateDate = data.estimateDate
+            this.list = data.list
+            this.invoiceCategory = data.invoiceCategory
           }
         })
       }

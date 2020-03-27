@@ -224,6 +224,7 @@
             this.otherID = data.otherID
             this.other = data.other
 
+
             this.otherOld = data.other
             this.otherIDOld = data.otherID
             if(this.category==='1'){
@@ -236,6 +237,7 @@
               this.switchSownerSys()
               this.isThisUnit = true
               this.isMoney = '1'
+              this.useRemark=data.useRemark
             }
           },
             add: (data)=>{

@@ -43,6 +43,7 @@
     },
     methods:{
       clickEvent(){
+        alert()
         setTimeout(()=>{
           this.shade = !this.shade
         },2000)
@@ -51,6 +52,17 @@
       //     this.$emit('call')
       //   })
       }
+    },
+    watch:{
+      // shade(val,newval){
+      //   alert()
+      //   if(newval==true){
+      //     setTimeout(()=>{
+      //       this.shade = !this.shade
+      //     },20)
+      //   }
+      //
+      // }
     }
   }
 </script>

@@ -16,7 +16,7 @@
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
 
-        <yhm-commonbutton value="打开选中信息" @click="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+        <yhm-commonbutton value="打开选中信息" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="状态" :content="listState"></yhm-radiofilter>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
       </template>
@@ -33,7 +33,7 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="申请日期" value="lastDate"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="申请日期" value="workDate"></yhm-managerth>
         <yhm-managerth style="width: 90px" title="报销方式" value="isPrettyCashOff"></yhm-managerth>
         <yhm-managerth title="事由"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="报销金额" value="money"></yhm-managerth>
@@ -299,7 +299,14 @@
             }
           })
         }else{
-          alert("备用金！！")
+          this.$dialog.OpenWindow({
+            width: '846',
+            height: '614',
+            title: '备用金报销单打印信息',
+            url: '/approvalReimbursementPrintBYJ?fundID=' + item.id,
+            closeCallBack: () => {
+            }
+          })
         }
 
       },
@@ -321,7 +328,7 @@
         if(item.state==='0'&&item.isFinish==='0'){
           this.$dialog.OpenWindow({
             width: 1050,
-            height: 700,
+            height: 770,
             url:'/reimbursementForm?id=' + item.id,
             title:'查看报销信息',
             closeCallBack:(data) =>{

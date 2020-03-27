@@ -75,11 +75,12 @@
             <yhm-manager-td-operate-button v-show="item.category === '4'&&item.isChecks1 === '0'&&item.isChecks2 === '0'&&item.isChecks3 === '0'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.state === '-1' && item.isFinish === '0' && item.isPrint === '1'" @click="repayment(item)" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="(item.isApproval !== '0' || item.isPrint !== '1') && item.isPrint === '0'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-show="(item.isApproval === '0' && item.isPrint === '1') || item.isPrint === '0'" :no-click="item.isApproval!=='0' || item.okSingle !== '0'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="(item.isApproval === '0' && item.isPrint === '1' && ((item.isChecks1!=='2'&&item.isChecks2!=='2'&&item.isChecks3!=='2')||item.PrettyCashsID ==='')) || item.isPrint === '0'" :no-click="item.isApproval!=='0' || item.okSingle !== '0'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
 
             <yhm-manager-td-operate-button v-show="item.isChecks1 === '1'" :no-click="item.isApproval==='4'" @click="refundMoney(item)" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isChecks2 === '1'" :no-click="item.isApproval==='4'" @click="repayment(item)" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isChecks3 === '1'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.isChecks1 === '3'&&item.isChecks2 === '3'&&item.isChecks3 === '3'&&item.isFinish === '0'" :no-click="item.isApproval==='4'" @click="writeOff(item)" value="确认核销" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -127,9 +128,29 @@
           {width:'100',title:'状态',category:'',key:'stateVal'}
         ],
         tableTipInfo:[],
+
+        isPrettyCashOff: true
       }
     },
     methods: {
+      writeOff(item){
+        let params={
+          id:item.id,
+          prettyCashsID:item.prettyCashsID
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/writeOffPrettyCashMoney',
+          data: params,
+          call: (data) => {
+            this.$dialog.alert({
+              tipValue: data.message,
+              closeCallBack: () => {
+                this.initPageData(false)
+              }
+            })
+          }
+        })
+      },
       refundMoney(item){
         this.$dialog.OpenWindow({
           width: '1050',

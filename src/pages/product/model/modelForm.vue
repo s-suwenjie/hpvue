@@ -154,12 +154,12 @@
             url: '/Basic/saveModel',
             data: params,
             call: (data) => {
-              if (data.type == 0) {
+              if (data.type === 0) {
                 this.$dialog.setReturnValue(this.id)
                 this.$dialog.alert({
                   tipValue: data.message,
                   closeCallBack: () => {
-
+                    this.$dialog.close()
                   }
                 })
               }

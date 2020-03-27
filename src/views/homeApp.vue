@@ -7,6 +7,7 @@
 <script>
   import { isLogin } from '@/assetsApp/app_login.js'
   import '../assets/fontSize'
+  import 'vant/lib/index.css';
   export default {
 
     name: 'homeApp',

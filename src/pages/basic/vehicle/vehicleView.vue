@@ -16,7 +16,7 @@
         <yhm-view-control title="车辆版本" :content="version"></yhm-view-control>
         <yhm-view-control title="车主信息" :content="carOwner"></yhm-view-control>
         <yhm-view-control title="登记日期" :content="registerDate === '1900-01-01'? '-----':registerDate"></yhm-view-control>
-        <yhm-view-control title="上传行车证" category="3" :content="drivingLicense"></yhm-view-control>
+        <yhm-view-control title="上传行车证" category="3" :content="drivingLicense" type="smfiles" tag="drivingLicense"></yhm-view-control>
       </template>
     </yhm-view-body>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">

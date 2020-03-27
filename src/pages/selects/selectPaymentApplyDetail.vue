@@ -41,7 +41,7 @@
         <span class="m_listNoData" v-show="content.length === 0">暂时没有数据</span>
       </template>
       <template #pager>
-        <yhm-pagination :pager="pager" isPageSize="false" @initData="initPageData(false)"></yhm-pagination>
+        <yhm-pagination is-not-right :pager="pager" isPageSize="false" @initData="initPageData(false)"></yhm-pagination>
         <yhm-commonbutton class="mr0" icon="i-complete" value="确定" category="two" @call="selectConfirmEvent()"></yhm-commonbutton>
       </template>
 

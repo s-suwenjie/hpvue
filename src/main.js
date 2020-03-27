@@ -6,6 +6,7 @@ import $ from 'jquery'
 import Axios from 'axios'
 import '@/assets/index.js'
 import '@/assetsApp/index.js'
+
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 // import { ImagePreview,Tabbar, TabbarItem ,Tab,Tabs} from 'vant'

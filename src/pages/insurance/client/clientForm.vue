@@ -22,7 +22,7 @@
         <yhm-form-radio title="往年" subtitle="投保公司"  width="1" :select-list="lastYearUnitList" :value="lastYearUnit" id="lastYearUnit"></yhm-form-radio>
         <yhm-form-date title="交强险" subtitle="到期日"  :value="forceEndDate" id="forceEndDate " position="u"  rule="R0000">
           <div class="formBoxIcon" @click="dateClick">
-            <span id="capitalType" class="iconYuan i-yuan"></span>
+            <span id="capitalType" class="synchronize i-synchronize"></span>
           </div>
         </yhm-form-date>
         <yhm-form-date title="商业险" subtitle="到期日"  :value="businessEndDate" id="businessEndDate " position="u"  rule="R0000"></yhm-form-date>
@@ -300,8 +300,14 @@
   }
 </script>
 
-<style scoped>
-
+//scoped 仅在当前页面使用
+<style scoped lang="less">
+.synchronize:hover{
+  color: #49a9ea;
+}
+.synchronize:before{
+  font-size: 22px;
+}
 </style>
 
 

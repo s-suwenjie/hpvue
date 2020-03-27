@@ -1,7 +1,7 @@
 <template>
   <div class="afc_main">
     <div class="afc_title">{{title}}</div>
-    <yhm-app-date-box :show="show" :empty-message="title + emptyMessage" :max="max" :min="min" :value="value" :id="id" :rule="rule" @formVerification="formVerificationEvent"></yhm-app-date-box>
+    <yhm-app-date-box :show="show" :empty-message="title + emptyMessage" :max="max" :min="min" :value="value" :id="id" :type="type" :rule="rule" @formVerification="formVerificationEvent"></yhm-app-date-box>
     <div class="afc_error"><span v-if="error">{{errorTipMessage}}</span></div>
   </div>
 </template>
@@ -43,6 +43,10 @@
       show:{
         type:Boolean,
         default:true
+      },
+      type:{
+        type: String,
+        default: 'date'
       }
     },
   }

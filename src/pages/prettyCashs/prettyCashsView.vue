@@ -5,13 +5,15 @@
       <template #body>
         <yhm-view-control title="所属单位" :content="unit"></yhm-view-control>
         <yhm-view-control title="申请人员" :content="person"></yhm-view-control>
+        <yhm-view-control title="发票类型" :content="invoiceCategory" :psd="invoiceCategoryList"></yhm-view-control>
         <yhm-view-control type="date" title="申请日期" :content="workDate"></yhm-view-control>
         <yhm-view-control title="业务相关" :psd="isTravelList" :content="isTravel"></yhm-view-control>
         <yhm-view-control type="money" title="申请金额" :content="money"></yhm-view-control>
         <yhm-view-control title="申请编号" :content="code"></yhm-view-control>
-        <yhm-view-control title="事由" :content="subject"></yhm-view-control>
+        <yhm-view-control title="事由" :content="subject" category="3"></yhm-view-control>
         <yhm-view-control title="预计核销日期" type="date"  :content="estimateDate"></yhm-view-control>
         <yhm-view-control title="备注" :content="remark" v-if="remark!==''"></yhm-view-control>
+        <yhm-view-control title="文件" :content="list" type="files" v-if="list.length !== 0"></yhm-view-control>
       </template>
     </yhm-view-body>
     <div v-if="isApproval" v-html="approvalHtml"></div>
@@ -43,7 +45,10 @@
         state:'',
         approvalHtml: '',
         estimateDate: '',
+        list: [],
         isApproval: true,
+        invoiceCategory: '',
+        invoiceCategoryList: [],
       }
     },
     methods:{
@@ -55,6 +60,7 @@
             this.isTravelList=data.isTravelPsd.list
             this.unit = data.unit
             this.unitID=data.unitID
+            this.invoiceCategoryList = data.invoiceCategoryPsd.list
           },
           add: (data)=>{
 
@@ -71,13 +77,16 @@
             this.state=data.state
             this.approvalHtml=data.approvalHtml
             this.estimateDate=data.estimateDate
+            this.list = data.list
+            this.invoiceCategory = data.invoiceCategory
           }
         })
       }
     },
     created () {
       this.initData()
-    }
+    },
+
   }
 </script>
 

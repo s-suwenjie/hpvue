@@ -62,24 +62,23 @@
         <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[2].select">
           <template #listHead>
             <yhm-managerth style="width: 100px;" title="所属类型" ></yhm-managerth>
-            <yhm-managerth style="width: 100px;" title="收入/支出"></yhm-managerth>
-            <yhm-managerth  title="基本信息"></yhm-managerth>
-            <yhm-managerth  title="对方账户"></yhm-managerth>
+            <yhm-managerth style="width: 80px;" title="收支方向"></yhm-managerth>
+            <yhm-managerth title="基本信息"></yhm-managerth>
+            <yhm-managerth title="对方账户"></yhm-managerth>
             <yhm-managerth style="width: 100px;" title="总金额"></yhm-managerth>
             <yhm-managerth style="width: 100px;" title="交易金额"></yhm-managerth>
-            <yhm-managerth  title="编号"></yhm-managerth>
+            <yhm-managerth style="width: 150px;" title="编号"></yhm-managerth>
 
           </template>
           <template #listBody>
             <tr v-for="(item,index) in listPolicy" :key="index" :class="{InterlacBg:index%2!==0}">
               <yhm-manager-td  :value="item.categoryVal"></yhm-manager-td>
-              <yhm-manager-td  :value="item.directionVal"></yhm-manager-td>
-              <yhm-manager-td  :value="item.ownAccount"></yhm-manager-td>
+              <yhm-manager-td-direction :direction="item.direction" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
+              <yhm-manager-td :tip="true" :value="item.ownAccount"></yhm-manager-td>
               <yhm-manager-td  :value="item.otherAccount"></yhm-manager-td>
               <yhm-manager-td  :value="item.money"></yhm-manager-td>
               <yhm-manager-td  :value="item.bankMoney"></yhm-manager-td>
               <yhm-manager-td  :value="item.number"></yhm-manager-td>
-
             </tr>
           </template>
           <template #customize>
@@ -126,7 +125,7 @@
         insuredChannelVal:'',
 
         //投保项目
-        insuredProject:'',
+        insuredProject:[],
         insuredProjectVal:'',
 
         forceStartDate:'',//交强险开始日期
@@ -173,9 +172,11 @@
         empty:true,
 
         insuredUnit: '',
-        insuredUnitList: '',
+        insuredUnitList: [],
 
-        listPolicy:[]
+        listPolicy:[],
+        discountList:[],
+        value: ''
 
       }
     },

@@ -4,7 +4,8 @@
       <yhm-app-structure-top-tap-menu @call="backEvent" title="返回"></yhm-app-structure-top-tap-menu>
       <yhm-app-structure-top-tap-menu :select="true" title="付款申请"></yhm-app-structure-top-tap-menu>
     </yhm-app-structure-top-tap>
-    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish" :is-allow-refresh="false">
+    <div style="overflow: auto;">
+<!--    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish" :is-allow-refresh="false">-->
       <yhm-app-structure-menu-group title="基本信息"  @click="toggle(0)">
         <yhm-app-view-control style="white-space: nowrap;" title="收款方" :content="details.otherUnit"></yhm-app-view-control>
         <yhm-app-view-control title="是否关联" :content="details.isRelevance" :psd="isRelevanceList"></yhm-app-view-control>
@@ -33,17 +34,18 @@
         </yhm-app-view-child>
 
       </yhm-app-structure-menu-group>
-      <yhm-app-structure-menu-group title="更多信息">
+      <yhm-app-structure-menu-group title="更多信息" style="margin-bottom: 0.2rem;">
         <yhm-app-view-control title="付款事由" :content="details.subject"></yhm-app-view-control>
         <yhm-app-view-control title="最迟付款日期" :content="details.lastDate" type="date"></yhm-app-view-control>
         <yhm-app-view-control title="编号" :content="details.code"></yhm-app-view-control>
         <yhm-app-view-control title="支付金额" :content="details.money" type="money" color="#f00"></yhm-app-view-control>
         <yhm-app-view-control title="金额大写" :content="details.capitalMoney"></yhm-app-view-control>
-        <yhm-app-view-child title="部门分配" v-show="details.branchList.length=='1'?true:false">
+        <yhm-app-view-child title="部门分配" v-show="details.branchList!==''?true:false">
           <yhm-app-view-control :title="items.selectValue" :content="items.value" type="money" v-for="(items,index) in details.branchList" :key="index"></yhm-app-view-control>
         </yhm-app-view-child>
       </yhm-app-structure-menu-group>
-    </yhm-app-scroll>
+<!--    </yhm-app-scroll>-->
+    </div>
 
     <yhm-app-form-operate v-if="getShowOperate" v-show="resultShow">
       <yhm-app-button @call="rejectEvent" value="驳回" category="ten"></yhm-app-button>
@@ -124,6 +126,7 @@
             this.ajaxJson({
               url: '/PersonOffice/m_approvalYesVue',
               data: params,
+              loading:"0",
               call: (data)=>{
                 if(data.type === 0){
                   this.$appDialog.toast({
