@@ -56,6 +56,10 @@
         <template v-if="getName(['92'])">
           <yhm-managerth title="型号"></yhm-managerth>
         </template>
+        <template v-if="getName(['93'])">
+          <yhm-managerth title="一级分类"></yhm-managerth>
+          <yhm-managerth title="二级分类"></yhm-managerth>
+        </template>
 
       </template>
 
@@ -92,6 +96,9 @@
             <yhm-manager-td :value="item.value2"></yhm-manager-td>
           </template>
           <template v-if="getName(['9'])">
+            <yhm-manager-td :value="item.value1"></yhm-manager-td>
+          </template>
+          <template v-if="getName(['93'])">
             <yhm-manager-td :value="item.value1"></yhm-manager-td>
           </template>
 

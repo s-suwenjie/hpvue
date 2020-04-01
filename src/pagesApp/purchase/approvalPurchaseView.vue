@@ -4,6 +4,7 @@
       <yhm-app-structure-top-tap-menu @call="backEvent" title="返回"></yhm-app-structure-top-tap-menu>
       <yhm-app-structure-top-tap-menu :select="true" title="采购信息明细"></yhm-app-structure-top-tap-menu>
     </yhm-app-structure-top-tap>
+    <div class="noticeBar" v-if="states==9||isFinish==0&&states==-1">请移动到PC端进行拨款</div>
     <div style="overflow: auto;">
 <!--    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish">-->
       <yhm-app-structure-menu-group title="基本信息">
@@ -30,7 +31,7 @@
       <div style="width: 100%;height: 0.2rem;"></div>
 <!--    </yhm-app-scroll>-->
     </div>
-    <yhm-app-form-operate v-if="getShowOperate">
+    <yhm-app-form-operate v-if="getShowOperate" v-show="allBtnShow">
       <yhm-app-button @call="rejectEvent" value="驳回" category="ten"></yhm-app-button>
       <yhm-app-button @call="adoptEvent" value="通过" category="two"></yhm-app-button>
     </yhm-app-form-operate>
@@ -44,6 +45,8 @@
     mixins: [appviewmixin],
     data(){
       return{
+        states:'',
+        allBtnShow:true,
         category:'',     //流程类型
         isFinishBack:'1',
         person:'',
@@ -147,6 +150,12 @@
           this.state = data.state
           this.isFinish = data.isFinish
           this.rejectDetail = data.rejectDetail
+          this.states = data.states
+          if(this.states=='9'||this.isFinish==0&&this.states==-1){
+            this.allBtnShow=false
+          }else{
+            this.allBtnShow=true
+          }
         }
       })
     },
@@ -155,12 +164,19 @@
         return this.isFinish === '0'
       },
       getState(){
-        return this.state % 2 === 1 || this.state === -1
+        return this.state % 2 == 1 || this.state == -1
       }
     }
   }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+  @rem:375/10rem;
+  .noticeBar{
+    font-size: 14/@rem;
+    background-color: #fffbe8;
+    color: #ed6a0c;
+    padding: 5/@rem 20/@rem;
+    text-align: center;
+  }
 </style>

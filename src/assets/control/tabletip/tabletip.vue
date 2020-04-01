@@ -111,6 +111,8 @@
   }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+  tbody{
+    font-size: 14px;
+  }
 </style>

@@ -112,7 +112,6 @@
     },
     methods:{
       goto(item,index){//跳转
-        console.log(item,index)
         this.$router.push(item.url)
         if(index=='0'){
           this.$router.push(item)
@@ -157,7 +156,6 @@
         // }
       },
       routerListData(){
-        setTimeout(()=>{this.$dialog.close()},100)
         this.ajaxJson({
           url: '/SysManager/m_getPurviewUsers',
           loading:"0",

@@ -6,7 +6,11 @@
         <yhm-view-control category="2" title="收款方" :content="otherUnit"></yhm-view-control>
       </template>
     </yhm-view-body>
+
     <div class="f_split"></div>
+    <div class="i-left fs48b colorFFF" title="上一条" v-show="isLeftID"  @click="leftStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom:300px;z-index: 9999;display:flex;justify-content:center;align-items:center;"></div>
+    <div class="i-right fs48b colorFFF" title="下一条" v-show="isRightID" @click="rightStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom:300px;right:0px;z-index: 9999;display:flex;justify-content:center;align-items:center;"></div>
+
     <yhm-view-tab>
       <template #tab>
         <yhm-view-tab-button :list="tabState" :index="0">事件信息</yhm-view-tab-button>
@@ -80,9 +84,41 @@
         handleButton:false,
         isApprovalContent:{},
         id:'',//主表id
+
+        isLeftID:false,//延长按钮
+        leftID:'',//上一条ID
+        isRightID:false,//延长按钮
+        rightID:'',//下一条ID
       }
     },
     methods: {
+
+      leftStrip(){
+        window.location='/approvalPayForm?id='+this.leftID
+      },
+      rightStrip(){
+        window.location='/approvalPayForm?id='+this.rightID
+      },
+
+      selectedList() {
+        let params = {
+          id: this.id
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedID',
+          data: params,
+          call: (data) => {
+            if(data.leftID!==""){
+              this.leftID=data.leftID
+              this.isLeftID=true
+            }
+            if(data.rightID!==""){
+              this.rightID=data.rightID
+              this.isRightID=true
+            }
+          }
+        })
+      },
 
       listView (item) {
         if (item) {
@@ -329,7 +365,8 @@
       }
     },
     created () {
-      this.initData()
+      this.initData();
+      this.selectedList();
     }
   }
 </script>

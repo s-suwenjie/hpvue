@@ -19,8 +19,8 @@
 <!--        <yhm-commonbutton value="上传发票" icon="btnAdd" :flicker="true" @call="addInvoice()" category="one"></yhm-commonbutton>-->
 <!--        <yhm-commonbutton value="弹框" icon="btnAdd" :flicker="true" @call="uploadInvoice()" category="one"></yhm-commonbutton>-->
         <yhm-commonbutton value="打开选中信息" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" all="0" :content="listState"></yhm-radiofilter>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型" :content="dateTypeList"></yhm-radiofilter>
 
       </template>
 
@@ -43,7 +43,7 @@
         <yhm-managerth style="width: 120px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 110px" title="计划申请金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 220px;" title="编号" value="code"></yhm-managerth>
-        <yhm-managerth style="width: 100px" title="状态" value="state"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="状态" value="state"></yhm-managerth>
         <yhm-managerth style="width: 300px;" title="操作"></yhm-managerth>
 
       </template>
@@ -100,6 +100,38 @@
       <template #empty>
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>
+
+
+      <template #total>
+        <div class="listTotalCrente m_list w620">
+          <div class="listTotalLeft">
+            <span class="test"></span>
+            <span class="test">金额</span>
+            <span class="test">条数</span>
+          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
+            <thead>
+            <tr>
+              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="进行中"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="已完成"></yhm-managerth>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <yhm-manager-td-money v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+            </tr>
+            <tr>
+              <yhm-manager-td-rgt  v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </template>
+
+
+
       <!--分页控件-->
       <template #pager>
         <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
@@ -172,6 +204,7 @@
           {width:'110',title:'剩余金额',category:'money',key:'balance'}
         ],
         tableTipInfo:[],
+        contentTotal: []
       }
     },
     methods: {
@@ -185,13 +218,12 @@
           data:params,
           call:(data) =>{
             if(data.type===0){
-              // this.ajaxJson({
-              //   url: '/PersonOffice/getReimbursementManagerTotal',
-              //   data:params,
-              //   call:(information) =>{
-              //     this.contentTotal = information
-              //   }
-              // })
+              this.ajaxJson({
+                url: '/PersonOffice/paymentManagerTotal',
+                call:(information) =>{
+                  this.contentTotal = information
+                }
+              })
             }
           }
         })
@@ -492,7 +524,7 @@
           url: '/PersonOffice/getPaymentManager',
           data: params,
           all: (data) => {
-
+            this.contentTotal = data.total
             //不管是不是初始化都需要执行的代码
           },
           init: (data) => {

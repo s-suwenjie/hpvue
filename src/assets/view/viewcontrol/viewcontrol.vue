@@ -1,7 +1,7 @@
 <template>
     <div class="v_control" :class="[getWidthClass]">
       <div class="v_title">{{title}}：</div>
-      <div v-if="getDefault" @click="clickEvent" class="v_content" :class="{rmb:getMoney,fs12b:getMoney}" :style="{color:colorValue}" v-html="getContentShow ? getContentShow:'-----'"></div>
+      <div v-if="getDefault" @click="clickEvent" class="v_content" :class="{rmb:getMoney,fs12b:getMoney}" :style="{color:colorValue,fontSize: fontSize + 'px'}" v-html="getContentShow ? getContentShow:'-----'"></div>
       <div v-if="getFiles" class="v_content">
         <yhm-view-show-files v-for="(item,index) in content" :key="index" :content="content" :item="item"></yhm-view-show-files>
       </div>
@@ -58,6 +58,10 @@
       tag: {
         type: String,
         default: ''
+      },
+      fontSize: {
+        type: String,
+        default: '14'
       }
     },
     methods : {

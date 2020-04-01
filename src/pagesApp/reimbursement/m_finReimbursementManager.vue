@@ -28,14 +28,16 @@
         <yhm-app-button  value="确定" @call="confirm(isPrettyCashOff)" icon="" category="two"></yhm-app-button>
       </div>
     </appfiltrate>
+    <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
   </div>
 </template>
 
 <script>
   import { appmanagermixin } from '@/assetsApp/app_manager.js'
-  import appSearch from '../common/appSearch'
-  import appfiltrate from '../common/appFiltrate'
-  import appRadiofilter from '../common/appRadiofilter'
+  import appSearch from '@/pagesApp/common/appSearch'
+  import appfiltrate from '@/pagesApp/common/appFiltrate'
+  import appRadiofilter from '@/pagesApp/common/appRadiofilter'
+  import appToast from '@/pagesApp/common/appToast'
 
   export default {
     name: 'm_finReimbursementManager',
@@ -43,10 +45,12 @@
     components:{
       appSearch,
       appfiltrate,
-      appRadiofilter
+      appRadiofilter,
+      appToast
     },
     data(){
       return{
+        appToastShow:false,
         rightAlert:false,//筛选弹窗
         key: 0,//用来刷新组件状态 点击重置按钮时刷新默认状态
         isPrettyCashOffList:[],
@@ -137,12 +141,14 @@
             // 不管是不是初始化都需要执行的代码
             this.content=data.content
             this.shortcutSearchContent = data.shortcutSearchContent
+            this.appToastShow = true
 
           },
           init: (data) => {
             // 初始化时需要执行的代码
             this.isPrettyCashOffList = data.isPrettyCashOffPsd.list
             console.log(this.isPrettyCashOffList  )
+            this.appToastShow = true
           }
         })
       }
@@ -156,6 +162,7 @@
       }
     },
     created () {
+
       this.setQuery2Value('isFinish')
       this.params.isFinish = this.isFinish
 

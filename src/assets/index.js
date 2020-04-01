@@ -147,7 +147,8 @@ import managertdoperatedelete from '@/assets/manager/td/managertdoperatedelete/m
 Vue.use(managertdoperatedelete)
 import managertdoperatecustomize from '@/assets/manager/td/managertdoperatecustomize/managertdoperatecustomize.js'
 Vue.use(managertdoperatecustomize)
-
+import managertdtipimg from '@/assets/manager/td/managertdtipimg/managertdtipimg.js'
+Vue.use(managertdtipimg)
 
 
 
@@ -227,5 +228,9 @@ import formselectboxmore from '@/assets/formselectboxmore/formselectboxmore.js'
 Vue.use(formselectboxmore)
 import validator from '@/assets/validator/validator.js'
 Vue.use(validator)
+
+
+
+
 import "@/assets/iconfont/style.css"
 import "@/assets/customevent.js"

@@ -4,7 +4,8 @@
       <yhm-app-structure-top-tap-menu @call="backEvent" title="返回"></yhm-app-structure-top-tap-menu>
       <yhm-app-structure-top-tap-menu :select="true" title="报销明细"></yhm-app-structure-top-tap-menu>
     </yhm-app-structure-top-tap>
-    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish" :is-allow-refresh="false">
+<!--    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish" :is-allow-refresh="false">-->
+    <div style="overflow: auto;">
       <yhm-app-structure-menu-group title="基本信息">
         <yhm-app-view-control title="申请人" :content="name"></yhm-app-view-control>
         <yhm-app-view-control title="申请日期" :content="workDate" ></yhm-app-view-control>
@@ -44,7 +45,8 @@
         </yhm-app-view-child>
 
       </yhm-app-structure-menu-group>
-    </yhm-app-scroll>
+<!--    </yhm-app-scroll>-->
+    </div>
 
   </div>
 </template>

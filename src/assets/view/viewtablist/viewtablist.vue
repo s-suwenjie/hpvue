@@ -1,15 +1,15 @@
 <template>
     <div class="t_list t_list_form mr0 ml0 mb0">
-      <table class="t_table" width="100%" border="1" cellspacing="0">
-        <thead>
-        <tr>
-          <slot name="listHead"></slot>
-        </tr>
-        </thead>
-        <tbody >
-        <slot name="listBody"></slot>
-        </tbody>
-      </table>
+        <table class="t_table" width="100%" border="1" cellspacing="0">
+          <thead>
+          <tr>
+            <slot name="listHead"></slot>
+          </tr>
+          </thead>
+          <tbody >
+          <slot name="listBody"></slot>
+          </tbody>
+        </table>
       <div class="v_empty">
         <slot name="empty"></slot>
       </div>
@@ -38,6 +38,13 @@
   }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.m_main{
+  width: auto;
+  height: auto;
+  min-height: auto;
+  float: none;
+  margin-bottom: 0;
+  position: relative;
+}
 </style>

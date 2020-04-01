@@ -756,3 +756,20 @@
   font-family: 'icomoon' !important;
   content: "\e995";
 }
+
+
+/* 利息入账 */
+.i-interest:before {
+  font-family: 'icomoon' !important;
+  content: "\e996";
+}
+/* 赎回本金 */
+.i-redeem:before {
+  font-family: 'icomoon' !important;
+  content: "\e997";
+}
+/* 转款 */
+.i-tranPayment:before {
+  font-family: 'icomoon' !important;
+  content: "\e998";
+}

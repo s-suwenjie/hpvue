@@ -3,7 +3,7 @@
     <div v-if="isEmpty" class="md_center">
       -----
     </div>
-    <div v-if="!isEmpty" class="md_left mt_psd" :style="getColor">
+    <div v-if="!isEmpty" class="md_left mt_psd" :style="getColor" :class="{textNormal:normalShow}">
       <div class="font fs22b" :class="getIcon"></div>
       <div :class="{ml3:getMl}">{{showName}}</div>
     </div>
@@ -29,6 +29,10 @@
       showName:{
         type:String,
         required: true
+      },
+      normalShow:{
+        type:Boolean,
+        default:false
       }
     },
     computed:{

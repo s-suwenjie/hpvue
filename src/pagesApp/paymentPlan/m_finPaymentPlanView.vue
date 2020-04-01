@@ -5,10 +5,11 @@
       <yhm-app-structure-top-tap-menu :select="true" title="查看付款信息"></yhm-app-structure-top-tap-menu>
     </yhm-app-structure-top-tap>
 
-    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish">
+<!--    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish">-->
+    <div style="overflow: auto;">
       <yhm-app-structure-menu-group title="基本信息">
-        <yhm-app-view-control title="收款方" :content="content.otherUnit"></yhm-app-view-control>
-        <yhm-app-view-control title="付款金额" :content="content.planMoney" type="money" color="#4BB414"></yhm-app-view-control>
+        <yhm-app-view-control title="收款方" :content="otherUnit"></yhm-app-view-control>
+        <yhm-app-view-control title="付款金额" :content="planMoney" type="money" color="#4BB414"></yhm-app-view-control>
       </yhm-app-structure-menu-group>
       <yhm-app-structure-menu-group title="事件信息" v-for="(item,index) in details" :key="item" @click="toggle(index)" :index="index" :length="details.length">
         <yhm-app-view-control title="事件描述" style="white-space: nowrap;" :content="item.name"></yhm-app-view-control>
@@ -24,7 +25,8 @@
         <yhm-app-structure-group-operate >
         </yhm-app-structure-group-operate>
       </yhm-app-structure-menu-group>
-    </yhm-app-scroll>
+<!--    </yhm-app-scroll>-->
+    </div>
   </div>
 </template>
 
@@ -39,6 +41,8 @@
       return{
         category:'',     //流程类型
         isFinishBack:'1',
+        otherUnit:'',
+        planMoney:'',
         person:'',
         code:'',
         workDate:'',    //申请日期
@@ -84,7 +88,8 @@
       this.init({
         url: '/PersonOffice/m_getApprovalPaymentPlanById',
         call:(data)=> {
-          this.content = data
+          this.otherUnit=data.otherUnit
+          this.planMoney=data.planMoney
           this.state = data.state
           this.category = data.category
           this.details = data.list

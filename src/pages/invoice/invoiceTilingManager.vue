@@ -7,7 +7,7 @@
       <template #navigationLft>
         <div @mouseover="tipChange(index)" @mouseout="tipOut" style="margin: 0;position: relative;"  v-for="(item,index) in routerList" :key="index">
           <router-link tag="div" :class="item.class" style="margin: 0;" class="tip" :to="item.path">
-            <div  class="cbl_main_prompt tipShow">
+            <div  class="cbl_main_prompt2 tipShow">
               <div class="cbl_main_prompt_content" style="font-size:13px;padding: 0 12px;">
                 {{tipValue}}
                 <img src="/UploadFile/m_image/arrow.png">
@@ -32,7 +32,7 @@
       </template>
       <template #tiled>
           <div style="margin: 10px;display: flex;flex-direction: row; flex-wrap: wrap;">
-            <yhm-view-list-block v-for="(item,index) in content" :key="index" @call="rightMenuEvent" :item="item" :menu="menu" :psd="psd" :menu-category="item.state" :category-value="item.maxValue" :category="item.maxValue" :code="item.code"  :color="getPsdSelectItemColor(stateList,item.state)" >
+            <yhm-view-list-block v-for="(item,index) in content" :key="index"  @VIewEvent="viewClickEvent"  @call="rightMenuEvent" :item="item" :menu="menu" :psd="psd" :menu-category="item.state" :category-value="item.maxValue" :category="item.maxValue" :code="item.code"  :color="getPsdSelectItemColor(stateList,item.state)" >
               <yhm-view-psd :psd="maxValueList" :value="item.maxValue" style="margin-right: 6px;"></yhm-view-psd>
               <yhm-view-psd :psd="stateList" :value="item.state"></yhm-view-psd>
             </yhm-view-list-block>
@@ -131,7 +131,7 @@
         invoiceCategoryList: [],
         stateList:[],
         maxValueList:[],
-        menu:[['作废发票','查看发票基本信息'],['查看发票基本信息'],['查看发票基本信息']],
+        menu:[['作废发票']],
         pager: {
           total: 0, // 总条数
           pageSize: 18, // 每页条数
@@ -141,6 +141,18 @@
       }
     },
     methods:{
+      viewClickEvent(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '450',
+          title: '查看发票基本信息',
+          url: '/invoiceView?id=' + item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
+      },
       tipChange(index){
         this.tipValue=this.tipList[index][0]
         $('.tipShow').eq(index).css({'display':'block'})
@@ -158,17 +170,6 @@
             closeCallBack: (data)=>{
               if(data){
                 this.initPageData(false)
-              }
-            }
-          })
-        } else if(category === '查看发票基本信息'){
-          this.$dialog.OpenWindow({
-            width: '1050',
-            height: '450',
-            title: '查看发票基本信息',
-            url: '/invoiceView?id=' + item.id,
-            closeCallBack: (data)=>{
-              if(data){
               }
             }
           })

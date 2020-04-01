@@ -7,7 +7,7 @@
       <template #navigationLft>
         <div @mouseover="tipChange(index)" @mouseout="tipOut" style="margin: 0;position: relative"  v-for="(item,index) in routerList" :key="index">
           <router-link tag="div" :class="item.class" style="margin: 0;" class="tip" :to="item.path">
-            <div  class="cbl_main_prompt tipShow">
+            <div  class="cbl_main_prompt2 tipShow">
               <div class="cbl_main_prompt_content" style="font-size:13px;padding: 0 12px;">
                 {{tipValue}}
                 <img src="/UploadFile/m_image/arrow.png">
@@ -31,7 +31,7 @@
       </template>
       <template #tiled>
         <div style="margin: 10px;display: flex;flex-direction: row; flex-wrap: wrap;">
-          <yhm-view-list-block v-for="(item,index) in content" :key="index"
+          <yhm-view-list-block @VIewEvent="viewClickEvent" v-for="(item,index) in content" :key="index"
                                @call="rightMenuEvent" :item="item" :menu="menu" :menu-category="item.state" :psd="categoryList"
                                :category-value="item.category" :category="item.category" :code="item.code"
                                :color="getPsdSelectItemColor(stateList,item.state)">
@@ -139,10 +139,10 @@
         stateList:[],
         menu:[
           ['查看支票','支票填开','空白支票作废'],
-          ['查看支票'],
-          ['查看支票','支票填开','作废支票'],
-          ['查看支票','入账操作','作废支票','查看票样'],
-          ['查看支票','查看票样']
+          ['查看支票','补打记录'],
+          ['查看支票','支票填开','作废支票','补打记录'],
+          ['查看支票','入账操作','作废支票','补打记录'],
+          ['查看支票','补打记录']
         ],
         pager: {
           total: 0, // 总条数
@@ -153,6 +153,18 @@
       }
     },
     methods:{
+      viewClickEvent(item){
+        if(item.state==='3'||item.state==='4'){
+          this.$dialog.OpenWindow({
+            width: '850',
+            height: '340',
+            title: '查看票样',
+            url: '/viewCheck?ownerID=' + item.id,
+            closeCallBack: ()=>{
+            }
+          })
+        }
+      },
       tipChange(index){
         this.tipValue=this.tipList[index][0]
         $('.tipShow').eq(index).css({'display':'block'})
@@ -161,24 +173,13 @@
         $('.tipShow').css('display','none')
       },
       rightMenuEvent(category,item){
-        if(category === '查看支票'){
-          this.$dialog.OpenWindow({
-            width: '1050',
-            height: '500',
-            title: '查看支票信息',
-            url: '/checkExpendView?id=' + item.id,
-            closeCallBack: () => {
-            }
-          })
-        }
-        if(category === '查看票样'){
+        if(category === '查看支票') {
           this.$dialog.OpenWindow({
             width: '850',
             height: '340',
             title: '查看票样',
             url: '/viewCheck?ownerID=' + item.id,
-            closeCallBack: ()=>{
-
+            closeCallBack: () => {
             }
           })
         }
@@ -243,6 +244,20 @@
             closeCallBack: (data)=>{
               if(data){
                 this.initPageData(false)
+              }
+            }
+          })
+        }
+        if(category === '补打记录'){
+          this.$dialog.OpenWindow({
+            width: '465',
+            height: '365',
+            title: '选择打印行号',
+            url: '/selectPrint?id=' + item.id + '&count=15',
+            closeCallBack: (data)=>{
+              if(data){
+                // this.$dialog.setReturnValue(this.id)
+                // this.$dialog.close()
               }
             }
           })

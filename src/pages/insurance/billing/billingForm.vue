@@ -57,7 +57,7 @@
 
         </yhm-form-zh-text-two>
 
-        <yhm-form-radio title="是否返利" subtitle=""  @call="isCashObject" :select-list="cashList" :value="cash" id="cash"></yhm-form-radio>
+        <yhm-form-radio title="是否返利" subtitle="" @call="isCashObject" :no-edit="ISCash" :select-list="cashList" :value="cash" id="cash"></yhm-form-radio>
         <yhm-form-text placeholder="" title="实收金额" subtitle="" :no-edit="isTotal" :value="receivedMoney" id="receivedMoney" rule="R0000"></yhm-form-text>
 
         <yhm-form-radio title="返利对象" subtitle="" width="1" v-if="isCash" :select-list="cashObjectList" :value="cashObject" id="cashObject"></yhm-form-radio>
@@ -164,15 +164,17 @@
         isTotal:'0',
         hide:'0',
         process:'',
+        ISCash:false,
 
         discountList: [],
         num:'',
         isaaa:'1',
         clientRate:'', //客户费率
         tipValue:'',
-        tipList:[
-          ['优惠点数超出保险公司提供的点数']
-        ],
+        // tipList:[
+        //   ['优惠点数超出保险公司提供的点数'+this.clientRate+'']
+        // ],
+        tipList:'',
       }
     },
     methods:{
@@ -195,9 +197,9 @@
         this.businessEndDate = newDateTime
       },
       tipChange(){
-        this.tipValue=this.tipList[0][0]
-        this.$refs.imgRight.style.left='243px'
-        let distance = 225
+        this.tipValue=this.tipList
+        this.$refs.imgRight.style.left='218px'
+        let distance = 250
         $('.tipShow').css({'left':distance+'px','display':'block'})
       },
       tipOut(){
@@ -233,6 +235,11 @@
             call: (data) => {
               for(let i in data){
                 if (this.discountCount*100>data[i].clientRate){
+                  this.tipList = '优惠点数超出保险公司提供的点数'
+                    + data[i].showName
+                    +'优惠额度为:'
+                    + data[i].clientRate
+                    +'%'
                   this.isDis=true
                   this.hide='1'
                 }else {
@@ -293,11 +300,13 @@
           this.receivedMoney=''
         }
         if (a.indexOf("2") != -1){
+          this.ISCash=false
           this.isTotal='0'
           this.isbusinessStart=true
           this.cash='0'
           this.isCashObject()
         }else {
+          this.ISCash=true
           this.isTotal='1'   //不选择商业险  保费合计/实收金额 不可输入
           this.isbusinessStart=false
           this.cash='1'  //没有商业险不返利
@@ -365,7 +374,7 @@
           width: 950,
           height: 692,
           url: '/selectPerson?category=1',
-          title: '选择联系人',
+          title: '选择被保险人',
           closeCallBack: (data) => {
             if (data) {
               this.beinsuredID=data.id
@@ -381,7 +390,7 @@
           width: 950,
           height: 692,
           url: '/selectPerson?category=1',
-          title: '选择联系人',
+          title: '选择投保人',
           closeCallBack: (data) => {
             if (data) {
               this.insuredID=data.id
@@ -821,5 +830,5 @@
   }
 </style>
 <style scoped lang="less">
-  .tipShow{display: none;width: 270px;}
+  .tipShow{display: none;width: 240px;}
 </style>

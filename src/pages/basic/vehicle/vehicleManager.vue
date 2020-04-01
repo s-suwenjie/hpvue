@@ -22,7 +22,7 @@
         <yhm-managerth  title="车辆版本" value="version"></yhm-managerth>
         <yhm-managerth title="登记日期" value="registerDate"></yhm-managerth>
 
-        <yhm-managerth style="width: 60px;" title="删除"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="删除"></yhm-managerth>
       </template>
 
       <!--数据明细-->

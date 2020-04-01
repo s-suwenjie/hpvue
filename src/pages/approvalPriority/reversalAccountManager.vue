@@ -18,7 +18,7 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth title="姓名" value="unit" ></yhm-managerth>
         <yhm-managerth style="width: 200px" title="添加时间" value="insertDate"></yhm-managerth>
-        <yhm-managerth style="width: 38px;" title="删除"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="删除"></yhm-managerth>
 
       </template>
       <!--数据明细-->
@@ -28,7 +28,7 @@
           <yhm-manager-td :value="item.person"></yhm-manager-td>
           <yhm-manager-td-date :value="item.insertDate"></yhm-manager-td-date>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button @click="del(item.id)" icon="delete" color="#FF0000" hover-color="#FF0000"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="del(item.id)" value="删除" icon="delete" color="#FF0000" hover-color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>

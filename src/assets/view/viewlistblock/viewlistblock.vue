@@ -1,5 +1,5 @@
 <template>
-  <div class="cbl_main" @contextmenu.prevent="contextMenuEvent($event)" :style="{boxShadow: (mouseStyle ? getHoverColor : getColor)}" @mouseover="mouseOverEvent" @mouseout="mouseOutEvent" v-right-click-control-outside="closeRightMenu">
+  <div class="cbl_main" @click="clickAllEvent" @contextmenu.prevent="contextMenuEvent($event)" :style="{boxShadow: (mouseStyle ? getHoverColor : getColor)}" @mouseover="mouseOverEvent" @mouseout="mouseOutEvent" v-right-click-control-outside="closeRightMenu">
     <div v-show="mouseStylePrompt" class="cbl_main_prompt">
       <div class="cbl_main_prompt_content">
         右键操作
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div v-show="rightMenuShow" :style="getRightMenuPosition" class="cbl_main_right_menu disable_menu" v-click-control-outside="closeRightMenu">
-      <div class="item" v-for="(item,index) in menu[menuCategory]" :key="index" @click="clickEvent(item)">{{item}}</div>
+      <div class="item" v-for="(item,index) in menu[menuCategory]" :key="index" @click.stop="clickEvent(item)">{{item}}</div>
     </div>
   </div>
 </template>
@@ -91,6 +91,11 @@
       }
     },
     methods:{
+      clickAllEvent(){
+        this.$nextTick(() => {
+          this.$emit('VIewEvent',this.item)
+        })
+      },
       mouseOverEvent(){
         this.mouseStyle = true
       },

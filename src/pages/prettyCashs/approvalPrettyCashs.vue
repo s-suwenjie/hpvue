@@ -18,8 +18,8 @@
         </router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/approvalPrettyCashs'}">备用金
         </router-link>
-        <router-link class="menuTabDiv  " :to="{path:'/home/approvalInsuranceManager'}">保险审批
-          <!--          <i class="noticeNum" v-if="prettyCashsNum!=='0'">{{prettyCashsNum}}</i>-->
+        <router-link class="menuTabDiv" :to="{path:'/home/approvalInsuranceManager'}">保险审批
+          <i class="noticeNum" v-if="insuranceNum!='0'">{{insuranceNum}}</i>
         </router-link>
       </template>
       <!--操作区-->
@@ -71,6 +71,7 @@
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button v-show="item.approval === '4'&&item.isApproval === '0'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.state === '9'||item.state === '15'||item.state==='-1'" @click="print(item)" value="打印单据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '0'&& item.approval !== '4' && item.isApproval === '0' && item.state !== '15'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state !== '15'" v-show="item.isApproval === '0'&& item.approval !== '4' && item.isApproval === '0' && item.state !== '15'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state === '15'" v-show="item.state === '15'&&item.isChecks!=='1'" @click="refundMoney(item)" value="备用金退款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
@@ -119,10 +120,25 @@
         paymentNum: '',
         reimburseNum: '',
         purchaseNum: '',
+        insuranceNum:'',
         invoiceCategoryList: []
       }
     },
     methods:{
+      print(item){
+        let params = {
+          id:item.id
+        }
+        this.ajaxJson({
+          data:params,
+          url: '/PersonOffice/printPrettyCashs',
+          call: (data)=>{
+            if(data.type===0){
+              window.open("/UploadFile/" + data.html)
+            }
+          }
+        })
+      },
       refundMoney(item){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -252,6 +268,7 @@
             this.paymentNum = data.payment
             this.reimburseNum = data.reimbursements
             this.purchaseNum = data.purchase
+            this.insuranceNum=data.insurance
           }
         })
       },

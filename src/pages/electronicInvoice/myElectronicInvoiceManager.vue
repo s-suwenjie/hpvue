@@ -39,7 +39,7 @@
             <yhm-manager-td :value="item.otherName"></yhm-manager-td>
             <yhm-manager-td :value="item.tag"></yhm-manager-td>
             <yhm-manager-td-image :tip="true" left="-750" width="900" height="550" :value="item.imgUrl" tag="ElectronicInvoice"></yhm-manager-td-image>
-            <yhm-manager-td-psd :value="item.state" :list="stateItems"></yhm-manager-td-psd>
+            <yhm-manager-td-psd @click="relationID(item)" :value="item.state" :list="stateItems"></yhm-manager-td-psd>
             <yhm-manager-td-operate>
               <yhm-manager-td-operate-button :no-click="item.state !== '0'" @click="transferInvoice(item)" value="转让" icon="i-btn-refresh" color="#49a9ea"></yhm-manager-td-operate-button>
               <yhm-manager-td-operate-button :no-click="item.state !== '0'" @click="gotoReimburse(item.id)" value="我要报销" icon="i-btn-go" color="#AA12CA" fs="10"></yhm-manager-td-operate-button>
@@ -79,6 +79,31 @@
       }
     },
     methods:{
+      relationID(item){
+        if(item.otherID!==''){
+          if(item.otherCategory==='1'){
+            this.$dialog.OpenWindow({
+              width: '1050',
+              height: '750',
+              // url: '/paymentApplyFormView?id=' + item.id + '&state=-1&isFinish=1',
+              url: '/paymentApplyFormView?id=' + item.otherID ,
+              title: "查看付款申请信息",
+              closeCallBack: () => {
+              }
+            })
+          }else if(item.otherCategory==='2'){
+            this.$dialog.OpenWindow({
+              width: 1050,
+              height: 690,
+              url: '/reimbursementDetailFormView?id=' + item.otherID,
+              title: '查看报销明细',
+              closeCallBack: (data) => {
+
+              }
+            })
+          }
+        }
+      },
       view(){
         this.$dialog.OpenWindow({
           width: 1050,

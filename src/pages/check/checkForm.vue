@@ -211,6 +211,21 @@
         }else{
           this.isInit = true
         }
+
+        let params = {
+          category: this.category
+        }
+        this.ajaxJson({
+          data: params,
+          url: '/Bill/getCheckAccountID',
+          call: (data) => {
+            if(data.type === 0){
+              this.account = data.html
+              this.accountID = data.val
+            }
+          }
+        })
+
       },
       btnAddSave(){
 
@@ -265,6 +280,7 @@
             detailList: this.list,
             buyDate: this.buyDate,
           }
+
           this.ajaxJson({
             url: '/Bill/checksSave',
             data: params,

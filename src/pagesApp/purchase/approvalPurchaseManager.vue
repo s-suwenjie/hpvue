@@ -12,7 +12,7 @@
           <yhm-app-view-detail>
             <span style="color:#aaaaaa">【{{item.person}}】</span>提交了<yhm-app-view-psd :psd="categoryPurchaseItems" :content="item.categoryPurchase"></yhm-app-view-psd>中的<yhm-app-view-psd :psd="modelItems" :content="item.model"></yhm-app-view-psd>类型的采购申请，预估价值<yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
           </yhm-app-view-detail>
-          <yhm-app-approval-result v-show="getIsFinish" :category="item.state % 2 === 1" :left="3.5" :top="0.5"></yhm-app-approval-result>
+          <yhm-app-approval-result v-show="getIsFinish" :category="item.state % 2 == 1||item.state== -1" :left="3.5" :top="0.5"></yhm-app-approval-result>
         </yhm-app-structure-menu-group>
 
 <!--        <yhm-app-structure-menu-group title="商品列表">-->
@@ -65,16 +65,22 @@
           <yhm-app-view-control title="申请编号" content="PUR20191217CXY001PRO001W"></yhm-app-view-control>
         </yhm-app-structure-menu-group>-->
       </yhm-app-scroll>
+      <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
     </div>
 </template>
 
 <script>
   import { appmanagermixin } from '@/assetsApp/app_manager.js'
+  import appToast from '@/pagesApp/common/appToast'
   export default {
     name: 'm_approvalPurchaseManager',
     mixins: [appmanagermixin],
+    components:{
+      appToast
+    },
     data(){
       return{
+        appToastShow:false,
         isFinish:'1',
         url:'/PersonOffice/m_getApprovalPurchaseManager',
         params:{
@@ -165,11 +171,14 @@
           data: params,
           all: (data) => {
             // 不管是不是初始化都需要执行的代码
+            this.appToastShow = true
           },
           init: (data) => {
             // 初始化时需要执行的代码
             this.categoryPurchaseItems = data.categoryPurchaseItems
             this.modelItems = data.modelItems
+            this.appToastShow = true
+
           }
         })
       }
@@ -182,7 +191,7 @@
         return function(id,isFinish){
           return '/homeApp/m_approvalPurchaseView?id=' + id + '&isFinishBack=' + isFinish
         }
-      }
+      },
     },
     created () {
       this.setQuery2Value('isFinish')

@@ -179,11 +179,25 @@
             data: params,
             call: (data)=>{
               if(data.type === 0){
-                this.$dialog.setReturnValue(this.id)
+                // this.$dialog.setReturnValue(this.id)
                 this.$dialog.alert({
                   tipValue: data.message,
                   closeCallBack: ()=>{
-                    this.$dialog.close()
+                    // this.$dialog.close()
+
+                    this.$dialog.OpenWindow({
+                      width: '465',
+                      height: '365',
+                      title: '选择打印行号',
+                      url: '/selectPrint?id=' + this.ownerID + '&count=15',
+                      closeCallBack: (data)=>{
+                        if(data){
+                          // this.$dialog.setReturnValue(this.id)
+                          // this.$dialog.close()
+                        }
+                      }
+                    })
+
                   }
                 })
               }else{
@@ -223,7 +237,7 @@
             this.ownerSys = data.ownerSysPsd.value
             this.otherID = data.otherID
             this.other = data.other
-
+            this.otherOwnerID = data.otherOwnerID
 
             this.otherOld = data.other
             this.otherIDOld = data.otherID
@@ -234,10 +248,10 @@
               this.isCategoryOther=true
               this.isOther=true
               this.money = data.money
-              this.switchSownerSys()
               this.isThisUnit = true
               this.isMoney = '1'
               this.useRemark=data.useRemark
+              this.switchSownerSys()
             }
           },
             add: (data)=>{

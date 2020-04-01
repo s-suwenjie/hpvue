@@ -6,12 +6,10 @@
         <yhm-form-radio  title="跟踪状态" @call="categoryEvent" width="1" :select-list="categoryList" :value="category" id="category"></yhm-form-radio>
         <yhm-form-radio  title="购买意向"  :show="isIntention" :select-list="intentionList" :value="intention" id="intention"></yhm-form-radio>
         <yhm-form-radio  title="是否报价"  @call="isQuoteEvent" :show="isIsQuote" :select-list="isQuoteList" :value="isQuote" id="isQuote"></yhm-form-radio>
-        <yhm-form-text placeholder=""  @repeatverify="isMoney" v-if="isBusinessMoney" title="商业险" subtitle="报价" tip="value" before-icon="rmb" :value="businessMoney" id="businessMoney" rule="R3000"></yhm-form-text>
-<!--        <yhm-form-upload-image title="商业险" subtitle="报价详情" tag="businessFile" v-if="isBusinessMoney"  discription="点击图标或拖拽图片上传"  :value="businessFile" id="businessFile" ></yhm-form-upload-image>-->
-        <yhm-form-text placeholder=""  @repeatverify="isMoney" v-if="isTravelTaxMoney" title="车船税" subtitle="报价" tip="value" before-icon="rmb" :value="travelTaxMoney" id="travelTaxMoney" rule="R3000"></yhm-form-text>
-        <yhm-form-text placeholder=""  @repeatverify="isMoney" v-if="isForceMoney" title="交强险" subtitle="报价" tip="value" before-icon="rmb" :value="forceMoney" id="forceMoney" rule="R3000"></yhm-form-text>
+        <yhm-form-text placeholder=""  @repeatverify="isMoney" v-if="isBusinessMoney" title="商业险" subtitle="报价" tip="value" before-icon="rmb" :value="businessMoney==='0.00'?'':businessMoney" id="businessMoney" rule="R3000"></yhm-form-text>
+        <yhm-form-text placeholder=""  @repeatverify="isMoney" v-if="isTravelTaxMoney" title="车船税" subtitle="报价" tip="value" before-icon="rmb" :value="travelTaxMoney==='0.00'?'':travelTaxMoney" id="travelTaxMoney" rule="R3000"></yhm-form-text>
+        <yhm-form-text placeholder=""  @repeatverify="isMoney" v-if="isForceMoney" title="交强险" subtitle="报价" tip="value" before-icon="rmb" :value="forceMoney==='0.00'?'':forceMoney" id="forceMoney" rule="R3000"></yhm-form-text>
         <yhm-form-text placeholder=""  title="报价总额" subtitle="" no-edit="1" tip="value" before-icon="rmb" :show="isTotalMoney" :value="totalMoney" id="totalMoney" ></yhm-form-text>
-
 
         <yhm-form-textarea  placeholder=""  title="过程记录" subtitle="" :show="isRemark" :value="remark" id="remark" rule="R0000"></yhm-form-textarea>
         <yhm-form-radio  title="潜客级别"  :select-list="levelList" :value="level" :show="isLevel" id="level" @call="levelEvent"></yhm-form-radio>
@@ -77,7 +75,7 @@
         isLevel:true, //潜客级别
         isNextDate:true,  //下次跟踪日期
         isPlanDate:true,  //预计到店日
-        isTrackPerson:true  //跟踪人员
+        isTrackPerson:true,  //跟踪人员
 
 
       }
@@ -169,8 +167,11 @@
       },
 
        save() {
-
         if (this.validator()) {
+          for(let i in this.fileList){
+            this.fileList[i].ownerID = this.id
+            this.fileList[i].id = guid();
+          }
           let params = {
             id:this.id,
             category:this.category,
@@ -280,6 +281,17 @@
               this.isForceMoney=false  //交强险报价
               this.isTotalMoney=false  //报价总额
 
+            }
+            if (this.isQuote === '1'){
+              this.isBusinessMoney=false //商业险报价
+              this.isTravelTaxMoney=false  //车船税报价
+              this.isForceMoney=false  //交强险报价
+              this.isTotalMoney=false  //报价总额
+            }else  if (this.isQuote === '0'){
+              this.isBusinessMoney=true //商业险报价
+              this.isTravelTaxMoney=true  //车船税报价
+              this.isForceMoney=true  //交强险报价
+              this.isTotalMoney=true  //报价总额
             }
           }
 

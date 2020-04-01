@@ -681,6 +681,11 @@
         }
 
       },
+      money(){
+        if(this.money === '0'){
+          this.isMoney = ''
+        }
+      },
       // direction () { //监听收支
       //   if (this.direction === 1 && this.feeType === 1) {
       //     this.HandlingFee = '0'

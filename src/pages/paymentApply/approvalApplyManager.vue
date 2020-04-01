@@ -26,6 +26,7 @@
         <yhm-table-tip :show="tableTip" :content="tableTipInfo" :column="tableTipColumnInfo" :mouse-control="tableTipControl"></yhm-table-tip>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
+        <yhm-commonbutton value="打开选中信息" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
       </template>
 
       <!--筛选区-->
@@ -42,15 +43,15 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth title="收款方" value="id"></yhm-managerth>
-        <yhm-managerth style="width: 70px;" title="申请人"></yhm-managerth>
+        <yhm-managerth style="width: 90px;" title="申请人"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="支付方式" value="isChecks"></yhm-managerth>
-        <yhm-managerth style="width: 110px" title="最迟付款日期" value="lastDate"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="事由"></yhm-managerth>
-        <yhm-managerth style="width: 110px" title="付款申请金额" value="money"></yhm-managerth>
-        <yhm-managerth style="width: 210px;" title="编号"></yhm-managerth>
-        <yhm-managerth style="width: 110px" title="状态" value="state"></yhm-managerth>
-        <yhm-managerth style="width: 300px;" title="操作"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="付款申请金额" value="money"></yhm-managerth>
+        <yhm-managerth style="width: 240px;" title="编号"></yhm-managerth>
+        <yhm-managerth style="width: 140px" title="状态" value="state"></yhm-managerth>
+        <yhm-managerth style="width: 250px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -95,6 +96,37 @@
       <template #empty>
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>
+
+
+      <template #total>
+        <div class="listTotalCrente m_list w620">
+          <div class="listTotalLeft">
+            <span class="test"></span>
+            <span class="test">金额</span>
+            <span class="test">条数</span>
+          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
+            <thead>
+            <tr>
+              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="未审批" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="已审批" ></yhm-managerth>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <yhm-manager-td-money @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+            </tr>
+            <tr>
+              <yhm-manager-td-rgt @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </template>
+
+
       <!--分页控件-->
       <template #pager>
         <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
@@ -162,10 +194,73 @@
         tableTipInfo:[],
         balanceList:[],
         printLogList: {},
-        tableTipColumnInfo: []
+        tableTipColumnInfo: [],
+        contentTotal: []
       }
     },
     methods: {
+      totalClick(item){
+        // if(item.val==='总数'){
+        //   this.listState.value = ''
+        // } else if(item.val==='已完成'){
+        //   this.listState.value = '0'
+        // } else if(item.val==='进行中'){
+        //   this.listState.value = '1'
+        // } else if(item.val==='驳回'){
+        //   this.listState.value = '2'
+        // }
+        // this.initPageData()
+      },
+      //选中汇总
+      selectedSum(){
+        let params={
+          selectValue:this.selectValue
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            if(data.type===0){
+              let paramsFinish = {
+                isFinish: this.listIsFinish.value,
+              }
+              this.ajaxJson({
+                url: '/PersonOffice/payApprovalTotal',
+                data: paramsFinish,
+                call:(information) =>{
+                  this.contentTotal = information
+                }
+              })
+            }
+          }
+        })
+      },
+      //打开选中信息
+      selectedList(){
+        let params={
+          selectValue:this.selectValue
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            if(data.type===0){
+              this.$dialog.OpenWindow({
+                width: '1050',
+                height: '620',
+                title: '查看选中信息',
+                url: '/approvalApplyView?id='+data.val,
+                closeCallBack: (dataTwo)=>{
+                  if(dataTwo){
+
+                  }
+                }
+              })
+            }
+          }
+        })
+      },
+
       //查看拨付资金  往来明细 凭证
       storeName(item){
         if(item.length>0){
@@ -431,6 +526,7 @@
           url: '/PersonOffice/getPayApprovalManager',
           data: params,
           all: (data) => {
+            this.contentTotal = data.total
             //不管是不是初始化都需要执行的代码
           },
           init: (data) => {

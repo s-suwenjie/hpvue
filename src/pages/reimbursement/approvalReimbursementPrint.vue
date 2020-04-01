@@ -29,15 +29,7 @@
     },
     methods:{
       doPrint(){
-        try {
-          this.ptintItem = this.printID.split("|");
-        }catch (e) {}
-        for(var i=0;i<this.ptintItem.length;i++){
-          var a = document.createElement("a");
-          a.download = this.ptintItem[i];
-          a.href = "/UploadFile/" + this.ptintItem[i];
-          a.click();
-        }
+        window.open("/UploadFile/" + this.printID)
         /*添加打印次数 */
         let printLogParams = {
           ownerID: this.fundID,
@@ -109,7 +101,7 @@
         data: params,
         call: (data)=>{
           this.contentHtml = data.contentHtml
-          this.printID=data.printID
+          this.printID = data.printID
           this.isSplit = data.isSplit
         }
       })

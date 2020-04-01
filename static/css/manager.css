@@ -164,7 +164,9 @@
 .m_pager{
     padding-left: 10px;
 }
-
+.textNormal{
+    font-weight: normal !important;
+}
 .mt_psd{
     display: flex;
     flex-direction: row;

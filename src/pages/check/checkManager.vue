@@ -6,7 +6,7 @@
       <template #navigationLft>
         <div @mouseover="tipChange(index)" @mouseout="tipOut" style="margin: 0;position: relative;"  v-for="(item,index) in routerList" :key="index">
           <router-link tag="div" :class="item.class" style="margin: 0;" class="tip" :to="item.path">
-            <div class="cbl_main_prompt">
+            <div class="cbl_main_prompt2 tipShow">
               <div class="cbl_main_prompt_content" style="font-size:13px;padding: 0 12px;">
                 {{tipValue}}
                 <img src="/UploadFile/m_image/arrow.png">
@@ -36,6 +36,7 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth title="所属单位" value="name"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="账户性质"></yhm-managerth>
         <yhm-managerth style="width: 160px;" title="所属银行" value="bank"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="支票类型" value="category"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="入库日期" value="workDate"></yhm-managerth>
@@ -51,6 +52,7 @@
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item.id,item.state)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.name"></yhm-manager-td>
+          <yhm-manager-td :value="item.natureType"></yhm-manager-td>
           <yhm-manager-td-logo :value="item.bank" :logo="item.bankLogo" tag="BankLogo" :center="true"></yhm-manager-td-logo>
           <yhm-manager-td-psd :value="item.category" :list="categoryList" ></yhm-manager-td-psd>
           <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
@@ -145,10 +147,10 @@
     methods: {
       tipChange(index){
         this.tipValue=this.tipList[index][0]
-        $('.cbl_main_prompt').eq(index).css({'display':'block'})
+        $('.tipShow').eq(index).css({'display':'block'})
       },
       tipOut(){
-        $('.cbl_main_prompt').css('display','none')
+        $('.tipShow').css('display','none')
       },
       wareHous(item){
         this.$dialog.confirm({
@@ -252,7 +254,7 @@
 </script>
 
 <style scoped>
-  .cbl_main_prompt{
+  .tipShow{
     width: 100px;
     display: none;
   }

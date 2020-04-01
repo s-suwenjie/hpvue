@@ -960,6 +960,8 @@ export default {
       let name = '65'
       if (this.ownerSys === '1') {
         name = '63'
+      } else if(this.ownerSys === '3'){
+        name = '93'
       }
       this.$dialog.OpenWindow({
         width: 950,

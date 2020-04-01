@@ -5,7 +5,9 @@
       <yhm-app-structure-top-tap-menu :select="true" title="付款申请"></yhm-app-structure-top-tap-menu>
     </yhm-app-structure-top-tap>
     <div style="overflow: auto;">
-<!--    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish" :is-allow-refresh="false">-->
+      <div class="noticeBar" v-if="states==9||isFinish==0&&states==-1">请移动到PC端进行拨款</div>
+
+      <!--    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish" :is-allow-refresh="false">-->
       <yhm-app-structure-menu-group title="基本信息"  @click="toggle(0)">
         <yhm-app-view-control style="white-space: nowrap;" title="收款方" :content="details.otherUnit"></yhm-app-view-control>
         <yhm-app-view-control title="是否关联" :content="details.isRelevance" :psd="isRelevanceList"></yhm-app-view-control>
@@ -18,7 +20,7 @@
         <div class="app_files" style="word-break:break-all;">文件:
           <span v-for="(item,index) in files" :key="index" class="imgName" @click="imgSkip(item)">{{item.showName}}</span>
         </div>
-        <yhm-app-approval-result v-if="!getShowOperate" v-show="resultShow" :category="getState" :left="3.5" :top="0.5"></yhm-app-approval-result>
+        <yhm-app-approval-result v-if="!getShowOperate" :category="getState" :left="3.5" :top="0.5"></yhm-app-approval-result>
         <yhm-app-view-child :title="'发票明细（' + (index+1) + '）'" v-for="(detailsItem,index) in productDetails" :key="detailsItem.id">
           <yhm-app-view-control title="发票号码" :content="detailsItem.code"></yhm-app-view-control>
           <yhm-app-view-control title="开票日期" :content="detailsItem.workDate"></yhm-app-view-control>
@@ -47,7 +49,7 @@
 <!--    </yhm-app-scroll>-->
     </div>
 
-    <yhm-app-form-operate v-if="getShowOperate" v-show="resultShow">
+    <yhm-app-form-operate v-if="getShowOperate" v-show="allBtnShow">
       <yhm-app-button @call="rejectEvent" value="驳回" category="ten"></yhm-app-button>
       <yhm-app-button @call="adoptEvent" value="通过" category="two"></yhm-app-button>
     </yhm-app-form-operate>
@@ -63,12 +65,13 @@
     mixins:[appviewmixin],
     data(){
       return{
+        states:'',
         category:'',     //类型
         isFinishBack:'1',
         isInvoice: false,
         isApproval:'0',
         loadFinish: false,
-        resultShow:true,
+        allBtnShow:true,
         state: '',
         isFinish:'0',
         details:[],
@@ -90,7 +93,7 @@
         }
       },
       toggle(index){
-        if($(".structure_main_content").eq(index).is(":hidden")){//判断是否隐藏去除隐藏后重叠的底部边框
+        if($(".structure_main_content").eq(index).is(":hidden")){//判断是否隐藏 去除隐藏后重叠的底部边框
           $('.structure_main_title').eq(index).css({'border-bottom':'0.02666667rem solid #bfbfbf'})
         }else{
           $('.structure_main_title').eq(index).css({'border-bottom':'0'})}
@@ -178,9 +181,7 @@
       document.querySelector('body').setAttribute('style', 'margin: 0 auto; width: 100%; background:#f3f3f3; overflow-x: hidden;height: 100%;');
       this.setQuery2Value('isFinishBack')
       this.setQuery2Value('isApproval')
-      if(this.isApproval==='2'){
-        this.resultShow = false
-      } else{
+      if(this.isApproval!=='2'){
         this.isFinish = this.isApproval
       }
       this.$nextTick(() => {
@@ -201,6 +202,12 @@
           this.listCategoryList = data.listCategoryPsd.list
           this.files = data.files
           this.state = data.state
+          this.states = data.state
+          if(this.states=='9'||this.isFinish==0&&this.states==-1){
+            this.allBtnShow=false
+          }else{
+            this.allBtnShow=true
+          }
         }
       })
     },
@@ -209,13 +216,14 @@
         return this.isFinish === '0'
       },
       getState(){
-        return this.state % 2 === 1 || this.state === -1
+        return this.state % 2 == 1 || this.state == -1
       }
     }
   }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  @rem:375/10rem;
   .flex_img{
     display: flex;
     justify-content: space-between;
@@ -242,5 +250,12 @@
   }
   .imgName:hover{
     text-decoration: underline;
+  }
+  .noticeBar{
+    font-size: 14/@rem;
+    background-color: #fffbe8;
+    color: #ed6a0c;
+    padding: 5/@rem 20/@rem;
+    text-align: center;
   }
 </style>

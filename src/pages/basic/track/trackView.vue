@@ -11,7 +11,7 @@
         <yhm-view-control title="身份证号" :content="idNo"></yhm-view-control>
         <yhm-view-control title="行车证信息"  category="3" type="smfiles"  :content="drivingLicense"></yhm-view-control>
         <yhm-view-control title="车架号" :content="frameNumber"></yhm-view-control>
-        <yhm-view-control title="登记日期" :content="registerDate"></yhm-view-control>
+        <yhm-view-control title="登记日期" :content="registerDate" type="date"></yhm-view-control>
         <yhm-view-control title="发动机号" :content="engineNumber" ></yhm-view-control>
       </template>
     </yhm-view-body>
@@ -24,9 +24,9 @@
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
           <yhm-view-control title="往年投保公司" category="3" :content="lastYearUnit" :psd="lastYearUnitList"></yhm-view-control>
-          <yhm-view-control title="交强险到期日" :content="forceEndDate"></yhm-view-control>
+          <yhm-view-control title="交强险到期日" :content="forceEndDate"  type="date"></yhm-view-control>
           <yhm-view-control title="剩余时间" category="2" :content="forceDay+' 天'"></yhm-view-control>
-          <yhm-view-control title="商业险到期日" :content="businessEndDate" ></yhm-view-control>
+          <yhm-view-control title="商业险到期日" :content="businessEndDate"  type="date"></yhm-view-control>
           <yhm-view-control title="剩余时间" category="2" :content="businessDay+' 天'"></yhm-view-control>
         </yhm-view-tab-content>
       </template>

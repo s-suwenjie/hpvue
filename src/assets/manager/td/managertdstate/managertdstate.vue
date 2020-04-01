@@ -63,11 +63,15 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="less">
   .stateImg{
     margin-right: 3px;
   }
   .stateImg:before{
     font-size: 20px;
+  }
+  .md_center{
+    justify-content: flex-start;
+    margin-left: 16px;
   }
 </style>

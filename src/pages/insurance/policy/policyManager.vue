@@ -20,15 +20,15 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth  title="车牌号" value="plate"></yhm-managerth>
-        <yhm-managerth  title="联系人" value="contactName"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="车牌号" value="plate"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth  title="被保险人" value="beinsuredName"></yhm-managerth>
-        <yhm-managerth  title="投保日期" value="insuredDate"></yhm-managerth>
-        <yhm-managerth  title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth  title="投保类型" value="insuredTypeVal"></yhm-managerth>
-        <yhm-managerth  title="保费合计" value="premiumsTotal"></yhm-managerth>
-        <yhm-managerth  title="实收金额" value="receivedMoney"></yhm-managerth>
-        <yhm-managerth  title="状态" value="status"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="投保日期" value="insuredDate"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="保险公司" value="insuredUnit"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="实收金额" value="receivedMoney"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="状态" value="status"></yhm-managerth>
       </template>
 
       <!--数据明细-->

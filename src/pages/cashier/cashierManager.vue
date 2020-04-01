@@ -25,7 +25,7 @@
         <yhm-managerth title="金额"  value="money"></yhm-managerth>
         <yhm-managerth title="此条交易剩余金额"  value="bankMoney"></yhm-managerth>
         <yhm-managerth title="编号" value="money"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="操作"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -35,7 +35,7 @@
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.categoryVal"></yhm-manager-td>
           <yhm-manager-td :value="item.insuredUnitShowName"></yhm-manager-td>
-          <yhm-manager-td-direction :direction="item.direction" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
+          <yhm-manager-td-direction  class="dfJcc" :direction="item.direction" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.bankMoney"></yhm-manager-td-money>
           <yhm-manager-td :value="item.number"></yhm-manager-td>

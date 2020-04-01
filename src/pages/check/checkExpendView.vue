@@ -13,7 +13,7 @@
           <yhm-view-control title="收款单位" :content="other"></yhm-view-control>
 
           <yhm-view-control category="3" title="对应账号" :content="account"></yhm-view-control>
-          <yhm-view-control title="发票类型" :content="category" :psd="categoryList" ></yhm-view-control>
+          <yhm-view-control title="支票类型" :content="category" :psd="categoryList" ></yhm-view-control>
           <yhm-view-control title="支票状态" :content="state" :psd="stateList"></yhm-view-control>
         </template>
       </yhm-view-body>

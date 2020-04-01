@@ -3,7 +3,7 @@
     <div v-show="isNotShowOperate" class="btn">
       <slot name="btn"></slot>
     </div>
-    <div class="info">
+    <div class="info" v-if="!noTimeTip">
       <div>
         <p>首次添加：<span>{{createName}}</span></p>
         <p>时间：<span>{{insertDate}}</span></p>
@@ -39,6 +39,10 @@
       updateDate:{
         type:String,
         default:"当前时间"
+      },
+      noTimeTip: {
+        type: Boolean,
+        default: false
       }
     }
   }

@@ -66,7 +66,7 @@
       <div class="orderBtmTip">
         <p>注：最晚于 10：00 前完成点餐服务、逾期将点餐失败</p>
       </div>
-      <appToast type="text" text="联系人或车牌号必填其中之一" v-show="toast"></appToast>
+      <appToast type="text" text="联系人或车牌号必填其中之一" v-show="toast" @login-success="toast = $event"></appToast>
     </div>
 </template>
 

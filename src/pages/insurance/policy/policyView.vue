@@ -4,7 +4,7 @@
       <template #title>基本信息</template>
       <template #body>
         <yhm-view-control title="车牌号" :content="plate"></yhm-view-control>
-        <yhm-view-control title="投保日期" :content="insuredDate" ></yhm-view-control>
+        <yhm-view-control title="投保日期" :content="insuredDate" type="date"></yhm-view-control>
         <yhm-view-control title="被投保人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
         <yhm-view-control title="联系人" :content="contactName+'-'+contactPhone"></yhm-view-control>
         <yhm-view-control title="投保人" :content="insuredName+'-'+insuredPhone"></yhm-view-control>
@@ -12,10 +12,8 @@
         <yhm-view-control title="投保类型"  :content="insuredTypeVal"></yhm-view-control>
         <yhm-view-control title="投保渠道" :content="insuredChannelVal"></yhm-view-control>
         <yhm-view-control title="投保项目" :content="insuredProjectVal"></yhm-view-control>
-
       </template>
     </yhm-view-body>
-
     <div class="f_split"></div>
     <yhm-view-tab>
       <template #tab>
@@ -25,23 +23,21 @@
       </template>
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
-          <yhm-view-control title="交强险开始日"  v-if="isforceStart" :content="forceStartDate" ></yhm-view-control>
-          <yhm-view-control title="交强险到期日"  v-if="isforceStart"  :content="forceEndDate"></yhm-view-control>
-          <yhm-view-control title="交强险金额"  v-if="isforceStart" :content="forceMoney"></yhm-view-control>
-          <yhm-view-control title="车船税金额"  v-if="isvehicle"   :content="vehicleMoney"></yhm-view-control>
-          <yhm-view-control title="商业险到期日" v-if="isbusinessStart" :content="businessStartDate" ></yhm-view-control>
-          <yhm-view-control title="商业险结束日" v-if="isbusinessStart"  :content="businessEndDate"></yhm-view-control>
+          <yhm-view-control title="交强险开始日"  v-if="isforceStart" :content="forceStartDate" type="date"></yhm-view-control>
+          <yhm-view-control title="交强险到期日"  v-if="isforceStart"  :content="forceEndDate" type="date"></yhm-view-control>
+          <yhm-view-control title="交强险金额"  v-if="isforceStart" :content="forceMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="车船税金额"  v-if="isvehicle"   :content="vehicleMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="商业险到期日" v-if="isbusinessStart" :content="businessStartDate" type="date"></yhm-view-control>
+          <yhm-view-control title="商业险结束日" v-if="isbusinessStart"  :content="businessEndDate" type="date"></yhm-view-control>
           <yhm-view-control title="商业险种(金额)" category="3" v-if="isbusinessStart" :content="commercialVal"></yhm-view-control>
           <yhm-view-control title="投保公司" :content="insuredUnit" :psd="insuredUnitList"></yhm-view-control>
-          <yhm-view-control title="商业险实际金额"  v-if="isbusinessStart" :content="businessMoney"></yhm-view-control>
-          <yhm-view-control title="开票金额" :content="invoicingMoney"></yhm-view-control>
-          <yhm-view-control title="保费合计" :content="premiumsTotal"></yhm-view-control>
-          <yhm-view-control title="优惠金额/点数" v-if="isbusinessStart" :content="discountMoney+'-'+discountCount"></yhm-view-control>
-          <yhm-view-control title="实收金额" :content="receivedMoney"></yhm-view-control>
+          <yhm-view-control title="商业险实际金额"  v-if="isbusinessStart" :content="businessMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="开票金额" :content="invoicingMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="保费合计" :content="premiumsTotal" type="money"></yhm-view-control>
+          <yhm-view-control title="优惠金额/点数" v-if="isbusinessStart" :content="discountMoney+'／'+discountCount"></yhm-view-control>
+          <yhm-view-control title="实收金额" :content="receivedMoney" type="money"></yhm-view-control>
           <yhm-view-control title="是否返利" :content="cashVal"></yhm-view-control>
           <yhm-view-control title="返利对象" v-if="isCash" :content="cashObjectVal" ></yhm-view-control>
-
-
         </yhm-view-tab-content>
         <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[1].select">
           <template #listHead>
@@ -58,7 +54,6 @@
             <span class="m_listNoData" v-show="empty">暂时没有数据</span>
           </template>
         </yhm-view-tab-list>
-
         <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[2].select">
           <template #listHead>
             <yhm-managerth style="width: 100px;" title="所属类型" ></yhm-managerth>
@@ -68,16 +63,15 @@
             <yhm-managerth style="width: 100px;" title="总金额"></yhm-managerth>
             <yhm-managerth style="width: 100px;" title="交易金额"></yhm-managerth>
             <yhm-managerth style="width: 150px;" title="编号"></yhm-managerth>
-
           </template>
           <template #listBody>
             <tr v-for="(item,index) in listPolicy" :key="index" :class="{InterlacBg:index%2!==0}">
-              <yhm-manager-td  :value="item.categoryVal"></yhm-manager-td>
-              <yhm-manager-td-direction :direction="item.direction" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
-              <yhm-manager-td :tip="true" :value="item.ownAccount"></yhm-manager-td>
-              <yhm-manager-td  :value="item.otherAccount"></yhm-manager-td>
-              <yhm-manager-td  :value="item.money"></yhm-manager-td>
-              <yhm-manager-td  :value="item.bankMoney"></yhm-manager-td>
+              <yhm-manager-td :value="item.categoryVal"></yhm-manager-td>
+              <yhm-manager-td-direction class="dfJcc" :direction="item.direction" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
+              <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.ownAccount"></yhm-manager-td>
+              <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td-money :value="Math.abs(item.money) + ''"></yhm-manager-td-money>
+              <yhm-manager-td-money :value="Math.abs(item.bankMoney) + ''"></yhm-manager-td-money>
               <yhm-manager-td  :value="item.number"></yhm-manager-td>
             </tr>
           </template>
@@ -91,11 +85,9 @@
       </template>
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
-
     </yhm-formoperate>
   </div>
 </template>
-
 <script>
   import { viewmixin } from '@/assets/view.js'
   import { accAdd } from '../../../assets/common'
@@ -113,39 +105,28 @@
         contactID:'',//联系人
         contactName:'',
         contactPhone:'',
-        //投保人
-        insuredName:'',
+        insuredName:'',//投保人
         insuredPhone:'',
-        //与车主关系
-        relationshipVal:'',
-        //投保类型
-        insuredTypeVal:'',
-
-        //投保渠道
-        insuredChannelVal:'',
-
-        //投保项目
-        insuredProject:[],
+        relationshipVal:'', //与车主关系
+        insuredTypeVal:'',//投保类型
+        insuredChannelVal:'',//投保渠道
+        insuredProject:[], //投保项目
         insuredProjectVal:'',
-
         forceStartDate:'',//交强险开始日期
         forceEndDate:'',//交强险结束日期
         forceMoney:'',//交强险金额
         vehicleMoney:'',//车船税金额
         businessStartDate:'',//商业险开始日期
         businessEndDate:'',//商业险结束日期
-        //投保公司
-        insuredUnitVal:'',
-        //商业险种
-        commercialVal:'',
+        insuredUnitVal:'', //投保公司
+        commercialVal:'', //商业险种
         invoicingMoney:'',//开票金额
         businessMoney:'',//商业险实际金额
         premiumsTotal:'',//保费合计
         discountMoney:'',//优惠金额
         discountCount:'',//优惠点位
         receivedMoney:'',//实收金额
-        //是否返利
-        cash:'',
+        cash:'',//是否返利
         cashVal:'',
         cashObject:'',
         cashObjectVal:'',
@@ -170,14 +151,11 @@
         isbusinessStart:true,
         isCash:true,
         empty:true,
-
         insuredUnit: '',
         insuredUnitList: [],
-
         listPolicy:[],
         discountList:[],
         value: ''
-
       }
     },
     methods:{
@@ -186,11 +164,9 @@
           id: this.id,
         }
         let sum=0
-
           this.init({
           url: '/Insurance/initBillingForm',
           data: params,
-
           call: (data) => {
             this.id=data.id
             this.plate=data.plate
@@ -211,9 +187,7 @@
             this.vehicleMoney=data.vehicleMoney
             this.businessStartDate=data.businessStartDate
             this.businessEndDate=data.businessEndDate
-
             this.insuredUnitVal=data.insuredUnitVal
-
             this.commercialVal=data.commercialVal
             this.invoicingMoney=data.invoicingMoney
             this.businessMoney=data.businessMoney
@@ -232,13 +206,13 @@
             for(let i in this.listPolicy){
               sum +=  parseFloat(this.listPolicy[i].bankMoney)
             }
+
             this.sumMoney=sum+'' //计算实际金额
             if (this.cash==='0'){
               this.isCash=true
             }else{
               this.isCash=false
             }
-
             if (this.discountList.length===0){
               this.empty=true
             }else {
@@ -262,9 +236,7 @@
               this.isbusinessStart=false
             }
           },
-
         })
-
       }
     },
     created () {

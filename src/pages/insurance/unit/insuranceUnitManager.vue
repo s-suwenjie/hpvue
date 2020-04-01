@@ -36,7 +36,7 @@
           <yhm-manager-td-rgt :value="item.oldRate===''?'------':item.oldRate+'  %'" ></yhm-manager-td-rgt>
           <yhm-manager-td-rgt :value="item.clientRate===''?'------':item.clientRate+'  %'" ></yhm-manager-td-rgt>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button  @click="editBtn(item)" value="编辑" icon="i-btn-applicationSm"  color="#0033FF"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="editBtn(item)" value="编辑" icon="i-edit"  color="#0033FF"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>

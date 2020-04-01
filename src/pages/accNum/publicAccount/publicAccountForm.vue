@@ -12,6 +12,7 @@
 
         <yhm-form-select :show="isSetAcc" @click="selectSettlementAccount" title="结算账户" tip="value"  :value="settlementAccount" id="settlementAccount" rule="R0000"></yhm-form-select>
         <yhm-form-text @repeatverify="repeatverifyAccountEvent"  ref="account"  :title="accountTitle" :value="account" id="account"  rule="R0000" :tip="tip" :tip-rule="tipRule"></yhm-form-text>
+        <yhm-form-text :show="isAlias" title="账户别名" :value="alias" id="alias"></yhm-form-text>
         <yhm-form-radio :show="isAccNature" title="账户性质" :select-list="natureList"  :value="nature" id="nature" rule="R0000" width="1"></yhm-form-radio>
         <yhm-form-text :show="isAccMan" title="客户经理" tip="value" :value="customerManager" id="customerManager" rule="R0000"></yhm-form-text>
 <!--        <yhm-form-select :show="isAccMan" title="客户经理" tip="value" @click="managerEvent" :value="customerManagerName" id="customerManagerName" rule="R0000"></yhm-form-select>-->
@@ -135,6 +136,9 @@
         posNameShow: false,
         accountTitle: '账号',
 
+        alias:'',//账户别名
+        isAlias:false,
+
         list:[],
         isList:false,
 
@@ -193,6 +197,10 @@
           this.categoryList = data.categoryPsd.list
           this.category = data.categoryPsd.value
           this.tipRule = data.accountEcho
+          this.alias = data.alias
+          if(this.categoryUnit==='0'){
+            this.isAlias=true
+          }
 
           this.isRelevanceEvent ()
           if(this.categoryUnit === '1'){
@@ -319,6 +327,9 @@
               this.name = data.name
               this.unitID = data.id
               this.categoryUnit = data.category
+              if(this.categoryUnit==='0'){
+                this.isAlias=true
+              }
               this.isRelevanceEvent ()
             }
           }
@@ -461,6 +472,7 @@
             settlementAccount:this.settlementAccount,     //结算账户
             posAccount:this.InvoiceDetails,         //添加下挂信息
             categoryUnit: this.categoryUnit,         //本外单位代码
+            alias: this.alias,//账户别名
           }
           this.ajaxJson({
             url: '/Fin/publicAccountVueSave',

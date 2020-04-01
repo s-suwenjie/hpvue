@@ -80,7 +80,7 @@
           data: params,
           all: (data) => {
             // 不管是不是初始化都需要执行的代码
-            this.content = data
+            this.content = data.content
           },
         })
       }

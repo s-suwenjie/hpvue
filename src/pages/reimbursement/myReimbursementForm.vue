@@ -347,7 +347,7 @@
           this.$dialog.OpenWindow({
             width: 1050,
             height: 840,
-            url: '/reimbursementDetailForm?id=' + id+'&ID='+this.id + '&edit='+this.btmShow,
+            url: '/reimbursementDetailForm?id=' + id+'&ID='+this.id + '&edit='+this.btmShow+ '&isSelectViewPrettyCash='+this.isSelectPrettyCash,
             title: '查看报销明细',
             closeCallBack: (data) => {
               this.$dialog.setReturnValue(this.id)

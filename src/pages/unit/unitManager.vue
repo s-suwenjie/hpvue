@@ -97,7 +97,7 @@
         })
       },
 
-      //搜素
+      //搜索
       initPageData (initValue) {
         let params = {}
         if (initValue) {

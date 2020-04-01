@@ -10,7 +10,13 @@
         <yhm-view-control  title="核销金额" v-if="noPrettyCashMoney" :content="prettyCashMoney" type="money"></yhm-view-control>
       </template>
     </yhm-view-body>
+
+
     <div class="f_split"></div>
+    <div class="i-left fs48b colorFFF" title="上一条" v-show="isLeftID"  @click="leftStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom:300px;z-index: 9999;display:flex;justify-content:center;align-items:center;"></div>
+    <div class="i-right fs48b colorFFF" title="下一条" v-show="isRightID" @click="rightStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom:300px;right:0px;z-index: 9999;display:flex;justify-content:center;align-items:center;"></div>
+
+
     <yhm-view-tab>
       <template #tab>
         <yhm-view-tab-button :list="tabState" :index="0">报销明细</yhm-view-tab-button>
@@ -162,9 +168,23 @@
         isChecks2:'',
         isChecks3:'',
         prettyCashsID:'',
+
+        isLeftID:false,//延长按钮
+        leftID:'',//上一条ID
+        isRightID:false,//延长按钮
+        rightID:'',//下一条ID
+
       }
     },
     methods:{
+
+      leftStrip(){
+        window.location='/approvalReimbursementForm?id='+this.leftID
+      },
+      rightStrip(){
+        window.location='/approvalReimbursementForm?id='+this.rightID
+      },
+
       approFund(){
         if (this.isPrettyCashOff === '0'){
           this.$dialog.OpenWindow({
@@ -470,10 +490,30 @@
             }
           }
         })
+      },
+      selectedList() {
+        let params = {
+          id: this.id
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedID',
+          data: params,
+          call: (data) => {
+            if(data.leftID!==""){
+              this.leftID=data.leftID
+              this.isLeftID=true
+            }
+            if(data.rightID!==""){
+              this.rightID=data.rightID
+              this.isRightID=true
+            }
+          }
+        })
       }
     },
     created () {
-      this.initData()
+      this.initData();
+      this.selectedList();
     }
   }
 </script>

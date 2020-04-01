@@ -25,5 +25,8 @@
 </script>
 
 <style scoped>
-
+.md_center{
+  justify-content: flex-start;
+  margin-left: 16px;
+}
 </style>

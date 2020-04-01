@@ -12,6 +12,12 @@
         </div>
         <div class="load-indicator">加载中<span class="span"></span></div>
       </div>
+      <!--
+         父组件引用示例
+         <appToast type="text" text="内容" :maskSwitch="true" v-show="toastShow" @login-success="toastShow = $event"></appToast>
+          :maskSwitch="true" 关闭遮罩 不加时默认开启遮罩
+          type=='text'时遮罩会有点击关闭事件 必须添加@login-success="toastShow（这个值要与v-show的变量一致） = $event" 不加会破坏单向数据流并报错
+       -->
     </div>
 </template>
 
@@ -30,7 +36,7 @@
       },
       maskSwitch: {//遮罩层开关
         type: Boolean,
-        default: true
+        default: false
       },
       shade:{
         type:Boolean,
@@ -43,10 +49,13 @@
     },
     methods:{
       clickEvent(){
-        alert()
-        setTimeout(()=>{
-          this.shade = !this.shade
-        },2000)
+        this.$nextTick(()=>{
+            // this.shade = !this.shade
+          if(this.type=='text'){
+              this.$emit('login-success',false);
+          }
+        })
+
       //   this.shade = !this.shade
       //   this.$nextTick(()=>{
       //     this.$emit('call')
@@ -54,15 +63,9 @@
       }
     },
     watch:{
-      // shade(val,newval){
-      //   alert()
-      //   if(newval==true){
-      //     setTimeout(()=>{
-      //       this.shade = !this.shade
-      //     },20)
-      //   }
-      //
-      // }
+    },
+    created () {
+
     }
   }
 </script>
@@ -162,6 +165,7 @@
     z-index: 999;
   }
   .toast{
+    z-index: 999;
     position: fixed;
     top: 50%;
     left: 50%;

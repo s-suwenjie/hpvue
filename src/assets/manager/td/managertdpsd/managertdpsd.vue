@@ -1,6 +1,6 @@
 <template>
   <td>
-    <div class="mt_psd" :class="{mt_psd_left:isLeft}" :style="getColor">
+    <div @click="clickEvent" class="mt_psd" :class="{mt_psd_left:isLeft}" :style="getColor">
       <div class="font" :class="[getIcon,fsb]"></div>
       <div :class="{ml3:getMl}">{{item.showName}}</div>
     </div>
@@ -32,6 +32,11 @@
         type: Array,
         required: true
       },
+    },
+    methods:{
+      clickEvent(){
+        this.$emit("click")
+      }
     },
     created(){
       for(var i = 0; i < this.list.length; i++){

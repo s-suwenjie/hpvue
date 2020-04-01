@@ -2,6 +2,11 @@
     <div class="aaa">
       name:{{name}}<br>
       phone:{{phone}}
+
+
+      <div @click="selectPrintEvent">选择打印</div>
+
+
       <br>
       <br>
       <br>
@@ -177,6 +182,19 @@
         }
         this.details.push(item)
       },
+      selectPrintEvent(){
+        this.$dialog.OpenWindow({
+          width: '465',
+          height: '365',
+          title: '选择打印',
+          url: '/selectPrint?id=' + this.ownerID,
+          closeCallBack: (data)=>{
+            if(data){
+              console.log(data)
+            }
+          }
+        })
+      }
     }
   }
 </script>

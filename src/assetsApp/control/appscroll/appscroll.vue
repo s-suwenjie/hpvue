@@ -152,6 +152,8 @@
     mounted () {
       this.initStyle()
       window.addEventListener('beforeunload', e => this.beforeunloadFn(e))
+      //有分页列表时会禁用原生滚动条 view页面可以直接不使用yhm-app-scroll标签
+      // 用<div style="overflow: auto;">启用原生滚动条 保持滚动条的平滑性 解决页面整体高度不准确以及所有overflow属性不生效问题
     },
     destroyed() {//监听离开事件
       this.enabledScroll()//重新启用原生滚动条

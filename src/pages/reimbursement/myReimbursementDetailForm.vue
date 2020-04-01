@@ -53,7 +53,11 @@
       <template #control>
 <!--        <yhm-form-date title="发生日期" :value="workDate" :min="minDate" :max="maxWorkDate" id="workDate" position="b" rule="R0000"></yhm-form-date>-->
         <yhm-form-zh-text-two :show="!noInvoice" color="#fd6802" :no-edit="true" tip-before="money" tip-after="value" :before="invoiceMoney" before-id="invoiceMoney" :after="invoiceCount" after-id="invoiceCount" title="发票金额" before-icon="rmb" after-title="发票张数"></yhm-form-zh-text-two>
-        <yhm-form-text ref="actualMoney" color="#0e9d51" :less-equal="invoiceMoney" less-equal-message="实际金额必须小于等于发票金额" title="实际金额" :no-edit=isActualMoney tip="money" before-icon="rmb" :value="actualMoney" id="actualMoney" rule="R3000"></yhm-form-text>
+
+        <yhm-form-text v-if="isViewPrettyCash" ref="actualMoney" color="#0e9d51" :less-equal="invoiceMoney" less-equal-message="实际金额必须小于等于发票金额" title="实际金额" :no-edit=isActualMoney tip="money" before-icon="rmb" :value="actualMoney" id="actualMoney" rule="R3000"></yhm-form-text>
+
+        <yhm-form-text v-if="!isViewPrettyCash" ref="actualMoney" color="#0e9d51" title="实际金额" :no-edit=isActualMoney tip="money" before-icon="rmb" :value="actualMoney" id="actualMoney" rule="R3000"></yhm-form-text>
+
 <!--        0e9d51-->
         <yhm-form-date ref="startDate" placeholder="*选填" placeholder-color="#A35227" color="#A35227" :max="endDate" title="费用" subtitle="开始日期" :value="startDate" id="startDate" position="u"></yhm-form-date>
         <yhm-form-date ref="endDate" placeholder="*选填" placeholder-color="#A35227" color="#A35227" :min="startDate" title="费用" subtitle="结束日期" :value="endDate" id="endDate" position="u"></yhm-form-date>
@@ -141,6 +145,8 @@
         noInvoiceReason: '',
         isNoInvoiceReason: false,
         isNoInvoiceReasonList: false,
+        isSelectViewPrettyCash: '',
+        isViewPrettyCash: true
       }
     },
 
@@ -863,6 +869,12 @@
       this.setQuery2Value('parentWorkDate')
       this.setQuery2Value('ID')
       this.setQuery2Value('edit')
+      this.setQuery2Value('isSelectViewPrettyCash')
+
+
+      if(this.isSelectViewPrettyCash === '1'){
+        this.isViewPrettyCash = false
+      }
 
 
       if(this.subjectID){
@@ -875,7 +887,7 @@
           data: params,
           all: (data)=>{
             this.subjectID = data.id
-            this.subject = data.value2
+            this.subject = data.value2 === '' ? data.value1 : data.value2
           }
         })
       }

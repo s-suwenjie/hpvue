@@ -4,7 +4,6 @@
       <!--导航条-->
 
       <template #navigation>财务管理&nbsp;&gt;&nbsp;账号&nbsp;&gt;&nbsp;对公账号</template>
-
       <!--操作区-->
       <template #operate>
         <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
@@ -25,9 +24,12 @@
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-        <yhm-managerth title="户名" value="name" ></yhm-managerth>
+        <yhm-managerth style="width: 300px" title="户名" value="name" ></yhm-managerth>
+        <yhm-managerth style="width: 300px" title="开户行" value="bank" ></yhm-managerth>
         <yhm-managerth style="width: 250px" title="账号" value="account" ></yhm-managerth>
-        <yhm-managerth style="width: 350px" title="开户行" value="bank" ></yhm-managerth>
+        <yhm-managerth style="width: 150px" title="别名" value="alias" ></yhm-managerth>
+        <yhm-managerth style="width: 150px" title="联行号"></yhm-managerth>
+        <yhm-managerth title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -35,9 +37,17 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item.id)"></yhm-manager-td-look>
-          <yhm-manager-td :value="item.name"></yhm-manager-td>
-          <yhm-manager-td :value="item.accountStr"></yhm-manager-td>
+          <yhm-manager-td-tip-img :value="item.name" :unitUrl="item.unitUrl" icon="icon-uniE999" :tip="true" color="#333" node-class-name="m_main"></yhm-manager-td-tip-img>
           <yhm-manager-td :value="item.bank"></yhm-manager-td>
+<!--          <yhm-manager-td-icon-txt-color node-class-name="m_main" :tip="true" :showName="item.accountStr" v-if="item.category!=0"  color="#49a9ea" icon="icon-3"></yhm-manager-td-icon-txt-color>-->
+<!--          <yhm-manager-td-tip-img :value="item.accountStr"></yhm-manager-td-tip-img>-->
+          <yhm-manager-td-tip-img :value="item.accountStr" :unitUrl="item.bankLogo" v-if="item.category!=='0'" :tip="true" color="#333" icon="icon-3" node-class-name="m_main" ></yhm-manager-td-tip-img>
+          <yhm-manager-td :value="item.accountStr" v-else></yhm-manager-td>
+          <yhm-manager-td :value="item.alias"></yhm-manager-td>
+          <yhm-manager-td :value="item.interbank"></yhm-manager-td>
+          <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button  @click="clickCopy(item)" value="一键复制" icon="i-copy" color="#49a9ea"></yhm-manager-td-operate-button>
+          </yhm-manager-td-operate>
         </tr>
       </template>
 
@@ -49,22 +59,22 @@
       <template #pager>
         <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
       </template>
-
     </yhm-managerpage>
+    <div class="copyTip" v-if="isCopyTip">复制成功 : {{text}}</div>
   </div>
-
 </template>
 
 <script>
-  import Qs from 'qs'
-  import { selectClick, selectComputedSelected, selectConfirm, selectdbClick, number2chinese } from '@/assets/common.js'
-  import { selectItem,managermixin } from '@/assets/manager.js'
+  import { managermixin } from '@/assets/manager.js'
   export default {
     name: 'publicAccManager',
     mixins: [managermixin],
     data() {
       return {
         id: '',
+        text:'',
+        time:'',
+        isCopyTip:false,
         listCategoryUnit: {
           value: '',
           list: []
@@ -81,11 +91,31 @@
           value: '',
           list: []
         },
-
         empty: true,
+
       }
     },
     methods:{
+      clickCopy(item){
+        clearTimeout(this.time)//再次点击时关闭上次触发的定时器 防止多次执行
+        console.log(item)
+        let text = '户名: '+item.name + '  '
+                    + '开户行: ' + item.bank + '  '
+                    + '账号: ' + item.account + '  '
+                    + '别名: ' + item.alias + '  '
+                    + '联行号: ' + item.interbank
+        this.$copyText(text).then(res=>{
+          this.text = text
+          this.isCopyTip =  true
+          let that = this
+          console.log('复制成功',text)
+          this.time = window.setTimeout(()=>{//将定时器的id存入变量
+            that.isCopyTip =  false
+          },4500)
+        },err=>{
+
+        })
+      },
       add (id) {
         // 默认设置页面标记是查看
         var isAdd = false
@@ -173,5 +203,19 @@
 </script>
 
 <style scoped>
-
+  /* 复制提示内容 */
+  .copyTip {
+    position: fixed;
+    top: 82px;
+    z-index: 9999;
+    background-color: #fff;
+    color: black;
+    padding: 16px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: max-content;
+    border-radius: 4px;
+    font-size: 14px;
+  }
 </style>

@@ -14,19 +14,20 @@
         <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()" category="one"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
+        <yhm-commonbutton value="打开选中信息" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
       </template>
 
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" all="0" :content="listState"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" :content="listState"></yhm-radiofilter>
         </div>
       </template>
       <!--数据表头-->
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-        <yhm-managerth title="收款方" value="id"></yhm-managerth>
+        <yhm-managerth style="width: 350px;" title="收款方" value="id"></yhm-managerth>
         <yhm-managerth style="width: 150px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="付款计划金额" value="planMoney"></yhm-managerth>
@@ -54,6 +55,36 @@
       <template #empty>
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>
+
+
+      <template #total>
+        <div class="listTotalCrente m_list w620">
+          <div class="listTotalLeft">
+            <span class="test"></span>
+            <span class="test">金额</span>
+            <span class="test">条数</span>
+          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
+            <thead>
+            <tr>
+              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="进行中" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="已完成" ></yhm-managerth>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <yhm-manager-td-money @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+            </tr>
+            <tr>
+              <yhm-manager-td-rgt @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </template>
+
       <!--分页控件-->
       <template #pager>
         <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
@@ -107,9 +138,68 @@ export default {
         {id:'5', name: '备用金',path:'/home/prettyCashsManager'},
         {id:'6', name: '补签字',path:'/home/myManager/signatureManager'},
       ],
+      contentTotal: []
     }
   },
   methods: {
+    //汇总部分筛选
+    totalClick(item){
+      // if(item.isFinish==='-1'){
+      //   this.listState.value = ''
+      // } else if(item.isFinish==='0'){
+      //   this.listState.value = '0'
+      // } else if(item.isFinish==='1'){
+      //   this.listState.value = '1'
+      // }
+      // this.pageIndex=1
+      // this.initPageData()
+    },
+    //选中汇总
+    selectedSum(){
+      let params={
+        selectValue:this.selectValue
+      }
+      this.ajaxJson({
+        url: '/PersonOffice/commonSelectedsave',
+        data:params,
+        call:(data) =>{
+          if(data.type===0){
+            this.ajaxJson({
+              url: '/PersonOffice/paymentPlanManagerTotal',
+              data:params,
+              call:(information) =>{
+                this.contentTotal = information
+              }
+            })
+          }
+        }
+      })
+    },
+    //打开选中信息
+    selectedList(){
+      let params={
+        selectValue:this.selectValue
+      }
+      this.ajaxJson({
+        url: '/PersonOffice/commonSelectedsave',
+        data:params,
+        call:(data) =>{
+          if(data.type===0){
+            this.$dialog.OpenWindow({
+              width: '1050',
+              height: '620',
+              title: '查看选中信息',
+              url: '/PaymentPlanFormView?id='+data.val,
+              closeCallBack: (dataTwo)=>{
+                if(dataTwo){
+
+                }
+              }
+            })
+          }
+        }
+      })
+    },
     /* 删除按钮 */
     del(item){
       this.$dialog.confirm({
@@ -215,6 +305,7 @@ export default {
         data: params,
         all: (data) => {
           // 不管是不是初始化都需要执行的代码
+          this.contentTotal = data.total
         },
         init: (data) => {
           // 初始化时需要执行的代码

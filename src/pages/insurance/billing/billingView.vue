@@ -4,7 +4,7 @@
       <template #title>基本信息</template>
       <template #body>
         <yhm-view-control title="车牌号" :content="plate"></yhm-view-control>
-        <yhm-view-control title="投保日期" :content="insuredDate" ></yhm-view-control>
+        <yhm-view-control title="投保日期" :content="insuredDate" type="date"></yhm-view-control>
         <yhm-view-control title="被投保人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
         <yhm-view-control title="联系人" :content="contactName+'-'+contactPhone"></yhm-view-control>
         <yhm-view-control title="投保人" :content="insuredName+'-'+insuredPhone"></yhm-view-control>
@@ -23,19 +23,19 @@
       </template>
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
-          <yhm-view-control title="交强险开始日"  v-if="isforceStart" :content="forceStartDate" ></yhm-view-control>
-          <yhm-view-control title="交强险到期日"  v-if="isforceStart"  :content="forceEndDate"></yhm-view-control>
-          <yhm-view-control title="交强险金额"  v-if="isforceStart" :content="forceMoney"></yhm-view-control>
-          <yhm-view-control title="车船税金额"  v-if="isvehicle"   :content="vehicleMoney"></yhm-view-control>
-          <yhm-view-control title="商业险到期日" v-if="isbusinessStart" :content="businessStartDate" ></yhm-view-control>
-          <yhm-view-control title="商业险结束日" v-if="isbusinessStart"  :content="businessEndDate"></yhm-view-control>
-          <yhm-view-control title="商业险种(金额)" category="3" v-if="isbusinessStart" :content="commercialVal"></yhm-view-control>
+          <yhm-view-control title="交强险开始日"  v-if="isforceStart" :content="forceStartDate" type="date"></yhm-view-control>
+          <yhm-view-control title="交强险到期日"  v-if="isforceStart"  :content="forceEndDate" type="date"></yhm-view-control>
+          <yhm-view-control title="交强险金额"  v-if="isforceStart" :content="forceMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="车船税金额"  v-if="isvehicle"   :content="vehicleMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="商业险到期日" v-if="isbusinessStart" :content="businessStartDate" type="date"></yhm-view-control>
+          <yhm-view-control title="商业险结束日" v-if="isbusinessStart"  :content="businessEndDate" type="date"></yhm-view-control>
+          <yhm-view-control title="商业险种(金额)" category="3" v-if="isbusinessStart" :content="commercialVal" ></yhm-view-control>
           <yhm-view-control title="投保公司" :content="insuredUnit" :psd="insuredUnitList"></yhm-view-control>
-          <yhm-view-control title="商业险实际金额"  v-if="isbusinessStart" :content="businessMoney"></yhm-view-control>
-          <yhm-view-control title="开票金额" :content="invoicingMoney"></yhm-view-control>
-          <yhm-view-control title="保费合计" :content="premiumsTotal"></yhm-view-control>
-          <yhm-view-control title="优惠金额/点数" v-if="isbusinessStart" :content="discountMoney+'/'+discountCount"></yhm-view-control>
-          <yhm-view-control title="实收金额" :content="receivedMoney"></yhm-view-control>
+          <yhm-view-control title="商业险实际金额"  v-if="isbusinessStart" :content="businessMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="开票金额" :content="invoicingMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="保费合计" :content="premiumsTotal" type="money"></yhm-view-control>
+          <yhm-view-control title="优惠金额/点数" v-if="isbusinessStart" :content="discountMoney+'／'+discountCount" ></yhm-view-control>
+          <yhm-view-control title="实收金额" :content="receivedMoney" type="money"></yhm-view-control>
           <yhm-view-control title="是否返利" :content="cashVal"></yhm-view-control>
           <yhm-view-control title="返利对象" v-if="isCash" :content="cashObjectVal" ></yhm-view-control>
 
@@ -134,7 +134,7 @@
         status:'',
 
         insuredUnit: '',
-        insuredUnitList: '',
+        insuredUnitList: [],
         discountList:[],
 
         isState: false

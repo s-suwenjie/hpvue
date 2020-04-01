@@ -10,22 +10,27 @@
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish,item.isApproval)" v-for="(item) in content" :key="item.id">
         <yhm-app-view-control :contentTitle="item.otherUnit" :content="item.lastDate" type="date"></yhm-app-view-control>
         <yhm-app-view-detail>
-          <span style="color:#aaaaaa">【{{item.person}}】</span>提交了<span style="color:#08acc0;">{{item.subject}}</span>的付款申请，申请金额<yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
+          <span style="color:#aaaaaa">【{{item.person}}】</span>提交了<span style="color:#08acc0;">{{item.subject}}</span>的付款申请，<span style="color: #2c920b;">{{item.stateVal}}</span>，申请金额<yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
         </yhm-app-view-detail>
-        <yhm-app-approval-result v-show="getIsFinish" :category="item.state % 2 === 1" :left="3.5" :top="0.5"></yhm-app-approval-result>
+        <yhm-app-approval-result v-show="getIsFinish" :category="item.state % 2 == 1||item.state== -1" :left="3.5" :top="0.5"></yhm-app-approval-result>
       </yhm-app-structure-menu-group>
     </yhm-app-scroll>
+    <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
   </div>
 </template>
 
 <script>
   import { appmanagermixin } from '@/assetsApp/app_manager.js'
-
+  import appToast from '@/pagesApp/common/appToast'
   export default {
     name: 'm_paymentApplyManager',
     mixins: [appmanagermixin],
+    components:{
+      appToast
+    },
     data(){
       return{
+        appToastShow:false,
         isFinish:'1',
         isFinishBack: '1',
         url:'/PersonOffice/m_getPayApprovalManager',
@@ -99,11 +104,13 @@
           all: (data) => {
             // 不管是不是初始化都需要执行的代码
             this.content = data.content
+            this.appToastShow = true//加载完成后关闭加载提示
           },
           init: (data) => {
             // 初始化时需要执行的代码
             this.categoryPurchaseItems = data.categoryPurchaseItems
             // this.modelItems = data.modelItems
+            this.appToastShow = true
           }
         })
       }

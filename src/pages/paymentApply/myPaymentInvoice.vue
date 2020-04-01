@@ -531,8 +531,9 @@
           aa = false
         }
         let bb = this.isRepeatInvoice()
-        let cc = this.invoiceMoney === this.money
-        if(!cc){
+        let cc = this.invoiceMoney > this.money
+
+        if(cc){
           this.$dialog.alert({
             tipValue: '发票金额和付款金额不一致!',
             width:300,

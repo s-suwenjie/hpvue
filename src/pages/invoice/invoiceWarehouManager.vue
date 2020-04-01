@@ -7,7 +7,7 @@
       <template #navigationLft>
         <div @mouseover="tipChange(index)" @mouseout="tipOut" style="margin: 0;position: relative;"  v-for="(item,index) in routerList" :key="index">
           <router-link tag="div" :class="item.class" style="margin: 0;" class="tip" :to="item.path">
-            <div  class="cbl_main_prompt">
+            <div  class="cbl_main_prompt2 tipShow">
               <div class="cbl_main_prompt_content" style="font-size:13px;padding: 0 12px;">
                 {{tipValue}}
                 <img src="/UploadFile/m_image/arrow.png">
@@ -146,10 +146,10 @@
     methods:{
       tipChange(index){
         this.tipValue=this.tipList[index][0]
-        $('.cbl_main_prompt').eq(index).css({'display':'block'})
+        $('.tipShow').eq(index).css({'display':'block'})
       },
       tipOut(){
-        $('.cbl_main_prompt').css('display','none')
+        $('.tipShow').css('display','none')
       },
       wareHous(item){
         this.$dialog.confirm({
@@ -253,5 +253,5 @@
 </script>
 
 <style scoped>
-  .cbl_main_prompt{display: none;width: 100px;}
+  .tipShow{display: none;width: 100px;}
 </style>

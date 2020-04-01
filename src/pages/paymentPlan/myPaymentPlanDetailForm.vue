@@ -491,8 +491,10 @@ export default {
     },
     selectCause (op) {
       var name = '65'
-      if (this.category == '1') {
+      if (this.category === '1') {
         name = '63'
+      }else if(this.category === '3'){
+        name = '93'
       }
       this.$dialog.OpenWindow({
         width: 950,

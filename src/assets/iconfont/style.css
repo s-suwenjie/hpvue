@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?yoowjc');
-  src:  url('fonts/icomoon.eot?yoowjc#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?yoowjc') format('truetype'),
-    url('fonts/icomoon.woff?yoowjc') format('woff'),
-    url('fonts/icomoon.svg?yoowjc#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?abnz8f');
+  src:  url('fonts/icomoon.eot?abnz8f#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?abnz8f') format('truetype'),
+    url('fonts/icomoon.woff?abnz8f') format('woff'),
+    url('fonts/icomoon.svg?abnz8f#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-uniE996:before {
+  content: "\e996";
+  color: #666;
+}
+.icon-1:before {
+  content: "\e997";
+  color: #666;
+}
+.icon-2:before {
+  content: "\e998";
+  color: #666;
+}
 .icon-uniE995:before {
   content: "\e995";
   color: #606060;
@@ -60,6 +72,14 @@
 .icon-incomeCheck:before {
   content: "\e97c";
   color: #606060;
+}
+.icon-uniE999:before {
+  content: "\e999";
+  color: #666;
+}
+.icon-3:before {
+  content: "\e99a";
+  color: #666;
 }
 .icon-add:before {
   content: "\e957";

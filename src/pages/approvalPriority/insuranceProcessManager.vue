@@ -20,7 +20,7 @@
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth title="名称" value="person"></yhm-managerth>
         <yhm-managerth title="添加时间" value="insertDate"></yhm-managerth>
-        <yhm-managerth style="width: 50px;" title="删除"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="删除"></yhm-managerth>
 
 
       </template>

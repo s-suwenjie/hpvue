@@ -7,7 +7,7 @@
         <yhm-view-control title="公司名称" category="2" :content="unit" ></yhm-view-control>
         <yhm-view-control title="开票类型" category="3" :content="billingTypeVal" ></yhm-view-control>
         <yhm-view-control title="商业险种" category="3" :content="commercialVal" ></yhm-view-control>
-         </template>
+       </template>
     </yhm-view-body>
     <div class="f_split"></div>
     <div class="f_split"></div>
@@ -68,6 +68,8 @@
         insertDate:'',
         updateName:'',
         updateDate:'',
+        billingTypeVal: '',
+        commercialVal: '',
       }
     },
     methods:{

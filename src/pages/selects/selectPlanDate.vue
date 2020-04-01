@@ -52,7 +52,7 @@
         this.$dialog.OpenWindow({
           width: 1050,
           height: 640,
-          url: '/PaymentPlanDetailForm?id=' + id,
+          url: '/myPaymentPlanDetailForm?id=' + id,
           title: '查看事件信息',
           closeCallBack: (data) => {
           }

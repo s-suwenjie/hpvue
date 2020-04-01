@@ -988,11 +988,10 @@
   background-color: #eeeef5;
   cursor: pointer;
 }
-
 .cbl_main_prompt{
   position: absolute;
   top: -50px;
-  right: -27px;
+  right: 0;
   width: 80px;
   height: 46px;
 
@@ -1054,9 +1053,9 @@
 
 .cbl_main_left_type0{
   border-radius: 4px;
-  background-color: #64b63b;
+  background-color: #e09e17;
   margin-bottom: 8px;
-  box-shadow: 0 0 4px #64b63b;
+  box-shadow: 0 0 4px #e09e17;
 }
 
 .cbl_main_left_type1{
@@ -1150,7 +1149,14 @@
   align-items: flex-end;
   justify-content: flex-end;
 }
+.cbl_main_prompt2{
+  position: absolute;
+  top: -50px;
+  right: -27px;
+  width: 80px;
+  height: 46px;
 
+}
 .cbl_main_right_menu{
   position:absolute;
   background-color: #FFFFFF;

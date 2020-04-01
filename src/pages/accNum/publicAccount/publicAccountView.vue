@@ -9,6 +9,7 @@
         <yhm-view-control title="开户行" :content="bank"></yhm-view-control>
         <yhm-view-control title="网络账户类型" :content="webAccountTypeName" v-show="webAccountTypeShow"></yhm-view-control>
         <yhm-view-control :title="accountName" :content="account"></yhm-view-control>
+        <yhm-view-control title="账户别名" v-show="isAlias" :content="alias"></yhm-view-control>
         <yhm-view-control title="POS机费率万分之多少" :content="rate" v-show="posShow"></yhm-view-control>
         <yhm-view-control title="账户性质" :content="natureName" v-show="categoryUnitShow"></yhm-view-control>
         <yhm-view-control title="客户经理" :content="customerManagerName" v-show="categoryUnitShow"></yhm-view-control>
@@ -49,6 +50,8 @@
         settlementAccountID:'',
         managerTel:'',
         rate:'',
+        isAlias:false,
+        alias:'',
         accountName:'账号',
         posShow:false,
       }
@@ -93,7 +96,10 @@
             this.settlementAccount = data.settlementAccount
             this.settlementAccountID = data.settlementAccountID
             this.rate = data.rate
-
+            this.alias = data.alias
+            if(data.categoryUnit==='0'){
+              this.isAlias=true
+            }
             if(data.categoryUnit === '0'){
               this.categoryUnitShow=true
             }else{

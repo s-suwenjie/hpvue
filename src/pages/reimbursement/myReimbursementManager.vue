@@ -33,14 +33,14 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="申请日期" value="workDate"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="报销方式" value="isPrettyCashOff"></yhm-managerth>
+        <yhm-managerth style="width: 140px" title="申请日期" value="workDate"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="报销方式" value="isPrettyCashOff"></yhm-managerth>
         <yhm-managerth title="事由"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="报销金额" value="money"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="提交天数" value="day"></yhm-managerth>
+        <yhm-managerth style="width: 110px" title="提交天数" value="day"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="编号" value="code"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="状态" value="state"></yhm-managerth>
-        <yhm-managerth style="width: 200px;" title="操作"></yhm-managerth>
+        <yhm-managerth style="width: 240px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -82,7 +82,7 @@
           <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
             <thead>
             <tr>
-              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数"></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="已拨款" ></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="未拨款" ></yhm-managerth>
             </tr>

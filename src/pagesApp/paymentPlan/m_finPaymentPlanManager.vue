@@ -22,20 +22,24 @@
           </yhm-app-view-detail>
         </yhm-app-structure-menu-group>
       </yhm-app-scroll>
+      <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
     </div>
 </template>
 
 <script>
   import { appmanagermixin } from '@/assetsApp/app_manager.js'
-  import appSearch from '../common/appSearch'
+  import appSearch from '@/pagesApp/common/appSearch'
+  import appToast from '@/pagesApp/common/appToast'
   export default {
     name: 'm_finPaymentPlanManager',
     mixins: [appmanagermixin],
     components:{
       appSearch,
+      appToast
     },
     data(){
       return{
+        appToastShow:false,
         searchStr:'',
         leftAlert:false,
         searchFrequentlyShow:false,
@@ -108,9 +112,12 @@
             // 不管是不是初始化都需要执行的代码
             this.content=data.content
             this.shortcutSearchContent = data.shortcutSearchContent
+            this.appToastShow = true
           },
           init: (data) => {
             // 初始化时需要执行的代码
+            this.appToastShow = true
+
           }
         })
       }

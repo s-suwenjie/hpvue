@@ -26,7 +26,7 @@
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth  title="收款方" value="name"></yhm-managerth>
         <yhm-managerth style="width: 200px" title="类型" value="category" ></yhm-managerth>
-        <yhm-managerth style="width: 38px;" title="删除"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="删除"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -37,7 +37,7 @@
           <yhm-manager-td :value="item.name"></yhm-manager-td>
           <yhm-manager-td :value="item.category"></yhm-manager-td>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button @click="del(item.id)" icon="delete" color="#FF0000" hover-color="#FF0000"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="del(item.id)" value="删除" icon="delete" color="#FF0000" hover-color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
