@@ -20,6 +20,19 @@ export default {
       }
     },600)
 
+
+    let onOffTime = true
+    setInterval(function () {
+      if(onOffTime){
+        $(".slowTwinkleBg").addClass('slowTwinkleBgColor');
+        onOffTime = false
+      }else{
+        onOffTime = true;
+        $(".slowTwinkleBg").removeClass('slowTwinkleBgColor');
+      }
+    },900)
+
+
   },
   methods: {
     allowDrop(event){

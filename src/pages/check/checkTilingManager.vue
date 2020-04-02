@@ -18,20 +18,22 @@
       </template>
       <!--操作区-->
       <template #operate>
+        <yhm-commonbutton value="入库" icon="btnAdd" :flicker="true" @call="add()" category="one"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'"  :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="支票状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="categoryBefore" @initData="initChoose('category')" title="支票类型" :content="listCategory"></yhm-radiofilter>
       </template>
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
           <yhm-radiofilter :before="bankBefore" @initData="initChoose('bank')" title="银行类型" :content="listBank"></yhm-radiofilter>
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="支票状态" :content="listState"></yhm-radiofilter>
-          <yhm-radiofilter :before="categoryBefore" @initData="initChoose('category')" title="支票类型" :content="listCategory"></yhm-radiofilter>
+
         </div>
       </template>
       <template #tiled>
         <div style="margin: 10px;display: flex;flex-direction: row; flex-wrap: wrap;">
-          <yhm-view-list-block @VIewEvent="viewClickEvent" v-for="(item,index) in content" :key="index"
+          <yhm-view-list-block :class="{slowTwinkleBgColor: item.isWarning === '1'}"  @VIewEvent="viewClickEvent" v-for="(item,index) in content" :key="index"
                                @call="rightMenuEvent" :item="item" :menu="menu" :menu-category="item.state" :psd="categoryList"
                                :category-value="item.category" :category="item.category" :code="item.code"
                                :color="getPsdSelectItemColor(stateList,item.state)">
@@ -69,12 +71,12 @@
       </template>
       <template #listTotalBody v-if="isTilingEmpty">
         <tr v-for="(item,index) in total" :key="index">
-          <yhm-manager-td-rgt :value="item.count"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.useCount"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.countState0"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.countState1"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.countState2"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.countState3"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt @click="totalClick(0)" :value="item.count"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt @click="totalClick(1)" :value="item.useCount"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt @click="totalClick(2)" :value="item.countState0"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt @click="totalClick(3)" :value="item.countState1"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt @click="totalClick(4)" :value="item.countState2"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt @click="totalClick(5)" :value="item.countState3"></yhm-manager-td-rgt>
         </tr>
       </template>
     </yhm-managerpage>
@@ -138,7 +140,7 @@
         categoryList: [],
         stateList:[],
         menu:[
-          ['查看支票','支票填开','空白支票作废'],
+          ['支票填开','空白支票作废'],
           ['查看支票','补打记录'],
           ['查看支票','支票填开','作废支票','补打记录'],
           ['查看支票','入账操作','作废支票','补打记录'],
@@ -153,6 +155,47 @@
       }
     },
     methods:{
+
+      totalClick(item){
+        if(item  ===  0){
+          this.listState.value = '0'
+        } else if(item  ===  1){
+          this.listState.value = '0'
+        } else if(item ===  2){
+          this.listState.value = '1'
+        } else if(item ===  3){
+          this.listState.value = '2'
+        } else if(item ===  4){
+          this.listState.value = '3'
+        } else if(item ===  5){
+          this.listState.value = '4'
+        }
+        this.initPageData()
+      },
+
+      add(id,state){
+        let isAdd = false
+        let title = '查看支票入库信息'
+        if(!id){
+          id = ''
+          title = '添加支票入库信息'
+          isAdd = true
+        }
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          title: title,
+          url: '/checkForm?id=' + id + '&isInitType=' + this.isInitType + '&isState=' + state,
+          closeCallBack: (data)=>{
+            if(data){
+              if(isAdd){
+                this.lastData = data
+              }
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       viewClickEvent(item){
         if(item.state==='3'||item.state==='4'){
           this.$dialog.OpenWindow({
@@ -269,7 +312,7 @@
 
         if (initValue) {
           params = {
-
+            state: '0'
           }
         } else {
           params = {
@@ -281,7 +324,7 @@
         this.init({
           initValue: initValue,
           url: '/Bill/checksDetailManagerData',
-          data:params,
+          data: params,
           all: (data) => {
             //不管是不是初始化都需要执行的代码
             this.content = data.content
@@ -298,10 +341,41 @@
             this.listBank = data.bankPsd
           }
         })
+      },
+      initWarnData(){
+
+        this.ajaxJson({
+          url: '/Bill/getChecksDetailNumber',
+          call: (data)=>{
+            let onOff = false
+            let height = 100
+            for(let i in data){
+              if(data[i].isWarning === '1'){
+                onOff = true
+                height = height  + 75
+              }
+            }
+            if(onOff){
+              this.$dialog.OpenWindow({
+                width: '550',
+                height: height,
+                title: '警示',
+                url: '/showCheckWarnView',
+                closeCallBack: (data)=>{
+
+                }
+              })
+            }
+          }
+        })
       }
     },
     created () {
       // this.initPageData(true)
+
+      setTimeout(()=>{
+        this.initWarnData();
+      },0)
 
     },
     watch:{

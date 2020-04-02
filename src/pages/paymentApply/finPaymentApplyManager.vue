@@ -41,10 +41,10 @@
         <yhm-managerth style="width: 100px;" title="支付方式" value="isChecks"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 70px" title="倒计时" value="day"></yhm-managerth>
-        <yhm-managerth style="width: 80px;" title="事由"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="申请金额" value="money"></yhm-managerth>
-        <yhm-managerth style="width: 205px;" title="编号" value="code"></yhm-managerth>
-        <yhm-managerth style="width: 100px" title="状态" value="state"></yhm-managerth>
+        <yhm-managerth style="width: 215px;" title="编号" value="code"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="状态" value="state"></yhm-managerth>
         <yhm-managerth style="width: 90px" title="最后操作人" value="lastOperatorPerson"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="操作时间" value="lastOperatorDate"></yhm-managerth>
       </template>

@@ -60,6 +60,7 @@ import checkExpendView from './pages/check/checkExpendView'
 import checkExpendManager from './pages/check/checkExpendManager'
 import checkTilingManager from './pages/check/checkTilingManager'
 import selectChecksDetail from './pages/selects/selectChecksDetail'
+import showCheckWarnView from './pages/check/showCheckWarnView'
 
 /* 支票支出->操作 支票填开  - 空白支票外带 - 作废 - 入账 - 查看票样*/
 import checkFillOut from './pages/check/checkOpera/checkFillOut'
@@ -483,13 +484,18 @@ import insuranceProcessForm from './pages/approvalPriority/insuranceProcessForm'
 import insuranceUnitDetailsForm from './pages/insurance/unit/insuranceUnitDetailsForm'
 import insuranceUnitView from './pages/insurance/unit/insuranceUnitView'
 
+/* 微信服务号消息模板管理 */
+import wxMessageTemplateManager from './pages/wxMessageTemplate/wxMessageTemplateManager.vue'
+import wxMessageTemplateForm from './pages/wxMessageTemplate/wxMessageTemplateForm.vue'
+
+
 export default new Router({
   mode: 'history',
   routes: [
     {path: '/', name: 'home', component: Home,
       children: [
         { path: '/home/desktop', name: 'home.desktop', component:desktop, meta: {title: '北京海派奥特经贸有限公司办公系统'}},
-
+        { path: '/home/wxMessageTemplateManager', name: 'wxMessageTemplateManager.vue', component: wxMessageTemplateManager , meta: {title: '微信服务号消息模板管理'}},
         { path: '/home/approvalPersonaliseManager', name: 'approvalPersonaliseManager.vue', component: approvalPersonaliseManager , meta: {title: '审批定制管理'}},
         { path: '/home/approvalPriorityManager', name: 'approvalPriorityManager.vue', component: approvalPriorityManager , meta: {title: '审批管理'}},
         { path: '/home/reversalAccountManager', name: 'reversalAccountManager.vue', component: reversalAccountManager , meta: {title: '冲账管理'}},
@@ -573,6 +579,7 @@ export default new Router({
 
     { path: '/login', name: 'login', component: login , meta: {title: '北京海派奥特经贸有限公司办公系统'}},
 
+    { path: '/wxMessageTemplateForm', name: 'wxMessageTemplateForm', component: wxMessageTemplateForm},
     { path: '/approvalPersonaliseForm', name: 'approvalPersonaliseForm', component: approvalPersonaliseForm},
     { path: '/approvalPriorityForm', name: 'approvalPriorityForm', component: approvalPriorityForm},
     { path: '/reversalAccountForm', name: 'reversalAccountForm', component: reversalAccountForm},
@@ -611,10 +618,10 @@ export default new Router({
     { path: '/selectFormPlate', name: 'selectFormPlate.vue',component: selectFormPlate },
     { path: '/selectPrint', name: 'selectPrint.vue',component: selectPrint },
 
-
     { path: '/demo', name: 'demo.vue', component: demo ,meta: {title: '组件测试'}},
 
     { path: '/checkForm', name: 'checkForm.vue', component: checkForm},
+    { path: '/showCheckWarnView', name: 'showCheckWarnView.vue', component: showCheckWarnView},
     { path: '/addCheckNumForm', name: 'addCheckNumForm.vue', component: addCheckNumForm},
     { path: '/checkExpendView', name: 'checkExpendView.vue', component: checkExpendView},
     { path: '/checkFillOut', name: 'checkFillOut.vue', component: checkFillOut},

@@ -18,9 +18,12 @@
 <!--      操作区-->
       <template #operate>
         <yhm-commonbutton value="入库" icon="btnAdd" :flicker="true" @call="add()" category="one"></yhm-commonbutton>
-        <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
+<!--        <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>-->
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
-        <!--      <div @click="selectPerson" style="display: inline-block; width: 120px; height: 30px; border: 1px solid #49A8EA;">选择联系人</div>-->
+
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="categoryBefore" @initData="initChoose('category')" title="支票类型" :content="listCategory"></yhm-radiofilter>
+
       </template>
 
       <!--筛选区-->
@@ -52,7 +55,7 @@
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item.id,item.state)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.name"></yhm-manager-td>
-          <yhm-manager-td :value="item.natureType"></yhm-manager-td>
+          <yhm-manager-td-center :value="item.natureType"></yhm-manager-td-center>
           <yhm-manager-td-logo :value="item.bank" :logo="item.bankLogo" tag="BankLogo" :center="true"></yhm-manager-td-logo>
           <yhm-manager-td-psd :value="item.category" :list="categoryList" ></yhm-manager-td-psd>
           <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>

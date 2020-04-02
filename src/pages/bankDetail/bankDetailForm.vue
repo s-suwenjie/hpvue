@@ -579,6 +579,8 @@
         this.isMoney = ''
       }
 
+
+
       if(this.directionBefore === '1'){
         this.isDirectionEdit = true
         this.isCause = true
@@ -659,6 +661,13 @@
           }
 
           this.detail = data.subjectList
+
+
+          if(this.bankDetailType === '10'){
+            this.isMoney = ''
+            this.money = ''
+          }
+
         },
         add: (data) => {
           /* 需要添加的数据 */
@@ -668,6 +677,7 @@
 
         }
       })
+
     },
     watch: { //监听detail是否有数据
       detail () {
@@ -680,11 +690,6 @@
 
         }
 
-      },
-      money(){
-        if(this.money === '0'){
-          this.isMoney = ''
-        }
       },
       // direction () { //监听收支
       //   if (this.direction === 1 && this.feeType === 1) {

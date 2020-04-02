@@ -438,4 +438,35 @@
 .twinkleBgColor td > div {
   color: #fff !important;
 }
+.slowTwinkleBgColor {
+  background-color: #66c0ff !important;
+  color: #fff !important;
+}
+.slowTwinkleBgColor span {
+  color: #fff !important;
+}
+.slowTwinkleBgColor p:before {
+  color: #fff !important;
+}
+.slowTwinkleBgColor .i-btn-prompt:before {
+  color: #fff !important;
+}
+.slowTwinkleBgColor .mt_button {
+  color: #fff !important;
+}
+.slowTwinkleBgColor div > div {
+  color: #fff !important;
+}
+.slowTwinkleBgColor td > div {
+  color: #fff !important;
+}
+.slowTwinkleBgColor .cbl_main_more > div {
+  background-color: #fff !important;
+}
+.slowTwinkleBgColor .cbl_main_right_menu {
+  background-color: #fff !important;
+}
+.slowTwinkleBgColor .cbl_main_right_menu div {
+  color: #333 !important;
+}
 /*# sourceMappingURL=common.css.map */

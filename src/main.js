@@ -9,13 +9,9 @@ import '@/assetsApp/index.js'
 
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
-// import { ImagePreview,Tabbar, TabbarItem ,Tab,Tabs} from 'vant'
-// import 'vant/lib/index.css';
-// Vue.use(ImagePreview).use(Tabbar).use(TabbarItem).use(Tab).use(Tabs)
 
 
 import "../staticApp/global.css";
-
 
 import "../static/staticHStyle/common.css";
 import "../static/staticHStyle/manager.css";
@@ -45,14 +41,3 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
-
-
-/*
-*
-*
-* gotoOrderSystem(){
-        this.$router.push("/homeApp/m_orderSystemMenu?isFinish=1&id=1")
-      },
-*
-*
-* */

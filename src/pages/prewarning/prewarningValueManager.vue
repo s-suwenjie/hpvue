@@ -5,6 +5,7 @@
         <template #navigation>财务管理&nbsp;&gt;&nbsp;设置预警&nbsp;&gt;&nbsp;预警管理</template>
         <template #customize>
           <div class="fd_center mt50">
+<!--            <div @click="aaa">跳转</div>-->
             <div style="width: 500px">
               <yhm-form-text title="设置支票" subtitle="预警值" type="text" widtn="100px" :value="value1" id="value1"></yhm-form-text>
 <!--              <yhm-form-text title="" type="text" :value="value2" id="value2"></yhm-form-text>-->
@@ -79,7 +80,6 @@
       }
     },
     created () {
-      this.run()
       this.ajaxJson({
         url:"/Com/commonWarningByID",
         data:{},

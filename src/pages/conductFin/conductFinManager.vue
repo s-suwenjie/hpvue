@@ -43,8 +43,8 @@
           <yhm-manager-td-psd :value="item.state" :list="stateItems"></yhm-manager-td-psd>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button :no-click="item.state !== '0'" @click="tranPaymentEvent(item)" value="转款" icon="i-tranPayment" color="#49a9ea"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button :no-click="item.state !== '2'" @click="redeemEvent(item)" value="赎回本金" icon="i-redeem" color="#2aa70b"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button :no-click="item.state !== '2'" @click="interestEntry(item)" value="利息入账" icon="i-interest" color="#c700df"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :no-click="item.state !== '2' || item.stateA === '2'" @click="redeemEvent(item)" value="赎回本金" icon="i-redeem" color="#2aa70b"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :no-click="item.state !== '2' || item.stateB === '1'" @click="interestEntry(item)" value="利息入账" icon="i-interest" color="#c700df"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -98,7 +98,7 @@
         this.$dialog.OpenWindow({
           width: 1050,
           height: 600,
-          url: '/conductFinView?id=' + item.id,
+          url: '/conductFinView?id=' + item.id + '&state=' + item.state,
           title: '查看理财产品',
           closeCallBack: (data) => {
             if(data){
@@ -109,12 +109,11 @@
       },
       /* 转款 */
       tranPaymentEvent(item){
-        console.log(item)
         this.$dialog.OpenWindow({
           width: '1050',
           height: '690',
           title: '拨付资金',
-          url: '/bankDetailForm?ownerID=' + item.id +'&bankDetailType=' + '0' + '&directionBefore=1',
+          url: '/bankDetailForm?ownerID=' + item.id +'&bankDetailType=8&directionBefore=1',
           closeCallBack: (data)=>{
             if(data){
               this.initPageData(false)
@@ -124,11 +123,31 @@
       },
       /* 赎回本金 */
       redeemEvent(item){
-
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          title: '拨付资金',
+          url: '/bankDetailForm?ownerID=' + item.id +'&bankDetailType=9&directionBefore=1',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
       },
       /* 利息入账 */
       interestEntry(item){
-
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          title: '拨付资金',
+          url: '/bankDetailForm?ownerID=' + item.id +'&bankDetailType=10&directionBefore=1',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
       },
       initPageData(initValue){
         let params = {}

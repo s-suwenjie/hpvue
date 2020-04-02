@@ -38,10 +38,11 @@
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item.id)"></yhm-manager-td-look>
           <yhm-manager-td-tip-img :value="item.name" :unitUrl="item.unitUrl" icon="icon-uniE999" :tip="true" color="#333" node-class-name="m_main"></yhm-manager-td-tip-img>
+<!--||||||| .r2837-->
+<!--          <yhm-manager-td-tip-img :value="item.name" color="#333" node-class-name="m_main" :tip="true" :qr-url="item.unitUrl" icon="icon-uniE999"></yhm-manager-td-tip-img>-->
+<!--=======-->
           <yhm-manager-td :value="item.bank"></yhm-manager-td>
-<!--          <yhm-manager-td-icon-txt-color node-class-name="m_main" :tip="true" :showName="item.accountStr" v-if="item.category!=0"  color="#49a9ea" icon="icon-3"></yhm-manager-td-icon-txt-color>-->
-<!--          <yhm-manager-td-tip-img :value="item.accountStr"></yhm-manager-td-tip-img>-->
-          <yhm-manager-td-tip-img :value="item.accountStr" :unitUrl="item.bankLogo" v-if="item.category!=='0'" :tip="true" color="#333" icon="icon-3" node-class-name="m_main" ></yhm-manager-td-tip-img>
+          <yhm-manager-td-tip-img :value="item.accountStr" :custom="true" :unitUrl="item.accountUrl" v-if="item.category!=='0'&&item.accountUrl !== ''" :tip="true" color="#333" icon="icon-3" node-class-name="m_main" ></yhm-manager-td-tip-img>
           <yhm-manager-td :value="item.accountStr" v-else></yhm-manager-td>
           <yhm-manager-td :value="item.alias"></yhm-manager-td>
           <yhm-manager-td :value="item.interbank"></yhm-manager-td>
@@ -92,7 +93,6 @@
           list: []
         },
         empty: true,
-
       }
     },
     methods:{
@@ -149,7 +149,7 @@
         })
       },
 
-      initPageData (initValue) {
+       initPageData (initValue) {
         let params = {}
 
         if (initValue) {

@@ -9,13 +9,12 @@
 
       <div v-if="afterIcon !== ''" class="md_afterIcon" :style="{color:afterIconColor}" :class="[afterIcon,afterIconFontSize]"></div>
     </div>
-    <div ref="tip" v-if="tip" v-show="showTip" class="c_tip" :style="getPosition">
+    <div ref="tip" v-if="tip" v-show="showTip" :class="{custom:custom}" class="c_tip" :style="getPosition">
       <div>
         <div>
-          {{getUnitUrlImg}}
           <img :src="getUnitUrlImg" alt="">
         </div>
-        <img src="./images/arrow.png">
+<!--        <img src="./images/arrow.png" v-show="!custom">-->
       </div>
     </div>
   </td>
@@ -34,6 +33,10 @@
       }
     },
     props: {
+      custom:{
+        type:Boolean,
+        default:false
+      },
       nodeClassName:{
         type:String,
         default:'m_main'
@@ -122,7 +125,7 @@
         return this.value === ''
       },
       getUnitUrlImg(){
-        return '/tomcat/apache-tomcat-8.5.47/null' + this.unitUrl
+        return '/UploadFile/UnitUrl/' + this.unitUrl
       },
       getMl(){
         if(this.icon === ''){
@@ -153,14 +156,35 @@
 </script>
 
 <style scoped lang="less">
+
 .c_tip{
   width: 220px;
   height: 220px;
+  border-radius: 5px;
+  background-color: #49a9ea;
+  border:0 !important;;
+  box-shadow: 0 0 8px #04273e;
+  margin: 0 !important;
   div{
+    width: 100%;
     height: 100%;
+    margin: 0;
+
     img{
-      bottom:0;
+      bottom:-5px;
+      width: 100%;
+      border-radius: 4px;
+      height: 100%;
     }
   }
 }
+  .custom{
+    min-width: 160px;
+    min-height: 80px;
+    width:auto;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>

@@ -58,7 +58,7 @@
           <yhm-manager-td :value="item.subject" :after-icon="item.subjectList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td-money :value="item.money" :before-icon="item.subjectList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-money>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
-          <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
+          <yhm-manager-td-state @click="storeName(item.list)" :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-center :value="item.lastOperatorPerson"></yhm-manager-td-center>
           <yhm-manager-td-date :value="item.lastOperatorDate"></yhm-manager-td-date>
         </tr>
@@ -153,6 +153,27 @@
       }
     },
     methods: {
+      //查看拨付资金  往来明细 凭证
+      storeName(item){
+        if(item.length>0){
+          if (item.image === "0") {
+            //查看文件
+            var url = "/UploadFile/" + this.tag + "/" + item.storeName;
+            window.open(url)
+          } else {
+            //查看图片
+            var imgArr = [];
+            for (var i = 0; i < item.length; i++) {
+              var temp = item[i];
+              if (temp.image === "1") {
+                imgArr.push("/UploadFile/" + temp.tag + "/" + temp.storeName);
+              }
+            }
+            var index = imgArr.indexOf("/UploadFile/" + item.tag + "/" + item.storeName) + 2;
+            this.$dialog.preview(imgArr, index)
+          }
+        }
+      },
       selectedSum(){
         let params={
           selectValue:this.selectValue
