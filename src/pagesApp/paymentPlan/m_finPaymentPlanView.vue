@@ -11,7 +11,7 @@
         <yhm-app-view-control title="收款方" :content="otherUnit"></yhm-app-view-control>
         <yhm-app-view-control title="付款金额" :content="planMoney" type="money" color="#4BB414"></yhm-app-view-control>
       </yhm-app-structure-menu-group>
-      <yhm-app-structure-menu-group title="事件信息" v-for="(item,index) in details" :key="item" @click="toggle(index)" :index="index" :length="details.length">
+      <yhm-app-structure-menu-group title="事件信息" v-for="(item,index) in details" :key="index" @click="toggle(index)" :index="index" :length="details.length">
         <yhm-app-view-control title="事件描述" style="white-space: nowrap;" :content="item.name"></yhm-app-view-control>
         <yhm-app-view-control title="品牌" :content="item.branch" :psd="item.brandPsd.list"></yhm-app-view-control>
         <yhm-app-view-control title="事件类型" :content="item.cause" class="eventType"></yhm-app-view-control>
@@ -20,25 +20,32 @@
         <yhm-app-view-control title="编号" :content="item.code"></yhm-app-view-control>
         <yhm-app-view-control title="生成申请" :content="item.isAuto" :psd="item.isAutoPsd.list"></yhm-app-view-control>
         <p class="app_files" style=" word-wrap: break-word;word-break: normal;">文件:
-          <span v-for="(items,index) in item.files"  :key="index" class="imgName" @click="imgSkip(items)">{{items.showName}}</span>
+          <span v-for="(items,index) in item.files" :key="index" class="imgName" @click="imgSkip(items)">{{items.showName}}</span>
         </p>
         <yhm-app-structure-group-operate >
         </yhm-app-structure-group-operate>
       </yhm-app-structure-menu-group>
 <!--    </yhm-app-scroll>-->
     </div>
+    <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
+
   </div>
 </template>
 
 <script>
   import { appviewmixin } from '@/assetsApp/app_view.js'
   import { ImagePreview } from 'vant';
+  import appToast from '@/pagesApp/common/appToast'
 
   export default {
     name: 'm_finPaymentPlanView',
     mixins: [appviewmixin],
+    components:{
+      appToast
+    },
     data(){
       return{
+        appToastShow:false,
         category:'',     //流程类型
         isFinishBack:'1',
         otherUnit:'',
@@ -88,6 +95,7 @@
       this.init({
         url: '/PersonOffice/m_getApprovalPaymentPlanById',
         call:(data)=> {
+          this.appToastShow = true
           this.otherUnit=data.otherUnit
           this.planMoney=data.planMoney
           this.state = data.state

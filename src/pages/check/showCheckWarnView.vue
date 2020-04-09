@@ -1,8 +1,10 @@
 <template>
   <div class="f_main">
-    <div class="remarkView" v-for="(item,index) in list" :key="index">
+    <div class="remarkView" v-for="(item,index) in listData" :key="index">
 
-      <span class="bankID">{{item.bankID}}</span> <span class="account"> ({{item.account.substr(-4)}}) </span>剩余 <span class="count">{{item.count}}</span> 张，数量不足
+      <span class="bankID">{{item.bankID}}</span>
+      <span class="account">({{item.account.substr(-4)}})</span>&nbsp;-&nbsp;<span class="categoryCash" v-if="item.category === '0'">现金账户</span>
+      <span class="categoryCheck" v-if="item.category === '1'">支票账户</span>&nbsp;剩余 <span class="count">{{item.count}}</span> 张，数量不足
 
     </div>
 
@@ -30,6 +32,13 @@
         url: '/Bill/getChecksDetailNumber',
         call: (data)=>{
           this.list = data
+          for(let i in this.list){
+            if(this.list[i].isWarning === '1'){
+              this.listData.push(
+                this.list[i]
+              )
+            }
+          }
         }
       })
     }
@@ -46,6 +55,14 @@
     text-align: center;
     margin: 10px 0;
     font-size: 24px;
+    .categoryCash{
+      color: #e09e17;
+      font-size: 24px;
+    }
+    .categoryCheck{
+      color: #fd6802;
+      font-size: 24px;
+    }
   }
   .bankID {
     color: #333;

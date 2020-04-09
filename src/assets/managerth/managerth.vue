@@ -105,9 +105,13 @@
             this.p____page.order = "desc"
           }
           this.$nextTick(() => {
+            this.$emit("call")
             this.p____page.initPageData(false);
           })
         }
+        this.$nextTick(() => {
+          this.$emit("call")
+        })
       }
     }
   }

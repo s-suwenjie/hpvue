@@ -38,12 +38,16 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td :value="item.person"></yhm-manager-td>
-          <yhm-manager-td :value="item.account"></yhm-manager-td>
+          <yhm-manager-td-tip-img :unitUrl="item.personUrl" icon="icon-uniE999" :tip="true" color="#333" node-class-name="m_main" :value="item.person"></yhm-manager-td-tip-img>
+          <yhm-manager-td-tip-img :custom="true" v-if="item.category!=='0'&&item.accountUrl !== ''"  :unitUrl="item.accountUrl" :tip="true" color="#333" icon="icon-3" node-class-name="m_main" :value="item.account"></yhm-manager-td-tip-img>
+          <yhm-manager-td :value="item.account" v-else></yhm-manager-td>
           <yhm-manager-td :value="item.bank"></yhm-manager-td>
           <yhm-manager-td-center :value="item.categoryUnitVal"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
           <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button  @click="sendWxmessageEvent(item)" value="发送微信" icon="i-sendwx" color="#fd6802"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="clickCopy(item)" value="一键复制" icon="i-copy" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="sendSelf(item)" value="发给本人" icon="i-sendwx" color="#2f54eb"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.state===1 || item.state===2" @click="del(item)" value="作废" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
@@ -59,6 +63,7 @@
       </template>
 
     </yhm-managerpage>
+    <div class="copyTip" v-if="isCopyTip">复制成功 : {{text}}</div>
   </div>
 
 </template>
@@ -88,9 +93,89 @@
           list: []
         },
         empty: true,
+
+        isCopyTip:false,
       }
     },
     methods:{
+      sendSelf(item){
+        let personID = sessionStorage.getItem('____currentUserID')
+        let params = {
+          personID: personID,
+          accountID: item.id
+        }
+        this.ajaxJson({
+          url: "/Fin/privateAccountWX",
+          data: params,
+          call: (data)=>{
+            if(data.type === 0){
+              this.$dialog.alert({
+                tipValue: data.message,
+                closeCallBack: (data)=>{
+
+                }
+              })
+            }else{
+              this.$dialog.alert({
+                alertImg: 'warn',
+                tipValue: data.message
+              })
+            }
+          }
+        })
+      },
+      sendWxmessageEvent(item){
+        this.$dialog.OpenWindow({
+          width: "950",
+          height: "700",
+          title: "选择联系人",
+          url: '/selectPerson?category=0&categoryBefore=1',
+          closeCallBack: (data)=>{
+            if(data){
+              let params = {
+                personID: data.id,
+                accountID: item.id
+              }
+              this.ajaxJson({
+                url: "/Fin/privateAccountWX",
+                data: params,
+                call: (data)=>{
+                  if(data.type === 0){
+                    this.$dialog.alert({
+                      tipValue: data.message,
+                      closeCallBack: (data)=>{
+
+                      }
+                    })
+                  }else{
+                    this.$dialog.alert({
+                      alertImg: 'warn',
+                      tipValue: data.message
+                    })
+                  }
+                }
+              })
+            }
+          }
+        })
+      },
+      clickCopy(item){
+        clearTimeout(this.time)//再次点击时关闭上次触发的定时器 防止多次执行
+        let text =
+           '户名: '+item.person + '  '
+          + '开户行: ' + item.bank + '  '
+          + '账号: ' + item.account + '  '
+        this.$copyText(text).then(res=>{
+          this.text = text
+          this.isCopyTip =  true
+          let that = this
+          this.time = window.setTimeout(()=>{//将定时器的id存入变量
+            that.isCopyTip =  false
+          },4500)
+        },err=>{
+
+        })
+      },
       del(item){
         if(item.id){
           this.$dialog.confirm({
@@ -207,5 +292,19 @@
 </script>
 
 <style scoped>
-
+    /* 复制提示内容 */
+  .copyTip {
+    position: fixed;
+    top: 82px;
+    z-index: 9999;
+    background-color: #fff;
+    color: black;
+    padding: 16px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: max-content;
+    border-radius: 4px;
+    font-size: 14px;
+  }
 </style>

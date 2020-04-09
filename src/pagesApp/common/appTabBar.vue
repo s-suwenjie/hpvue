@@ -1,6 +1,6 @@
 <template>
-    <div>
-      <van-tabbar v-model="batActive" style="z-index:2;">
+    <div class="appTabBar">
+      <van-tabbar v-model="batActive" style="z-index:1000;">
         <van-tabbar-item>
           <span>分类</span>
           <img
@@ -48,32 +48,35 @@
     }
   }
 </script>
-<style lang="less">/*适配vant下tabbar组件(不能使用自动适配,pc端会乱)*/
+<style lang="less">/*适配vant下tabbar组件(不能使用自动适配,pc端会乱)如与pc端分离后可直接使用框架适配样式*/
 @rem:375/10rem;
-.van-tabbar-item__icon img{
-  height: 19/@rem !important;
-}
-.van-tabbar{
-  border-radius: 8/@rem 8/@rem 0 0;
-  height: 50/@rem !important;
-  border-top: 1/@rem solid #bfbfbf;
-}
-.van-tabbar-item--active{
-  color: #49A9EA !important;
-}
-.van-tabbar-item{
-  height: 50/@rem;
-  font-size: 12/@rem;
-  .van-tabbar-item__text{
+.appTabBar{
+  .van-tabbar-item__icon img{
+    height: 19/@rem !important;
+  }
+  .van-tabbar{
+    border-radius: 8/@rem 8/@rem 0 0;
+    height: 50/@rem !important;
+    border-top: 1/@rem solid #bfbfbf;
+  }
+  .van-tabbar-item--active{
+    color: #49A9EA !important;
+  }
+  .van-tabbar-item{
+    height: 50/@rem;
     font-size: 12/@rem;
+    .van-tabbar-item__text{
+      font-size: 12/@rem;
+    }
+    .van-tabbar-item__icon{
+      margin-bottom: 2/@rem;
+    }
   }
-  .van-tabbar-item__icon{
-    margin-bottom: 2/@rem;
+  .van-tabbar-item__icon i{
+    font-size: 19/@rem;
   }
 }
-.van-tabbar-item__icon i{
-  font-size: 19/@rem;
-}
+
 </style>
 <style scoped>
 

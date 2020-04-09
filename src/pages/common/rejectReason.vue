@@ -62,7 +62,8 @@
         tableName:'',
         tableDetailName:'',
         kind:'',
-        isOther: true
+        isOther: true,
+        approvalCategory: ''
       }
     },
     methods: {
@@ -152,6 +153,7 @@
       if(query.tableName){
         this.tableName = query.tableName
       }
+
       if(query.tableDetailName){
         this.tableDetailName = query.tableDetailName
       }

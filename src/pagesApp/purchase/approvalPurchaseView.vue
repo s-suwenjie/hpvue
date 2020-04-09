@@ -35,16 +35,24 @@
       <yhm-app-button @call="rejectEvent" value="驳回" category="ten"></yhm-app-button>
       <yhm-app-button @call="adoptEvent" value="通过" category="two"></yhm-app-button>
     </yhm-app-form-operate>
+    <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
+
   </div>
 </template>
 
 <script>
   import { appviewmixin } from '@/assetsApp/app_view.js'
+  import appToast from '@/pagesApp/common/appToast'
+
   export default {
     name: 'm_approvalPurchaseView',
     mixins: [appviewmixin],
+    components:{
+      appToast
+    },
     data(){
       return{
+        appToastShow:false,
         states:'',
         allBtnShow:true,
         category:'',     //流程类型
@@ -136,6 +144,7 @@
       this.init({
         url: '/PersonOffice/m_initPurchaseForm',
         call:(data)=> {
+          this.appToastShow = true
           this.category = data.category
           this.person = data.person
           this.code = data.code

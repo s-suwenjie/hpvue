@@ -8,6 +8,7 @@
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentPlanViewManager'}">付款计划</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentApplyViewManager'}">付款申请</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/viewManager/reimbursementViewManager'}">报销申请</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
       </template>
 
       <!--操作区-->

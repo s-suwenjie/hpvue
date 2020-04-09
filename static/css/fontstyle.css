@@ -773,3 +773,23 @@
   font-family: 'icomoon' !important;
   content: "\e998";
 }
+
+
+/* 发送微信 */
+.i-sendwx:before {
+  font-family: 'icomoon' !important;
+  content: "\e99b";
+}
+
+/* 打开选中信息 */
+.i-selectAll:before {
+  font-family: 'icomoon' !important;
+  content: "\e99c";
+}
+
+/* 批量拨付 */
+.i-batchAllca:before {
+  font-family: 'icomoon' !important;
+  content: "\e99d";
+}
+

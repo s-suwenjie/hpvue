@@ -15,7 +15,9 @@
             </template>
           </yhm-app-view-table>
           <div class="private_bg">
-          <yhm-app-form-text-box title="驳回理由"  @blur="btnBlurEvent()" @focus="btnFocusEvent()" :no-edit="getNoEdit" :value="remark" id="remark" rule="R0000"></yhm-app-form-text-box>
+          <yhm-app-form-text-box title="驳回理由"  v-if="category!=='00'" @blur="btnBlurEvent()" @focus="btnFocusEvent()" :no-edit="getNoEdit" :value="remark" id="remark" rule="R0000"></yhm-app-form-text-box>
+            <yhm-app-form-text-box title="驳回理由" v-else :value="remark2" id="remark2"  @focus="aaa()"></yhm-app-form-text-box>
+
           </div>
         </div>
       </yhm-app-scroll>
@@ -40,7 +42,8 @@
         kind:'',
         content:[],
         selectItem:null,
-        remark:''
+        remark:'',
+        remark2:''
       }
     },
     methods:{
@@ -58,6 +61,9 @@
 
         })
       },
+      aaa(){
+        console.log(this.remark2)
+      },
       touchStartEvent(item){
         item.touch = true
       },
@@ -72,7 +78,52 @@
           }
         }
       },
+      rejectEvent2(){//保单审批的驳回流程
+        this.$appDialog.confirm({
+          tipValue: '确定驳回吗？',
+          btnValueOk: '驳回',
+          okCallBack: () => {
+            let params = {
+              id: this.id,
+              remark:this.remark2
+            }
+            this.ajaxJson({
+              url: '/Insurance/m_rejectStateInsuranceApp',
+              data: params,
+              loading: '0',
+              call: (data) => {
+                if (data.type === 0) {
+                  this.$appDialog.toast({
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                      this.$appDialog.setReturnValue(this.remark)
+                      this.$appDialog.close()
+                    }
+                  })
+                } else if (data.type === 1) {
+                  this.$appDialog.toast({
+                    tipValue: data.message,
+                    alertImg: 'error'
+                  })
+                } else {
+                  this.$appDialog.toast({
+                    tipValue: data.message,
+                    alertImg: 'error',
+                    closeCallBack: () => {
+                      this.$appDialog.close()
+                    }
+                  })
+                }
+              }
+            })
+          }
+        })
+      },
       rejectEvent(){
+        if(this.category == '00'){
+          this.rejectEvent2()
+          return
+        }
         if(this.validator()) {
           this.$appDialog.confirm({
             tipValue: '确定驳回吗？',
@@ -144,6 +195,9 @@
       this.setQuery2Value('tableDetailName')
       this.setQuery2Value('kind')
       this.setQuery2Value('location')
+      if(this.category == '00'){
+        return
+      }
       this.$nextTick(()=>{
         window.οnscrοll=function(){
           $(".app_fixed").css("top",$(window).scrollTop());

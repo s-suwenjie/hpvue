@@ -47,6 +47,7 @@
       </yhm-app-structure-menu-group>
 <!--    </yhm-app-scroll>-->
     </div>
+    <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
 
   </div>
 </template>
@@ -55,11 +56,17 @@
 
   import { appviewmixin } from '@/assetsApp/app_view.js'
   import { ImagePreview } from 'vant';
+  import appToast from '@/pagesApp/common/appToast'
+
   export default {
     name: 'm_approvalReimbursementView',
     mixins:[appviewmixin],
+    components:{
+      appToast
+    },
     data(){
       return{
+        appToastShow:false,
         isFinishBack: '1',
         loadFinish: false,
         code:'',
@@ -109,6 +116,7 @@
       this.init({
         url: '/PersonOffice/m_reimbursementsForm',
         call:(data)=> {
+          this.appToastShow = true
           this.state = data.state
           this.category = data.category
           this.name = data.name

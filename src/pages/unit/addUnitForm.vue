@@ -21,7 +21,7 @@
         <yhm-form-textarea title="地址" :value="addressCN" id="addressCN" rule="R0000" width="1"></yhm-form-textarea>
 
         <yhm-form-text title="统一社会" subtitle="信用代码" :value="registrationNumber" id="registrationNumber" rule="R0000">
-          <div class="formBoxIcon" >
+          <div class="formBoxIcon" @click="unitRegNum">
             <span class="i-help"></span>
           </div>
         </yhm-form-text>

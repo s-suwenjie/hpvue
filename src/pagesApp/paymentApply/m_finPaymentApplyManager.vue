@@ -8,7 +8,7 @@
 
     <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="url" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">
 
-      <appSearch @change="change" @alertShow="rightAlert=true,key+=1" :list="shortcutSearchContent" ></appSearch>
+      <appSearch @change="change" @alertShow="rightAlert=true,key<1?key+=1:''" :list="shortcutSearchContent" ></appSearch>
 
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish)" v-for="(item) in content" :key="item.id">
         <yhm-app-view-control :contentTitle="item.person" :content="item.lastDate" type="date"></yhm-app-view-control>
@@ -24,7 +24,7 @@
         </yhm-app-view-detail>
       </yhm-app-structure-menu-group>
     </yhm-app-scroll>
-    <appfiltrate :alert-show="rightAlert" @close="rightAlert=false,key+=1" >
+    <appfiltrate :alert-show="rightAlert" @close="rightAlert=false,key<1?key+=1:''" >
       <appRadiofilter :list="isChecksList" title="是否发票支付" :key="key" @change="radioChange"></appRadiofilter>
       <appRadiofilter :list="isRelevanceList" title="是否关联" :key="key+10" @change="radioChange2"></appRadiofilter>
       <div class="alert_bottom">

@@ -102,6 +102,10 @@ Vue.use(formtdselectdialog)
 
 import managertdthisexter from '@/assets/manager/td/managertdthisexter/managertdthisexter.js'
 Vue.use(managertdthisexter)
+
+import managertdinput from '@/assets/manager/td/managertdinput/managertdinput.js'
+Vue.use(managertdinput)
+
 import managertdstate from '@/assets/manager/td/managertdstate/managertdstate.js'
 Vue.use(managertdstate)
 

@@ -33,7 +33,7 @@
         <yhm-managerth style="width: 120px;" title="预计核销日期" value="estimateDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="状态" value=""></yhm-managerth>
-        <yhm-managerth style="width: 280px" title="操作" value=""></yhm-managerth>
+        <yhm-managerth style="width: 400px" title="操作" value=""></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in content" :key="index" :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]">
@@ -55,6 +55,9 @@
             <yhm-manager-td-operate-button v-show="item.state === '-1' && item.isDelay === '0'&&item.isFinish !== '1'" @click="delayEvent(item)" value="延期核销" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.state!=='0' || item.isFinish !== '1'" :no-click="item.state!=='0' || item.isFinish === '1'" @click="submit(item)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.isFinish !== '0' || item.state === '0'" @click="urge(item)" value="催促" icon="i-btn-urge" color="#2AA70B"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="chargeAgainst(item)" value="报销冲抵" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="aFullReturn(item)" value="全额退回" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
+
             <yhm-manager-td-operate-button :no-click="item.state !== '0' || item.isFinish === '1'" @click="del(item)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
@@ -110,6 +113,57 @@
       }
     },
     methods:{
+      cancelAfterVerification(){
+        // this.$dialog.confirm({
+        //     width: 250,
+        //     tipValue: '请选择核销类型',
+        //     alertImg: 'warn',
+        //     btnValueCancel:'全额退款',
+        //     btnValueOk:'报销冲抵',
+        //     okCallBack: () => {
+        //
+        //     }
+        // })
+      },
+      aFullReturn(item){
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 690,
+          title: '选择账号',
+          url: '/selectPublicAccount?categoryUnit=0&categoryBefore=1&category=1&categoryAccBefore=1',
+          closeCallBack: (data) => {
+            console.log(data)
+            let params = {
+              id: item.id,
+              selfAccountID:data.id
+            }
+            this.ajaxJson({
+              url: '/PersonOffice/prettyCashsRefund',
+              data: params,
+              call: (data) => {
+                console.log(data)
+                // if (data.type === 0) {
+                //   this.$dialog.alert({
+                //     width: 250,
+                //     tipValue: '延期成功',
+                //     closeCallBack: ()=>{
+                //       this.initPageData()
+                //     }
+                //   })
+                // }else{
+                //   this.$dialog.alert({
+                //     width: 250,
+                //     alertImg: 'error',
+                //     tipValue: '延期失败',
+                //     closeCallBack: ()=>{
+                //     }
+                //   })
+                // }
+              }
+            })
+          }
+        })
+      },
       /* 延期核销 */
       delayEvent(item){
         if(item){

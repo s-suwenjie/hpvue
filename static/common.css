@@ -438,6 +438,9 @@
 .twinkleBgColor td > div {
   color: #fff !important;
 }
+.twinkleBgColor input {
+  background-color: #66c0ff !important;
+}
 .slowTwinkleBgColor {
   background-color: #66c0ff !important;
   color: #fff !important;

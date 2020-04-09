@@ -20,7 +20,9 @@ input[type="number"]{
 .w620{
     width: 600px !important;
 }
-
+.w418{
+    width: 418px !important;
+}
 .gray{
     -webkit-filter: grayscale(100%);
     -ms-filter: grayscale(100%);

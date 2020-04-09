@@ -16,6 +16,37 @@
         <yhm-view-control title="文件" :content="list" type="files" v-if="list.length !== 0"></yhm-view-control>
       </template>
     </yhm-view-body>
+    <yhm-view-tab>
+      <template #tab>
+        <yhm-view-tab-button :list="tabState" :index="0"  v-if="isAppropriationMoney">拨付信息</yhm-view-tab-button>
+      </template>
+      <template #content>
+        <yhm-view-tab-list :customize="true"  v-if="isAppropriationMoney">
+          <template #listHead>
+            <yhm-managerth style="width: 150px" title="账号"></yhm-managerth>
+            <yhm-managerth style="width: 150px" title="对方账号"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
+            <yhm-managerth style="width: 80px" title="收支方向"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="交易金额"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="备注"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="凭证"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in appropriationMoney" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td :value="item.selfAccount"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
+              <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
+              <yhm-manager-td :value="item.subject"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td :value="item.remark"></yhm-manager-td>
+              <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.storeName" :tag="'bankDetail'" ></yhm-manager-td-image>
+            </tr>
+          </template>
+        </yhm-view-tab-list>
+      </template>
+    </yhm-view-tab>
     <div v-if="isApproval" v-html="approvalHtml"></div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
     </yhm-formoperate>
@@ -29,6 +60,7 @@
     mixins: [formmixin],
     data(){
       return{
+        tabState:[{select:true}],
         unitID:'',
         unit:'',
         person:'',
@@ -49,6 +81,8 @@
         isApproval: true,
         invoiceCategory: '',
         invoiceCategoryList: [],
+        appropriationMoney:[],
+        isAppropriationMoney:false,
       }
     },
     methods:{
@@ -61,6 +95,10 @@
             this.unit = data.unit
             this.unitID=data.unitID
             this.invoiceCategoryList = data.invoiceCategoryPsd.list
+            this.appropriationMoney = data.bankDetailList
+            if(this.appropriationMoney.length>0){
+              this.isAppropriationMoney=true
+            }
           },
           add: (data)=>{
 

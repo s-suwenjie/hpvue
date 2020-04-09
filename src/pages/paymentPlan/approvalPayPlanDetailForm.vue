@@ -10,7 +10,7 @@
         <yhm-view-control title="付款金额" color="#f00" :content="money" type="money"></yhm-view-control>
         <yhm-view-control title="编号"  :content="code" ></yhm-view-control>
         <yhm-view-control title="生成申请" :content="isAuto" :psd="isAutoList"></yhm-view-control>
-        <yhm-view-control title="文件" type="files" category="3" :content="fileList"></yhm-view-control>
+        <yhm-view-control title="文件" type="files" v-if="fileList.length !== 0" category="3" :content="fileList"></yhm-view-control>
       </template>
     </yhm-view-body>
     <div class="f_split" v-show="rejectCause === ''?false:true"></div>
@@ -71,15 +71,16 @@ export default {
       isFinish: '0',
       unitID: '',
       approvalHtml: '',
+      isApproval: '',
       isLook: true,
       isBtn: true
     }
   },
   created () {
+
     this.setQuery2Value('ownerID')
     this.setQuery2Value('otherUnitID')
     this.setQuery2Value('otherAccountID')
-    this.setQuery2Value('id')
     this.setQuery2Value('isApproval')
     this.setQuery2Value('rejectCause')
     this.init({
@@ -148,8 +149,7 @@ export default {
                   this.$dialog.alert({
                     tipValue: data.message,
                     closeCallBack: () => {
-                      location.reload()
-                      this.$dialog.close()
+                      this.approvalNext()
                     }
                   })
                 }else{
@@ -166,6 +166,53 @@ export default {
         })
       }
     },
+
+
+    approvalNext(){
+      let params = {
+        id: this.id,
+        category: 0
+      }
+      this.ajaxJson({
+        url: '/Com/approvalNext',
+        data: params,
+        call: (data)=>{
+          if(data.type === 0){
+            let dataID = data.id
+
+            let txt = ''
+            let width = ''
+            if(data.html === '0'){
+              txt = '当前批次中还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+              width = '450'
+            }else if(data.html === '1'){
+              txt = '检测到<b class="red">【' + data.val + '】</b>名下还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+              width = '550'
+            }else{
+              txt = '检测到其他人名下还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+              width = '500'
+            }
+
+            this.$dialog.confirm({
+              width: width,
+              height: '100',
+              tipValue: txt,
+              btnValueOk: '继续审批',
+              btnValueCancel: '暂不审批',
+              okCallBack: ()=>{
+                window.location = '/approvalPlanDetailForm?id=' + dataID + '&isApproval=' + this.isApproval
+              },
+              cancelCallBack: ()=>{
+                this.$dialog.close()
+              }
+            })
+          }else{
+            this.$dialog.close()
+          }
+        }
+      })
+    },
+
     rejectEvent (id) { //子表驳回
       // if(this.isApproval==='1'){
       //   return
@@ -175,11 +222,12 @@ export default {
         this.$dialog.OpenWindow({
           width: 1050,
           height: 720,
+          title: '驳回理由',
           url: '/rejectReason?category=12' +'&id=' + id+ '&tableName=43&tableDetailName=44&kind=2',
           closeCallBack: (data)=>{
             if(data){
               this.$dialog.setReturnValue(this.id)
-              location.reload()
+              this.approvalNext()
             }
           }
         })

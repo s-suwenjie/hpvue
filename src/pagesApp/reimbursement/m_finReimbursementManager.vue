@@ -7,7 +7,7 @@
     </yhm-app-structure-top-tap>
 
     <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="url" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">
-      <appSearch @change="change" @alertShow="rightAlert=true,key+=1" :list="shortcutSearchContent" ></appSearch>
+      <appSearch @change="change" @alertShow="rightAlert=true,key<1?key+=1:''" :list="shortcutSearchContent" ></appSearch>
 
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish)" v-for="(item) in content" :key="item.id">
         <yhm-app-view-control :contentTitle="item.name" :content="item.workDate" type="date"></yhm-app-view-control>
@@ -21,7 +21,7 @@
         </yhm-app-view-detail>
       </yhm-app-structure-menu-group>
     </yhm-app-scroll>
-    <appfiltrate :alert-show="rightAlert" @close="rightAlert=false,key+=1" >
+    <appfiltrate :alert-show="rightAlert" @close="rightAlert=false,key<1?key+=1:''" >
       <appRadiofilter :list="isPrettyCashOffList" title="是否核销" :key="key" @change="radioChange"></appRadiofilter>
       <div class="alert_bottom">
         <yhm-app-button  value="重置" @call="reset()" icon="" category="five" style="border: 1px solid #666;margin-right:0.75rem;"></yhm-app-button>
@@ -70,7 +70,6 @@
     methods:{
       radioChange(index,item){//用户选择后触发 可接收选中的索引值以及类别
         this.isPrettyCashOff=index
-        console.log( '是否核销 ',index,item)
       },
       change(value){//搜索 从组件接收value值 用户执行操作时触发当前事件
         this.searchStr = value
@@ -147,7 +146,6 @@
           init: (data) => {
             // 初始化时需要执行的代码
             this.isPrettyCashOffList = data.isPrettyCashOffPsd.list
-            console.log(this.isPrettyCashOffList  )
             this.appToastShow = true
           }
         })

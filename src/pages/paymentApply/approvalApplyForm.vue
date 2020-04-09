@@ -403,6 +403,51 @@ export default {
         })
       }
     },
+    approvalNext(){
+      let params = {
+        id: this.id,
+        category: 1
+      }
+      this.ajaxJson({
+        url: '/Com/approvalNext',
+        data: params,
+        call: (data)=>{
+          if(data.type === 0){
+            let dataID = data.id
+
+            let txt = ''
+            let width = ''
+            if(data.html === '0'){
+              txt = '当前批次中还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+              width = '450'
+            }else if(data.html === '1'){
+              txt = '检测到<b class="red">【' + data.val + '】</b>名下还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+              width = '550'
+            }else{
+              txt = '检测到其他人名下还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+              width = '500'
+            }
+
+            this.$dialog.confirm({
+              width: width,
+              height: '100',
+              tipValue: txt,
+              btnValueOk: '继续审批',
+              btnValueCancel: '暂不审批',
+              okCallBack: ()=>{
+                window.location = '/approvalApplyView?id=' + dataID + '&isApproval='+this.isApproval+ '&isPrint='+this.isPrint+ '&approval='+this.approval
+              },
+              cancelCallBack: ()=>{
+                this.$dialog.close()
+              }
+            })
+          }else{
+            this.$dialog.close()
+          }
+        }
+      })
+    },
+
     /*通过*/
     adoptEvent () { //
       if(this.id){
@@ -425,11 +470,11 @@ export default {
                   this.$dialog.alert({
                     tipValue: data.message,
                     closeCallBack: () => {
-                      this.initData()
-                      this.$dialog.close()
+                      this.approvalNext()
+
                     }
                   })
-                }else if(data.type === 1){
+                }else{
                   this.$dialog.alert({
                     tipValue: data.message,
                     alertImg: 'error',
@@ -464,8 +509,7 @@ export default {
                 closeCallBack: (data) => {
                   if(data){
                     this.$dialog.setReturnValue('123')
-                    this.initData()
-                    this.$dialog.close()
+                    this.approvalNext()
                   }
                 }
               })

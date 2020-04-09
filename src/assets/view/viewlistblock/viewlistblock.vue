@@ -98,9 +98,15 @@
       },
       mouseOverEvent(){
         this.mouseStyle = true
+        this.$nextTick(() => {
+          this.$emit('mouseover')
+        })
       },
       mouseOutEvent(){
         this.mouseStyle = false
+        this.$nextTick(() => {
+          this.$emit('mouseout')
+        })
       },
       mouseOverPromptEvent(){
         this.mouseStylePrompt = true

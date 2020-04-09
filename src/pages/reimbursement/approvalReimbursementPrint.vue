@@ -112,19 +112,4 @@
 <style scoped>
   @import "../../../static/reimbursementStatic/ReimbursementsPrintForm.css";
 
-  .content
-  {
-    margin: 0 auto;
-    width: 810px;
-    height: 472px;
-    margin-top: 20px;
-    font-family: "宋体";
-    background-color: #FFFFFF;
-  }
-  .btn{
-    margin:20px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 </style>

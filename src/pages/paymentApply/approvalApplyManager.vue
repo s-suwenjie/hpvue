@@ -26,7 +26,8 @@
         <yhm-table-tip :show="tableTip" :content="tableTipInfo" :column="tableTipColumnInfo" :mouse-control="tableTipControl"></yhm-table-tip>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
-        <yhm-commonbutton value="打开选中信息" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+        <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+        <yhm-commonbutton v-if="false" value="批量拨付" icon="i-batchAllca" @call="batchAllca" category="three"></yhm-commonbutton>
       </template>
 
       <!--筛选区-->
@@ -199,6 +200,18 @@
       }
     },
     methods: {
+      /* 批量拨付 */
+      batchAllca(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '650',
+          title: '批量拨付',
+          url: '/approvalBatchAllca',
+          closeCallBack: (data)=>{
+            console.log(data)
+          }
+        })
+      },
       totalClick(item){
         // if(item.val==='总数'){
         //   this.listState.value = ''

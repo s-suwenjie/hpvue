@@ -12,7 +12,8 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 200px;" title="模板名称" value="name"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="模板名称" value="name"></yhm-managerth>
+        <yhm-managerth style="width: 250px;" title="RedisKey" value="redisKey"></yhm-managerth>
         <yhm-managerth style="width: 350px;" title="模板ID" value="templateID"></yhm-managerth>
         <yhm-managerth title="备注" value="remark"></yhm-managerth>
       </template>
@@ -22,6 +23,7 @@
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item.id)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.name"></yhm-manager-td>
+          <yhm-manager-td :value="item.redisKey"></yhm-manager-td>
           <yhm-manager-td-center :value="item.templateID"></yhm-manager-td-center>
           <yhm-manager-td :value="item.remark"></yhm-manager-td>
         </tr>
@@ -59,7 +61,7 @@
         }
         this.$dialog.OpenWindow({
           width: 1050,
-          height: 340,
+          height: 400,
           url:'/wxMessageTemplateForm?id=' + id,
           title:title,
           closeCallBack:(data) =>{

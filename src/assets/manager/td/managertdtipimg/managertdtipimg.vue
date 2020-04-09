@@ -125,7 +125,7 @@
         return this.value === ''
       },
       getUnitUrlImg(){
-        return '/UploadFile/UnitUrl/' + this.unitUrl
+        return this.unitUrl
       },
       getMl(){
         if(this.icon === ''){
@@ -169,7 +169,7 @@
     width: 100%;
     height: 100%;
     margin: 0;
-
+    display: flex;
     img{
       bottom:-5px;
       width: 100%;

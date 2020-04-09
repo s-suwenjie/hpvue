@@ -317,19 +317,7 @@
       invoiceTypeEvent(old){
 
       if(this.isPrettyCashOff === '1'){
-        if(this.isSelectPrettyCash === '1'){
-          if(this.invoiceCategory !== '2'){
-            this.$dialog.alert({
-              width: '280',
-              tipValue: '当前备用金为无票！！！',
-              alertImg: 'error',
-              closeCallBack: ()=>{
-                this.invoiceCategory = '2'
-              }
-            })
-            return
-          }
-        }else{
+        if(this.isSelectPrettyCash === '0'){
           if(this.invoiceCategory === '2'){
             this.$dialog.alert({
               width: '280',

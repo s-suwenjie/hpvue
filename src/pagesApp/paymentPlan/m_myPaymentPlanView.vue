@@ -37,6 +37,7 @@
       <yhm-app-button @call="rejectEvent(0)" value="驳回" category="ten"></yhm-app-button>
       <yhm-app-button @call="adoptEvent(0)" value="通过" category="two"></yhm-app-button>
     </yhm-app-form-operate>
+    <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
 
   </div>
 </template>
@@ -44,13 +45,17 @@
 <script>
   import { appviewmixin } from '@/assetsApp/app_view.js'
   import { ImagePreview } from 'vant';
-
+  import appToast from '@/pagesApp/common/appToast'
   export default {
     name: 'm_myPaymentPlanView',
     mixins: [appviewmixin],
+    components:{
+      appToast
+    },
     states:'',
     data(){
       return{
+        appToastShow:false,//loading
         states:'',
         stateList:[],
         allBtnShow:true,
@@ -227,6 +232,7 @@
       this.init({
         url: '/PersonOffice/m_getApprovalPaymentPlanById',
         call:(data)=> {
+          this.appToastShow = true
           this.content = data
           this.otherUnit=data.otherUnit
           this.planMoney=data.planMoney

@@ -5,6 +5,8 @@
         <template #title>基本信息</template>
         <template #control>
           <yhm-form-text title="模板名称" :value="name" id="name" rule="R0000"></yhm-form-text>
+          <div class="f_br"></div>
+          <yhm-form-text title="RedisKey" :value="redisKey" id="redisKey" rule="R0000"></yhm-form-text>
           <yhm-form-text title="模板ID" :value="templateID" id="templateID" rule="R0000"></yhm-form-text>
           <yhm-form-textarea title="备注" :value="remark" id="remark" rule="R0000"></yhm-form-textarea>
         </template>
@@ -27,6 +29,7 @@
     data(){
       return {
         name:'',
+        redisKey:'',
         templateID:'',
         remark:''
       }
@@ -37,6 +40,7 @@
           let params = {
             id: this.id,
             name:this.name,
+            redisKey:this.redisKey,
             templateID:this.templateID,
             remark:this.remark
           }
@@ -78,6 +82,7 @@
         look: (data) => {
           //查看时独有的信息
           this.name = data.name
+          this.redisKey = data.redisKey
           this.templateID = data.templateID
           this.remark = data.remark
         }

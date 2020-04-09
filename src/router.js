@@ -16,7 +16,10 @@ import prettyCashsForm from './pages/prettyCashs/prettyCashsForm.vue'
 import prettyCashsView from './pages/prettyCashs/prettyCashsView.vue'
 import approvalPrettyCashs from './pages/prettyCashs/approvalPrettyCashs.vue'
 import approvalPrettyCashsView from './pages/prettyCashs/approvalPrettyCashsView.vue'
+import finPrettyCashsManagerAll from './pages/prettyCashs/finPrettyCashsManagerAll.vue'
+import finPrettyCashsView from './pages/prettyCashs/finPrettyCashsView.vue'
 import selectPrettyCashs from './pages/selects/selectPrettyCashs.vue'
+
 
 /* 处理图片 */
 import handleImageForm from './pages/common/handleImageForm.vue'
@@ -107,6 +110,10 @@ import approvalApplyView from './pages/paymentApply/approvalApplyForm'
 import paymentApplyViewManager from './pages/paymentApply/finPaymentApplyManager'
 import paymentApplyViewForm from './pages/paymentApply/finPaymentApplyForm'
 
+import finPayApplyReconDetailManager from './pages/paymentApply/finPayApplyReconDetailManager'
+
+import approvalBatchAllca from './pages/paymentApply/approvalBatchAllca'
+
 /* 报销 */
 import reimbursementManager from './pages/reimbursement/myReimbursementManager'
 import reimbursementForm from './pages/reimbursement/myReimbursementForm'
@@ -188,6 +195,10 @@ import personManager from './pages/person/personManager'
 import addPersonForm from './pages/person/addPersonForm'
 import addPersonSimplifyForm from './pages/person/addPersonSimplifyForm'
 import personView from './pages/person/personView.vue'
+
+/* 来访人员 */
+import visitPersonManager from './pages/visitPerson/visitPersonManager'
+import visitPersonForm from './pages/visitPerson/visitPersonForm'
 
 /* 测试demo */
 import demo from './pages/selects/demo'
@@ -330,6 +341,11 @@ import openModelForm from './pages/basic/repairWork/openModelForm'
 import carManager from './pages/basic/insurancePolicy/information/car/carManager'
 import carForm from './pages/basic/insurancePolicy/information/car/carForm'
 
+/*保险理赔*/
+import claimsManager from './pages/insurance/claims/claimsManager'
+import claimsForm from './pages/insurance/claims/claimsForm'
+import claimsView from './pages/insurance/claims/claimsView'
+
 /*办理人员*/
 import handlePersonManager from './pages/basic/insurancePolicy/information/handlePerson/handlePersonManager'
 import handlePersonForm from './pages/basic/insurancePolicy/information/handlePerson/handlePersonForm'
@@ -391,9 +407,13 @@ import m_rejectForm from './pagesApp/common/rejectForm.vue'
 /* 移动端 - 测试菜单 */
 import m_menu from './pagesApp/m_menu'
 
+/* 移动端 - 理财管理 - 查看详情*/
+
+import  m_financialManagementView from './pagesApp/financialManagement/m_financialManagementView'
+
 /* 移动端 - 测试导航菜单 */
-import m_menuBar from './pagesApp/m_menuBar'
-import m_menuBars from './pagesApp/m_menuBars'
+// import m_menuBar from './pagesApp/m_menuBar'
+// import m_menuBars from './pagesApp/m_menuBars'
 
 /* 导航 */
 import m_tab from './pagesApp/m_tab'
@@ -433,6 +453,12 @@ import m_bankDetailCashierView from './pagesApp/bankDetailCashier/bankDetailCash
 import m_orderSystemMenu from './pagesApp/orderSystem/m_orderSystemMenu'
 import m_orderSystemHistory from './pagesApp/orderSystem/m_orderSystemHistory'
 import m_orderStatistics from './pagesApp/orderSystem/m_orderStatistics'
+
+/* 移动端 - 保险 - 利率审批 */
+import m_interestRateManager from './pagesApp/insurance/m_interestRateManager'
+import m_interestRateView from './pagesApp/insurance/m_interestRateView'
+
+
 
 /* 收银管理 */
 import cashierManager from './pages/cashier/cashierManager'
@@ -475,6 +501,9 @@ import billingView from './pages/insurance/billing/billingView'
 /* 保单管理 */
 import policyManager from './pages/insurance/policy/policyManager'
 import policyView from './pages/insurance/policy/policyView'
+/* 应收账款*/
+import accountsReceivableManager from './pages/insurance/accountsReceivable/accountsReceivableManager'
+import accountsReceivableView from './pages/insurance/accountsReceivable/accountsReceivableView'
 
 /* 保险审批制定 */
 import insuranceProcessManager from './pages/approvalPriority/insuranceProcessManager'
@@ -488,6 +517,8 @@ import insuranceUnitView from './pages/insurance/unit/insuranceUnitView'
 import wxMessageTemplateManager from './pages/wxMessageTemplate/wxMessageTemplateManager.vue'
 import wxMessageTemplateForm from './pages/wxMessageTemplate/wxMessageTemplateForm.vue'
 
+/* 微信服务号消息管理 */
+import wxMessageManager from './pages/wxMessage/wxMessageManager.vue'
 
 export default new Router({
   mode: 'history',
@@ -496,6 +527,7 @@ export default new Router({
       children: [
         { path: '/home/desktop', name: 'home.desktop', component:desktop, meta: {title: '北京海派奥特经贸有限公司办公系统'}},
         { path: '/home/wxMessageTemplateManager', name: 'wxMessageTemplateManager.vue', component: wxMessageTemplateManager , meta: {title: '微信服务号消息模板管理'}},
+        { path: '/home/wxMessageManager', name: 'wxMessageManager.vue', component: wxMessageManager , meta: {title: '微信服务号消息管理'}},
         { path: '/home/approvalPersonaliseManager', name: 'approvalPersonaliseManager.vue', component: approvalPersonaliseManager , meta: {title: '审批定制管理'}},
         { path: '/home/approvalPriorityManager', name: 'approvalPriorityManager.vue', component: approvalPriorityManager , meta: {title: '审批管理'}},
         { path: '/home/reversalAccountManager', name: 'reversalAccountManager.vue', component: reversalAccountManager , meta: {title: '冲账管理'}},
@@ -513,6 +545,7 @@ export default new Router({
         { path: '/home/myElectronicInvoiceManager', name: 'myElectronicInvoiceManager.vue',component:  myElectronicInvoiceManager, meta: {title: '我的电子发票'}},
         { path: '/home/prettyCashsManager', name: 'prettyCashsManager.vue',component:  prettyCashsManager, meta: {title: '备用金'}},
         { path: '/home/approvalPrettyCashs', name: 'approvalPrettyCashs.vue',component:  approvalPrettyCashs, meta: {title: '备用金审批'}},
+        { path: '/home/viewManager/finPrettyCashsManagerAll', name: 'finPrettyCashsManagerAll.vue',component:  finPrettyCashsManagerAll, meta: {title: '备用金管理'}},
         { path: '/home/approvalPayManager', name: 'approvalPayManager.vue',component:  approvalPayManager, meta: {title: '付款申请审批'}},
         { path: '/home/approvalPayPlanManager', name: 'approvalPayPlanManager.vue',component:  approvalPayPlanManager, meta: {title: '付款计划审批'}},
         { path: '/home/approvalReimbursementManager', name: 'approvalReimbursementManager.vue',component:  approvalReimbursementManager, meta: {title: '报销审批'}},
@@ -520,6 +553,8 @@ export default new Router({
         { path: '/home/departmentManager', name: 'departmentManager.vue', component: departmentManager  , meta: {title: '部门管理'}},
         { path: '/home/usersUpdatePwdManager', name: 'usersUpdatePwdManager.vue', component: usersUpdatePwdManager  , meta: {title: '修改密码'}},
         { path: '/home/viewManager/paymentApplyViewManager', name: 'paymentApplyViewManager.vue', component: paymentApplyViewManager  , meta: {title: '付款申请管理'}},
+        { path: '/home/finPayApplyReconDetailManager', name: 'finPayApplyReconDetailManager.vue', component: finPayApplyReconDetailManager  , meta: {title: '付款申请对账明细'}},
+        { path: '/home/viewManager/claimsManager', name: 'claimsManager.vue', component: claimsManager  , meta: {title: '保险理赔'}},
         { path: '/home/viewManager/reimbursementViewManager', name: 'reimbursementViewManager.vue', component: reimbursementViewManager  , meta: {title: '报销管理'}},
         { path: '/home/viewManager/paymentPlanViewManager', name: 'paymentPlanViewManager.vue', component: paymentPlanViewManager  , meta: {title: '付款计划管理'}},
         { path: '/home/businessAssortManager', name: 'businessAssortManager.vue', component: businessAssortManager},
@@ -529,6 +564,7 @@ export default new Router({
         { path: '/home/keeprepairManager', name: 'keeprepairManager.vue', component: keeprepairManager, meta: {title: '维修项目'}},
         { path: '/home/unitManager', name: 'unitManager.vue', component: unitManager  , meta: {title: '单位管理'}},
         { path: '/home/personManager', name: 'personManager.vue', component: personManager  , meta: {title: '联系人管理'}},
+        { path: '/home/visitPersonManager', name: 'visitPersonManager.vue', component: visitPersonManager  , meta: {title: '来访人员'}},
         { path: '/home/supplierManager', name: 'supplierManager.vue', component: supplierManager},
         { path: '/home/bankDetailCashierManager', name: 'bankDetailCashierManager.vue', component: bankDetailCashierManager},
         { path: '/home/checkManager', name: 'checkManager.vue', component: checkManager , meta: {title: '支票管理'}},
@@ -569,6 +605,8 @@ export default new Router({
         { path: '/home/track/trackManager', name: 'trackManager.vue', component: trackManager ,meta: {title: '跟踪信息'}},
         { path: '/home/billing/billingManager', name: 'billingManager.vue', component: billingManager ,meta: {title: '出单管理'}},
         { path: '/home/policy/policyManager', name: 'policyManager.vue', component: policyManager ,meta: {title: '保单管理'}},
+        { path: '/home/accountsReceivable/accountsReceivableManager', name: 'accountsReceivableManager.vue', component: accountsReceivableManager ,meta: {title: '应收账款'}},
+
         { path: '/home/trackDetails/trackDetailsManager', name: 'trackDetailsManager.vue', component: trackDetailsManager ,meta: {title: '跟踪细节'}},
         { path: '/home/insuranceProcessManager', name: 'insuranceProcessManager.vue', component: insuranceProcessManager ,meta: {title: '保险审批制定'}},
         { path: '/home/conductFinManager', name: 'conductFinManager.vue', component: conductFinManager ,meta: {title: '理财管理'}},
@@ -638,9 +676,13 @@ export default new Router({
 
     { path: '/addUnitForm', name: 'addUnitForm', component: addUnitForm},
     { path: '/addUnitSimplifyForm', name: 'addUnitSimplifyForm', component: addUnitSimplifyForm},
+
     { path: '/unitView', name: 'unitView.vue', component: unitView},
     { path: '/unitDetailView', name: 'unitDetailView.vue', component: unitDetailView},
+
     { path: '/addPersonForm', name: 'addPersonForm', component: addPersonForm},
+    { path: '/visitPersonForm', name: 'visitPersonForm', component: visitPersonForm},
+
     { path: '/addPersonSimplifyForm', name: 'addPersonSimplifyForm', component: addPersonSimplifyForm},
     { path: '/personView', name: 'personView', component: personView},
 
@@ -664,6 +706,9 @@ export default new Router({
     { path: '/psdForm', name: 'psdForm', component: psdForm},
     { path: '/bankDetailForm', name: 'bankDetailForm', component: bankDetailForm},
     { path: '/bankDetailCashierForm', name: 'bankDetailCashierForm', component: bankDetailCashierForm},
+
+
+
 
     { path: '/reimbursementForm', name: 'reimbursementForm', component: reimbursementForm},
     { path: '/reimbursementDetailForm', name: 'reimbursementDetailForm', component: reimbursementDetailForm},
@@ -701,6 +746,7 @@ export default new Router({
     { path: '/approvalReimbursementPrint', name: 'approvalReimbursementPrint.vue',component: approvalReimbursementPrint },
     { path: '/approvalReimbursementPrintBYJ', name: 'approvalReimbursementPrintBYJ.vue',component: approvalReimbursementPrintBYJ },
     { path: '/approvalReimbursementSingleSplitForm', name: 'approvalReimbursementSingleSplitForm.vue',component: approvalReimbursementSingleSplitForm },
+    { path: '/approvalBatchAllca', name: 'approvalBatchAllca.vue',component: approvalBatchAllca },
 
     { path: '/invoiceWarehouFrom', name: 'invoiceWarehouFrom.vue',component: invoiceWarehouFrom },
     { path: '/invoiceView', name: 'invoiceView.vue',component: invoiceView },
@@ -744,7 +790,10 @@ export default new Router({
     { path: '/insuranceUnitDetailsForm', name: 'insuranceUnitDetailsForm.vue',component: insuranceUnitDetailsForm },
     { path: '/insuranceUnitView', name: 'insuranceUnitView.vue',component: insuranceUnitView },
     { path: '/clientForm', name: 'clientForm.vue',component: clientForm },
+
     { path: '/clientView', name: 'clientView.vue',component: clientView },
+    { path: '/claimsForm', name: 'claimsForm.vue',component: claimsForm },
+    { path: '/claimsView', name: 'claimsView.vue',component: claimsView },
 
     { path: '/handleImageForm', name: 'handleImageForm.vue',component: handleImageForm ,meta: {title: '图片预览'}},
     { path: '/onlyGoogle', name: 'onlyGoogle.vue',component: onlyGoogle },
@@ -766,6 +815,7 @@ export default new Router({
 
     { path: '/prettyCashsView', name: 'prettyCashsView.vue',component: prettyCashsView },
     { path: '/approvalPrettyCashsView', name: 'approvalPrettyCashsView.vue',component: approvalPrettyCashsView },
+    { path: '/finPrettyCashsView', name: 'finPrettyCashsView.vue',component: finPrettyCashsView },
 
     { path: '/modelForm', name: 'modelForm.vue',component: modelForm },
 
@@ -790,6 +840,7 @@ export default new Router({
     { path: '/billingView', name: 'billingView.vue',component: billingView },
 
     { path: '/policyView', name: 'policyView.vue',component: policyView },
+    { path: '/accountsReceivableView', name: 'accountsReceivableView.vue',component: accountsReceivableView },
 
     { path: '/insuranceProcessForm', name: 'insuranceProcessForm.vue',component: insuranceProcessForm },
 
@@ -829,12 +880,16 @@ export default new Router({
         { path: '/homeApp/m_orderSystemMenu', name: 'm_orderSystemMenu',component: m_orderSystemMenu, meta: {title: '点餐系统'}},
         { path: '/homeApp/m_orderSystemHistory', name: 'm_orderSystemHistory',component: m_orderSystemHistory, meta: {title: '历史记录'}},
         { path: '/homeApp/m_orderStatistics', name: 'm_orderStatistics',component: m_orderStatistics, meta: {title: '订餐统计'}},
+        { path: '/homeApp/m_interestRateManager', name: 'm_interestRateManager',component: m_interestRateManager, meta: {title: '利率审批管理'}},
+        { path: '/homeApp/m_interestRateView', name: 'm_interestRateView',component: m_interestRateView, meta: {title: '利率审批'}},
+
+        { path: '/homeApp/m_financialManagementView', name: 'm_financialManagementView',component: m_financialManagementView, meta: {title: '详细信息'}},
 
         { path: '/homeApp/m_rejectForm', name: 'm_rejectForm', component: m_rejectForm ,meta: {title: '驳回理由'}},
 
-        { path: '/homeApp/m_menu', name: 'm_menu', component: m_menu ,meta: {title: '测试菜单'}},
-        { path: '/homeApp/m_menuBar', name: 'm_menuBar', component: m_menuBar ,meta: {title: '测试导航菜单'}},
-        { path: '/homeApp/m_menuBars', name: 'm_menuBars', component: m_menuBars ,meta: {title: '测试导航菜单副本'}},
+        { path: '/homeApp/m_menu', name: 'm_menu', component: m_menu ,meta: {title: '测试导航菜单'}},
+        // { path: '/homeApp/m_menuBar', name: 'm_menuBar', component: m_menuBar ,meta: {title: '测试导航菜单'}},
+        // { path: '/homeApp/m_menuBars', name: 'm_menuBars', component: m_menuBars ,meta: {title: '测试导航菜单副本'}},
 
         { path: '/homeApp/m_tab', name: 'm_tab', component: m_tab ,meta: {title: '测试菜单'}},
       ]

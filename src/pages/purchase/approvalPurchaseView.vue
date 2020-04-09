@@ -93,6 +93,50 @@
       }
     },
     methods:{
+      approvalNext(){
+        let params = {
+          id: this.id,
+          category: 3
+        }
+        this.ajaxJson({
+          url: '/Com/approvalNext',
+          data: params,
+          call: (data)=>{
+            if(data.type === 0){
+              let dataID = data.id
+
+              let txt = ''
+              let width = ''
+              if(data.html === '0'){
+                txt = '当前批次中还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+                width = '450'
+              }else if(data.html === '1'){
+                txt = '检测到<b class="red">【' + data.val + '】</b>名下还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+                width = '550'
+              }else{
+                txt = '检测到其他人名下还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+                width = '500'
+              }
+
+              this.$dialog.confirm({
+                width: width,
+                height: '100',
+                tipValue: txt,
+                btnValueOk: '继续审批',
+                btnValueCancel: '暂不审批',
+                okCallBack: ()=>{
+                  window.location = '/approvalPurchaseView?id=' + dataID
+                },
+                cancelCallBack: ()=>{
+                  this.$dialog.close()
+                }
+              })
+            }else{
+              this.$dialog.close()
+            }
+          }
+        })
+      },
       //通过
       adoptEvent(){
         if(this.id) {
@@ -111,11 +155,11 @@
                 data: params,
                 call: (data)=>{
                   if(data.type === 0){
+                    this.$dialog.setReturnValue(this.id)
                     this.$dialog.alert({
                       tipValue: data.message,
                       closeCallBack: () => {
-                        this.isFinish = '1'
-                        this.$dialog.setReturnValue(data)
+                        this.approvalNext()
                       }
                     })
                   }else if(data.type === 1){
@@ -153,7 +197,8 @@
           closeCallBack: (data) => {
             if(data) {
               this.isFinish = '1'
-              this.$dialog.setReturnValue(data)
+              this.$dialog.setReturnValue(this.id)
+              this.approvalNext()
             }
           }
         })

@@ -43,7 +43,6 @@
     created () {
       this.$nextTick(()=>{
         setTimeout(()=>{
-          console.log(this.list.length)
           this.ins = this.list.length
         },100)
       })

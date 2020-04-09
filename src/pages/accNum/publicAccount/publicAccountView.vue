@@ -81,6 +81,7 @@
         this.init({
           url: '/Fin/publicAccountVueForm',
           all: (data)=>{
+            this.$dialog.setReturnValue('1')
             this.id=data.id
             this.name=data.name
             this.categoryName=data.categoryName
@@ -97,7 +98,7 @@
             this.settlementAccountID = data.settlementAccountID
             this.rate = data.rate
             this.alias = data.alias
-            if(data.categoryUnit==='0'){
+            if(data.alias!==''){
               this.isAlias=true
             }
             if(data.categoryUnit === '0'){

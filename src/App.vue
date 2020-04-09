@@ -33,6 +33,29 @@ export default {
     },900)
 
 
+    let onOffCsah = true
+    setInterval(function () {
+      if(onOffCsah){
+        $(".sharkCashTip").addClass('cashShark');
+        onOffCsah = false
+      }else{
+        onOffCsah = true;
+        $(".sharkCashTip").removeClass('cashShark');
+      }
+    },800)
+
+    let onOffTran = true
+    setInterval(function () {
+      if(onOffTran){
+        $(".sharkTranTip").addClass('tranShark');
+        onOffTran = false
+      }else{
+        onOffTran = true;
+        $(".sharkTranTip").removeClass('tranShark');
+      }
+    },800)
+
+
   },
   methods: {
     allowDrop(event){

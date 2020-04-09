@@ -19,8 +19,8 @@
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton v-show="approval === '4'&&isApproval === '0'" :no-click="isApproval==='4'" @call="approFund()" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
-        <yhm-commonbutton v-show="(isApproval === '0'&& approval !== '4')||isApproval === '1'" :no-click="isApproval!=='0'" @call="adoptEvent()" value="通过" icon="i-btn-applicationSm" color="#49a9ea" :flicker="true"></yhm-commonbutton>
-        <yhm-commonbutton :no-click="isApproval!=='0'" @call="rejectEvent()"  value="驳回" icon="i-btn-turnDown" color="#FF0000" category="ten"></yhm-commonbutton>
+        <yhm-commonbutton v-show="(isApproval === '0'&& approval !== '4' && state!=='15')||(isApproval === '1' && state!=='15')" :no-click="isApproval!=='0'" @call="adoptEvent()" value="通过" icon="i-btn-applicationSm" color="#49a9ea" :flicker="true"></yhm-commonbutton>
+        <yhm-commonbutton v-show="state!=='15'" :no-click="isApproval!=='0' && state!=='15'" @call="rejectEvent()"  value="驳回" icon="i-btn-turnDown" color="#FF0000" category="ten"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
   </div>
@@ -99,10 +99,10 @@
                       this.$dialog.alert({
                         tipValue: data.message,
                         closeCallBack: () => {
-                          this.$dialog.close()
+                          this.approvalNext()
                         }
                       })
-                    }else if(data.type === 1){
+                    }else{
                       this.$dialog.alert({
                         tipValue: data.message,
                         alertImg: 'error',
@@ -117,6 +117,52 @@
           }
         }
       },
+
+      approvalNext(){
+        let params = {
+          id: this.id,
+          category: 4
+        }
+        this.ajaxJson({
+          url: '/Com/approvalNext',
+          data: params,
+          call: (data)=>{
+            if(data.type === 0){
+              let dataID = data.id
+
+              let txt = ''
+              let width = ''
+              if(data.html === '0'){
+                txt = '当前批次中还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+                width = '450'
+              }else if(data.html === '1'){
+                txt = '检测到<b class="red">【' + data.val + '】</b>名下还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+                width = '550'
+              }else{
+                txt = '检测到其他人名下还有<b class="red">【' + data.message + '】</b>条没有审批,是否继续审批?'
+                width = '500'
+              }
+
+              this.$dialog.confirm({
+                width: width,
+                height: '100',
+                tipValue: txt,
+                btnValueOk: '继续审批',
+                btnValueCancel: '暂不审批',
+                okCallBack: ()=>{
+                  window.location = '/approvalPrettyCashsView?id=' + dataID + '&isApproval=' + this.isApproval+'&approval='+this.approval
+                },
+                cancelCallBack: ()=>{
+                  this.$dialog.close()
+                }
+              })
+            }else{
+              this.$dialog.close()
+            }
+          }
+        })
+      },
+
       rejectEvent () {
         if(this.isApproval!=='1') {
           this.$dialog.OpenWindow({
@@ -125,17 +171,21 @@
             title: '驳回理由',
             url: '/rejectReason?category=0&id=' + this.id+'&tableName=47&kind=0',
             closeCallBack: (data) => {
-              if(data.type === 0){
+              if(data){
                 this.$dialog.setReturnValue(this.id)
-                this.$dialog.close()
-              }else if(data.type === 1){
-                this.$dialog.alert({
-                  tipValue: data.message,
-                  alertImg: 'error',
-                  closeCallBack: () => {
-                  }
-                })
+                this.approvalNext()
               }
+              // if(data.type === 0){
+              //   this.$dialog.setReturnValue(this.id)
+              //   this.$dialog.close()
+              // }else if(data.type === 1){
+              //   this.$dialog.alert({
+              //     tipValue: data.message,
+              //     alertImg: 'error',
+              //     closeCallBack: () => {
+              //     }
+              //   })
+              // }
             }
           })
         }

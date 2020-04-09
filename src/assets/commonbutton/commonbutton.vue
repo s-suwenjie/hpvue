@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="b_main" :class="[icon,category,getClass,getHoverClass,getFlickerClass,getErrorClass,getIconClass]" @click="clickEvent()">{{value}}</div>
+  <div v-if="show" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" :style="{backgroundColor: getBgColor,color: getColor}" class="b_main" :class="[icon,category,getClass,getHoverClass,getFlickerClass,getErrorClass,getIconClass]" @click="clickEvent()">{{value}}</div>
 </template>
 
 <script>
@@ -49,6 +49,14 @@
       show:{
         type:Boolean,
         default:true
+      },
+      bgColor: {
+        type: String,
+        default: "#fff"
+      },
+      color: {
+        type: String,
+        default: "#333"
       }
     },
     methods:{
@@ -84,6 +92,12 @@
       }
     },
     computed:{
+      getBgColor(){
+        return this.bgColor
+      },
+      getColor(){
+        return this.color
+      },
       getIconClass(){
         if(this.value !== '' && this.icon !== ''){
           return 'mr5b'

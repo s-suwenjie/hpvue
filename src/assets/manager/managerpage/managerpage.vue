@@ -1,5 +1,5 @@
 <template >
-  <div class="m_main">
+  <div class="m_main" :class="{ism_Main: isManager}">
     <div v-if="category === '0'" class="m_navigation" >
       <slot name="navigation"></slot>
       <div class="navLft">
@@ -10,18 +10,28 @@
       <div class="menuTabTit">
         <div class="menuTabLft">
           <slot name="navigationTab"></slot>
+
+        </div>
+        <div class="navSwitchLft">
+          <slot name="navigationLft"></slot>
         </div>
       </div>
     </div>
-    <div class="m_operate" :class="{w620: smTable}">
+    <div class="m_operate" :class="[{w620: smTable},{iswAuto: isManager}]">
       <slot name="operate"></slot>
       <div class="operaLft">
         <slot name="video"></slot>
       </div>
+
+    </div>
+
+    <div class="operateMore">
+      <slot name="operateMore"></slot>
     </div>
 
     <slot v-if="!customize" name="choose"></slot>
-    <div v-if="!customize" class="m_list" :class="{w620: smTable}">
+
+    <div v-if="!customize" class="m_list" :class="[{w620: smTable},{iswAuto: isManager}]">
       <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table">
         <thead>
           <tr>
@@ -39,7 +49,7 @@
     <div>
       <slot name="colorTip"></slot>
     </div>
-    <div v-if="!customize" class="m_list mt10" :class="{w620: totalTable,mr40:totalRgt}">
+    <div v-if="!customize" class="m_list mt10" :class="[{w620: totalTable,mr40:totalRgt,w418:totalWidth},{iswAuto: isManager}]">
       <slot name="total"></slot>
       <div class="listTotalCrente">
         <slot name="listTotalLeft"></slot>
@@ -83,7 +93,15 @@
         type:Boolean,
         default: false
       },
+      totalWidth:{
+        type:Boolean,
+        default:false
+      },
       totalRgt: {
+        type: Boolean,
+        default: false
+      },
+      isManager: {
         type: Boolean,
         default: false
       }
@@ -95,6 +113,18 @@
 <style scoped>
 .m_main{
   position: relative;
+}
+
+.ism_Main{
+  height: auto;
+  width: auto;
+  min-height: auto;
+  margin: 10px 20px;
+  border-radius: 4px;
+}
+.iswAuto{
+  width: auto !important;
+  margin: 0 20px;
 }
 
 </style>

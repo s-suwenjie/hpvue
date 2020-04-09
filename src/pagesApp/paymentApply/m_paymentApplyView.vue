@@ -53,18 +53,24 @@
       <yhm-app-button @call="rejectEvent" value="驳回" category="ten"></yhm-app-button>
       <yhm-app-button @call="adoptEvent" value="通过" category="two"></yhm-app-button>
     </yhm-app-form-operate>
+    <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
   </div>
 </template>
 
 <script>
   import { appviewmixin } from '@/assetsApp/app_view.js'
   import { ImagePreview } from 'vant';
+  import appToast from '@/pagesApp/common/appToast'
 
   export default {
     name: 'm_paymentApplyView',
     mixins:[appviewmixin],
+    components:{
+      appToast
+    },
     data(){
       return{
+        appToastShow:false,
         states:'',
         category:'',     //类型
         isFinishBack:'1',
@@ -192,6 +198,7 @@
       this.init({
         url: '/PersonOffice/m_initPaymentForm',
         call:(data)=> {
+          this.appToastShow = true//关闭loading
           this.details = data
           this.productDetails = data.paymentInvoice
           this.category = data.category

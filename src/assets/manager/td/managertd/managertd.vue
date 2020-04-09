@@ -1,5 +1,5 @@
 <template>
-  <td ref="control" @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent">
+  <td ref="control" @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent" @dblclick="dblclickEvent">
     <div v-if="getEmpty" class="md_center">
       -----
     </div>
@@ -62,6 +62,11 @@
       }
     },
     methods:{
+      dblclickEvent(){
+        this.$nextTick(() =>{
+          this.$emit("dblclick")
+        })
+      },
       getRelativeNode(control){
         let name = control.parentNode.className
         if(name !== this.nodeClassName){

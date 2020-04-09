@@ -132,18 +132,18 @@
                 this.$dialog.setReturnValue(this.id)
                 this.initData()
               }
-              let params = {
-                id: data
-              }
-              if (data) {
-                this.ajaxJson({
-                  url: '/PersonOffice/getPaymentPlanDetailList',
-                  data: params,
-                  call: (data) => {
-                    this.detail = data
-                  }
-                })
-              }
+              // let params = {
+              //   id: data
+              // }
+              // if (data) {
+              //   this.ajaxJson({
+              //     url: '/PersonOffice/getPaymentPlanDetailList',
+              //     data: params,
+              //     call: (data) => {
+              //       this.detail = data
+              //     }
+              //   })
+              // }
             }
           })
         }

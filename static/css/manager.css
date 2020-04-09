@@ -36,6 +36,12 @@
 .navLft div.active{
     border: 2px solid #fff;
 }
+.navSwitchLft{
+    float: right;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
 .m_operate{
     width: 1590px;
     padding: 10px 0 10px 10px;
@@ -52,6 +58,15 @@
 }
 .operaLft:hover{
     color: #49a9ea;
+}
+.operateMore{
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.operateMore>div{
+    margin-bottom: 10px;
 }
 .m_list
 {

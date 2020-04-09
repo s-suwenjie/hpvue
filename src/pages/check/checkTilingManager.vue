@@ -5,7 +5,8 @@
       <template #navigation>财务管理&nbsp;&gt;&nbsp;票据&nbsp;&gt;&nbsp;支票管理</template>
 
       <template #navigationLft>
-        <div @mouseover="tipChange(index)" @mouseout="tipOut" style="margin: 0;position: relative"  v-for="(item,index) in routerList" :key="index">
+        <div @mouseover="tipChange(index)" @mouseout="tipOut" style="margin: 0;position: relative"
+             v-for="(item,index) in routerList" :key="index">
           <router-link tag="div" :class="item.class" style="margin: 0;" class="tip" :to="item.path">
             <div  class="cbl_main_prompt2 tipShow">
               <div class="cbl_main_prompt_content" style="font-size:13px;padding: 0 12px;">
@@ -19,10 +20,24 @@
       <!--操作区-->
       <template #operate>
         <yhm-commonbutton value="入库" icon="btnAdd" :flicker="true" @call="add()" category="one"></yhm-commonbutton>
-        <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'"  :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
+        <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="支票状态" :content="listState"></yhm-radiofilter>
         <yhm-radiofilter :before="categoryBefore" @initData="initChoose('category')" title="支票类型" :content="listCategory"></yhm-radiofilter>
+        <div class="remarkCon">
+          <p class="sharkCashTip cashTip" v-show="isCashWarn">
+            <span class="count">{{cashCount}}</span>
+            &nbsp;<span class="slash">/</span>&nbsp;
+            <span class="commonWarning">{{cashCommonWarning}}</span>
+          </p>
+
+          <p class="sharkTranTip tranTip" v-show="isTranWarn">
+            <span class="count">{{tranCount}}</span>
+            &nbsp;<span class="slash">/</span>&nbsp;
+            <span class="commonWarning">{{tranCommonWarning}}</span>
+          </p>
+
+        </div>
       </template>
       <!--筛选区-->
       <template #choose>
@@ -31,10 +46,15 @@
 
         </div>
       </template>
+
+
       <template #tiled>
         <div style="margin: 10px;display: flex;flex-direction: row; flex-wrap: wrap;">
-          <yhm-view-list-block :class="{slowTwinkleBgColor: item.isWarning === '1'}"  @VIewEvent="viewClickEvent" v-for="(item,index) in content" :key="index"
-                               @call="rightMenuEvent" :item="item" :menu="menu" :menu-category="item.state" :psd="categoryList"
+          <yhm-view-list-block @mouseover="warnMouseOver(item)" @mouseout="warnMouseout(item)"
+                               :class="{slowTwinkleBg: item.isWarning === '1'}"
+                               @VIewEvent="viewClickEvent" v-for="(item,index) in content" :key="index"
+                               @call="rightMenuEvent" :item="item" :menu="menu"
+                               :menu-category="item.state" :psd="categoryList"
                                :category-value="item.category" :category="item.category" :code="item.code"
                                :color="getPsdSelectItemColor(stateList,item.state)">
             <div style="margin: 0 5px 2px 0;">
@@ -95,7 +115,17 @@
         category:'',
         total:'',
         isTilingEmpty:true,
+        isRemark: false,
+        isCashWarn: false,
+        isTranWarn: false,
+        cashCommonWarning: '',
+        tranCommonWarning: '',
+        tranCount: '',
+        cashCount: '',
+        timer: '',
+        index: 0,
         list:[],
+        listData:[],
         checkTheType:'现金',
         stateBefore: '0', // 默认选择状态为可以选择，1为不可以选择
         listState: {
@@ -151,11 +181,35 @@
           pageSize: 18, // 每页条数
           pageIndex: 1, // 当前页码
           selectCount: 0 // 选中条数
-        }
+        },
       }
     },
     methods:{
 
+      /* 预警值显示部分代码,如非必要,勿动勿动!!! */
+      /* 涉及调用函数 warnMouseOver warnMouseout setIndexTime setIntervalEvent isCashTran initWarnData */
+
+      warnMouseOver(item){
+        if(this.listData[0].isWarning === '1' && this.listData[1].isWarning === '1') {
+          if (item.category === '0') {
+            clearInterval(this.timer)
+            this.isCashWarn = true
+            this.isTranWarn = false
+            this.cashCount = this.listData[0].count
+            this.cashCommonWarning = this.listData[0].commonWarning
+          } else {
+            clearInterval(this.timer)
+            this.isCashWarn = false
+            this.isTranWarn = true
+            this.tranCount = this.listData[1].count
+            this.tranCommonWarning = this.listData[1].commonWarning
+          }
+        }
+      },
+      warnMouseout(){
+        this.setIndexTime()
+        this.isCashTran()
+      },
       totalClick(item){
         if(item  ===  0){
           this.listState.value = '0'
@@ -342,6 +396,52 @@
           }
         })
       },
+
+      /* 显示预警值 */
+      setIndexTime(){
+        if(this.listData[0].isWarning === '1'){
+          this.isCashWarn = true
+          this.cashCount = this.listData[0].count
+          this.cashCommonWarning = this.listData[0].commonWarning
+        }
+
+        if(this.listData[1].isWarning === '1'){
+          this.isTranWarn = true
+          this.tranCount = this.listData[1].count
+          this.tranCommonWarning = this.listData[1].commonWarning
+        }
+        if(this.listData[0].isWarning === '1' && this.listData[1].isWarning === '1'){
+          this.setIntervalEvent()
+        }
+      },
+
+      /* 现金和转账之间切换 */
+      setIntervalEvent(){
+        let onaOff = true
+        clearInterval(this.timer)
+        this.timer = window.setInterval(()=>{
+          if(onaOff){
+            this.isTranWarn = true
+            this.isCashWarn = false
+            onaOff = false
+          }else{
+            this.isTranWarn = false
+            this.isCashWarn = true
+            onaOff = true
+          }
+        },2000)
+      },
+
+      /* 优化移入移出时间间隔不显示 */
+      isCashTran(){
+        if(this.isCashWarn === true){
+          this.isTranWarn = false
+        }
+        if(this.isTranWarn === true){
+          this.isCashWarn = false
+        }
+      },
+
       initWarnData(){
 
         this.ajaxJson({
@@ -350,14 +450,23 @@
             let onOff = false
             let height = 100
             for(let i in data){
+              this.listData = data
               if(data[i].isWarning === '1'){
                 onOff = true
                 height = height  + 75
+                this.isRemark = true
               }
             }
+
+
+            if(this.listData[0].isWarning === '1' || this.listData[1].isWarning === '1'){
+              this.setIndexTime()
+            }
+            this.isCashTran()
+
             if(onOff){
               this.$dialog.OpenWindow({
-                width: '550',
+                width: '700',
                 height: height,
                 title: '警示',
                 url: '/showCheckWarnView',
@@ -381,7 +490,7 @@
     watch:{
       content(){
         this.isTilingEmpty = this.content.length !== 0;
-      }
+      },
     }
   }
 </script>
@@ -417,5 +526,64 @@
 }
 .fifColor{
   color: #1F809C;
+}
+.remarkCon{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  p{
+    margin: 0 5px;
+    border-radius: 4px;
+    padding: 4px 8px;
+  }
+
+  .cashTip{
+    border: 1px solid #e09e17;
+    .commonWarning{
+      font-size: 16px;
+      color: #e09e17;
+    }
+    .slash{
+      font-size: 14px;
+      color: #e09e17;
+    }
+    .count{
+      font-size: 16px;
+      color: #e09e17;
+    }
+  }
+  .tranTip{
+    border: 1px solid #5a82f6;
+    .commonWarning{
+      font-size: 16px;
+      color: #5a82f6;
+    }
+    .slash{
+      font-size: 14px;
+      color: #5a82f6;
+    }
+    .count{
+      font-size: 16px;
+      color: #5a82f6;
+    }
+  }
+
+
+  p.cashShark{
+    background-color: #e09e17;
+    color: #fff !important;
+    .commonWarning,.slash,.count{
+      color: #fff;
+    }
+  }
+  p.tranShark{
+    background-color: #5a82f6;
+    color: #fff !important;
+    .commonWarning,.slash,.count{
+      color: #fff;
+    }
+  }
+
 }
 </style>

@@ -48,9 +48,7 @@
               <yhm-app-structure-group-operate
                 :class="'reimbursenebt'+index"
                 v-show="details.length==1?false:true"
-                v-if="item.state== states&&states!=9"
-                ref="aaa"
-              >
+                v-if="item.state== states&&states!=9">
               <yhm-app-button @call="rejectEvent(1,item.id,index)"  v-if="getShowOperate" value="驳回" category="ten"></yhm-app-button>
               <yhm-app-button @call="adoptEvent(1,item.id,index)"  v-if="getShowOperate" value="通过" category="two"></yhm-app-button>
               </yhm-app-structure-group-operate>
@@ -62,17 +60,25 @@
         <yhm-app-button @call="rejectEvent(0)" value="驳回" category="ten"></yhm-app-button>
         <yhm-app-button @call="adoptEvent(0)" value="通过" category="two"></yhm-app-button>
       </yhm-app-form-operate>
+      <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
+
     </div>
 </template>
 
 <script>
   import { ImagePreview }from 'vant';
   import { appviewmixin } from '@/assetsApp/app_view.js'
+  import appToast from '@/pagesApp/common/appToast'
+
   export default {
     name: 'm_approvalReimbursementView',
     mixins:[appviewmixin],
+    components:{
+      appToast
+    },
     data(){
       return{
+        appToastShow:false,
         states:'',
         stateList:[],
         allBtnShow:true,
@@ -208,7 +214,6 @@
           this.allBtnShow = true
           for(let i = 0; i<this.details.length; i++){
             if(this.details[i].state%2==1){
-              console.log(this.details[i],this.details[i].state)
             }
           }
         }
@@ -257,6 +262,7 @@
       this.init({
         url: '/PersonOffice/m_reimbursementsForm',
         call:(data)=> {
+          this.appToastShow = true
           this.state = data.state
           this.states = data.state
           this.category = data.category

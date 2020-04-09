@@ -37,14 +37,16 @@
         <template #listBody>
           <tr v-for="(item,index) in content" :key="index" :class="{InterlacBg:index%2!==0}">
 <!--            <yhm-manager-td-look @click="listView(item.id)"></yhm-manager-td-look>-->
-            <yhm-manager-td width="130"  :value="item.selfAccount"></yhm-manager-td>
-            <yhm-manager-td-center width="130" :value="item.otherAccount"></yhm-manager-td-center>
-            <yhm-manager-td-date :value="item.insertDate" typeof="data"></yhm-manager-td-date>
+            <yhm-manager-td :value="item.selfAccount"></yhm-manager-td>
+            <yhm-manager-td-center :value="item.otherAccount"></yhm-manager-td-center>
+            <yhm-manager-td-date :value="item.insertDate"></yhm-manager-td-date>
             <yhm-manager-td-direction :direction="item.direction" :value="item.direction" class="dfJcc" :dir-val="false"></yhm-manager-td-direction>
             <yhm-manager-td :value="item.subject" ></yhm-manager-td>
             <yhm-manager-td :value="item.remark"></yhm-manager-td>
-            <yhm-manager-td-money :value="money" v-if="item.direction==='0'?money=item.money:money='0'" style="color:#001CCE;"></yhm-manager-td-money>
-            <yhm-manager-td-money :value="money" v-if="item.direction==='1'?money=item.money:money='0'" style="color:#f00;"></yhm-manager-td-money>
+
+            <yhm-manager-td-money :value="item.direction === '0' ? money : '0' " style="color:#001CCE;"></yhm-manager-td-money>
+            <yhm-manager-td-money :value="item.direction === '1' ? money : '0' " style="color:#f00;"></yhm-manager-td-money>
+
             <yhm-manager-td-image :tip="true" width="850" height="500" left="50" type="files" :value="item.storeName" :tag="'bankDetail'" ></yhm-manager-td-image>
 
           </tr>
@@ -138,14 +140,14 @@
     },
     watch:{
       content(){
-          if(this.content.length === 0){
-            this.isEmpty = true
-            this.isTabShow = false
-          }else{
-            this.isEmpty = false
-            this.isTabShow = true
+        if(this.content.length === 0){
+          this.isEmpty = true
+          this.isTabShow = false
+        }else{
+          this.isEmpty = false
+          this.isTabShow = true
 
-          }
+        }
 
       }
 

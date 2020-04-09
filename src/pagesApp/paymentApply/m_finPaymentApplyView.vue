@@ -45,18 +45,25 @@
       </yhm-app-structure-menu-group>
 <!--    </yhm-app-scroll>-->
     </div>
+    <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
+
   </div>
 </template>
 
 <script>
   import { appviewmixin } from '@/assetsApp/app_view.js'
   import { ImagePreview } from 'vant';
+  import appToast from '@/pagesApp/common/appToast'
 
   export default {
     name: 'm_finPaymentApplyView',
     mixins:[appviewmixin],
+    components:{
+      appToast
+    },
     data(){
       return{
+        appToastShow:false,
         category:'',     //类型
         isFinishBack:'1',
         isInvoice: false,
@@ -117,6 +124,7 @@
       this.init({
         url: '/PersonOffice/m_initPaymentForm',
         call:(data)=> {
+          this.appToastShow = true
           this.details = data
           this.productDetails = data.paymentInvoice
           this.category = data.category

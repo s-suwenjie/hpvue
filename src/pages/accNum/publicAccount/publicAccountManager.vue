@@ -24,10 +24,10 @@
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
+        <yhm-managerth style="width: 150px" title="别名" value="alias" ></yhm-managerth>
         <yhm-managerth style="width: 300px" title="户名" value="name" ></yhm-managerth>
         <yhm-managerth style="width: 300px" title="开户行" value="bank" ></yhm-managerth>
         <yhm-managerth style="width: 250px" title="账号" value="account" ></yhm-managerth>
-        <yhm-managerth style="width: 150px" title="别名" value="alias" ></yhm-managerth>
         <yhm-managerth style="width: 150px" title="联行号"></yhm-managerth>
         <yhm-managerth title="操作"></yhm-managerth>
       </template>
@@ -37,17 +37,20 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item.id)"></yhm-manager-td-look>
+          <yhm-manager-td-input v-show="aliasIndex === index" @blur="blurAliasEvent" :id="item.id" :value="item.alias"></yhm-manager-td-input>
+          <yhm-manager-td  v-show="aliasIndex !== index" @dblclick="dbAliasEvent(item.alias,index)" :value="item.alias"></yhm-manager-td>
+
           <yhm-manager-td-tip-img :value="item.name" :unitUrl="item.unitUrl" icon="icon-uniE999" :tip="true" color="#333" node-class-name="m_main"></yhm-manager-td-tip-img>
-<!--||||||| .r2837-->
-<!--          <yhm-manager-td-tip-img :value="item.name" color="#333" node-class-name="m_main" :tip="true" :qr-url="item.unitUrl" icon="icon-uniE999"></yhm-manager-td-tip-img>-->
-<!--=======-->
           <yhm-manager-td :value="item.bank"></yhm-manager-td>
           <yhm-manager-td-tip-img :value="item.accountStr" :custom="true" :unitUrl="item.accountUrl" v-if="item.category!=='0'&&item.accountUrl !== ''" :tip="true" color="#333" icon="icon-3" node-class-name="m_main" ></yhm-manager-td-tip-img>
           <yhm-manager-td :value="item.accountStr" v-else></yhm-manager-td>
-          <yhm-manager-td :value="item.alias"></yhm-manager-td>
+
           <yhm-manager-td :value="item.interbank"></yhm-manager-td>
           <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button  @click="sendWxmessageEvent(item)" value="发送微信" icon="i-sendwx" color="#fd6802"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button  @click="clickCopy(item)" value="一键复制" icon="i-copy" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="sendSelf(item)" value="发给本人" icon="i-sendwx" color="#2f54eb"></yhm-manager-td-operate-button>
+
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -61,7 +64,7 @@
         <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
       </template>
     </yhm-managerpage>
-    <div class="copyTip" v-if="isCopyTip">复制成功 : {{text}}</div>
+    <div class="copyTip" v-if="isCopyTip">复制成功： {{text}}</div>
   </div>
 </template>
 
@@ -75,7 +78,11 @@
         id: '',
         text:'',
         time:'',
+        alias:'',
+        oldAlias:'',
         isCopyTip:false,
+
+        aliasIndex: '0',
         listCategoryUnit: {
           value: '',
           list: []
@@ -96,19 +103,111 @@
       }
     },
     methods:{
+      sendSelf(item){
+        let personID = sessionStorage.getItem('____currentUserID')
+        let params = {
+          personID: personID,
+          accountID: item.id
+        }
+        this.ajaxJson({
+          url: "/Fin/publicAccountWX",
+          data: params,
+          call: (data)=>{
+            if(data.type === 0){
+              this.$dialog.alert({
+                tipValue: data.message,
+                closeCallBack: (data)=>{
+
+                }
+              })
+            }else{
+              this.$dialog.alert({
+                alertImg: 'warn',
+                tipValue: data.message
+              })
+            }
+          }
+        })
+      },
+      sendWxmessageEvent(item){
+        this.$dialog.OpenWindow({
+          width: "950",
+          height: "700",
+          title: "选择联系人",
+          url: '/selectPerson?category=0&categoryBefore=1',
+          closeCallBack: (data)=>{
+            if(data){
+              let params = {
+                personID: data.id,
+                accountID: item.id
+              }
+              console.log(params)
+              this.ajaxJson({
+                url: "/Fin/publicAccountWX",
+                data: params,
+                call: (data)=>{
+                  if(data.type === 0){
+                    this.$dialog.alert({
+                      tipValue: data.message,
+                      closeCallBack: (data)=>{
+
+                      }
+                    })
+                  }else{
+                    this.$dialog.alert({
+                      alertImg: 'warn',
+                      tipValue: data.message
+                    })
+                  }
+                }
+              })
+            }
+          }
+        })
+      },
+      dbAliasEvent(alias,index){
+        this.oldAlias = alias
+        this.aliasIndex = index
+      },
+
+      blurAliasEvent(id, value){
+
+        this.aliasIndex = -1
+        if(this.oldAlias !== value) {
+
+          let params = {
+            id: id,
+            alias: value
+          }
+
+          this.ajaxJson({
+            url: '/Fin/publicAccountAliasSave',
+            data: params,
+            call: (data) => {
+              if (data.type === 0) {
+                this.initPageData()
+              }else{
+                this.$dialog.alert({
+                  alertImg: 'warn',
+                  tipValue: data.message
+                })
+              }
+            }
+          })
+        }
+
+      },
       clickCopy(item){
         clearTimeout(this.time)//再次点击时关闭上次触发的定时器 防止多次执行
-        console.log(item)
-        let text = '户名: '+item.name + '  '
-                    + '开户行: ' + item.bank + '  '
-                    + '账号: ' + item.account + '  '
-                    + '别名: ' + item.alias + '  '
-                    + '联行号: ' + item.interbank
+        let text =
+                    '户名：'+item.name + '  '
+                    + '开户行：' + item.bank + '  '
+                    + '账号：' + item.account + '  '
+                    + '联行号：' + item.interbank
         this.$copyText(text).then(res=>{
           this.text = text
           this.isCopyTip =  true
           let that = this
-          console.log('复制成功',text)
           this.time = window.setTimeout(()=>{//将定时器的id存入变量
             that.isCopyTip =  false
           },4500)
@@ -148,7 +247,6 @@
           }
         })
       },
-
        initPageData (initValue) {
         let params = {}
 

@@ -24,6 +24,9 @@
       selectEvent(){
         if(this.noClick) {
           this.p____page.selectValue = this.selectItem(this.p____page.selectValue, this.value)
+          this.$nextTick(()=>{
+            this.$emit("call",this.p____page.selectValue)
+          })
         }
       },
       selectItem (selectValue,data) {

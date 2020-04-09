@@ -18,7 +18,7 @@
         <!--      <div @click="selectPerson" style="display: inline-block; width: 120px; height: 30px; border: 1px solid #49A8EA;">选择联系人</div>-->
 <!--        <yhm-commonbutton value="上传发票" icon="btnAdd" :flicker="true" @call="addInvoice()" category="one"></yhm-commonbutton>-->
 <!--        <yhm-commonbutton value="弹框" icon="btnAdd" :flicker="true" @call="uploadInvoice()" category="one"></yhm-commonbutton>-->
-        <yhm-commonbutton value="打开选中信息" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+        <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" :content="listState"></yhm-radiofilter>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型" :content="dateTypeList"></yhm-radiofilter>
 

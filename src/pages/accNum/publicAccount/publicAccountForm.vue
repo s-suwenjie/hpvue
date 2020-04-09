@@ -12,7 +12,7 @@
 
         <yhm-form-select :show="isSetAcc" @click="selectSettlementAccount" title="结算账户" tip="value"  :value="settlementAccount" id="settlementAccount" rule="R0000"></yhm-form-select>
         <yhm-form-text @repeatverify="repeatverifyAccountEvent"  ref="account"  :title="accountTitle" :value="account" id="account"  rule="R0000" :tip="tip" :tip-rule="tipRule"></yhm-form-text>
-        <yhm-form-text :show="isAlias" title="账户别名" :value="alias" id="alias"></yhm-form-text>
+        <yhm-form-text title="账户别名" :value="alias" id="alias" ref="alias" @blur="isAliasVerifyEvent()"></yhm-form-text>
         <yhm-form-radio :show="isAccNature" title="账户性质" :select-list="natureList"  :value="nature" id="nature" rule="R0000" width="1"></yhm-form-radio>
         <yhm-form-text :show="isAccMan" title="客户经理" tip="value" :value="customerManager" id="customerManager" rule="R0000"></yhm-form-text>
 <!--        <yhm-form-select :show="isAccMan" title="客户经理" tip="value" @click="managerEvent" :value="customerManagerName" id="customerManagerName" rule="R0000"></yhm-form-select>-->
@@ -93,6 +93,7 @@
     data(){
       return{
         id:'',
+        aliasType:-1,
         categoryList:[], //账户类型
         category:'',     //账户类型
         categoryUnit:'',  //0是本单位    1是外单位
@@ -137,7 +138,7 @@
         accountTitle: '账号',
 
         alias:'',//账户别名
-        isAlias:false,
+        // isAlias:false,
 
         list:[],
         isList:false,
@@ -198,9 +199,9 @@
           this.category = data.categoryPsd.value
           this.tipRule = data.accountEcho
           this.alias = data.alias
-          if(this.categoryUnit==='0'){
-            this.isAlias=true
-          }
+          // if(this.categoryUnit==='0'){
+          //   this.isAlias=true
+          // }
 
           this.isRelevanceEvent ()
           if(this.categoryUnit === '1'){
@@ -213,6 +214,7 @@
       })
     },
     methods: {
+
       select(item){
         if(item.unitID===this.unitID){
           this.$dialog.setReturnValue(item)
@@ -327,9 +329,9 @@
               this.name = data.name
               this.unitID = data.id
               this.categoryUnit = data.category
-              if(this.categoryUnit==='0'){
-                this.isAlias=true
-              }
+              // if(this.categoryUnit==='0'){
+              //   this.isAlias=true
+              // }
               this.isRelevanceEvent ()
             }
           }
@@ -449,10 +451,32 @@
         }
       },
 
+      async isAliasVerifyEvent(){
+        if(this.alias!==''){
+          let result = await this.ajaxAsync({
+            url:"/Fin/verifyAccountVueAlias",
+            data:{
+              alias:this.alias,
+              id:this.id
+            },
+            loading:"0"
+          })
+          if(result.type === 1){//说明存在，调用控件验证显示规则
+            this.$refs.alias.errorEvent("别名重复")
+            return false
+          }
+          return true
+        }else {
+          return true
+        }
+
+      },
       async save () { //保存
+
+        let c = await this.isAliasVerifyEvent()
         let a = await this.isAccountVerifyEvent()
         let b = this.validator()
-        if (a && b) {
+        if (a && b && c) {
           let params = {
             id: this.id,
             category:this.category,                 //账户类型
@@ -479,6 +503,7 @@
             data: params,
             call: (data) => {
               if (data.type === 0) {
+                this.$dialog.setReturnValue('1')
                 this.$dialog.setReturnValue(this.id)
                 this.$dialog.alert({
                   tipValue: data.message,
