@@ -162,10 +162,10 @@
     right: 0;
     background-color: #000;
     opacity: 0.6;
-    z-index: 999;
+    z-index: 1001;
   }
   .toast{
-    z-index: 999;
+    z-index: 1002;
     position: fixed;
     top: 50%;
     left: 50%;

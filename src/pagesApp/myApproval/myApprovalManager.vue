@@ -16,6 +16,9 @@
           <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[2].menu" :key="index"   :url="item.imgUrl" :num="insurance"></yhm-app-menu>
         </yhm-app-structure-menu-group>
       </template>
+      <template #tabBar>
+        <TabBar></TabBar>
+      </template>
     </appScroll>
     <!--      <yhm-app-menu @call="goto('/homeApp/m_fundDynamicsChartView','0')" name="资金动态" url="/UploadFile/m_image/menu/fundDynamicsCharts.svg" :num="prettyCashs"></yhm-app-menu>-->
     <!--      <yhm-app-menu @call="goto('/homeApp/m_orderSystemMenu','0')" name="点餐系统" url="/UploadFile/m_image/menu/orderSystem.svg"></yhm-app-menu>-->
@@ -30,8 +33,6 @@
 <!--    <yhm-app-structure-menu-group title="保险" v-if="insuranceShow">-->
 <!--      <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[2].menu" :key="index"   :url="item.imgUrl" :num="insurance"></yhm-app-menu>-->
 <!--    </yhm-app-structure-menu-group>-->
-    <div class="height"></div>
-    <TabBar></TabBar>
 
     <appToast :type="type" v-show="!appToastShow" :text="title" @login-success="appToastShow = $event"></appToast>
 
@@ -267,9 +268,5 @@
   }
 </script>
 <style lang="less" scoped>
-@rem:375/10rem;
-  .height{
-    width: 100%;
-    height: 55/@rem;
-  }
+
 </style>

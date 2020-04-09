@@ -7,6 +7,8 @@
           </div>
         </van-tab>
       </van-tabs>
+      <slot name="tabBar"></slot>
+      <div class="height"></div>
     </div>
 </template>
 
@@ -42,7 +44,7 @@
 @rem:375/10rem;
 .appScroll{
   .van-sticky--fixed{
-    z-index: 1000;
+    z-index: 998;
   }
   .van-tab{
     line-height: 42/@rem;
@@ -54,6 +56,10 @@
   .van-tabs--line .van-tabs__wrap{
     height: 42/@rem;
     border-bottom: 1/@rem solid #bfbfbf;
+  }
+  .height{
+    width: 100%;
+    height: 55/@rem;
   }
 }
 
