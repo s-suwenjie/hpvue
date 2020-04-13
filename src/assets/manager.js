@@ -133,8 +133,8 @@ const managermixin = {
         }
         this.allCheck = check
         if(this.selectedSum) {
-          this.selectedSum()
           if (this.selectValue.length > 0) {
+            this.selectedSum()
             this.isSelected = true
           } else {
             this.isSelected = false

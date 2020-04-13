@@ -16,7 +16,7 @@
         <yhm-form-select title="车辆版本" tip="value" :value="version" id="version"  @click="selectVersion"></yhm-form-select>
         <yhm-form-date title="登记日期" v-if="isHide" :value="registerDate" id="registerDate " position="u"  ></yhm-form-date>
         <yhm-form-select  title="车主信息" tip="value" @click="carOwnerIDEvent" :show="isHides"  :value="carOwner" id="carOwner" rule="R0000"></yhm-form-select>
-        <yhm-form-upload-image title="上传行车证" tag="drivingLicense" discription="点击图标或拖拽图片上传" :show="isHide" :value="drivingLicense" id="drivingLicense" ></yhm-form-upload-image>
+        <yhm-form-upload-image title="上传行车证" tag="drivingLicense" discription="点击图标或拖拽图片上传(不支持PDF格式)" :show="isHide" :value="drivingLicense" id="drivingLicense" ></yhm-form-upload-image>
       </template>
     </yhm-formbody>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">

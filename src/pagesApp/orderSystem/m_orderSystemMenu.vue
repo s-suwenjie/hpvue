@@ -133,7 +133,6 @@
       },
       cancel(index){
         this.list.splice(index, 1)
-        console.log(this.list)
       },
       add(index,item){
         this.list[index].plate = item
@@ -194,7 +193,7 @@
         }
       },
       orderMenuEvent(){
-        console.log(this.list[0].phone,this.list[0].plate)
+        // console.log(this.list[0].phone,this.list[0].plate)
         if(this.list[0].phone==''&&this.list[0].plate==''){
           this.toast = true
           setTimeout(()=>{

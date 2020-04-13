@@ -176,10 +176,7 @@
         let screenHeight = document.documentElement.clientHeight || document.body.clientHeight
         let elHeight = el.clientHeight < screenHeight ? el.clientHeight : screenHeight
         this.min = elHeight - wrapper.clientHeight
-        // console.log("screenHeight：" + screenHeight)
-        // console.log("elHeight：" + elHeight)
-        // console.log("elHeight：" + wrapper.clientHeight)
-        // console.log("wrapper.offsetHeight：" + wrapper.offsetHeight)
+
         this.scrollHeight = elHeight * 0.98
         this.maxDistance = wrapper.offsetHeight - elHeight
         if(this.maxDistance < 0){

@@ -451,11 +451,9 @@
     methods: {
       appTime(){
         this.appTimeShow = !this.appTimeShow
-        console.log(this.appTimeShow)
       },
       changeEvent(value){
         this.calendarIpt = value
-        console.log('1',value)
       },
       backEvent () {
         // this.$router.go(-1);

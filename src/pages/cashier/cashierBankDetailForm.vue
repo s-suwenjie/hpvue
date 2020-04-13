@@ -4,7 +4,7 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-radio title="分类" :select-list="ownerSysList" :value="ownerSys" id="ownerSys" @call="contentTT" :no-edit="true"></yhm-form-radio>
-        <yhm-form-radio title="品牌" :select-list="brandList" :value="brand" id="brand"></yhm-form-radio>
+        <yhm-form-radio title="品牌" :no-edit="true" :select-list="brandList" :value="brand" id="brand"></yhm-form-radio>
         <yhm-form-radio title="收支方向" @call="contentTC" :no-edit="true" :before="direction_state" :select-list="directionList" :value="direction" id="direction"></yhm-form-radio>
         <yhm-form-date title="交易日期" :value="cccurDate" id="cccurDate" position="b" rule="R0000"></yhm-form-date>
         <yhm-form-select title="我方" subtitle="账户信息" @click="selectaccount" :value="selfAccount" v-if="isSelfAcc" id="selfAccount" width="1" rule="R0000" tip="value"></yhm-form-select>
@@ -63,7 +63,7 @@
 
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton value="拨付资金" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
+        <yhm-commonbutton value="拨付资金" color="#fff" bg-color="#f00" :flicker="true" icon="btnSave" @call="save()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
 
@@ -552,10 +552,11 @@
       this.setQuery2Value('bankMoney')
       this.setQuery2Value('insuredUnitAccountID')
       this.setQuery2Value('insuredUnitAccount')
-      // if(this.bankDetailType === '0'){
-      //   this.isMoney = ''
-      // }
-
+      this.setQuery2Value('cashierSubject')
+      this.setQuery2Value('cashierSubjectID')
+      this.setQuery2Value('cashierRemake')
+      this.setQuery2Value('publicandPrivateAccount')
+      this.setQuery2Value('cashierBankTag')
 
       if(this.directionBefore === '1'){
 
@@ -636,6 +637,15 @@
           this.calcTrMoney =this.bankMoney
           this.otherAccount=this.insuredUnitAccount
           this.otherAccountID=this.insuredUnitAccountID
+          this.subject=this.cashierSubject
+          this.subjectID=this.cashierSubjectID
+          this.remark=this.cashierRemake
+          this.brand=this.cashierBankTag
+          if (this.publicandPrivateAccount==='0'){
+            this.otherAccountType='0'
+          }else if (this.publicandPrivateAccount==='1'){
+            this.otherAccountType='1'
+          }
         },
         add: (data) => {
           /* 需要添加的数据 */

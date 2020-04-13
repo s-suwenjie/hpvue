@@ -146,7 +146,7 @@
         isNoInvoiceReason: false,
         isNoInvoiceReasonList: false,
         isSelectViewPrettyCash: '',
-        isViewPrettyCash: true
+        isViewPrettyCash: true,
       }
     },
 
@@ -864,7 +864,6 @@
         this.isViewPrettyCash = false
       }
 
-
       if(this.subjectID){
 
         let params = {
@@ -968,9 +967,15 @@
           this.isFinish = data.isFinish
           this.prettyCashsList = data.prettyCashsList
           this.fileList = data.files
+          this.invoiceCategory = data.invoiceCategory
+
           if(this.invoiceCategory === '2'){
             this.noInvoice = true
             this.isActualMoney = '0'
+          }
+          if(this.invoiceCategory === '0'){
+            this.invoiceTypeEvent();
+            this.invoiceDetails = data.invoiceList
           }
 
         }
@@ -983,7 +988,6 @@
         this.invoiceTypeEvent();
         this.invoiceDetails = []
       }
-
 
     },
     watch: {

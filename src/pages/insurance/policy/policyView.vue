@@ -14,12 +14,19 @@
         <yhm-view-control title="投保项目" :content="insuredProjectVal"></yhm-view-control>
       </template>
     </yhm-view-body>
+
+    <div class="f_split"></div>
+    <div class="i-left fs48b colorFFF" title="上一条" v-show="isLeftID"  @click="leftStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom: 300px;z-index: 9999;display:flex;justify-content:center;align-items:center;">
+    </div>
+    <div class="i-right fs48b colorFFF" title="下一条" v-show="isRightID" @click="rightStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom: 300px;right:0px;z-index: 9999;display:flex;justify-content:center;align-items:center;">
+    </div>
     <div class="f_split"></div>
     <yhm-view-tab>
       <template #tab>
-        <yhm-view-tab-button :list="tabState" :index="0" >跟踪信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="0">跟踪信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1">赠送信息</yhm-view-tab-button>
-        <yhm-view-tab-button :list="tabState" :index="2" >收银信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="2">收支明细</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="3">应收账款</yhm-view-tab-button>
       </template>
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
@@ -76,12 +83,45 @@
             </tr>
           </template>
           <template #customize>
-            <yhm-view-control type="money" category="5" title="实际金额" :content="sumMoney" color="#4BB414"></yhm-view-control>
+            <yhm-view-control category="5" title="实时盈亏" :content="sumMoney" v-show="parseFloat(sumMoney) <  0" color="#f00"  type="money"></yhm-view-control>
+            <yhm-view-control category="5" title="实时盈亏" :content="sumMoney" v-show="parseInt(sumMoney) >= 0" color="#4BB414" type="money"></yhm-view-control>
           </template>
           <template #empty>
             <span class="m_listNoData" v-show="empty">暂时没有数据</span>
           </template>
         </yhm-view-tab-list>
+          <!--收支盈亏-->
+        <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[3].select">
+          <template #listHead>
+            <yhm-managerth title="保险公司" ></yhm-managerth>
+            <yhm-managerth style="width: 110px;" title="活动启用时间"></yhm-managerth>
+            <yhm-managerth style="width: 150px;" title="保险公司优惠额度比例"></yhm-managerth>
+            <yhm-managerth style="width: 150px;" title="支付保险公司金额"></yhm-managerth>
+            <yhm-managerth style="width: 150px;" title="应收账款金额"></yhm-managerth>
+<!--            <yhm-managerth  style="width: 100px;" title="返利金额"></yhm-managerth>-->
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in listProfit" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.unit"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.startDate"></yhm-manager-td-date>
+              <yhm-manager-td :value="item.clientRate+'%'"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.totalMoney"></yhm-manager-td-money>
+              <yhm-manager-td-money :value="quotaMoney"></yhm-manager-td-money>
+<!--              <yhm-manager-td-money :value="item.discountMoney"></yhm-manager-td-money>-->
+            </tr>
+          </template>
+          <template #customize>
+            <yhm-view-control type="money" category="1" title="预计盈亏" :content="profitAndLossMoney" v-show="parseFloat(profitAndLossMoney) >= 0" color="#4BB414"></yhm-view-control>
+            <yhm-view-control type="money" category="1" title="预计盈亏" :content="profitAndLossMoney" v-show="parseFloat(profitAndLossMoney) < 0 " color="#f00"></yhm-view-control>
+            <yhm-view-control type="money" category="1" title="实时盈亏" :content="sumMoney" v-show="parseFloat(sumMoney)>=0" color="#4BB414"></yhm-view-control>
+            <yhm-view-control type="money" category="1" title="实时盈亏" :content="sumMoney" v-show="parseFloat(sumMoney)<0" color="#f00"></yhm-view-control>
+            <yhm-view-control  category="3" title="盈亏比例" :content="profitAndLossProportion" v-show="parseFloat(profitAndLossMoney) >= 0 " color="#4BB414"></yhm-view-control>
+            <yhm-view-control  category="3" title="盈亏比例" :content="profitAndLossProportion" v-show="parseFloat(profitAndLossMoney) < 0 " color="#f00"></yhm-view-control>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="empty">暂时没有数据</span>
+          </template>
+      </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -97,7 +137,7 @@
     data(){
       return{
         id:'',
-        tabState:[{select:true},{select:false},{select:false}],
+        tabState:[{select:true},{select:false},{select:false},{select:false}],
         plate:'',//车主
         insuredDate:'',//投保日期
         beinsuredName:'',
@@ -154,18 +194,34 @@
         insuredUnit: '',
         insuredUnitList: [],
         listPolicy:[],
+        listProfit:[],
         discountList:[],
-        value: ''
+        quotaMoney:'',   //
+        profitAndLossMoney:'', //实际盈亏金额
+        profitAndLossProportion:'', //盈亏比例
+        value: '',
+        getNumColor: '',
+        isLeftID:false,//延长按钮
+        leftID:'',//上一条ID
+        isRightID:false,//延长按钮
+        rightID:'',//下一条ID
       }
     },
     methods:{
+      leftStrip(){
+        window.location='/policyView?id='+this.leftID
+      },
+      rightStrip(){
+        window.location='/policyView?id='+this.rightID
+      },
+
       initData(){
         let params = {
           id: this.id,
         }
         let sum=0
           this.init({
-          url: '/Insurance/initBillingForm',
+          url: '/Insurance/initPolicyForm',
           data: params,
           call: (data) => {
             this.id=data.id
@@ -202,12 +258,20 @@
             this.insuredUnit = data.insuredUnit
             this.insuredUnitList = data.insuredUnitPsd.list
             this.listPolicy=data.deatails
+            this.listProfit=data.listProfit
 
+            for (let i in this.listProfit){
+              //计算保险公司优惠定额
+              this.quotaMoney= this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100) + ''
+              //计算实际金额
+              this.profitAndLossMoney=(this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney +''
+              //计算实际金额盈亏比例
+              this.profitAndLossProportion = (((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney) / this.listProfit[i].totalMoney *100 ).toFixed(2) + '%'
+            }
             for(let i in this.listPolicy){
               sum +=  parseFloat(this.listPolicy[i].bankMoney)
             }
-
-            this.sumMoney=sum+'' //计算实际金额
+            this.sumMoney = sum  + '' //计算实际金额
             if (this.cash==='0'){
               this.isCash=true
             }else{
@@ -237,10 +301,33 @@
             }
           },
         })
+      },
+      selectedList() {
+        let params = {
+          id: this.id
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedID',
+          data: params,
+          call: (data) => {
+            if(data.leftID!==""){
+              this.leftID=data.leftID
+              this.isLeftID=true
+            }
+            if(data.rightID!==""){
+              this.rightID=data.rightID
+              this.isRightID=true
+            }
+          }
+        })
       }
     },
     created () {
       this.initData()
+      this.selectedList()
+    },
+    computed: {
+
     }
   }
 </script>

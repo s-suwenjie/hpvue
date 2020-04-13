@@ -120,7 +120,6 @@
         this.btnShow = false
       },
       blurEvent(item){
-        console.log(item)
         var weekDay = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
         var myDate = new Date(Date.parse(item));
         this.week = weekDay[myDate.getDay()]
@@ -134,14 +133,11 @@
       touChange(index){//轮播图发生变化时
         this.index = index
         this.num = this.getRandom(1000, 9999)
-        // console.log('index',index)
       },
       fileChange(base){//获取选中的
         this.imgBase = base
-        console.log(base,'base64')
       },
       adoptEvent(){
-        // console.log(this.imgBase,this.value)
       }
     },
     created () {
@@ -154,7 +150,6 @@
         // this.directionShow=!this.directionShow
       },
       value3(val, newval){
-        console.log(val)
         this.btnShow = true
       }
     }

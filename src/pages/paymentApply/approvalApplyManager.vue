@@ -72,7 +72,9 @@
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #f00;font-weight: bold"></yhm-manager-td-center>
 
           <yhm-manager-td-center :value="item.subject"></yhm-manager-td-center>
+
           <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" :value-object="item" @mouseout="tableTipHideEvent" :value="item.money"></yhm-manager-td-money>
+
           <yhm-manager-td-center :value="item.code" :class="{priority:item.isPriority === '1'}"></yhm-manager-td-center>
           <yhm-manager-td-state :value="item.stateVal" @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
@@ -85,6 +87,7 @@
             <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isChecks === '1'&&item.isApproval!=='4'&&item.isApproval !== '2'&&item.isApproval !== '3'" :no-click="item.isApproval==='4'" @click="selectChecksDetail(item)" value="支票填开" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isPrint === '1' && item.isChecks !== '1' && item.isApproval!=='5' && item.isApproval!=='6'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval==='6'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+
 <!--            <yhm-manager-td-operate-button v-show="item.approval === '4' && item.isPrint === '1'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>-->
             <yhm-manager-td-operate-button v-show="(item.isApproval === '1' || item.isPrint !== '1') && item.isPrint === '0'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="(item.isApproval === '0' && item.isPrint === '1') || item.isPrint === '0'" :no-click="item.isApproval!=='0'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
@@ -190,7 +193,9 @@
           {width:'40',title:'次数',category:'',key:'times'}
         ],
         balanceTableTipColumnInfo:[
-          {width:'110',title:'剩余金额',category:'money',key:'balance'}
+          {width:'110',title:'总金额',category:'money',key:'money'},
+          {width:'110',title:'(-)拨款金额',category:'money',key:'bankDetailMoney'},
+          {width:'110',title:'(=)剩余金额',category:'money',key:'balance'},
         ],
         tableTipInfo:[],
         balanceList:[],
@@ -208,7 +213,6 @@
           title: '批量拨付',
           url: '/approvalBatchAllca',
           closeCallBack: (data)=>{
-            console.log(data)
           }
         })
       },
@@ -253,6 +257,7 @@
         let params={
           selectValue:this.selectValue
         }
+
         this.ajaxJson({
           url: '/PersonOffice/commonSelectedsave',
           data:params,
@@ -265,7 +270,7 @@
                 url: '/approvalApplyView?id='+data.val,
                 closeCallBack: (dataTwo)=>{
                   if(dataTwo){
-
+                    this.initPageData(false)
                   }
                 }
               })

@@ -11,14 +11,14 @@
       <!--操作区-->
       <template #operate>
         <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add" category="one"></yhm-commonbutton>
-        <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
+        <yhm-radiofilter :before="isFinishBefore" @initData="initChoose('isFinish')" title="状态"  :content="isFinishList"></yhm-radiofilter>
+
       </template>
 
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter :before="isFinishBefore" @initData="initChoose('isFinish')" title="状态" all="0" :content="isFinishList"></yhm-radiofilter>
         </div>
       </template>
 
@@ -73,7 +73,7 @@
       return{
         isFinishBefore: '0', // 默认选择状态为可以选择，1为不可以选择
         isFinishList: {
-          // value: '1',
+          value: '',
           list: []
         },
         categoryPurchaseItems:[],//采购分类

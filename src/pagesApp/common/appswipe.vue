@@ -187,13 +187,12 @@
         this.$refs.swiperCenter.style.width = distance +'rem'//根据当前条数来生成ul的宽度
         this.$refs.swiperCenter.style.transition = this.animationTime+'s'//设置动画过渡时间
         this.$refs.atPresentCenter.style.width = (this.list.length * this.indicatorWidth) +'rem'//整体指示器的宽度
-        console.log(this.autoScroll)
+        // console.log(this.autoScroll)
         if(this.autoScroll){//自动轮播
          this.timer = setInterval(()=>{
             this.active++
             this.ins++
             this.clickActive(this.active)//同步图片与指示器位置
-            console.log(this.active)
           },this.chillTime)
         }
       })

@@ -7,8 +7,8 @@
         <router-link class="menuTabDiv" :to="{path:'/home/reversalAccountManager'}">冲账人员</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/boardFeesManager'}">董事会费人员</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/approvalPersonaliseManager'}">审批定制</router-link>
-        <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/insuranceProcessManager'}">保险审批制定</router-link>
-        <router-link class="menuTabDiv " :to="{path:'/home/cashRegisterManager'}">收银审批制定</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/insuranceProcessManager'}">保险审批制定</router-link>
+        <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/cashRegisterManager'}">收银审批制定</router-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -49,11 +49,10 @@
     </yhm-managerpage>
   </div>
 </template>
-
 <script>
   import { selectItem,managermixin } from '@/assets/manager.js'
   export default {
-    name: 'insuranceProcessManager',
+    name: 'cashRegisterManager',
     mixins: [managermixin],
     data(){
       return{
@@ -73,8 +72,8 @@
         // 默认设置页面标记是查看
         var isAdd = false
         // 默认设置页面标题为查看信息
-        var title = '添加保险流程人员'
-        var url = '/insuranceProcessForm?id='
+        var title = '添加收银流程人员'
+        var url = '/cashRegisterForm?id='
         this.$dialog.OpenWindow({
           width: 1050,
           height: 550,
@@ -100,7 +99,7 @@
               id: id,
             }
             this.ajaxJson({
-              url: '/Com/insuranceProcessDel',
+              url: '/Com/cashRegisterDel',
               data: params,
               call: (data) => {
                 if (data.type == '0') {
@@ -134,7 +133,7 @@
         }
         this.init({
           initValue:initValue,
-          url: '/Com/getInsuranceProcessManager',
+          url: '/Com/getCashRegisterManager',
           data:params,
           all:(data) =>{
             //不管是不是初始化都需要执行的代码

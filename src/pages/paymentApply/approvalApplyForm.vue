@@ -123,7 +123,10 @@
         <yhm-commonbutton v-show="(isApproval === '1' || isPrint !== '1') && isPrint === '0' && isApproval === '0'" :no-click="isApproval!=='0'"  @call="adoptEvent" value="通过" icon="i-btn-applicationSm" color="#49a9ea" :flicker="true"></yhm-commonbutton>
         <yhm-commonbutton v-show="(isApproval === '1' || isPrint !== '1') && isPrint === '0' && isApproval === '0'" :no-click="isApproval!=='0'" @call="rejectEvent" value="驳回" icon="i-btn-turnDown" color="#FF0000" category="ten"></yhm-commonbutton>
         <yhm-commonbutton v-show="isPrinter" @call="printFund" value="打印单据" icon="i-btn-print"></yhm-commonbutton>
-        <yhm-commonbutton v-show="state === '9' && isChecks === '0'" :no-click="isApproval==='4'" @call="approFund" value="拨付资金" icon="i-btn-grant" color="#FF0000"></yhm-commonbutton>
+
+        <yhm-commonbutton v-show="state === '9' && isChecks === '0' && item.isApproval!=='5' && item.isApproval!=='6' && approval === '4'" :no-click="isApproval==='4'" @call="approFund" value="拨付资金" icon="i-btn-grant" color="#FF0000"></yhm-commonbutton>
+        <yhm-commonbutton v-show="isChecks === '0' && isApproval === '6' && approval === '4'" :no-click="isApproval==='4'" @call="approFund" value="拨付资金" icon="i-btn-grant" color="#FF0000"></yhm-commonbutton>
+
         <yhm-commonbutton v-show="state === '9' && isChecks === '1' && checksID === ''" @call="selectChecksDetail" value="支票填开" icon="i-checkFillOut" color="#FF0000"></yhm-commonbutton>
 
         <yhm-commonbutton v-show="state === '9' && isChecks === '1' && checksID !== ''" @call="accEntry" value="支票入账" icon="i-accEntry" color="#49a9ea"></yhm-commonbutton>
@@ -551,6 +554,11 @@ export default {
           /* 需要添加的数据 */
         },
         look: (data) => {
+
+          this.isApproval = data.isApproval
+          this.isPrint = data.isPrint
+          this.approval = data.approval
+
 
           this.otherUnit = data.otherUnit
           this.isRelevanceList = data.isRelevancePsd.list

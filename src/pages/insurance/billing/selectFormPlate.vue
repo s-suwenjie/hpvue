@@ -10,6 +10,7 @@
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
         <yhm-managerth  title="车牌号"></yhm-managerth>
+        <yhm-managerth  title="车主"></yhm-managerth>
         <yhm-managerth  title="联系人"></yhm-managerth>
       </template>
       <template #listBody>
@@ -24,6 +25,7 @@
 
           <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-center :value="item.plate"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.carOwner"></yhm-manager-td-center>
           <yhm-manager-td :value="item.name"></yhm-manager-td>
         </tr>
       </template>

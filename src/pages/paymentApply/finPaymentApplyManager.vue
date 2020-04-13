@@ -156,7 +156,9 @@
         tableTipColumnInfo: [],
         tableTipControl: {},
         balanceTableTipColumnInfo:[
-          {width:'110',title:'剩余金额',category:'money',key:'balance'}
+          {width:'110',title:'总金额',category:'money',key:'money'},
+          {width:'110',title:'(-)拨款金额',category:'money',key:'bankDetailMoney'},
+          {width:'110',title:'(=)剩余金额',category:'money',key:'balance'},
         ],
         tableTipInfo:[],
         stateBefore: '0', // 默认选择状态为可以选择，1为不可以选择

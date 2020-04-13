@@ -62,9 +62,12 @@
       </template>
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
-<!--      <template #btn>-->
-<!--        <yhm-commonbutton value="编辑"  icon="i-edit" :flicker="false" @call="editBtn()"></yhm-commonbutton>-->
-<!--      </template>-->
+      <template #btn>
+        <yhm-commonbutton v-if="cashierOperation==='3'?true:false"  :flicker="true" @call="approFund()" :value="'收款(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
+        <yhm-commonbutton v-if="cashierOperation==='2'?true:false"  :flicker="true" @call="approFund()" :value="'代付(保险公司)'" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
+        <yhm-commonbutton v-if="cashierOperation==='1'?true:false"  :flicker="true" @call="approFund()" :value="'返利(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
+
+      </template>
     </yhm-formoperate>
   </div>
 </template>
@@ -145,10 +148,66 @@
 
         insuredUnit: '',
         insuredUnitList: '',
+        cashierOperation:'',
+
+        ownerID:'',
+        bankDetailType:'',
+        bankID:'',
+        bankOwnerID:'',
+        cashierMoney:'',
+        cashierDirection:'',
+        bankMoney:'',
+        insuredUnitAccountID:'',
+        insuredUnitAccount:'',
+
 
       }
     },
     methods:{
+      /* 拨付资金 */
+      approFund(){
+
+        if (this.cashierOperation=== '3') {
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '690',
+            title: '客户收款',
+            url: '/cashierBankDetailPrivateForm?cashierMoney=' + this.cashierMoney + '&cashierDirection=' + this.cashierDirection + '&bankID=' + this.bankID + '&bankOwnerID=' + this.bankOwnerID + '&bankMoney=' + this.bankMoney
+              + '&insuredUnitAccountID=' + this.insuredUnitAccountID + '&insuredUnitAccount=' + this.insuredUnitAccount +'&cashierSubject=代收保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=F0887A4D-DA14-4FCB-B48B-221B42C8F17A'
+              +'&cashierRemake='+this.cashierRemake+'&publicandPrivateAccount='+this.publicandPrivateAccount+'&cashierBankTag='+this.cashierBankTag,
+            closeCallBack: (data) => {
+              this.$dialog.setReturnValue(1)
+              this.$dialog.close()
+            }
+          })
+        }else if (this.cashierOperation=== '2') {
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '690',
+            title: '拨付资金',
+            url: '/cashierBankDetailForm?cashierMoney=' + this.cashierMoney + '&cashierDirection=' + this.cashierDirection + '&bankID=' + this.bankID + '&bankOwnerID=' + this.bankOwnerID + '&bankMoney=' + this.bankMoney
+              + '&insuredUnitAccountID=' + this.insuredUnitAccountID + '&insuredUnitAccount=' + this.insuredUnitAccount+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
+              +'&cashierRemake='+this.cashierRemake+'&publicandPrivateAccount='+this.publicandPrivateAccount+'&cashierBankTag='+this.cashierBankTag,
+            closeCallBack: (data) => {
+              this.$dialog.setReturnValue(1)
+              this.$dialog.close()
+            }
+          })
+        }else if (this.cashierOperation=== '1') {
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '690',
+            title: '保险返利',
+            url: '/cashierBankDetailForm?cashierMoney=' + this.cashierMoney + '&cashierDirection=' + this.cashierDirection + '&bankID=' + this.bankID + '&bankOwnerID=' + this.bankOwnerID + '&bankMoney=' + this.bankMoney
+              + '&insuredUnitAccountID=' + this.insuredUnitAccountID + '&insuredUnitAccount=' + this.insuredUnitAccount+'&cashierSubject=支付客户返利 ------ 售后业务 ------ 其他业务&cashierSubjectID=D65A9EF9-DCB2-47B8-918B-F8DD9342B2CB'
+              +'&cashierRemake='+this.cashierRemake+'&publicandPrivateAccount='+this.publicandPrivateAccount+'&cashierBankTag='+this.cashierBankTag,
+            closeCallBack: (data) => {
+              this.$dialog.setReturnValue(1)
+              this.$dialog.close()
+            }
+          })
+        }
+      },
       editBtn(){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -166,6 +225,20 @@
 
     },
     created () {
+      this.setQuery2Value('cashierOperation')
+
+      this.setQuery2Value('ownerID')
+      this.setQuery2Value('bankDetailType')
+      this.setQuery2Value('bankID')
+      this.setQuery2Value('bankOwnerID')
+      this.setQuery2Value('cashierMoney')
+      this.setQuery2Value('cashierDirection')
+      this.setQuery2Value('bankMoney')
+      this.setQuery2Value('insuredUnitAccountID')
+      this.setQuery2Value('insuredUnitAccount')
+      this.setQuery2Value('cashierRemake')
+      this.setQuery2Value('publicandPrivateAccount')
+      this.setQuery2Value('cashierBankTag')
 
       let params = {
         id: this.id,

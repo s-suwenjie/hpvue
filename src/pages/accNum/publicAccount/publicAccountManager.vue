@@ -141,7 +141,6 @@
                 personID: data.id,
                 accountID: item.id
               }
-              console.log(params)
               this.ajaxJson({
                 url: "/Fin/publicAccountWX",
                 data: params,

@@ -26,6 +26,8 @@
       <template #operate>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'"  :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
+        <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+
       </template>
       <!--筛选区-->
       <template #choose>
@@ -74,13 +76,43 @@
             <yhm-manager-td-operate-button v-show="item.state === '9'||item.state === '15'||item.state==='-1'" @click="print(item)" value="打印单据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '0'&& item.approval !== '4' && item.isApproval === '0' && item.state !== '15'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state !== '15'" v-show="item.isApproval === '0'&& item.approval !== '4' && item.isApproval === '0' && item.state !== '15'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state === '15'" v-show="item.state === '15'&&item.isChecks!=='1'" @click="refundMoney(item)" value="备用金退款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+
+<!--            <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state === '15'" v-show="item.state === '15'&&item.isChecks!=='1'" @click="refundMoney(item)" value="备用金退款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>-->
+            <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state === '15'" v-show="item.isChecks === '2'" @click="refundMoney(item)" value="备用金退款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+
           </yhm-manager-td-operate>
         </tr>
       </template>
       <!--数据空提示-->
       <template #empty>
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
+      </template>
+      <template #total>
+        <div class="listTotalCrente m_list w620">
+          <div class="listTotalLeft">
+            <span class="test"></span>
+            <span class="test">金额</span>
+            <span class="test">条数</span>
+          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
+            <thead>
+            <tr>
+              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="未审批" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="已审批" ></yhm-managerth>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <yhm-manager-td-money @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+            </tr>
+            <tr>
+              <yhm-manager-td-rgt @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
       </template>
       <!--分页控件-->
       <template #pager>
@@ -121,10 +153,58 @@
         reimburseNum: '',
         purchaseNum: '',
         insuranceNum:'',
-        invoiceCategoryList: []
+        total:'',
+        invoiceCategoryList: [],
+        contentTotal: []
       }
     },
     methods:{
+      selectedSum(){
+        let params={
+          selectValue:this.selectValue
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            if(data.type===0){
+              this.ajaxJson({
+                url: '/PersonOffice/approvalPrettyCashsManagerTotal',
+                data:params,
+                call:(information) =>{
+                  this.contentTotal = information
+                }
+              })
+            }
+          }
+        })
+      },
+      //打开选中信息
+      selectedList(){
+          let params={
+            selectValue:this.selectValue
+          }
+          this.ajaxJson({
+            url: '/PersonOffice/commonSelectedsave',
+            data:params,
+            call:(data) =>{
+              //finReimbursementViewFormSelect
+              if(data.type===0){
+                this.$dialog.OpenWindow({
+                  width: '1050',
+                  height: '620',
+                  title: '查看选中信息',
+                  url:'/approvalPrettyCashsView?id='+data.val,
+                  closeCallBack: (dataTwo)=>{
+                    if(dataTwo){
+
+                    }
+                  }
+                })
+              }
+            }
+          })
+      },
       print(item){
         let params = {
           id:item.id
@@ -139,12 +219,23 @@
           }
         })
       },
+      // refundMoney(item){
+      //   this.$dialog.OpenWindow({
+      //     width: '1050',
+      //     height: '690',
+      //     title: '备用金退款',
+      //     url: '/bankDetailForm?ownerID=' + item.id +'&bankDetailType=7&directionBefore=1',
+      //     closeCallBack: (data)=>{
+      //       this.initPageData(false)
+      //     }
+      //   })
+      // },
       refundMoney(item){
         this.$dialog.OpenWindow({
           width: '1050',
           height: '690',
           title: '备用金退款',
-          url: '/bankDetailForm?ownerID=' + item.id +'&bankDetailType=7&directionBefore=1',
+          url: '/bankDetailForm?ownerID=' + item.id +'&bankDetailType=11&directionBefore=1',
           closeCallBack: (data)=>{
             this.initPageData(false)
           }
@@ -253,6 +344,7 @@
           url: '/PersonOffice/approvalPrettyCashsManager',
           data:params,
           all:(data) =>{
+            this.contentTotal = data.total
           },
           init:(data)=>{
             this.isFinishPsd = data.isFinishPsd

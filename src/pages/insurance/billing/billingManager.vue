@@ -23,18 +23,18 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth  title="车牌号" value="plate"></yhm-managerth>
-        <yhm-managerth  title="联系人" value="contactName"></yhm-managerth>
-        <yhm-managerth style="width: 250px;"  title="被保险人" value="beinsuredName"></yhm-managerth>
+        <yhm-managerth  style="width: 130px;" title="车牌号" value="plate"></yhm-managerth>
+        <yhm-managerth  style="width: 100px;" title="联系人" value="contactName"></yhm-managerth>
+        <yhm-managerth  style="width: 200px;"  title="被保险人" value="beinsuredName"></yhm-managerth>
         <yhm-managerth  title="投保日期" value="insuredDate"></yhm-managerth>
         <yhm-managerth  title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth  style="width: 130px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
-        <yhm-managerth  title="保费合计" value="premiumsTotal"></yhm-managerth>
-        <yhm-managerth  title="实收金额" value="receivedMoney"></yhm-managerth>
-        <yhm-managerth  title="审批人员" value="insuranceFormulatorName"></yhm-managerth>
+        <yhm-managerth  style="width: 100px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
+        <yhm-managerth  style="width: 100px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
+        <yhm-managerth  style="width: 100px;" title="实收金额" value="receivedMoney"></yhm-managerth>
+        <yhm-managerth  style="width: 100px;" title="审批人员" value="insuranceFormulatorName"></yhm-managerth>
         <yhm-managerth  title="状态" value="status"></yhm-managerth>
 
-        <yhm-managerth  style="width: 200px;" title="操作"></yhm-managerth>
+        <yhm-managerth  style="width: 160px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->

@@ -101,6 +101,7 @@
           this.isTravelTaxMoney=false  //车船税报价
           this.isForceMoney=false  //交强险报价
           this.isTotalMoney=false  //报价总额
+          this.isPlanDate=false  //预计到店日
 
         }
       },

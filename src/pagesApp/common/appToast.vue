@@ -73,7 +73,7 @@
 <style lang="less" scoped>
   @rem:375/10rem;
   .load-indicator {
-    font-size: 16px;
+    font-size: 16/@rem;
     color: #fff;
   }
   .span {

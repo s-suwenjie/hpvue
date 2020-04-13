@@ -148,7 +148,9 @@
         isSelectPrettyCash: '',
         subject: '',
         subjectID: '',
-        invoiceCategoryList: []
+        invoiceCategoryList: [],
+        chargeID: ''
+
       }
     },
     methods: {
@@ -229,7 +231,6 @@
         })
       },
       selectIsPrettyCashOff(){
-
         if(this.isPrettyCashOff==='0'){
           this.isPrettyMoneyCash=false
           this.prettyCashsList=[]
@@ -645,8 +646,15 @@
               this.getIsPrettyCashOff = true
               this.selectPrettyCashsShow = false
               this.getPrettyCashsShow = true
-            }
 
+
+
+
+            }
+            if(this.chargeID){
+              this.isPrettyCashOff = '1';
+              this.isPrettyMoneyCash = true
+            }
 
           },
           add: (data) => {
@@ -655,11 +663,57 @@
 
           }
         })
-      }
+      },
+      initCharge(){
+        if(this.chargeID){
+          let params = {
+            id: this.chargeID
+          };
+          this.ajaxJson({
+            url: '/PersonOffice/prettyCashMoneyInformation',
+            data: params,
+            call: (data)=>{
+              if(data){
+                this.getIsPrettyCashOff = true
+
+                for(let i in data){
+
+                  this.id = data[0].ownerID
+
+                  this.prettyCashsList.push({
+                    id: data[0].id,
+                    insertDate: data[0].insertDate,
+                    ownerID: data[0].ownerID,
+                    prettyCashsID: data[0].prettyCashsID,
+                    workDate: data[0].workDate,
+                    money: data[0].money,
+                    subject: data[0].subject,
+                    estimateDate: data[0].estimateDate,
+                    remark: data[0].remark,
+                    invoiceCategory: data[0].invoiceCategory === '0' ? '有票' : '无票',
+                  })
+                  this.prettyCashMoney = data[0].money
+                }
+
+              }
+            }
+          })
+        }
+      },
     },
+
     created () {
       this.initPrettyCash()
       this.initData()
+      this.setQuery2Value('chargeID')
+      if(this.chargeID){
+
+        this.$nextTick(()=>{
+          this.isPrettyCashOff = '1'
+        })
+        this.initCharge()
+      }
+
 
     },
     watch:{
@@ -677,6 +731,11 @@
         }
       },
       prettyCashsList(){
+        if(this.prettyCashsList.length === 0){
+          this.isPrettyCashsEmpty = true
+        }else{
+          this.isPrettyCashsEmpty = false
+        }
         if(this.prettyCashsList.length>0){
           for(let i in this.prettyCashsList){
             this.isSelectPrettyCash = this.prettyCashsList[i].invoiceCategory === '无票'?'1':'0'

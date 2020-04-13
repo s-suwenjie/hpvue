@@ -4,11 +4,17 @@
       <!--导航条-->
       <template #navigationTab>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/policy/policyManager'}">保单管理</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/accountsReceivable/accountsReceivableManager'}">应收账款</router-link>
       </template>
       <!--操作区-->
       <template #operate>
-        <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
+
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData(false)"></yhm-managersearch>
+        <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('insuredUnit')" title=" 保险公司" :content="listInsuredUnit"></yhm-radiofilter>
+        <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+      </template>
+      <template #operateMore>
+        <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('accountsReceivableDate')" title="时间" :content="listAccountsReceivableDate"></yhm-radiofilter>
       </template>
       <!--筛选区-->
       <template #choose>
@@ -21,14 +27,18 @@
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="车牌号" value="plate"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="联系人" value="contactName"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth  title="被保险人" value="beinsuredName"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="投保日期" value="insuredDate"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="实收金额" value="receivedMoney"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="状态" value="status"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="投保日期" value="insuredDate"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="保险公司" value="insuredUnit"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
+
+        <yhm-managerth @call="actualEvent" v-if="isActual" style="width: 120px;" title="预计盈亏"></yhm-managerth>
+        <yhm-managerth @call="realEvent" v-if="isReal" style="width: 120px;" title="实时盈亏"></yhm-managerth>
+
+        <yhm-managerth style="width: 120px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="实收金额" value="receivedMoney"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="状态" value="status"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -38,10 +48,14 @@
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName"></yhm-manager-td>
-          <yhm-manager-td  :value="item.beinsuredName" ></yhm-manager-td>
+          <yhm-manager-td  :tip="true" :value="item.beinsuredName" ></yhm-manager-td>
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
+
+          <yhm-manager-td-money v-if="isActual" :value="item.actualProfitLoss" style=" font-weight:bold"></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isReal" :value="item.realTimeProfitLoss" style=" font-weight:bold"></yhm-manager-td-money>
+
           <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
@@ -51,6 +65,33 @@
       <!--数据空提示-->
       <template #empty>
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
+      </template>
+      <template #total>
+        <div class="listTotalCrente m_list w620">
+          <div class="listTotalLeft">
+            <span class="test"></span>
+            <span class="test">金额</span>
+            <span class="test">条数</span>
+          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
+            <thead>
+            <tr>
+              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="保费合计" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="实收金额" ></yhm-managerth>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <yhm-manager-td-money  v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+            </tr>
+            <tr>
+              <yhm-manager-td-rgt  v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
       </template>
       <!--分页控件-->
       <template #pager>
@@ -72,11 +113,76 @@
           value: '', //默认为空
           list: []
         },
+        listAccountsReceivableDate:{
+          value: '0', //默认为空
+          list: []
+        },
         insuredUnitList:[],
+        isActual: true,
+        isReal: false,
+        contentTotal: []
 
       }
     },
     methods:{
+      //打开选中信息
+      selectedList(){
+        let params={
+          selectValue:this.selectValue
+        }
+        this.ajaxJson({
+          url: '/Fin/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            if(data.type===0){
+              this.$dialog.OpenWindow({
+                width: '1050',
+                height: '620',
+                title: '查看选中信息',
+                url: '/policyView?id='+data.val,
+                closeCallBack: (dataTwo)  =>{
+                  if(dataTwo){
+
+                  }
+                }
+              })
+            }
+          }
+        })
+      },
+      //选中汇总
+      selectedSum(){
+        let params={
+          selectValue:this.selectValue
+        }
+        console.log( this.listIsFinish,this.selectValue )
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            if(data.type===0){
+              let paramsFinish = {
+                selectValue: this.selectValue,
+              }
+              this.ajaxJson({
+                url: '/Insurance/policyManagerTotal',
+                data: paramsFinish,
+                call:(information) =>{
+                  this.contentTotal = information
+                }
+              })
+            }
+          }
+        })
+      },
+      actualEvent(){
+        this.isActual = false
+        this.isReal = true
+      },
+      realEvent(){
+        this.isReal = false
+        this.isActual = true
+      },
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -96,6 +202,9 @@
         if (op === 'insuredUnit') {
           this.selectValue = []
         }
+        if (op === 'accountsReceivableDate') {
+          this.selectValue = []
+        }
         this.initPageData(false)
       },
       //搜索
@@ -104,11 +213,13 @@
 
         if (initValue) {
           params = {
-            insuredUnit:this.listInsuredUnit.value
+            insuredUnit:this.listInsuredUnit.value,
+            accountsReceivableDate:this.listAccountsReceivableDate.value
           }
         } else {
           params = {
-            insuredUnit:this.listInsuredUnit.value
+            insuredUnit:this.listInsuredUnit.value,
+            accountsReceivableDate:this.listAccountsReceivableDate.value
           }
         }
         this.init({
@@ -117,12 +228,15 @@
           data:params,
           all:(data) =>{
             //不管是不是初始化都需要执行的代码
+            this.contentTotal = data.total
           },
           init:(data)=>{
             //初始化时需要执行的代码
             // 这边初始化筛选信息
             this.listInsuredUnit=data.insuredUnitPsd
             this.insuredUnitList=data.insuredUnitList
+            this.listAccountsReceivableDate=data.accountsReceivableDatePsd
+
           }
         })
       }

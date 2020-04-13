@@ -10,10 +10,12 @@
       <template #operate>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData(false)"></yhm-managersearch>
         <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('insuredUnit')" title=" 保险公司" :content="listInsuredUnit"></yhm-radiofilter>
-        <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('accountsReceivableDate')" title="时间" :content="listAccountsReceivableDate"></yhm-radiofilter>
-        <yhm-commonbutton value="打开选中信息" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+        <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
       </template>
 
+      <template #operateMore>
+        <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('accountsReceivableDate')" title="时间" :content="listAccountsReceivableDate"></yhm-radiofilter>
+      </template>
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
@@ -23,6 +25,7 @@
         <yhm-managerth title="保险公司" value="insuredUnit"></yhm-managerth>
         <yhm-managerth title="预计盈亏"></yhm-managerth>
         <yhm-managerth title="实时盈亏"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="状态" value="cashStatus"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -36,6 +39,7 @@
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-money  :value="item.actualProfitLoss" ></yhm-manager-td-money>
           <yhm-manager-td-money  :value="item.realTimeProfitLoss"></yhm-manager-td-money>
+          <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
         </tr>
       </template>
 
@@ -61,14 +65,10 @@
             </thead>
             <tbody>
             <tr>
-              <yhm-manager-td-money  v-for="(item,index) in totalList" :key="index" :value="item.totalMoney"></yhm-manager-td-money>
-              <yhm-manager-td-money  v-for="(item,index) in totalList" :key="index" :value="item.actualProfitLossSum"></yhm-manager-td-money>
-              <yhm-manager-td-money  v-for="(item,index) in totalList" :key="index" :value="item.realTimeProfitLossSum"></yhm-manager-td-money>
+              <yhm-manager-td-money  v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
             </tr>
             <tr>
-              <yhm-manager-td-rgt  v-for="(item,index) in totalList" :key="index" :value="item.count"></yhm-manager-td-rgt>
-              <yhm-manager-td-rgt  v-for="(item,index) in totalList" :key="index" :value="item.count"></yhm-manager-td-rgt>
-              <yhm-manager-td-rgt  v-for="(item,index) in totalList" :key="index" :value="item.count"></yhm-manager-td-rgt>
+              <yhm-manager-td-rgt  v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
             </tr>
             </tbody>
           </table>
@@ -106,6 +106,7 @@
         Count :'0',
         totalList:[],
         isSelected:false,
+        contentTotal: []
 
       }
     },
@@ -136,27 +137,30 @@
           }
         })
       },
-      selectID(item){
-        this.isSelected=true
-        let arr = []
-        let getID = ''
-        for(let i = 0; i<item.length; i++){
-          arr.push(item[i])
-        }
-        getID = arr.join(',')
-        let params = {
-          id:getID,
-          insuredUnit:this.listInsuredUnit.value,
-          accountsReceivableDate:this.listAccountsReceivableDate.value
+      selectedSum(){
+        let params={
+          selectValue:this.selectValue
         }
         this.ajaxJson({
-          url: '/Insurance/accountsReceivableTotalMoney',
-          data: params,
-          call: (data) => {
-            this.totalList=data.totalList
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            if(data.type===0){
+              let paramsFinish = {
+                selectValue: this.selectValue,
+              }
+              this.ajaxJson({
+                url: '/Insurance/accountsReceivableTotalMoney',
+                data: paramsFinish,
+                call:(information) =>{
+                  this.contentTotal = information
+                }
+              })
+            }
           }
         })
       },
+
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -200,7 +204,7 @@
           url: '/Insurance/accountsReceivableManager',
           data:params,
           all:(data) =>{
-            this.totalList=data.totalList
+            this.contentTotal=data.total
           },
           init:(data)=>{
             //初始化时需要执行的代码

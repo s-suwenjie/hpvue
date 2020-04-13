@@ -57,12 +57,11 @@
         <yhm-form-radio title="有无" subtitle="手续费" :select-list="feeTypepsd" :value="feeType" id="feeType" rule="R0000" @call="feeTypeA"></yhm-form-radio>
         <yhm-form-text title="手续费" subtitle="金额" :value="fee" id="fee" :no-edit="HandlingFee"></yhm-form-text>
         <yhm-form-text title="凭证号" :value="voucherNo" id="voucherNo" width="1"></yhm-form-text>
-        <yhm-form-upload-image title="上传凭证" @mouseover="lookImg" tag="bankDetail" discription="点击图标或拖拽图片上传" :value="img" id="img" rule=""></yhm-form-upload-image>
+        <yhm-form-upload-image title="上传凭证" tag="bankDetail" discription="点击图标或拖拽图片上传" @mouseover="lookImg" @mouseout="isLookImg"  :value="img" id="img" rule=""></yhm-form-upload-image>
         <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传文件" tag="payment" subtitle="" multiple="multiple"></yhm-formupload>
       </template>
     </yhm-formbody>
-    <div id="lookImg" class="preview_showImg" @click="isLookImg" v-show="tipShow">
-      <div style="position: absolute;  bottom: 350px;color: #FF0000;font-size: 100px; opacity: 0.6;">点击消失</div>
+    <div id="lookImg" class="showImg" v-show="tipShow" >
       <img :src="getUrl">
     </div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -146,6 +145,7 @@
         tipShow:false,
         getUrl:'',
         bankDetailImg:[],
+        storeName: '',
       }
     },
     methods: {
@@ -536,6 +536,7 @@
             subjectList: this.detail,//多事由
             bankDetailImg:this.bankDetailImg,//上传凭证集合
           }
+
           this.$dialog.confirm({
             alertImg: 'warn',
             btnValueOk: '确定',
@@ -668,6 +669,11 @@
             this.money = ''
           }
 
+          this.storeName = data.storeName
+          if(this.storeName){
+            this.img = this.storeName;
+          }
+
         },
         add: (data) => {
           /* 需要添加的数据 */
@@ -738,5 +744,8 @@
 
   input {
     text-align: center;
+  }
+  .showImg{
+
   }
 </style>

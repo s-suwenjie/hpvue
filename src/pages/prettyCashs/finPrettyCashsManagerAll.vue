@@ -70,8 +70,8 @@
       <template #listTotalHead>
         <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
         <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="进行中" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="驳回" ></yhm-managerth>
         <yhm-managerth style="width: 100px;" before-color="#2c920b" title="" before-title="已完成" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="驳回" ></yhm-managerth>
       </template>
       <template #listTotalLeft>
         <div class=" listTotalLeft">

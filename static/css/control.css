@@ -788,7 +788,23 @@
   border-radius: 10px;
 }
 
-
+.showImg{
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: -500px;
+  bottom: 0;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+}
+.showImg>img{
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+}
 /******** 权限相关 *******/
 .privilege{
   margin-left: 20px;

@@ -5,7 +5,7 @@
       <template #control>
         <yhm-form-select  title="车牌号" tip="value"   @click="plateEvent" :value="plate" id="plate" rule="R0000"></yhm-form-select>
         <yhm-form-date title="投保日期" subtitle=""   :value="insuredDate" id="insuredDate " position="t"  rule="R0000"></yhm-form-date>
-        <yhm-form-zh-select-text tip-before="value" tip-after="beinsuredidNo" @call="beinsuredEvent" :before="beinsuredName" before-id="beinsuredName" :after="beinsuredidNo" after-id="beinsuredidNo" before-rule="#" after-rule="R0000" title="被保险人" after-title="证件号" after-width="160"></yhm-form-zh-select-text>
+        <yhm-form-zh-select-text tip-before="value" tip-after="beinsuredidNo" @call="beinsuredEvent" :no-edit="true" :before="beinsuredName" before-id="beinsuredName" :after="beinsuredidNo" after-id="beinsuredidNo" before-rule="#" after-rule="R0000" title="被保险人" after-title="证件号" after-width="160"></yhm-form-zh-select-text>
         <yhm-form-zh-select-text tip-before="value" tip-after="contactPhone"  @call="contactEvent" :before="contactName" before-id="contactName" :after="contactPhone" after-id="contactPhone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="160"></yhm-form-zh-select-text>
         <yhm-form-zh-select-text tip-before="value" tip-after="insuredPhone" @call="insuredEvent" :before="insuredName" before-id="insuredName" :after="insuredPhone" after-id="insuredPhone" before-rule="#" after-rule="R4000" title="投保人" after-title="手机号码" after-width="160"></yhm-form-zh-select-text>
         <yhm-form-radio title="与车主关系" subtitle=""  :select-list="relationshipList" :value="relationship" id="relationship"></yhm-form-radio>
@@ -24,7 +24,7 @@
         <yhm-form-text placeholder="" v-if="isvehicle" title="车船税金额" subtitle="" @input="isaMoney" :value="vehicleMoney" id="vehicleMoney" ></yhm-form-text>
         <yhm-form-date title="商业险" subtitle="开始日期" @call="businessDate" v-if="isbusinessStart"  :value="businessStartDate" id="businessStartDate " position="u"  rule="R0000"></yhm-form-date>
         <yhm-form-date title="商业险" subtitle="结束日期" :min="businessStartDate" v-if="isbusinessStart"  :value="businessEndDate" id="businessEndDate " position="u"  rule="R0000"></yhm-form-date>
-        <yhm-form-radio title="投保公司" subtitle=""  width="1" :select-list="insuredUnitList" :value="insuredUnit" id="insuredUnit"></yhm-form-radio>
+        <yhm-form-radio title="投保公司"  subtitle=""  width="1" :select-list="insuredUnitList" :value="insuredUnit" id="insuredUnit"></yhm-form-radio>
 
         <yhm-form-select-insurance  title="商业险种" :is-content="true" v-if="isbusinessStart"
                                    :passenger-value="passenger" passenger-id="passenger"
@@ -43,7 +43,7 @@
 
 
 
-        <yhm-form-zh-text-two v-if="isbusinessStart"   :before="discountMoney" before-id="discountMoney"  :after="discountCount" @afterblurEvent="calcAfterMoney" @beforeBlur="calcBeforeMoney" after-id="discountCount" title="优惠金额" before-icon="rmb" after-title="优惠点数">
+        <yhm-form-zh-text-two v-if="isbusinessStart"   :before="discountMoney" before-id="discountMoney"  :after="discountCount" @afterblurEvent="calcAfterMoney" @beforeBlur="calcBeforeMoney" after-id="discountCount" title="优惠金额" before-icon="rmb" after-title="优惠点数(%)" after-width="50px;">
 
           <div class="formBoxIcon" v-if="isDis" @mouseover="tipChange" @mouseout="tipOut">
             <div  class="cbl_main_prompt tipShow">
@@ -178,6 +178,7 @@
       }
     },
     methods:{
+
       forceDate(){
         let forceStartDate = new Date(this.forceStartDate).getTime();
         var y = new Date().getFullYear(),
@@ -207,8 +208,8 @@
       },
       calcBeforeMoney(){
         if (this.discountMoney!=='' &&this.premiumsTotal!==''){
-          this.receivedMoney=accAdd(parseFloat(this.premiumsTotal),parseFloat(this.discountMoney)*-1)
-          this.discountCount=(parseFloat(this.discountMoney)/parseFloat(this.premiumsTotal)).toFixed(2)
+          this.receivedMoney=accAdd(parseFloat(this.premiumsTotal),parseFloat(this.discountMoney)*-1) +''
+          this.discountCount=((parseFloat(this.discountMoney)/parseFloat(this.premiumsTotal)).toFixed(2))*100 +''
           if (this.cash ==='0'){
             this.receivedMoney=this.premiumsTotal
           }
@@ -217,8 +218,8 @@
       },
       calcAfterMoney(){
         if (this.discountCount!=='') {
-          this.discountMoney = parseFloat(this.premiumsTotal) * parseFloat(this.discountCount)
-          this.receivedMoney = accAdd(parseFloat(this.premiumsTotal), parseFloat(this.discountMoney) * -1)
+          this.discountMoney = parseFloat(this.premiumsTotal) * (parseFloat(this.discountCount)/100) +''
+          this.receivedMoney = accAdd(parseFloat(this.premiumsTotal), parseFloat(this.discountMoney) * -1) +''
           if (this.cash ==='0'){
             this.receivedMoney=this.premiumsTotal
           }
@@ -226,6 +227,7 @@
         }
       },
       unitRate(){
+
           let params = {
             num:this.insuredUnit
           }
@@ -234,7 +236,7 @@
             data: params,
             call: (data) => {
               for(let i in data){
-                if (this.discountCount*100>data[i].clientRate){
+                if (parseFloat(this.discountCount)>data[i].clientRate){
                   this.tipList = '优惠点数超出保险公司提供的点数'
                     + data[i].showName
                     +'优惠额度为:'
@@ -276,22 +278,24 @@
         })
       },
       Project(){
-
-        let  a=this.insuredProject
-        if (a.indexOf("0") != -1){
+        let  a=this.insuredProject.sort()
+        if (a.indexOf("0") != -1 ){
           this.isforceStart=true
-          this.insuredProject.push(
-            '1'   //只要选择了交强险，车船税必选，不可取消
-          )
-        }else {
+          // this.insuredProject.push(
+          //   '1'   //只要选择了交强险，车船税必选，不可取消
+          // )&&a.indexOf("1") === -1
+        }
+        // if (a.indexOf("0") != -1){
+        //   this.isforceStart=true
+        // }
+        else {
+          // this.insuredProject.splice(0,1)
           this.isforceStart=false
           this.forceMoney=''
           this.premiumsTotal=''
           this.receivedMoney=''
-
         }
-        if (a.indexOf("1") != -1){
-
+        if ( a.indexOf("1") != -1){
           this.isvehicle=true
         }else {
           this.isvehicle=false
@@ -417,6 +421,7 @@
         })
       },
       save(){
+
         if (this.hide==='1'){
           this.$dialog.confirm({
             width: '400',

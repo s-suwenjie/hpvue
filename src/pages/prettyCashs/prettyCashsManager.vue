@@ -12,6 +12,7 @@
         <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()" category="one"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'"  :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
+        <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
       </template>
       <!--筛选区-->
       <template #choose>
@@ -55,8 +56,8 @@
             <yhm-manager-td-operate-button v-show="item.state === '-1' && item.isDelay === '0'&&item.isFinish !== '1'" @click="delayEvent(item)" value="延期核销" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.state!=='0' || item.isFinish !== '1'" :no-click="item.state!=='0' || item.isFinish === '1'" @click="submit(item)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.isFinish !== '0' || item.state === '0'" @click="urge(item)" value="催促" icon="i-btn-urge" color="#2AA70B"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button  @click="chargeAgainst(item)" value="报销冲抵" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button  @click="aFullReturn(item)" value="全额退回" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="chargeAgainst(item)" v-show="item.state === '15' && item.isChecks === '0'" value="报销冲抵" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="aFullReturn(item)" v-show="item.state === '15' && item.isChecks === '0'" value="全额退回" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
 
             <yhm-manager-td-operate-button :no-click="item.state !== '0' || item.isFinish === '1'" @click="del(item)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
@@ -65,6 +66,33 @@
       <!--数据空提示-->
       <template #empty>
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
+      </template>
+      <template #total>
+        <div class="listTotalCrente m_list w620">
+          <div class="listTotalLeft">
+            <span class="test"></span>
+            <span class="test">金额</span>
+            <span class="test">条数</span>
+          </div>
+          <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
+            <thead>
+            <tr>
+              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="进行中" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="已完成" ></yhm-managerth>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <yhm-manager-td-money @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+            </tr>
+            <tr>
+              <yhm-manager-td-rgt @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
       </template>
       <!--分页控件-->
       <template #pager>
@@ -109,10 +137,58 @@
           {id:'5', name: '备用金',path:'/home/prettyCashsManager'},
           {id:'6', name: '补签字',path:'/home/myManager/signatureManager'},
         ],
+        total:[],
+        contentTotal:[],
         invoiceCategoryList: []
       }
     },
     methods:{
+      selectedSum(){
+        let params={
+          selectValue:this.selectValue
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            if(data.type===0){
+              this.ajaxJson({
+                url: '/PersonOffice/prettyCashsManagerTotal',
+                data:params,
+                call:(information) =>{
+                  this.contentTotal = information
+                }
+              })
+            }
+          }
+        })
+      },
+      //打开选中信息
+      selectedList(){
+        let params={
+          selectValue:this.selectValue
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedsave',
+          data:params,
+          call:(data) =>{
+            if(data.type===0){
+              this.$dialog.OpenWindow({
+                width: '1050',
+                height: '620',
+                title: '查看选中信息',
+                url: '/prettyCashsView?id='+data.val,
+                // url: '/PaymentPlanFormView?id='+data.val,
+                closeCallBack: (dataTwo)=>{
+                  if(dataTwo){
+
+                  }
+                }
+              })
+            }
+          }
+        })
+      },
       cancelAfterVerification(){
         // this.$dialog.confirm({
         //     width: 250,
@@ -125,44 +201,37 @@
         //     }
         // })
       },
+
+      /* 报销冲抵 */
+      chargeAgainst(item){
+
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 690,
+          title: '报销冲抵',
+          url: '/reimbursementForm?chargeID=' + item.id,
+          closeCallBack: (data)=>{
+            if(data){
+              // console.log(data);
+            }
+          }
+
+        })
+
+
+      },
       aFullReturn(item){
         this.$dialog.OpenWindow({
-          width: 950,
+          width: 1050,
           height: 690,
-          title: '选择账号',
-          url: '/selectPublicAccount?categoryUnit=0&categoryBefore=1&category=1&categoryAccBefore=1',
+          title: '全额退回',
+          url: '/fullRefundForm?ownerID=' + item.id,
           closeCallBack: (data) => {
-            console.log(data)
-            let params = {
-              id: item.id,
-              selfAccountID:data.id
+            if (data) {
+              this.initPageData(false)
             }
-            this.ajaxJson({
-              url: '/PersonOffice/prettyCashsRefund',
-              data: params,
-              call: (data) => {
-                console.log(data)
-                // if (data.type === 0) {
-                //   this.$dialog.alert({
-                //     width: 250,
-                //     tipValue: '延期成功',
-                //     closeCallBack: ()=>{
-                //       this.initPageData()
-                //     }
-                //   })
-                // }else{
-                //   this.$dialog.alert({
-                //     width: 250,
-                //     alertImg: 'error',
-                //     tipValue: '延期失败',
-                //     closeCallBack: ()=>{
-                //     }
-                //   })
-                // }
-              }
-            })
           }
-        })
+        });
       },
       /* 延期核销 */
       delayEvent(item){
@@ -379,12 +448,14 @@
           url: '/PersonOffice/prettyCashsManager',
           data:params,
           all:(data) =>{
+            this.contentTotal = data.total
           },
           init:(data)=>{
             this.isFinishPsd = data.isFinishPsd
             this.isTravelPsd = data.isTravelPsd
             this.invoiceCategoryPsd = data.invoiceCategoryPsd
             this.invoiceCategoryList = data.invoiceCategoryPsd.list
+            this.contentTotal = data.total
           }
         })
       },

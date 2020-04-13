@@ -54,6 +54,7 @@
         }
       },
       initData() {
+
         let params = {
           ownerID: this.ownerID,
           isAllocationMoney: this.isAllocationMoney
@@ -92,28 +93,35 @@
         })
       },
       submit(){
-        let params = {
-          id: this.id
-        }
-        console.log(params)
-        this.ajaxJson({
-          url: '/PersonOffice/paymentAllocationSubmit',
-          data: params,
-          call: (data)=>{
-            if(data.type === 0){
-              this.$dialog.setReturnValue(this.id)
-              this.$dialog.alert({
-                tipValue: data.message,
-                closeCallBack: ()=>{
-                  this.$dialog.close()
-                }
-              })
-            }else{
-              this.$dialog.alert({
-                alertImg: 'warn',
-                tipValue: data.message
-              })
+        this.$dialog.confirm({
+          width: 300,
+          tipValue: '确定提交申请?',
+          btnValueOk: '确定',
+          alertImg: 'warn',
+          okCallBack: (data) => {
+            let params = {
+              id: this.id
             }
+            this.ajaxJson({
+              url: '/PersonOffice/paymentAllocationSubmit',
+              data: params,
+              call: (data)=>{
+                if(data.type === 0){
+                  this.$dialog.setReturnValue(this.id)
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: ()=>{
+                      this.$dialog.close()
+                    }
+                  })
+                }else{
+                  this.$dialog.alert({
+                    alertImg: 'warn',
+                    tipValue: data.message
+                  })
+                }
+              }
+            })
           }
         })
       },
@@ -125,7 +133,6 @@
             workDate: this.workDate,
             value: this.value
           }
-          console.log(params)
           this.ajaxJson({
             url: '/PersonOffice/paymentAllocationSave',
             data: params,
@@ -135,7 +142,7 @@
                 this.$dialog.alert({
                   tipValue: data.message,
                   closeCallBack: ()=>{
-                    this.$dialog.close()
+                   this.submit()
                   }
                 })
               }else{

@@ -77,6 +77,7 @@
           list: []
         },
         simplify: '0',   // 0 代表添加完整联系人页面,1 代表添加简版联系人界面
+        commonClientUse: '0'
       }
     },
     methods: {
@@ -135,17 +136,30 @@
         let params = {}
         if (initValue) {
           // 页面初始化是需要的参数
-          params = {
-            category: this.listCategory.value,
-            prefixLetter: this.prefixLetter.value,
-            commonUse:0
+
+          /* 默认选中全部联系人 */
+          if(this.commonClientUse === '1'){
+            params = {
+              category: this.listCategory.value,
+              prefixLetter: this.prefixLetter.value,
+              commonUse: '1',
+            }
+          }
+          else{
+            params = {
+              category: this.listCategory.value,
+              prefixLetter: this.prefixLetter.value,
+              commonUse:0
+            }
+
           }
         } else {
           // 页面非初始化时需要的参数
+
           params = {
             category: this.listCategory.value,
             prefixLetter: this.prefixLetter.value,
-            commonUse:this.commonUsePsd.value
+            commonUse:this.commonUsePsd.value,
           }
         }
         this.init({
@@ -167,6 +181,17 @@
       this.listCategory.value = this.getQueryParam('category')
       this.setQuery2Value('categoryBefore')
       this.setQuery2Value('simplify')
+      this.setQuery2Value('commonClientUse')
+
+      setTimeout(()=>{
+        this.commonUsePsd.value = this.commonClientUse
+
+      },0)
+
+      // console.log(this.commonClientUse)
+      // this.commonUsePsd.push({
+      //   value: this.commonClientUse
+      // })
     }
 
   }

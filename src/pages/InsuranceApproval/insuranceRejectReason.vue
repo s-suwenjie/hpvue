@@ -105,7 +105,7 @@
               tableDetailName: this.tableDetailName
             }
             this.ajaxJson({
-              url: '/Fin/rejectStateNoVue',
+              url: '/Insurance/rejectStateInsuranceApp',
               data: params,
               call: (data) => {
                 if(data.type === 0){

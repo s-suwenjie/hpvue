@@ -16,7 +16,7 @@
           </yhm-app-view-table>
           <div class="private_bg">
           <yhm-app-form-text-box title="驳回理由"  v-if="category!=='00'" @blur="btnBlurEvent()" @focus="btnFocusEvent()" :no-edit="getNoEdit" :value="remark" id="remark" rule="R0000"></yhm-app-form-text-box>
-            <yhm-app-form-text-box title="驳回理由" v-else :value="remark2" id="remark2"  @focus="aaa()"></yhm-app-form-text-box>
+            <yhm-app-form-text-box title="驳回理由" v-else :value="remark2" id="remark2" @blur="btnBlurEvent()" @focus="btnFocusEvent()"></yhm-app-form-text-box>
 
           </div>
         </div>
@@ -61,9 +61,6 @@
 
         })
       },
-      aaa(){
-        console.log(this.remark2)
-      },
       touchStartEvent(item){
         item.touch = true
       },
@@ -96,7 +93,7 @@
                   this.$appDialog.toast({
                     tipValue: data.message,
                     closeCallBack: () => {
-                      this.$appDialog.setReturnValue(this.remark)
+                      this.$appDialog.setReturnValue(this.remark2)
                       this.$appDialog.close()
                     }
                   })

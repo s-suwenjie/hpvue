@@ -1,5 +1,8 @@
 <template >
   <div class="m_main" :class="{ism_Main: isManager}">
+    <div>
+      <slot name="title"></slot>
+    </div>
     <div v-if="category === '0'" class="m_navigation" >
       <slot name="navigation"></slot>
       <div class="navLft">
@@ -117,14 +120,13 @@
 
 .ism_Main{
   height: auto;
-  width: auto;
+  width: 1010px;
   min-height: auto;
   margin: 10px 20px;
-  border-radius: 4px;
+  border-radius: 8px 8px 0 0;
 }
 .iswAuto{
   width: auto !important;
-  margin: 0 20px;
 }
 
 </style>

@@ -79,7 +79,6 @@
         this.pitchOnMonth = index+1
         this.appTimeShow=!this.appTimeShow
         this.$emit('update:appTimeShow', this.appTimeShow)
-        console.log(this.pitchOnYear,this.pitchOnMonth)
       },
       getYearArr(startYear,endYear){
         let yearArr=[],
@@ -120,7 +119,6 @@
       //   this.pitchOnYear=this.value.substr(0, 4)
       //   console.log('231',this.pitchOnYear,this.pitchOnMonth,)
       // }
-      console.log(this.pitchOnYear,this.pitchOnMonth,this.value)
     }
   }
 </script>

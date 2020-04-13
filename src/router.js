@@ -20,6 +20,8 @@ import finPrettyCashsManagerAll from './pages/prettyCashs/finPrettyCashsManagerA
 import finPrettyCashsView from './pages/prettyCashs/finPrettyCashsView.vue'
 import selectPrettyCashs from './pages/selects/selectPrettyCashs.vue'
 
+import fullRefundForm from './pages/prettyCashs/fullRefundForm.vue'
+
 
 /* 处理图片 */
 import handleImageForm from './pages/common/handleImageForm.vue'
@@ -508,7 +510,9 @@ import accountsReceivableView from './pages/insurance/accountsReceivable/account
 /* 保险审批制定 */
 import insuranceProcessManager from './pages/approvalPriority/insuranceProcessManager'
 import insuranceProcessForm from './pages/approvalPriority/insuranceProcessForm'
-
+/*收银审批制定*/
+import cashRegisterManager from './pages/approvalPriority/cashRegisterManager'
+import cashRegisterForm from './pages/approvalPriority/cashRegisterForm'
 /* 维护保险公司 */
 import insuranceUnitDetailsForm from './pages/insurance/unit/insuranceUnitDetailsForm'
 import insuranceUnitView from './pages/insurance/unit/insuranceUnitView'
@@ -609,6 +613,7 @@ export default new Router({
 
         { path: '/home/trackDetails/trackDetailsManager', name: 'trackDetailsManager.vue', component: trackDetailsManager ,meta: {title: '跟踪细节'}},
         { path: '/home/insuranceProcessManager', name: 'insuranceProcessManager.vue', component: insuranceProcessManager ,meta: {title: '保险审批制定'}},
+        { path: '/home/cashRegisterManager', name: 'cashRegisterManager.vue', component: cashRegisterManager ,meta: {title: '收银审批制定'}},
         { path: '/home/conductFinManager', name: 'conductFinManager.vue', component: conductFinManager ,meta: {title: '理财管理'}},
         { path: '/home/prewarningValueManager', name: 'prewarningValueManager.vue', component: prewarningValueManager},
 
@@ -816,6 +821,7 @@ export default new Router({
     { path: '/prettyCashsView', name: 'prettyCashsView.vue',component: prettyCashsView },
     { path: '/approvalPrettyCashsView', name: 'approvalPrettyCashsView.vue',component: approvalPrettyCashsView },
     { path: '/finPrettyCashsView', name: 'finPrettyCashsView.vue',component: finPrettyCashsView },
+    { path: '/fullRefundForm', name: 'fullRefundForm.vue',component: fullRefundForm },
 
     { path: '/modelForm', name: 'modelForm.vue',component: modelForm },
 
@@ -843,6 +849,7 @@ export default new Router({
     { path: '/accountsReceivableView', name: 'accountsReceivableView.vue',component: accountsReceivableView },
 
     { path: '/insuranceProcessForm', name: 'insuranceProcessForm.vue',component: insuranceProcessForm },
+    { path: '/cashRegisterForm', name: 'cashRegisterForm.vue',component: cashRegisterForm },
 
 
     /* APP端路由 */

@@ -16,6 +16,11 @@
         <yhm-view-control title="文件" :content="list" type="files" v-if="list.length !== 0"></yhm-view-control>
       </template>
     </yhm-view-body>
+
+    <div class="f_split"></div>
+    <div class="i-left fs48b colorFFF" title="上一条" v-show="isLeftID"  @click="leftStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom:300px;z-index: 9999;display:flex;justify-content:center;align-items:center;"></div>
+    <div class="i-right fs48b colorFFF" title="下一条" v-show="isRightID" @click="rightStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom:300px;right:0px;z-index: 9999;display:flex;justify-content:center;align-items:center;"></div>
+
     <yhm-view-tab>
       <template #tab>
         <yhm-view-tab-button :list="tabState" :index="0"  v-if="isAppropriationMoney">拨付信息</yhm-view-tab-button>
@@ -83,9 +88,22 @@
         invoiceCategoryList: [],
         appropriationMoney:[],
         isAppropriationMoney:false,
+
+        isLeftID:false,//延长按钮
+        leftID:'',//上一条ID
+        isRightID:false,//延长按钮
+        rightID:'',//下一条ID
       }
     },
     methods:{
+
+      leftStrip(){
+        window.location='/prettyCashsView?id='+this.leftID
+      },
+      rightStrip(){
+        window.location='/prettyCashsView?id='+this.rightID
+      },
+
       initData(){
         this.init({
           url: '/PersonOffice/prettyCashsForm',
@@ -119,10 +137,30 @@
             this.invoiceCategory = data.invoiceCategory
           }
         })
+      },
+      selectedList() {
+        let params = {
+          id: this.id
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/commonSelectedID',
+          data: params,
+          call: (data) => {
+            if(data.leftID!==""){
+              this.leftID=data.leftID
+              this.isLeftID=true
+            }
+            if(data.rightID!==""){
+              this.rightID=data.rightID
+              this.isRightID=true
+            }
+          }
+        })
       }
     },
     created () {
       this.initData()
+      this.selectedList()
     },
 
   }

@@ -33,9 +33,7 @@
 <!--    <yhm-app-structure-menu-group title="保险" v-if="insuranceShow">-->
 <!--      <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[2].menu" :key="index"   :url="item.imgUrl" :num="insurance"></yhm-app-menu>-->
 <!--    </yhm-app-structure-menu-group>-->
-
     <appToast :type="type" v-show="!appToastShow" :text="title" @login-success="appToastShow = $event"></appToast>
-
   </div>
 </template>
 
@@ -67,8 +65,6 @@
         routerList:[{ id:'' },{ id:'' },{ id:'' },{ id:'' }],
         finance:[{ id:'' },{ id:'' },{ id:'' }],
         prettyCashs:'',
-        // routerList: [],
-        // finance:  [],
         navigationList:['我的审批','财务管理','保险'],
         financeList:[],
         myApprovalShow:true,
@@ -180,21 +176,6 @@
         arrs.push(maxStr)
         arrs.push(maxValue)
         return arrs
-        // if(index=='0'){
-        //   console.log('index 0',maxStr,maxValue)
-        //
-        //   if(maxStr=='0'&&maxValue=='4'){
-        //     this.myApprovalShow = false
-        //   }
-        // }
-        // if(index=='1'){
-        //   console.log('index 1',maxStr,maxValue)
-        //
-        //   if(maxStr=='0'&&maxValue=='3'){
-        //     console.log(maxStr,maxValue)
-        //     this.financeShow = false
-        //   }
-        // }
       },
       routerListData(){
         this.ajaxJson({

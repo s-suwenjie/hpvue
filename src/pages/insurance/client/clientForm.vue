@@ -8,7 +8,7 @@
         <yhm-form-zh-select-text tip-before="value" tip-after="phone" @call="contactEvent" :before="name" before-id="name" :after="phone" after-id="phone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="100"></yhm-form-zh-select-text>
         <yhm-form-select  title="车牌号" tip="value"   @click="plateEvent" :value="plate" id="plate" rule="R0000"></yhm-form-select>
         <yhm-form-select  title="车主" tip="value" @click="carOwnerEvent" :value="carOwner" id="carOwner" rule="R0000" :no-click="isEdit" ></yhm-form-select>
-        <yhm-form-upload-image title="行车证信息"  discription="点击图标或拖拽图片上传" tag="drivingLicense" :value="drivingLicense" id="drivingLicense" rule="#"></yhm-form-upload-image>
+        <yhm-form-upload-image title="行车证信息"  discription="点击图标或拖拽图片上传(不支持PDF格式)" tag="drivingLicense" :value="drivingLicense" id="drivingLicense" rule="#"></yhm-form-upload-image>
         <yhm-form-text placeholder="" tip="value"  title="身份证号" subtitle="" :value="idNo" id="idNo" rule="R5000"></yhm-form-text>
         <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber" rule="R0000"></yhm-form-text>
         <yhm-form-date title="登记日期"  :value="registerDate" id="registerDate " position="u"  rule="R0000"></yhm-form-date>
@@ -20,12 +20,12 @@
       <template #title>保险信息</template>
       <template #control>
         <yhm-form-radio title="往年" subtitle="投保公司"  width="1" :select-list="lastYearUnitList" :value="lastYearUnit" id="lastYearUnit"></yhm-form-radio>
-        <yhm-form-date title="交强险" subtitle="到期日"  :value="forceEndDate" id="forceEndDate " position="u"  rule="R0000">
+        <yhm-form-date title="交强险" subtitle="到期日"  :value="forceEndDate" id="forceEndDate " position="u"  rule="R0000"></yhm-form-date>
+        <yhm-form-date title="商业险" subtitle="到期日"  :value="businessEndDate" id="businessEndDate " position="u" >
           <div class="formBoxIcon" @click="dateClick">
             <span id="capitalType" class="synchronize i-synchronize"></span>
           </div>
         </yhm-form-date>
-        <yhm-form-date title="商业险" subtitle="到期日"  :value="businessEndDate" id="businessEndDate " position="u"  rule="R0000"></yhm-form-date>
         </template>
     </yhm-formbody>
 
@@ -156,7 +156,7 @@
         this.$dialog.OpenWindow({
           width: 950,
           height: 692,
-          url: '/selectPerson?category=1',
+          url: '/selectPerson?category=1&commonClientUse=1',
           title: '选择联系人',
           closeCallBack: (data) => {
             if (data) {
@@ -266,6 +266,10 @@
           this.state = data.statePsd.value
           this.lastYearUnitList = data.lastYearUnitPsd.list
           this.lastYearUnit = data.lastYearUnitPsd.value
+
+
+          this.principal=this.createName
+          this.principalID=data.personID
         },
         add: (data) => {
           /* 需要添加的数据 */

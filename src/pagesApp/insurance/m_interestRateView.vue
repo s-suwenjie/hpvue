@@ -17,7 +17,7 @@
         <yhm-app-view-control title="投保类型" :content="insuredTypeVal"></yhm-app-view-control>
         <yhm-app-view-control title="投保渠道" :content="insuredChannelVal"></yhm-app-view-control>
         <yhm-app-view-control title="投保项目" :content="insuredProjectVal"></yhm-app-view-control>
-        <yhm-app-approval-result v-show="getIsFinish" :category="true" :left="3.5" :top="0.5"></yhm-app-approval-result>
+        <yhm-app-approval-result v-show="getIsFinish" :category="down==0?true:false" :left="3.5" :top="0.5"></yhm-app-approval-result>
 
       </yhm-app-structure-menu-group>
       <yhm-app-structure-menu-group title="保险信息">
@@ -30,13 +30,19 @@
         <yhm-app-view-control title="商业保险结束日" v-if="isbusinessStart" :content="businessEndDate" type="date"></yhm-app-view-control>
         <yhm-app-view-control title="商业险种" v-if="isbusinessStart" :content="commercialVal"></yhm-app-view-control>
         <yhm-app-view-control title="投保公司" :content="insuredUnitVal"></yhm-app-view-control>
-        <yhm-app-view-control title="商业险实际金额" v-if="isbusinessStart" :content="businessMoney" type="money" color="#f00"></yhm-app-view-control>
+        <yhm-app-view-control title="商业险实际金额" v-if="isbusinessStart" :content="businessMoney" type="money"></yhm-app-view-control>
         <yhm-app-view-control title="开票金额" :content="invoicingMoney" type="money"></yhm-app-view-control>
         <yhm-app-view-control title="保费合计" :content="premiumsTotal" type="money"></yhm-app-view-control>
-        <yhm-app-view-control title="优惠金额/点数" v-if="isbusinessStart" :content="discountMoney + ' ' + '/' + ' ' + discountCount"></yhm-app-view-control>
+        <yhm-app-view-control title="优惠金额/点数" v-if="isbusinessStart"  color="#f00" :content="discountMoney + ' ' + '/' + ' ' + discountCount + '%'"></yhm-app-view-control>
         <yhm-app-view-control title="实收金额" :content="receivedMoney" type="money"></yhm-app-view-control>
         <yhm-app-view-control title="是否返利" :content="cashVal"></yhm-app-view-control>
-        <yhm-app-view-control title="返利对象" v-if="isCash" :content="cashObjectVal"></yhm-app-view-control>
+        <yhm-app-view-control title="返利对象" v-show="isCash" :content="cashObjectVal"></yhm-app-view-control>
+
+        <yhm-app-view-control title="返利对象姓名" v-show="isCash" v-if="cashObject==0" :content="beinsuredName"></yhm-app-view-control>
+        <yhm-app-view-control title="返利对象姓名" v-show="isCash" v-else-if="cashObject==1" :content="contactName"></yhm-app-view-control>
+        <yhm-app-view-control title="返利对象姓名" v-show="isCash" v-else-if="cashObject==2" :content="insuredName"></yhm-app-view-control>
+        <yhm-app-view-control title="返利对象姓名" v-show="isCash" v-else-if="cashObject==3" :content="insuredName"></yhm-app-view-control>
+
         <yhm-app-view-child title="赠送信息">
           <yhm-app-view-control  :content="item.remark" v-for="(item,index) in discountList" :key="index"></yhm-app-view-control>
         </yhm-app-view-child>
@@ -71,6 +77,8 @@
         operateShow:true,
         appToastShow:false,
         id:'',
+        down:'',
+        cashObject:'',//返利对象状态
         isCash:true,//是否返利
         cash:'',
         forceStartDate:'',//交强险开始日
@@ -124,7 +132,12 @@
           url:'/homeApp/m_rejectForm?category=00' +'&id=' + this.id,
           title : '保单驳回操作',
           closeCallBack:(data) => {
-            this.operateShow = false
+
+            if(data){
+              this.down = -1
+              this.operateShow = false
+            }
+
           }
         })
       },
@@ -140,6 +153,8 @@
               data: params,
               loading:"0",
               call: (data)=>{
+                this.down = 0
+                this.operateShow = false
                 if(data.type === 0){
                   this.$appDialog.toast({
                     tipValue: data.message,
@@ -194,20 +209,14 @@
     created () {
       this.setQuery2Value('isFinishBack')
       this.setQuery2Value('isApproval')
-      console.log(this.isFinishBack)
-      let url = ''
-      if(this.isFinishBack=='0'){
-        url='/Insurance/m_initPolicyForm'
-      }else{
-        url='/Insurance/m_initBillingForm'
-      }
+      this.setQuery2Value('down')
       this.init({
-        url: url,
+        url: '/Insurance/m_initBillingForm',
         call:(data)=> {
           this.appToastShow = true
           this.content = data.content
           this.id = data.id
-          this.insuredName=data.insuredName//投保人姓名
+          this.insuredName=data.insuredName //投保人姓名
           this.beinsuredName = data.beinsuredName,//被投保人姓名
           this.insuredDate = data.insuredDate,//投保日期
           this.cashObjectVal = data.cashObjectVal,//返利对象
@@ -239,6 +248,7 @@
           this.discountList = data.discountList//赠送信息
           this.businessMoney = data.businessMoney
           this.submit = data.submit//完成状态
+          this.cashObject = data.cashObject//返利对象状态
           this.insuredUnitList = data.insuredUnitList
           this.deatails = data.deatails
           this.cash = data.cash//是否返利
@@ -269,13 +279,13 @@
     },
     computed:{
       getShowOperate(){
-        if(this.submit==2){
+        if(this.isFinishBack==0){
           return false
         }
         return true
       },
       getIsFinish(){
-        if(this.submit==2){
+        if(this.isFinishBack==0||this.isFinishBack==1&&this.operateShow == false){
           return true
         }
         return false

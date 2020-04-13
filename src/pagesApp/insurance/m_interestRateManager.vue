@@ -3,14 +3,14 @@
     <yhm-app-structure-top-tap>
       <yhm-app-structure-top-tap-menu @call="backEvent" title="返回"></yhm-app-structure-top-tap-menu>
       <yhm-app-structure-top-tap-menu @call="waitEvent" title="待审批" :select="isFinish == '1'"></yhm-app-structure-top-tap-menu>
-      <yhm-app-structure-top-tap-menu @call="finishEvent" title="已完成" :select="isFinish == '0'"></yhm-app-structure-top-tap-menu>
+      <yhm-app-structure-top-tap-menu @call="finishEvent" title="已审批" :select="isFinish == '0'"></yhm-app-structure-top-tap-menu>
     </yhm-app-structure-top-tap>
 
     <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="isFinish==='0'?url='/Insurance/m_getPoManager':url='/Insurance/m_getInsuranceAppManager'" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">
 
       <appSearch @change="change" @alertShow="rightAlert=true,key<1?key+=1:''" :list="shortcutSearchContent" ></appSearch>
 
-      <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish)" v-for="(item) in content" :key="item.id">
+      <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish,item.down)" v-for="(item) in content" :key="item.id">
         <yhm-app-view-control :contentTitle="item.plate" :content="item.insuredDate" type="date"></yhm-app-view-control>
         <yhm-app-view-detail>
 <!--          车牌号:<span style="color: #49a9ea;">{{item.plate}}</span>，-->
@@ -18,9 +18,9 @@
           被投保人<span style="color:#08acc0;">【{{item.beinsuredName}}】</span>，
           投保类型 <span style="color:#027c02;"> {{item.insuredTypeVal}}</span>，
           投保公司是<span style="color: #fd6802;" >{{item.insuredUnitVal}}</span>，
-          优惠金额/点数  <yhm-app-view-money color="#FF0000" :content="item.discountMoney"></yhm-app-view-money><span style="color: #FF0000"> / {{item.discountCount}}</span>
+          优惠金额/点数  <yhm-app-view-money color="#FF0000" :content="item.discountMoney"></yhm-app-view-money><span style="color: #FF0000"> / {{item.discountCount+'%'}}</span>
         </yhm-app-view-detail>
-        <yhm-app-approval-result v-show="getIsFinish" :category="true" :left="3.5" :top="0.5"></yhm-app-approval-result>
+        <yhm-app-approval-result v-show="getIsFinish" :category="item.down==0?true:false" :left="3.5" :top="0.5"></yhm-app-approval-result>
       </yhm-app-structure-menu-group>
 
     </yhm-app-scroll>
@@ -34,7 +34,6 @@
     <appToast type="loading" v-show="!appToastShow" @login-success="appToastShow = $event"></appToast>
   </div>
 </template>
-
 <script>
   import { appmanagermixin } from '@/assetsApp/app_manager.js'
   import appToast from '@/pagesApp/common/appToast'
@@ -173,8 +172,8 @@
         return this.isFinish === '0'
       },
       getUrl(){
-        return function(id,isFinish,isApproval,state){
-          return '/homeApp/m_interestRateView?id=' + id + '&isFinishBack=' + isFinish
+        return function(id,isFinish,down){
+          return '/homeApp/m_interestRateView?id=' + id + '&isFinishBack=' + isFinish + '&down=' + down
         }
       }
     },
@@ -185,6 +184,6 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 
 </style>

@@ -17,7 +17,6 @@
     },
     created () {
       this.setQuery2Value('id')
-        console.log(this.id)
       let params = {
           id:this.id
       }
