@@ -143,6 +143,7 @@ export default {
     }
   },
   methods: {
+
     //汇总部分筛选
     totalClick(item){
       // if(item.isFinish==='-1'){

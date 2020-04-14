@@ -50,6 +50,7 @@
 
       </template>
     </yhm-formbody>
+    <div class="f_split"></div>
     <yhm-form-list-edit :show="isList">
       <template #title>重复账户信息</template>
       <template #listHead>
@@ -62,10 +63,10 @@
       </template>
       <template #listBody>
         <tr v-for="(item,index) in list" :key="index" :class="{InterlacBg:index%2!==0}">
-          <yhm-manager-td-look @click="lookPublic(item)"></yhm-manager-td-look>
-          <yhm-manager-td :value="item.name"></yhm-manager-td>
+          <yhm-manager-td-look @click="lookPublic(item,0)"></yhm-manager-td-look>
+          <yhm-manager-td :value="item.name" @click="listView(item)"></yhm-manager-td>
           <yhm-manager-td :value="item.account"></yhm-manager-td>
-          <yhm-manager-td :value="item.bank"></yhm-manager-td>
+          <yhm-manager-td :value="item.bank"  @click="lookPublic(item,1)"></yhm-manager-td>
           <yhm-manager-td v-show="item.state === '0'" value="正常  "></yhm-manager-td>
           <yhm-manager-td v-show="item.state === '1'" value="休眠"></yhm-manager-td>
           <yhm-manager-td v-show="item.state === '2'" value="销户"></yhm-manager-td>
@@ -93,6 +94,7 @@
     data(){
       return{
         id:'',
+        accountNumberId:'',
         aliasType:-1,
         categoryList:[], //账户类型
         category:'',     //账户类型
@@ -215,6 +217,75 @@
     },
     methods: {
 
+      listView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/addUnitForm?id=' + item.unitID,
+          title: '编辑公司信息',
+          closeCallBack: (data)=>{
+            console.log(data)
+            if(data){
+              this.ajaxJson({
+                url:"/Fin/getPublicAccountInformation",
+                data:{
+                  id:this.accountNumberId,
+                },
+                loading:"0",
+                call:(information) =>{
+                  console.log(typeof information)
+                  if(information){
+                    this.list=information
+                    if(this.list.length>0){
+                      this.isList=true
+                    }
+                  }
+
+                },
+              })
+            }
+          }
+        })
+      },
+      lookPublic(item,index){
+        let title = ''
+        let url = ''
+        let height = ''
+        if(index == 0){
+          title = '查看对公账号信息'
+          url = '/publicAccountView?id=' + item.id
+          height = '400'
+        }else if(index == 1){
+          title = '编辑对公账号信息'
+          url = '/publicAccountForm?id=' + item.id
+          height = '800'
+
+        }
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height:height,
+          title: title,
+          url:url,
+          closeCallBack: (data)=>{
+            console.log(data)
+            if(data&&index == 1){
+              this.ajaxJson({
+                url:"/Fin/getPublicAccountInformation",
+                data:{
+                  id:data,
+                },
+                loading:"0",
+                call:(information) =>{
+                  this.list=information
+                  if(this.list.length>0){
+                    this.isList=true
+                  }
+                },
+              })
+            }
+          }
+        })
+      },
       select(item){
         if(item.unitID===this.unitID){
           this.$dialog.setReturnValue(item)
@@ -263,6 +334,7 @@
           },
           loading:"0",
           call:(data) =>{
+            this.accountNumberId = data.id
             if(this.url===''){
               this.isUrl=true
             }

@@ -15,6 +15,7 @@
         <yhm-formupload :show="isNetwork" :ownerID="id" :value="fileList" id="fileList" title="收款二维码上传" tag="privateAccount" subtitle="" multiple="multiple" :no-edit="isEditBl" ></yhm-formupload>
       </template>
     </yhm-formbody>
+    <div class="f_split"></div>
     <yhm-form-list-edit :show="isList">
       <template #title>重复账户信息</template>
       <template #listHead>
@@ -27,10 +28,10 @@
       </template>
       <template #listBody>
         <tr v-for="(item,index) in list" :key="index" :class="{InterlacBg:index%2!==0}">
-          <yhm-manager-td-look @click="lookPublic(item)"></yhm-manager-td-look>
-          <yhm-manager-td :value="item.person"></yhm-manager-td>
+          <yhm-manager-td-look @click="lookPublic(item,0)"></yhm-manager-td-look>
+          <yhm-manager-td :value="item.person" @click="listView(item)"></yhm-manager-td>
           <yhm-manager-td :value="item.account"></yhm-manager-td>
-          <yhm-manager-td :value="item.bank"></yhm-manager-td>
+          <yhm-manager-td :value="item.bank"  @click="lookPublic(item,1)"></yhm-manager-td>
           <yhm-manager-td v-show="item.state === 0" value="正常  "></yhm-manager-td>
           <yhm-manager-td v-show="item.state === 1" value="休眠"></yhm-manager-td>
           <yhm-manager-td v-show="item.state === 2" value="销户"></yhm-manager-td>
@@ -58,6 +59,7 @@
     data(){
       return{
         id:'',
+        privateAccountId:'',
         ownerID:'',
         categoryList:[],        //账户分类
         category:'',             //账户分类
@@ -163,6 +165,70 @@
       })
     },
     methods:{
+      listView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/addPersonForm?id=' + item.personID,
+          title: '编辑联系人信息',
+          closeCallBack: (data)=>{
+            if(data){
+              this.ajaxJson({
+                url:"/Fin/getPrivateAccountInformation",
+                data:{
+                  id:this.privateAccountId,
+                },
+                loading:"0",
+                call:(information) =>{
+                  this.list=information
+                  if(this.list.length>0){
+                    this.isList=true
+                  }
+                },
+              })
+            }
+          }
+        })
+      },
+      lookPublic(item,index){
+        let title = ''
+        let url = ''
+        let height = ''
+        if(index == 0){
+          title = '查看对私账号信息'
+          url = '/privateAccountView?id=' + item.id
+          height = '400'
+        }else if(index == 1){
+          title = '编辑对私账号信息'
+          url = '/privateAccountForm?id=' + item.id
+          height = '800'
+
+        }
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height:height,
+          title: title,
+          url:url,
+          closeCallBack: (data)=>{
+            console.log(data)
+            if(data){
+              this.ajaxJson({
+                url:"/Fin/getPrivateAccountInformation",
+                data:{
+                  id:data,
+                },
+                loading:"0",
+                call:(information) =>{
+                  this.list=information
+                  if(this.list.length>0){
+                    this.isList=true
+                  }
+                },
+              })
+            }
+          }
+        })
+      },
       select(item){
         if(item.personID===this.personID){
           this.$dialog.setReturnValue(item)
@@ -211,6 +277,7 @@
           },
           loading:"0",
           call:(data) =>{
+            this.privateAccountId = data.id
             if(this.url===''){
               this.isUrl=true
             }

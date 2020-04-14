@@ -24,8 +24,10 @@
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
             <yhm-view-control title="类型" :content="categoryUnit" ></yhm-view-control>
-            <yhm-view-control title="法定代表人" :content="legalPersonID" ></yhm-view-control>
-            <yhm-view-control title="注册资本" :content="capital*capitalCompany" ></yhm-view-control>
+            <yhm-view-control title="法定代表人" :content="legalPersonID"></yhm-view-control>
+
+            <yhm-view-control title="注册资本" :content="registeredCapital"></yhm-view-control>
+
             <yhm-view-control title="币种类型" :content="currency" ></yhm-view-control>
             <yhm-view-control title="成立日期" :content="establishDate" type="date"></yhm-view-control>
             <yhm-view-control title="营业期限自" :content="doBusinessDate" type="date"></yhm-view-control>
@@ -76,7 +78,7 @@
     </yhm-formoperate>
   </div>
 </template>
-
+<!--capital*capitalCompany-->
 <script>
   import { viewmixin } from '@/assets/view.js'
   export default {
@@ -121,6 +123,7 @@
         registerOffice: '',              //登记机关
         approvalDate: '',              //核准日期
         registerState: '',              //登记状态
+        registeredCapital: '',              //註冊資本
         registerStateList: [],
         capitalCompany: '',              //金额单位
         management: '',              //经营范围
@@ -180,6 +183,7 @@
         })
       },
       initPageData (initValue) {
+
         let params = {}
         if (initValue) {
           // 页面初始化是需要的参数
@@ -206,6 +210,7 @@
       }
     },
     created () {
+
       let params = {
         id:this.id
       }
@@ -248,6 +253,14 @@
           this.registerState = data.registerState
           this.capitalCompany = data.capitalCompany
           this.management = data.management
+
+
+          if(this.capital && this.capitalCompany){
+            this.registeredCapital = ( parseFloat(this.capital) * parseFloat(this.capitalCompany) ) + '';
+            if(this.registeredCapital === '0'){
+              this.registeredCapital = ''
+            }
+          }
 
           if(this.category === '1'){
             this.isTagShow = true

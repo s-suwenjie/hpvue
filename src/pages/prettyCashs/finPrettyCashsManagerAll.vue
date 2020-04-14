@@ -15,7 +15,7 @@
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
         <div @click="selectedList" v-show="isSelected" class="b_main one b_one mr5b">打开选中信息</div>
         <yhm-radiofilter  @initData="initChoose('isFinish')" all="0" title="完成状态" :content="isFinishPsd"></yhm-radiofilter>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
+        <yhm-radiofilter @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
       </template>
       <!--筛选区-->
       <template #choose>
@@ -28,24 +28,46 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 50px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="申请人" value="personID"></yhm-managerth>
+
         <yhm-managerth style="width: 150px;" title="批次号" value="code"></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="申请时间" value="workDate"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="申请金额" value="money"></yhm-managerth>
+
+        <yhm-managerth style="width: 120px;" title="拨款金额" value="bankDetailMoney"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="核销金额" value="reimbursementsMoney"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="待退回金额" value="balance"></yhm-managerth>
+
+        <yhm-managerth style="width: 120px;" title="已退回金额" value="balance"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="退款方式" value="useType"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="发票类型"></yhm-managerth>
+
         <yhm-managerth title="事由" value="subjectID"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="预计核销日期" value="estimateDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
+
         <yhm-managerth style="width: 120px;" title="状态" value=""></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in content" :key="index" :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]">
+
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.person"></yhm-manager-td>
+
           <yhm-manager-td :value="item.code"></yhm-manager-td>
           <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+
+          <yhm-manager-td-money :value="item.bankDetailMoney"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.reimbursementsMoney"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.balance"></yhm-manager-td-money>
+
+          <yhm-manager-td-money :value="item.refundBalance"></yhm-manager-td-money>
+          <yhm-manager-td v-show="item.useType==='0'" value=""></yhm-manager-td>
+          <yhm-manager-td @click="useType(item)" v-show="item.useType==='1'" value="全额退回"></yhm-manager-td>
+          <yhm-manager-td @click="useType(item)" v-show="item.useType==='2'" value="报销"></yhm-manager-td>
           <yhm-manager-td-psd :value="item.invoiceCategory" :list="invoiceCategoryList"></yhm-manager-td-psd>
+
           <yhm-manager-td :value="item.subject"></yhm-manager-td>
           <yhm-manager-td-date :value="item.estimateDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.day+'天'" v-if="item.day<=2" style="color:#2c920b;font-weight: bold"></yhm-manager-td-center>
@@ -53,6 +75,7 @@
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #f00;font-weight: bold"></yhm-manager-td-center>
 
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
+
         </tr>
       </template>
       <!--数据空提示-->
@@ -123,6 +146,14 @@
       }
     },
     methods:{
+      //退款方式
+      useType(item){
+        if(item.useType === '1'){
+
+        }else if(item.useType === '2'){
+
+        }
+      },
       totalClick(item){
         if(item.val==='总数'){
           this.listState.value = ''
