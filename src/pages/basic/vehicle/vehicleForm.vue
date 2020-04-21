@@ -28,7 +28,9 @@
 </template>
 
 <script>
+  import { accMul, accAdd, guid, formatDate,formatTime } from '@/assets/common.js'
   import { formmixin } from '@/assets/form.js'
+
   export default {
     name: 'vehicleForm',
     mixins: [formmixin],
@@ -299,6 +301,7 @@
         },
         add: (data) => {
           /* 需要添加的数据 */
+          this.registerDate=formatDate( new Date((new Date()).getTime()))
         },
         look: (data) => {
           /* 需要查看的数据 */

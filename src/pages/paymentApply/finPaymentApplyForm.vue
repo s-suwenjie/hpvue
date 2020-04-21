@@ -3,7 +3,7 @@
     <yhm-view-body>
       <template #title>基本信息</template>
       <template #body>
-        <yhm-view-control title="收款方" :content="otherUnit" @click="unitView()" color="#49a9ea" style="cursor: pointer;"></yhm-view-control>
+        <yhm-view-control title="收款方" :content="otherUnit" @iconClick="iconClick" iconColor="#49a9ea" font-icon="uniE99E" @click="unitView()" color="#49a9ea" style="cursor: pointer;"></yhm-view-control>
         <yhm-view-control title="支付方式" :content="isChecks" :psd="isChecksList"></yhm-view-control>
         <yhm-view-control title="是否关联" :content="isRelevance" @click="planView()" :psd="isRelevanceList" v-show="isRelevance==='0'" color="#49a9ea"></yhm-view-control>
         <yhm-view-control title="是否关联" content="计划外" color="#8000FF" v-show="isRelevance==='1'"></yhm-view-control>
@@ -235,6 +235,16 @@ export default {
     }
   },
   methods: {
+    iconClick(){
+      this.$dialog.OpenWindow({
+        width: '1050',
+        height: '780',
+        title: '查看收支明细',
+        url: '/unitBankDetailForm?unitID='+this.content.unitID,
+        closeCallBack: (dataTwo)=>{
+        }
+      })
+    },
     leftStrip(){
       window.location='/paymentApplyViewForm?id='+this.leftID
     },

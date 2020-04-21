@@ -112,7 +112,7 @@
         this.initPageData()
       },
       selectAddEvent () {
-        let url = '/addPersonForm'
+        let url = '/addPersonForm?isUrl=0'
         let height = '692'
         if(this.simplify === '1'){
            url = '/addPersonSimplifyForm'

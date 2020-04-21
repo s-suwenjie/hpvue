@@ -21,7 +21,7 @@
     </yhm-view-body>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton value="编辑" icon="i-edit" :flicker="true" @call="editBtn()"></yhm-commonbutton>
+        <yhm-commonbutton value="编辑" v-if="isBlCustomer" icon="i-edit" :flicker="true" @call="editBtn()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
   </div>
@@ -57,6 +57,7 @@
         carOwner:'',
         carOwnerID:'',//车主信息
         drivingLicense:'',//行车证
+        isBlCustomer:true,
       }
     },
     methods:{
@@ -115,6 +116,12 @@
       }
     },
     created () {
+      this.setQuery2Value('isCustomer')
+
+      if(this.isCustomer === '0'){
+        this.isBlCustomer = false
+      }
+
       this.initData()
     }
   }

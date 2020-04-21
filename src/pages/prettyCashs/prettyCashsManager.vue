@@ -17,7 +17,7 @@
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter  @initData="initChoose('isFinish')" all="0" title="完成状态" :content="isFinishPsd"></yhm-radiofilter>
+          <yhm-radiofilter  @initData="initChoose('isFinish')" title="完成状态" :content="isFinishPsd"></yhm-radiofilter>
           <yhm-radiofilter  @initData="initChoose('isTravel')" title="业务相关" :content="isTravelPsd"></yhm-radiofilter>
           <yhm-radiofilter  @initData="initChoose('isTravel')" title="发票类型" :content="invoiceCategoryPsd"></yhm-radiofilter>
         </div>
@@ -143,6 +143,16 @@
       }
     },
     methods:{
+      totalClick(item){
+        if(item.val === '总数'){
+          this.isFinishPsd.value = ''
+        }else if(item.val === '已完成'){
+          this.isFinishPsd.value = '0'
+        }else if(item.val === '进行中'){
+          this.isFinishPsd.value = '1'
+        }
+        this.initPageData(false)
+      },
       selectedSum(){
         let params={
           selectValue:this.selectValue
@@ -213,6 +223,7 @@
           closeCallBack: (data)=>{
             if(data){
               // console.log(data);
+              this.initPageData(false)
             }
           }
 
@@ -253,7 +264,7 @@
                       width: 250,
                       tipValue: '延期成功',
                       closeCallBack: ()=>{
-                        this.initPageData()
+                        this.initPageData(false)
                       }
                     })
                   }else{
@@ -459,9 +470,6 @@
           }
         })
       },
-    },
-    created () {
-
     }
   }
 </script>

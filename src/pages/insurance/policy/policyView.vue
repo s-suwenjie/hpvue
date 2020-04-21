@@ -262,9 +262,9 @@
 
             for (let i in this.listProfit){
               //计算保险公司优惠定额
-              this.quotaMoney= this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100) + ''
+              this.quotaMoney= (this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100)).toFixed(2) + ''
               //计算实际金额
-              this.profitAndLossMoney=(this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney +''
+              this.profitAndLossMoney=((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney).toFixed(2) +''
               //计算实际金额盈亏比例
               this.profitAndLossProportion = (((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney) / this.listProfit[i].totalMoney *100 ).toFixed(2) + '%'
             }

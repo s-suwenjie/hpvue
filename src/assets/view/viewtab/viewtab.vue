@@ -1,7 +1,14 @@
 <template>
   <div class="v_area_tab">
     <div class="v_tab_title">
-      <slot name="tab"></slot>
+      <div class="content">
+        <slot name="tab"></slot>
+      </div>
+      <div>
+        <span class="v_tab_title_total">
+          <slot name="tab_total"></slot>
+        </span>
+      </div>
     </div>
     <slot name="content"></slot>
   </div>

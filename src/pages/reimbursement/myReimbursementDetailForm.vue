@@ -22,9 +22,11 @@
         <yhm-managerth style="width: 130px" title="发票号码"></yhm-managerth>
         <yhm-managerth style="width: 140px" title="开票日期"></yhm-managerth>
         <yhm-managerth style="width: 160px" title="类型"></yhm-managerth>
+
         <yhm-managerth style="width: 50px" title="张数"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="票面金额"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="实报金额"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="单张票面金额"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="票面总金额"></yhm-managerth>
+
         <yhm-managerth style="width: 130px" title="备注"></yhm-managerth>
         <yhm-managerth style="width: 90px" title="发票照片"></yhm-managerth>
         <yhm-managerth style="width: 40px" title="操作"></yhm-managerth>
@@ -33,13 +35,23 @@
         <tr v-for="(item,index) in invoiceDetails" :key="index" :class="{InterlacBg:index%2!==0}">
           <yhm-manager-td-look :no-click="isElLook" @click="listView(item)"></yhm-manager-td-look>
           <yhm-form-td-textbox width="130" @change="verificationRepeatInvoice(item)" :no-edit="getIsElectronicInvoice" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="code" rule="R0000"></yhm-form-td-textbox>
+
           <yhm-form-td-date width="140" :no-edit="getIsElectronicInvoice" :min="minWorkDate" :max="maxWorkDate" position="u" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="workDate" rule="R0000"></yhm-form-td-date>
 
           <yhm-form-td-radio width="160" :no-edit="isElectronicInvoice" @call="switchInvoiceCategory" :list="invoiceDetails" listid="invoiceDetails" :value="item" :select-list="listCategoryList" id="category"></yhm-form-td-radio>
 
+
+
+
+
           <yhm-form-td-textbox width="50" @change="verificationRepeatInvoice(item)" @input="invoicesQuantityInputEvent" :no-edit="getIsElectronicInvoice || item.category === '0' ? '1':''" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="quantity" rule="R1000"></yhm-form-td-textbox>
           <yhm-form-td-textbox width="90" :no-edit="getIsElectronicInvoice" @input="invoicesMoneyInputEvent()" @blur="calcMoney(item)" before-icon="rmb" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="money" rule="R3000"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="90" @input="actualMoneyEvent()" @blur="calcActualMoney(item)" before-icon="rmb" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="actualMoney" rule="R3000"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="90" no-edit="1" @input="actualMoneyEvent()" @blur="calcActualMoney(item)" before-icon="rmb" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="actualMoney" rule="R3000"></yhm-form-td-textbox>
+
+
+
+
+
           <yhm-form-td-textbox width="130" :no-edit="getIsElectronicInvoice" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="remark"></yhm-form-td-textbox>
           <yhm-form-td-upload-image width="90" :no-upload="isElectronicInvoice" tag="Invoice" @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="url" rule="#"></yhm-form-td-upload-image>
           <yhm-form-td-delete :no-click="getDeleteInvoiceBtnShow" width="40" :list="invoiceDetails" :value="item" :del-click="true" @click="delInvoice(index,item)"></yhm-form-td-delete>
@@ -52,9 +64,9 @@
       <template #title></template>
       <template #control>
 <!--        <yhm-form-date title="发生日期" :value="workDate" :min="minDate" :max="maxWorkDate" id="workDate" position="b" rule="R0000"></yhm-form-date>-->
-        <yhm-form-zh-text-two :show="!noInvoice" color="#fd6802" :no-edit="true" tip-before="money" tip-after="value" :before="invoiceMoney" before-id="invoiceMoney" :after="invoiceCount" after-id="invoiceCount" title="发票金额" before-icon="rmb" after-title="发票张数"></yhm-form-zh-text-two>
+        <yhm-form-zh-text-two :show="!noInvoice" color="#fd6802" :no-edit="true" tip-before="money" tip-after="value" :before="invoiceMoney" before-id="invoiceMoney" :after="invoiceCount" after-id="invoiceCount" title="发票" subtitle="总计额" before-icon="rmb" after-title="发票张数"></yhm-form-zh-text-two>
 
-        <yhm-form-text v-if="isViewPrettyCash" ref="actualMoney" color="#0e9d51" :less-equal="invoiceMoney" less-equal-message="实际金额必须小于等于发票金额" title="实际金额" :no-edit=isActualMoney tip="money" before-icon="rmb" :value="actualMoney" id="actualMoney" rule="R3000"></yhm-form-text>
+        <yhm-form-text v-if="isViewPrettyCash" ref="actualMoney" color="#0e9d51" :less-equal="invoiceMoney" less-equal-message="实报总金额必须小于等于发票总计额" title="实报" subtitle="总金额" tip="money" before-icon="rmb" :value="actualMoney" id="actualMoney" rule="R3000"></yhm-form-text>
 
         <yhm-form-text v-if="!isViewPrettyCash" ref="actualMoney" color="#0e9d51" title="实际金额" :no-edit=isActualMoney tip="money" before-icon="rmb" :value="actualMoney" id="actualMoney" rule="R3000"></yhm-form-text>
 
@@ -299,7 +311,10 @@
       },
       //选择事由
       selectSubject(){
-        let name = '63'
+        let name ='63'
+        if(this.type==='3'){
+          name = '93'
+        }
         this.$dialog.OpenWindow({
           width: 950,
           height: 603,
@@ -563,21 +578,30 @@
         if(item.category === '0') {
           //单张情况
           item.quantity = "1"
+
+
+          item.money = ""
+          item.actualMoney = ""
         }
         else{
           //连号首张
           item.quantity = ""
+          item.money = ""
+          item.actualMoney = ""
         }
         this.calculationInvoiceMoney()
         this.verificationRepeatInvoice(item)
       },
+
       //计算发票金额
       calculationInvoiceMoney(){
         let money = 0
         let quantity = 0
+        let mulQuantity = 0
         for(let i in this.invoiceDetails){
           let item = this.invoiceDetails[i]
           let temp = item.money
+          let tempMoney = item.money
           if(isNaN(temp) || temp === ''){
             temp = 0
           }
@@ -585,13 +609,25 @@
           if(isNaN(count) || count === ''){
             count = 1
           }
+          if(isNaN(tempMoney) || count === ''){
+            tempMoney = 0
+          }
           quantity = accAdd(quantity,count)
           temp = accMul(temp,count)
           money = accAdd(money,temp)
+
+          mulQuantity = count * tempMoney
+
+          item.actualMoney = this.actualMoney = mulQuantity + ''
+
         }
-        this.invoiceCount = quantity + ''
-        this.invoiceMoney = money + ''
+
+
+        this.invoiceCount =  quantity + ''
+        this.invoiceMoney = this.actualMoney = money + ''
       },
+
+
       calculationActualMoneyEvent(){
         let money = 0
         let quantity = 0
@@ -625,6 +661,8 @@
         if(regMoney && regActualMoney){
 
           if(regActualMoney > regMoney){
+
+            return
             this.$dialog.alert({
               width: '300',
               alertImg: 'warn',
@@ -643,6 +681,7 @@
 
         if(regMoney && regActualMoney){
 
+          return
           if(regActualMoney > regMoney){
             this.$dialog.alert({
               width: '300',
@@ -948,11 +987,13 @@
             if(this.invoiceDetails[i].isPdf === '1'){
               this.isElectronicInvoice = true
               this.maxWorkDate = this.invoiceDetails[i].workDate
+
               break
             }else{
               this.isElLook = true
             }
           }
+          this.minWorkDate = data.minDate
           this.ownerID = data.ownerID
           this.workDate = data.workDate
           this.subjectID = data.subjectID

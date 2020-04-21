@@ -1,9 +1,13 @@
 <template>
     <div class="v_control" :class="[getWidthClass]">
       <div class="v_title">{{title}}：</div>
+
       <div v-if="getDefault" @click="clickEvent" class="v_content" :class="{rmb:getMoney,fs12b:getMoney}" :style="{color:colorValue,fontSize: fontSize + 'px'}" v-html="getContentShow ? getContentShow:'-----'"></div>
+      <span :class="fontIcon" @click="iconClick" v-if="fontIcon!==''" :style="{fontSize:iconFontSize+'px',color:iconColor}" style="display: flex;align-items: center;"></span>
+
       <div v-if="getFiles" class="v_content">
         <yhm-view-show-files v-for="(item,index) in content" :key="index" :content="content" :item="item"></yhm-view-show-files>
+
       </div>
 
       <div v-if="getsmFiles" class="v_content">
@@ -59,12 +63,27 @@
         type: String,
         default: ''
       },
+      iconFontSize:{
+        type: String,
+        default: '16'
+      },
+      iconColor:{
+        type: String,
+        default: ''
+      },
       fontSize: {
         type: String,
         default: '14'
+      },
+      fontIcon: {
+        type: String,
+        default: ''
       }
     },
     methods : {
+      iconClick(){
+        this.$emit("iconClick")
+      },
       imgClickEvent(){
         let index = this.getImages.indexOf('/UploadFile/' + this.tag + '/' + this.content)
 

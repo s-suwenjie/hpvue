@@ -14,10 +14,10 @@
         <yhm-form-radio title="是否" subtitle="重要联系人" :select-list="importantList" :value="important" id="important"></yhm-form-radio>
         <yhm-form-radio title="政治面貌" :show="isThisUnit" :select-list="politicsStatusList" :value="politicsStatus" id="politicsStatus"></yhm-form-radio>
         <yhm-form-text title="姓名" :value="name" id="name" ref="name" @repeatverify="repeatVerifyEvent" rule="R7000"></yhm-form-text>
-        <yhm-form-text title="手机号码" :value="phone" id="phone" tip="value" @repeatverify="repeatVerifyEvent" rule="R4000"></yhm-form-text>
+        <yhm-form-text title="手机号码" :value="phone" id="phone" ref="phone" tip="value" @repeatverify="repeatVerifyEvent" rule="R4000"></yhm-form-text>
         <yhm-form-select title="所属公司" v-if="isThisUnit" @click="selectUnit" tip="value" :value="unit" id="unit" rule="R0000" ></yhm-form-select>
         <yhm-form-text title="所属部门" :show="isThisUnit" :value="department" id="department" placeholder="请在部门管理中调整所属部门" no-edit="1"></yhm-form-text>
-        <yhm-form-text title="身份证号" @input="isNoEvent" @repeatverify="repeatVerifyEvent" tip="value" :value="idNo" id="idNo">
+        <yhm-form-text title="身份证号" @input="isNoEvent" @repeatverify="repeatVerifyEvent" ref="idNo" tip="value" :value="idNo" id="idNo" rule="R5000">
           <div class="formBoxIcon" @click="copyEvent">
             <span class="i-copy"></span>
           </div>
@@ -38,12 +38,48 @@
         <yhm-form-check title="标签" :show="!isThisUnit" :select-list="tagList" submit-value="tagSubmit" :ownerID="id" :tableName="'1029'" :value="tag" id="tag" rule="#" width="1"></yhm-form-check>
       </template>
     </yhm-formbody>
+    <div class="f_split"></div>
 
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
+
+    <div class="switchIconTop switchIconTop2" @click="switchClick" v-show="switchIconShow">
+      <span class="i-input-down-arrow switchIcon2 iconUp"></span>
+    </div>
+    <yhm-form-list-edit  class="duplicateAccount" :class="{isList:isList}">
+      <template #switchIcon>
+        <div class="switchIconTop" @click="switchClick">
+          <span class="i-input-down-arrow switchIcon2"></span>
+        </div>
+      </template>
+      <template #title>重复账户信息</template>
+      <template #listHead>
+        <yhm-managerth style="width: 38px;background: linear-gradient(0deg, #ec6603, #a24906);" title="查看"></yhm-managerth>
+        <yhm-managerth title="姓名" style="background: linear-gradient(0deg, #ec6603, #a24906);"></yhm-managerth>
+        <yhm-managerth style="width: 170px;background: linear-gradient(0deg, #ec6603, #a24906);" title="性别"></yhm-managerth>
+        <yhm-managerth style="width: 230px;background: linear-gradient(0deg, #ec6603, #a24906);" title="手机号码"></yhm-managerth>
+        <yhm-managerth style="width: 100px;background: linear-gradient(0deg, #ec6603, #a24906);" title="身份证号"></yhm-managerth>
+        <yhm-managerth style="width: 100px;background: linear-gradient(0deg, #ec6603, #a24906);" title="重要级别"></yhm-managerth>
+        <yhm-managerth style="width: 150px;background: linear-gradient(0deg, #ec6603, #a24906);" title="操作"></yhm-managerth>
+      </template>
+      <template #listBody>
+        <tr v-for="(item,index) in list" :key="index" :class="{InterlacBg:index%2!==0}">
+          <yhm-manager-td-look @click="lookPublic(item,0)"></yhm-manager-td-look>
+          <yhm-manager-td :value="item.name" @click="listView(item)"></yhm-manager-td>
+          <yhm-manager-td-center :value="item.sex==0?'女':'男'"></yhm-manager-td-center>
+          <yhm-manager-td :value="item.phone"  @click="lookPublic(item,1)"></yhm-manager-td>
+          <yhm-manager-td :value="item.idNo" ></yhm-manager-td>
+          <yhm-manager-td :value="item.important==0?'重要联系人':'一般联系人'"></yhm-manager-td>
+          <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button v-show="isUrl" @click="select(item)" style="color:#ec6603" value="选择"></yhm-manager-td-operate-button>
+          </yhm-manager-td-operate>
+        </tr>
+      </template>
+
+    </yhm-form-list-edit>
     <div class="copyTip" v-if="isCopyTip">复制成功：{{idNo}}</div>
   </div>
 </template>
@@ -58,6 +94,10 @@
       return {
         id: '',
         ownerID: '',
+        verificationId:'',
+        isList:false,
+        switchIconShow:false,
+        list:[],
         categoryList: [] ,
         category: '',
         sexList: [],
@@ -97,6 +137,83 @@
       }
     },
     methods: {
+      listView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/addPersonForm?id=' + item.id,
+          title: '编辑联系人信息',
+          closeCallBack: (data)=>{
+            if(data){
+              this.ajaxJson({
+                url:"/Fin/getPrivateAccountInformation",
+                data:{
+                  id:this.privateAccountId,
+                },
+                loading:"0",
+                call:(information) =>{
+                  this.list=information
+                  if(this.list.length>0){
+                    this.isList=true
+                  }
+                },
+              })
+            }
+          }
+        })
+      },
+      lookPublic(item,index){
+        let title = ''
+        let url = ''
+        if(index == 0){
+          title = '查看联系人信息'
+          url = '/personView?id=' + item.id
+        }else if(index == 1){
+          title = '编辑联系人信息'
+          url = '/addPersonForm?id=' + item.id
+
+        }
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height:'800',
+          title: title,
+          url:url,
+          closeCallBack: (data)=>{
+            if(data){
+              this.ajaxJson({
+                url:"/Basic/getPersonID",
+                data:{
+                  id:data,
+                },
+                loading:"0",
+                call:(information) =>{
+                  this.list=information
+                  if(this.list.length>0){
+                    this.isList=true
+                  }else {
+                    this.isList=false
+                    this.switchIconShow=false
+                  }
+                },
+              })
+            }
+          }
+        })
+      },
+      select(item){
+        if(item.personID===this.personID){
+          this.$dialog.setReturnValue(item.id)
+          this.$dialog.close()
+        }else{
+          this.$dialog.alert({
+            tipValue: '请选择所选人账户',
+            alertImg: 'error',
+          })
+        }
+      },
+      switchClick(){//重复账号信息显示隐藏
+        this.isList=!this.isList
+      },
       /* 视频播放 */
       videoPlay(){
         this.$dialog.OpenWindow({
@@ -220,6 +337,14 @@
           this.isThisUnit = true
         }
       },
+      cutOutFront(item){//截取特定字符串前边的
+        let tr = item.match(/(\S*)%/)[1];
+        return tr
+      },
+      cutOutBack(item){//截取特定字符串后边的
+        let str = item.match(/%(\S*)/)[1];
+        return str
+      },
       /* 验证 */
       repeatVerifyEvent() {
         if(this.category === '1'){
@@ -228,6 +353,8 @@
               id:this.id,
               name: this.name,
               phone: this.phone,
+              idNo: this.idNo,
+
             }
             this.ajaxJson({
               url: '/Basic/verifyPersonVueName',
@@ -235,7 +362,39 @@
               loading: "0",
               call: (data) => {
                 if (data.type === 1){
-                  this.$refs.name.errorEvent('已存在！！！')
+                  this.isList = true
+                  this.switchIconShow = true
+                  let arr = []
+                  if(data.html!==''){
+                    let name = this.cutOutFront(data.html)//截取字符串并返回 姓名
+                    arr.push("'" + this.cutOutBack(data.html) + "'")
+                    this.$refs.name.errorEvent(name)
+                  }
+                  if(data.message!==''){
+                    let phone = this.cutOutFront(data.message)//截取字符串并返回 电话号
+                    arr.push("'" + this.cutOutBack(data.message) + "'")
+                    this.$refs.phone.errorEvent(phone)
+                  }
+                  if(data.val!==''){
+                    let identityCard = this.cutOutFront(data.val)//截取字符串并返回 身份证
+                    arr.push("'" + this.cutOutBack(data.val) + "'")
+                    this.$refs.idNo.errorEvent(identityCard)
+                  }
+                  this.verificationId = arr.join(',')
+                  let params = {
+                    id:this.verificationId
+                  }
+                  this.ajaxJson({
+                    url: '/Basic/getPersonID',
+                    data: params,
+                    loading: "0",
+                    call: (data) => {
+                      this.list = data
+                    }
+                  })
+                }else{
+                  this.isList = false
+                  this.switchIconShow = false
                 }
               }
             })
@@ -382,11 +541,58 @@
       }
     },
     created () {
+      this.setQuery2Value('isUrl')
       this.initData()
     }
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+  .isList{
+    position: fixed;
+    bottom: 0!important;
+  }
+  .duplicateAccount{
+    position: fixed;
+    bottom: -300px;
+    transition: all 0.5s;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 64px;
+    box-shadow: 0px -5px 5px #bfbfbf;
+  }
+  .iconUp{
+    color: #fff;
+    transform:rotate(180deg);
+    transition: all 0.5s;
+  }
+  .switchIconTop2{
+    display: flex;
+    justify-content: center;
+    background-color: #49a9ea;
+    height: 48px!important;
+    line-height: 48px !important;
+    box-shadow:0px 1px 7px #49a9ea ;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 48px;
+    padding: 0!important;
+    border-radius: 50%;
+    margin:0 20px 72px 0;
+  }
+  .switchIconTop{
+    /*display: flex;*/
+    margin-top: 10px;
+    align-items: center;
+    padding:0 22px;
+    height: 20px;
+    line-height: 20px;
 
+    .switchIcon2{
+      font-size: 20px;
+      display: inline-block;
+      float: right;
+    }
+  }
 </style>

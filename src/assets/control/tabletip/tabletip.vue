@@ -8,10 +8,10 @@
         </thead>
         <tbody>
           <tr v-for="(detail,i) in content" :key="i">
-            <template v-for="(item,index) in column">
-              <yhm-manager-td v-if="item.category === ''" :value="detail[item.key]" :key="index"></yhm-manager-td>
-              <yhm-manager-td-date v-if="item.category === 'date'" :value="detail[item.key]" :key="index"></yhm-manager-td-date>
-              <yhm-manager-td-money v-if="item.category === 'money'" :value="detail[item.key]" :key="index"></yhm-manager-td-money>
+            <template v-for="(item,index) in column" >
+              <yhm-manager-td v-if="item.category === ''" :value="detail[item.key]" :key="index" @click="clickEvent(detail,item)"></yhm-manager-td>
+              <yhm-manager-td-date v-if="item.category === 'date'" :value="detail[item.key]" :key="index" @click="clickEvent(detail,item)"></yhm-manager-td-date>
+              <yhm-manager-td-money v-if="item.category === 'money'" :value="detail[item.key]" :key="index" @click="clickEvent(detail,item)"></yhm-manager-td-money>
             </template>
           </tr>
         </tbody>
@@ -69,6 +69,11 @@
       // }
     },
     methods:{
+      clickEvent(item,title){
+        this.$nextTick(()=>{
+          this.$emit('call',item,title.title)
+        })
+      },
       getRelativeNode(control){
         let name = control.parentNode.className
         if(name !== this.nodeClassName){
@@ -104,7 +109,7 @@
           this.left = clientRect.x - this.x - (this.getTotalWidth.replace('px','') - clientRect.width)/2
         }
         if(this.verticalAlign === 'bottom') {
-          this.top = clientRect.y - this.y + clientRect.height + 5
+          this.top = clientRect.y - this.y + clientRect.height + 0
         }
       }
     }

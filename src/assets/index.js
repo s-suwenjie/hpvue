@@ -39,6 +39,10 @@ Vue.use(viewtextmoney)
 import viewdatemoney from '@/assets/view/viewdatemoney/viewdatemoney.js'
 Vue.use(viewdatemoney)
 
+
+import viewimg from '@/assets/view/viewimg/viewimg.js'
+Vue.use(viewimg)
+
 import viewshowfiles from '@/assets/view/viewshowfiles/viewshowfiles.js'
 Vue.use(viewshowfiles)
 
@@ -49,6 +53,8 @@ Vue.use(tabletip)
 import formdatebox from '@/assets/form/control/formdatebox/formdatebox.js'
 Vue.use(formdatebox)
 
+import formshowtable from '@/assets/form/formshowtable/formshowtable.js'
+Vue.use(formshowtable)
 
 import formdateboxinterval from '@/assets/form/control/formdateboxinterval/formdateboxinterval.js'
 Vue.use(formdateboxinterval)

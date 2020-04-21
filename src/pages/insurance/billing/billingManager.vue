@@ -34,7 +34,7 @@
         <yhm-managerth  style="width: 100px;" title="审批人员" value="insuranceFormulatorName"></yhm-managerth>
         <yhm-managerth  title="状态" value="status"></yhm-managerth>
 
-        <yhm-managerth  style="width: 160px;" title="操作"></yhm-managerth>
+        <yhm-managerth  style="width: 260px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -53,8 +53,9 @@
           <yhm-manager-td :value="item.status===''?item.causeList[0].insuranceFormulatorName:'-----'"></yhm-manager-td>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button @click="editBtn(item)" :no-click="item.status===''|| item.status==='1'" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button @click="del(item)"   :no-click="item.status===''|| item.status==='1'" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="editPayment(item)" :no-click="item.cashierOperation==='1'?false:true" value="付款申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="editBtn(item)" :no-click="item.status===''|| item.status==='1'|| item.status==='4'" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="del(item)"   :no-click="item.status===''|| item.status==='1' || item.status==='4'" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -99,6 +100,20 @@
       }
     },
     methods:{
+      editPayment(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/billingApprovalApplyForm?discountMoney='+item.discountMoney+'&billingID='+item.id+'&cashierSubject=支付客户返利 ------ 售后业务 ------ 其他业务&cashierSubjectID=D65A9EF9-DCB2-47B8-918B-F8DD9342B2CB'
+          +'&numbering='+item.numbering+'&plate='+item.plate+'&cashName='+item.cashName+'&cashNameID='+item.cashNameID+'&publicPrivate='+item.publicPrivate,
+          title: '添加返利付款申请',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
        editBtn(item){ //提交申请
          this.$dialog.confirm({
            width: 300,

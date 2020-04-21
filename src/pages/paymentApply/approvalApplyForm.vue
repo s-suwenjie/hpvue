@@ -40,82 +40,81 @@
           <yhm-view-control category="3" title="分批拨付" type="date-money" :content="allocationList" v-if="allocationList.length !== 0"></yhm-view-control>
           <yhm-view-control title="备注" :content="remark" v-if="remark!==''"></yhm-view-control>
         </yhm-view-tab-content>
-
-      <yhm-view-tab-list :customize="true"  v-show="tabState[1].select" v-if="isElInvoice">
-        <template #listHead>
-          <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
-          <yhm-managerth style="width: 200px" title="发票号码"></yhm-managerth>
-          <yhm-managerth style="width: 140px" title="类型"></yhm-managerth>
-          <yhm-managerth style="width: 80px" title="发票张数"></yhm-managerth>
-          <yhm-managerth style="width: 140px" title="开票日期"></yhm-managerth>
-          <yhm-managerth style="width: 140px" title="发票金额"></yhm-managerth>
-          <yhm-managerth style="width: 140px" title="发票照片"></yhm-managerth>
-        </template>
-        <template #listBody>
-          <tr v-for="(item,index) in paymentInvoice" :class="{InterlacBg:index%2!=0}" :key="index">
-            <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-            <yhm-manager-td :value="item.code"></yhm-manager-td>
-            <yhm-manager-td-psd :list="listCategoryList" :value="item.category"></yhm-manager-td-psd>
-            <yhm-manager-td :value="item.quantity"></yhm-manager-td>
-            <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
-            <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
-            <yhm-manager-td-image :tip="true" width="700" height="500" top="30" left="140" type="files" :value="item.url" :tag="item.isPdf === '1'?'ElectronicInvoice':'Invoice'" ></yhm-manager-td-image>
-          </tr>
-        </template>
-        <template #empty>
-          <span class="m_listNoData" v-show="paymentInvoice.length>=1?false:true">暂时没有数据</span>
-        </template>
-      </yhm-view-tab-list>
-      <yhm-view-tab-list :customize="true"  v-show="tabState[2].select" v-if="isBankList">
-        <template #listHead>
-          <yhm-managerth style="width: 340px" title="对方账号"></yhm-managerth>
-          <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
-          <yhm-managerth style="width: 80px" title="收支方向"></yhm-managerth>
-          <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
-          <yhm-managerth style="width: 120px" title="交易金额"></yhm-managerth>
-          <yhm-managerth style="width: 210px" title="备注"></yhm-managerth>
-        </template>
-        <template #listBody>
-          <tr v-for="(item,index) in bankDetailList" :class="{InterlacBg:index%2!=0}" :key="index">
-            <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
-            <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
-            <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
-            <yhm-manager-td :value="item.subject"></yhm-manager-td>
-            <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
-            <yhm-manager-td :value="item.remark"></yhm-manager-td>
-          </tr>
-        </template>
-        <template #empty>
-          <span class="m_listNoData" v-show="bankDetailList.length>=1?false:true">暂时没有数据</span>
-        </template>
-      </yhm-view-tab-list>
-      <yhm-view-tab-list :customize="true"  v-show="tabState[3].select" v-if="isAppropriationMoney">
-        <template #listHead>
-          <yhm-managerth style="width: 150px" title="账号"></yhm-managerth>
-          <yhm-managerth style="width: 150px" title="对方账号"></yhm-managerth>
-          <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
-          <yhm-managerth style="width: 80px" title="收支方向"></yhm-managerth>
-          <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
-          <yhm-managerth style="width: 120px" title="交易金额"></yhm-managerth>
-          <yhm-managerth style="width: 110px" title="备注"></yhm-managerth>
-          <yhm-managerth style="width: 100px" title="凭证"></yhm-managerth>
-        </template>
-        <template #listBody>
-          <tr v-for="(item,index) in appropriationMoney" :class="{InterlacBg:index%2!=0}" :key="index">
-            <yhm-manager-td :value="item.selfAccount"></yhm-manager-td>
-            <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
-            <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
-            <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
-            <yhm-manager-td :value="item.subject"></yhm-manager-td>
-            <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
-            <yhm-manager-td :value="item.remark"></yhm-manager-td>
-            <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.storeName" :tag="'bankDetail'" ></yhm-manager-td-image>
-          </tr>
-        </template>
-        <template #empty>
-          <span class="m_listNoData" v-show="appropriationMoney.length>=1?false:true">暂时没有数据</span>
-        </template>
-      </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[1].select" v-if="isElInvoice">
+          <template #listHead>
+            <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
+            <yhm-managerth style="width: 200px" title="发票号码"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="类型"></yhm-managerth>
+            <yhm-managerth style="width: 80px" title="发票张数"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="开票日期"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="发票金额"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="发票照片"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in paymentInvoice" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
+              <yhm-manager-td :value="item.code"></yhm-manager-td>
+              <yhm-manager-td-psd :list="listCategoryList" :value="item.category"></yhm-manager-td-psd>
+              <yhm-manager-td :value="item.quantity"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td-image :tip="true" width="700" height="500" top="30" left="140" type="files" :value="item.url" :tag="item.isPdf === '1'?'ElectronicInvoice':'Invoice'" ></yhm-manager-td-image>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="paymentInvoice.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[2].select" v-if="isBankList">
+          <template #listHead>
+            <yhm-managerth style="width: 340px" title="对方账号"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
+            <yhm-managerth style="width: 80px" title="收支方向"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="交易金额"></yhm-managerth>
+            <yhm-managerth style="width: 210px" title="备注"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in bankDetailList" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
+              <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
+              <yhm-manager-td :value="item.subject"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td :value="item.remark"></yhm-manager-td>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="bankDetailList.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[3].select" v-if="isAppropriationMoney">
+          <template #listHead>
+            <yhm-managerth style="width: 150px" title="账号"></yhm-managerth>
+            <yhm-managerth style="width: 150px" title="对方账号"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
+            <yhm-managerth style="width: 80px" title="收支方向"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="交易金额"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="备注"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="凭证"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in appropriationMoney" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td :value="item.selfAccount"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
+              <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
+              <yhm-manager-td :value="item.subject"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td :value="item.remark"></yhm-manager-td>
+              <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.storeName" :tag="'bankDetail'" ></yhm-manager-td-image>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="appropriationMoney.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -140,8 +139,10 @@
 
 <script>
 import { formmixin } from '@/assets/form.js'
+import ViewCheck from '../check/checkOpera/viewCheck'
 export default {
   name: 'paymentForm',
+  components: { ViewCheck },
   mixins: [formmixin],
   data () {
     return {

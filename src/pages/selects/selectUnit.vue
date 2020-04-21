@@ -102,7 +102,7 @@ export default {
       this.initPageData()
     },
     selectAddEvent () {
-      let url = '/addUnitForm'
+      let url = '/addUnitForm?isUrl=0'
       let height = '692'
       if(this.simplify === '1'){
         url = '/addUnitSimplifyForm'

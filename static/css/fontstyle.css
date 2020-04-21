@@ -793,3 +793,14 @@
   content: "\e99d";
 }
 
+/* 批量拨付 撤回批量拨付图标*/
+.i-uniE99F:before {
+  font-family: 'icomoon' !important;
+  content: "\e99f";
+}
+
+/*财务 付款申请 view 记录图标*/
+.uniE99E:before {
+  font-family: 'icomoon' !important;
+  content: "\e99e";
+}

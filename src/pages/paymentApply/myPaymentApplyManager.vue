@@ -21,13 +21,14 @@
         <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" :content="listState"></yhm-radiofilter>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型" :content="dateTypeList"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
 
       </template>
 
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('nature')" title="付款性质" all="1" :content="listNature"></yhm-radiofilter>
           <yhm-radiofilter :before="stateBefore" @initData="initChoose('isAllocation')" title="是否分批拨付" all="1" :content="listIsAllocation"></yhm-radiofilter>
         </div>
       </template>
@@ -37,6 +38,7 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth title="收款方" value="id"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="付款性质" value="nature"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="支付方式" value="isChecks"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
@@ -55,6 +57,7 @@
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :tip="true" :value="item.otherUnit"></yhm-manager-td>
+          <yhm-manager-td-psd :value="item.nature" :list="natureList"></yhm-manager-td-psd>
           <yhm-manager-td-psd :value="item.isChecks" :list="isChecksList"></yhm-manager-td-psd>
           <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
 <!--          <yhm-manager-td-center :value="item.day"></yhm-manager-td-center>-->
@@ -175,6 +178,12 @@
 
         stateBefore: '0', // 默认选择状态为可以选择，1为不可以选择
         listState: {
+          value: '',
+          list: []
+        },
+        nature: '',
+        natureList:[],
+        listNature:{
           value: '',
           list: []
         },
@@ -519,6 +528,7 @@
             isChecks:this.listIsChecks.value,
             isAllocation: this.listIsAllocation.value,
             dateType: this.dateTypeList.value,
+            nature: this.listNature.value,
           }
         }
         this.init({
@@ -536,6 +546,8 @@
             this.isChecksList = data.isChecksPsd.list
             this.listIsChecks = data.isChecksPsd
             this.listIsAllocation = data.isAllocationPsd
+            this.natureList = data.naturePsd.list
+            this.listNature = data.naturePsd
           }
         })
       },

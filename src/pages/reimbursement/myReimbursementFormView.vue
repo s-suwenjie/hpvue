@@ -27,8 +27,8 @@
           <template #listHead>
             <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
             <yhm-managerth style="width: 140px" title="事由"></yhm-managerth>
-            <yhm-managerth style="width: 120px" title="金额"></yhm-managerth>
-            <yhm-managerth style="width: 110px" title="发票金额"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="实报总金额"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="发票总金额"></yhm-managerth>
             <yhm-managerth style="width: 110px" title="发票类型"></yhm-managerth>
             <yhm-managerth  title="备注"></yhm-managerth>
             <yhm-managerth style="width: 120px" title="审批状态"></yhm-managerth>

@@ -3,8 +3,8 @@
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
-        <yhm-form-date title="回款日期" :value="moneyBackDate" id="moneyBackDate" :no-edit="isMoneyBackDate" rule="R0000"></yhm-form-date>
-        <yhm-form-text title="金额" :value="money" id="money" rule="R0000" no-edit="1"></yhm-form-text>
+        <yhm-form-date title="回款日期" :value="moneyBackDate" id="moneyBackDate" :no-edit="isMoneyBackDate"></yhm-form-date>
+        <yhm-form-text title="金额" :value="money" id="money" no-edit="1"></yhm-form-text>
 
         <yhm-form-select title="我方账户" :value="account" id="account" width="1" rule="R0000" :no-click="true"></yhm-form-select>
         <yhm-form-select title="对方账户" :value="otherAccount" id="otherAccount" width="1" rule="R0000" :no-click="true"></yhm-form-select>
@@ -13,11 +13,12 @@
         <yhm-form-select title="部门" @click="branchEvent" :value="branch" id="branch" rule="R0000"></yhm-form-select>
         <yhm-form-select title="业务员" @click="operatorEvent" :value="operator" id="operator" rule="R0000"></yhm-form-select>
 
-        <yhm-form-text title="工单号" @call="workOrderEvent" :value="workOrder" id="workOrder" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="工单号" @repeatverify="VerifyworkOrder" ref="workOrderID" :value="workOrderID" id="workOrderID" rule="R0000"></yhm-form-text>
         <yhm-form-text title="客户" :value="customerName" id="customerName" rule="R0000"></yhm-form-text>
 
-        <yhm-form-select title="车辆品牌" @click="vehicleTypeEvent" :value="vehicleType" id="vehicleType" rule="R0000"></yhm-form-select>
-        <yhm-form-text title="车牌号" :value="licensePlateNumber" id="licensePlateNumber" rule="R0000"></yhm-form-text>
+        <yhm-form-select title="车辆品牌" @click="selectVehicleBrandID" :value="vehicleBrand" id="vehicleBrand" rule="R0000"></yhm-form-select>
+        <yhm-form-select title="车型" @click="vehicleTypeEvent" :value="vehicleType" id="vehicleType" rule="R0000"></yhm-form-select>
+        <yhm-form-text title="车牌号" :value="licensePlateNumber" id="licensePlateNumber" rule="R8000"></yhm-form-text>
 
 <!--        <yhm-form-text title="车辆品牌" :value="brand" id="brand" rule="R0000"></yhm-form-text>-->
 
@@ -84,9 +85,9 @@
 
         money: '',
         remark: '',
-
+        vehicleBrandID:'',//车辆品牌ID
+        vehicleBrand:'',//车辆品牌ID
         isMoneyBackDate: true,
-
 
         isLeftID:false,//延长按钮
         leftID:'',//上一条ID
@@ -111,14 +112,29 @@
       otherAccountEvent(){
 
       },
-      /* 选择车型品牌 */
-      vehicleTypeEvent(){
+      selectVehicleBrandID(){
         let name = '90'
         this.$dialog.OpenWindow({
           width: 950,
           height: 603,
           url: '/selectDic?name=' + name,
           title: '选择车辆品牌',
+          closeCallBack: (data) => {
+            if (data) {
+              this.vehicleBrandID = data.id
+              this.vehicleBrand = data.showName
+            }
+          }
+        })
+      },
+      /* 选择车型品牌 */
+      vehicleTypeEvent(){
+        let name = '91'
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 603,
+          url: '/selectDic?name=' + name+'&value12='+this.vehicleBrandID,
+          title: '选择车辆型号',
           closeCallBack: (data) => {
             if (data) {
               this.vehicleTypeID = data.id
@@ -162,6 +178,23 @@
           }
         })
       },
+      //验证工单号唯一性
+      VerifyworkOrder(){
+        let params = {
+          id:this.id,
+          workOrderID:this.workOrderID
+        }
+        this.ajaxJson({
+          url: '/Fin/verifyworkOrder',
+          data: params,
+          loading: '0',
+          call: (data) => {
+            if(data.type===1){
+              this.$refs.workOrderID.errorEvent(data.message)
+            }
+          }
+        })
+      },
       /* 选择工单号 */
       workOrderEvent(){
 
@@ -181,19 +214,19 @@
             branchID: this.branchID,
             operator: this.operator,
             operatorID: this.operatorID,
-            workOrder: this.workOrder,
+            workOrderID: this.workOrderID,
 
             customerName: this.customerName,
             vehicleTypeID: this.vehicleTypeID,
             vehicleType: this.vehicleType,
             licensePlateNumber: this.licensePlateNumber,
 
-            // brand: this.brand,
+            vehicleBrand: this.vehicleBrand,
+            vehicleBrandID: this.vehicleBrandID,
             invoiceID: this.invoiceID,
             settlementDate: this.settlementDate,
             remark: this.remark,
           }
-
           this.ajaxJson({
             url: '/Fin/bankDetailInsuranceSave',
             data: params,
@@ -254,8 +287,8 @@
             this.branch = data.branch
             this.branchID = data.branchID
 
-            // this.brand = data.brand
-            // this.brandID = data.brandID
+            this.vehicleBrandID = data.vehicleBrandID
+            this.vehicleBrand = data.vehicleBrand
 
             this.storeName =  '/UploadFile/bankDetail/' + data.storeName
 

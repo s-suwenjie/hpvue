@@ -11,14 +11,14 @@
 
       <!--操作区-->
       <template #operate>
-        <yhm-table-tip :show="tableTip" :content="tableTipInfo" :column="tableTipColumnInfo" :mouse-control="tableTipControl"></yhm-table-tip>
+        <yhm-table-tip ref="smallTable" :show="tableTip" :content="tableTipInfo" :column="tableTipColumnInfo" :mouse-control="tableTipControl"></yhm-table-tip>
         <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()" category="one"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
 
         <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="状态" :content="listState"></yhm-radiofilter>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型" :content="dateTypeList"></yhm-radiofilter>
       </template>
 
       <!--筛选区-->
@@ -172,6 +172,7 @@
           list: [{showName:"本周", num: "0", code: "", img: ""},{showName:"本月", num: "1", code: "", img: ""},{showName:"本季度", num: "2", code: "", img: ""},{showName:"本年", num: "3", code: "", img: ""},]
         },
         contentTotal:[],
+        currentControl:null
       }
     },
     methods: {
@@ -313,13 +314,31 @@
       /* 小标格显示 */
       tableTipShowEvent(item,control){
         if(item.subjectList.length > 1) {
+          this.currentControl = control
           this.tableTipInfo = item.subjectList
           this.tableTipControl = control
           this.tableTip = true
+          this.currentControl = control
+        }
+        else{
+          this.currentControl = null
+          this.tableTip = false
         }
       },
-      tableTipHideEvent(){
-        this.tableTip = false
+      moveToSmallTable(e){
+        if(this.currentControl) {
+          if(!(this.currentControl.contains(e.target) || this.$refs.smallTable.$el.contains(e.target))){
+            this.tableTip = false
+          }
+        }
+        else{
+          document.removeEventListener('mouseover', this.moveToSmallTable)
+        }
+      },
+      tableTipHideEvent(item,control){
+        if(item.subjectList.length > 1){
+          document.addEventListener('mouseover', this.moveToSmallTable)
+        }
       },
       menuTab (index) {
         this.menuTabOn = index

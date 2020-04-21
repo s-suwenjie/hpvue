@@ -29,28 +29,37 @@
 
 .v_tab_title {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.v_tab_title>.content{
+    display: flex;
     justify-content: flex-start;
     align-items: center;
 }
 
-.v_tab_title>div{
+.v_tab_title>.content>div{
     padding: 16px;
     font-size: 16px;
     cursor: pointer;
 }
 
-.v_tab_title>div:hover{
+.v_tab_title>.content>div:hover{
     color: #49a9ea;
 }
 
-.v_tab_title>.select{
+.v_tab_title>.content>.select{
     background-color: #49a9ea;
     color: #FFFFFF;
     border-radius: 8px 8px 0 0;
 }
 
-.v_tab_title>.select:hover{
+.v_tab_title>.content>.select:hover{
     color: #FFFFFF;
+}
+
+.v_tab_title_total{
+    float: right;
 }
 
 .v_controls {

@@ -24,6 +24,7 @@
         <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态"  :content="listState"></yhm-radiofilter>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
       </template>
 
       <!--筛选区-->
@@ -31,8 +32,8 @@
         <div v-show="choose" class="buttonBody mptZero">
           <yhm-radiofilter :before="stateBefore" @initData="initChoose('branchID')" title="部门"  :content="branchList"></yhm-radiofilter>
           <yhm-radiofilter :before="isRelevanceBefore" @initData="initChoose('isRelevance')" title="是否关联"   :content="listisRelevance"></yhm-radiofilter>
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
           <yhm-radiofilter :before="stateBefore" @initData="initChoose('isAllocation')" title="是否分批拨付" all="1" :content="listIsAllocation"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('nature')" title="付款性质" all="1" :content="listNature"></yhm-radiofilter>
         </div>
       </template>
 
@@ -42,6 +43,7 @@
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 70px" title="申请人" value="person"></yhm-managerth>
         <yhm-managerth title="收款方"  value="id"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="付款性质" value="nature"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="支付方式" value="isChecks"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 70px" title="倒计时" value="day"></yhm-managerth>
@@ -62,6 +64,7 @@
           <yhm-manager-td-center @click="lookPerson(item)" :value="item.person"></yhm-manager-td-center>
           <yhm-manager-td :tip="true" @click="unitView(item)" :value="item.otherUnit" color="#7307dc" v-show="item.ownerID!==''"></yhm-manager-td>
           <yhm-manager-td :tip="true" @click="unitView(item)" :value="item.otherUnit"  v-show="item.ownerID==''"></yhm-manager-td>
+          <yhm-manager-td-psd :value="item.nature" :list="natureList"></yhm-manager-td-psd>
           <yhm-manager-td-psd :value="item.isChecks" :list="isChecksList"></yhm-manager-td-psd>
           <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.day+'天'" v-if="item.day<=7" style="color:#f00;font-weight: bold"></yhm-manager-td-center>
@@ -151,7 +154,12 @@
           value: '',
           list: []
         },
-
+        nature: '',
+        natureList:[],
+        listNature:{
+          value: '',
+          list: []
+        },
         tableTip: false,
         tableTipColumnInfo: [],
         tableTipControl: {},
@@ -372,6 +380,7 @@
             isAllocation: this.listIsAllocation.value,
             branchID: this.branchList.value,
             dateType: this.dateTypeList.value,
+            nature: this.listNature.value,
           }
         }
         this.init({
@@ -398,6 +407,8 @@
             this.listState = data.statePsd
             this.listisRelevance = data.isRelevancePsd
             this.listIsAllocation = data.isAllocationPsd
+            this.natureList = data.naturePsd.list
+            this.listNature = data.naturePsd
           }
         })
       },

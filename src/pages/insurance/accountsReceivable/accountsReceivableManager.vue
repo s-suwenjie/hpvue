@@ -5,6 +5,8 @@
       <template #navigationTab>
         <router-link class="menuTabDiv " :to="{path:'/home/policy/policyManager'}">保单管理</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/accountsReceivable/accountsReceivableManager'}">应收账款</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/customerRebates/customerRebatesManager'}">客户返利</router-link>
+        <outer-link class="menuTabDiv" :to="{path:'/home/paymentInsurance/payInsuranceFeeManager'}">付保险费</outer-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -19,26 +21,28 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
+        <yhm-managerth title="投保日期" value="insuredDate"></yhm-managerth>
         <yhm-managerth title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth title="联系人" value="contactName"></yhm-managerth>
-        <yhm-managerth title="投保日期" value="insuredDate"></yhm-managerth>
         <yhm-managerth title="保险公司" value="insuredUnit"></yhm-managerth>
         <yhm-managerth title="预计盈亏"></yhm-managerth>
         <yhm-managerth title="实时盈亏"></yhm-managerth>
+        <yhm-managerth title="保单号" value="numbering"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="状态" value="cashStatus"></yhm-managerth>
       </template>
 
       <!--数据明细-->
       <template #listBody>
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
-          <yhm-manager-td-checkbox :value="item" @call="selectID"></yhm-manager-td-checkbox>
+          <yhm-manager-td-checkbox :value="item" ></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
+          <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName"></yhm-manager-td>
-          <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-money  :value="item.actualProfitLoss" ></yhm-manager-td-money>
           <yhm-manager-td-money  :value="item.realTimeProfitLoss"></yhm-manager-td-money>
+          <yhm-manager-td-center :value="item.numbering"></yhm-manager-td-center>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
         </tr>
       </template>

@@ -209,7 +209,7 @@
       calcBeforeMoney(){
         if (this.discountMoney!=='' &&this.premiumsTotal!==''){
           this.receivedMoney=accAdd(parseFloat(this.premiumsTotal),parseFloat(this.discountMoney)*-1) +''
-          this.discountCount=((parseFloat(this.discountMoney)/parseFloat(this.premiumsTotal)).toFixed(2))*100 +''
+          this.discountCount=(parseFloat(this.discountMoney)/parseFloat(this.premiumsTotal)).toFixed(2)*100 +''
           if (this.cash ==='0'){
             this.receivedMoney=this.premiumsTotal
           }
@@ -218,7 +218,7 @@
       },
       calcAfterMoney(){
         if (this.discountCount!=='') {
-          this.discountMoney = parseFloat(this.premiumsTotal) * (parseFloat(this.discountCount)/100) +''
+          this.discountMoney = parseFloat(this.premiumsTotal) * (parseFloat(this.discountCount)/100).toFixed(2) +''
           this.receivedMoney = accAdd(parseFloat(this.premiumsTotal), parseFloat(this.discountMoney) * -1) +''
           if (this.cash ==='0'){
             this.receivedMoney=this.premiumsTotal

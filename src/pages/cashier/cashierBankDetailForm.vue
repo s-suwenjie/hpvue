@@ -497,7 +497,7 @@
                 money:this.money
               }
               this.ajaxJson({
-                url: '/Fin/modifyBankDetailClueState',
+                url: '/Fin/modifyBankDetailPayment',
                 data: dataParams,
                 call: (data) => {
                   if(data.type === 0){
@@ -550,7 +550,7 @@
       this.setQuery2Value('cashierMoney')
       this.setQuery2Value('cashierDirection')
       this.setQuery2Value('bankMoney')
-      this.setQuery2Value('insuredUnitAccountID')
+      this.setQuery2Value('insuredUnitID')
       this.setQuery2Value('insuredUnitAccount')
       this.setQuery2Value('cashierSubject')
       this.setQuery2Value('cashierSubjectID')
@@ -636,7 +636,8 @@
           this.money=this.bankMoney
           this.calcTrMoney =this.bankMoney
           this.otherAccount=this.insuredUnitAccount
-          this.otherAccountID=this.insuredUnitAccountID
+          this.otherAccountID=this.insuredUnitID
+
           this.subject=this.cashierSubject
           this.subjectID=this.cashierSubjectID
           this.remark=this.cashierRemake

@@ -76,7 +76,11 @@
       addup(category){
         if(this.value !== '') {
           if (category === "bind") {
-            this.p____page.sortTh.push(this)
+            try {//避免为空时会在页面抛出大量红色报错
+              this.p____page.sortTh.push(this)
+            }catch (e) {
+              console.log(e)
+            }
           } else if (category === "unbind") {
             let index = this.p____page.sortTh.indexOf(this)
             if (index !== -1) {

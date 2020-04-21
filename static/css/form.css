@@ -34,6 +34,10 @@
   border: solid 1px #d9d9d9;
 }
 
+.f_area1200{
+  width: 1200px;
+}
+
 .h_image{
   height: 500px;
   display:flex;
@@ -56,6 +60,23 @@
   align-items: center;
   padding: 0 20px;
   border-bottom: 1px solid #d9d9d9;
+}
+
+.f_tab_title{
+  display: flex;
+}
+
+.f_tab_title_btn{
+  padding: 15px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+}
+
+.f_tab_title_active{
+  color: #49a9ea;
+  border-bottom: 2px solid #49a9ea;
 }
 
 .f_flex_column{

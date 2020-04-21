@@ -1,11 +1,11 @@
 <template>
-  <div v-if="show" class="fc_main">
-    <div class="fc_box">
+  <div v-if="show" class="fc_main"  :style="widthCalculate">
+    <div class="fc_box"  :style="widthCalculate">
       <div class="fc_title" :style="{color: color}">
         <div>{{title}}</div>
         <div v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
-      <yhm-datebox :placeholder="placeholder" :placeholder-color="placeholderColor" ref="control" @formVerification="verificationEvent" :no-edit="noEdit" @call="callEvent" :type="type" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :position="position" :max="max" :min="min" :value="value" :id="id" :rule="rule"></yhm-datebox>
+      <yhm-datebox :placeholder="placeholder" :placeholder-color="placeholderColor" :width="width" ref="control" @formVerification="verificationEvent" :no-edit="noEdit" @call="callEvent" :type="type" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :position="position" :max="max" :min="min" :value="value" :id="id" :rule="rule"></yhm-datebox>
       <slot>
       </slot>
     </div>
@@ -32,6 +32,10 @@ export default {
     title: {
       type: String,
       default: '标题'
+    },
+    width: {
+      type: String,
+      default: ''
     },
     placeholder:{
       type: String,
@@ -90,6 +94,14 @@ export default {
       default: '#333'
     },
 
+  },
+  computed:{
+    widthCalculate(){
+      if(this.width !== '') {
+        let width = parseInt(this.width) + 50
+        return 'width:' + width + 'px !important;'
+      }
+    }
   },
   methods: {
     callEvent(){

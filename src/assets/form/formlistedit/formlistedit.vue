@@ -1,5 +1,6 @@
 <template>
   <div class="f_area" v-if="show">
+    <slot name="switchIcon"></slot>
     <div class="f_title f_listtitle">
       <p class="f_titleTxt">
         <slot name="title"></slot>

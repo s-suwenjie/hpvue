@@ -210,7 +210,6 @@
           title: title,
           url:url,
           closeCallBack: (data)=>{
-            console.log(data)
             if(data){
               this.ajaxJson({
                 url:"/Fin/getPrivateAccountInformation",

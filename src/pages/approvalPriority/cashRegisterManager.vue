@@ -9,6 +9,8 @@
         <router-link class="menuTabDiv" :to="{path:'/home/approvalPersonaliseManager'}">审批定制</router-link>
         <router-link class="menuTabDiv " :to="{path:'/home/insuranceProcessManager'}">保险审批制定</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/cashRegisterManager'}">收银审批制定</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/approPriationManager'}">批量拨款审批制定</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/unionCostsManager'}">工会审批制定</router-link>
       </template>
       <!--操作区-->
       <template #operate>

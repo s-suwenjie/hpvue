@@ -24,9 +24,30 @@
     <yhm-view-tab>
       <template #tab>
         <yhm-view-tab-button :list="tabState" :index="0"  v-if="isAppropriationMoney">拨付信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="1" @click="particulars">以往记录</yhm-view-tab-button>
+      </template>
+      <template #tab_total>
+        <div v-show="tabState[1].select" style="background: #c5daeb;margin-right: 2px;">
+          <table style="width: 400px;height: 50px;" >
+            <thead>
+              <th >总金额</th>
+              <th style="color: #49a9ea;">占用金额</th>
+              <th style="color: #001cce;">核销金额</th>
+            </thead>
+            <tbody>
+              <tr v-for="(item,index) in totalTotal" style="background: #fff;">
+                <td v-html="tenThousandFormatShow(item.sumMoney)" style="text-align: right;"></td>
+                <td v-html="tenThousandFormatShow(item.useMoney)" style="text-align: right;color: #49a9ea;"></td>
+                <td v-html="tenThousandFormatShow(item.writeOffMoney)" style="text-align: right;color: #001cce;"></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
       </template>
       <template #content>
-        <yhm-view-tab-list :customize="true"  v-if="isAppropriationMoney">
+
+        <yhm-view-tab-list :customize="true"  v-if="isAppropriationMoney" v-show="tabState[0].select">
           <template #listHead>
             <yhm-managerth style="width: 150px" title="账号"></yhm-managerth>
             <yhm-managerth style="width: 150px" title="对方账号"></yhm-managerth>
@@ -50,8 +71,47 @@
             </tr>
           </template>
         </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[1].select">
+          <template #operate>
+            <yhm-radiofilter @initData="initChoose('state')" title="完成状态" :content="stateList" style="margin: 5px 0;"></yhm-radiofilter>
+          </template>
+          <template #listHead>
+            <yhm-managerth style="width: 30px;" title="查看"></yhm-managerth>
+
+
+            <yhm-managerth style="width: 110px;" title="申请时间" value="workDate"></yhm-managerth>
+            <yhm-managerth style="width: 120px;" title="申请金额" value="money"></yhm-managerth>
+
+            <yhm-managerth style="width: 120px;" title="核销金额" value="reimbursementsMoney"></yhm-managerth>
+            <yhm-managerth style="width: 120px;" title="待退回金额" value="balance"></yhm-managerth>
+
+            <yhm-managerth style="width: 120px;" title="已退回金额" value="balance"></yhm-managerth>
+            <yhm-managerth style="width: 120px;" title="状态" value=""></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in particularsList" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
+              <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+
+              <yhm-manager-td-money :value="item.reimbursementsMoney"></yhm-manager-td-money>
+              <yhm-manager-td-money :value="item.balance"></yhm-manager-td-money>
+              <yhm-manager-td-money :value="item.balance"></yhm-manager-td-money>
+              <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
+
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="empty">暂时没有数据</span>
+          </template>
+          <template #pager>
+            <yhm-pagination :pager="pager" is-page-size="false" @initData="particulars"></yhm-pagination>
+          </template>
+        </yhm-view-tab-list>
+
       </template>
     </yhm-view-tab>
+
   </div>
 </template>
 
@@ -62,7 +122,22 @@
     mixins: [formmixin],
     data(){
       return{
-        tabState:[{select:true}],
+        pager: { // 分页数据
+          total: '', // 数据总条数
+          pageSize: 5, // 单页数据条数
+          pageIndex: 1, // 当前页码
+          selectCount: 0 // 选中数据的条数
+        },
+        stateList: {
+          value: '',
+          list: [
+            {showName:"已完成", num: "0", code: "", img: ""},
+            {showName:"进行中", num: "1", code: "", img: ""},
+          ]
+        },
+        totalTotal: [],
+        empty:false,
+        tabState:[{select:true},{select:false}],
         unitID:'',
         unit:'',
         person:'',
@@ -85,7 +160,7 @@
         invoiceCategoryList: [],
         appropriationMoney:[],
         isAppropriationMoney:false,
-
+        particularsList:[],
         isLeftID:false,//延长按钮
         leftID:'',//上一条ID
         isRightID:false,//延长按钮
@@ -93,6 +168,39 @@
       }
     },
     methods:{
+      initChoose(){
+        this.particulars()
+      },
+      listView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '740',
+          title: '查看备用金信息',
+          url:'/finPrettyCashsView?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      particulars(){
+        let params = {
+          isFinish: this.stateList.value,
+          pageIndex: this.pager.pageIndex,
+          pageSize: this.pager.pageSize
+
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/prettyCashsPersonManager',
+          data: params,
+          call: (data) => {
+            this.particularsList = data.content
+            this.pager.total = data.count
+            this.totalTotal = data.total
+          }
+        })
+      },
       leftStrip(){
         window.location='/finPrettyCashsView?id='+this.leftID
 
@@ -160,10 +268,15 @@
       this.setQuery2Value('approval')
       this.initData()
       this.selectedList()
-    }
+    },watch:{
+      content(){
+        this.empty = this.content.length === 0;
+      }
+    },
   }
 </script>
 
 <style scoped>
 
 </style>
+

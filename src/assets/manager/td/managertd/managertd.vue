@@ -1,5 +1,5 @@
 <template>
-  <td ref="control" @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent" @dblclick="dblclickEvent">
+  <td :rowspan="rowspan" ref="control" @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent" @dblclick="dblclickEvent">
     <div v-if="getEmpty" class="md_center">
       -----
     </div>
@@ -29,6 +29,10 @@
       }
     },
     props: {
+      rowspan:{
+        type:Number,
+        default:1
+      },
       nodeClassName:{
         type:String,
         default:'m_main'

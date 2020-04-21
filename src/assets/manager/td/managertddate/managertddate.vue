@@ -1,5 +1,5 @@
 <template>
-    <td ref="control" @mouseover="mouseoverEvent" @mouseout="mouseoutEvent">
+    <td ref="control" @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent">
       <div class="md_center md_relative">
         <div v-if="beforeIcon !== ''" class="md_beforeIcon" :style="{color:beforeIconColor}" :class="[beforeIcon,beforeIconFontSize]"></div>
         {{getValue}}<span v-if="getEmpty" class="ml5" :class="{weekend:getWeekend}">{{getWeek}}</span>
@@ -23,6 +23,10 @@
         type:String,
         default:''
       },
+      empty:{
+        type:String,
+        default:'-----'
+      },
       beforeIconColor:{
         type:String,
         default:'#18d123'
@@ -33,6 +37,11 @@
       }
     },
     methods:{
+      clickEvent(){
+        this.$nextTick(()=>{
+          this.$emit('click')
+        })
+      },
       mouseoverEvent(){
         this.$nextTick(() => {
           this.$emit('mouseover',this.valueObject,this.$refs.control)
@@ -47,7 +56,7 @@
     computed:{
       getValue(){
         if(new Date(this.value).getTime() === new Date('1900-01-01').getTime()){
-          return '-----'
+          return this.empty
         }
         return this.value
       },

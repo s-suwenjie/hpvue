@@ -11,6 +11,7 @@
       </template>
       <!--操作区-->
       <template #operate>
+        <yhm-table-tip ref="smallTable" @call="clickTipEvent" :show="tableTip" :content="tableTipInfo" :column="refundMap" :mouse-control="tableTipControl"></yhm-table-tip>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'"  :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
         <div @click="selectedList" v-show="isSelected" class="b_main one b_one mr5b">打开选中信息</div>
@@ -26,11 +27,12 @@
       </template>
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
-        <yhm-managerth style="width: 50px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 110px;" title="申请人" value="personID"></yhm-managerth>
+        <yhm-managerth style="width: 30px;" title="查看"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="申请人" value="personID"></yhm-managerth>
 
         <yhm-managerth style="width: 150px;" title="批次号" value="code"></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="申请时间" value="workDate"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="占用天数" value="workDateDay"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="申请金额" value="money"></yhm-managerth>
 
         <yhm-managerth style="width: 120px;" title="拨款金额" value="bankDetailMoney"></yhm-managerth>
@@ -38,14 +40,14 @@
         <yhm-managerth style="width: 120px;" title="待退回金额" value="balance"></yhm-managerth>
 
         <yhm-managerth style="width: 120px;" title="已退回金额" value="balance"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="退款方式" value="useType"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="发票类型"></yhm-managerth>
+        <yhm-managerth style="width: 70px;" title="退款方式" value="useType"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="发票类型"></yhm-managerth>
 
         <yhm-managerth title="事由" value="subjectID"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="预计核销日期" value="estimateDate"></yhm-managerth>
-        <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="倒计时" value="day"></yhm-managerth>
 
-        <yhm-managerth style="width: 120px;" title="状态" value=""></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="状态" value=""></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in content" :key="index" :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]">
@@ -56,13 +58,14 @@
 
           <yhm-manager-td :value="item.code"></yhm-manager-td>
           <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
+          <yhm-manager-td-center :value="item.workDateDay+'天'" style="color:#2c920b;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
 
-          <yhm-manager-td-money :value="item.bankDetailMoney"></yhm-manager-td-money>
-          <yhm-manager-td-money :value="item.reimbursementsMoney"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.bankDetailMoney" @click="detailView(item)"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.reimbursementsMoney" @click="reimbursementView(item)"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.balance"></yhm-manager-td-money>
 
-          <yhm-manager-td-money :value="item.refundBalance"></yhm-manager-td-money>
+          <yhm-manager-td :value="item.refundBalance"  :after-icon="item.refundBalance>0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td v-show="item.useType==='0'" value=""></yhm-manager-td>
           <yhm-manager-td @click="useType(item)" v-show="item.useType==='1'" value="全额退回"></yhm-manager-td>
           <yhm-manager-td @click="useType(item)" v-show="item.useType==='2'" value="报销"></yhm-manager-td>
@@ -91,25 +94,26 @@
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>
       <template #listTotalHead>
-        <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="进行中" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#2c920b" title="" before-title="已完成" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="驳回" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="已拨款" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#2c920b" title="" before-title="报销核销" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="已退金额" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#08acc0" title="" before-title="备用金退款" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#c700df" title="" before-title="待退发票金额" ></yhm-managerth>
       </template>
       <template #listTotalLeft>
         <div class=" listTotalLeft">
           <span class="test"></span>
           <span class="test">金额</span>
-          <span class="test">条数</span>
+<!--          <span class="test">条数</span>-->
         </div>
       </template>
       <template #listTotalBody>
         <tr>
           <yhm-manager-td-money @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
         </tr>
-        <tr>
-          <yhm-manager-td-rgt @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
-        </tr>
+<!--        <tr>-->
+<!--          <yhm-manager-td-rgt @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>-->
+<!--        </tr>-->
       </template>
     </yhm-managerpage>
   </div>
@@ -136,6 +140,14 @@
           value: '',
           list: []
         },
+        tableTip: false,
+        tableTipControl: {},
+        tableTipInfo:[],
+        refundMap:[
+          {width:'140',title:'退备用金',category:'money',key:'refundMoney'},
+          {width:'100',title:'特殊账户',category:'money',key:'specialMoney'},
+        ],
+
         invoiceCategoryList: [],
         contentTotal:[],
         dateType:'',
@@ -146,6 +158,81 @@
       }
     },
     methods:{
+      clickTipEvent(item,title){
+        let id = ''
+        if(title==='退备用金'){
+          id = item.refundID
+        }else if(title==='特殊账户'){
+          id = item.refundSpecialID
+        }
+        setTimeout(()=>{
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '620',
+            title: '查看收支明细',
+            url: '/unitDetailView?id='+id,
+            closeCallBack: (dataTwo)=>{
+            }
+          })
+        },0)
+
+        console.log(item,title)
+      },
+      /* 小标格显示 */
+      tableTipShowEvent(item,control){
+        // console.log(item.refundMap)
+        // this.refundMapList.push(item.refundMap)
+        // console.log(this.refundMapList)
+        if(item.refundBalance > 0) {
+          this.currentControl = control
+          this.tableTipInfo = item.refundMap
+          this.tableTipControl = control
+          this.tableTip = true
+          this.currentControl = control
+        }
+        else{
+          this.currentControl = null
+          this.tableTip = false
+        }
+      },
+      moveToSmallTable(e){
+        this.refundMapList = ''
+        if(this.currentControl) {
+          if(!(this.currentControl.contains(e.target) || this.$refs.smallTable.$el.contains(e.target))){
+            this.tableTip = false
+          }
+        }
+        else{
+          document.removeEventListener('mouseover', this.moveToSmallTable)
+        }
+      },
+      tableTipHideEvent(item,control){
+        if(item.refundBalance > 0){
+          document.addEventListener('mouseover', this.moveToSmallTable)
+        }
+      },
+      reimbursementView(item){//跳转到报销
+        if(item.reimbursementsMoney>0){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '620',
+            title: '查看报销信息',
+            url: '/reimbursementViewForm?id='+item.reimbursementsID,
+            closeCallBack: (dataTwo)=>{
+            }
+          })
+        }
+      },
+      detailView(item){//拨款金额跳转到收支明细
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '620',
+          title: '查看收支明细',
+          url: '/unitDetailView?id='+item.bankDetailID,
+          closeCallBack: (dataTwo)=>{
+          }
+        })
+      },
       //退款方式
       useType(item){
         if(item.useType === '1'){

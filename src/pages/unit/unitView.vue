@@ -21,6 +21,25 @@
         <yhm-view-tab-button :list="tabState" :index="0">更多信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1" @click="listDetail">往来明细</yhm-view-tab-button>
       </template>
+      <template #tab_total>
+        <div v-show="tabState[1].select" style="background: #c5daeb;margin-right: 2px;">
+          <table style="width: 400px;height: 50px;" >
+            <thead>
+            <th >总金额</th>
+            <th style="color: #49a9ea;">收入金额</th>
+            <th style="color: #ff0000;">支出金额</th>
+            </thead>
+            <tbody>
+            <tr v-for="(item,index) in totalTotal" style="background: #fff;">
+              <td v-html="tenThousandFormatShow(item.balance)" style="text-align: right;"></td>
+              <td v-html="tenThousandFormatShow(item.income)" style="text-align: right;color: #49a9ea;"></td>
+              <td v-html="tenThousandFormatShow(item.expend)" style="text-align: right;color: #ff0000;"></td>
+            </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </template>
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
             <yhm-view-control title="类型" :content="categoryUnit" ></yhm-view-control>
@@ -38,6 +57,9 @@
             <yhm-view-control category="3" title="经营范围" :content="management" ></yhm-view-control>
         </yhm-view-tab-content>
         <yhm-view-tab-list :customize="true"  v-show="tabState[1].select">
+          <template #operate>
+            <yhm-radiofilter @initData="initChoose('direction')" title="完成状态" :content="directionList" style="margin: 5px 0;"></yhm-radiofilter>
+          </template>
           <template #listHead>
             <yhm-managerth style="width:28px" title="查看" ></yhm-managerth>
             <yhm-managerth style="width:88px" title="账户" ></yhm-managerth>
@@ -86,13 +108,15 @@
     mixins: [viewmixin],
     data() {
       return {
-        pager: { // 分页数据
-          total: '', // 数据总条数
-          pageSize: 10, // 单页数据条数
-          pageIndex: 1, // 当前页码
-          selectCount: 0 // 选中数据的条数
+        directionList: {
+          value: '',
+          list: [
+            {showName:"收入", num: "0", code: "", img: ""},
+            {showName:"支出", num: "1", code: "", img: ""},
+          ]
         },
         category: '',//单位分类
+        totalTotal:[],
         name:'',//单位名称
         prefixLetter: '',   //单位名称首字母
         code:'',//单位代码
@@ -131,7 +155,9 @@
       }
     },
     methods: {
-
+      initChoose(){
+        this.listDetail(false)
+      },
       listDetail(initValue){
         let params = {}
         if (initValue) {
@@ -146,6 +172,7 @@
             init:initValue,
             pageIndex: this.pager.pageIndex,
             pageSize:  this.pager.pageSize,
+            direction: this.directionList.value
           }
         }
         this.ajaxJson({
@@ -153,6 +180,8 @@
           data: params,
           call: (data) => {
             this.content = data.content
+            this.totalTotal = data.total
+            console.log(this.totalTotal)
             this.pager.total = data.count
 
           }

@@ -45,7 +45,7 @@
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton value="编辑" style="margin-right: 20px" icon="i-edit" :flicker="false" @call="editBtn()"></yhm-commonbutton> </template>
+        <yhm-commonbutton value="编辑" v-if="isInsuredUnit" style="margin-right: 20px" icon="i-edit" :flicker="false" @call="editBtn()"></yhm-commonbutton> </template>
     </yhm-formoperate>
   </div>
 </template>
@@ -70,6 +70,7 @@
         updateDate:'',
         billingTypeVal: '',
         commercialVal: '',
+        isInsuredUnit:true,
       }
     },
     methods:{
@@ -90,6 +91,11 @@
 
     },
     created () {
+      this.setQuery2Value('isCustomer')
+      if(this.isCustomer === '0'){
+        this.isInsuredUnit = false
+      }
+
       let params = {
         id: this.id,
       }

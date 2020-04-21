@@ -1,5 +1,5 @@
 <template>
-  <div class="f_area" :class="{w620: !smTable}">
+  <div class="f_area" :class="[getWidth,{w620: !smTable}]">
     <div class="f_title f_listtitle">
       <p class="f_titleTxt">
         <slot name="title"></slot>
@@ -29,9 +29,23 @@
   export default {
     name: 'yhm-form-list-show',
     props:{
+      width:{
+        type:String,
+        default: ''
+      },
       smTable:{
         type:Boolean,
         default:true
+      }
+    },
+    computed:{
+      getWidth(){
+        if(this.width){
+          return "f_area" + this.width
+        }
+        else{
+          return ""
+        }
       }
     }
   }

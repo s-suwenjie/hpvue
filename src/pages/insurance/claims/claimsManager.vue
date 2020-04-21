@@ -30,7 +30,7 @@
           <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
           <yhm-managerth style="width: 80px" title="客户姓名" value="customerName"></yhm-managerth>
           <yhm-managerth title="保险公司" value="otherName"></yhm-managerth>
-          <yhm-managerth style="width: 140px;" title="工单号" value="workOrder"></yhm-managerth>
+          <yhm-managerth style="width: 140px;" title="工单号" value="workOrderID"></yhm-managerth>
           <yhm-managerth style="width: 120px" title="业务员" value="operator"></yhm-managerth>
           <yhm-managerth style="width: 90px" title="部门" value="branch"></yhm-managerth>
           <yhm-managerth style="width: 100px;" title="车型品牌" value="vehicleType"></yhm-managerth>
@@ -49,7 +49,7 @@
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
             <yhm-manager-td :value="item.customerName"></yhm-manager-td>
             <yhm-manager-td :tip="true" :value="item.otherName"></yhm-manager-td>
-            <yhm-manager-td :value="item.workOrder"></yhm-manager-td>
+            <yhm-manager-td :value="item.workOrderID"></yhm-manager-td>
             <yhm-manager-td :value="item.operator"></yhm-manager-td>
             <yhm-manager-td :value="item.branch" ></yhm-manager-td>
             <yhm-manager-td :value="item.vehicleType"></yhm-manager-td>
@@ -58,10 +58,7 @@
             <yhm-manager-td-money :value="item.money === null ? ' ':item.money"></yhm-manager-td-money>
             <yhm-manager-td-center :value="item.bankName"></yhm-manager-td-center>
             <yhm-manager-td-date :value="item.settlementDate" ></yhm-manager-td-date>
-<!--            <yhm-manager-td :value="item.invoice" ></yhm-manager-td>-->
             <yhm-manager-td :value="item.remark"></yhm-manager-td>
-
-
           </tr>
         </template>
         <!--数据空提示-->

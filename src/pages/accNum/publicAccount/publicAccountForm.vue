@@ -224,7 +224,6 @@
           url: '/addUnitForm?id=' + item.unitID,
           title: '编辑公司信息',
           closeCallBack: (data)=>{
-            console.log(data)
             if(data){
               this.ajaxJson({
                 url:"/Fin/getPublicAccountInformation",
@@ -233,7 +232,6 @@
                 },
                 loading:"0",
                 call:(information) =>{
-                  console.log(typeof information)
                   if(information){
                     this.list=information
                     if(this.list.length>0){
@@ -267,7 +265,6 @@
           title: title,
           url:url,
           closeCallBack: (data)=>{
-            console.log(data)
             if(data&&index == 1){
               this.ajaxJson({
                 url:"/Fin/getPublicAccountInformation",

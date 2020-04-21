@@ -20,7 +20,7 @@
         <yhm-form-text title="公司电话" :value="tel" id="tel" rule="R0000"></yhm-form-text>
         <yhm-form-textarea title="地址" :value="addressCN" id="addressCN" rule="R0000" width="1"></yhm-form-textarea>
 
-        <yhm-form-text title="统一社会" subtitle="信用代码" :value="registrationNumber" id="registrationNumber" rule="R0000">
+        <yhm-form-text title="统一社会" @repeatverify="verifyRegistrationNumber" subtitle="信用代码" ref="registrationNumber" :value="registrationNumber" id="registrationNumber" rule="R0000">
           <div class="formBoxIcon" @click="unitRegNum">
             <span class="i-help"></span>
           </div>
@@ -53,6 +53,37 @@
         <yhm-form-textarea title="经营范围" :value="management" id="management"></yhm-form-textarea>
       </template>
     </yhm-formbody>
+    <div class="switchIconTop switchIconTop2" @click="switchClick" v-show="switchIconShow">
+      <span class="i-input-down-arrow switchIcon2 iconUp"></span>
+    </div>
+    <yhm-form-list-edit  class="duplicateAccount" :class="{isList:isList}">
+      <template #switchIcon>
+        <div class="switchIconTop" @click="switchClick">
+          <span class="i-input-down-arrow switchIcon2"></span>
+        </div>
+      </template>
+      <template #title>重复单位信息</template>
+      <template #listHead>
+        <yhm-managerth style="width: 38px;background: linear-gradient(0deg, #ec6603, #a24906);" title="查看"></yhm-managerth>
+        <yhm-managerth title="单位名称" style="background: linear-gradient(0deg, #ec6603, #a24906);"></yhm-managerth>
+        <yhm-managerth style="width: 150px;background: linear-gradient(0deg, #ec6603, #a24906);" title="公司简称"></yhm-managerth>
+        <yhm-managerth style="width: 170px;background: linear-gradient(0deg, #ec6603, #a24906);" title="统一社会信用代码"></yhm-managerth>
+        <yhm-managerth style="width: 150px;background: linear-gradient(0deg, #ec6603, #a24906);" title="公司电话"></yhm-managerth>
+        <yhm-managerth style="width: 150px;background: linear-gradient(0deg, #ec6603, #a24906);" title="操作"></yhm-managerth>
+      </template>
+      <template #listBody>
+        <tr v-for="(item,index) in list" :key="index" :class="{InterlacBg:index%2!==0}">
+          <yhm-manager-td-look @click="viewDetails(item)"></yhm-manager-td-look>
+          <yhm-manager-td :value="item.name" @click="lookPublic(item)"></yhm-manager-td>
+          <yhm-manager-td :value="item.abbreviation"></yhm-manager-td>
+          <yhm-manager-td :value="item.registrationNumber" @click="lookPublic(item)"></yhm-manager-td>
+          <yhm-manager-td :value="item.tel"></yhm-manager-td>
+          <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button v-show="isUrl" @click="selectEvent(item)" style="color:#ec6603" value="选择"></yhm-manager-td-operate-button>
+          </yhm-manager-td-operate>
+        </tr>
+      </template>
+    </yhm-form-list-edit>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
@@ -73,6 +104,9 @@
       return {
         id: '',
         categoryList: [] ,
+        isList:false,
+        switchIconShow:false,
+        list:[],
         category: '',
         name: '',
         code: '',
@@ -108,10 +142,129 @@
         capitalCompany: '',              //金额单位
         management: '',              //经营范围
         isCopyTip: false,
-        videoUrl: ''
+        videoUrl: '',
+
+        list:[],
+        isList:false,
+
+        isUrl:'',
+
       }
     },
     methods: {
+      switchClick(){//重复账号信息显示隐藏
+        this.isList=!this.isList
+      },
+      viewDetails(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/unitView?id='+item.id,
+          title:'查看单位信息',
+          closeCallBack:(data) =>{
+            if (data) {
+              this.getUnitInformation(data)
+            }
+          }
+        })
+      },
+      lookPublic(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/addUnitForm?id='+item.id,
+          title:'编辑单位信息',
+          closeCallBack:(data) =>{
+            if (data) {
+              this.getUnitInformation(data)
+            }
+          }
+        })
+      },
+      selectEvent(item){
+        if(item.unitID===this.unitID){
+          this.$dialog.setReturnValue(item.id)
+          this.$dialog.close()
+        }else{
+          this.$dialog.alert({
+            tipValue: '请选择所选人账户',
+            alertImg: 'error',
+          })
+        }
+      },
+      //获取单位重复信息
+      getUnitInformation(id){
+        let params = {
+          id: id
+        }
+        this.ajaxJson({
+          url: '/Basic/getUnitInformation',
+          data: params,
+          loading:"0",
+          call: (data)=>{
+            if(this.list.length>0){
+              let a = true
+              let b = ''
+              for(let i=0;i<this.list.length;i++){
+                  if(this.list[i].id===data[0].id){
+                    a=false
+                    b=i
+                  }
+              }
+              if(a){
+                this.list.push(data[0])
+              }else{
+                console.log(this.list.slice(b, 1))
+              }
+            }else{
+              this.isList=true
+              this.list.push(data[0])
+            }
+          }
+        })
+      },
+      //验证公司注册号唯一性
+      verifyRegistrationNumber(){
+        let params = {
+          id: this.id,
+          registrationNumber: this.registrationNumber
+        }
+        this.ajaxJson({
+          url: '/Basic/verifyRegistrationNumber',
+          data: params,
+          loading:"0",
+          call: (data)=>{
+            if(data.type === 0) {
+              this.isList = true
+              this.switchIconShow = true
+              this.$refs.registrationNumber.errorEvent(data.message)
+              this.getUnitInformation(data.id)
+            }else{
+              this.isList = false
+              this.switchIconShow = false
+            }
+          }
+        })
+      },
+      async isVerifyRegistrationNumber(){
+        let params = {
+          id: this.id,
+          registrationNumber: this.registrationNumber
+        }
+        let result = await this.ajaxAsync({
+          url:"/Basic/verifyRegistrationNumber",
+          data: params,
+          loading:"0"
+        })
+        if(result.type === 0){//说明存在，调用控件验证显示规则
+          this.isList = true
+          this.switchIconShow = true
+          this.$refs.registrationNumber.errorEvent(result.message)
+          this.getUnitInformation(result.id)
+          return false
+        }
+        return true
+      },
       /* 视频播放 */
       videoPlay(){
         this.$dialog.OpenWindow({
@@ -198,8 +351,13 @@
               this.code = data.html
               // if(this.prefixLetter === '')
               this.prefixLetter = data.val
+              this.isList = false
+              this.switchIconShow = false
             }else{
               this.$refs.name.errorEvent(data.message)
+              this.getUnitInformation(data.id)
+              this.isList = true
+              this.switchIconShow = true
             }
           }
         })
@@ -224,8 +382,9 @@
         this.prefixLetterRule = 'R0000'
         let a = await this.isRepeatVerifyEvent()
         let b = this.validator()
+        let c = this.isVerifyRegistrationNumber()
         this.prefixLetterRule = ''
-        if (a && b) {
+        if (a && b && c) {
           let params = {
             id: this.id,  //id
             name: this.name,   //单位名称
@@ -269,7 +428,6 @@
             registerOffice: this.registerOffice,
             approvalDate: this.approvalDate,
             registerState: this.registerState,
-            capitalCompany: this.capitalCompany,
             management: this.management,
           }
           this.ajaxJson({
@@ -297,6 +455,7 @@
       }
     },
     created () {
+      this.setQuery2Value('isUrl')
       this.init({
         url: '/Basic/unitVueForm',
         all: (data)=>{
@@ -350,6 +509,53 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+  //重复账号信息的显示隐藏样式
+  .isList{
+    position: fixed;
+    bottom: 0!important;
+  }
+  .duplicateAccount{
+    position: fixed;
+    bottom: -300px;
+    transition: all 0.5s;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 64px;
+    box-shadow: 0px -5px 5px #bfbfbf;
+  }
+  .iconUp{
+    color: #fff;
+    transform:rotate(180deg);
+    transition: all 0.5s;
+  }
+  .switchIconTop2{
+    display: flex;
+    justify-content: center;
+    background-color: #49a9ea;
+    height: 48px!important;
+    line-height: 48px !important;
+    box-shadow:0px 1px 7px #49a9ea ;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 48px;
+    padding: 0!important;
+    border-radius: 50%;
+    margin:0 20px 72px 0;
+  }
+  .switchIconTop{
+    /*display: flex;*/
+    margin-top: 10px;
+    align-items: center;
+    padding:0 22px;
+    height: 20px;
+    line-height: 20px;
 
+  .switchIcon2{
+    font-size: 20px;
+    display: inline-block;
+    float: right;
+  }
+  }
 </style>

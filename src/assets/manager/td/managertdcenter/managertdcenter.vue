@@ -1,6 +1,7 @@
 <template>
     <td @click="clickEvent">
-      <div class="md_center" :style="{color: color}">
+      <div class="md_center md_relative" :style="{color: color}">
+        <div v-if="afterIcon !== ''" class="md_afterIcon" :style="{color:afterIconColor}" :class="[afterIcon,afterIconFontSize]"></div>
         {{value|formats(format,emptyValue,isEmpty)}}
       </div>
     </td>
@@ -30,7 +31,19 @@
       color: {
         type: String,
         default: '#333'
-      }
+      },
+      afterIcon:{
+        type:String,
+        default:''
+      },
+      afterIconColor:{
+        type:String,
+        default:'#18d123'
+      },
+      afterIconFontSize:{
+        type:String,
+        default:'fs14'
+      },
     },
     methods: {
       clickEvent(){

@@ -4,7 +4,13 @@
       phone:{{phone}}
 
 
-      <div @click="selectPrintEvent">选择打印</div>
+      <div style="margin-top: 20px;" @click="payApplyReconDetailForm">批量拨付 - 付款申请</div>
+      <div style="margin-top: 20px;" @click="reimbursementReconDetailForm">批量拨付 - 报销</div>
+      <div style="margin-top: 20px;" @click="unitEvent">查看单位-明细</div>
+
+      <div style="margin-top: 20px;" @click="noTicket">无票</div>
+      <div style="margin-top: 20px;" @click="boardDire">董事费</div>
+      <div style="margin-top: 20px;" @click="ticket">有票</div>
 
 
       <br>
@@ -182,19 +188,63 @@
         }
         this.details.push(item)
       },
-      selectPrintEvent(){
+      payApplyReconDetailForm(){
         this.$dialog.OpenWindow({
-          width: '465',
-          height: '365',
-          title: '选择打印',
-          url: '/selectPrint?id=' + this.ownerID,
+          width: '1050',
+          height: '750',
+          title: '申请-批量拨付',
+          url: '/payApplyReconDetailForm',
           closeCallBack: (data)=>{
             if(data){
               console.log(data)
             }
           }
         })
-      }
+      },
+      reimbursementReconDetailForm(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          title: '报销-批量拨付',
+          url: '/reimbursementReconDetailForm',
+          closeCallBack: (data)=>{
+            if(data){
+              console.log(data)
+            }
+          }
+        })
+      },
+
+      unitEvent(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          title: '单位',
+          url: '/unitBankDetailForm',
+          closeCallBack: (data)=>{
+            if(data){
+              console.log(data)
+            }
+          }
+        })
+      },
+      noTicket(){
+        this.$dialog.OpenWindow({
+          title: '打印报销单信息',
+          url: '/approvalPrintReimbursementTicket?fundID=' + 'D86840BB-830F-4171-BEFC-DD13E4A7256D' + '&ownerID=' + '0',
+          width: '846',
+          height: '614',
+          closeCallBack: (data)=> {
+
+          }
+        })
+      },
+      boardDire(){
+
+      },
+      ticket(){
+
+      },
     }
   }
 </script>

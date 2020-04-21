@@ -27,6 +27,7 @@
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
         <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+        <yhm-commonbutton v-if="showBatchAppropriation" value="批量拨付" icon="i-batchAllca" @call="batchAllca" category="three"></yhm-commonbutton>
       </template>
 
       <!--筛选区-->
@@ -141,6 +142,7 @@
         reimburseNum:'',
         purchaseNum:'',
         prettyCashsNum:'',
+        showBatchAppropriation: false,
         insuranceNum:'',
         stateBefore: '0',
         listState: {
@@ -167,6 +169,19 @@
       }
     },
     methods: {
+      batchAllca(){
+        this.$dialog.OpenWindow({
+          width: '1250',
+          height: '750',
+          title: '批量拨付',
+          url: '/reimbursementReconDetailForm',
+          closeCallBack: (data)=>{
+            if(data){
+              console.log(data)
+            }
+          }
+        })
+      },
       totalClick(item){
         // if(item.val==='总数'){
         //   this.listState.value = ''
@@ -370,6 +385,7 @@
           data: params,
           all: (data) => {
             this.contentTotal = data.total
+            this.showBatchAppropriation = data.showBatchAppropriation
             //不管是不是初始化都需要执行的代码
           },
           init: (data) => {

@@ -42,7 +42,7 @@
             <yhm-managerth style="width: 70px" title="支出金额"></yhm-managerth>
           </template>
           <template #listBody>
-            <tr v-for="(item,index) in content" :key="index" :class="{InterlacBg:index%2!==0}">
+            <tr v-for="(item,index) in list" :key="index" :class="{InterlacBg:index%2!==0}">
               <yhm-manager-td-look @click="listView(item.id)"></yhm-manager-td-look>
               <yhm-manager-td width="130"  :value="item.bankName+item.account+item.nature"></yhm-manager-td>
               <yhm-manager-td-center width="130" v-if="item.otherName.indexOf('style')===-1?true:false" :value="item.otherName"></yhm-manager-td-center>
@@ -81,6 +81,13 @@
     mixins: [formmixin,viewmixin,managermixin],
     data (){
       return {
+        pager: { // 分页数据
+          total: '', // 数据总条数
+          pageSize: 5, // 单页数据条数
+          pageIndex: 1, // 当前页码
+          selectCount: 0 // 选中数据的条数
+        },
+        list:[],
         tabState:[{select:true}],
         category: '',
         categoryList: [],
@@ -119,7 +126,7 @@
           width: '1050',
           height: '750',
           title: '编辑联系人信息',
-          url: '/addPersonForm?id=' + this.id ,
+          url: '/addPersonForm?id=' + this.id+'&url=0',
           closeCallBack: (data)=>{
             if(data){
               this.$dialog.setReturnValue(this.id)
@@ -143,7 +150,8 @@
         if (initValue) {
           // 页面初始化是需要的参数
           params = {
-            unitID:this.id
+            unitID:this.id,
+
           }
         } else {
           // 页面非初始化时需要的参数
@@ -158,6 +166,8 @@
             // 不管是不是初始化都需要执行的代码
           },
           init: (data) => {
+            this.pager.total = data.count
+
             // 初始化时需要执行的代码
             // 这边初始化筛选信息
           }
@@ -165,13 +175,16 @@
       },
       viewTabList(){
         let params = {
-          personID:this.id
+          personID:this.id,
+          pageIndex:this.pager.pageIndex,
+          pageSize:this.pager.pageSize,
         }
         this.ajaxJson({
           url: '/Fin/getUnitOrPersonBankDetail',
           data: params,
           call: (data) => {
-            this.content = data.content
+            this.pager.total = data.count
+            this.list = data.content
           }
         })
       },
@@ -183,7 +196,8 @@
           url: '/Basic/personVueForm',
           data: params,
           call: (data) => {
-            this.content = data.content
+            this.list = data.content
+            this.pager.total = data.count
             this.categoryList = data.categoryPsd.list
             this.category = data.categoryPsd.value
             this.sexList = data.sexPsd.list
@@ -234,8 +248,10 @@
       this.setQuery2Value('videoUrl')
     },
     watch:{
-      content(){
-        this.empty = this.content.length === 0;
+      list(){
+        if(this.list!==undefined){
+          this.empty = this.list.length === 0;
+        }
       }
     },
   }

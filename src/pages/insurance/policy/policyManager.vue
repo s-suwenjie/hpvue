@@ -5,6 +5,8 @@
       <template #navigationTab>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/policy/policyManager'}">保单管理</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/accountsReceivable/accountsReceivableManager'}">应收账款</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/customerRebates/customerRebatesManager'}">客户返利</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/paymentInsurance/payInsuranceFeeManager'}">付保险费</router-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -26,15 +28,16 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="投保日期" value="insuredDate"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth  title="被保险人" value="beinsuredName"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="投保日期" value="insuredDate"></yhm-managerth>
+
         <yhm-managerth style="width: 120px;" title="保险公司" value="insuredUnit"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
 
-        <yhm-managerth @call="actualEvent" v-if="isActual" style="width: 120px;" title="预计盈亏"></yhm-managerth>
-        <yhm-managerth @call="realEvent" v-if="isReal" style="width: 120px;" title="实时盈亏"></yhm-managerth>
+        <yhm-managerth @call="actualEvent" v-if="isActual" style="width: 120px ;" title="预计盈亏"></yhm-managerth>
+        <yhm-managerth @call="realEvent" v-if="isReal" style="width: 120px; " title="实时盈亏"></yhm-managerth>
 
         <yhm-managerth style="width: 120px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="实收金额" value="receivedMoney"></yhm-managerth>
@@ -46,15 +49,15 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
+          <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName"></yhm-manager-td>
           <yhm-manager-td  :tip="true" :value="item.beinsuredName" ></yhm-manager-td>
-          <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
 
-          <yhm-manager-td-money v-if="isActual" :value="item.actualProfitLoss" style=" font-weight:bold"></yhm-manager-td-money>
-          <yhm-manager-td-money v-if="isReal" :value="item.realTimeProfitLoss" style=" font-weight:bold"></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isActual" :value="item.actualProfitLoss" style=" font-weight:bold;"></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isReal" :value="item.realTimeProfitLoss" style=" font-weight:bold;"></yhm-manager-td-money>
 
           <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
@@ -155,7 +158,6 @@
         let params={
           selectValue:this.selectValue
         }
-        console.log( this.listIsFinish,this.selectValue )
         this.ajaxJson({
           url: '/PersonOffice/commonSelectedsave',
           data:params,

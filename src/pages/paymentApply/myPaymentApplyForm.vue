@@ -782,6 +782,9 @@ export default {
             this.isBankDetailEmpty = true
             this.isAddBankDetail = true
           }
+
+          this.money = parseFloat(this.money) - parseFloat(item.money)
+
         }
       })
     },
@@ -1666,6 +1669,14 @@ export default {
     money () {
       this.capitalMoney = number2chinese(this.money)
       this.actualMoney = this.money
+    },
+    bankDetailList(){
+      let sumMoney = 0;
+      for(let i in this.bankDetailList){
+        let money = this.bankDetailList[i].money
+        sumMoney = accAdd( money,sumMoney)
+      }
+      this.money = sumMoney + ''
     },
   },
   computed:{

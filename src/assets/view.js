@@ -1,4 +1,5 @@
 import Qs from 'qs'
+import { tenThousandFormatHtml} from '@/assets/common.js'
 const viewmixin = {
   provide () {
     return {
@@ -22,6 +23,10 @@ const viewmixin = {
     }
   },
   methods: {
+    //万位分割金额，字体变色和缩放
+    tenThousandFormatShow(data){
+      return tenThousandFormatHtml(data)
+    },
     setQuery2Value(key){
       let query = Qs.parse(location.search.substring(1))
       let js = 'let val = query.' + key + '; if(val) this.' + key + ' = val;'
