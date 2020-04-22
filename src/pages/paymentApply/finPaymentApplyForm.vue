@@ -19,8 +19,8 @@
     </yhm-view-body>
 
     <div class="f_split"></div>
-    <div class="i-left fs48b colorFFF" title="上一条" v-show="isLeftID"  @click="leftStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom: 300px;z-index: 9999;display:flex;justify-content:center;align-items:center;"></div>
-    <div class="i-right fs48b colorFFF" title="下一条" v-show="isRightID" @click="rightStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom: 300px;right:0px;z-index: 9999;display:flex;justify-content:center;align-items:center;"></div>
+    <div class="i-left fs48b colorFFF lftSwitchArrow" title="上一条" v-show="isLeftID"  @click="leftStrip"></div>
+    <div class="i-right fs48b colorFFF rgtSwitchArrow" title="下一条" v-show="isRightID" @click="rightStrip"></div>
 
     <yhm-view-tab>
       <template #tab>
@@ -81,7 +81,7 @@
           </template>
           <template #listBody>
             <tr v-for="(item,index) in bankDetailList" :class="{InterlacBg:index%2!=0}" :key="index">
-              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount === null? '':item.otherAccount"></yhm-manager-td>
               <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
               <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
               <yhm-manager-td :value="item.subject"></yhm-manager-td>
@@ -107,13 +107,13 @@
           <template #listBody>
             <tr v-for="(item,index) in appropriationMoney" :class="{InterlacBg:index%2!=0}" :key="index">
               <yhm-manager-td :value="item.selfAccount"></yhm-manager-td>
-              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount === null? '':item.otherAccount"></yhm-manager-td>
               <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
               <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
               <yhm-manager-td :value="item.subject"></yhm-manager-td>
               <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
               <yhm-manager-td :value="item.remark"></yhm-manager-td>
-              <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.storeName" :tag="'bankDetail'" ></yhm-manager-td-image>
+              <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.storeName === null ? '': item.storeName" :tag="'bankDetail'" ></yhm-manager-td-image>
             </tr>
           </template>
         </yhm-view-tab-list>
@@ -227,6 +227,7 @@ export default {
 
       isAllocationList: [],
       isAllocation: '',
+      personOrUnit: '',
 
       isLeftID:false,//延长按钮
       leftID:'',//上一条ID
@@ -236,11 +237,17 @@ export default {
   },
   methods: {
     iconClick(){
+      let url = '';
+      if(this.personOrUnit === '1'){
+        url = '/unitBankDetailForm?personID='+ this.content.otherUnitID
+      }else{
+        url = '/unitBankDetailForm?unitID='+ this.content.otherUnitID
+      }
       this.$dialog.OpenWindow({
         width: '1050',
-        height: '780',
+        height: '640',
         title: '查看收支明细',
-        url: '/unitBankDetailForm?unitID='+this.content.unitID,
+        url: url,
         closeCallBack: (dataTwo)=>{
         }
       })
@@ -409,6 +416,7 @@ export default {
         this.lastDate = data.lastDate
         this.message = data.code
         this.money = data.money
+        this.personOrUnit = data.personOrUnit
         this.capitalMoney = data.capitalMoney
         this.remark = data.remark
         this.paymentInvoice = data.paymentInvoice

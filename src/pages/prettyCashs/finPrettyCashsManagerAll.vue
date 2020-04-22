@@ -35,8 +35,8 @@
         <yhm-managerth style="width: 60px;" title="占用天数" value="workDateDay"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="申请金额" value="money"></yhm-managerth>
 
-        <yhm-managerth style="width: 120px;" title="拨款金额" value="bankDetailMoney"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="核销金额" value="reimbursementsMoney"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="拨款金额" value="bankDetailMoney"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="核销金额" value="reimbursementsMoney"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="待退回金额" value="balance"></yhm-managerth>
 
         <yhm-managerth style="width: 120px;" title="已退回金额" value="balance"></yhm-managerth>
@@ -47,7 +47,7 @@
         <yhm-managerth style="width: 120px;" title="预计核销日期" value="estimateDate"></yhm-managerth>
         <yhm-managerth style="width: 60px;" title="倒计时" value="day"></yhm-managerth>
 
-        <yhm-managerth style="width: 80px;" title="状态" value=""></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="状态" value=""></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in content" :key="index" :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]">

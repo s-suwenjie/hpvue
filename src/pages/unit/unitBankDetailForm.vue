@@ -49,7 +49,7 @@
             <tr>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="收入" ></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="支出" ></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="余额" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="区间差额" ></yhm-managerth>
             </tr>
             </thead>
             <tbody>
@@ -85,6 +85,8 @@
         contentTotal:[],
         income:'',
         expend:'',
+        unitID:'',
+        personID:'',
         balance:'',
         direction:'',
         directionPsd:{
@@ -127,50 +129,61 @@
           }
         })
       },
-      initPageData (initValue) {
-        let params = {}
-        if (initValue) {
-          // 页面初始化是需要的参数
-          params = {
-            init: true,
-          }
-        } else {
-          // 页面非初始化时需要的参数
-          params = {
-            direction: this.directionPsd.value,
-            dateType:this.dateTypeList.value,
-            startDate:this.startDate,//开始时间
-            endDate:this.endDate,//结束时间
-            unitID: this.unitID,
-            init: false
-          }
-        }
-        this.init({
-          initValue: initValue,
-          url: '/Fin/getUnitOrPersonBankDetail',
-          data: params,
-          all: (data) => {
-            // 不管是不是初始化都需要执行的代码
-            this.content = data.content
-            this.contentTotal = data.total
-            this.income = this.contentTotal[0].income
-            this.expend = this.contentTotal[0].expend
-            this.balance = this.contentTotal[0].balance
 
-          },
-          init: (data) => {
-            // 初始化时需要执行的代码
-            // 这边初始化筛选信息
-            this.directionPsd = data.directionPsd
-            this.startDate = data.startDate//开始时间
-            this.endDate = data.endDate//结束时间
+      initPageData (initValue) {
+        this.$nextTick(()=>{
+          let params = {
+
+          };
+
+          if (initValue) {
+            // 页面初始化是需要的参数
+            params = {
+              init: true,
+              unitID: this.unitID,
+              personID: this.personID,
+            }
+
+          } else {
+            // 页面非初始化时需要的参数
+            params = {
+              direction: this.directionPsd.value,
+              dateType:this.dateTypeList.value,
+              startDate:this.startDate,//开始时间
+              endDate:this.endDate,//结束时间
+              unitID: this.unitID,
+              personID: this.personID,
+              init: false
+            }
           }
+
+          this.init({
+            initValue: initValue,
+            url: '/Fin/getUnitOrPersonBankDetail',
+            data: params,
+            all: (data) => {
+              // 不管是不是初始化都需要执行的代码
+              this.content = data.content
+              this.contentTotal = data.total
+              this.income = this.contentTotal[0].income
+              this.expend = this.contentTotal[0].expend
+              this.balance = this.contentTotal[0].balance
+
+            },
+            init: (data) => {
+              // 初始化时需要执行的代码
+              // 这边初始化筛选信息
+              this.directionPsd = data.directionPsd
+              this.startDate = data.startDate //开始时间
+              this.endDate = data.endDate//结束时间
+            }
+          })
         })
       },
     },
     created() {
-      this.setQuery2Value('unitID')
-      this.initData()
+      this.setQuery2Value('unitID');
+      this.setQuery2Value('personID');
     }
   }
 </script>

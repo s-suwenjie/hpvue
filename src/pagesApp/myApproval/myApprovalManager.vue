@@ -4,6 +4,7 @@
       <template #scroll0>
         <yhm-app-structure-menu-group title="我的审批" v-if="myApprovalShow">
           <yhm-app-menu :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[0].menu" :key="index" v-show="routerList[index].id==item.id&&routerList[index].state=='1'" :url="item.imgUrl" :num="cornerMark[index]"></yhm-app-menu>
+          <yhm-app-menu @call="goto('/homeApp/m_approvalPrettyCashsManager?isFinish=1','0')" name="备用金" url="/UploadFile/m_image/menu/prettyCashs.svg"></yhm-app-menu>
         </yhm-app-structure-menu-group>
       </template>
       <template #scroll1>
@@ -144,13 +145,13 @@
               url:'/homeApp/m_interestRateManager?isFinish=1',
               id:'AA05FB98-153D-4BEB-8572-918ABDBC1487',
             },
-            {
-              name:'备用金',
-              imgUrl:'/UploadFile/m_image/menu/prettyCashs.svg',
-              url:'/homeApp/m_approvalPrettyCashsManager?isFinish=1',
-              id:'ABFCD5F9-1FB9-49C0-9405-E229239B4727',
-              num:'',
-            },
+            // {
+            //   name:'备用金',
+            //   imgUrl:'/UploadFile/m_image/menu/prettyCashs.svg',
+            //   url:'/homeApp/m_approvalPrettyCashsManager?isFinish=1',
+            //   id:'ABFCD5F9-1FB9-49C0-9405-E229239B4727',
+            //   num:'',
+            // },
           ]
         },
       ]}

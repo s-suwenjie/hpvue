@@ -6,7 +6,7 @@
         <router-link class="menuTabDiv " :to="{path:'/home/policy/policyManager'}">保单管理</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/accountsReceivable/accountsReceivableManager'}">应收账款</router-link>
         <router-link class="menuTabDiv " :to="{path:'/home/customerRebates/customerRebatesManager'}">客户返利</router-link>
-        <outer-link class="menuTabDiv" :to="{path:'/home/paymentInsurance/payInsuranceFeeManager'}">付保险费</outer-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/paymentInsurance/payInsuranceFeeManager'}">付保险费</router-link>
       </template>
       <!--操作区-->
       <template #operate>

@@ -17,9 +17,9 @@
       </template>
     </yhm-view-body>
     <div class="f_split"></div>
-    <div class="i-left fs48b colorFFF" title="上一条" v-show="isLeftID"  @click="leftStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: absolute;  bottom: 0px;z-index: 9999;display:flex;justify-content:center;align-items:center;">
+    <div class="i-left fs48b colorFFF lftSwitchArrow" title="上一条" v-show="isLeftID"  @click="leftStrip">
     </div>
-    <div class="i-right fs48b colorFFF" title="下一条" v-show="isRightID" @click="rightStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: absolute;  bottom: 0px;right:0px;z-index: 9999;display:flex;justify-content:center;align-items:center;">
+    <div class="i-right fs48b colorFFF rgtSwitchArrow" title="下一条" v-show="isRightID" @click="rightStrip">
     </div>
     <yhm-view-tab>
       <template #tab>
@@ -102,7 +102,7 @@
             </tr>
           </template>
           <template #empty>
-            <span class="m_listNoData" v-show="empty">暂时没有数据</span>
+            <span class="m_listNoData" v-show="particularsEmpty">暂时没有数据</span>
           </template>
           <template #pager>
             <yhm-pagination :pager="pager" is-page-size="false" @initData="particulars"></yhm-pagination>
@@ -222,6 +222,12 @@
             if(this.appropriationMoney.length>0){
               this.isAppropriationMoney=true
             }
+            if(!this.isAppropriationMoney){
+              this.particulars()
+              this.tabState = [
+                {select:false},{select:true}
+              ]
+            }
           },
           add: (data)=>{
 
@@ -263,12 +269,23 @@
         })
       }
     },
+    computed:{
+      particularsEmpty(){
+        if(this.particularsList.length>=1) {
+          return false
+        }else{
+          return true
+        }
+
+      }
+    },
     created () {
       this.setQuery2Value('isApproval')
       this.setQuery2Value('approval')
       this.initData()
       this.selectedList()
-    },watch:{
+    },
+    watch:{
       content(){
         this.empty = this.content.length === 0;
       }

@@ -10,7 +10,7 @@
         <yhm-form-select title="对方账户" :value="otherAccount" id="otherAccount" width="1" rule="R0000" :no-click="true"></yhm-form-select>
 
 
-        <yhm-form-select title="部门" @click="branchEvent" :value="branch" id="branch" rule="R0000"></yhm-form-select>
+<!--        <yhm-form-select title="部门" @click="branchEvent" :value="branch" id="branch"></yhm-form-select>-->
         <yhm-form-select title="业务员" @click="operatorEvent" :value="operator" id="operator" rule="R0000"></yhm-form-select>
 
         <yhm-form-text title="工单号" @repeatverify="VerifyworkOrder" ref="workOrderID" :value="workOrderID" id="workOrderID" rule="R0000"></yhm-form-text>
@@ -23,7 +23,7 @@
 <!--        <yhm-form-text title="车辆品牌" :value="brand" id="brand" rule="R0000"></yhm-form-text>-->
 
 
-        <yhm-form-text title="发票" @call="invoiceEvent" :value="invoiceID" id="invoiceID" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="发票" @call="invoiceEvent" :value="invoiceID" id="invoiceID"></yhm-form-text>
         <yhm-form-date title="结算日期" :value="settlementDate" id="settlementDate" rule="R0000" position="u"></yhm-form-date>
 
 
@@ -36,8 +36,8 @@
     </yhm-formbody>
 
     <div class="f_split"></div>
-    <div class="i-left fs48b colorFFF" title="上一条" v-show="isLeftID"  @click="leftStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom: 300px;z-index: 9999;display:flex;justify-content:center;align-items:center;"></div>
-    <div class="i-right fs48b colorFFF" title="下一条" v-show="isRightID" @click="rightStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: fixed;  bottom: 300px;right:0px;z-index: 9999;display:flex;justify-content:center;align-items:center;"></div>
+    <div class="i-left fs48b colorFFF lftSwitchArrow" title="上一条" v-show="isLeftID"  @click="leftStrip"></div>
+    <div class="i-right fs48b colorFFF rgtSwitchArrow" title="下一条" v-show="isRightID" @click="rightStrip"></div>
 
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
@@ -149,20 +149,20 @@
 
       },
       /* 选择部门 */
-      branchEvent(){
-        this.$dialog.OpenWindow({
-          url:"/selectDepartment?level=2&open=1",
-          width:"850",
-          height:"600",
-          title: "选择部门",
-          closeCallBack: (data) => {
-            if (data) {
-              this.branch = data.name
-              this.branchID = data.id
-            }
-          }
-        })
-      },
+      // branchEvent(){
+      //   this.$dialog.OpenWindow({
+      //     url:"/selectDepartment?level=2&open=1",
+      //     width:"850",
+      //     height:"600",
+      //     title: "选择部门",
+      //     closeCallBack: (data) => {
+      //       if (data) {
+      //         this.branch = data.name
+      //         this.branchID = data.id
+      //       }
+      //     }
+      //   })
+      // },
       /* 选择业务员 */
       operatorEvent(){
         this.$dialog.OpenWindow({
@@ -284,8 +284,8 @@
             this.money = data.money
             this.customerName = data.customerName
             this.licensePlateNumber = data.licensePlateNumber
-            this.branch = data.branch
-            this.branchID = data.branchID
+            // this.branch = data.branch
+            // this.branchID = data.branchID
 
             this.vehicleBrandID = data.vehicleBrandID
             this.vehicleBrand = data.vehicleBrand

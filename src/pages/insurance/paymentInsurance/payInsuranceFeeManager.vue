@@ -41,7 +41,7 @@
           <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName"></yhm-manager-td>
           <yhm-manager-td-psd  @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
-          <yhm-manager-td @click="unitDetail(item)" :value="item.otherAccount" ></yhm-manager-td>
+          <yhm-manager-td @click="unitDetail(item)" :tip="true" :value="item.otherAccount" ></yhm-manager-td>
           <yhm-manager-td-money  :value="item.invoicingMoney"></yhm-manager-td-money>
           <yhm-manager-td :value="item.numbering"></yhm-manager-td>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>

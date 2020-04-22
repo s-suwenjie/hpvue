@@ -64,6 +64,7 @@
         isHide:true,
         isDisplacement:true,
         idNo: '',
+        registrationNumber:'',
 
       }
     },
@@ -122,6 +123,11 @@
               if(data) {
                 this.carOwnerID = data.id
                 this.carOwner = data.name
+                this.registrationNumber=data.registrationNumber
+                if (this.registrationNumber===''){
+                  this.updataselectUnit(data.id)
+                }
+
               }
             },
           })
@@ -130,16 +136,35 @@
 
       updataSelectPerson(id){
         this.$dialog.OpenWindow({
-          width: 950,
+          width: 1050,
           height: 692,
           url: '/addPersonForm?id=' + id,
           title: '选择联系人',
           closeCallBack: (data) => {
             if (data) {
-              
+
+            }else{
+              this.carOwnerID = ''
+              this.carOwner = ''
             }
           }
         })
+      },
+      updataselectUnit(id){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 692,
+          url: '/addUnitForm?id=' + id,
+          title: '选择单位信息',
+          closeCallBack: (data) => {
+            if (data) {
+
+            }else {
+              this.carOwnerID = ''
+              this.carOwner = ''
+            }
+          }
+          })
       },
 
       selectColour(){

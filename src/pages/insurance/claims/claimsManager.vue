@@ -1,12 +1,12 @@
 <template>
     <div>
-      <yhm-managerpage category="1" :total-table="true" :totalWidth="true">
+      <yhm-managerpage :category="isCategory" :total-table="true" :totalWidth="true">
         <!--导航条-->
-        <template #navigationTab>
+        <template #navigationTab v-if="isPersonalClaims">
           <a class="menuTabDiv" href="/Fin/bankDetailManager?menuType=0">收支明细</a>
           <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/viewManager/claimsManager'}">保险理赔</router-link>
-
         </template>
+        <template #navigation v-if="!isPersonalClaims">个人办公&nbsp;&gt;&nbsp;个人办公&nbsp;&gt;&nbsp;保险理赔</template>
         <!--操作区-->
         <template #operate>
 <!--          <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>-->
@@ -36,7 +36,6 @@
           <yhm-managerth title="保险公司" value="otherName"></yhm-managerth>
           <yhm-managerth style="width: 140px;" title="工单号" value="workOrderID"></yhm-managerth>
           <yhm-managerth style="width: 120px" title="业务员" value="operator"></yhm-managerth>
-          <yhm-managerth style="width: 90px" title="部门" value="branch"></yhm-managerth>
           <yhm-managerth style="width: 100px;" title="车型品牌" value="vehicleType"></yhm-managerth>
           <yhm-managerth style="width: 120px" title="车牌号" value="licensePlateNumber"></yhm-managerth>
           <yhm-managerth style="width: 120px;" title="回款日期" value="moneyBackDate"></yhm-managerth>
@@ -55,7 +54,6 @@
             <yhm-manager-td :tip="true" :value="item.otherName"></yhm-manager-td>
             <yhm-manager-td :value="item.workOrderID"></yhm-manager-td>
             <yhm-manager-td :value="item.operator"></yhm-manager-td>
-            <yhm-manager-td :value="item.branch" ></yhm-manager-td>
             <yhm-manager-td :value="item.vehicleType"></yhm-manager-td>
             <yhm-manager-td :value="item.licensePlateNumber"></yhm-manager-td>
             <yhm-manager-td-date :value="item.moneyBackDate"></yhm-manager-td-date>
@@ -100,6 +98,9 @@
         content:[],
         bank:'0',
         yearMonth: '',
+        isCategory: '1',
+        isPersonalClaims: true,
+        isClaims: '',
         radioTime: {},
         bankList: {
           value: '',
@@ -141,6 +142,9 @@
       }
     },
     methods:{
+      totalClick(){
+
+      },
       initChoose(item){
         this.radioTime = item;
         this.initPageData(false)
@@ -227,12 +231,27 @@
       //   })
       // },
       initPageData (initValue) {
-        let params = {}
+        let params = {};
         if (initValue) {
-          params = {
 
+          let nowDate = new Date();
+          let newYear = nowDate.getFullYear();
+          let newMonth = nowDate.getMonth() + 1;
+          let newDate = nowDate.getDate();
+          let newHours = nowDate.getHours();
+          let newMin = nowDate.getMinutes();
+          let newSec = nowDate.getSeconds();
+          let lastDate = newDate - 1;
+
+          let startDate = newYear + '-' + newMonth + '-' + lastDate + ' ' + '23:59:59';
+          let endDate = newYear + '-' + newMonth + '-' + newDate + ' ' + newHours + ':' + newMin + ':' + newSec;
+
+          params = {
+            startDate: startDate,
+            endDate: endDate,
           }
         } else {
+
           params = {
             bankID: this.bankList.value,
             unitID: this.insuranceUnitList.value,
@@ -261,8 +280,14 @@
       },
     },
     created () {
-      let month = new Date().getMonth() + 1
+      let month = new Date().getMonth() + 1;
       this.yearMonth = new Date().getFullYear()+ '-' + month
+      this.setQuery2Value('isClaims');
+      console.log(this.isClaims);
+      if(this.isClaims === '0'){
+        this.isPersonalClaims = false
+        this.isCategory = '0'
+      }
     },
     watch: {
       month:{

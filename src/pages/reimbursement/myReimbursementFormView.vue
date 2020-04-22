@@ -11,9 +11,9 @@
       </template>
     </yhm-view-body>
     <div class="f_split"></div>
-    <div class="i-left fs48b colorFFF" title="上一条" v-show="isLeftID"  @click="leftStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: absolute;  bottom: 100px;z-index: 9999;display:flex;justify-content:center;align-items:center;">
+    <div class="i-left fs48b colorFFF lftSwitchArrow" title="上一条" v-show="isLeftID"  @click="leftStrip">
     </div>
-    <div class="i-right fs48b colorFFF" title="下一条" v-show="isRightID" @click="rightStrip" style="width:48px;height:70px;background: #000;opacity:0.3;position: absolute;  bottom: 100px;right:0px;z-index: 9999;display:flex;justify-content:center;align-items:center;">
+    <div class="i-right fs48b colorFFF rgtSwitchArrow" title="下一条" v-show="isRightID" @click="rightStrip">
     </div>
     <yhm-view-tab>
       <template #tab>

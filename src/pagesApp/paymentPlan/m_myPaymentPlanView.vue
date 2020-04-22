@@ -28,7 +28,7 @@
           v-if="item.state==states&&states==9">
             <yhm-app-button @call="rejectEvent(1,item.id,index)"  v-if="getShowOperate" value="驳回" category="ten"></yhm-app-button>
             <yhm-app-button @call="adoptEvent(1,item.id,index)"  v-if="getShowOperate" value="通过" category="two"></yhm-app-button>
-          </yhm-app-structure-group-operate>
+        </yhm-app-structure-group-operate>
       </yhm-app-structure-menu-group>
     </yhm-app-scroll>
 

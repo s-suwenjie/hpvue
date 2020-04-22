@@ -25,7 +25,7 @@
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth  style="width: 130px;" title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth  style="width: 100px;" title="联系人" value="contactName"></yhm-managerth>
-        <yhm-managerth  style="width: 200px;"  title="被保险人" value="beinsuredName"></yhm-managerth>
+        <yhm-managerth  style="width: 150px;"  title="被保险人" value="beinsuredName"></yhm-managerth>
         <yhm-managerth  title="投保日期" value="insuredDate"></yhm-managerth>
         <yhm-managerth  title="保险公司" value="insuredUnit"></yhm-managerth>
         <yhm-managerth  style="width: 100px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
@@ -34,7 +34,7 @@
         <yhm-managerth  style="width: 100px;" title="审批人员" value="insuranceFormulatorName"></yhm-managerth>
         <yhm-managerth  title="状态" value="status"></yhm-managerth>
 
-        <yhm-managerth  style="width: 260px;" title="操作"></yhm-managerth>
+        <yhm-managerth  style="width: 230px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -44,7 +44,7 @@
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td  :value="item.plate" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
-          <yhm-manager-td  :value="item.beinsuredName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
+          <yhm-manager-td :tip="true" :value="item.beinsuredName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td-date :value="item.insuredDate"  @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-date>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>

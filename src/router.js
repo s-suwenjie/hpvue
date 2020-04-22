@@ -416,6 +416,9 @@ import m_finReimbursementView from './pagesApp/reimbursement/m_finReimbursementV
 import m_approvalPrettyCashsManager from './pagesApp/prettyCashs/m_approvalPrettyCashsManager'
 import m_approvalPrettyCashsView from './pagesApp/prettyCashs/m_approvalPrettyCashsView'
 
+import m_finPrettyCashsManager from './pagesApp/prettyCashs/m_finPrettyCashsManager'
+import m_finPrettyCashsView from './pagesApp/prettyCashs/m_finPrettyCashsView'
+
 /* 移动端 - 资金图表动态 - 资金动态*/
 import m_fundDynamicsChartView from './pagesApp/fundDynamics/m_fundDynamicsChartView'
 import m_fundDynamicsView from './pagesApp/fundDynamics/m_fundDynamicsView'
@@ -853,6 +856,8 @@ export default new Router({
 
         { path: '/homeApp/m_approvalPrettyCashsManager', name: 'm_approvalPrettyCashsManager', component: m_approvalPrettyCashsManager ,meta: {title: '备用金'}},
         { path: '/homeApp/m_approvalPrettyCashsView', name: 'm_approvalPrettyCashsView', component: m_approvalPrettyCashsView ,meta: {title: '备用金'}},
+        { path: '/homeApp/m_finPrettyCashsManager', name: 'm_finPrettyCashsManager', component: m_finPrettyCashsManager ,meta: {title: '备用金'}},
+        { path: '/homeApp/m_finPrettyCashsView', name: 'm_finPrettyCashsView', component: m_finPrettyCashsView ,meta: {title: '备用金'}},
 
 
         { path: '/homeApp/m_fundDynamicsChartView', name: 'm_fundDynamicsChartView', component: m_fundDynamicsChartView ,meta: {title: '资金动态'}},
