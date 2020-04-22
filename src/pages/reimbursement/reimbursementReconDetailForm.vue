@@ -21,7 +21,7 @@
           <yhm-manager-td :value="item.subject ? item.subject: '' " :after-icon="parseInt(item.subjectCount) > 1 ?'i-btn-prompt':''" @click="clickIconEvent(item,index)"></yhm-manager-td>
           <yhm-manager-td-money  :value="item.money"></yhm-manager-td-money>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button v-if="item.category&&!item.finish" @click="approvalBatch(item,index)" style="color:#2f54eb" icon="i-batchAllca" value="批量审批"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-if="item.category&&!item.finish" @click="approvalBatch(item,index)" style="color:#2f54eb" icon="i-batchAllca" value="设置批量拨付"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-if="item.category !== '1'&&item.finish" @click="revocation(item,index)"  style="color:#f00" icon="i-uniE99F" value="撤销批量拨付"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.finish==false?true:false" v-if="item.category" style="color:#A60CDE" icon="i-batchAllca" value="批量拨付"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.finish==false?true:false" v-if="item.category" @click="bulkPrint(item)" style="color:#333" icon="i-btn-print" value="批量打印"></yhm-manager-td-operate-button>

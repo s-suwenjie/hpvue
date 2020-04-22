@@ -27,8 +27,10 @@
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button v-if="item.category !== '1'&&item.finish==false" @click="approvalBatch(item,index)" style="color:#2f54eb" icon="i-batchAllca" value="设置批量拨付"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-if="item.category !== '1'&&item.finish" @click="revocation(item,index)"  style="color:#f00" icon="i-uniE99F" value="撤销批量拨付"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button :no-click="item.finish==false?true:false" v-if="item.category !== '1'" style="color:#A60CDE" icon="i-batchAllca" value="批量拨付"></yhm-manager-td-operate-button>
+
             <yhm-manager-td-operate-button :no-click="item.finish==false?true:false" v-if="item.category !== '1'" @click="bulkPrint(item)" style="color:#333" icon="i-btn-print" value="批量打印"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :no-click="item.finish==false?true:false" v-show="item.isChecks==='0'" v-if="item.category !== '1'" @click="batchPayment(item)" style="color:#A60CDE" icon="i-batchAllca" value="批量拨付"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :no-click="item.finish==false?true:false" v-show="item.isChecks==='1'" v-if="item.category !== '1'" @click="checksFillIn(item)" style="color:#A60CDE" icon="i-batchAllca" value="支票填开"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-if="item.category === '1'" @click="removeApproval(item,index)" style="color:#ec6603" icon="btnDel" value="移除"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
@@ -57,6 +59,58 @@
       }
     },
     methods: {
+      //批量拨付  支票填开
+      checksFillIn(item){
+        this.$dialog.OpenWindow({
+          url: '/selectChecksDetail?stateBefore=1&state=0&category=',
+          width: "1000",
+          height: "650",
+          title: '选择支票',
+          closeCallBack: (data) => {
+            if (data) {
+              if(data.category==='0'){
+                this.$dialog.OpenWindow({
+                  width: '1050',
+                  height: '690',
+                  title: '支票填开',
+                  url: '/checkFillOut?ownerID=' + data.id+"&otherOwnerID="+item.id+'&otherCategory=2',
+                  closeCallBack: (information) => {
+                    if (information) {
+                      this.initPageData(false)
+                    }
+                  }
+                })
+              }else{
+                if(item.personOrUnit==='0'){
+                  this.$dialog.OpenWindow({
+                    width: '1050',
+                    height: '690',
+                    title: '支票填开',
+                    url: '/checkFillOut?ownerID=' + data.id+"&otherOwnerID="+item.id+'&otherCategory=2',
+                    closeCallBack: (information) => {
+                      if (information) {
+                        this.initPageData(false)
+                      }
+                    }
+                  })
+                }
+              }
+            }
+          }
+        })
+      },
+      //批量拨付  转账
+      batchPayment(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          title: '拨付资金',
+          url: '/bankDetailForm?ownerID=' + item.id +'&bankDetailType=12&directionBefore=1',
+          closeCallBack: (data)=>{
+            this.initPageData(false)
+          }
+        })
+      },
       //批量打印
       bulkPrint(item){
         let params = {

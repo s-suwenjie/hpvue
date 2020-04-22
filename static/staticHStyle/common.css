@@ -154,6 +154,11 @@ input {
     display: flex;
     align-items: center;
 }
+.logo img{
+    width: 72%;
+    display: block;
+    margin: 0 auto;
+}
 .logoIcon{
     width: 33px;
     height: 33px;

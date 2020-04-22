@@ -51,7 +51,7 @@
         </div>
         <div class="print_main_table2 print_main_table2_height" >
           <span style="height: 70px !important;" class="table_title_span span1">合 计</span>
-          <span style="height: 70px !important;" class="table_title_span span2"></span>
+          <span style="height: 70px !important;" class="table_title_span span2">{{totalMoney}}</span>
             <div class="print_approver" style="">
               <span>领导审批</span>
             </div>
@@ -102,6 +102,7 @@
         imgUrl:'',//编号一维码
         branch:'销售部-程序员',//部门
         time:'',//日期
+        serialNumber:'',//编号
         list:[
           {
             purpose:'',//用途

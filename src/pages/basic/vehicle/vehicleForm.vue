@@ -63,6 +63,7 @@
         isHides:true,
         isHide:true,
         isDisplacement:true,
+        idNo: '',
 
       }
     },
@@ -97,20 +98,24 @@
         if(this.assort=== '1'){
         this.$dialog.OpenWindow({
           width: 950,
-          height: 604,
+          height: 692,
           url: '/selectPerson?category=1&simplify=1',
           title: '选择车辆所有人',
           closeCallBack: (data) => {
             if(data){
               this.carOwnerID=data.id
               this.carOwner = data.name
+              this.idNo = data.idNo
+              if(this.idNo === ''){
+                this.updataSelectPerson(data.id)
+              }
             }
           },
         })
         }else{
           this.$dialog.OpenWindow({
             width: 950,
-            height: 604,
+            height: 692,
             url: '/selectUnit?category=1&simplify=1',
             title: '选择车辆所有人',
             closeCallBack: (data) => {
@@ -121,6 +126,20 @@
             },
           })
         }
+      },
+
+      updataSelectPerson(id){
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 692,
+          url: '/addPersonForm?id=' + id,
+          title: '选择联系人',
+          closeCallBack: (data) => {
+            if (data) {
+              
+            }
+          }
+        })
       },
 
       selectColour(){

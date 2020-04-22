@@ -123,10 +123,9 @@
       }
     },
     computed:{
-
       getUrl(){
-        return function(id,isFinish,isApproval){
-          return '/homeApp/m_finPaymentPlanView?id=' + id + '&isFinishBack=' + isFinish + '&isApproval=' + isApproval
+        return function(id,isFinish){
+          return '/homeApp/m_finPaymentPlanView?id=' + id + '&isFinishBack=' + isFinish
         }
       }
     },

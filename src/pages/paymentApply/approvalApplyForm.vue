@@ -631,6 +631,11 @@ export default {
             this.appropriationMoney=data.appropriationMoney
             this.isAppropriationMoney=true
           }
+
+          if(this.paymentInvoice.length > 0){
+            this.isElInvoice = true
+          }
+
           if(this.isRelevance === '0'){
             this.planIn = true
             this.planOut = false

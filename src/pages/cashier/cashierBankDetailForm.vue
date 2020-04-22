@@ -63,7 +63,7 @@
 
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton value="拨付资金" color="#fff" bg-color="#f00" :flicker="true" icon="btnSave" @call="save()"></yhm-commonbutton>
+        <yhm-commonbutton value="拨付资金"   color="#fff" bg-color="#f00" :flicker="true" icon="btnSave" @call="save()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
 

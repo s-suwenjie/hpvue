@@ -86,7 +86,7 @@
       <template #title >更多信息</template>
       <template #control  >
         <yhm-form-text title="支付金额" tip="money" before-icon="rmb" :value="money" id="money" rule="R3000" :no-edit="isInvoice" placeholder="请输入数字" error-message="纯数字输入"></yhm-form-text>
-        <yhm-form-text title="金额大写" :value="capitalMoney" id="capitalMoney" rule="R0000" no-edit="1"></yhm-form-text>
+        <yhm-form-text title="金额大写" tip="capitalMoney" :value="capitalMoney" id="capitalMoney" rule="R0000" no-edit="1"></yhm-form-text>
         <yhm-form-drop-down-select :show="isCause" title="付款事由" width="1" @select="selectCause" :select-list="ownerSysPsd" :selectValue="ownerSys" selectid="ownerSys" :value="subject" id="subject" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>
 <!--        <yhm-form-radio :show="PrepaidHiddenA" title="用途代码" @call="initCode" width="1" :select-list="useNumList" :value="useNum" id="useNum" :no-edit="disable"></yhm-form-radio>-->
         <yhm-form-date title="最迟" @call="initCode" subtitle="付款日期" :min="nowDate" :value="lastDate" id="lastDate" position="r" rule="R0000"></yhm-form-date>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" ref="aaa" :style="getWidth" class="c_main" :class="{c_main_m:category === 'm'}" v-validator="validatorEvent" v-click-control-outside="closedatepanel">
+  <div v-if="show" ref="aaa" :style="getWidth" class="c_main" :class="[{c_main_m:category === 'm'},{c_smmain: isSm}]" v-validator="validatorEvent" v-click-control-outside="closedatepanel">
     <div @contextmenu.prevent v-show="datepanelShow" class="dp_main disable_menu" :style="{left: getDatepanelPosition.left,bottom: getDatepanelPosition.bottom}">
       <div v-show="date.current">
         <div class="dp_up">
@@ -26,7 +26,7 @@
           <span @click="nextMoreYear" class="dp_icon i-btn-next-year"></span>
         </div>
         <div class="dp_middle">
-          <div v-for="(item,index) in date.selectYears" :key="index" @click="selectYeared(item)" class="yearMonth" :class="{current:getSelectCurrentYear(item)}">{{item}}年</div>
+          <div v-for="(item,index) in date.selectYears" :key="index" @click="selectYeared(item)" class="yearMonth" :class="{current:getSelectCurrentYear(item),dp_current:getCurrentDate(item),dp_no:!getIsYearRange(item)}">{{item}}年</div>
         </div>
       </div>
       <div v-show="date.selectMonth">
@@ -42,9 +42,9 @@
         </div>
       </div>
     </div>
-    <div @click="clickEvent" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box" :class="{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_disable:noEdit}">
-      <span class="c_icon" :class="[iconStyle,{c_icon_m:category === 'm'}]"></span>
-      <div class="dp_content" :style="getTxtWidth" :class="{dp_content_m:category === 'm'}">
+    <div @click="clickEvent" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box" :class="[{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_disable:noEdit},{c_smbox: isSm}]">
+      <span class="c_icon" :class="[iconStyle,{c_icon_m:category === 'm'},{c_smicon: isSm}]"></span>
+      <div class="dp_content" :style="getTxtWidth" :class="[{dp_content_m:category === 'm'},{dt_smcontent: isSm}]">
         {{txt}}
         <span v-show="txt !== ''" class="ml5" :class="{weekend:getWeekend}">{{getWeek}}</span>
         <span v-show="txt === ''" :style="{color: placeholderColor}">{{placeholder}}</span>
@@ -84,6 +84,10 @@
       }
     },
     props:{
+      isSm: {
+        type: Boolean,
+        default: false
+      },
       width:{
         type: String,
         default:""
@@ -119,6 +123,14 @@
       min:{
         type:String,
         default:""
+      },
+      maxYear:{
+        type:Number,
+        default: 0
+      },
+      minYear:{
+        type:Number,
+        default: 0
       },
       rule:{
         type:String,
@@ -234,19 +246,21 @@
         }
         else{
           if(this.type === 'year'){
-            this.txt = val
-            this.datepanelShow = false
-            this.focusStyle = false
-            this.$nextTick(() =>{
-              this.$emit("call")
-            })
+            if(this.getIsYearRange(val)){
+              this.txt = val
+              this.datepanelShow = false
+              this.focusStyle = false
+              this.$nextTick(() =>{
+                this.$emit("call",val)
+              })
+            }
           }
           else if(this.type === 'month'){
             this.txt = this.date.year + "-" + this.date.month
             this.datepanelShow = false
             this.focusStyle = false
             this.$nextTick(() =>{
-              this.$emit("call")
+              this.$emit("call",val)
             })
           }
         }
@@ -523,6 +537,22 @@
           return result
         }
       },
+      getIsYearRange(){
+        return function (val) {
+          var result = true
+          if(this.maxYear !== ""){
+            if(new Date(this.maxYear).getTime() < new Date(val).getTime()){
+              result = false
+            }
+          }
+          if (this.minYear !== ""){
+            if(new Date(this.minYear).getTime() > new Date(val).getTime()){
+              result = false
+            }
+          }
+          return result
+        }
+      },
       getCurrentMonth(){
         return function (val) {
           var month = this.date.month - 1
@@ -641,5 +671,18 @@
 <style scoped>
   *{
     box-sizing: border-box;
+  }
+  .c_smicon{
+    height: 28px;
+  }
+  .dt_smcontent{
+    height: 28px;
+    line-height: 28px;
+  }
+  .c_smmain{
+    min-height: 28px;
+  }
+  .c_smbox{
+    border-radius: 5px 0 0 5px;
   }
 </style>

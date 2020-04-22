@@ -183,7 +183,7 @@
       },
       selectEvent(item){
         if(item.unitID===this.unitID){
-          this.$dialog.setReturnValue(item.id)
+          this.$dialog.setReturnValue(item)
           this.$dialog.close()
         }else{
           this.$dialog.alert({

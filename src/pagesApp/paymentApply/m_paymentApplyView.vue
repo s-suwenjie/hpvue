@@ -5,7 +5,7 @@
       <yhm-app-structure-top-tap-menu :select="true" title="付款申请"></yhm-app-structure-top-tap-menu>
     </yhm-app-structure-top-tap>
     <div style="overflow: auto;">
-      <div class="noticeBar" v-if="states==9||isFinish==0&&states==-1">请移动到PC端进行拨款</div>
+      <div class="noticeBar" v-if="isFinish==0&&states==9">请移至PC端进行拨款</div>
 
       <!--    <yhm-app-scroll :empty="false" :init-load-finish="loadFinish" :is-allow-refresh="false">-->
       <yhm-app-structure-menu-group title="基本信息"  @click="toggle(0)">

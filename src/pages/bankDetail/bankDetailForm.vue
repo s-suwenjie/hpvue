@@ -6,7 +6,7 @@
         <yhm-form-radio title="分类" :select-list="ownerSysList" :value="ownerSys" id="ownerSys" @call="contentTT" :no-edit="true"></yhm-form-radio>
         <yhm-form-radio title="品牌" :select-list="brandList" :value="brand" id="brand"></yhm-form-radio>
         <yhm-form-radio title="收支方向" @call="contentTC" :no-edit="isDirectionEdit" :before="direction_state" :select-list="directionList" :value="direction" id="direction"></yhm-form-radio>
-        <yhm-form-date title="交易日期" :value="cccurDate" id="cccurDate" position="b" rule="R0000"></yhm-form-date>
+        <yhm-form-date title="交易日期" :value="cccurDate" :max="nowDate" id="cccurDate" position="b" rule="R0000"></yhm-form-date>
         <yhm-form-select title="我方" subtitle="账户信息" @click="selectaccount" :no-click="isSelectaccount" :value="selfAccount" v-if="isSelfAcc" id="selfAccount" width="1" rule="R0000" tip="value"></yhm-form-select>
         <yhm-form-text title="我方" subtitle="账户信息" :value="selfAccount" v-if="!isSelfAcc" id="selfAccount" rule="R0000" no-edit="1"></yhm-form-text>
         <yhm-form-text title="当前余额" :value="message" id="message" no-edit="1"></yhm-form-text>
@@ -83,6 +83,7 @@
     mixins: [formmixin],
     data () {
       return {
+        nowDate: formatDate(new Date()),//当前时间
         ownerID: '',
         ownerSys: '',//收支分类
         ownerSysList: [],

@@ -177,6 +177,12 @@ import radiofilterletter from '@/assets/radiofilterletter/radiofilterletter.js'
 Vue.use(radiofilter)
 Vue.use(radiofilterletter)
 
+import radiofilterdate from '@/assets/radiofilterdate/radiofilterdate.js'
+Vue.use(radiofilterdate)
+
+import radiofilterday from '@/assets/radiofilterday/radiofilterday.js'
+Vue.use(radiofilterday)
+
 import selectbody from '@/assets/selectbody/selectbody.js'
 Vue.use(selectbody)
 

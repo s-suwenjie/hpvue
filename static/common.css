@@ -128,6 +128,10 @@
   color: #999;
   display: inline-block;
 }
+.isWeek {
+  color: #F20B2B !important;
+  font-weight: bold !important;
+}
 /* 列表页面顶部消息提示 */
 .noticeNum {
   width: 22px;

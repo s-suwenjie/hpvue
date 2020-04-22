@@ -128,6 +128,8 @@
               this.commonUsePsd.value = '1'
               this.searchStr = data
               this.initPageData(false)
+              this.$dialog.setReturnValue(data)
+              this.$dialog.close()
             }
           }
         })

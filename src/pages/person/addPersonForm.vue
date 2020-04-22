@@ -202,7 +202,7 @@
       },
       select(item){
         if(item.personID===this.personID){
-          this.$dialog.setReturnValue(item.id)
+          this.$dialog.setReturnValue(item)
           this.$dialog.close()
         }else{
           this.$dialog.alert({
@@ -361,7 +361,7 @@
               data: params,
               loading: "0",
               call: (data) => {
-                if (data.type === 1){
+                if (data.type === 0){
                   this.isList = true
                   this.switchIconShow = true
                   let arr = []
@@ -384,14 +384,19 @@
                   let params = {
                     id:this.verificationId
                   }
-                  this.ajaxJson({
-                    url: '/Basic/getPersonID',
-                    data: params,
-                    loading: "0",
-                    call: (data) => {
-                      this.list = data
-                    }
-                  })
+                  if(this.verificationId){
+                    this.ajaxJson({
+                      url: '/Basic/getPersonID',
+                      data: params,
+                      loading: "0",
+                      call: (data) => {
+                        this.list = data
+                      }
+                    })
+                  }else{
+                    this.isList = false
+                    this.switchIconShow = false
+                  }
                 }else{
                   this.isList = false
                   this.switchIconShow = false

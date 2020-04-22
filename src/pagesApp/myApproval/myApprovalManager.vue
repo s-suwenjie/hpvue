@@ -74,7 +74,6 @@
         myApproval:[],
         cornerMark: [],//我的审批 角标数组
         loadFinish:true,
-        active:0,
         selectMenu:'我的审批',
         topMenu:[{
           title: '我的审批',
@@ -106,7 +105,7 @@
               url:'/homeApp/m_approvalPurchaseManager?isFinish=1',
               id:'ABFCD5F9-1FB9-49C0-9405-E229239B4727',
               num:'',
-            },
+            }
           ]
         },{
           title: '财务管理',
@@ -135,7 +134,8 @@
             //   url:'/homeApp/m_fundDynamicsChartView?isFinish=1&id=1'
             // }
           ]
-        },{
+        },
+        {
           title: '保险',
           menu:[
             {
@@ -143,9 +143,17 @@
               imgUrl:'/UploadFile/m_image/menu/insurance.svg',
               url:'/homeApp/m_interestRateManager?isFinish=1',
               id:'AA05FB98-153D-4BEB-8572-918ABDBC1487',
-            }]
-          },
-        ]}
+            },
+            {
+              name:'备用金',
+              imgUrl:'/UploadFile/m_image/menu/prettyCashs.svg',
+              url:'/homeApp/m_approvalPrettyCashsManager?isFinish=1',
+              id:'ABFCD5F9-1FB9-49C0-9405-E229239B4727',
+              num:'',
+            },
+          ]
+        },
+      ]}
     },
     methods:{
       goto(item,index){//跳转

@@ -166,17 +166,15 @@
       }
     },
     computed:{
-
       getUrl(){
-        return function(id,isFinish,isApproval){
-          return '/homeApp/m_finPaymentApplyView?id=' + id + '&isFinishBack=' + isFinish + '&isApproval=' + isApproval
+        return function(id,isFinish){
+          return '/homeApp/m_finPaymentApplyView?id=' + id + '&isFinishBack=' + isFinish
         }
       }
     },
     created () {
       this.setQuery2Value('isFinish')
       this.params.isFinish = this.isFinish
-
     }
   }
 </script>

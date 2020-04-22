@@ -10,7 +10,7 @@
         <yhm-view-control title="车牌号" :content="plate"></yhm-view-control>
         <yhm-view-control title="车主" :content="carOwner"></yhm-view-control>
 
-        <yhm-view-control title="行车证信息"  category="3" type="smfiles" :content="drivingLicense"></yhm-view-control>
+        <yhm-view-control title="行车证信息"  category="3" type="smfiles" tag="drivingLicense" :content="drivingLicense"></yhm-view-control>
         <yhm-view-control title="车架号" :content="frameNumber"></yhm-view-control>
         <yhm-view-control title="登记日期" :content="registerDate" type="date"></yhm-view-control>
         <yhm-view-control title="发动机号" :content="engineNumber" ></yhm-view-control>

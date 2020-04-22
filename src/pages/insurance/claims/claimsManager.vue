@@ -14,13 +14,17 @@
           <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
           <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
 
-          <yhm-radiofilter :before="insuranceUnit" @initData="initChoose('insuranceUnit')" title="保险公司"  :content="insuranceUnitList"></yhm-radiofilter>
-          <yhm-radiofilter :before="dateType" @initData="initChoose(' dateType')" title="时间"  :content=" dateTypeList"></yhm-radiofilter>
+
+          <yhm-radiofilterdate title="时间" @initData="selectMonthEvent"></yhm-radiofilterdate>
+          <yhm-radiofilterday title="日" :yearMonth="yearMonth" @initData="initChoose"></yhm-radiofilterday>
+
 
         </template>
         <template #choose>
           <div v-show="choose" class="buttonBody mptZero">
             <yhm-radiofilter :before="bank" @initData="initChoose('bank')" title="银行"  :content="bankList"></yhm-radiofilter>
+            <yhm-radiofilter :before="insuranceUnit" @initData="initChoose('insuranceUnit')" title="保险公司"  :content="insuranceUnitList"></yhm-radiofilter>
+            <yhm-radiofilter :before="dateType" @initData="initChoose('dateType')" title="时间"  :content="dateTypeList"></yhm-radiofilter>
 
           </div>
         </template>
@@ -58,7 +62,7 @@
             <yhm-manager-td-money :value="item.money === null ? ' ':item.money"></yhm-manager-td-money>
             <yhm-manager-td-center :value="item.bankName"></yhm-manager-td-center>
             <yhm-manager-td-date :value="item.settlementDate" ></yhm-manager-td-date>
-            <yhm-manager-td :value="item.remark"></yhm-manager-td>
+            <yhm-manager-td :value="item.remark === null ? ' ': item.remark"></yhm-manager-td>
           </tr>
         </template>
         <!--数据空提示-->
@@ -95,6 +99,8 @@
         contentTotal: [],
         content:[],
         bank:'0',
+        yearMonth: '',
+        radioTime: {},
         bankList: {
           value: '',
           list: []
@@ -105,6 +111,7 @@
           list: []
         },
         dateType:'0',
+        timeParams: '',
         dateTypeList:{
           value:'',
           list:[
@@ -134,11 +141,22 @@
       }
     },
     methods:{
+      initChoose(item){
+        this.radioTime = item;
+        this.initPageData(false)
+      },
+      selectMonthEvent(data,item){
+        this.yearMonth = data;
+        this.radioTime = item;
+        if(this.radioTime){
+          this.initPageData(false)
+        }
+      },
       //选中汇总
       selectedSum(){
         let params={
           selectValue:this.selectValue
-        }
+        };
         this.ajaxJson({
           url: '/Fin/commonSelectedsave',
           data:params,
@@ -218,8 +236,9 @@
           params = {
             bankID: this.bankList.value,
             unitID: this.insuranceUnitList.value,
-            dateType:this.dateTypeList.value
-
+            dateType:this.dateTypeList.value,
+            startDate: this.radioTime.startDate,
+            endDate: this.radioTime.endDate,
           }
         }
         this.init({
@@ -242,6 +261,16 @@
       },
     },
     created () {
+      let month = new Date().getMonth() + 1
+      this.yearMonth = new Date().getFullYear()+ '-' + month
+    },
+    watch: {
+      month:{
+        handler(newValue, oldValue) {
+          console.log(newValue + '--' + oldValue);
+          this.month = newValue
+        },
+      }
     }
   }
 </script>

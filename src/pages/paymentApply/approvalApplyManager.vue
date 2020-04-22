@@ -549,7 +549,7 @@
           data: params,
           all: (data) => {
             this.contentTotal = data.total
-            this.showBatchAppropriation = data.showBatchAppropriation
+            // this.showBatchAppropriation = data.showBatchAppropriation
             //不管是不是初始化都需要执行的代码
           },
           init: (data) => {

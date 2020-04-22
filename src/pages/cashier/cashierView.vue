@@ -64,7 +64,7 @@
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton v-if="cashierOperation==='3'?true:false"  :flicker="true" @call="approFund()" :value="'收款(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
-        <yhm-commonbutton v-if="cashierOperation==='2'?true:false"  :flicker="true" @call="approFund()" :value="'代付(保险公司)'" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
+        <yhm-commonbutton v-if="cashierOperation==='2'?true:false" :show="isPay"  :flicker="true" @call="approFund()" :value="'代付(保险公司)'" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
         <yhm-commonbutton v-if="cashierOperation==='1'?true:false"  :flicker="true" @call="approFund()" :value="'返利(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
 
       </template>
@@ -145,6 +145,7 @@
         isbusinessStart:true,
         isCash:true,
         empty:true,
+        isPay:true,
 
         insuredUnit: '',
         insuredUnitList: '',
@@ -239,7 +240,9 @@
       this.setQuery2Value('cashierRemake')
       this.setQuery2Value('publicandPrivateAccount')
       this.setQuery2Value('cashierBankTag')
-
+      if (this.bankMoney==='0.00'){
+        this.isPay=false
+      }
       let params = {
         id: this.id,
       }

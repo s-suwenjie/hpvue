@@ -4,8 +4,7 @@
       <yhm-app-structure-top-tap-menu @call="backEvent" title="返回"></yhm-app-structure-top-tap-menu>
       <yhm-app-structure-top-tap-menu :select="true" title="查看付款信息"></yhm-app-structure-top-tap-menu>
     </yhm-app-structure-top-tap>
-    <div class="noticeBar" v-if="states==9||isFinish==0&&states==-1">请移动到PC端进行拨款</div>
-
+    <div class="noticeBar" v-if="isFinish==0&&states==9">请移至PC端进行拨款</div>
     <yhm-app-scroll :empty="false" :init-load-finish="loadFinish">
       <yhm-app-structure-menu-group title="基本信息">
         <yhm-app-view-control title="收款方" :content="otherUnit"></yhm-app-view-control>

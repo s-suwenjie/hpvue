@@ -399,6 +399,48 @@ function formatCustomizeTip (val,rule) {
 }
 
 
+function getDayNumByYearMonth(year,month){
+  switch (month) {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+      return 31;
+      break;
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+      return 30;
+      break;
+    case 2:
+      return isLeapYear(year) ? 29 : 28;
+  }
+}
+
+function isLeapYear(year){
+  if(year % 4 === 0 && year%100 !== 0 || year%400 === 0){
+    return true
+  }else{
+    return false
+  }
+}
+
+function zero(num) {
+  if(isNaN(num)){
+    return ''
+  }else{
+    if(num < 10){
+      num = '0' + num
+    }
+  }
+
+  return num
+}
+
 export{
-  accMul,accAdd,guid,selectClick,selectdbClick,selectConfirm,selectComputedSelected,verify,formatDate,number2chinese,formatCnDate,tenThousandFormat,formatDateHtml,tenThousandFormatHtml,formatTime,formatPhone,formatCustomizeTip
+  zero,getDayNumByYearMonth,accMul,accAdd,guid,selectClick,selectdbClick,selectConfirm,selectComputedSelected,verify,formatDate,number2chinese,formatCnDate,tenThousandFormat,formatDateHtml,tenThousandFormatHtml,formatTime,formatPhone,formatCustomizeTip
 }

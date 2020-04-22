@@ -368,8 +368,8 @@ import homeApp from './views/homeApp.vue'
 import m_myApprovalManager from './pagesApp/myApproval/myApprovalManager.vue'
 
 /* 采购计划 */
-import m_approvalPurchaseManager from './pagesApp/purchase/approvalPurchaseManager.vue'
-import m_approvalPurchaseView from './pagesApp/purchase/approvalPurchaseView.vue'
+import m_approvalPurchaseManager from './pagesApp/purchase/m_approvalPurchaseManager.vue'
+import m_approvalPurchaseView from './pagesApp/purchase/m_approvalPurchaseView.vue'
 
 /* 驳回 */
 import m_rejectForm from './pagesApp/common/rejectForm.vue'
@@ -411,6 +411,10 @@ import m_reimbursementView from './pagesApp/reimbursement/m_reimbursementView'
 
 import m_finReimbursementManager from './pagesApp/reimbursement/m_finReimbursementManager'
 import m_finReimbursementView from './pagesApp/reimbursement/m_finReimbursementView'
+
+/* 移动端 - 备用金 */
+import m_approvalPrettyCashsManager from './pagesApp/prettyCashs/m_approvalPrettyCashsManager'
+import m_approvalPrettyCashsView from './pagesApp/prettyCashs/m_approvalPrettyCashsView'
 
 /* 移动端 - 资金图表动态 - 资金动态*/
 import m_fundDynamicsChartView from './pagesApp/fundDynamics/m_fundDynamicsChartView'
@@ -846,6 +850,10 @@ export default new Router({
 
         { path: '/homeApp/m_approvalPurchaseManager', name: 'm_approvalPurchaseManager', component: m_approvalPurchaseManager ,meta: {title: '采购计划'}},
         { path: '/homeApp/m_approvalPurchaseView', name: 'm_approvalPurchaseView', component: m_approvalPurchaseView ,meta: {title: '采购计划'}},
+
+        { path: '/homeApp/m_approvalPrettyCashsManager', name: 'm_approvalPrettyCashsManager', component: m_approvalPrettyCashsManager ,meta: {title: '备用金'}},
+        { path: '/homeApp/m_approvalPrettyCashsView', name: 'm_approvalPrettyCashsView', component: m_approvalPrettyCashsView ,meta: {title: '备用金'}},
+
 
         { path: '/homeApp/m_fundDynamicsChartView', name: 'm_fundDynamicsChartView', component: m_fundDynamicsChartView ,meta: {title: '资金动态'}},
         { path: '/homeApp/m_fundDynamicsView', name: 'm_fundDynamicsView', component: m_fundDynamicsView ,meta: {title: '资金动态'}},
