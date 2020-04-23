@@ -12,7 +12,7 @@
         <yhm-form-date title="申请日期" @call="getCode" :max="maxWorkDate" :value="workDate" id="workDate" rule="R0000" :no-edit="true"></yhm-form-date>
 
         <yhm-form-radio title="选择天数" @call="selectDateEvent" :select-list="selectDateList" :value="selectDate" id="selectDate" rule="R0000"></yhm-form-radio>
-        <yhm-form-date title="预计归还/" subtitle="核销时间" :min="minEstimateDate" :max="maxEstimateDate" :value="estimateDate" id="estimateDate" rule="R0000" position="b"></yhm-form-date>
+        <yhm-form-date title="预计归还/" subtitle="核销时间" :no-edit="isSelectDate" :min="minEstimateDate" :max="maxEstimateDate" :value="estimateDate" id="estimateDate" rule="R0000" position="b"></yhm-form-date>
 
         <yhm-form-text title="申请金额" @change="getCode" tip="money" before-icon="rmb" :value="money" id="money" rule="R3000" placeholder="请输入数字" error-message="纯数字输入"></yhm-form-text>
 
@@ -63,7 +63,6 @@
         minEstimateDate:formatDate(new Date()),
         maxEstimateDate:formatDate(new Date(accAdd(new Date().getTime(), accMul(3888000,1000)))),
         approvalHtml: '',
-        selectDate: '',
         list: [],
         selectDateList: [
           {
@@ -91,6 +90,8 @@
             img: ''
           }
         ],
+        selectDate: '3',
+        isSelectDate: false,
       }
     },
     methods:{
@@ -98,11 +99,16 @@
       selectDateEvent(){
         let workDate = this.workDate
           if(this.selectDate === '0'){
+            this.isSelectDate=true
             this.estimateDate = formatDate( new Date(accAdd((new Date(workDate)).getTime(),7*24*60*60*1000)))
           }else if(this.selectDate === '1'){
+            this.isSelectDate=true
             this.estimateDate = formatDate( new Date(accAdd((new Date(workDate)).getTime(),15*24*60*60*1000)))
           }else if(this.selectDate === '2'){
+            this.isSelectDate=true
             this.estimateDate = formatDate( new Date(accAdd((new Date(workDate)).getTime(),30*24*60*60*1000)))
+          }else{
+            this.isSelectDate=false
           }
       },
       getCode(){

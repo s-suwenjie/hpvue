@@ -176,7 +176,6 @@
           })
         },0)
 
-        console.log(item,title)
       },
       /* 小标格显示 */
       tableTipShowEvent(item,control){

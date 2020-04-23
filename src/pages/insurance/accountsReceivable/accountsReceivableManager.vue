@@ -27,7 +27,7 @@
         <yhm-managerth title="保险公司" value="insuredUnit"></yhm-managerth>
         <yhm-managerth title="预计盈亏"></yhm-managerth>
         <yhm-managerth title="实时盈亏"></yhm-managerth>
-        <yhm-managerth title="保单号" value="numbering"></yhm-managerth>
+        <yhm-managerth title="申请编号" value="numbering"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="状态" value="cashStatus"></yhm-managerth>
       </template>
 

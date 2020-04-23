@@ -10,6 +10,7 @@
       <template #scroll1>
         <yhm-app-structure-menu-group title="财务管理" v-if="financeShow">
           <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[1].menu" :key="index" v-show="financeList[index]==item.id&&finance[index]=='1'"  :url="item.imgUrl"></yhm-app-menu>
+          <yhm-app-menu @call="goto('/homeApp/m_finPrettyCashsManager?isFinish=1','0')" name="备用金" url="/UploadFile/m_image/menu/prettyCashs.svg"></yhm-app-menu>
         </yhm-app-structure-menu-group>
       </template>
       <template #scroll2>
@@ -158,10 +159,12 @@
     },
     methods:{
       goto(item,index){//跳转
-        this.$router.push(item.url)
         if(index=='0'){
           this.$router.push(item)
+        }else{
+          this.$router.push(item.url)
         }
+
       },
       num(arr,index){//计算某个值在数组中出现的最多和出现次数
         let obj = {};

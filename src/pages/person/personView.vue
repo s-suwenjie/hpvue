@@ -65,7 +65,7 @@
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton value="编辑" icon="i-edit" :flicker="true" @call="editBtn()"></yhm-commonbutton>
+        <yhm-commonbutton value="编辑" icon="i-edit" :show="isdisplay" :flicker="true" @call="editBtn()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
   </div>
@@ -117,6 +117,7 @@
         tag: '',
         id:'',
         isThisUnit: true,
+        isdisplay:true,
       }
     },
     methods: {
@@ -246,6 +247,10 @@
       this.initData()
       this.viewTabList()
       this.setQuery2Value('videoUrl')
+      this.setQuery2Value('isBilling')
+      if (this.isBilling==='0'){
+          this.isdisplay=false
+      }
     },
     watch:{
       list(){

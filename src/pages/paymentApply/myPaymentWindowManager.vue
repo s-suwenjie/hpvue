@@ -1,6 +1,6 @@
 <template>
   <div style="height: 500px">
-    <yhm-managerpage style="min-height:490px" category="1" >
+    <yhm-managerpage category="1" :isManager="isManager">
         <template #listHead>
           <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
           <yhm-managerth title="收款方" value="id"></yhm-managerth>
@@ -38,6 +38,7 @@
     mixins: [managermixin],
     data () {
       return {
+        isManager: true,
         otherUnitID:'',
         content:[],
       }

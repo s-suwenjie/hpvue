@@ -40,17 +40,9 @@
 
           <yhm-form-td-radio width="160" :no-edit="isElectronicInvoice" @call="switchInvoiceCategory" :list="invoiceDetails" listid="invoiceDetails" :value="item" :select-list="listCategoryList" id="category"></yhm-form-td-radio>
 
-
-
-
-
           <yhm-form-td-textbox width="50" @change="verificationRepeatInvoice(item)" @input="invoicesQuantityInputEvent" :no-edit="getIsElectronicInvoice || item.category === '0' ? '1':''" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="quantity" rule="R1000"></yhm-form-td-textbox>
           <yhm-form-td-textbox width="90" :no-edit="getIsElectronicInvoice" @input="invoicesMoneyInputEvent()" @blur="calcMoney(item)" before-icon="rmb" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="money" rule="R3000"></yhm-form-td-textbox>
           <yhm-form-td-textbox width="90" no-edit="1" @input="actualMoneyEvent()" @blur="calcActualMoney(item)" before-icon="rmb" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="actualMoney" rule="R3000"></yhm-form-td-textbox>
-
-
-
-
 
           <yhm-form-td-textbox width="130" :no-edit="getIsElectronicInvoice" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="remark"></yhm-form-td-textbox>
           <yhm-form-td-upload-image width="90" :no-upload="isElectronicInvoice" tag="Invoice" @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="url" rule="#"></yhm-form-td-upload-image>
@@ -331,20 +323,20 @@
       //发票类型切换事件
       invoiceTypeEvent(old){
 
-      if(this.isPrettyCashOff === '1'){
-        if(this.isSelectPrettyCash === '0'){
-          if(this.invoiceCategory === '2'){
-            this.$dialog.alert({
-              width: '280',
-              tipValue: '当前备用金有发票！！！',
-              closeCallBack: () => {
-                this.invoiceCategory = old
-                this.invoiceTypeEvent();
-              }
-            })
+        if(this.isPrettyCashOff === '1'){
+          if(this.isSelectPrettyCash === '0'){
+            if(this.invoiceCategory === '2'){
+              this.$dialog.alert({
+                width: '280',
+                tipValue: '当前备用金有发票！！！',
+                closeCallBack: () => {
+                  this.invoiceCategory = old
+                  this.invoiceTypeEvent();
+                }
+              })
+            }
           }
         }
-      }
 
 
         if(this.invoiceCategory === '0' || this.invoiceCategory === '1'){

@@ -1216,7 +1216,7 @@
                         btnValueCancel: '继续操作',
                         okCallBack: ()=>{
                           this.$dialog.OpenWindow({
-                            width: '1205',
+                            width: '1050',
                             height: '550',
                             url: '/paymentWindowManager?otherUnitID=' + otherUnitID,
                             title: '待上传发票',

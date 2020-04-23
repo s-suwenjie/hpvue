@@ -11,72 +11,74 @@
       <yhm-formbody>
         <template #title>基本信息</template>
         <template #control>
-          <yhm-form-date title="开票日期" :value="openDate" id="openDate">
+          <yhm-form-date title="开票日期" :value="openDate" id="openDate" rule="R0000">
             <div class="vs">
-              <div v-if="openDateShow" class="invoice category0" :style="getVs(openDatePosition,0)"></div>
-              <img @mouseover.self="showSource('openDateShow')" @mouseout.self="hideSource('openDateShow')" src="../../../static/css/images/contrastIcon.svg">
+              <div v-if="openDateShow" class="invoice category4" :style="getVs(openDatePosition,0)"></div>
+              <p :class="getVerifyState(confirmArr[0])" @mouseover.self="showSource('openDateShow')" @mouseout.self="hideSource('openDateShow')" @click="confirm('0')"></p>
+              <p class="confirmTip" v-show="isTip">点击确认</p>
             </div>
           </yhm-form-date>
-          <yhm-form-text title="所属人员" :value="person" id="person"></yhm-form-text>
-          <yhm-form-text title="发票代码" :value="code" id="code">
+          <yhm-form-text title="所属人员" :value="person" id="person" rule="R0000"></yhm-form-text>
+          <yhm-form-text title="发票代码" :value="code" id="code" rule="R0000">
             <div class="vs">
-              <div v-if="codeShow" class="invoice category0" :style="getVs(codePosition,0)"></div>
-              <img @mouseover.self="showSource('codeShow')" @mouseout.self="hideSource('codeShow')" src="../../../static/css/images/contrastIcon.svg">
+              <div v-if="codeShow" class="invoice category5" :style="getVs(codePosition,0)"></div>
+              <p :class="getVerifyState(confirmArr[1])" @mouseover.self="showSource('codeShow')" @mouseout.self="hideSource('codeShow')" @click="confirm('1')"></p>
             </div>
           </yhm-form-text>
-          <yhm-form-text title="发票号码" :value="num" id="num">
+          <yhm-form-text title="发票号码" :value="num" id="num" rule="R0000">
             <div class="vs">
-              <div v-if="numShow" class="invoice category0" :style="getVs(numPosition,0)"></div>
-              <img @mouseover.self="showSource('numShow')" @mouseout.self="hideSource('numShow')" src="../../../static/css/images/contrastIcon.svg">
+              <div v-if="numShow" class="invoice category3" :style="getVs(numPosition,0)"></div>
+              <p :class="getVerifyState(confirmArr[2])" @mouseover.self="showSource('numShow')" @mouseout.self="hideSource('numShow')" @click="confirm('2')"></p>
             </div>
           </yhm-form-text>
-          <yhm-form-text title="所属单位" :value="selfName" id="selfName">
+<!--          {{selfNameID}}-->
+          <yhm-form-text title="所属单位" :value="selfName" id="selfName" rule="R0000" @blur="selfNameEvent">
             <div class="vs">
               <div v-if="selfNameShow" class="invoice category0" :style="getVs(selfNamePosition,1)"></div>
-              <img @mouseover.self="showSource('selfNameShow')" @mouseout.self="hideSource('selfNameShow')" src="../../../static/css/images/contrastIcon.svg">
+              <p :class="getVerifyState(confirmArr[3])" @mouseover.self="showSource('selfNameShow')" @mouseout.self="hideSource('selfNameShow')" @click="confirm('3')"></p>
             </div>
           </yhm-form-text>
-          <yhm-form-text title="纳税人" subtitle="识别号" :value="selfCode" id="selfCode">
+          <yhm-form-text title="纳税人" subtitle="识别号" :value="selfCode" id="selfCode" rule="R0000">
             <div class="vs">
               <div v-if="selfCodeShow" class="invoice category0" :style="getVs(selfCodePosition,1)"></div>
-              <img @mouseover.self="showSource('selfCodeShow')" @mouseout.self="hideSource('selfCodeShow')" src="../../../static/css/images/contrastIcon.svg">
+              <p :class="getVerifyState(confirmArr[4])" @mouseover.self="showSource('selfCodeShow')" @mouseout.self="hideSource('selfCodeShow')" @click="confirm('4')"></p>
             </div>
           </yhm-form-text>
-          <yhm-form-text tip="money" title="金额" before-icon="rmb" :value="money" id="money">
+          <yhm-form-text tip="money" title="金额" before-icon="rmb" :value="money" id="money" @input="getMoneyEvent" rule="R1500">
             <div class="vs">
               <div v-if="moneyShow" class="invoice category0" :style="getVs(moneyPosition,1)"></div>
-              <img @mouseover.self="showSource('moneyShow')" @mouseout.self="hideSource('moneyShow')" src="../../../static/css/images/contrastIcon.svg">
+              <p :class="getVerifyState(confirmArr[5])" @mouseover.self="showSource('moneyShow')" @mouseout.self="hideSource('moneyShow')" @click="confirm('5')"></p>
             </div>
           </yhm-form-text>
-          <yhm-form-text tip="money" title="税额" before-icon="rmb" :value="tax" id="tax">
+          <yhm-form-text tip="money" title="税额" before-icon="rmb" :value="tax" id="tax" @input="getTaxEvent" rule="R1500">
             <div class="vs">
               <div v-if="taxShow" class="invoice category0" :style="getVs(taxPosition,1)"></div>
-              <img @mouseover.self="showSource('taxShow')" @mouseout.self="hideSource('taxShow')" src="../../../static/css/images/contrastIcon.svg">
+              <p :class="getVerifyState(confirmArr[6])" @mouseover.self="showSource('taxShow')" @mouseout.self="hideSource('taxShow')" @click="confirm('6')"></p>
             </div>
           </yhm-form-text>
-          <yhm-form-text tip="money" title="价税合计" before-icon="rmb" :value="totalMoney" id="totalMoney">
+          <yhm-form-text tip="money" title="价税合计" before-icon="rmb" :value="totalMoney" id="totalMoney" no-edit="1" rule="R1500">
             <div class="vs">
               <div v-if="totalMoneyShow" class="invoice category1" :style="getVs(totalMoneyPosition,1)"></div>
-              <img @mouseover.self="showSource('totalMoneyShow')" @mouseout.self="hideSource('totalMoneyShow')" src="../../../static/css/images/contrastIcon.svg">
+              <p :class="getVerifyState(confirmArr[7])" @mouseover.self="showSource('totalMoneyShow')" @mouseout.self="hideSource('totalMoneyShow')" @click="confirm('7')"></p>
             </div>
           </yhm-form-text>
-          <yhm-formimage :tip="true" width="1000" height="650" rule="#" title="发票照片" :big="1" :value="'/UploadFile/electronicInvoice/' + imgUrl" id="url"></yhm-formimage>
-          <yhm-form-text title="开票单位" :value="otherName" id="otherName">
+          <yhm-formimage :tip="true" width="1000" height="650" rule="#" title="发票照片" :big="1" discription=" " :value="'/UploadFile/electronicInvoice/' + imgUrl" id="url"></yhm-formimage>
+          <yhm-form-text title="开票单位" :value="otherName" id="otherName" rule="R0000">
             <div class="vs">
               <div v-if="otherNameShow" class="invoice category0" :style="getVs(otherNamePosition,1)"></div>
-              <img @mouseover.self="showSource('otherNameShow')" @mouseout.self="hideSource('otherNameShow')" src="../../../static/css/images/contrastIcon.svg">
+              <p :class="getVerifyState(confirmArr[8])" @mouseover.self="showSource('otherNameShow')" @mouseout.self="hideSource('otherNameShow')" @click="confirm('8')"></p>
             </div>
           </yhm-form-text>
-          <yhm-form-text title="纳税人" subtitle="识别号" :value="otherCode" id="otherCode">
+          <yhm-form-text title="纳税人" subtitle="识别号" :value="otherCode" id="otherCode" rule="R0000">
             <div class="vs">
               <div v-if="otherCodeShow" class="invoice category0" :style="getVs(otherCodePosition,1)"></div>
-              <img @mouseover.self="showSource('otherCodeShow')" @mouseout.self="hideSource('otherCodeShow')" src="../../../static/css/images/contrastIcon.svg">
+              <p :class="getVerifyState(confirmArr[9])" @mouseover.self="showSource('otherCodeShow')" @mouseout.self="hideSource('otherCodeShow')" @click="confirm('9')"></p>
             </div>
           </yhm-form-text>
           <yhm-form-textarea title="备注" :value="remark" id="remark">
             <div class="vs">
               <div v-if="remarkShow" class="invoice category2" :style="getVs(remarkPosition,2)"></div>
-              <img @mouseover.self="showSource('remarkShow')" @mouseout.self="hideSource('remarkShow')" src="../../../static/css/images/contrastIcon.svg">
+              <p :class="getVerifyState(confirmArr[10])" @mouseover.self="showSource('remarkShow')" @mouseout.self="hideSource('remarkShow')" @click="confirm('10')"></p>
             </div>
           </yhm-form-textarea>
           <yhm-form-textarea title="标签" :value="tag" id="tag"></yhm-form-textarea>
@@ -95,6 +97,7 @@
 
 <script>
   import { formmixin } from '@/assets/form.js'
+  import {accAdd} from "../../assets/common";
   export default {
     name: 'myElectronicInvoiceForm',
     mixins: [formmixin],
@@ -141,7 +144,11 @@
         imgUrl:'',
         remark:'',
         remarkShow:false,
+        onOff: false,
+        isTip: false,
+        indexOn: -1,
         remarkPosition:[],
+        confirmArr: [false, false, false, false, false, false, false, false, false, false, false,],
         tag:'',
 
         isTrue:'0',
@@ -155,11 +162,57 @@
       }
     },
     methods:{
+      confirm(index){
+        this.confirmArr[index] = true
+        this.confirmArr.push(false)
+        this.confirmArr.splice(this.confirmArr.length - 1,1)
+        if(this.confirmArr.indexOf(false) === -1){
+          this.onOff = true
+        }else{
+          this.onOff = false
+        }
+
+      },
+      selfNameEvent(){
+
+        for(let i in this.thisUnit){
+          if(this.selfName === this.thisUnit[i].name){
+           this.selfNameID = this.thisUnit[i].id
+          }else{
+            this.selfName = ''
+          }
+        }
+      },
+
+      /* 计算 税价合计 =  金额 + 税额 */
+      getMoneyEvent(){
+        this.calcMoneyTaxEvent()
+      },
+      getTaxEvent(){
+        this.calcMoneyTaxEvent()
+      },
+      calcMoneyTaxEvent(){
+        let money = this.money;
+        let tax = this.tax;
+        let totalMoney = '';
+        if(money === '' || money.indexOf('.') === money.length - 1 || isNaN(money)){
+          money = 0
+        }
+        if(tax === '' || tax.indexOf('.') === tax.length - 1 || isNaN(tax)){
+          tax = 0
+        }
+        totalMoney = accAdd(money,tax);
+        this.totalMoney = totalMoney + '';
+
+      },
+
       showSource(id){
+        this.isTip = true
         let js = 'this.' + id + ' = true'
         eval(js)
       },
       hideSource(id){
+        this.isTip = false
         let js = 'this.' + id + ' = false'
         eval(js)
       },
@@ -204,11 +257,17 @@
                     else if(dataResult.type === 5){
                       //发微信索要
                       this.$dialog.confirm({
-                        tipValue:'此发票已被<b class="Red">（工程师）</b>上传，可以向对方索要！！！',
+                        tipValue: dataResult.message,
                         width:'500',
                         btnValueOk:'向对方索要',
                         okCallBack:() => {
-                          alert("发微信索要")
+                          this.$dialog.alert({
+                            tipValue: "此功能暂未开放！！！",
+                            alertImg: 'warn',
+                            closeCallBack: ()=>{
+
+                            }
+                          })
                         }
                       })
                     }
@@ -345,50 +404,60 @@
 
       },
       save(op){
-        if(this.validator()){
+        if(!this.onOff){
+          this.$dialog.alert({
+            width: '320',
+            alertImg: 'warn',
+            tipValue: '请在对比（VS）后、点击确认！',
+            closeCallBack: ()=>{
+
+            }
+          })
+        }
+        if(this.validator() && this.onOff){
           // this.$dialog.confirm({
           //   tipValue:'请确认发票信息无误后再保存！！！',
           //   width:'400',
           //   btnValueOk:'确认信息无误，保存',
           //   okCallBack:() => {
-              let params = {
-                id: this.id,
-                category:this.category,
-                authCode:this.authCode,
-                personID:this.personID,
-                person:this.person,
-                openDate:this.openDate,
-                openDatePositionArray:this.openDatePosition,
-                code:this.code,
-                codePositionArray:this.codePosition,
-                num:this.num,
-                numPositionArray:this.numPosition,
-                selfNameID:this.selfNameID,
-                selfName:this.selfName,
-                selfNamePositionArray:this.selfNamePosition,
-                selfCode:this.selfCode,
-                selfCodePositionArray:this.selfCodePosition,
-                money:this.money,
-                moneyPositionArray:this.moneyPosition,
-                tax:this.tax,
-                taxPositionArray:this.taxPosition,
-                totalMoney:this.totalMoney,
-                totalMoneyPositionArray:this.totalMoneyPosition,
-                otherName:this.otherName,
-                otherNamePositionArray:this.otherNamePosition,
-                otherCode:this.otherCode,
-                otherCodePositionArray:this.otherCodePosition,
-                pdfUrl:this.pdfUrl,
-                imgUrl:this.imgUrl,
-                remark:this.remark,
-                remarkPositionArray:this.remarkPosition,
-                tag:this.tag,
-                isTrue:this.isTrue,
-                checkTrue:this.checkTrue,
-                isMove:this.isMove,
-                state:this.state,
-              }
-              this.ajaxJson({
+          let params = {
+            id: this.id,
+            category:this.category,
+            authCode:this.authCode,
+            personID:this.personID,
+            person:this.person,
+            openDate:this.openDate,
+            openDatePositionArray:this.openDatePosition,
+            code:this.code,
+            codePositionArray:this.codePosition,
+            num:this.num,
+            numPositionArray:this.numPosition,
+            selfNameID:this.selfNameID,
+            selfName:this.selfName,
+            selfNamePositionArray:this.selfNamePosition,
+            selfCode:this.selfCode,
+            selfCodePositionArray:this.selfCodePosition,
+            money:this.money,
+            moneyPositionArray:this.moneyPosition,
+            tax:this.tax,
+            taxPositionArray:this.taxPosition,
+            totalMoney:this.totalMoney,
+            totalMoneyPositionArray:this.totalMoneyPosition,
+            otherName:this.otherName,
+            otherNamePositionArray:this.otherNamePosition,
+            otherCode:this.otherCode,
+            otherCodePositionArray:this.otherCodePosition,
+            pdfUrl:this.pdfUrl,
+            imgUrl:this.imgUrl,
+            remark:this.remark,
+            remarkPositionArray:this.remarkPosition,
+            tag:this.tag,
+            isTrue:this.isTrue,
+            checkTrue:this.checkTrue,
+            isMove:this.isMove,
+            state:this.state,
+          }
+          this.ajaxJson({
                 url: '/Fin/saveElectronicInvoice',
                 data: params,
                 call: (data) => {
@@ -427,6 +496,18 @@
       }
     },
     computed:{
+
+      getVerifyState(){
+        return function (sign) {
+          if(sign){
+            return 'i-check'
+          }
+          else{
+            return 'i-vsIcon'
+          }
+        }
+      },
+
       getVs(){
         return function (arr,op) {
           if(this.imgUrl === '' || arr.length === 0){
@@ -524,7 +605,7 @@
 
 .vs .category0{
   left: -521px;
-  top:-36px;
+  top: -26px;
 }
 .vs .category1{
   left: -521px;
@@ -534,9 +615,42 @@
   left: -1030px;
   bottom:-40px;
 }
-
+.vs .category3{
+  left: -411px;
+  top:-28px;
+}
+.vs .category4{
+  left: -455px;
+  top: -28px;
+}
+.vs .category5{
+  left: -435px;
+  top: -28px;
+}
 .vs img{
   width: 25px; height: 25px;
   margin-left: 3px;
 }
+.i-check:before{
+  color: #0e9d51;
+  font-size: 25px;
+}
+.i-vsIcon:before{
+  color: #49a9ea;
+  font-size: 25px;
+}
+.i-vsIcon,.i-check{
+  margin-left: 4px;
+}
+.confirmTip{
+  position: absolute;
+  white-space: nowrap;
+  top: 35px;
+  margin: 0 0 0 4px;
+  background-color: #49a9ea;
+  color: #fff;
+  border-radius: 2px;
+  padding: 2px;
+}
+
 </style>

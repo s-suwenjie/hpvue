@@ -174,8 +174,10 @@ import request from '@/assets/ajax/request.js'
 Vue.use(request)
 import radiofilter from '@/assets/radiofilter/radiofilter.js'
 import radiofilterletter from '@/assets/radiofilterletter/radiofilterletter.js'
+import searchfilter from '@/assets/searchfilter/searchfilter.js'
 Vue.use(radiofilter)
 Vue.use(radiofilterletter)
+Vue.use(searchfilter)
 
 import radiofilterdate from '@/assets/radiofilterdate/radiofilterdate.js'
 Vue.use(radiofilterdate)

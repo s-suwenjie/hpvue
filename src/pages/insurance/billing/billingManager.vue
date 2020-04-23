@@ -42,9 +42,9 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"  ></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td  :value="item.plate" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
+          <yhm-manager-td @click="plateView(item)" :value="item.plate" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
-          <yhm-manager-td :tip="true" :value="item.beinsuredName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
+          <yhm-manager-td :tip="true" @click="personView(item)" :value="item.beinsuredName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td-date :value="item.insuredDate"  @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-date>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
@@ -96,10 +96,35 @@
 
         ],
         tableTipInfo:[],
-
       }
     },
     methods:{
+      plateView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '500',
+          url: '/vehicleView?id=' + item.plateID+'&isCustomer=0',
+          title: '查看车辆信息',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      personView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/personView?id=' + item.beinsuredID+'&isBilling=0',
+          title:'查看联系人信息',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       editPayment(item){
         this.$dialog.OpenWindow({
           width: '1050',

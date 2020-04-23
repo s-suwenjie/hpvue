@@ -214,7 +214,7 @@
               if(a){
                 this.list.push(data[0])
               }else{
-                console.log(this.list.slice(b, 1))
+                // console.log(this.list.slice(b, 1))
               }
             }else{
               this.isList=true

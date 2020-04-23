@@ -2,7 +2,7 @@
     <div>
       <p class="app_alert_title">{{title}}:</p>
       <div class="app_main_btn" >
-        <span v-for="(item,index) in list" :key="index" @click="activeClick(item.num,item.showName)" :class="{active:index==ins}" class="app_alert_btn app_alert_btn2">{{item.showName}}</span>
+        <span v-for="(item,index) in list" :key="index" @click="activeClick(item.num,item.showName)" :class="{active:item.num==ins}" class="app_alert_btn app_alert_btn2">{{item.showName}}</span>
         <span :class="{active:list.length==ins}" @click="activeClick(list.length,'全部',)" class="app_alert_btn">全部</span>
       </div>
     </div>

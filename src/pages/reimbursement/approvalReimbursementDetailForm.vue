@@ -76,8 +76,8 @@
     </div>
     <yhm-formoperate v-if="isApproval === '0'" :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton value="通过" :flicker="true" @call="adoptEvent()" icon="i-btm-applicationSm" class="btnIcon"></yhm-commonbutton>
-        <yhm-commonbutton value="驳回" @call="rejectEvent()" icon="i-btn-turnDown" class="btnIcon btnIconColor"></yhm-commonbutton>
+        <yhm-commonbutton value="通过" v-show="isState !== '9'" :flicker="true" @call="adoptEvent()" icon="i-btm-applicationSm" class="btnIcon"></yhm-commonbutton>
+        <yhm-commonbutton value="驳回" v-show="isState !== '9'" @call="rejectEvent()" icon="i-btn-turnDown" class="btnIcon btnIconColor"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
   </div>
@@ -93,6 +93,7 @@
       return {
         tabState:[{select:true}],
         workDate: '',
+        isState: '',
         subject: '',
         subjectID: '',
         startDate: '',
@@ -286,6 +287,7 @@
           this.noInvoice = this.invoiceCategory !== '2';
 
           this.files = data.files
+          this.isState = data.state
 
           this.isPrettyCashOff = data.isPrettyCashOff
           this.isPrettyCashOffList = data.isPrettyCashOffPsd.list

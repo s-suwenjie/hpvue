@@ -41,6 +41,7 @@
 
         <yhm-managerth style="width: 120px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="实收金额" value="receivedMoney"></yhm-managerth>
+        <yhm-managerth style="width: 170px;" title="申请编号" value="numbering"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="状态" value="status"></yhm-managerth>
       </template>
 
@@ -61,6 +62,7 @@
 
           <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
+          <yhm-manager-td :value="item.numbering"></yhm-manager-td>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
         </tr>
       </template>

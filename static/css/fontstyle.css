@@ -804,3 +804,13 @@
   font-family: 'icomoon' !important;
   content: "\e99e";
 }
+
+/* 电子发票对比图标 */
+.i-vsIcon:before{
+  font-family: 'icomoon' !important;
+  content: "\e9a0";
+}
+.i-check:before{
+  font-family: 'icomoon' !important;
+  content: "\e954";
+}

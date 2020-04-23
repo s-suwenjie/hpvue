@@ -30,7 +30,7 @@
         <yhm-managerth title="收款人" value="cashObjectVal"></yhm-managerth>
         <yhm-managerth title="返利金额" value="actualProfitLoss"></yhm-managerth>
         <yhm-managerth title="保险公司返利金额" value="realTimeProfitLoss"></yhm-managerth>
-        <yhm-managerth title="保单号" value="numbering"></yhm-managerth>
+        <yhm-managerth title="申请编号" value="numbering"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="状态" value="status"></yhm-managerth>
       </template>
 

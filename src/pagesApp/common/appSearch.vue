@@ -3,8 +3,9 @@
       <div class="search">
         <div class="search_center">
           <div class="search_left" :class="{'search_auto':btnShow}">
-            <input type="text" v-model="search" @focus="focusEvent" @blur="blurEvent" @keyup.enter="keyupEvent" placeholder="请输入搜索">
-            <i class="icon-search search_icon" @click="blurEvent"></i>
+            <input type="text" v-model="search" ref="inputVal" @focus="focusEvent" @blur="blurEvent" @keyup.enter="keyupEvent" placeholder="请输入搜索">
+            <i class="icon-search search_icon" v-show="searchIconShow" @click="blurEvent"></i>
+            <i class="delete search_icon" style="color: #49a9ea" v-show="!searchIconShow" @click="clickDeleteEvent"></i>
             <div class="search_frequently" v-show="searchFrequentlyShow">
               <p v-for="(item,index) in list" @click="searchEvent(item.searchStr)" :key="index">TOP{{index+1}}:{{item.searchStr}}</p>
             </div>
@@ -29,7 +30,9 @@
     data(){
       return{
         searchFrequentlyShow:false,
+        searchIconShow:true,
         search:'',
+        timer:'',
       }
     },
     props:{
@@ -45,11 +48,21 @@
       },
     },
     methods:{
+      clickDeleteEvent(){
+        this.search = ''
+        this.searchFrequentlyShow = true
+        // this.$nextTick(()=>{
+        //   this.$refs.inputVal.focus()
+        // })
+        // clearTimeout(this.timer)
+        this.changeEvent('')
+        clearTimeout(this.timer)
+      },
       filtrate(){//筛选按钮的点击事件
         this.$emit('alertShow')
       },
       changeEvent(value){//当前函数接收用户收起键盘 回车搜索时的值
-          this.$emit('change',value)
+        this.$emit('change',value)
       },
       searchEvent(search){//用户点击常用搜索内容时
         this.search = search         
@@ -62,15 +75,18 @@
         }
       },
       blurEvent(){
+        // this.timer = window.setTimeout(()=>{
         setTimeout(()=>{
-           this.searchFrequentlyShow = false
+          this.searchIconShow = true
+          this.searchFrequentlyShow = false
         },100)
-        setTimeout(()=>{
+        this.timer = window.setTimeout(()=>{
           // if(this.search == ''){return}
           this.changeEvent(this.search)
         },0)
       },
       focusEvent(){
+        this.searchIconShow = false
         this.searchFrequentlyShow = true
         this.$emit('focus')
       },
@@ -80,6 +96,9 @@
 
 <style scoped lang="less">
   @rem:375/10rem;
+  i{
+    font-style: normal;
+  }
   .search_auto{
     margin: 0 !important;
   }
@@ -114,7 +133,7 @@
     font-size: 18/@rem;
     position: absolute;
     right: 10/@rem;
-    top: 5/@rem;
+    top: 6/@rem;
   }
   .search_frequently{
     width: 100%;
@@ -141,6 +160,7 @@
     display:inline-flex;
     width: 56/@rem;
     height: 28/@rem;
+    font-size: 15/@rem;
     align-items: center;
     justify-content: center;
     background-color: #fff;

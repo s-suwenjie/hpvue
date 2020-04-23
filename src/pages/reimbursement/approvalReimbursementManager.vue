@@ -75,13 +75,13 @@
             <yhm-manager-td-operate-button v-show="item.isPrint === '1' " :no-click="item.state !== '-1' && item.isFinish === '1'" @click="printFund(item)" value="打印单据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.category === '4'&&item.isChecks1 === '0'&&item.isChecks2 === '0'&&item.isChecks3 === '0'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.state === '-1' && item.isFinish === '0' && item.isPrint === '1'" @click="repayment(item)" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-show="(item.isApproval !== '0' || item.isPrint !== '1') && item.isPrint === '0'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-show="(item.isApproval === '0' && item.isPrint === '1' && ((item.isChecks1!=='2'&&item.isChecks2!=='2'&&item.isChecks3!=='2')||item.PrettyCashsID ==='')) || item.isPrint === '0'" :no-click="item.isApproval!=='0' || item.okSingle !== '0'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
 
             <yhm-manager-td-operate-button v-show="item.isChecks1 === '1'" :no-click="item.isApproval==='4'" @click="refundMoney(item)" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isChecks2 === '1'" :no-click="item.isApproval==='4'" @click="repayment(item)" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isChecks3 === '1'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isChecks1 === '3'&&item.isChecks2 === '3'&&item.isChecks3 === '3'&&item.isFinish === '0'" :no-click="item.isApproval==='4'" @click="writeOff(item)" value="确认核销" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="(item.isApproval !== '0' || item.isPrint !== '1') && item.isPrint === '0'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="(item.isApproval === '0' && item.isPrint === '1' && ((item.isChecks1!=='2'&&item.isChecks2!=='2'&&item.isChecks3!=='2')||item.PrettyCashsID ==='')) || item.isPrint === '0'" :no-click="item.isApproval!=='0' || item.okSingle !== '0'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -290,7 +290,7 @@
       },
       /* 打印 */
       printFund(item){
-        if (item.isPrettyCashOff === '0'){
+        // if (item.isPrettyCashOff === '0'){
           this.$dialog.OpenWindow({
             width: '638',
             height: '300',
@@ -299,16 +299,16 @@
             closeCallBack: () => {
             }
           })
-        }else{
-          this.$dialog.OpenWindow({
-            width: '846',
-            height: '614',
-            title: '备用金报销单打印信息',
-            url: '/approvalReimbursementPrintBYJ?fundID=' + item.id,
-            closeCallBack: () => {
-            }
-          })
-        }
+        // }else{
+        //   this.$dialog.OpenWindow({
+        //     width: '846',
+        //     height: '614',
+        //     title: '备用金报销单打印信息',
+        //     url: '/approvalReimbursementPrintBYJ?fundID=' + item.id,
+        //     closeCallBack: () => {
+        //     }
+        //   })
+        // }
       },
       /* 拨付资金 */
       approFund(item){
@@ -360,10 +360,10 @@
           url: '/approvalReimbursementForm?id=' + item.id +'&isPrint=' + item.isPrint + '&isApproval=' + item.isApproval,
           title: '查看报销信息',
           closeCallBack: (data) => {
-            if (data) {
-              this.initPageData(false)
-              /*false->非初始化=>!import  true->初始化*/
-            }
+            this.initPageData(false);
+            // if (data) {
+            //   this.initPageData(false);
+            // }
           }
         })
       },

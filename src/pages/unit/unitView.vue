@@ -181,7 +181,6 @@
           call: (data) => {
             this.content = data.content
             this.totalTotal = data.total
-            console.log(this.totalTotal)
             this.pager.total = data.count
 
           }

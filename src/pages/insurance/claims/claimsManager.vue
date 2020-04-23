@@ -283,16 +283,14 @@
       let month = new Date().getMonth() + 1;
       this.yearMonth = new Date().getFullYear()+ '-' + month
       this.setQuery2Value('isClaims');
-      console.log(this.isClaims);
       if(this.isClaims === '0'){
-        this.isPersonalClaims = false
+        this.isPersonalClaims = false;
         this.isCategory = '0'
       }
     },
     watch: {
       month:{
         handler(newValue, oldValue) {
-          console.log(newValue + '--' + oldValue);
           this.month = newValue
         },
       }

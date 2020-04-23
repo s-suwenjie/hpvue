@@ -259,6 +259,12 @@ export default {
 
         if(this.nature === '4'||this.nature === '5'){
           this.isInvoice='1'
+          let sumMoney = 0;
+          for(let i in this.bankDetailList){
+            let money = this.bankDetailList[i].money;
+            sumMoney = accAdd( money,sumMoney)
+          }
+          this.money = sumMoney + ''
         }
 
         if(this.isAllocation === '0'){
@@ -407,31 +413,31 @@ export default {
       }
     },
     /* 金额分配 */
-    moneyAllocation(val){
-      if(this.actualMoney){
-        this.min = val
-        let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.allocationList.length, 1000)))
-
-        let item = {
-          id: guid(),
-          insertDate: formatTime(insertDate),
-          ownerID: this.id,
-          workDate: val,
-          value: '',
-          selectValue: val,
-          isFinish: '0'
-        }
-        if (this.allocationList.length > 0) {
-          this.allocationList[this.allocationList.length - 1].value = ''
-        }
-        this.allocationList.push(item)
-      }else {
-        this.$dialog.alert({
-          alertImg: 'warn',
-          tipValue: '请输入付款金额'
-        })
-      }
-    },
+    // moneyAllocation(val){
+    //   if(this.actualMoney){
+    //     this.min = val
+    //     let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.allocationList.length, 1000)))
+    //
+    //     let item = {
+    //       id: guid(),
+    //       insertDate: formatTime(insertDate),
+    //       ownerID: this.id,
+    //       workDate: val,
+    //       value: '',
+    //       selectValue: val,
+    //       isFinish: '0'
+    //     }
+    //     if (this.allocationList.length > 0) {
+    //       this.allocationList[this.allocationList.length - 1].value = ''
+    //     }
+    //     this.allocationList.push(item)
+    //   }else {
+    //     this.$dialog.alert({
+    //       alertImg: 'warn',
+    //       tipValue: '请输入付款金额'
+    //     })
+    //   }
+    // },
     //查看发票是否使用过
     verificationRepeatInvoice(item){
       if(this.isRepeatInvoice()) {
@@ -1196,7 +1202,7 @@ export default {
                       btnValueCancel: '继续操作',
                       okCallBack: ()=>{
                         this.$dialog.OpenWindow({
-                          width: '1205',
+                          width: '1050',
                           height: '550',
                           url: '/paymentWindowManager?otherUnitID=' + otherUnitID,
                           title: '待上传发票',
@@ -1671,12 +1677,15 @@ export default {
       this.actualMoney = this.money
     },
     bankDetailList(){
-      let sumMoney = 0;
-      for(let i in this.bankDetailList){
-        let money = this.bankDetailList[i].money
-        sumMoney = accAdd( money,sumMoney)
+
+      if(this.nature === '4' || this.nature === '5'){
+        let sumMoney = 0;
+        for(let i in this.bankDetailList){
+          let money = this.bankDetailList[i].money;
+          sumMoney = accAdd( money,sumMoney)
+        }
+        this.money = sumMoney + ''
       }
-      this.money = sumMoney + ''
     },
   },
   computed:{

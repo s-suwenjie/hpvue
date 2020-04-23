@@ -35,6 +35,7 @@ var rule = {
     R1200:{empty:"*",emptyMessage:"不能为空",rules:"RS00012",errormessage:"格式错误"} ,  //验证数字格式   正负都可以是纯数字
     R1300:{empty:"*",emptyMessage:"不能为空",rules:"RS00013",errormessage:"格式错误"} ,  //验证最多3位纯数字
     R1400:{empty:"*",emptyMessage:"不能为空",rules:"RS00014",errormessage:"格式错误"} ,  //大于0，小于等于100，并且最多保留两位小数。
+    R1500:{empty:"*",emptyMessage:"不能为空",rules:"RS00004",errormessage:"格式错误"} ,  //大于等于0的所有数字
 }
 
 function verify(value,ruleKey) {

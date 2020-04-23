@@ -13,16 +13,16 @@
         </template>
         <!--数据表头-->
         <template #listHead>
-          <yhm-managerth style="width: 30px;" title="选择"></yhm-managerth>
-          <yhm-managerth style="width: 30px;" title="查看"></yhm-managerth>
-          <yhm-managerth style="width: 80px;" title="所属单位" value="selfNameID"></yhm-managerth>
-          <yhm-managerth style="width: 100px;" title="发票代码" value="code"></yhm-managerth>
-          <yhm-managerth style="width: 80px;" title="发票号码" value="num"></yhm-managerth>
-          <yhm-managerth style="width: 110px;" title="开票日期" value="openDate"></yhm-managerth>
+          <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
+          <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
+          <yhm-managerth style="width: 200px;" title="所属单位" value="selfNameID"></yhm-managerth>
+          <yhm-managerth style="width: 120px;" title="发票代码" value="code"></yhm-managerth>
+          <yhm-managerth style="width: 120px;" title="发票号码" value="num"></yhm-managerth>
+          <yhm-managerth style="width: 120px;" title="开票日期" value="openDate"></yhm-managerth>
           <yhm-managerth style="width: 100px;" title="发票金额" value="totalMoney"></yhm-managerth>
           <yhm-managerth style="width: 200px;" title="开票单位" value="otherName"></yhm-managerth>
           <yhm-managerth style="width: 120px;" title="标签" value="tag"></yhm-managerth>
-          <yhm-managerth style="width: 70px;" title="发票照片"></yhm-managerth>
+          <yhm-managerth style="width: 80px;" title="发票照片"></yhm-managerth>
           <yhm-managerth style="width: 90px;" title="发票状态"></yhm-managerth>
           <yhm-managerth title="操作"></yhm-managerth>
         </template>
@@ -31,7 +31,7 @@
           <tr v-for="(item,index) in content" :key="index" :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]">
             <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
             <yhm-manager-td-look @click="add(item.id)"></yhm-manager-td-look>
-            <yhm-manager-td :value="item.selfName"></yhm-manager-td>
+            <yhm-manager-td :value="item.selfName === null? '' : item.selfName"></yhm-manager-td>
             <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
             <yhm-manager-td-center :value="item.num"></yhm-manager-td-center>
             <yhm-manager-td-date :value="item.openDate"></yhm-manager-td-date>

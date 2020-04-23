@@ -111,7 +111,7 @@
           title: '拨付资金',
           closeCallBack: (data) => {
             if(data){
-              this.$dialog.setReturnValue('123')
+              this.$dialog.setReturnValue(data)
               location.reload()
             }
           }
