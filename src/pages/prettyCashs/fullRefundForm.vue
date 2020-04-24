@@ -10,6 +10,11 @@
         <yhm-view-img title="账户图片" tag="UnitUrl" :url="accountUrl"></yhm-view-img>
         <yhm-view-img title="单位图片" tag="UnitUrl" :url="unitUrl"></yhm-view-img>
 
+        <div class="copy">
+          <yhm-commonbutton value="复制收款人名称" icon="i-copy" @call="copyName"></yhm-commonbutton>
+          <yhm-commonbutton value="复制收款人账号" icon="i-copy" @call="copyAccount"></yhm-commonbutton>
+        </div>
+
 <!--        <yhm-formupload :ownerID="id" :value="list" id="list" title="支持单据" tag="bankDetail" subtitle="" multiple="multiple" rule="#"></yhm-formupload>-->
         <yhm-form-upload-image title="支持单据" tag="bankDetail" discription=" " :value="list" id="list" rule="#"></yhm-form-upload-image>
       </template>
@@ -19,6 +24,7 @@
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()" category="one"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
+    <div class="copyTip" v-if="isCopyTip">复制成功：{{copyTxt}}</div>
   </div>
 </template>
 
@@ -38,12 +44,50 @@
         list: '',
         bankName: '',
         interbank: '',
+        account: '',
+        selfUnit: '',
         accountUrl: '',
         unitUrl: '',
-        fileList: []
+        copyTxt: '',
+        fileList: [],
+        isCopyTip: false,
+        nameTime: '',
+        accountTime: '',
       }
     },
     methods: {
+      /* 复制收款人名称 */
+      copyName(){
+        if(this.selfUnit){
+          this.$copyText(this.selfUnit).then(res=>{
+            this.isCopyTip =  true
+            this.copyTxt = this.selfUnit
+            let that = this
+            clearTimeout(this.accountTime)
+            this.nameTime = window.setTimeout(function () {
+              that.isCopyTip =  false
+            },5000)
+          },err=>{
+
+          })
+        }
+      },
+      /* 复制收款人账号 */
+      copyAccount(){
+        if(this.account){
+          this.$copyText(this.account).then(res=>{
+            this.isCopyTip =  true
+            this.copyTxt = this.account
+            let that = this
+            clearTimeout(this.nameTime)
+            this.accountTime = window.setTimeout(function () {
+              that.isCopyTip =  false
+            },5000)
+          },err=>{
+
+          })
+        }
+      },
       selfAccountEvent(){
         this.$dialog.OpenWindow({
           width: 950,
@@ -121,6 +165,8 @@
 
               this.bankName = data.bankName
               this.interbank = data.interbank
+              this.account = data.account
+              this.selfUnit = data.selfUnit
 
               this.accountUrl = data.accountUrl
               this.unitUrl = data.unitUrl
@@ -139,6 +185,15 @@
   }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+  .copy{
+    display: flex;
+    flex-direction: column;
+  }
+  .copy>div:first-child{
+    margin-top: 60px;
+  }
+  .copy>div:last-child{
+    margin-top: 32px;
+  }
 </style>

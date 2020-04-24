@@ -185,7 +185,20 @@
           })
         }
       },
-
+      /* 查看备用金信息 */
+      prettyCashsView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '740',
+          title: '查看备用金信息',
+          url:'/finPrettyCashsView?id='+item.prettyCashsID,
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       initData(){
         this.init({
           url: '/PersonOffice/reimbursementsForm',

@@ -14,10 +14,13 @@
         <yhm-app-view-detail>
           <span style="color:#aaaaaa">【{{item.name}}】</span>
           申请了
-          <span style="color:#08acc0;">{{item.subject}}</span>
-          的报销申请 ，报销金额
-          <yhm-app-view-money color="#FF0000" :content="item.actualMoney"></yhm-app-view-money>
-          ，<span :style="{'color':item.stateColor}">{{item.stateVal}}</span>
+          <span style="color: #08acc0;">{{item.subject}}</span>
+          的报销申请，
+          <yhm-app-view-psd :psd="isPrettyCashOffList" :content="item.isPrettyCashOff"></yhm-app-view-psd>
+          ，申请金额
+          <yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
+          ，
+          <span style="color: #49A9EA;">{{item.stateVal}}</span>
         </yhm-app-view-detail>
       </yhm-app-structure-menu-group>
     </yhm-app-scroll>

@@ -22,7 +22,7 @@
             <span class="i-copy"></span>
           </div>
         </yhm-form-text>
-        <yhm-form-text title="籍贯" :value="nativePlace" id="nativePlace" rule="R0000">
+        <yhm-form-text title="籍贯" :value="nativePlace" id="nativePlace" rule="R0000" tip="value">
           <div class="formBoxIcon" @click="personNative">
             <span class="i-help"></span>
           </div>

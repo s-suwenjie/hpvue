@@ -11,10 +11,10 @@
 <div class="searchFilter">
     <div class="divIpt">
         <label>
-            <input type="text" class="ipt" />
+            <input type="text" class="ipt"/>
         </label>
     </div>
-    <div class="searchCon" >
+    <div class="searchCon">
         <p>1111111</p>
         <p>1111112</p>
         <p>1111113</p>
@@ -24,28 +24,28 @@
 </div>
 
 <script>
-    $('.ipt').on("focus", function () {
-        if ($('.searchCon p').length > 0) {
-            $('.searchCon').show();
-        }
-    }).on("keyup", function () {
-        $('.searchCon').show();
-        if (!$(this).val()) {
-            $('.searchCon').hide();
-        }
-    });
+  $('.ipt').on("focus", function () {
+    if ($('.searchCon p').length > 0) {
+      $('.searchCon').show();
+    }
+  }).on("keyup", function () {
+    $('.searchCon').show();
+    if (!$(this).val()) {
+      $('.searchCon').hide();
+    }
+  });
 
-    $('.searchCon p').click(function () {
-        console.log($(this).html());
-        $('.ipt').val($(this).html());
-        $('.searchCon').hide();
-    });
+  $('.searchCon p').click(function () {
+    console.log($(this).html());
+    $('.ipt').val($(this).html());
+    $('.searchCon').hide();
+  });
 
-    $(document).on("click", function (e) {
-        if ($(e.target).find('.searchCon').length !== 0) {
-            $('.searchCon').hide();
-        }
-    })
+  $(document).on("click", function (e) {
+    if ($(e.target).find('.searchCon').length !== 0) {
+      $('.searchCon').hide();
+    }
+  })
 
 </script>
 

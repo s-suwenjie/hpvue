@@ -44,9 +44,10 @@
           </div>
           <div class="left_bottom" ref="leftBottomHeight">
             <div class="bottom_left float size" style="margin-top: 15px;">
-              <div class="bottom_left_test" >事由:</div>
-              <div class="fromTheTop bottom_left_test" ref="fromTheTop" style="margin: 17px 0px 23px 0px;">凭证号:</div>
-              <div class="bottom_left_test">备注:</div>
+              <div class="bottom_left_test" >事由：</div>
+              <div class="fromTheTop bottom_left_test" ref="fromTheTop" style="margin: 17px 0px 23px 0px;">凭证号：</div>
+              <div class="bottom_left_test">备注：</div>
+              <div class="bottom_left_test" style="margin-top: 10px;">凭证：</div>
             </div>
             <div  class="bottom_right float" style="margin-top: 15px;">
               <p  class="size flex" style="width: 608px;height: 38px;" v-if="content.subjectType==='0'">
@@ -65,13 +66,21 @@
                 <span style="margin: 0px 20px 0px 30px;">-----</span>
                 <span style="text-align: center">-----</span>
               </p>
-              <p style="font-size: 14px;margin-bottom: 22px;" ref="top">
-                 <span v-for="(item,index) in content.files" :key="index" class="imgName" @click="imgSkip(item)" v-show="content.files.length>0?true:false" >{{item.storeName}}</span>
-                <span  v-show="content.files===undefined?false:true">-----</span>
+               <p style="margin: 4px 0px 24px;">
+                 <span v-if="content.voucherNo">
+                   {{content.voucherNo}}
+                 </span>
+                 <span v-else>
+                   -----
+                 </span>
               </p>
+
               <p style="font-size: 14px;margin-top: 2px;" v-if="content.remark==='' ">-----</p>
               <p style="font-size: 14px;margin-top: 2px;" v-else>{{content.remark}}</p>
-
+              <p style="font-size: 14px;margin-top: 10px;" ref="top">
+                <span v-for="(item,index) in content.files" :key="index" class="imgName" @click="imgSkip(item)" v-show="content.storeName!==''">查看凭证</span>
+                <span  v-show="content.storeName===''">-----</span>
+              </p>
               <br>
             </div>
           </div>
@@ -84,7 +93,7 @@
           <div class="icon i-income" ref="iconColorBlue"  style="color: #49a9ea;"></div>
           <div class="rectangle_money black"  ref="colorBlue2">{{item.money}}</div>
         </div>
-        <div class="right_rectangle"  ref="backgroundColorRed"  v-show="item.direction==='1'" @click="switcher(item,index)" v-for="(item,index) in content.bankDetailMony" :key="index">
+        <div class="right_rectangle"  ref="backgroundColorRed"  v-show="item.direction==='1'" @click="switcher(item,index)" v-for="(item,index) in content.bankDetailMony" :key="'info2-'+index">
           <div class="rectangle_tit black" ref="colorRed">{{item.otherName}}</div>
           <div class="icon i-expenditure"  ref="iconColorRed" style="color: #f00;"></div>
           <div class="rectangle_money black"  ref="colorRed2">{{item.money}}</div>
@@ -111,7 +120,6 @@
         storeName:'',
         otherName:'',
         reasonsShow:false,
-        imgUrl:'http://192.168.0.70/UploadFile/',
         direction:'0',
         redShow:false,
         directionShow:false,
@@ -123,7 +131,7 @@
     },
     methods:{
       imgSkip(item){
-        let img = this.imgUrl+ item.tag+'/'+ item.storeName
+        let img = '/UploadFile/' + item.tag + '/' + item.storeName
         window.open(img)
       },
       save(){

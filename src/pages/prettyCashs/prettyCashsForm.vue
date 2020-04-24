@@ -282,6 +282,7 @@
                     }
                   } else {
                     this.$dialog.alert({
+                      width: '380',
                       alertImg: 'error',
                       tipValue: submit.message,
                       closeCallBack: () => {

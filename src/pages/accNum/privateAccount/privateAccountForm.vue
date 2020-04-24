@@ -6,7 +6,7 @@
         <!--@call="selectUnit" 账户分类 银行卡类型 网络账户类型 户名类型 -->
         <yhm-form-radio @call="categoryEvent" title="账户分类" :select-list="categoryList" :value="category" id="category" rule="R0000" :no-edit="isEditBl "></yhm-form-radio>
         <yhm-form-radio :show="isIntBank && isNtwork" title="银行卡类型" :select-list="bankCartCategoryList" :value="bankCartCategor" id="bankCartCategor" rule="R0000" :no-edit="isEditBl"></yhm-form-radio>
-        <yhm-form-select :show="isIntBank && isNtwork" title="开户行"   @click="selectEvent" :value="bank" id="bank" rule="R0000" :no-edit='1'></yhm-form-select>
+        <yhm-form-select :show="isIntBank && isNtwork" title="开户行" @click="selectEvent" :value="bank" id="bank" rule="R0000" :no-edit='1' tip="value"></yhm-form-select>
         <yhm-form-select title="户名" :noClick="isPerson" tip="person" rule="R0000" @click="selectUnit" :value="person" id="person" :no-edit="isEdit"></yhm-form-select>
         <yhm-form-text :show="isCash" @repeatverify="repeatverifyAccountEvent" ref="account" title="账号" :value="account" id="account"  rule="R0000" tip="account"></yhm-form-text>
         <yhm-form-radio :show="isCash" @call="isThirdPartEvent" title="户名类型" :select-list="isThirdPartPsd"  :value="isThirdPart" id="isThirdPart" rule="R0000" :no-edit="isEditBl"></yhm-form-radio>

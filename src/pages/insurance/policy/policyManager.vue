@@ -29,7 +29,7 @@
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="投保日期" value="insuredDate"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="车牌号" value="plate"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth  title="被保险人" value="beinsuredName"></yhm-managerth>
 
@@ -39,10 +39,11 @@
         <yhm-managerth @call="actualEvent" v-if="isActual" style="width: 120px ;" title="预计盈亏"></yhm-managerth>
         <yhm-managerth @call="realEvent" v-if="isReal" style="width: 120px; " title="实时盈亏"></yhm-managerth>
 
-        <yhm-managerth style="width: 120px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="实收金额" value="receivedMoney"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="实收金额" value="receivedMoney"></yhm-managerth>
         <yhm-managerth style="width: 170px;" title="申请编号" value="numbering"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="状态" value="status"></yhm-managerth>
+        <yhm-managerth title="保单号" value="numbering"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -64,6 +65,10 @@
           <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
           <yhm-manager-td :value="item.numbering"></yhm-manager-td>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
+          <yhm-manager-td-operate>
+          <yhm-manager-td-operate-button v-show="item.boNumbering === ''?true:false" @click="addPNumbering(item)" icon="i-export" value="上传保单号"></yhm-manager-td-operate-button>
+          <yhm-manager-td-operate-button v-show="item.boNumbering !=''?true:false"  @click="addPNumbering(item)" icon="i-invoiceView" value="查看保单号" color="#fd6802"></yhm-manager-td-operate-button>
+          </yhm-manager-td-operate>
         </tr>
       </template>
 
@@ -175,6 +180,25 @@
                   this.contentTotal = information
                 }
               })
+            }
+          }
+        })
+      },
+      addPNumbering(item){
+        let title = '上传保单号'
+        let url = '/poNumbering?id='+item.boNumbering+'&ownerID='+item.id
+        if(item.boNumbering!=''){
+          let url = '/poNumbering?id='+item.boNumbering+'&ownerID='+item.id
+          title = '查看保单号'
+        }
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '550',
+          url: url,
+          title: title,
+          closeCallBack: (data) => {
+            if (data) {
+              this.initPageData(false)
             }
           }
         })

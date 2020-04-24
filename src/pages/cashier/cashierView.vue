@@ -188,7 +188,7 @@
             title: '拨付资金',
             url: '/cashierBankDetailForm?cashierMoney=' + this.cashierMoney + '&cashierDirection=' + this.cashierDirection + '&bankID=' + this.bankID + '&bankOwnerID=' + this.bankOwnerID + '&bankMoney=' + this.bankMoney
               + '&insuredUnitAccountID=' + this.insuredUnitAccountID + '&insuredUnitAccount=' + this.insuredUnitAccount+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
-              +'&cashierRemake='+this.cashierRemake+'&publicandPrivateAccount='+this.publicandPrivateAccount+'&cashierBankTag='+this.cashierBankTag,
+              +'&cashierRemake='+this.cashierRemake+'&publicandPrivateAccount='+this.publicandPrivateAccount+'&cashierBankTag='+this.cashierBankTag+'&insuredUnitAccountID='+item.insuredUnitAccountID,
             closeCallBack: (data) => {
               this.$dialog.setReturnValue(1)
               this.$dialog.close()

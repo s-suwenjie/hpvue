@@ -1,6 +1,6 @@
 <template>
   <td>
-    <div class="md_center">
+    <div class="md_center" @click="pdfOpenView">
       <div @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" v-show="tipShow" class="preview_showImg" :style="getStyle">
         <img :src="getUrl">
       </div>
@@ -46,6 +46,10 @@
         type: String,
         required: true
       },
+      pdfUrl: {
+        type: String,
+        default: ''
+      }
     },
     methods:{
       mouseoverEvent(){
@@ -69,6 +73,11 @@
         this.$nextTick(() => {
           this.$emit("click")
         })
+      },
+      pdfOpenView(){
+        if(this.tag === 'ElectronicInvoice' && this.pdfUrl){
+          window.open("/UploadFile/" + this.tag + "/" + this.pdfUrl)
+        }
       }
     },
     computed:{

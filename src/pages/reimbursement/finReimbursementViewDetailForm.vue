@@ -50,7 +50,7 @@
               <yhm-manager-td-money :value="item.actualMoney"></yhm-manager-td-money>
 
               <yhm-manager-td-center :value="item.remark"></yhm-manager-td-center>
-              <yhm-manager-td-image  @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.url" :tag="item.isPdf === '1'?'ElectronicInvoice':'Invoice'" ></yhm-manager-td-image>
+              <yhm-manager-td-image  @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.url" :tag="item.isPdf === '1'?'ElectronicInvoice':'Invoice'" :pdf-url="item.pdfUrl"></yhm-manager-td-image>
             </tr>
           </template>
           <template #empty>

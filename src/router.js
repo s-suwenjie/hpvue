@@ -442,7 +442,7 @@ import cashierManager from './pages/cashier/cashierManager'
 import cashierView from './pages/cashier/cashierView'
 import cashierBankDetailForm from './pages/cashier/cashierBankDetailForm'
 import cashierBankDetailPrivateForm from './pages/cashier/cashierBankDetailPrivateForm'
-import cashierApprovalApplyForm from './pages/cashier/cashierApprovalApplyForm'
+
 
 /* 保险审批 */
 import approvalInsuranceManager from './pages/InsuranceApproval/approvalInsuranceManager'
@@ -478,6 +478,7 @@ import billingApprovalApplyForm from './pages/insurance/billing/billingApprovalA
 /* 保单管理 */
 import policyManager from './pages/insurance/policy/policyManager'
 import policyView from './pages/insurance/policy/policyView'
+import poNumbering from './pages/insurance/policy/poNumbering'
 /* 应收账款*/
 import accountsReceivableManager from './pages/insurance/accountsReceivable/accountsReceivableManager'
 import accountsReceivableView from './pages/insurance/accountsReceivable/accountsReceivableView'
@@ -807,7 +808,7 @@ export default new Router({
     { path: '/cashierView', name: 'cashierView.vue',component: cashierView },
     { path: '/cashierBankDetailForm', name: 'cashierBankDetailForm.vue',component: cashierBankDetailForm },
     { path: '/cashierBankDetailPrivateForm', name: 'cashierBankDetailPrivateForm.vue', component: cashierBankDetailPrivateForm },
-    { path: '/cashierApprovalApplyForm', name: 'cashierApprovalApplyForm.vue', component: cashierApprovalApplyForm },
+
     { path: '/trackForm', name: 'trackForm.vue',component: trackForm },
     { path: '/trackView', name: 'trackView.vue',component: trackView },
     { path: '/trackFormView', name: 'trackFormView.vue',component: trackFormView },
@@ -819,6 +820,7 @@ export default new Router({
     { path: '/billingApprovalApplyForm', name: 'billingApprovalApplyForm.vue',component: billingApprovalApplyForm },
 
     { path: '/policyView', name: 'policyView.vue',component: policyView },
+    { path: '/poNumbering', name: 'poNumbering.vue',component: poNumbering },
     { path: '/accountsReceivableView', name: 'accountsReceivableView.vue',component: accountsReceivableView },
     { path: '/customerRebatesView', name: 'customerRebatesView.vue',component: customerRebatesView },
 

@@ -76,7 +76,7 @@
             <yhm-radiofilter @initData="initChoose('state')" title="完成状态" :content="stateList" style="margin: 5px 0;"></yhm-radiofilter>
           </template>
           <template #listHead>
-            <yhm-managerth style="width: 30px;" title="查看"></yhm-managerth>
+            <yhm-managerth style="width: 30px;" @click="listView(item)" title="查看"></yhm-managerth>
 
 
             <yhm-managerth style="width: 110px;" title="申请时间" value="workDate"></yhm-managerth>

@@ -61,7 +61,7 @@
               <yhm-manager-td-center :value="item.quantity"></yhm-manager-td-center>
               <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
               <yhm-manager-td :value="item.remark"></yhm-manager-td>
-              <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.url" :tag="item.isPdf === '1'?'ElectronicInvoice':'Invoice'" ></yhm-manager-td-image>
+              <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.url" :tag="item.isPdf === '1'?'ElectronicInvoice':'Invoice'" :pdf-url="item.pdfUrl"></yhm-manager-td-image>
             </tr>
           </template>
           <template #empty>
@@ -204,7 +204,7 @@
       /* 查看电子发票完整图片 */
       showInvoicePdfEvent(item){
         if(item.isPdf === '1'){
-          window.open("/UploadFile/ElectronicInvoice/" + item.url)
+          window.open("/UploadFile/ElectronicInvoice/" + item.pdfUrl)
         }
       },
       listView(item){

@@ -4,20 +4,20 @@
       <template #scroll0>
         <yhm-app-structure-menu-group title="我的审批" v-if="myApprovalShow">
           <yhm-app-menu :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[0].menu" :key="index" v-show="routerList[index].id==item.id&&routerList[index].state=='1'" :url="item.imgUrl" :num="cornerMark[index]"></yhm-app-menu>
-          <yhm-app-menu @call="goto('/homeApp/m_approvalPrettyCashsManager?isFinish=1','0')" name="备用金" url="/UploadFile/m_image/menu/prettyCashs.svg"></yhm-app-menu>
+          <!-- <yhm-app-menu @call="goto('/homeApp/m_approvalPrettyCashsManager?isFinish=1','0')" name="备用金" url="/UploadFile/m_image/menu/prettyCashs.svg"></yhm-app-menu> -->
         </yhm-app-structure-menu-group>
       </template>
       <template #scroll1>
         <yhm-app-structure-menu-group title="财务管理" v-if="financeShow">
           <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[1].menu" :key="index" v-show="financeList[index]==item.id&&finance[index]=='1'"  :url="item.imgUrl"></yhm-app-menu>
-          <yhm-app-menu @call="goto('/homeApp/m_finPrettyCashsManager?isFinish=1','0')" name="备用金" url="/UploadFile/m_image/menu/prettyCashs.svg"></yhm-app-menu>
+          <!-- <yhm-app-menu @call="goto('/homeApp/m_finPrettyCashsManager?isFinish=1','0')" name="备用金" url="/UploadFile/m_image/menu/prettyCashs.svg"></yhm-app-menu> -->
         </yhm-app-structure-menu-group>
       </template>
-      <template #scroll2>
+     <!-- <template #scroll2>
         <yhm-app-structure-menu-group title="保险" v-if="insuranceShow">
           <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[2].menu" :key="index"   :url="item.imgUrl" :num="insurance"></yhm-app-menu>
         </yhm-app-structure-menu-group>
-      </template>
+      </template> -->
       <template #tabBar>
         <TabBar></TabBar>
       </template>
@@ -64,10 +64,10 @@
         title:'',
         type:'loading',
         appToastShow:false,
-        routerList:[{ id:'' },{ id:'' },{ id:'' },{ id:'' }],
-        finance:[{ id:'' },{ id:'' },{ id:'' }],
+        routerList:[{ id:'' },{ id:'' },{ id:'' },{ id:'' },{ id:'' },{ id:'' }],
+        finance:[{ id:'' },{ id:'' },{ id:'' },{ id:'' }],
         prettyCashs:'',
-        navigationList:['我的审批','财务管理','保险'],
+        navigationList:['我的审批','财务管理'],
         financeList:[],
         myApprovalShow:true,
         insuranceShow:true,
@@ -107,7 +107,19 @@
               url:'/homeApp/m_approvalPurchaseManager?isFinish=1',
               id:'ABFCD5F9-1FB9-49C0-9405-E229239B4727',
               num:'',
-            }
+            },
+            {
+              name:'备用金',
+              imgUrl:'/UploadFile/m_image/menu/prettyCashs.svg',
+              url:'/homeApp/m_approvalPrettyCashsManager?isFinish=1',
+              id:'A3A1963C-27BF-4F7D-88CE-1750B238A71F',
+            },
+            {
+              name:'保险审批',
+              imgUrl:'/UploadFile/m_image/menu/insurance.svg',
+              url:'/homeApp/m_interestRateManager?isFinish=1',
+              id:'BBD4FB7A-3442-48BF-91CA-70208FBCC78C',
+            },
           ]
         },{
           title: '财务管理',
@@ -130,6 +142,12 @@
               id:'00FFA132-FEA5-4618-8AAA-E1B4DEFCA4E4',
               url:'/homeApp/m_finReimbursementManager?isFinish=1'
             },
+            {
+              name:'备用金',
+              imgUrl:'/UploadFile/m_image/menu/prettyCashs.svg',
+              url:'/homeApp/m_finPrettyCashsManager?isFinish=1',
+              id:'13264365-8109-49C1-8069-9344413F5519',
+            },
             // {
             //   name:'资金动态',
             //   imgUrl:'/UploadFile/m_image/menu/fundDynamicsCharts.svg',
@@ -137,24 +155,19 @@
             // }
           ]
         },
-        {
-          title: '保险',
-          menu:[
-            {
-              name:'利率审批',
-              imgUrl:'/UploadFile/m_image/menu/insurance.svg',
-              url:'/homeApp/m_interestRateManager?isFinish=1',
-              id:'AA05FB98-153D-4BEB-8572-918ABDBC1487',
-            },
-            // {
-            //   name:'备用金',
-            //   imgUrl:'/UploadFile/m_image/menu/prettyCashs.svg',
-            //   url:'/homeApp/m_approvalPrettyCashsManager?isFinish=1',
-            //   id:'ABFCD5F9-1FB9-49C0-9405-E229239B4727',
-            //   num:'',
-            // },
-          ]
-        },
+        // {
+        //   title: '保险',
+        //   menu:[
+
+        //     // {
+        //     //   name:'备用金',
+        //     //   imgUrl:'/UploadFile/m_image/menu/prettyCashs.svg',
+        //     //   url:'/homeApp/m_approvalPrettyCashsManager?isFinish=1',
+        //     //   id:'ABFCD5F9-1FB9-49C0-9405-E229239B4727',
+        //     //   num:'',
+        //     // },
+        //   ]
+        // },
       ]}
     },
     methods:{
@@ -199,26 +212,26 @@
             this.routerList = data
             let arr = []
             for (let i=0; i<=data.length; i++){
-              if(i<='3'){
+              if(i<='5'){//权限接口返回的数据的索引值0-5是审批模块的
                 this.myApproval.push(data[i].state)
                 this.num(this.myApproval,'0')
                 arr = this.num(this.myApproval,'0')
                 // console.log(i,'操作',this.myApproval)
                 setTimeout(()=> {
-                  if(arr[0].maxStr=='0'&&arr[1].maxValue=='4'){
+                  if(arr[0].maxStr=='0'&&arr[1].maxValue=='6'){
                     this.myApprovalShow = false
                   }else {this.myApprovalShow = true}
                   // console.log(this.num(this.myApproval, '0'))
                 },0)
               }
-              if(i>'3'&&i<'7'){
+              if(i>='6'&&i<'10'){//权限接口返回的数据的索引值6-10是财务管理模块的
                 this.finance.push(data[i].state)
                 this.financeList.push(data[i].id)
                 // console.log(i,'财务',this.finance,this.financeList)
                 this.num(this.finance,'1')
                 arr = this.num(this.finance,'1')
                 setTimeout(()=>{
-                  if(arr[0].maxStr=='0'&&arr[1].maxValue=='3'){
+                  if(arr[0].maxStr=='0'&&arr[1].maxValue=='4'){
                     this.financeShow = false
                   }else{this.financeShow = true}
                   // console.log(this.num(this.finance,'1'))
@@ -252,7 +265,9 @@
             this.cornerMark.push(data.payment)//付款申请
             this.cornerMark.push(data.reimbursements)//报销条数
             this.cornerMark.push(data.purchase)//采购计划
-            this.insurance = data.insurance//利率审批条数
+            this.cornerMark.push(data.prettyCashs)//备用金
+            this.cornerMark.push(data.insurance)//保险审批
+            // this.insurance = data.insurance//利率审批条数
           }
         }
       })

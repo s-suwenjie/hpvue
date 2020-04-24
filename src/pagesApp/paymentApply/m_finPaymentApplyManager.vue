@@ -16,9 +16,9 @@
           <span style="color:#aaaaaa">【{{item.person}}】</span>
           提交了
           <span style="color:#08acc0;">{{item.subject}}</span>
-          的报销申请 ， 收款方是
+          的付款申请 ， 收款方是
           <span style="color: #fd6802;">{{item.otherUnit}}</span>
-          ，报销金额
+          ，申请金额
           <yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
           ，<span :style="{'color':item.stateColor}">{{item.stateVal}}</span>
         </yhm-app-view-detail>

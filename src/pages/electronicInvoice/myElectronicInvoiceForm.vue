@@ -15,7 +15,7 @@
             <div class="vs">
               <div v-if="openDateShow" class="invoice category4" :style="getVs(openDatePosition,0)"></div>
               <p :class="getVerifyState(confirmArr[0])" @mouseover.self="showSource('openDateShow')" @mouseout.self="hideSource('openDateShow')" @click="confirm('0')"></p>
-              <p class="confirmTip" v-show="isTip">点击确认</p>
+              <p class="confirmTip" v-show="openDateShow">点击确认</p>
             </div>
           </yhm-form-date>
           <yhm-form-text title="所属人员" :value="person" id="person" rule="R0000"></yhm-form-text>
@@ -23,62 +23,72 @@
             <div class="vs">
               <div v-if="codeShow" class="invoice category5" :style="getVs(codePosition,0)"></div>
               <p :class="getVerifyState(confirmArr[1])" @mouseover.self="showSource('codeShow')" @mouseout.self="hideSource('codeShow')" @click="confirm('1')"></p>
+              <p class="confirmTip" v-show="codeShow">点击确认</p>
             </div>
           </yhm-form-text>
           <yhm-form-text title="发票号码" :value="num" id="num" rule="R0000">
             <div class="vs">
               <div v-if="numShow" class="invoice category3" :style="getVs(numPosition,0)"></div>
               <p :class="getVerifyState(confirmArr[2])" @mouseover.self="showSource('numShow')" @mouseout.self="hideSource('numShow')" @click="confirm('2')"></p>
+              <p class="confirmTip" v-show="numShow">点击确认</p>
             </div>
           </yhm-form-text>
 <!--          {{selfNameID}}-->
-          <yhm-form-text title="所属单位" :value="selfName" id="selfName" rule="R0000" @blur="selfNameEvent">
+          <yhm-form-text title="所属单位" :value="selfName" id="selfName" rule="R0000" tip="value" @blur="selfNameEvent">
             <div class="vs">
               <div v-if="selfNameShow" class="invoice category0" :style="getVs(selfNamePosition,1)"></div>
               <p :class="getVerifyState(confirmArr[3])" @mouseover.self="showSource('selfNameShow')" @mouseout.self="hideSource('selfNameShow')" @click="confirm('3')"></p>
+              <p class="confirmTip" v-show="selfNameShow">点击确认</p>
             </div>
           </yhm-form-text>
           <yhm-form-text title="纳税人" subtitle="识别号" :value="selfCode" id="selfCode" rule="R0000">
             <div class="vs">
               <div v-if="selfCodeShow" class="invoice category0" :style="getVs(selfCodePosition,1)"></div>
               <p :class="getVerifyState(confirmArr[4])" @mouseover.self="showSource('selfCodeShow')" @mouseout.self="hideSource('selfCodeShow')" @click="confirm('4')"></p>
+              <p class="confirmTip" v-show="selfCodeShow">点击确认</p>
             </div>
           </yhm-form-text>
           <yhm-form-text tip="money" title="金额" before-icon="rmb" :value="money" id="money" @input="getMoneyEvent" rule="R1500">
             <div class="vs">
               <div v-if="moneyShow" class="invoice category0" :style="getVs(moneyPosition,1)"></div>
               <p :class="getVerifyState(confirmArr[5])" @mouseover.self="showSource('moneyShow')" @mouseout.self="hideSource('moneyShow')" @click="confirm('5')"></p>
+              <p class="confirmTip" v-show="moneyShow">点击确认</p>
             </div>
           </yhm-form-text>
           <yhm-form-text tip="money" title="税额" before-icon="rmb" :value="tax" id="tax" @input="getTaxEvent" rule="R1500">
             <div class="vs">
               <div v-if="taxShow" class="invoice category0" :style="getVs(taxPosition,1)"></div>
               <p :class="getVerifyState(confirmArr[6])" @mouseover.self="showSource('taxShow')" @mouseout.self="hideSource('taxShow')" @click="confirm('6')"></p>
+              <p class="confirmTip" v-show="taxShow">点击确认</p>
             </div>
           </yhm-form-text>
           <yhm-form-text tip="money" title="价税合计" before-icon="rmb" :value="totalMoney" id="totalMoney" no-edit="1" rule="R1500">
             <div class="vs">
               <div v-if="totalMoneyShow" class="invoice category1" :style="getVs(totalMoneyPosition,1)"></div>
               <p :class="getVerifyState(confirmArr[7])" @mouseover.self="showSource('totalMoneyShow')" @mouseout.self="hideSource('totalMoneyShow')" @click="confirm('7')"></p>
+              <p class="confirmTip" v-show="totalMoneyShow">点击确认</p>
             </div>
           </yhm-form-text>
           <yhm-formimage :tip="true" width="1000" height="650" rule="#" title="发票照片" :big="1" discription=" " :value="'/UploadFile/electronicInvoice/' + imgUrl" id="url"></yhm-formimage>
-          <yhm-form-text title="开票单位" :value="otherName" id="otherName" rule="R0000">
+          <yhm-form-text title="开票单位" :value="otherName" id="otherName" rule="R0000" tip="value">
             <div class="vs">
               <div v-if="otherNameShow" class="invoice category0" :style="getVs(otherNamePosition,1)"></div>
               <p :class="getVerifyState(confirmArr[8])" @mouseover.self="showSource('otherNameShow')" @mouseout.self="hideSource('otherNameShow')" @click="confirm('8')"></p>
+              <p class="confirmTip" v-show="otherNameShow">点击确认</p>
             </div>
           </yhm-form-text>
           <yhm-form-text title="纳税人" subtitle="识别号" :value="otherCode" id="otherCode" rule="R0000">
             <div class="vs">
               <div v-if="otherCodeShow" class="invoice category0" :style="getVs(otherCodePosition,1)"></div>
               <p :class="getVerifyState(confirmArr[9])" @mouseover.self="showSource('otherCodeShow')" @mouseout.self="hideSource('otherCodeShow')" @click="confirm('9')"></p>
+              <p class="confirmTip" v-show="otherCodeShow">点击确认</p>
             </div>
           </yhm-form-text>
           <yhm-form-textarea title="备注" :value="remark" id="remark">
             <div class="vs">
               <div v-if="remarkShow" class="invoice category2" :style="getVs(remarkPosition,2)"></div>
               <p :class="getVerifyState(confirmArr[10])" @mouseover.self="showSource('remarkShow')" @mouseout.self="hideSource('remarkShow')" @click="confirm('10')"></p>
+              <p class="confirmTip" v-show="remarkShow" style="top: 42px;">点击确认</p>
             </div>
           </yhm-form-textarea>
           <yhm-form-textarea title="标签" :value="tag" id="tag"></yhm-form-textarea>
@@ -163,13 +173,15 @@
     },
     methods:{
       confirm(index){
-        this.confirmArr[index] = true
-        this.confirmArr.push(false)
-        this.confirmArr.splice(this.confirmArr.length - 1,1)
-        if(this.confirmArr.indexOf(false) === -1){
-          this.onOff = true
-        }else{
-          this.onOff = false
+        if(this.validator()){
+          this.confirmArr[index] = true
+          this.confirmArr.push(false)
+          this.confirmArr.splice(this.confirmArr.length - 1,1)
+          if(this.confirmArr.indexOf(false) === -1){
+            this.onOff = true
+          }else{
+            this.onOff = false
+          }
         }
 
       },
@@ -207,7 +219,6 @@
       },
 
       showSource(id){
-        this.isTip = true
         let js = 'this.' + id + ' = true'
         eval(js)
       },
@@ -496,7 +507,6 @@
       }
     },
     computed:{
-
       getVerifyState(){
         return function (sign) {
           if(sign){
@@ -541,6 +551,11 @@
           this.personID = data.personID
           this.person = data.person
           this.thisUnit = data.thisUnit
+          for(let i in this.thisUnit){
+            this.thisUnit[i].id = '56C79016-453A-4A38-9924-7CF1FB48C55C';
+            this.thisUnit[i].name = '北京海派奥特经贸有限公司工会委员会'
+          }
+
         },
         add: (data) => {
           //添加时独有的代码

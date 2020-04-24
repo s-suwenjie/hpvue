@@ -58,7 +58,7 @@
               <yhm-manager-td :value="item.quantity"></yhm-manager-td>
               <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
               <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
-              <yhm-manager-td-image :tip="true" width="700" height="500" top="30" left="140" type="files" :value="item.url" :tag="item.isPdf === '1'?'ElectronicInvoice':'Invoice'" ></yhm-manager-td-image>
+              <yhm-manager-td-image :tip="true" width="700" height="500" top="30" left="140" type="files" :value="item.url" :tag="item.isPdf === '1'?'ElectronicInvoice':'Invoice'" :pdf-url="item.pdfUrl"></yhm-manager-td-image>
             </tr>
           </template>
           <template #empty>

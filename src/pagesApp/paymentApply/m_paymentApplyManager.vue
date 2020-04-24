@@ -10,7 +10,14 @@
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish,item.isApproval)" v-for="(item) in content" :key="item.id">
         <yhm-app-view-control :contentTitle="item.otherUnit" :content="item.lastDate" type="date"></yhm-app-view-control>
         <yhm-app-view-detail>
-          <span style="color:#aaaaaa">【{{item.person}}】</span>提交了<span style="color:#08acc0;">{{item.subject}}</span>的付款申请，<span style="color: #2c920b;">{{item.stateVal}}</span>，申请金额<yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
+          <span style="color:#aaaaaa">【{{item.person}}】</span>
+          提交了
+          <span style="color:#08acc0;">{{item.subject}}</span>
+          的付款申请 ， 收款方是
+          <span style="color: #fd6802;">{{item.otherUnit}}</span>
+          ，申请金额
+          <yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
+          ，<span :style="{'color':item.stateColor}">{{item.stateVal}}</span>
         </yhm-app-view-detail>
         <yhm-app-approval-result v-show="getIsFinish" :category="item.state % 2 == 1||item.state== -1" :left="3.5" :top="0.5"></yhm-app-approval-result>
       </yhm-app-structure-menu-group>

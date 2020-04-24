@@ -44,13 +44,10 @@
           <yhm-manager-td-money :value="item.bankMoney"></yhm-manager-td-money>
           <yhm-manager-td :value="item.number"></yhm-manager-td>
           <yhm-manager-td-operate>
-
-            <yhm-manager-td-operate-button v-if="item.bankMoney==='0.00'?true:false"  @click="Application(item)" :value="'付款申请'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
-
-
-            <yhm-manager-td-operate-button v-if="item.cashierOperation==='3'&& item.bankMoney!='0.00'?true:false"  @click="approFund(item)" :value="'收款(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-if="item.cashierOperation==='2'&& item.bankMoney!='0.00'?true:false"  @click="approFund(item)" :value="'代付(保险公司)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-if="item.cashierOperation==='1'&& item.bankMoney!='0.00'?true:false"  @click="approFund(item)" :value="'返利(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+<!--            <yhm-manager-td-operate-button v-if="item.bankMoney==='0.00'?true:false"  @click="Application(item)" :value="'付款申请'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>-->
+            <yhm-manager-td-operate-button v-if="item.cashierOperation==='3'?true:false"  @click="approFund(item)" :value="'收款(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-if="item.cashierOperation==='2'?true:false"  @click="approFund(item)" :value="'代付(保险公司)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-if="item.cashierOperation==='1'?true:false"  @click="approFund(item)" :value="'返利(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
 
           </yhm-manager-td-operate>
         </tr>
@@ -94,7 +91,7 @@
           height: '680',
           url: '/cashierView?id=' + item.ownerID+'&cashierOperation='+item.cashierOperation+'&cashierMoney='+item.money+'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney
             +'&insuredUnitAccountID='+item.insuredUnitAccountID+'&insuredUnitAccount='+item.insuredUnitAccount
-            +'&cashierRemake='+item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank,
+            +'&cashierRemake='+item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank+'&insuredUnitAccountID='+item.insuredUnitAccountID,
           title: '查看客户信息',
           closeCallBack: (data)=>{
             if(data){
@@ -104,23 +101,23 @@
         })
       },
       /*添加付款申请*/
-      Application(item){
-          this.$dialog.OpenWindow({
-            width: '1050',
-            height: '690',
-            title: '付款申请',
-            url: '/cashierApprovalApplyForm?discountMoney='+item.money+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
-              +'&insuredUnitAccountID='+item.insuredUnitAccountID+'&insuredUnitAccount='+item.insuredUnitAccount+'&remake='+item.remake+'&insuredUnitShowName='+item.insuredUnitShowName
-              +'&newNature=4'+'&billingOwID='+item.ownerID+'&billingID='+item.id+'&insuredUnitID='+item.insuredUnitID
-            ,
-            closeCallBack: (data)=>{
-              if(data){
-                this.initPageData(false)
-              }
-            }
-          })
-
-      },
+      // Application(item){
+      //     this.$dialog.OpenWindow({
+      //       width: '1050',
+      //       height: '690',
+      //       title: '付款申请',
+      //       url: '/cashierApprovalApplyForm?discountMoney='+item.money+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
+      //         +'&insuredUnitAccountID='+item.insuredUnitAccountID+'&insuredUnitAccount='+item.insuredUnitAccount+'&remake='+item.remake+'&insuredUnitShowName='+item.insuredUnitShowName
+      //         +'&newNature=4'+'&billingOwID='+item.ownerID+'&billingID='+item.id+'&insuredUnitID='+item.insuredUnitID+'&insuredUnitAccountID='+item.insuredUnitAccountID
+      //       ,
+      //       closeCallBack: (data)=>{
+      //         if(data){
+      //           this.initPageData(false)
+      //         }
+      //       }
+      //     })
+      //
+      // },
       /* 拨付资金 */
       approFund(item){
         if (item.cashierOperation=== '3'){
@@ -142,7 +139,7 @@
             title: '拨付资金',
             url: '/cashierBankDetailForm?cashierMoney='+item.money +'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney
             +'&insuredUnitID='+item.insuredUnitID+'&insuredUnitAccount='+item.insuredUnitAccount+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
-              +'&cashierRemake='+ item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank,
+              +'&cashierRemake='+ item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank+'&insuredUnitAccountID='+item.insuredUnitAccountID,
             closeCallBack: (data)=>{
               this.initPageData(false)
             }

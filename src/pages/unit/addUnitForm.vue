@@ -37,7 +37,7 @@
       <template #control>
         <yhm-form-text title="类型" :value="categoryUnit" id="categoryUnit"></yhm-form-text>
         <yhm-form-text title="法定代表人" :value="legalPersonID" id="legalPersonID"></yhm-form-text>
-        <yhm-form-text title="注册资本" :value="capital" id="capital">
+        <yhm-form-text title="注册资本" :value="capital" id="capital" tip="money">
           <div class="formBoxIcon" @click="capitalClick">
             <span id="capitalType" class="iconYuan i-yuan"></span>
           </div>

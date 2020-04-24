@@ -46,14 +46,14 @@
             <tr v-for="(item,index) in InvoiceDetails" :class="{InterlacBg:index%2!=0}" :key="item.id">
               <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
               <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
-              <yhm-manager-td-psd :value="item.category" :list="invoiceTypePsdList"></yhm-manager-td-psd>
+              <yhm-manager-td-psd :value="item.category" :list="invoiceCategoryList"></yhm-manager-td-psd>
 
               <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
               <yhm-manager-td-money :value="item.actualMoney"></yhm-manager-td-money>
 
               <yhm-manager-td-center :value="item.quantity"></yhm-manager-td-center>
               <yhm-manager-td :value="item.remark"></yhm-manager-td>
-              <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.url" :tag="item.isPdf === '1'?'ElectronicInvoice':'Invoice'"></yhm-manager-td-image>
+              <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.url" :tag="item.isPdf === '1'?'ElectronicInvoice':'Invoice'" :pdf-url="item.pdfUrl"></yhm-manager-td-image>
             </tr>
           </template>
           <template #empty>
@@ -113,6 +113,7 @@
         details: [],
         InvoiceDetails: [],
         invoiceCategoryPsdList: [],
+        invoiceCategoryList: [],
         btnLook: false,
         elInvoiceBtn: true,
         isElInvoiceBtn: true,
@@ -273,6 +274,7 @@
           this.subject = data.subject
           this.invoiceTypePsdList = data.invoiceTypePsd.list
           this.invoiceCategory = data.invoiceTypePsd.value
+          this.invoiceCategoryList = data.invoiceCategoryPsd.list
           this.typeList = data.typePsd.list
           this.type = data.typePsd.value
           this.actualMoney = data.actualMoney

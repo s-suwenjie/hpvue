@@ -3,7 +3,7 @@
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
-        <yhm-form-text title="事件描述" :value="name" id="name" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="事件描述" :value="name" id="name" rule="R0000" tip="value"></yhm-form-text>
         <yhm-form-radio title="品牌" submitvalue="brandObject" :ownerID="id" :select-list="brandList" :value="brand" id="brand" rule="#"></yhm-form-radio>
         <yhm-form-drop-down-select title="事件类型" width="1" @select="selectCause" :select-list="categoryList" :selectValue="category" selectid="category" :value="cause" id="cause" rule="R0000"></yhm-form-drop-down-select>
         <yhm-form-date title="最迟" @call="initCode" subtitle="付款日期" :min="nowDate" :value="lastDate" id="lastDate" position="r" rule="R0000"></yhm-form-date>

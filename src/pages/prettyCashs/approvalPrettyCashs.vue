@@ -18,9 +18,9 @@
         </router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/approvalPrettyCashs'}">备用金
         </router-link>
-        <router-link class="menuTabDiv" :to="{path:'/home/approvalInsuranceManager'}">保险审批
-          <i class="noticeNum" v-if="insuranceNum!='0'">{{insuranceNum}}</i>
-        </router-link>
+<!--        <router-link class="menuTabDiv" :to="{path:'/home/approvalInsuranceManager'}">保险审批-->
+<!--          <i class="noticeNum" v-if="insuranceNum!='0'">{{insuranceNum}}</i>-->
+<!--        </router-link>-->
       </template>
       <!--操作区-->
       <template #operate>
@@ -39,7 +39,7 @@
         </div>
       </template>
       <template #listHead>
-        <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
+        <yhm-managerth style="width: 38px;" title="全选"></yhm-managerth>
         <yhm-managerth style="width: 50px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="申请人" value="personID"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="批次号" value="code"></yhm-managerth>

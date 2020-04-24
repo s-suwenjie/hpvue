@@ -10,7 +10,11 @@
         <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish)" v-for="(item) in content" :key="item.id">
           <yhm-app-view-control :contentTitle="item.person + item.state" :content="item.workDate" type="date"></yhm-app-view-control>
           <yhm-app-view-detail>
-            <span style="color:#aaaaaa">【{{item.person}}】</span>提交了<yhm-app-view-psd :psd="categoryPurchaseItems" :content="item.categoryPurchase"></yhm-app-view-psd>中的<yhm-app-view-psd :psd="modelItems" :content="item.model"></yhm-app-view-psd>类型的采购申请，预估价值<yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
+            <span style="color:#aaaaaa">【{{item.person}}】</span>
+            提交了<yhm-app-view-psd :psd="categoryPurchaseItems" :content="item.categoryPurchase"></yhm-app-view-psd>
+            中的<yhm-app-view-psd :psd="modelItems" :content="item.model"></yhm-app-view-psd>
+            类型的采购申请，预估价值<yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
+            ，<yhm-app-view-psd :psd="stateItems" :content="item.state"></yhm-app-view-psd>
           </yhm-app-view-detail>
           <yhm-app-approval-result v-show="getIsFinish" :category="item.state % 2 == 1||item.state== -1" :left="3.5" :top="0.5"></yhm-app-approval-result>
         </yhm-app-structure-menu-group>
@@ -88,6 +92,7 @@
         },
         categoryPurchaseItems:[],//采购分类
         modelItems:[],//采购类型
+        stateItems:[],//状态
       }
     },
     methods:{
@@ -178,6 +183,7 @@
             this.categoryPurchaseItems = data.categoryPurchaseItems
             this.modelItems = data.modelItems
             this.appToastShow = true
+            this.stateItems = data.stateItems
 
           }
         })

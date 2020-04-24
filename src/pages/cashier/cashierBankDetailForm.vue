@@ -552,11 +552,13 @@
       this.setQuery2Value('bankMoney')
       this.setQuery2Value('insuredUnitID')
       this.setQuery2Value('insuredUnitAccount')
+      this.setQuery2Value('insuredUnitAccountID')
       this.setQuery2Value('cashierSubject')
       this.setQuery2Value('cashierSubjectID')
       this.setQuery2Value('cashierRemake')
       this.setQuery2Value('publicandPrivateAccount')
       this.setQuery2Value('cashierBankTag')
+
 
       if(this.directionBefore === '1'){
 
@@ -636,7 +638,7 @@
           this.money=this.bankMoney
           this.calcTrMoney =this.bankMoney
           this.otherAccount=this.insuredUnitAccount
-          this.otherAccountID=this.insuredUnitID
+          this.otherAccountID=this.insuredUnitAccountID
 
           this.subject=this.cashierSubject
           this.subjectID=this.cashierSubjectID
