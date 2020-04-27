@@ -1,5 +1,6 @@
 <template>
     <div>
+      <!-- 移动端 输入框 文件上传组件-->
       <div class="text_input">
         <span class="title">{{title}}</span>
         <input :type="type" v-if="type=='text'" class="input" :value="value" ref="input" @input="$emit('input', $event.target.value)" :placeholder="placeholder">

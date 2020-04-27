@@ -186,12 +186,16 @@
 
       },
       selfNameEvent(){
+        if(this.thisUnit !== null){
+          let arr = [];
+          for(let i in this.thisUnit){
+            arr.push(this.thisUnit[i].name)
+          }
 
-        for(let i in this.thisUnit){
-          if(this.selfName === this.thisUnit[i].name){
-           this.selfNameID = this.thisUnit[i].id
-          }else{
+          if(arr.indexOf(this.selfName) === -1){
             this.selfName = ''
+          }else{
+            this.selfNameID = this.thisUnit[arr.indexOf(this.selfName)].id
           }
         }
       },
@@ -551,11 +555,14 @@
           this.personID = data.personID
           this.person = data.person
           this.thisUnit = data.thisUnit
-          for(let i in this.thisUnit){
-            this.thisUnit[i].id = '56C79016-453A-4A38-9924-7CF1FB48C55C';
-            this.thisUnit[i].name = '北京海派奥特经贸有限公司工会委员会'
-          }
 
+          if(this.thisUnit !== null){
+            let unitParams = {
+              id: '56C79016-453A-4A38-9924-7CF1FB48C55C',
+              name: '北京海派奥特经贸有限公司工会委员会'
+            }
+            this.thisUnit.push(unitParams)
+          }
         },
         add: (data) => {
           //添加时独有的代码

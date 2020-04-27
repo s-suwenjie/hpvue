@@ -1,6 +1,7 @@
 <template>
     <div>
-<!--      <div  @click="appTimeShow=!appTimeShow">打开</div>-->
+      <!-- 移动端 时间选择器 -->
+      <!--      <div  @click="appTimeShow=!appTimeShow">打开</div>-->
       <div class="appTimeShade" v-show="appTimeShow" @click="shadeClick"></div>
       <div   class="appTime" :class="[appTimeShow==false?'appTimeHide':'appTimeShow']">
           <p class="appTimeTop"><span class="timeTopBtn btn" @click="appTimeShow=!appTimeShow">关闭</span><span class="timeTopBtn2 btn" @click="monthClick">返回当月</span></p>

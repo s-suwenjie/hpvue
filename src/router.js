@@ -364,8 +364,10 @@ import warehouseExitView from './pages/Inventory/warehouseExitView'
 /* 手机页面 */
 import homeApp from './views/homeApp.vue'
 
-/* 菜单管理 */
+/* 菜单管理 ->分类 ->消息 ->我的 */
 import m_myApprovalManager from './pagesApp/myApproval/myApprovalManager.vue'
+import newsManager from './pagesApp/myApproval/newsManager.vue'
+import mineManager from './pagesApp/myApproval/mineManager.vue'
 
 /* 采购计划 */
 import m_approvalPurchaseManager from './pagesApp/purchase/m_approvalPurchaseManager.vue'
@@ -834,6 +836,8 @@ export default new Router({
       children:[
         { path: '/homeApp/testApp', name: 'testApp', component: testApp ,meta: {title: 'app端测试'}},
         { path: '/homeApp/m_myApprovalManager', name: 'm_myApprovalManager', component: m_myApprovalManager ,meta: {title: '北京海派办公系统'}},
+        { path: '/homeApp/newsManager', name: 'newsManager', component: newsManager ,meta: {title: '北京海派办公系统'}},
+        { path: '/homeApp/mineManager', name: 'mineManager', component: mineManager ,meta: {title: '北京海派办公系统'}},
 
         { path: '/homeApp/m_myPaymentPlanManager', name: 'm_myPaymentPlanManager', component: m_myPaymentPlanManager ,meta: {title: '付款计划审批'}},
         { path: '/homeApp/m_myPaymentPlanView', name: 'm_myPaymentPlanView', component: m_myPaymentPlanView ,meta: {title: '付款计划审批'}},

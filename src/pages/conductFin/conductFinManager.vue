@@ -24,10 +24,10 @@
         <yhm-managerth style="width: 220px" title="名称" value="name"></yhm-managerth>
         <yhm-managerth title="账号" value="account"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="金额" value="money"></yhm-managerth>
-        <yhm-managerth style="width: 140px" title="开始日期" value="startDate"></yhm-managerth>
-        <yhm-managerth style="width: 140px" title="结束日期" value="endDate"></yhm-managerth>
+        <yhm-managerth style="width: 135px" title="开始日期" value="startDate"></yhm-managerth>
+        <yhm-managerth style="width: 135px" title="结束日期" value="endDate"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="状态"></yhm-managerth>
-        <yhm-managerth style="width: 240px;" title="操作"></yhm-managerth>
+        <yhm-managerth style="width: 290px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -43,8 +43,9 @@
           <yhm-manager-td-psd :value="item.state" :list="stateItems"></yhm-manager-td-psd>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button :no-click="item.state !== '0'" @click="tranPaymentEvent(item)" value="转款" icon="i-tranPayment" color="#49a9ea"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button :no-click="item.state !== '2' || item.stateA === '2'" @click="redeemEvent(item)" value="赎回本金" icon="i-redeem" color="#2aa70b"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button :no-click="item.state !== '2' || item.stateB === '1'" @click="interestEntry(item)" value="利息入账" icon="i-interest" color="#c700df"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :no-click="getRedeem(item)" @click="redeemEvent(item)" value="赎回本金" icon="i-redeem" color="#2aa70b"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :no-click="getInterest(item)" @click="interestEntry(item)" value="利息入账" icon="i-interest" color="#c700df"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :no-click="item.state !== '3'" @click="finishEvent(item)" value="完成" icon="i-check" color="#49a9ea"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -84,7 +85,7 @@
       add(){
         this.$dialog.OpenWindow({
           width: 1050,
-          height: 600,
+          height: 640,
           url: '/conductFinForm',
           title: '添加理财产品',
           closeCallBack: (data) => {
@@ -149,6 +150,38 @@
           }
         })
       },
+      finishEvent(item){
+        this.$dialog.confirm({
+          width:420,
+          tipValue:'确定本条理财的本金和利息全部到账！！！',
+          btnValueOk:'确定已全部到账',
+          btnValueCancel:'我再看看',
+          okCallBack:() =>{
+            let params = {
+              id:item.id
+            }
+            this.ajaxJson({
+              url: '/Fin/finishBankProduct',
+              data: params,
+              call: (data) => {
+                if(data.type === 0){
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: ()=> {
+                      this.initPageData(false)
+                    }
+                  })
+                }else{
+                  this.$dialog.alert({
+                    tipValue:data.message,
+                    alertImg: 'error'
+                  })
+                }
+              }
+            })
+          }
+        })
+      },
       initPageData(initValue){
         let params = {}
         if (initValue) {
@@ -180,6 +213,23 @@
             // this.listCategory=data.categoryPsd
           }
         })
+      }
+    },
+    computed:{
+      getRedeem(){
+        return function (item) {
+          if(item.redemptionCategory === '0'){
+            return  item.state !== '2'
+          }
+          else{
+            return item.state === '0' || item.state === '3' || item.state === '4'
+          }
+        }
+      },
+      getInterest(){
+        return function (item) {
+          return item.state === '0' || item.state === '4'
+        }
       }
     },
     created () {

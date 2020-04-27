@@ -5,7 +5,7 @@
         <div>{{title}}</div>
         <div v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
-      <yhm-text :show="show" :decimal-places="decimalPlaces" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>
+      <yhm-text :show="show" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>
       <slot></slot>
     </div>
     <div class="fc_error"><span v-if="error">{{errorTipMessage}}</span></div>
@@ -137,6 +137,11 @@
             this.$emit("blur")
           })
         },
+        focusEvent(){
+          this.$nextTick(() => {
+            this.$emit("focus")
+          })
+        }
       },
       watch: {
         show (newVal, oldVal) {

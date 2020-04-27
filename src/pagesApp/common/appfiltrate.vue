@@ -1,5 +1,6 @@
 <template>
     <div>
+      <!-- 移动端 右侧弹出筛选框 -->
       <div class="a_mask a_mask_show" v-if="alertShow" @click="closeEvent" style="z-index: 2;"></div>
       <div class="app_alert" ref="hidden" :class="{'hidden':!alertShow}">
         <div class="alert_top">

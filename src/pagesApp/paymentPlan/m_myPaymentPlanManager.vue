@@ -8,17 +8,15 @@
 
     <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="url" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish,item.isApproval,item.state)" v-for="(item) in content" :key="item.id">
-        <yhm-app-view-control :contentTitle="item.person" :content="item.lastDate" type="date"></yhm-app-view-control>
+        <yhm-app-view-control contentTitle="付款计划" style="font-size: 18px;border-bottom: 1px solid #bfbfbf;margin-bottom: 0.5rem;" :content="item.lastDate" type="date"></yhm-app-view-control>
         <yhm-app-view-detail>
-          <span style="color:#aaaaaa">【{{item.person}}】</span>
-          申请了
-          <span style="color:#08acc0;">{{item.cause}}</span>
-          的付款计划，收款方是
-          <span style="color: #fd6802;">{{item.otherUnit}}</span>
-          ，计划金额
-          <yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
-          ，<span :style="{'color':item.stateColor}">{{item.stateVal}}</span>
-          <!-- <span style="color:#aaaaaa">【{{item.person}}】</span>提交了<span style="color:#08acc0;">{{item.cause}}</span>的付款计划，<span style="color: #2c920b;">{{item.stateVal}}</span>，对方单位是<span style="color: #fd6802;">{{item.otherUnit}}</span>，计划金额<yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money> -->
+
+          <yhm-app-view-control title="申请人" :content="item.person"></yhm-app-view-control>
+          <yhm-app-view-control title="事由" :content="item.cause"></yhm-app-view-control>
+          <yhm-app-view-control title="收款方" :content="item.otherUnit"></yhm-app-view-control>
+          <yhm-app-view-control title="计划金额" :content="item.money" type="money" color="#f00"></yhm-app-view-control>
+          <yhm-app-view-control title="状态" :content="item.stateVal"></yhm-app-view-control>
+
         </yhm-app-view-detail>
         <yhm-app-approval-result v-show="getIsFinish" :category="item.state % 2 == 1||item.state== -1" :left="3.5" :top="0.5"></yhm-app-approval-result>
       </yhm-app-structure-menu-group>

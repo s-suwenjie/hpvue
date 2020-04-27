@@ -8,7 +8,7 @@
               :class="[{choice: index===onMonthChoice},{dp_no:!getIsMonthRange(item)}]">{{item}}月</button>
     </div>
     <div>
-      <button class="allBtn" @click="clickMonthAllEvent" :class="{choice: onMonthAllChoice}">通配</button>
+      <button class="allBtn" @click="clickMonthAllEvent" :class="{choice: onMonthAllChoice}">整年</button>
     </div>
   </div>
 </template>
@@ -43,6 +43,7 @@
         type: Boolean,
         default: false
       }
+
     },
     methods: {
       selectYear(year){

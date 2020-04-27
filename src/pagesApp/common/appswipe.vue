@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 移动端 轮播图 -->
     <div class="public">
       <div class="carousel" :style="{width:mainWidth+'rem'}">
           <ul class="swiper_center" ref="swiperCenter">

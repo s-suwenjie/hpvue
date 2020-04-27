@@ -665,9 +665,10 @@
           this.detail = data.subjectList
 
 
-          if(this.bankDetailType === '10'){
+          if(this.bankDetailType === '10' || this.bankDetailType === '9'){
             this.isMoney = ''
             this.money = ''
+            this.isOtherAcc = true
           }
 
           this.storeName = data.storeName

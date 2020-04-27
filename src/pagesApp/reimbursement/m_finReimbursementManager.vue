@@ -10,17 +10,14 @@
       <appSearch @change="change" @alertShow="rightAlert=true,key<1?key+=1:''" :list="shortcutSearchContent" ></appSearch>
 
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish)" v-for="(item) in content" :key="item.id">
-        <yhm-app-view-control :contentTitle="item.name" :content="item.workDate" type="date"></yhm-app-view-control>
+        <yhm-app-view-control contentTitle="报销申请" style="font-size: 18px;border-bottom: 1px solid #bfbfbf;margin-bottom: 0.5rem;" :content="item.workDate" type="date"></yhm-app-view-control>
         <yhm-app-view-detail>
-          <span style="color:#aaaaaa">【{{item.name}}】</span>
-          申请了
-          <span style="color: #08acc0;">{{item.subject}}</span>
-          的报销申请，
-          <yhm-app-view-psd :psd="isPrettyCashOffList" :content="item.isPrettyCashOff"></yhm-app-view-psd>
-          ，申请金额
-          <yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
-          ，
-          <span style="color: #49A9EA;">{{item.stateVal}}</span>
+
+          <yhm-app-view-control title="申请人" :content="item.name"></yhm-app-view-control>
+          <yhm-app-view-control title="事由" :content="item.subject"></yhm-app-view-control>
+          <yhm-app-view-psd title="报销方式" :psd="isPrettyCashOffList" :content="item.isPrettyCashOff"></yhm-app-view-psd>
+          <yhm-app-view-control title="申请金额" :content="item.money" type="money" color="#f00"></yhm-app-view-control>
+          <yhm-app-view-control title="状态" :content="item.stateVal"></yhm-app-view-control>
         </yhm-app-view-detail>
       </yhm-app-structure-menu-group>
     </yhm-app-scroll>

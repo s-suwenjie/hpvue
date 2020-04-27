@@ -7,17 +7,18 @@
 
     <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="url" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish,item.isApproval,item.state)" v-for="(item) in content" :key="item.id">
-        <yhm-app-view-control :contentTitle="item.name" :content="item.workDate" type="date"></yhm-app-view-control>
+        <yhm-app-view-control style="font-size: 18px;border-bottom: 1px solid #bfbfbf;margin-bottom: 0.5rem;"  contentTitle="报销申请" :content="item.workDate" type="date"></yhm-app-view-control>
         <yhm-app-view-detail>
-          <span style="color:#aaaaaa">【{{item.name}}】</span>
-          提交了
-          <span style="color: #08acc0;">{{item.subject}}</span>
-          的报销申请，
-          <span :style="{color:isPrettyCashOffPsd[item.isPrettyCashOff].code}">{{isPrettyCashOffPsd[item.isPrettyCashOff].showName}}</span>
-          ，申请金额
-          <yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
-          ，
-          <span style="color: #49A9EA;">{{item.stateVal}}</span>
+
+
+
+          <yhm-app-view-control title="申请人" :content="item.name"></yhm-app-view-control>
+          <yhm-app-view-control title="事由" :content="item.subject"></yhm-app-view-control>
+<!--          <yhm-app-view-control title="收款方" :content="item.otherUnit"></yhm-app-view-control>-->
+          <yhm-app-view-psd title="报销方式" :psd="isPrettyCashOffPsd" :content="item.isPrettyCashOff"></yhm-app-view-psd>
+          <yhm-app-view-control title="申请金额" :content="item.money" type="money" color="#f00"></yhm-app-view-control>
+          <yhm-app-view-control title="状态" :content="item.stateVal"></yhm-app-view-control>
+          
         </yhm-app-view-detail>
         <yhm-app-approval-result v-show="getIsFinish" :category="item.state % 2 == 1||item.state== -1" :left="3.5" :top="0.5"></yhm-app-approval-result>
       </yhm-app-structure-menu-group>

@@ -38,7 +38,7 @@
             <yhm-manager-td-money :value="item.totalMoney"></yhm-manager-td-money>
             <yhm-manager-td :value="item.otherName"></yhm-manager-td>
             <yhm-manager-td :value="item.tag"></yhm-manager-td>
-            <yhm-manager-td-image :tip="true" left="-750" width="900" height="550" :value="item.imgUrl" tag="ElectronicInvoice"></yhm-manager-td-image>
+            <yhm-manager-td-image :tip="true" left="-340" width="900" height="550" :value="item.imgUrl" tag="ElectronicInvoice"></yhm-manager-td-image>
             <yhm-manager-td-psd @click="relationID(item)" :value="item.state" :list="stateItems"></yhm-manager-td-psd>
             <yhm-manager-td-operate>
               <yhm-manager-td-operate-button :no-click="item.state !== '0'" @click="transferInvoice(item)" value="转让" icon="i-btn-refresh" color="#49a9ea"></yhm-manager-td-operate-button>

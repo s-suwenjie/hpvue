@@ -769,8 +769,9 @@
 
 .preview_showImg{
   display: flex;
+  overflow: hidden;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   background-color: #FFFFFF;
   position: fixed !important;
   z-index: 999999;
@@ -783,8 +784,9 @@
   margin: auto;
 }
 .preview_showImg>img{
-  max-width: 100%;
-  max-height: 100%;
+  /*max-width: 1000px;*/
+  width: 95%;
+  /*max-height: 100%;*/
   border-radius: 10px;
 }
 
@@ -1064,7 +1066,7 @@
 
 .cbl_main_left_type{
   width: 30px;
-  height: 62px;
+  height: 68px;
 }
 
 .cbl_main_left_type0{
@@ -1104,11 +1106,11 @@
 }
 
 .cbl_main_left_type>span{
-  font-size: 14px;
+  font-size: 12px;
   color: #FFFFFF;
   font-weight: bold;
   width: 28px;
-  height: 62px;
+  height: 68px;
   display: inline-flex;
   justify-content: center;
   align-items: center;

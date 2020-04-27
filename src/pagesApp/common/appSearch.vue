@@ -1,5 +1,6 @@
 <template>
     <div>
+      <!-- 移动端 搜索框 -->
       <div class="search">
         <div class="search_center">
           <div class="search_left" :class="{'search_auto':btnShow}">

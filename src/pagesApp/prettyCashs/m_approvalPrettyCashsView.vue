@@ -13,13 +13,14 @@
         <yhm-app-view-control title="申请事由" :content="subject"></yhm-app-view-control>
         <yhm-app-view-control title="业务相关" :content="isTravel" :psd="isTravelList"></yhm-app-view-control>
         <yhm-app-view-control title="申请日期" :content="workDate"></yhm-app-view-control>
-        <yhm-app-view-control title="申请金额" :content="money"></yhm-app-view-control>
+        <yhm-app-view-control title="申请金额" :content="money" type="money" color="#f00"></yhm-app-view-control>
         <yhm-app-view-control title="申请编号" :content="code"></yhm-app-view-control>
         <yhm-app-view-control title="预计核销日期" :content="estimateDate"></yhm-app-view-control>
         <yhm-app-view-control title="备注" :content="remark"></yhm-app-view-control>
         <p class="app_files" style=" word-wrap: break-word;word-break: normal;" v-if="list.length>=1">文件:
           <span v-for="(items,index) in list" :key="index" class="imgName" @click="imgSkip(items)">{{items.showName}}</span>
         </p>
+        <yhm-app-approval-result v-if="stateShow" :category="category" :left="3.5" :top="0.5"></yhm-app-approval-result>
         <yhm-app-approval-result v-if="isFinish=='1'?false:true" :category="getState" :left="3.5" :top="0.5"></yhm-app-approval-result>
       </yhm-app-structure-menu-group>
       <yhm-app-structure-menu-group title="拨付信息" v-for="(item,index) in bankDetailList" :key="index" @click="toggle(index)" :index="index" :length="bankDetailList.length">
@@ -53,6 +54,8 @@
     data(){
       return{
         appToastShow:false,
+        stateShow:false,
+        category:'',
         unit:'',//单位
         person:'',//申请人员
         invoiceCategory:'',//发票类型
@@ -95,6 +98,8 @@
                       ////结束刷新页面
                       this.operateShow = false
                       this.state = '-1'
+                      this.stateShow = true
+                      this.category = true
                     }
                   })
                 }else if(data.type === 1){
@@ -129,6 +134,8 @@
             if(data){
               this.operateShow = false
               this.state = '2'
+              this.stateShow = true
+              this.category = false
             }
           }
         })

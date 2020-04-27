@@ -8,13 +8,22 @@
 
       <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="url" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">
         <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish)" v-for="(item) in content" :key="item.id">
-          <yhm-app-view-control :contentTitle="item.person + item.state" :content="item.workDate" type="date"></yhm-app-view-control>
+          <yhm-app-view-control contentTitle="采购计划" style="font-size: 18px;border-bottom: 1px solid #bfbfbf;margin-bottom: 0.5rem;"  :content="item.workDate" type="date"></yhm-app-view-control>
           <yhm-app-view-detail>
-            <span style="color:#aaaaaa">【{{item.person}}】</span>
-            提交了<yhm-app-view-psd :psd="categoryPurchaseItems" :content="item.categoryPurchase"></yhm-app-view-psd>
-            中的<yhm-app-view-psd :psd="modelItems" :content="item.model"></yhm-app-view-psd>
-            类型的采购申请，预估价值<yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
-            ，<yhm-app-view-psd :psd="stateItems" :content="item.state"></yhm-app-view-psd>
+            <yhm-app-view-control title="申请人" :content="item.person"></yhm-app-view-control>
+            <div class="flex">
+              <span>采购分类：</span>
+              <yhm-app-view-psd style="width: auto" :psd="categoryPurchaseItems" :content="item.categoryPurchase"></yhm-app-view-psd>
+            </div>
+            <div class="flex">
+              <span>采购类型：</span>
+              <yhm-app-view-psd style="width: auto" :psd="modelItems" :content="item.model"></yhm-app-view-psd>
+            </div>
+            <yhm-app-view-control title="预估价值" :content="item.money" type="money" color="#f00"></yhm-app-view-control>
+            <div class="flex">
+              <span>状态：</span>
+              <yhm-app-view-psd style="width: auto" :psd="stateItems" :content="item.state"></yhm-app-view-psd>
+            </div>
           </yhm-app-view-detail>
           <yhm-app-approval-result v-show="getIsFinish" :category="item.state % 2 == 1||item.state== -1" :left="3.5" :top="0.5"></yhm-app-approval-result>
         </yhm-app-structure-menu-group>
@@ -209,8 +218,11 @@
 <style scoped lang="less">
   @rem: 375/10rem;
   .basic{
-
     margin-bottom: 16/@rem !important;
+  }
+  .flex{
+    display: flex;
+    justify-content: space-between;
   }
   .basic,.reim{
     font-size: 18/@rem;

@@ -8,21 +8,17 @@
 
     <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="url" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish)" v-for="(item) in content" :key="item.id">
-        <yhm-app-view-control :contentTitle="item.person" :content="item.workDate" type="date"></yhm-app-view-control>
+        <yhm-app-view-control contentTitle="备用金" style="font-size: 18px;border-bottom: 1px solid #bfbfbf;margin-bottom: 0.5rem;" :content="item.workDate" type="date"></yhm-app-view-control>
         <yhm-app-view-detail>
-          <span style="color:#aaaaaa">【{{item.person}}】</span>
-          申请了
-          <span style="color:#fd6802;">{{item.subject}}</span>
-          的备用金，发票类型
-          <span style="color: #c700df" v-if="item.invoiceCategory==0">有票</span>
-          <span style="color: #FF0000" v-if="item.invoiceCategory==1">无票</span>
-          <span style="color: #00f" v-if="item.invoiceCategory==2">工会费用</span>
 
-          ，倒计时
-          <span style="color: #08acc0">{{item.day}}天</span>
-          ，申请金额
-          <yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
-          ，<span :style="{'color':item.stateColor}">{{item.stateVal}}</span>
+
+          <yhm-app-view-control title="申请人" :content="item.person"></yhm-app-view-control>
+          <yhm-app-view-control title="事由" :content="item.subject"></yhm-app-view-control>
+          <yhm-app-view-psd title="发票类型" :content="item.invoiceCategory" :psd="invoiceCategoryList"></yhm-app-view-psd>
+          <yhm-app-view-control title="倒计时" :content="item.day + '天'"></yhm-app-view-control>
+          <yhm-app-view-control title="申请金额" :content="item.money" type="money" color="#f00"></yhm-app-view-control>
+          <yhm-app-view-control title="状态" :content="item.stateVal"></yhm-app-view-control>
+
         </yhm-app-view-detail>
         <yhm-app-approval-result v-show="getIsFinish" :category="item.state % 2 == 1||item.state== -1" :left="3.5" :top="0.5"></yhm-app-approval-result>
       </yhm-app-structure-menu-group>
@@ -48,23 +44,23 @@
         rightAlert:false,//筛选弹窗
         key: 0,//用来刷新组件状态 点击重置按钮时刷新默认状态
         invoiceCategory:'',
-        invoiceCategoryList: [
-            {
-              code: '#49a9ea',
-              num:'0',
-              showName:'有票'
-            },
-            {
-              code: '#f00',
-              num:'1',
-              showName:'无票'
-            },
-            {
-              code: '#f00',
-              num:'4',
-              showName:'工会费用'
-            }
-        ],
+        // invoiceCategoryList: [
+        //     {
+        //       code: '#49a9ea',
+        //       num:'0',
+        //       showName:'有票'
+        //     },
+        //     {
+        //       code: '#f00',
+        //       num:'1',
+        //       showName:'无票'
+        //     },
+        //     {
+        //       code: '#f00',
+        //       num:'4',
+        //       showName:'工会费用'
+        //     }
+        // ],
         shortcutSearchContent: [],
         isFinish:'1',
         url:'/PersonOffice/m_getPrettyCashsApproval',
@@ -151,10 +147,11 @@
             this.content = data.content
             this.shortcutSearchContent = data.shortcutSearchContent
             this.appToastShow = true
-            this.invoiceCategoryList = data.invoiceCategoryPsd.list
+
             this.invoiceCategory = data.invoiceCategory
           },
           init: (data) => {
+            this.invoiceCategoryList = data.invoiceCategoryPsd.list
             // 初始化时需要执行的代码
             this.appToastShow = true
 

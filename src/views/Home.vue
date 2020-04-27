@@ -3,7 +3,7 @@
     <div id="topmenu">
       <div class="topmenu">
         <div class="logo">
-          <img src="/HtmlStatic/images/HPlogo.svg" alt="">
+          <img src="/HtmlStatic/images/HPlogo.svg" alt="" />
 
           <!--<img src="/HtmlStatic/Images/CompanyLogo/YHMLogo.png"/><span>元亨机械</span>-->
 <!--          <div class="logoIcon">-->

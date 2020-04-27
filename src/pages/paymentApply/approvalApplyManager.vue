@@ -16,9 +16,9 @@
         <router-link class="menuTabDiv" :to="{path:'/home/approvalPrettyCashs'}">备用金
           <i class="noticeNum" v-if="prettyCashsNum!=0">{{prettyCashsNum}}</i>
         </router-link>
-<!--        <router-link class="menuTabDiv  " :to="{path:'/home/approvalInsuranceManager'}">保险审批-->
-<!--                    <i class="noticeNum" v-if="insuranceNum!=='0'">{{insuranceNum}}</i>-->
-<!--        </router-link>-->
+        <router-link class="menuTabDiv  " :to="{path:'/home/approvalInsuranceManager'}">保险审批
+                    <i class="noticeNum" v-if="insuranceNum!=='0'">{{insuranceNum}}</i>
+        </router-link>
       </template>
 
       <!--操作区-->
@@ -44,15 +44,15 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth title="收款方" value="id"></yhm-managerth>
-        <yhm-managerth style="width: 90px;" title="申请人"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="支付方式" value="isChecks"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="申请人"></yhm-managerth>
+        <yhm-managerth style="width: 90px;" title="支付方式" value="isChecks"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="事由"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="付款申请金额" value="money"></yhm-managerth>
+        <yhm-managerth style="width: 100px" title="付款申请金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 240px;" title="编号"></yhm-managerth>
-        <yhm-managerth style="width: 140px" title="状态" value="state"></yhm-managerth>
-        <yhm-managerth style="width: 250px;" title="操作"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="状态" value="state"></yhm-managerth>
+        <yhm-managerth style="width: 320px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->

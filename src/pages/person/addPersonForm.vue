@@ -17,17 +17,29 @@
         <yhm-form-text title="手机号码" :value="phone" id="phone" ref="phone" tip="value" @repeatverify="repeatVerifyEvent" rule="R4000"></yhm-form-text>
         <yhm-form-select title="所属公司" v-if="isThisUnit" @click="selectUnit" tip="value" :value="unit" id="unit" rule="R0000" ></yhm-form-select>
         <yhm-form-text title="所属部门" :show="isThisUnit" :value="department" id="department" placeholder="请在部门管理中调整所属部门" no-edit="1"></yhm-form-text>
-        <yhm-form-text title="身份证号" @input="isNoEvent" @repeatverify="repeatVerifyEvent" ref="idNo" tip="value" :value="idNo" id="idNo" rule="R5000">
+        <yhm-form-text title="身份证号" @input="isNoEvent" @repeatverify="repeatVerifyEvent" ref="idNo" tip="value" :value="idNo" id="idNo" :rule="idnoRule">
           <div class="formBoxIcon" @click="copyEvent">
             <span class="i-copy"></span>
           </div>
         </yhm-form-text>
-        <yhm-form-text title="籍贯" :value="nativePlace" id="nativePlace" rule="R0000" tip="value">
+        <yhm-form-text title="籍贯" style="position: relative;" :value="nativePlace" @focus="nativePlaceFocus" id="nativePlace" rule="R0000" tip="value">
+          <div class="nativePlaceBox" v-show="true"
+               :class="{
+               'nativePlaceBox':cityShow,
+               'nativePlaceBoxHide':!cityShow,
+               'nativePlaceBox1':category==='1',
+               'nativePlaceBox0':category==='0'}">
+            <span v-for="(item,index) in cityList" v-show="cityListShow" :key="index" @click="nativePlaceClick(item,index)">{{item.name}}</span>
+            <span v-for="(items) in cities" v-show="!cityListShow" :key="items" @click="citiesClick(items)">{{items}}</span>
+          </div>
+
           <div class="formBoxIcon" @click="personNative">
             <span class="i-help"></span>
           </div>
+
         </yhm-form-text>
         <yhm-form-radio title="生日历法" @call="calendarEvent" :select-list="calendarList" :value="calendar" id="calendar"></yhm-form-radio>
+
         <yhm-form-text title="公历生日" :value="birthday" id="birthday" no-edit="1"></yhm-form-text>
         <yhm-form-text title="农历生日" :value="birthdayLunar" id="birthdayLunar" no-edit="1"></yhm-form-text>
         <yhm-form-text title="属相" :value="zodiac" id="zodiac" no-edit="1"></yhm-form-text>
@@ -60,8 +72,8 @@
         <yhm-managerth style="width: 38px;background: linear-gradient(0deg, #ec6603, #a24906);" title="查看"></yhm-managerth>
         <yhm-managerth title="姓名" style="background: linear-gradient(0deg, #ec6603, #a24906);"></yhm-managerth>
         <yhm-managerth style="width: 170px;background: linear-gradient(0deg, #ec6603, #a24906);" title="性别"></yhm-managerth>
-        <yhm-managerth style="width: 230px;background: linear-gradient(0deg, #ec6603, #a24906);" title="手机号码"></yhm-managerth>
-        <yhm-managerth style="width: 100px;background: linear-gradient(0deg, #ec6603, #a24906);" title="身份证号"></yhm-managerth>
+        <yhm-managerth style="width: 100px;background: linear-gradient(0deg, #ec6603, #a24906);" title="手机号码"></yhm-managerth>
+        <yhm-managerth style="width: 230px;background: linear-gradient(0deg, #ec6603, #a24906);" title="身份证号"></yhm-managerth>
         <yhm-managerth style="width: 100px;background: linear-gradient(0deg, #ec6603, #a24906);" title="重要级别"></yhm-managerth>
         <yhm-managerth style="width: 150px;background: linear-gradient(0deg, #ec6603, #a24906);" title="操作"></yhm-managerth>
       </template>
@@ -87,16 +99,26 @@
 <script>
   import { guid } from '@/assets/common.js'
   import { formmixin } from '@/assets/form.js'
+  import city from '@/assets/city.json'
   export default {
     name: 'addPersonForm',
     mixins: [formmixin],
     data() {
       return {
+        cityList:city,
+        cities:[],
+        cityListShow:true,
+        cityShow:false,
+        idnoRule:'R5000',
+        provinceAndCity:'',
         id: '',
         ownerID: '',
+        isUrl:'',
         verificationId:'',
         isList:false,
         switchIconShow:false,
+        flatType:false,//外单位姓名是否重复
+        flatTypes:false,//本单位手机号是否重复
         list:[],
         categoryList: [] ,
         category: '',
@@ -137,6 +159,19 @@
       }
     },
     methods: {
+      citiesClick(item){//点击选择市
+        this.cityShow = false
+        this.nativePlace = this.provinceAndCity+ '/' +item//将选中的值赋给输入框
+      },
+      nativePlaceClick(item,index){//点击选择省
+        this.provinceAndCity = item.name
+        this.cities = item.cities
+        this.cityListShow = false
+      },
+      nativePlaceFocus(){
+        this.cityListShow = true
+        this.cityShow = true
+      },
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -331,9 +366,12 @@
       },
       /* 单位类型切换 */
       categoryEvent(){
+        // console.log(this.category)
         if(this.category === '1'){
+          this.idnoRule=''
           this.isThisUnit = false
         }else {
+          this.idnoRule = 'R5000'
           this.isThisUnit = true
         }
       },
@@ -345,6 +383,58 @@
         let str = item.match(/%(\S*)/)[1];
         return str
       },
+      /* 重复账号判断 并弹出重复的联系人数据 */
+      duplicateAccount(data){
+        this.isList = true
+        this.switchIconShow = true
+        let arr = []
+        if(data.type==='0'){
+          this.flatType = false
+          this.flatTypes = false
+        }
+        if(data.html!==''){//姓名已存在
+          if(this.category==='1'){//外单位时
+            this.flatType = true//标记 外单位姓名是否重复 true为重复
+          }else{
+            let name = this.cutOutFront(data.html)//截取字符串并返回 姓名
+            arr.push("'" + this.cutOutBack(data.html) + "'")
+            this.$refs.name.errorEvent(name)
+          }
+
+        }
+        if(data.message!==''){
+          if(this.category==='0'){//本单位时
+            this.flatTypes = true//标记 本单位手机号是否重复 true为重复
+          }else{
+            let phone = this.cutOutFront(data.message)//截取字符串并返回 电话号
+            arr.push("'" + this.cutOutBack(data.message) + "'")
+            this.$refs.phone.errorEvent(phone)
+          }
+        }
+        if(data.val!==''){
+          let identityCard = this.cutOutFront(data.val)//截取字符串并返回 身份证
+          arr.push("'" + this.cutOutBack(data.val) + "'")
+          this.$refs.idNo.errorEvent(identityCard)
+        }
+        this.verificationId = arr.join(',')
+        let params = {
+          id:this.verificationId
+        }
+        if(this.verificationId){
+          this.ajaxJson({
+            url: '/Basic/getPersonID',
+            data: params,
+            loading: "0",
+            call: (data) => {
+              this.list = data
+            }
+          })
+        }else{
+          this.isList = false
+          this.switchIconShow = false
+        }
+      },
+
       /* 验证 */
       repeatVerifyEvent() {
         if(this.category === '1'){
@@ -361,51 +451,21 @@
               data: params,
               loading: "0",
               call: (data) => {
-                if (data.type === 0){
+                if (data.type === 1){
                   this.isList = true
                   this.switchIconShow = true
-                  let arr = []
-                  if(data.html!==''){
-                    let name = this.cutOutFront(data.html)//截取字符串并返回 姓名
-                    arr.push("'" + this.cutOutBack(data.html) + "'")
-                    this.$refs.name.errorEvent(name)
-                  }
-                  if(data.message!==''){
-                    let phone = this.cutOutFront(data.message)//截取字符串并返回 电话号
-                    arr.push("'" + this.cutOutBack(data.message) + "'")
-                    this.$refs.phone.errorEvent(phone)
-                  }
-                  if(data.val!==''){
-                    let identityCard = this.cutOutFront(data.val)//截取字符串并返回 身份证
-                    arr.push("'" + this.cutOutBack(data.val) + "'")
-                    this.$refs.idNo.errorEvent(identityCard)
-                  }
-                  this.verificationId = arr.join(',')
-                  let params = {
-                    id:this.verificationId
-                  }
-                  if(this.verificationId){
-                    this.ajaxJson({
-                      url: '/Basic/getPersonID',
-                      data: params,
-                      loading: "0",
-                      call: (data) => {
-                        this.list = data
-                      }
-                    })
-                  }else{
-                    this.isList = false
-                    this.switchIconShow = false
-                  }
+                  this.duplicateAccount(data)
                 }else{
-                  this.isList = false
-                  this.switchIconShow = false
+                  this.isList = false//关闭底部重复信息
+                  this.switchIconShow = false//关闭重复信息框的隐藏按钮
+                  this.flatType = false
+                  this.flatTypes = false
                 }
               }
             })
           }
         }else {
-          if (this.name && this.phone && this.idNo.length === 18){
+          // if (this.name && this.phone && this.idNo.length === 18){
             let params = {
               id:this.id,
               name: this.name,
@@ -418,11 +478,19 @@
               loading: "0",
               call: (data) => {
                 if (data.type === 1) {
-                  this.$refs.name.errorEvent("用户名已存在")
+                  this.isList = true
+                  this.switchIconShow = true
+                  this.duplicateAccount(data)
+                  // this.$refs.name.errorEvent("用户名已存在")
+                }else{
+                  this.isList = false
+                  this.switchIconShow = false
+                  this.flatType = false
+                  this.flatTypes = false
                 }
               }
             })
-          }
+          // }
         }
       },
       async isRepeatVerifyEvent(){
@@ -438,8 +506,23 @@
           loading:"0"
         })
         if(result.type === 1){
-          this.$refs.name.errorEvent('联系人已存在')
-          return false
+          this.duplicateAccount(result)
+          // this.$refs.name.errorEvent('联系人已存在')
+          if(this.category==='1'){//外单位
+            if(this.flatType === true){//外单位姓名重复时 允许
+              return true
+            }else{
+              this.flatType = false
+            }
+            return false
+          }else if(this.category==='0'){
+            if(this.flatTypes === true){//本单位手机号重复时 允许
+              return true
+            }else{
+              this.flatTypes = false
+            }
+            return false
+          }
         }
         return true
       },
@@ -473,26 +556,56 @@
             nation: this.nation,
             nationID: this.nationID
           }
-          this.ajaxJson({
-            url: '/Basic/personSaveVue',
-            data: params,
-            call: (data)=>{
-              if(data.type === 0){
-                this.$dialog.setReturnValue(this.id)
-                this.$dialog.alert({
-                  tipValue: data.message,
-                  closeCallBack: ()=>{
-                    this.$dialog.close()
+          if(this.flatType===false&&this.flatTypes===false){
+            this.ajaxJson({
+              url: '/Basic/personSaveVue',
+              data: params,
+              call: (data)=>{
+                if(data.type === 0){
+                  this.$dialog.setReturnValue(this.id)
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: ()=>{
+                      this.$dialog.close()
+                    }
+                  })
+                }else{
+                  this.$dialog.alert({
+                    alertImg: 'warn',
+                    tipValue: data.message
+                  })
+                }
+              }
+            })
+          }
+          if(this.flatType === true){//外单位姓名重复时
+            this.$dialog.confirm({
+              tipValue: '是否是同一个人?',
+              okCallBack: (data) => {
+                this.ajaxJson({
+                  url: '/Basic/personSaveVue',
+                  data: params,
+                  call: (data)=>{
+                    if(data.type === 0){
+                      this.$dialog.setReturnValue(this.id)
+                      this.$dialog.alert({
+                        tipValue: data.message,
+                        closeCallBack: ()=>{
+                          this.$dialog.close()
+                        }
+                      })
+                    }else{
+                      this.$dialog.alert({
+                        alertImg: 'warn',
+                        tipValue: data.message
+                      })
+                    }
                   }
                 })
-              }else{
-                this.$dialog.alert({
-                  alertImg: 'warn',
-                  tipValue: data.message
-                })
               }
-            }
-          })
+            })
+          }
+
         }
       },
       initData(){
@@ -523,8 +636,10 @@
             this.tag = data.tagPsd.value
 
             if(this.category == '1'){
+              this.idnoRule=''
               this.isThisUnit = false
             }else {
+              this.idnoRule = 'R5000'
               this.isThisUnit = true
             }
           },
@@ -553,6 +668,49 @@
 </script>
 
 <style lang="less" scoped>
+  .nativePlaceBoxHide{
+    height: 0px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    z-index: 999;
+    transition: all 0.5s;
+    overflow: hidden;
+  }
+  .nativePlaceBox1{
+    left: 84px;
+    top: 42px;
+  }
+  .nativePlaceBox0{
+    top: 42px;
+    right: 34px;
+  }
+  .nativePlaceBox{
+    position: absolute;
+    width: 881px;
+    height: 180px;
+    transition: all 0.5s;
+    border: 1px solid #bfbfbf;
+    z-index: 999;
+    background: #fff;
+    overflow: hidden;
+    font-size: 16px;
+    border-radius: 4px;
+    padding: 5px;
+    margin: 0 auto 20px auto;
+    span{
+      display: inline-block;
+      text-align: center;
+      width:auto;
+      cursor: pointer;
+      padding: 10px;
+    }
+    span:hover{
+      border-radius: 5px;
+      background: #49a9ea;
+      color: #fff;
+    }
+  }
   .isList{
     position: fixed;
     bottom: 0!important;

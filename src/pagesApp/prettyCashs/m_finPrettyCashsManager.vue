@@ -9,26 +9,22 @@
     <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="url" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">
       <appSearch @change="change" @alertShow="rightAlert=true,key<1?key+=1:''" :list="shortcutSearchContent" ></appSearch>
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish)" v-for="(item) in content" :key="item.id">
-        <yhm-app-view-control :contentTitle="item.person" :content="item.workDate" type="date"></yhm-app-view-control>
+        <yhm-app-view-control contentTitle="备用金" style="font-size: 18px;border-bottom: 1px solid #bfbfbf;margin-bottom: 0.5rem;" :content="item.workDate" type="date"></yhm-app-view-control>
         <yhm-app-view-detail>
-          <span style="color:#aaaaaa">【{{item.person}}】</span>
-          申请了
-          <span style="color:#fd6802;">{{item.subject}}</span>
-          的备用金，发票类型
-          <span style="color: #c700df" v-if="item.invoiceCategory==0">有票</span>
-          <span style="color: #FF0000" v-if="item.invoiceCategory==1">无票</span>
-          ，倒计时
-          <span style="color: #08acc0">{{item.day}}天</span>
-          ，申请金额
-          <yhm-app-view-money color="#FF0000" :content="item.money"></yhm-app-view-money>
-          ，核销金额
-          <yhm-app-view-money color="#FF0000" :content="item.reimbursementsMoney"></yhm-app-view-money>
-          ，待退回金额
-          <yhm-app-view-money color="#FF0000" :content="item.balance"></yhm-app-view-money>
-          ，已退回金额
-          <yhm-app-view-money color="#FF0000" :content="item.balance"></yhm-app-view-money>
 
-          ，<span :style="{'color':item.stateColor}">{{item.stateVal}}</span>
+
+          <yhm-app-view-control title="申请人" :content="item.person"></yhm-app-view-control>
+          <yhm-app-view-control title="事由" :content="item.subject"></yhm-app-view-control>
+          <yhm-app-view-psd title="发票类型" :content="item.invoiceCategory" :psd="invoiceCategoryList"></yhm-app-view-psd>
+          <yhm-app-view-control title="倒计时" :content="item.day + '天'"></yhm-app-view-control>
+          <yhm-app-view-control title="申请金额" :content="item.money" type="money" color="#f00"></yhm-app-view-control>
+
+          <yhm-app-view-control title="核销金额" :content="item.reimbursementsMoney" type="money" color="#f00"></yhm-app-view-control>
+          <yhm-app-view-control title="待退回金额" :content="item.balance" type="money" color="#f00"></yhm-app-view-control>
+          <yhm-app-view-control title="已退回金额" :content="item.balance" type="money" color="#f00"></yhm-app-view-control>
+
+          <yhm-app-view-control title="状态" :content="item.stateVal"></yhm-app-view-control>
+
         </yhm-app-view-detail>
       </yhm-app-structure-menu-group>
     </yhm-app-scroll>

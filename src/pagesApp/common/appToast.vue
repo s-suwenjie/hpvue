@@ -1,5 +1,6 @@
 <template>
     <div>
+      <!-- 移动端 轻提示 页面加载中 组件 -->
       <div class="shade" v-if="!shade" v-show="!maskSwitch" @click="clickEvent"></div>
       <div class="toast" v-if="!shade" v-show="type=='text'" @click="clickEvent">
         {{text}}

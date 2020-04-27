@@ -384,8 +384,8 @@ function formatCustomizeTip (val,rule) {
         result = val
       }
       else{
-        console.log('next:'+next)
-        console.log('val.length:'+val.length)
+        // console.log('next:'+next)
+        // console.log('val.length:'+val.length)
         result += ' ' + val.substring(next,val.length)
       }
     }

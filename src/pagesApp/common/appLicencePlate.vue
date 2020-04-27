@@ -1,3 +1,4 @@
+<!-- 移动端 车牌快捷输入组件 -->
 <template>
   <div class="container">
     <div class="plateShade" v-if="show" @click="clickMask"></div>

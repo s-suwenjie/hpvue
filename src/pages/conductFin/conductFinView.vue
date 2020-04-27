@@ -44,8 +44,8 @@
             <yhm-manager-td :value="item.subject" ></yhm-manager-td>
             <yhm-manager-td :value="item.remark"></yhm-manager-td>
 
-            <yhm-manager-td-money :value="item.direction === '0' ? money : '0' " style="color:#001CCE;"></yhm-manager-td-money>
-            <yhm-manager-td-money :value="item.direction === '1' ? money : '0' " style="color:#f00;"></yhm-manager-td-money>
+            <yhm-manager-td-money :value="item.direction === '0' ? item.money : '0' " style="color:#001CCE;"></yhm-manager-td-money>
+            <yhm-manager-td-money :value="item.direction === '1' ? item.money : '0' " style="color:#f00;"></yhm-manager-td-money>
 
             <yhm-manager-td-image :tip="true" width="850" height="500" left="50" type="files" :value="item.storeName" :tag="'bankDetail'" ></yhm-manager-td-image>
 

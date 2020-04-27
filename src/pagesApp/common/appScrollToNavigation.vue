@@ -1,7 +1,8 @@
+<!-- 移动端 滑动导航 -->
 <template>
     <div class="appScroll">
       <van-tabs v-model="active" scrollspy sticky>
-        <van-tab v-for="(item,index) in list" :title="item">
+        <van-tab v-for="(item,index) in list" :title="item" :key="index">
           <div>
             <slot :name="'scroll'+index"></slot>
           </div>

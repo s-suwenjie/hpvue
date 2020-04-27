@@ -1,6 +1,6 @@
 <template>
   <div class="f_main mb0">
-    <div class="print">
+    <div class="repairPrint">
       <div v-for="(index) in getCount" :key="index" @click="choicePrintEvent(index)" :class="{'selectChoice': isSelectChoice === index}">{{index}}</div>
     </div>
 
@@ -59,7 +59,7 @@
 
 
 <style scoped lang="less">
-  .print{
+  .repairPrint{
     margin: 0 20px;
     display: flex;
     flex-wrap: wrap;

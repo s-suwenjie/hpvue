@@ -46,8 +46,8 @@
               <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.remark" @click="listView(item)" color="#49a9ea"></yhm-manager-td>
               <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
               <yhm-manager-td-operate>
-                <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' || item.state === '9'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
-                <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' || item.state === '9'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
+                <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' || item.state === '9' || item.isFinish === '1'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
+                <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' || item.state === '9' || item.isFinish === '1'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
               </yhm-manager-td-operate>
             </tr>
           </template>
@@ -116,8 +116,8 @@
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" v-show="handleButton" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate" >
         <template #btn >
-          <yhm-commonbutton v-show="state !== '9'" value="通过" :flicker="true" @call="tableAdoptEvent()" icon="i-btm-applicationSm" class="btnIcon"></yhm-commonbutton>
-          <yhm-commonbutton v-show="state !== '9'" value="驳回" @call="tableRejectEvent()" icon="i-btn-turnDown" class="btnIcon btnIconColor"></yhm-commonbutton>
+          <yhm-commonbutton v-show="state !== '9' && isFinish !== '1'" value="通过" :flicker="true" @call="tableAdoptEvent()" icon="i-btm-applicationSm" class="btnIcon"></yhm-commonbutton>
+          <yhm-commonbutton v-show="state !== '9' && isFinish !== '1'" value="驳回" @call="tableRejectEvent()" icon="i-btn-turnDown" class="btnIcon btnIconColor"></yhm-commonbutton>
           <yhm-commonbutton v-show="isChecks1 === '1'" @call="refundMoney" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
           <yhm-commonbutton v-show="isChecks2 === '1'" @call="repayment()" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-commonbutton>
           <yhm-commonbutton v-show="isChecks3 === '1' || state === '9'" @call="approFund()" value="拨付资金" icon="i-btn-grant" color="#be08e3" :flicker="true"></yhm-commonbutton>
@@ -167,6 +167,7 @@
         isChecks1:'',
         isChecks2:'',
         isChecks3:'',
+        isFinish:'',
         prettyCashsID:'',
 
         isLeftID:false,//延长按钮
@@ -473,6 +474,7 @@
             this.isChecks1 = data.isChecks1
             this.isChecks2 = data.isChecks2
             this.isChecks3 = data.isChecks3
+            this.isFinish = data.isFinish
             this.prettyCashsID = data.prettyCashsID
           },
           add: (data) => {

@@ -420,22 +420,15 @@
   top: 0;
   right: 0;
   bottom: 0;
-  left: -150px;
+  left: -130px;
   margin: auto;
   box-shadow: 0 0 15px #333;
   border-radius: 8px;
   background-color: #fff;
+  overflow: hidden;
 }
 .invoiceImgView img {
-  max-width: 700px;
-  max-height: 500px;
-  line-height: 500px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
+  width: 95%;
 }
 /* 报销界面 无票理由 */
 .noInvoiceBox {

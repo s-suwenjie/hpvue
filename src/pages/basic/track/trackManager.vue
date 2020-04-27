@@ -87,7 +87,7 @@
           width: '1050',
           height: '700',
           title: '跟踪信息',
-          url: '/trackForm?ownerID='+item.id ,
+          url: '/trackForm?ownerID='+item.id,
           closeCallBack:(data)=>{
             if(data){
               this.initPageData(false)

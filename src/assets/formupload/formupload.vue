@@ -15,7 +15,7 @@
       </div>
       <div class="content">{{subtitle}}</div>
     </div>
-    <div class="filecontent" :class="{errorBox:error}">
+    <div class="filecontent" :class="{errorBox:error}" :style="getwidth">
       <div v-for="(item,index) in value" :key="index" @click="lookItem(item)" class="item" :class="{hover:item.isEdit === '1'}">
         <label v-if="!noEdit" @click.stop="editShowNameEvent(item)"  :class="{image:item.image === '1',file:item.image === '0'}"></label>
         <label v-if="noEdit" :class="{image_1:item.image === '1',file_1:item.image === '0'}"></label>
@@ -104,6 +104,10 @@
       show:{
         type:Boolean,
         default:true
+      },
+      width: {
+        type: String,
+        default: '945'
       }
     },
     methods:{
@@ -273,6 +277,9 @@
       }
     },
     computed:{
+      getwidth(){
+        return 'width:' +  this.width + 'px'
+      },
       getShowProgressRates(){
         return function(key) {
           return this.uploadingFileFinishKeys.indexOf(key) === -1

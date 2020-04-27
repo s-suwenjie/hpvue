@@ -1,3 +1,4 @@
+<!-- 移动端 筛选组件 -->
 <template>
     <div>
       <p class="app_alert_title">{{title}}:</p>

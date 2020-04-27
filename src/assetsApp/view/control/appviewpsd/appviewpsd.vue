@@ -1,5 +1,8 @@
 <template>
+  <div class="app_view_c_main">
+    <div v-if="getTitleShow" class="title">{{title}}：</div>
     <span :style="{color:colorValue}" v-html="getContentShow"></span>
+  </div>
 </template>
 
 <script>
@@ -24,9 +27,16 @@
       color:{
         type:String,
         default:'#333'
-      }
+      },
+      title:{
+        type:String,
+        default:''
+      },
     },
     computed:{
+      getTitleShow(){
+        return this.title !== ''
+      },
       getContentShow(){
         let result = ''
         if(typeof this.content === 'string') {
@@ -52,5 +62,7 @@
 </script>
 
 <style scoped>
-
+.app_view_c_main{
+  justify-content: space-between;
+}
 </style>

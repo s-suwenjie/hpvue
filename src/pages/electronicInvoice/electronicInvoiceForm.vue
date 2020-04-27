@@ -53,7 +53,7 @@
                 <img @mouseover.self="showSource('totalMoneyShow')" @mouseout.self="hideSource('totalMoneyShow')" src="../../../static/css/images/contrastIcon.svg">
               </div>
             </yhm-form-text>
-            <yhm-formimage :tip="true" width="850" height="550" left="-510" top="-300" rule="#" title="发票照片" :big="1" :value="'/UploadFile/electronicInvoice/' + imgUrl" id="imgUrl"></yhm-formimage>
+            <yhm-formimage :tip="true" width="850" height="550" left="-40" top="-50" rule="#" title="发票照片" :big="1" :value="'/UploadFile/electronicInvoice/' + imgUrl" id="imgUrl" discription=" "></yhm-formimage>
             <yhm-form-text title="开票单位" :value="otherName" id="otherName">
               <div class="vs">
                 <div v-if="otherNameShow" class="invoice category0" :style="getVs(otherNamePosition,1)"></div>

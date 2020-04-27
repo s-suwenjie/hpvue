@@ -18,9 +18,9 @@
         </router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/approvalPrettyCashs'}">备用金
         </router-link>
-<!--        <router-link class="menuTabDiv" :to="{path:'/home/approvalInsuranceManager'}">保险审批-->
-<!--          <i class="noticeNum" v-if="insuranceNum!='0'">{{insuranceNum}}</i>-->
-<!--        </router-link>-->
+        <router-link class="menuTabDiv" :to="{path:'/home/approvalInsuranceManager'}">保险审批
+          <i class="noticeNum" v-if="insuranceNum!='0'">{{insuranceNum}}</i>
+        </router-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -52,7 +52,7 @@
 
         <yhm-managerth title="事由" value="subjectID"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="状态" value=""></yhm-managerth>
-        <yhm-managerth style="width: 240px;" title="操作" value=""></yhm-managerth>
+        <yhm-managerth style="width: 350px;" title="操作" value=""></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in content" :key="index" :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]">
@@ -72,12 +72,14 @@
           <yhm-manager-td :value="item.subject"></yhm-manager-td>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button v-show="item.approval === '4'&&item.isApproval === '0'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-show="item.state === '9'||item.state === '15'||item.state==='-1'" @click="print(item)" value="打印单据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
+
+            <yhm-manager-td-operate-button v-show="item.state === '9'||item.state === '15'||item.state==='-1'" @click="print(item)" value="打印借据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.state === '15' && item.isChecks === '2'" @click="printeceipt(item)" value="打印收据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '0'&& item.approval !== '4' && item.isApproval === '0' && item.state !== '15'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state !== '15'" v-show="item.isApproval === '0'&& item.approval !== '4' && item.isApproval === '0' && item.state !== '15'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
 
-<!--            <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state === '15'" v-show="item.state === '15'&&item.isChecks!=='1'" @click="refundMoney(item)" value="备用金退款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>-->
+            <!--            <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state === '15'" v-show="item.state === '15'&&item.isChecks!=='1'" @click="refundMoney(item)" value="备用金退款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>-->
+            <yhm-manager-td-operate-button v-show="item.approval === '4'&&item.isApproval === '0'" :no-click="item.isApprovRal==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state === '15'" v-show="item.isChecks === '2'" @click="refundMoney(item)" value="备用金退款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
 
           </yhm-manager-td-operate>
@@ -204,6 +206,21 @@
               }
             }
           })
+      },
+      /* 打印收据 */
+      printeceipt(item){
+        let params = {
+          id:item.id
+        }
+        this.ajaxJson({
+          data:params,
+          url: '/PersonOffice/printPrettyCashsBack',
+          call: (data)=>{
+            if(data.type===0){
+              window.open("/UploadFile/" + data.html)
+            }
+          }
+        })
       },
       print(item){
         let params = {

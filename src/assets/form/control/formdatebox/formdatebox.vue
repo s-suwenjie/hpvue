@@ -117,18 +117,18 @@ export default {
     errorEvent(errorMessage){
       this.$refs.control.errorEvent(errorMessage)
     },
-    evil (fn) {
-      let Fn = Function
-      return new Fn('return ' + fn)()
-    }
+    // evil (fn) {
+    //   let Fn = Function
+    //   return new Fn('return ' + fn)()
+    // }
   },
   watch: {
     show (newVal, oldVal) {
       this.error = false
       if (!newVal) {
         this.txt = ''
-        var js = 'this.p____page.' + this.id + ' = \'\''
-        this.evil(js)
+        let js = 'this.p____page.' + this.id + ' = \'\''
+        eval(js)
       }
     },
     value (newVal, oldVal) {

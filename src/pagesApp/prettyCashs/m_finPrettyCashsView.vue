@@ -13,7 +13,7 @@
         <yhm-app-view-control title="申请事由" :content="subject"></yhm-app-view-control>
         <yhm-app-view-control title="业务相关" :content="isTravel" :psd="isTravelList"></yhm-app-view-control>
         <yhm-app-view-control title="申请日期" :content="workDate"></yhm-app-view-control>
-        <yhm-app-view-control title="申请金额" :content="money"></yhm-app-view-control>
+        <yhm-app-view-control title="申请金额" :content="money" type="money" color="#f00"></yhm-app-view-control>
         <yhm-app-view-control title="申请编号" :content="code"></yhm-app-view-control>
         <yhm-app-view-control title="预计核销日期" :content="estimateDate"></yhm-app-view-control>
         <yhm-app-view-control title="备注" :content="remark"></yhm-app-view-control>

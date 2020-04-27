@@ -3,11 +3,14 @@
     <p class="btnLine"></p>
     <p class="btnTit">{{title}}：</p>
     <div class="chooseMonth daysList">
-      <button v-for="(item,index) in daysList" @click="clickMonthEvent(item,index)" class="btn"
-               :class="[{choice: index===onMonthChoice},{dp_no:!getIsDayRange(item)},{dp_no:!notAllClick},{isWeek: getWeek(item)}]">{{item}}</button>
+      <template v-for="(item,index) in daysList">
+        <button  @click="clickMonthEvent(item,index)" class="btn"
+               :class="[{choice: index===onMonthChoice},{dp_no:!getIsDayRange(item)},{dp_no:!notAllClick},getWeek(item)]">{{item}}</button>
+        <button v-if="getIsSun(item)">-</button>
+      </template>
     </div>
     <div>
-      <button class="allBtn" @click="clickMonthAllEvent" :class="{choice: onMonthAllChoice}">通配</button>
+      <button class="allBtn" @click="clickMonthAllEvent" :class="{choice: onMonthAllChoice}">整月</button>
     </div>
   </div>
 </template>
@@ -149,13 +152,20 @@
       },
       getWeek(){
         return function (val) {
-          let isWeek = false;
           let weekDate = this.yearMonth + '-' + val;
           let weekNum = new Date(weekDate).getDay();
-          if(weekNum === 6 || weekNum === 0){
-            isWeek = true
+          if(weekNum === 6){
+            return  'satur'
+          }else if(weekNum === 0){
+            return 'sun'
           }
-          return isWeek
+        }
+      },
+      getIsSun(){
+        return function (val) {
+          let weekDate = this.yearMonth + '-' + val;
+          let weekNum = new Date(weekDate).getDay();
+          return weekNum === 0;
         }
       }
     },
@@ -168,6 +178,21 @@
       this.daysList = getDayNumByYearMonth(parseInt(this.year),parseInt(this.month));
 
       this.maxDay = this.year + '-' + this.month + '-' + nowDate
+
+
+      this.$nextTick(()=>{
+        let sunDay = this.$refs.btn
+
+        let arr = []
+        for(let i in sunDay){
+          arr.push(sunDay[i].className)
+        }
+        for(let i in arr){
+          if(arr[i].indexOf('sun') !== -1 ){
+            console.log(sunDay[arr[i].indexOf('sun')])
+          }
+        }
+      })
 
     },
     watch: {
@@ -204,6 +229,9 @@
     }
   }
 </script>
+
+
+
 
 <style scoped lang="less">
   *{
@@ -255,9 +283,18 @@
     cursor: pointer;
     border: 1px solid #dedede;
     border-left: none;
+    white-space: nowrap;
   }
   .choice{
     background-color: #49a9ea !important;
     color: #fff !important;
+  }
+  .satur{
+    color: #c700df !important;
+    font-weight: bold;
+  }
+  .sun{
+    color: #f00 !important;
+    font-weight: bold;
   }
 </style>

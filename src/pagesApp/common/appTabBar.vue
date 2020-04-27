@@ -1,5 +1,6 @@
 <template>
     <div class="appTabBar">
+      <!-- 移动端 底部tab 使用vant下的组件 -->
       <van-tabbar v-model="batActive" style="z-index:1000;">
         <van-tabbar-item>
           <span>分类</span>

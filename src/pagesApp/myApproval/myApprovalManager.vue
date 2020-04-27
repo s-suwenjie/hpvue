@@ -4,38 +4,22 @@
       <template #scroll0>
         <yhm-app-structure-menu-group title="我的审批" v-if="myApprovalShow">
           <yhm-app-menu :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[0].menu" :key="index" v-show="routerList[index].id==item.id&&routerList[index].state=='1'" :url="item.imgUrl" :num="cornerMark[index]"></yhm-app-menu>
-          <!-- <yhm-app-menu @call="goto('/homeApp/m_approvalPrettyCashsManager?isFinish=1','0')" name="备用金" url="/UploadFile/m_image/menu/prettyCashs.svg"></yhm-app-menu> -->
         </yhm-app-structure-menu-group>
       </template>
       <template #scroll1>
         <yhm-app-structure-menu-group title="财务管理" v-if="financeShow">
           <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[1].menu" :key="index" v-show="financeList[index]==item.id&&finance[index]=='1'"  :url="item.imgUrl"></yhm-app-menu>
-          <!-- <yhm-app-menu @call="goto('/homeApp/m_finPrettyCashsManager?isFinish=1','0')" name="备用金" url="/UploadFile/m_image/menu/prettyCashs.svg"></yhm-app-menu> -->
         </yhm-app-structure-menu-group>
       </template>
-     <!-- <template #scroll2>
-        <yhm-app-structure-menu-group title="保险" v-if="insuranceShow">
-          <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[2].menu" :key="index"   :url="item.imgUrl" :num="insurance"></yhm-app-menu>
-        </yhm-app-structure-menu-group>
-      </template> -->
       <template #tabBar>
         <TabBar></TabBar>
       </template>
     </appScroll>
+    <appToast :type="type" v-show="!appToastShow" :text="title" @login-success="appToastShow = $event"></appToast>
+
     <!--      <yhm-app-menu @call="goto('/homeApp/m_fundDynamicsChartView','0')" name="资金动态" url="/UploadFile/m_image/menu/fundDynamicsCharts.svg" :num="prettyCashs"></yhm-app-menu>-->
     <!--      <yhm-app-menu @call="goto('/homeApp/m_orderSystemMenu','0')" name="点餐系统" url="/UploadFile/m_image/menu/orderSystem.svg"></yhm-app-menu>-->
     <!--      <yhm-app-menu @call="goto('/homeApp/m_bankDetailCashierView','0')" name="收支明细" url="/UploadFile/m_image/menu/fundDynamicsCharts.svg"></yhm-app-menu>-->
-
-<!--    <yhm-app-structure-menu-group title="我的审批" v-if="myApprovalShow">-->
-<!--      <yhm-app-menu :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[0].menu" :key="index" v-show="routerList[index].id==item.id&&routerList[index].state=='1'" :url="item.imgUrl" :num="cornerMark[index]"></yhm-app-menu>-->
-<!--    </yhm-app-structure-menu-group>-->
-<!--    <yhm-app-structure-menu-group title="财务" v-if="financeShow">-->
-<!--      <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[1].menu" :key="index" v-show="financeList[index]==item.id&&finance[index]=='1'"  :url="item.imgUrl"></yhm-app-menu>-->
-<!--    </yhm-app-structure-menu-group>-->
-<!--    <yhm-app-structure-menu-group title="保险" v-if="insuranceShow">-->
-<!--      <yhm-app-menu  :name="item.name" @call="goto(item)" v-for="(item,index) in topMenu[2].menu" :key="index"   :url="item.imgUrl" :num="insurance"></yhm-app-menu>-->
-<!--    </yhm-app-structure-menu-group>-->
-    <appToast :type="type" v-show="!appToastShow" :text="title" @login-success="appToastShow = $event"></appToast>
   </div>
 </template>
 
@@ -155,19 +139,6 @@
             // }
           ]
         },
-        // {
-        //   title: '保险',
-        //   menu:[
-
-        //     // {
-        //     //   name:'备用金',
-        //     //   imgUrl:'/UploadFile/m_image/menu/prettyCashs.svg',
-        //     //   url:'/homeApp/m_approvalPrettyCashsManager?isFinish=1',
-        //     //   id:'ABFCD5F9-1FB9-49C0-9405-E229239B4727',
-        //     //   num:'',
-        //     // },
-        //   ]
-        // },
       ]}
     },
     methods:{

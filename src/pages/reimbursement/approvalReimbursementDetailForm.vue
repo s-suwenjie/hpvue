@@ -122,6 +122,7 @@
         typeList: [],
         isApproval: '',
         rejectCause: '',
+        isFinish: '',
 
         isPrettyCashOff: '',
         isPrettyCashOffList: [],
@@ -287,6 +288,8 @@
           this.approvalHtml = data.approvalHtml
           this.rejectCause = data.rejectCause
           this.noInvoice = this.invoiceCategory !== '2';
+
+          this.isFinish = data.isFinish
 
           this.files = data.files
           this.isState = data.state

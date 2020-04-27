@@ -31,7 +31,7 @@
         <yhm-managerth title="返利金额" value="actualProfitLoss"></yhm-managerth>
         <yhm-managerth title="保险公司返利金额" value="realTimeProfitLoss"></yhm-managerth>
         <yhm-managerth title="申请编号" value="numbering"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="状态" value="status"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="状态" value="status"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -46,7 +46,7 @@
           <yhm-manager-td @click="unitDetail(item)" :tip="true" :value="item.otherAccount" ></yhm-manager-td>
           <yhm-manager-td :value="item.cashObjectVal"></yhm-manager-td>
           <yhm-manager-td-money  :value="item.actualProfitLoss"></yhm-manager-td-money>
-          <yhm-manager-td-money  :value="item.realTimePrzofitLoss"></yhm-manager-td-money>
+          <yhm-manager-td-money  :value="item.realTimeProfitLoss"></yhm-manager-td-money>
           <yhm-manager-td :value="item.numbering"></yhm-manager-td>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
         </tr>

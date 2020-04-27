@@ -6,10 +6,11 @@
         <yhm-form-text title="产品名称" :value="name" id="name" rule="R0000"></yhm-form-text>
         <yhm-form-radio title="状态" :select-list="stateList" :value="state" id="state" no-edit></yhm-form-radio>
         <yhm-form-select title="选择账号" @click="selectAccountEvent" :value="account" id="account" width="1" rule="R0000" tip="value"></yhm-form-select>
-        <yhm-form-text title="金额" :value="money" id="money" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="金额" tip="money" :value="money" id="money" rule="R0000"></yhm-form-text>
         <yhm-form-text title="金额大写" :value="moneyCn" id="moneyCn" rule="R0000" no-edit="1"></yhm-form-text>
         <yhm-form-date title="开始日期" :value="startDate" id="startDate" :max="endDate" rule="R0000" position="r"></yhm-form-date>
-        <yhm-form-date title="结束日期" :value="endDate" id="endDate" :min="startDate" rule="R0000" position="l"></yhm-form-date>
+        <yhm-form-radio title="状态" :select-list="redemptionCategoryList" :value="redemptionCategory" id="redemptionCategory" @call="switchRedemptionCategoryEvent"></yhm-form-radio>
+        <yhm-form-date title="结束日期" :show="redemptionCategory == 0" :value="endDate" id="endDate" :min="startDate" rule="R0000" position="r"></yhm-form-date>
         <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="支持单据" tag="conductFin" subtitle="" multiple="multiple"></yhm-formupload>
       </template>
     </yhm-formbody>
@@ -38,6 +39,8 @@
         money: '',
         moneyCn: '',
         startDate: '',
+        redemptionCategory:'',
+        redemptionCategoryList:[],
         endDate: '',
         fileList: [],
         state: '',
@@ -45,6 +48,11 @@
       }
     },
     methods: {
+      switchRedemptionCategoryEvent(){
+        if(this.redemptionCategory === '1'){
+          this.endDate = ''
+        }
+      },
       selectAccountEvent(){
         this.$dialog.OpenWindow({
           width: 950,
@@ -87,6 +95,7 @@
             money: this.money,
             moneyCn: this.moneyCn,
             startDate: this.startDate,
+            redemptionCategory: this.redemptionCategory,
             endDate: this.endDate,
             files: this.fileList,
           }
@@ -127,6 +136,8 @@
       this.init({
         url: '/Fin/initBankProductForm',
         all: (data) =>{
+          this.redemptionCategory = data.redemptionCategoryPsd.value
+          this.redemptionCategoryList = data.redemptionCategoryPsd.list
           this.state = data.statePsd.value
           this.stateList = data.statePsd.list
         },

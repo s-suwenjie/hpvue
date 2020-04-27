@@ -3,7 +3,7 @@
     <yhm-formbody>
       <template #control>
         <yhm-form-text title="保单号" tip="value" :value="pNumber" id="pNumber" ></yhm-form-text>
-        <yhm-formupload :ownerID="id" :value="fileList"  id="fileList" title="保单号(支持单据)" tag="track" multiple="multiple"></yhm-formupload>
+        <yhm-formupload :ownerID="id" :value="fileList"  id="fileList" title="保单号(支持单据)" tag="poNumber" multiple="multiple"></yhm-formupload>
       </template>
     </yhm-formbody>
     <div class="f_split"></div>

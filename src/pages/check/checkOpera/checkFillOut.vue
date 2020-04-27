@@ -174,6 +174,7 @@
             otherOwnerID: this.otherOwnerID,
             otherCategory: this.otherCategory
           }
+
           this.ajaxJson({
             url: '/Bill/checksUseFormSave',
             data: params,
@@ -237,14 +238,14 @@
             this.ownerSys = data.ownerSysPsd.value
             this.otherID = data.otherID
             this.other = data.other
-            this.otherOwnerID = data.otherOwnerID
 
             this.otherOld = data.other
             this.otherIDOld = data.otherID
             if(this.category==='1'){
               this.categoryOtherNoList = ['2']
             }
-            if(this.otherOwnerID){
+            if(data.otherOwnerID){
+              this.otherOwnerID = data.otherOwnerID
               this.isCategoryOther=true
               this.isOther=true
               this.money = data.money

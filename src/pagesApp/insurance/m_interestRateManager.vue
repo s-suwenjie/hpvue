@@ -11,14 +11,20 @@
       <appSearch @change="change" @alertShow="rightAlert=true,key<1?key+=1:''" :list="shortcutSearchContent" ></appSearch>
 
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish,item.down)" v-for="(item) in content" :key="item.id">
-        <yhm-app-view-control :contentTitle="item.plate" :content="item.insuredDate" type="date"></yhm-app-view-control>
+        <yhm-app-view-control contentTitle="保险审批"  style="font-size: 18px;border-bottom: 1px solid #bfbfbf;margin-bottom: 0.5rem;" :content="item.insuredDate" type="date"></yhm-app-view-control>
         <yhm-app-view-detail>
-<!--          车牌号:<span style="color: #49a9ea;">{{item.plate}}</span>，-->
-          联系人<span style="color:#08acc0;">【{{item.contactName}}】</span>，
-          被投保人<span style="color:#08acc0;">【{{item.beinsuredName}}】</span>，
-          投保类型 <span style="color:#027c02;"> {{item.insuredTypeVal}}</span>，
-          投保公司是<span style="color: #fd6802;" >{{item.insuredUnitVal}}</span>，
-          优惠金额/点数  <yhm-app-view-money color="#FF0000" :content="item.discountMoney"></yhm-app-view-money><span style="color: #FF0000"> / {{item.discountCount+'%'}}</span>
+          <yhm-app-view-control title="联系人" :content="item.contactName"></yhm-app-view-control>
+          <yhm-app-view-control title="被投保人" :content="item.beinsuredName"></yhm-app-view-control>
+          <yhm-app-view-control title="车牌号" :content="item.plate"></yhm-app-view-control>
+          <yhm-app-view-control title="投保类型" :content="item.insuredTypeVal"></yhm-app-view-control>
+          <yhm-app-view-control title="投保公司" :content="item.insuredUnitVal"></yhm-app-view-control>
+
+          <div class="flex">
+            <span>优惠金额/点数：</span>
+            <div>
+              <yhm-app-view-money color="#FF0000" :content="item.discountMoney"></yhm-app-view-money><span style="color: #FF0000"> / {{item.discountCount+'%'}}</span>
+            </div>
+          </div>
         </yhm-app-view-detail>
         <yhm-app-approval-result v-show="getIsFinish" :category="item.down==0?true:false" :left="3.5" :top="0.5"></yhm-app-approval-result>
       </yhm-app-structure-menu-group>
@@ -185,5 +191,8 @@
 </script>
 
 <style lang="less" scoped>
-
+.flex{
+  display: flex;
+  justify-content: space-between;
+}
 </style>

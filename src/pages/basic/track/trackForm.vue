@@ -20,7 +20,11 @@
         <yhm-form-select  title="跟踪人员" tip="value" @click="trackPersonEvent" :show="isTrackPerson" :value="trackPerson" id="trackPerson" rule="R0000"></yhm-form-select>
 
         <yhm-form-radio  title="跟踪反馈"  width="1" :select-list="feedbackList" :value="feedback" id="feedback"></yhm-form-radio>
-        <yhm-formupload :ownerID="id" :value="fileList" v-if="isBusinessMoney" id="fileList" title="商业险报价详情(支持单据)" tag="track" multiple="multiple"></yhm-formupload>
+
+
+
+        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="商业险报价详情(支持单据)" tag="track" multiple="multiple"></yhm-formupload>
+
       </template>
     </yhm-formbody>
 
@@ -40,7 +44,6 @@
     mixins: [formmixin],
     data(){
       return {
-        id:'',
         category:'', //
         categoryList:[],
         intention:'',
@@ -64,6 +67,7 @@
         feedback:'',
         feedbackList:[],
         nowDate:  formatDate(new Date((new Date()).getTime())),
+
 
         isIntention:true, //购买意向
         isIsQuote:true,   //是否报价
@@ -192,6 +196,7 @@
             ownerID:this.ownerID,
             feedback:this.feedback,
           }
+
           this.ajaxJson({
             url: '/Insurance/saveTrack',
             data: params,
@@ -219,7 +224,7 @@
     },
     created () {
       this.setQuery2Value('ownerID')
-      this.setQuery2Value('id')
+      this.setQuery2Value('trackSum')
       let params = {
         ownerID: this.ownerID
       }
@@ -228,7 +233,7 @@
         data: params,
         all: (data) => {
           this.businessMoney=data.businessMoney
-          this.fileList = data.files
+
           this.travelTaxMoney=data.travelTaxMoney
           this.forceMoney=data.forceMoney
           this.totalMoney=data.totalMoney
@@ -236,7 +241,9 @@
           this.level=data.level
           this.nextDate=data.nextDate
           this.planDate=data.planDate
-
+          if (this.remark!='') {
+            this.fileList = data.files
+          }
           this.categoryList = data.categoryPsd.list
           this.category = data.categoryPsd.value
 
@@ -303,40 +310,40 @@
         },
         look: (data) => {
           /* 需要查看的数据 */
-            this.id=data.id
-            this.businessMoney=data.businessMoney
-            this.fileList = data.files
-            this.travelTaxMoney=data.travelTaxMoney
-            this.forceMoney=data.forceMoney
-            this.totalMoney=data.totalMoney
-            this.remark=data.remark
-            this.level=data.level
-            this.nextDate=data.nextDate
-            this.planDate=data.planDate
-            this.trackPerson=data.trackPerson
-            this.trackPersonID=data.trackPersonID
-
-          if (this.category === '0' ){
-            this.isIntention=true //购买意向
-            this.isIsQuote=true   //是否报价
-            this.isBusinessMoney=true //商业险报价
-            this.isTravelTaxMoney=true  //车船税报价
-            this.isForceMoney=true  //交强险报价
-            this.isTotalMoney=true  //报价总额
-            this.isRemark=true  //过程记录
-            this.isLevel=true //潜客级别
-            this.isNextDate=true  //下次跟踪日期
-            this.isPlanDate=true  //预计到店日
-            this.isTrackPerson=true  //跟踪人员
-          }else{
-            this.isIntention=false //购买意向
-            this.isIsQuote=false   //是否报价
-            this.isBusinessMoney=false //商业险报价
-            this.isTravelTaxMoney=false  //车船税报价
-            this.isForceMoney=false  //交强险报价
-            this.isTotalMoney=false  //报价总额
-
-          }
+          //   this.id=data.id
+          //   this.businessMoney=data.businessMoney
+          //   this.fileList = data.files
+          //   this.travelTaxMoney=data.travelTaxMoney
+          //   this.forceMoney=data.forceMoney
+          //   this.totalMoney=data.totalMoney
+          //   this.remark=data.remark
+          //   this.level=data.level
+          //   this.nextDate=data.nextDate
+          //   this.planDate=data.planDate
+          //   this.trackPerson=data.trackPerson
+          //   this.trackPersonID=data.trackPersonID
+          //
+          // if (this.category === '0' ){
+          //   this.isIntention=true //购买意向
+          //   this.isIsQuote=true   //是否报价
+          //   this.isBusinessMoney=true //商业险报价
+          //   this.isTravelTaxMoney=true  //车船税报价
+          //   this.isForceMoney=true  //交强险报价
+          //   this.isTotalMoney=true  //报价总额
+          //   this.isRemark=true  //过程记录
+          //   this.isLevel=true //潜客级别
+          //   this.isNextDate=true  //下次跟踪日期
+          //   this.isPlanDate=true  //预计到店日
+          //   this.isTrackPerson=true  //跟踪人员
+          // }else{
+          //   this.isIntention=false //购买意向
+          //   this.isIsQuote=false   //是否报价
+          //   this.isBusinessMoney=false //商业险报价
+          //   this.isTravelTaxMoney=false  //车船税报价
+          //   this.isForceMoney=false  //交强险报价
+          //   this.isTotalMoney=false  //报价总额
+          //
+          // }
         }
       })
     },
