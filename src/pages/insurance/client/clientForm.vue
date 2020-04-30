@@ -8,11 +8,12 @@
         <yhm-form-zh-select-text tip-before="value" tip-after="phone" @call="contactEvent" :before="name" before-id="name" :after="phone" after-id="phone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="100"></yhm-form-zh-select-text>
         <yhm-form-select  title="车牌号" tip="value"   @click="plateEvent" :value="plate" id="plate" rule="R0000"></yhm-form-select>
         <yhm-form-select  title="车主" tip="value" @click="carOwnerEvent" :value="carOwner" id="carOwner" rule="R0000" :no-click="isEdit" ></yhm-form-select>
-        <yhm-form-upload-image title="行车证信息"  discription="点击图标或拖拽图片上传(不支持PDF格式)" tag="drivingLicense" :value="drivingLicense" id="drivingLicense" rule="#"></yhm-form-upload-image>
+<!--        <yhm-form-upload-image title="行车证信息"  discription="点击图标或拖拽图片上传(不支持PDF格式)" tag="drivingLicense" :value="drivingLicense" id="drivingLicense" rule="#"></yhm-form-upload-image>-->
         <yhm-form-text placeholder="" tip="value"  title="身份证号" subtitle="" :value="idNo" id="idNo" rule="R5000"></yhm-form-text>
-        <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber" rule="R0000"></yhm-form-text>
+        <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber" rule="R1600"></yhm-form-text>
         <yhm-form-date title="登记日期"  :value="registerDate" id="registerDate " position="u"  rule="R0000"></yhm-form-date>
-        <yhm-form-text placeholder="" title="发动机号" subtitle="" :value="engineNumber" id="engineNumber" rule="R0000"></yhm-form-text>
+        <yhm-form-text placeholder="" title="发动机号" subtitle="" :value="engineNumber" id="engineNumber" rule="R1700"></yhm-form-text>
+        <yhm-formupload :ownerID="vehicleID" :value="fileList"  id="fileList" title="行车证(支持单据)" tag="vehicle" multiple="multiple" category="3" rule="#"></yhm-formupload>
       </template>
     </yhm-formbody>
     <div class="f_split"></div>
@@ -39,6 +40,7 @@
 
 <script>
   import { formmixin } from '@/assets/form.js'
+  import { guid, formatTime} from '@/assets/common.js'
   export default {
     name: 'clientForm',
     mixins: [formmixin],
@@ -65,7 +67,7 @@
         lastYearUnitList:[],
         forceEndDate:'',  //交强险到期日
         businessEndDate:'', //商业险到期日
-
+        fileList:[],
         isAssort:'',
         isEdit:false
 
@@ -93,6 +95,30 @@
                 this.frameNumber=data.frameNumber
                 this.engineNumber=data.engineNumber
                 this.drivingLicense=data.drivingLicense
+                // let fileParams = {
+                //   id: guid(),
+                //   insertDate: formatTime(insertDate),
+                //   ownerID: this.id,
+                //   category: '',
+                //   storeName: this.list,
+                //   suffix: this.suffix,
+                //   image: '1',
+                //   showName: '2',
+                //   tag: 'bankDetail'
+                // }
+                // this.fileList.push(fileParams)
+                //
+                // console.log(this.fileList)
+                let params = {
+                  id:this.vehicleID,
+                }
+                this.ajaxJson({
+                  url: '/Basic/getVehileFile',
+                  data: params,
+                  call: (data) => {
+                   this.fileList=data.files
+                  }
+                })
 
                 if(data.carOwnerID !== ''){
                   this.isEdit=true
@@ -188,26 +214,36 @@
           url: '/Basic/getByPlateAll?id=' + this.contactPersonID,
           call: (data)=>{
             if(data){
-             if (data.length ===1){
-              for(let i in data){
-
-                this.carOwnerID=data[i].carOwnerID
-                this.plate = data[i].plate
-                this.vehicleID = data[i].id
-                this.carOwner = data[i].carOwner
-                this.drivingLicense = data[i].drivingLicense
-                this.frameNumber = data[i].frameNumber
-                this.engineNumber = data[i].engineNumber
-                this.registerDate = data[i].registerDate
-
-                if(data.carOwnerID !== ''){
-                  this.isEdit=true
-                }else {
-                  this.isEdit =false
-                  this.isAssort = 1
-                }
+              this.carOwnerID=data.carOwnerID
+              this.plate=data.plate
+              this.vehicleID = data.id
+              this.carOwner = data.carOwner
+              this.drivingLicense = data.drivingLicense
+              this.frameNumber = data.frameNumber
+              this.engineNumber = data.engineNumber
+              this.registerDate = data.registerDate
+              this.fileList=data.files
+              if(data.carOwnerID !== ''){
+                this.isEdit=true
+              }else {
+                this.isEdit =false
+                this.isAssort = 1
               }
-             }
+             // if (data.length ===1){
+             //  for(let i in data){
+             //
+             //    this.carOwnerID=data[i].carOwnerID
+             //    this.plate = data[i].plate
+             //    this.vehicleID = data[i].id
+             //    this.carOwner = data[i].carOwner
+             //    this.drivingLicense = data[i].drivingLicense
+             //    this.frameNumber = data[i].frameNumber
+             //    this.engineNumber = data[i].engineNumber
+             //    this.registerDate = data[i].registerDate
+             //
+
+             //  }
+             // }
             }
 
           }
@@ -215,7 +251,8 @@
       },
       //添加
        save () {
-        if (this.validator()) {
+
+         if (this.validator()) {
         let params = {
             id: this.id,
             principalID:this.principalID, //负责人ID
@@ -234,6 +271,7 @@
             lastYearUnit:this.lastYearUnit,  //投保公司
             forceEndDate:this.forceEndDate,  //交强险到期日
             businessEndDate:this.businessEndDate, //商业险到期日
+            files:this.fileList,
           }
           this.ajaxJson({
             url: '/Insurance/saveClient',
@@ -293,6 +331,7 @@
           this.engineNumber =data.engineNumber //发动机号
           this.forceEndDate =data.forceEndDate //交强险到期日
           this.businessEndDate =data.businessEndDate//商业险到期日
+          this.fileList=data.files
 
           if (data.carOwnerID != ''){
             this.isEdit=true

@@ -430,9 +430,9 @@
       }
     },
     created : function() {
-        if(this.tip === 'phone'){
-          this.maxNum = '11'
-        }
+      if(this.tip === 'phone'){
+        this.maxNum = '11'
+      }
     }
   }
 </script>

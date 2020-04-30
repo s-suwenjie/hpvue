@@ -1,17 +1,36 @@
 <template>
-    <td @click="clickEvent">
+    <td @click="clickEvent" class="menuTd" :class="{'overflow':menuShow}" @contextmenu.prevent="contextMenuEvent($event)"  @dblclick="dblclickEvent">
       <div class="md_center md_relative" :style="{color: color}">
         <div v-if="afterIcon !== ''" class="md_afterIcon" :style="{color:afterIconColor}" :class="[afterIcon,afterIconFontSize]"></div>
         {{value|formats(format,emptyValue,isEmpty)}}
       </div>
+      <div v-show="menuShow" v-if="menuList.length>0" ref="menuRight" class="menuRight" v-click-control-outside="outsideClick">
+        <p v-for="(item,index) in menuList" @click.stop="menuClick(item,index)">{{item}}</p>
+      </div>
+
     </td>
+
 </template>
 
 <script>
   export default {
     name: 'yhm-manager-td-center',
     inject: ["p____page"],
+    data(){
+      return{
+        menuShow:false,
+        mouseX:'',
+        mouseY:'',
+        // menuList:['编辑','编辑']
+      }
+    },
     props: {
+      menuList:{
+        type:Array,
+        default:function() {
+          return []
+        }
+      },
       isEmpty:{
         type:Boolean,
         default:false
@@ -51,6 +70,35 @@
           this.$emit('click')
         })
       },
+      dblclickEvent(){
+        this.$nextTick(() =>{
+          this.$emit("dblclick")
+        })
+      },
+      menuClick(item,index){
+        this.$nextTick(()=>{
+          this.menuShow = false
+          this.$emit('menuClick',item,index)
+        })
+      },
+      outsideClick(){
+        this.menuShow = false
+      },
+      contextMenuEvent(event){
+        if(this.menuList.length>0){
+          this.menuShow = false
+          $(".menuRight").hide()
+          let rect = this.$el.getBoundingClientRect()
+          this.mouseX = event.pageX - rect.x
+          this.mouseY = event.pageY - rect.y
+          let styles = this.$refs.menuRight.style
+          styles.left = this.mouseX+'px'
+          styles.top = this.mouseY+'px'
+          styles.display = 'block'
+          this.menuShow = true
+        }
+        this.$emit('rightClick')
+      },
     },
     filters:{
       formats(data,format,emptyValue,isEmpty){
@@ -79,6 +127,31 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+.menuRight{
+  position: absolute;
+  width: 100px;
+  height: auto;
+  padding: 5px 0;
+  background: #fff;
+  z-index: 999;
+  border: 1px solid black;
+  border-radius: 5px;
+  p{
+   height: 32px;
+    line-height: 32px;
+    text-align: center;
+  }
+  p:hover{
+    background: #49a9ea;
+    color: #FFFFFF;
+  }
+}
+.overflow{
+  overflow: inherit;
+}
 
+.menuTd{
+    position: relative;
+  }
 </style>

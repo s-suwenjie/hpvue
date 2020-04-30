@@ -23,13 +23,14 @@
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth title="投保日期" value="insuredDate"></yhm-managerth>
-        <yhm-managerth title="车牌号" value="plate"></yhm-managerth>
-        <yhm-managerth title="联系人" value="contactName"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="车牌号" value="plate"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth  style="width: 300px;" title="收款账户" value="otherAccount"></yhm-managerth>
-        <yhm-managerth title="收款人" value="cashObjectVal"></yhm-managerth>
-        <yhm-managerth title="返利金额" value="actualProfitLoss"></yhm-managerth>
-        <yhm-managerth title="保险公司返利金额" value="realTimeProfitLoss"></yhm-managerth>
+        <yhm-managerth style="width: 260px;" title="收款账户" value="otherAccount"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="收款人" value="cashObjectVal"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="优惠金额" value="preferential"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="返利金额" value="actualProfitLoss"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="保险公司返利金额" value="realTimeProfitLoss"></yhm-managerth>
         <yhm-managerth title="申请编号" value="numbering"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="状态" value="status"></yhm-managerth>
       </template>
@@ -45,6 +46,7 @@
           <yhm-manager-td-psd @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td @click="unitDetail(item)" :tip="true" :value="item.otherAccount" ></yhm-manager-td>
           <yhm-manager-td :value="item.cashObjectVal"></yhm-manager-td>
+          <yhm-manager-td-money  :value="item.preferential"></yhm-manager-td-money>
           <yhm-manager-td-money  :value="item.actualProfitLoss"></yhm-manager-td-money>
           <yhm-manager-td-money  :value="item.realTimeProfitLoss"></yhm-manager-td-money>
           <yhm-manager-td :value="item.numbering"></yhm-manager-td>
@@ -70,6 +72,7 @@
               <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="已返利总金额"></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="未返利总金额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="优惠总金额"></yhm-managerth>
             </tr>
             </thead>
             <tbody>
@@ -149,7 +152,14 @@
         })
       },
       unitDetail(item){
-      if (item.cashierOperation==='3'){
+        if (item.cash==='1'){
+          this.$dialog.alert({
+            tipValue:'此条不需要返利!!!',
+            alertImg: 'warn',
+            width:'300'
+          })
+        }
+      if (item.cashierOperation==='3' && item.cash==='0'){
           this.$dialog.OpenWindow({
             width: '1050',
             height: '750',
@@ -158,7 +168,7 @@
             closeCallBack: (data)=>{
             }
           })
-        }else{
+        }else if (item.cash==='0'){
           this.$dialog.alert({
             tipValue:'客户待返利!!!',
             alertImg: 'warn',

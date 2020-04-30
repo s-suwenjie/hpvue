@@ -1,14 +1,13 @@
 <template>
   <div class="f_main">
-
     <yhm-view-body>
       <template #title>报销明细</template>
       <template #body>
-        <yhm-view-control category="5" title="申请人" :content="name"></yhm-view-control>
-        <yhm-view-control  title="交易日期" :content="workDate"></yhm-view-control>
-        <yhm-view-control  title="报销编号" :content="code"></yhm-view-control>
+        <yhm-view-control title="申请人" :content="name"></yhm-view-control>
+        <yhm-view-control title="交易日期" :content="workDate"></yhm-view-control>
+        <yhm-view-control title="报销编号" :content="code"></yhm-view-control>
         <yhm-view-control title="是否核销" :content="isPrettyCashOff" :psd="isPrettyCashOffList"></yhm-view-control>
-        <yhm-view-control  title="核销金额" v-if="noPrettyCashMoney" :content="prettyCashMoney"></yhm-view-control>
+        <yhm-view-control title="核销金额" :content="getPrettyCashMoney + getTotalCalcMoney" category="2" v-if="noPrettyCashMoney"></yhm-view-control>
       </template>
     </yhm-view-body>
     <div class="f_split"></div>
@@ -118,7 +117,7 @@
 
 <script>
   import Qs from 'qs'
-  import { accMul, accAdd, guid, } from '@/assets/common.js'
+  import { accMul, accAdd, guid,tenThousandFormatHtml } from '@/assets/common.js'
   import { formmixin } from '@/assets/form.js'
   export default {
     name: 'reimbursementViewForm',
@@ -161,7 +160,7 @@
         isLeftID:false,//延长按钮
         leftID:'',//上一条ID
         isRightID:false,//延长按钮
-        rightID:'',//下一条ID
+        rightID:'',//下一条ID,
       }
     },
     methods: {
@@ -280,8 +279,27 @@
     created () {
       this.initData()
       this.selectedList()
+    },
+    computed: {
+      getPrettyCashMoney(){
+        return tenThousandFormatHtml(this.prettyCashMoney)
+      },
+
+      getTotalCalcMoney(){
+        let sumMoney = accAdd(this.actualMoney, accMul(this.prettyCashMoney, -1));
+        if(sumMoney === 0){
+          return '&nbsp;&nbsp;' + '（报销金额：' + tenThousandFormatHtml(this.actualMoney)  + '）'
+        }else if(sumMoney > 0){
+          return '&nbsp;&nbsp;' + '（报销金额：' + tenThousandFormatHtml(this.actualMoney) + '&nbsp;&nbsp;' + '拨付金额：' + tenThousandFormatHtml(sumMoney + '')  + '）'
+        }else{
+          return '&nbsp;&nbsp;' + '（报销金额：' + tenThousandFormatHtml(this.actualMoney) + '&nbsp;&nbsp;' + '退回金额：' + tenThousandFormatHtml(Math.abs(sumMoney) + '')  + '）'
+        }
+      },
+
     }
   }
+
+
 </script>
 
 <style scoped>

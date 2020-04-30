@@ -1,11 +1,19 @@
 <template>
   <div v-if="show" class="fc_main">
-    <div class="fc_box">
+    <div class="fc_box" >
       <div class="fc_title" :style="{color: color}">
         <div>{{title}}</div>
         <div v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
-      <yhm-text :show="show" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>
+
+<!--      <yhm-text :show="show"  v-if="!iconShou" :decimal-places="decimalPlaces" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>-->
+      <yhm-text :show="show" v-if="!iconShou" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>
+            <span class="list_look icon_look"  @click="iconClickEvent" v-show="iconShou"></span>
+
+<!--      <yhm-text :show="show" :decimal-places="decimalPlaces" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>-->
+
+<!--      <yhm-text :show="show" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>-->
+
       <slot></slot>
     </div>
     <div class="fc_error"><span v-if="error">{{errorTipMessage}}</span></div>
@@ -23,6 +31,10 @@
         }
       },
       props: {
+        iconShou:{
+          type:Boolean,
+          default :false
+        },
         decimalPlaces:{
           type:Number,
           default :null
@@ -113,6 +125,11 @@
         }
       },
       methods: {
+        iconClickEvent(){
+          this.$nextTick(() =>{
+            this.$emit("call")
+          })
+        },
         changeEvent(){
           this.$emit("change")
         },
@@ -163,5 +180,13 @@
 <style scoped>
   *{
     box-sizing: border-box;
+  }
+  .icon_look{
+    font-size: 20px;
+    color: #49a9ea;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
   }
 </style>

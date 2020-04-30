@@ -56,9 +56,13 @@
 </script>
 
 <style scoped lang="less">
+
 .md_left{
   input{
     text-indent: 4px;
+    width: 100%;
+    height: 32px;
+    margin: 0 1px;
   }
 }
 </style>

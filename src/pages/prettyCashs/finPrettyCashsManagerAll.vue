@@ -15,7 +15,7 @@
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'"  :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
         <div @click="selectedList" v-show="isSelected" class="b_main one b_one mr5b">打开选中信息</div>
-        <yhm-radiofilter  @initData="initChoose('isFinish')" all="0" title="完成状态" :content="isFinishPsd"></yhm-radiofilter>
+        <yhm-radiofilter  @initData="initChoose('isFinish')" title="完成状态" :content="isFinishPsd"></yhm-radiofilter>
         <yhm-radiofilter @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
       </template>
       <!--筛选区-->
@@ -26,7 +26,7 @@
         </div>
       </template>
       <template #listHead>
-        <yhm-managerth style="width: 38px;" title="全选"></yhm-managerth>
+        <yhm-managerth-check :check="allCheck" title="全选"></yhm-managerth-check>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="申请人" value="personID"></yhm-managerth>
 

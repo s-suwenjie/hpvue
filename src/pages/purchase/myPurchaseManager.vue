@@ -26,14 +26,14 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="申请日期" value="workDate"></yhm-managerth>
-        <yhm-managerth style="width: 110px" title="采购分类" value="categoryPurchase"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="采购类型" value="model"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="预计使用日期" value="lastDate"></yhm-managerth>
-        <yhm-managerth style="width: 230px;" title="编号" value="code"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="预计金额" value="money"></yhm-managerth>
+        <yhm-managerth style="width: 160px" title="申请日期" value="workDate"></yhm-managerth>
+        <yhm-managerth style="width: 160px" title="采购分类" value="categoryPurchase"></yhm-managerth>
+        <yhm-managerth style="width: 160px;" title="采购类型" value="model"></yhm-managerth>
+        <yhm-managerth style="width: 160px" title="预计使用日期" value="lastDate"></yhm-managerth>
+        <yhm-managerth style="width: 260px;" title="编号" value="code"></yhm-managerth>
+        <yhm-managerth style="width: 160px" title="预计金额" value="money"></yhm-managerth>
         <yhm-managerth title="状态" value="state"></yhm-managerth>
-        <yhm-managerth style="width: 150px" title="操作"></yhm-managerth>
+        <yhm-managerth style="width: 240px" title="操作"></yhm-managerth>
       </template>
       <template #listBody>
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
@@ -45,7 +45,7 @@
           <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
-          <yhm-manager-td-psd :list="stateItems" fsb="fs20b" :value="item.state"></yhm-manager-td-psd>
+          <yhm-manager-td-psd :is-left="true" :list="stateItems" fsb="fs20b" :value="item.state"></yhm-manager-td-psd>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button @click="submit(item)" :no-click="item.state !== '0'" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="urge(item)" :no-click="item.state === '0'" value="催促" icon="i-btn-urge" color="#2AA70B"></yhm-manager-td-operate-button>

@@ -16,7 +16,8 @@ var rules = {
   //"RS00012": "/^(?:0|\\-?(?:0\\.\\d*[1-9]|[1-9]\\d*(?:\\.\\d*[1-9])?))$/",  //验证数字格式   正负都可以是纯数字
   "RS00013": "/^\\d{0,3}$/", //验证最多3位纯数字
   "RS00014": "/^(\\d|[1-9]\\d|100)(\\.\\d{1,2})?$/", //大于0，小于等于100，并且最多保留两位小数。
-
+  "RS00015": "/^[a-zA-Z0-9]{17}$/", //车架号
+  "RS00016": "/^[a-zA-Z0-9]{7,8}$/", //发动机号
 }
 //验证规则
 var rule = {
@@ -36,11 +37,14 @@ var rule = {
     R1300:{empty:"*",emptyMessage:"不能为空",rules:"RS00013",errormessage:"格式错误"} ,  //验证最多3位纯数字
     R1400:{empty:"*",emptyMessage:"不能为空",rules:"RS00014",errormessage:"格式错误"} ,  //大于0，小于等于100，并且最多保留两位小数。
     R1500:{empty:"*",emptyMessage:"不能为空",rules:"RS00004",errormessage:"格式错误"} ,  //大于等于0的所有数字
+    R1600:{empty:"*",emptyMessage:"不能为空",rules:"RS00015",errormessage:"车架号为17位,请仔细核查"} ,
+    R1700:{empty:"*",emptyMessage:"不能为空",rules:"RS00016",errormessage:"发动机号为7-8位,请仔细核查"} ,
 }
 
 function verify(value,ruleKey) {
   var result = {key:true,value:'',category:-1}
   var r = rule[ruleKey]
+  value = value.replace(/\s/g,"")
   if(r){
     if(r.empty === '*'){
       if (value === ""){
@@ -363,6 +367,15 @@ function formatPhone (data) {
   return result
 }
 
+/******************** 格式化身份证 ****************************/
+function formatIdNo (data) {
+  let result = ''
+  if(data != null && data.length <= 18){
+    result = data.substring(0,6) + ' ' + data.substring(6,14) + ' ' + data.substring(14,18)
+  }
+  return result
+}
+
 /******************** 按规则回显 ************************/
 function formatCustomizeTip (val,rule) {
   let index = 0,end = rule.length - 1
@@ -443,5 +456,5 @@ function zero(num) {
 }
 
 export{
-  zero,getDayNumByYearMonth,accMul,accAdd,guid,selectClick,selectdbClick,selectConfirm,selectComputedSelected,verify,formatDate,number2chinese,formatCnDate,tenThousandFormat,formatDateHtml,tenThousandFormatHtml,formatTime,formatPhone,formatCustomizeTip
+  zero,getDayNumByYearMonth,accMul,accAdd,guid,selectClick,selectdbClick,selectConfirm,selectComputedSelected,verify,formatDate,number2chinese,formatCnDate,tenThousandFormat,formatDateHtml,tenThousandFormatHtml,formatTime,formatPhone,formatIdNo,formatCustomizeTip
 }

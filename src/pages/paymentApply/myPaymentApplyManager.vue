@@ -57,7 +57,7 @@
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :tip="true" :value="item.otherUnit"></yhm-manager-td>
-          <yhm-manager-td-psd :value="item.nature" :list="natureList"></yhm-manager-td-psd>
+          <yhm-manager-td-psd :isLeft="true" :value="item.nature" :list="natureList"></yhm-manager-td-psd>
           <yhm-manager-td-psd :value="item.isChecks" :list="isChecksList"></yhm-manager-td-psd>
           <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
 <!--          <yhm-manager-td-center :value="item.day"></yhm-manager-td-center>-->

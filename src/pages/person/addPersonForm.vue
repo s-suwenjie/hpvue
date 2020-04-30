@@ -22,7 +22,7 @@
             <span class="i-copy"></span>
           </div>
         </yhm-form-text>
-        <yhm-form-text title="籍贯" style="position: relative;" :value="nativePlace" @focus="nativePlaceFocus" id="nativePlace" rule="R0000" tip="value">
+        <yhm-form-text title="籍贯" style="position: relative;" :no-edit="noedit" :value="nativePlace" @focus="nativePlaceFocus" id="nativePlace" rule="R0000" tip="value">
           <div class="nativePlaceBox" v-show="true"
                :class="{
                'nativePlaceBox':cityShow,
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-  import { guid } from '@/assets/common.js'
+  import {formatPhone, guid } from '@/assets/common.js'
   import { formmixin } from '@/assets/form.js'
   import city from '@/assets/city.json'
   export default {
@@ -107,6 +107,7 @@
       return {
         cityList:city,
         cities:[],
+        noedit:'0',
         cityListShow:true,
         cityShow:false,
         idnoRule:'R5000',
@@ -344,6 +345,8 @@
                 this.zodiacID = data.zodiacID
                 this.constellation = data.constellation
                 this.constellationID = data.constellationID
+                this.nativePlace = data.nativePlace
+                this.noedit = '1'
               }else {
                 this.$dialog.alert({
                   alertImg: 'error',
@@ -352,6 +355,9 @@
               }
             }
           })
+        }else if(this.idNo.length === 0){
+          this.nativePlace = ''
+          this.noedit = '0'
         }
       },
       /* 切换生日历法 */
@@ -663,13 +669,23 @@
     created () {
       this.setQuery2Value('isUrl')
       this.initData()
+    },
+    watch: {
+      // idNo(){
+      //   if(this.idNo !== ''){
+      //     this.idnoRule = 'R5000'
+      //   }
+      //   if(this.category === '1' && this.idNo === ''){
+      //     this.idnoRule = ''
+      //   }
+      // }
     }
   }
 </script>
 
 <style lang="less" scoped>
   .nativePlaceBoxHide{
-    height: 0px !important;
+    height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     border: 0 !important;
@@ -735,7 +751,7 @@
     background-color: #49a9ea;
     height: 48px!important;
     line-height: 48px !important;
-    box-shadow:0px 1px 7px #49a9ea ;
+    box-shadow:0 1px 7px #49a9ea ;
     position: fixed;
     bottom: 0;
     right: 0;

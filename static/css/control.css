@@ -771,7 +771,7 @@
   display: flex;
   overflow: hidden;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   background-color: #FFFFFF;
   position: fixed !important;
   z-index: 999999;
@@ -785,7 +785,7 @@
 }
 .preview_showImg>img{
   /*max-width: 1000px;*/
-  width: 95%;
+  /*width: 95%;*/
   /*max-height: 100%;*/
   border-radius: 10px;
 }

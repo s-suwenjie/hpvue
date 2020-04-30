@@ -131,7 +131,6 @@
         isActual: true,
         isReal: false,
         contentTotal: []
-
       }
     },
     methods:{
@@ -185,12 +184,9 @@
         })
       },
       addPNumbering(item){
-        let title = '上传保单号'
-        let url = '/poNumbering?id='+item.boNumbering+'&ownerID='+item.id
-        if(item.boNumbering!=''){
-          let url = '/poNumbering?id='+item.boNumbering+'&ownerID='+item.id
-          title = '查看保单号'
-        }
+        let title = '查看保单号'
+        let url = '/poNumberView?id='+item.boNumbering+'&ownerID='+item.id
+
         this.$dialog.OpenWindow({
           width: '1050',
           height: '550',

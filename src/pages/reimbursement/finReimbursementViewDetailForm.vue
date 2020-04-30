@@ -20,10 +20,16 @@
         <yhm-view-control title="支持单据" v-if="files.length !== 0" :content="files" type="files" category="3"></yhm-view-control>
       </template>
     </yhm-view-body>
-    <div class="f_split"  v-show="invoiceCategory==='2'?false:true"></div>
+    <div class="f_split" v-show="invoiceCategory==='2'?false:true"></div>
     <yhm-view-tab v-show="invoiceCategory==='2'?false:true">
       <template #tab>
         <yhm-view-tab-button :list="tabState" :index="0">发票明细</yhm-view-tab-button>
+      </template>
+      <template #tab_total>
+        <div class="tabTotal">
+          <p>共计: {{totalCount}} 张</p>
+          <p>共计: <span v-html="tenThousandFormatShow(totalMoney)"></span>  元</p>
+        </div>
       </template>
       <template #content>
         <yhm-view-tab-list :customize="true" :pager="false" v-show="tabState[0].select">
@@ -68,6 +74,7 @@
 </template>
 
 <script>
+  import { tenThousandFormatHtml ,tenThousandFormatShow,accAdd} from '@/assets/common.js'
   import { formmixin } from '@/assets/form.js'
   export default {
     name: 'reimbursementViemDetailForm',
@@ -102,7 +109,10 @@
         isPrettyCashOff: '',
         isPrettyCashOffList: [],
         prettyCashMoney: '',
-        files: []
+        files: [],
+
+        totalCount: '150',
+        totalMoney: '15000'
       }
     },
     methods: {
@@ -169,12 +179,31 @@
             this.prettyCashMoney = data.prettyCashMoney
           }
 
+          let invoice = this.content.invoiceList
+          let totalMoneySum = 0;
+          for(let i in invoice){
+            totalMoneySum = accAdd(totalMoneySum, invoice[i].actualMoney)
+          }
+          this.totalMoney = totalMoneySum + ''
         }
       })
+    },
+    watch: {
+      content(){
+        this.totalCount = this.content.invoiceList.length;
+      },
+    },
+    computed: {
+
     }
   }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.tabTotal{
+  display: flex;
+  p{
+    margin-right: 10px;
+  }
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
   <td>
     <div class="md_center" @click="pdfOpenView">
-      <div @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" v-show="tipShow" class="preview_showImg" :style="getStyle">
+      <div @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" v-show="tipShow" class="preview_showImg" :style="getStyle" :class="getImgStyle">
         <img :src="getUrl">
       </div>
       <img @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent" class="md_img" :src="getUrl">
@@ -81,16 +81,33 @@
       }
     },
     computed:{
+      getImgStyle(){
+        if(this.tag === 'ElectronicInvoice' && this.pdfUrl){
+          return 'pdfStyle'
+        }else{
+          return 'imgStyle'
+        }
+      },
       getUrl(){
         return '/UploadFile/' + this.tag + '/' + this.value
       },
       getStyle(){
         return 'top:' + this.top + 'px;left:' + this.left + 'px;width:' + this.width + 'px;height:' + this.height + 'px'
       }
+    },
+    created() {
+
     }
   }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+  .imgStyle>img{
+    /*height: 600px;*/
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .pdfStyle>img{
+    width: 95%;
+  }
 </style>

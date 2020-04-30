@@ -47,17 +47,21 @@
         },
         multiple:{
           type:Boolean,
-          default:false
+          default: false
         },
       },
       methods:{
         //鼠标放上事件
         mouseoverEvent(){
-          this.$emit("mouseoverEvent")
+          this.$nextTick(()=>{
+            this.$emit("mouseoverEvent")
+          })
         },
         //鼠标移出事件
         mouseoutEvent(){
-          this.$emit("mouseoutEvent")
+          this.$nextTick(()=>{
+            this.$emit("mouseoutEvent")
+          })
         },
         //拖拽相关
         dropEvent(category,file){

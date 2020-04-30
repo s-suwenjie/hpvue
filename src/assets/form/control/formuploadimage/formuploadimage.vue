@@ -7,7 +7,7 @@
       </div>
       <div class="c_main">
         <div class="c_main_upload">
-          <yhm-upload @call="uploadImg" @mouseoverEvent="mouseoverEvent" @mouseoutEvent="mouseoutEvent" :tag="tag" title="上传图片">
+          <yhm-upload :no-upload="noUpload" @call="uploadImg" @mouseoverEvent="mouseoverEvent" @mouseoutEvent="mouseoutEvent" :tag="tag" title="上传图片">
             <div class="c_image_main" :class="getBig">
               <div class="c_image fs18b" :class="[getDefaultStyle,{c_error:error,red:error}]">
                 <div class="box">
@@ -20,6 +20,11 @@
         </div>
       </div>
     </div>
+
+    <div class="imgShow" v-show="isImgShow">
+      <img :src='getShowUrl' alt="">
+    </div>
+
     <div class="fc_error"><span v-if="error">{{errorTipMessage}}</span></div>
   </div>
 </template>
@@ -32,7 +37,9 @@
       return {
         url:this.value,
         error: false,
-        errorTipMessage: ''
+        isImgShow: false,
+        errorTipMessage: '',
+        getShowUrl: ''
       }
     },
     props: {
@@ -71,6 +78,14 @@
       show: {
         type: Boolean,
         default: true
+      },
+      isShow: {
+        type: Boolean,
+        default: false
+      },
+      noUpload: {
+        type: Boolean,
+        default: false
       }
     },
     methods:{
@@ -112,13 +127,20 @@
         return result;
       },
       mouseoverEvent(){
+        if(this.isShow && this.value){
+          this.isImgShow = true;
+          this.getShowUrl = '/UploadFile/' + this.tag + '/' + this.url
+        }
         this.$nextTick(() => {
-          this.$emit("mouseover",this.getUrl)
+          this.$emit("mouseoverEvent",this.getUrl)
         })
       },
       mouseoutEvent(){
+        if(this.isShow) {
+          this.isImgShow = false
+        }
         this.$nextTick(() => {
-          this.$emit("mouseout",this.getUrl)
+          this.$emit("mouseoutEvent",this.getUrl)
         })
       },
     },
@@ -153,8 +175,34 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="less">
   *{
     box-sizing: border-box;
+  }
+  .imgShow{
+    width: 850px;
+    height: 600px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: center;
+    background-color: #FFFFFF;
+    position: fixed !important;
+    z-index: 999999;
+    -webkit-box-shadow: 0 0 20px #000000;
+    box-shadow: 0 0 20px #000000;
+    border-radius: 10px;
+    top: 0;
+    right: 0;
+    left: 140px;
+    bottom: 0;
+    margin: auto;
+
   }
 </style>

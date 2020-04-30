@@ -10,7 +10,7 @@
       <template #choose>
         <yhm-radiofilter :before="categoryBefore" @initData="initChoose('category')" title="单位分类" all="0" :content="listCategoryUnit"></yhm-radiofilter>
         <yhm-radiofilter :before="categoryAccBefore" @initData="initChoose('category')" title="账户类型" all="0" :content="listCategory"></yhm-radiofilter>
-        <yhm-radiofilter @initData="initChoose('category')" title="常用" all="0" :content="commonUsePsd"></yhm-radiofilter>
+        <yhm-radiofilter @initData="initChoose('category')" :before="commonUse" title="常用" all="0" :content="commonUsePsd"></yhm-radiofilter>
       </template>
 
       <template #listHead>
@@ -73,6 +73,7 @@
         },
         isState: false,
         personID: '',
+
       }
     },
     methods: {
@@ -144,7 +145,7 @@
           params = {
             category: this.listCategory.value,
             categoryUnit: this.listCategoryUnit.value,
-            commonUse:this.commonUsePsd.value,
+            commonUse: this.commonUsePsd.value,
 
             privatePersonID: this.personID,
           }
@@ -162,6 +163,7 @@
             this.listCategory = data.listCategory
             this.listCategoryUnit = data.listCategoryUnit
             this.commonUsePsd = data.commonUsePsd
+
           }
         })
       },
@@ -172,6 +174,8 @@
       this.setQuery2Value('categoryBefore')
       this.setQuery2Value('personID')
       this.setQuery2Value('categoryAccBefore')
+      this.setQuery2Value('categoryUnit')
+      this.setQuery2Value('commonUse')
 
       //this.setQuery2Value('unitID')
       if(this.isHide === '1'){

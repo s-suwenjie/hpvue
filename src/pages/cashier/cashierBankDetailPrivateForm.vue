@@ -397,7 +397,7 @@
           this.$dialog.OpenWindow({
             width: 950,
             height: 640,
-            url: '/selectPrivateAccount?state=0&category=1&categoryUnit=0&categoryUnitBefore=0&personID='+this.otherID,
+            url: '/selectPrivateAccount?state=0&category=1&categoryUnitBefore=0&commonUse=1&categoryUnit=1&personID='+this.otherID,
             title: '选择私人账号',
             closeCallBack: (data) => {
               if(data){

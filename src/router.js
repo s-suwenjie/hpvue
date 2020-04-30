@@ -142,6 +142,13 @@ import reimbursementDetailFormView from './pages/reimbursement/myReimbursementDe
 import reimbursementReconDetailForm from './pages/reimbursement/reimbursementReconDetailForm'
 
 
+
+/* 财务-付款-收支明细 */
+import BankDetailRebateManager from './pages/budgetDetail/BankDetailRebate/BankDetailRebateManager'
+import BankDetailRebateDetail from './pages/budgetDetail/BankDetailRebate/BankDetailRebateDetail'
+
+
+
 /* 打印报销单 */
 import approvalPrintReimbursementTicket from './pages/reimbursement/approvalPrintReimbursementList/approvalPrintReimbursementTicket'
 
@@ -481,6 +488,7 @@ import billingApprovalApplyForm from './pages/insurance/billing/billingApprovalA
 import policyManager from './pages/insurance/policy/policyManager'
 import policyView from './pages/insurance/policy/policyView'
 import poNumbering from './pages/insurance/policy/poNumbering'
+import poNumberView from './pages/insurance/policy/poNumberView'
 /* 应收账款*/
 import accountsReceivableManager from './pages/insurance/accountsReceivable/accountsReceivableManager'
 import accountsReceivableView from './pages/insurance/accountsReceivable/accountsReceivableView'
@@ -596,6 +604,8 @@ export default new Router({
         { path: '/home/cashRegisterManager', name: 'cashRegisterManager.vue', component: cashRegisterManager ,meta: {title: '收银审批制定'}},
         { path: '/home/conductFinManager', name: 'conductFinManager.vue', component: conductFinManager ,meta: {title: '理财管理'}},
         { path: '/home/prewarningValueManager', name: 'prewarningValueManager.vue', component: prewarningValueManager},
+
+        { path: '/home/BankDetailRebateManager', name: 'BankDetailRebateManager.vue', component: BankDetailRebateManager ,meta: {title: '收支明细'}},
 
       ]
     },
@@ -755,6 +765,9 @@ export default new Router({
     { path: '/approvalPrintReimbursementTicket', name: 'approvalPrintReimbursementTicket.vue',component: approvalPrintReimbursementTicket },
 
 
+    { path: '/BankDetailRebateDetail', name: 'BankDetailRebateDetail.vue',component: BankDetailRebateDetail },
+
+
     { path: '/openBankForm', name: 'openBankForm.vue',component: openBankForm },
     { path: '/openBankDetailForm', name: 'openBankDetailForm.vue',component: openBankDetailForm },
 
@@ -823,6 +836,7 @@ export default new Router({
 
     { path: '/policyView', name: 'policyView.vue',component: policyView },
     { path: '/poNumbering', name: 'poNumbering.vue',component: poNumbering },
+    { path: '/poNumberView', name: 'poNumberView.vue',component: poNumberView },
     { path: '/accountsReceivableView', name: 'accountsReceivableView.vue',component: accountsReceivableView },
     { path: '/customerRebatesView', name: 'customerRebatesView.vue',component: customerRebatesView },
 

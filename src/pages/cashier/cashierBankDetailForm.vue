@@ -399,7 +399,7 @@
           this.$dialog.OpenWindow({
             width: 950,
             height: 640,
-            url: '/selectPrivateAccount?state=0&category=1&categoryUnit=0&categoryUnitBefore=0&personID='+this.otherID,
+            url: '/selectPrivateAccount?state=0&category=1&categoryUnit=1&categoryUnitBefore=0&personID='+this.otherID,
             title: '选择私人账号',
             closeCallBack: (data) => {
               if(data){
@@ -497,35 +497,38 @@
                 money:this.money
               }
               this.ajaxJson({
-                url: '/Fin/modifyBankDetailPayment',
-                data: dataParams,
+                url: '/Fin/vueBankDetailSave',
+                data: params,
+                loading: '0',
                 call: (data) => {
-                  if(data.type === 0){
+                  if (data.type === 0) {
+
+
                     this.ajaxJson({
-                      url: '/Fin/vueBankDetailSave',
-                      data: params,
-                      loading: '0',
+                      url: '/Fin/modifyBankDetailPayment',
+                      data: dataParams,
                       call: (data) => {
-                        if (data.type === 0) {
-                          this.$dialog.setReturnValue(this.id) //向父级页面id值
-                          this.$dialog.alert({
-                            tipValue: data.message,
-                            closeCallBack: () => {
-                              this.$dialog.close()
-                            }
-                          })
-                        } else {
-                          this.$dialog.alert({
-                            alertImg: 'error',
-                            tipValue: data.message,
-                            closeCallBack: () => {
-                            }
-                          })
+                        if(data.type === 0){
+                        }else{
+                          //第一次请求失败
+                          // this.$dialog.alert({
+                          //   alertImg: 'error',
+                          //   tipValue: data.message,
+                          //   closeCallBack: () => {
+                          //   }
+                          // })
                         }
                       }
                     })
-                  }else{
-                      //第一次请求失败
+                    this.$dialog.setReturnValue(this.id) //向父级页面id值
+                    this.$dialog.alert({
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                        this.$dialog.close()
+                      }
+                    })
+
+                  } else {
                     this.$dialog.alert({
                       alertImg: 'error',
                       tipValue: data.message,
@@ -535,6 +538,7 @@
                   }
                 }
               })
+
             }
           })
         }
@@ -558,7 +562,6 @@
       this.setQuery2Value('cashierRemake')
       this.setQuery2Value('publicandPrivateAccount')
       this.setQuery2Value('cashierBankTag')
-
 
       if(this.directionBefore === '1'){
 

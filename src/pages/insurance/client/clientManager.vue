@@ -22,7 +22,7 @@
         <yhm-managerth  title="去年投保公司" value="lastYearUnit"></yhm-managerth>
         <yhm-managerth  title="交强险到期日" value="forceEndDate"></yhm-managerth>
         <yhm-managerth  title="商业险到期日" value="businessEndDate"></yhm-managerth>
-        <yhm-managerth  title="行车证" value="drivingLicense"></yhm-managerth>
+<!--        <yhm-managerth  title="行车证" value="drivingLicense"></yhm-managerth>-->
         <yhm-managerth  title="负责人" value="principal"></yhm-managerth>
         <yhm-managerth  title="更换操作人"></yhm-managerth>
       </template>
@@ -39,7 +39,7 @@
           <yhm-manager-td :value="item.lastYearUnitVal"></yhm-manager-td>
           <yhm-manager-td-date :value="item.forceEndDate"></yhm-manager-td-date>
           <yhm-manager-td-date :value="item.businessEndDate"></yhm-manager-td-date>
-          <yhm-manager-td-image :tip="true" width="850" height="500" :value="item.drivingLicense" tag="drivingLicense"></yhm-manager-td-image>
+<!--          <yhm-manager-td-image :tip="true" width="850" height="500" :value="item.drivingLicense" tag="drivingLicense"></yhm-manager-td-image>-->
           <yhm-manager-td :value="item.principal"></yhm-manager-td>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button  @click="replacePrincipal(item.id)" value="更换负责人" icon="i-replace"  color="#0033FF" ></yhm-manager-td-operate-button>

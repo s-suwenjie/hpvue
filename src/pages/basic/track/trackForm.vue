@@ -23,7 +23,7 @@
 
 
 
-        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="商业险报价详情(支持单据)" tag="track" multiple="multiple"></yhm-formupload>
+        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="商业险报价详情(支持单据)"  v-if="isBusinessMoney"   tag="track" multiple="multiple"></yhm-formupload>
 
       </template>
     </yhm-formbody>

@@ -19,12 +19,13 @@
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton v-show="approval === '4'&&isApproval === '0'" :no-click="isApproval==='4'" @call="approFund()" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
-        <yhm-commonbutton v-show="(isApproval === '0'&& approval !== '4' && state!=='15')||(isApproval === '1' && state!=='15')" :no-click="isApproval!=='0'" @call="adoptEvent()" value="通过" icon="i-btn-applicationSm" color="#49a9ea" :flicker="true"></yhm-commonbutton>
-        <yhm-commonbutton v-show="state!=='15'" :no-click="isApproval!=='0' && state!=='15'" @call="rejectEvent()"  value="驳回" icon="i-btn-turnDown" color="#FF0000" category="ten"></yhm-commonbutton>
+        <yhm-commonbutton v-show="(isApproval === '0' && approval !== '4' && state !== '15') || (isApproval === '1' && state!=='15' ) && isApproval !== '1'  && state !== '-1'" :no-click="isApproval!=='0'" @call="adoptEvent()" value="通过" icon="i-btn-applicationSm" color="#49a9ea" :flicker="true"></yhm-commonbutton>
+        <yhm-commonbutton v-show="state !== '15' && state !== '-1' && isApproval !== '1'" :no-click="isApproval!=='0' && state!=='15'" @call="rejectEvent()"  value="驳回" icon="i-btn-turnDown" color="#FF0000" category="ten"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
   </div>
 </template>
+
 
 <script>
   import { formmixin } from '@/assets/form.js'
@@ -48,6 +49,7 @@
         subjectID:'',
         state:'',
         isApproval:'',
+        isFinish:'',
         approval:'',
         estimateDate: '',
         list: [],
@@ -213,6 +215,7 @@
             this.subjectID=data.subjectID
             this.remark=data.remark
             this.state=data.state
+            this.isFinish=data.isFinish
             this.estimateDate = data.estimateDate
             this.list = data.list
             this.invoiceCategory = data.invoiceCategory

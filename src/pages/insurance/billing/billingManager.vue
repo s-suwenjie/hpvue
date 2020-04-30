@@ -21,11 +21,11 @@
       </template>
       <!--数据表头-->
       <template #listHead>
-        <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
-        <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
+        <yhm-managerth  style="width: 40px;" title="选择"></yhm-managerth>
+        <yhm-managerth  style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth  style="width: 130px;" title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth  style="width: 100px;" title="联系人" value="contactName"></yhm-managerth>
-        <yhm-managerth  style="width: 150px;"  title="被保险人" value="beinsuredName"></yhm-managerth>
+        <yhm-managerth  style="width: 100px;"  title="被保险人" value="beinsuredName"></yhm-managerth>
         <yhm-managerth  title="投保日期" value="insuredDate"></yhm-managerth>
         <yhm-managerth  title="保险公司" value="insuredUnit"></yhm-managerth>
         <yhm-managerth  style="width: 100px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
@@ -36,7 +36,6 @@
 
         <yhm-managerth  style="width: 230px;" title="操作"></yhm-managerth>
       </template>
-
       <!--数据明细-->
       <template #listBody>
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
@@ -50,16 +49,16 @@
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
           <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
-          <yhm-manager-td :value="item.status===''?item.causeList[0].insuranceFormulatorName:'-----'"></yhm-manager-td>
-          <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
+          <yhm-manager-td :value="item.statusVal==='部门审批中'?item.causeList[0].insuranceFormulatorName:'-----'"></yhm-manager-td>
+          <yhm-manager-td-state @click="appPay(item)" :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button @click="editPayment(item)" :no-click="item.cashierOperation==='1'?false:true" value="付款申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.category==='1' " @click="addPNumbering(item)" icon="i-export" value="上传保单"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="editPayment(item)" v-show="item.category==='2' ||item.category==='3'" :no-click="item.cashierOperation==='1'?false:true" value="付款申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="editBtn(item)" :no-click="item.status===''|| item.status==='1'|| item.status==='4'" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="del(item)"   :no-click="item.status===''|| item.status==='1' || item.status==='4'" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
-
       <!--数据空提示-->
       <template #empty>
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
@@ -96,9 +95,40 @@
 
         ],
         tableTipInfo:[],
+        isPoNumber:false,
+        isAppPayment:false,
+        isApp:false,
       }
     },
     methods:{
+      appPay(item){
+        if (item.statusVal==='返利审批中') {
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '750',
+            url: '/paymentApplyFormView?id=' + item.cashID +'&isState=1&isFinish=0',
+            title: "查看付款申请信息",
+            closeCallBack: () => {
+              this.initPageData(false)
+            }
+          })
+        }
+      },
+      addPNumbering(item){
+        let title = '上传保单号'
+        let url = '/poNumbering?id='+item.poNumber+'&ownerID='+item.id
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '550',
+          url: url,
+          title: title,
+          closeCallBack: (data) => {
+            if (data) {
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       plateView(item){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -288,6 +318,7 @@
             // 这边初始化筛选信息
             this.listInsuredUnit=data.insuredUnitPsd
             this.insuredUnitList=data.insuredUnitList
+
           }
         })
       }

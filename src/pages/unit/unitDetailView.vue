@@ -90,12 +90,12 @@
 
         <div class="right_rectangle"  :class="{'backgroundChange':backgroundShow}" ref="backgroundColorBlue" v-show="item.direction==='0'" @click="switcher(item,index)" v-for="(item,index) in content.bankDetailMony" :key="index">
           <div class="rectangle_tit black" ref="colorBlue" >{{item.otherName}}</div>
-          <div class="icon i-income" ref="iconColorBlue"  style="color: #49a9ea;"></div>
+          <div class="iconSwitch i-income" ref="iconColorBlue"  style="color: #49a9ea;"></div>
           <div class="rectangle_money black"  ref="colorBlue2">{{item.money}}</div>
         </div>
         <div class="right_rectangle"  ref="backgroundColorRed"  v-show="item.direction==='1'" @click="switcher(item,index)" v-for="(item,index) in content.bankDetailMony" :key="'info2-'+index">
           <div class="rectangle_tit black" ref="colorRed">{{item.otherName}}</div>
-          <div class="icon i-expenditure"  ref="iconColorRed" style="color: #f00;"></div>
+          <div class="iconSwitch i-expenditure"  ref="iconColorRed" style="color: #f00;"></div>
           <div class="rectangle_money black"  ref="colorRed2">{{item.money}}</div>
         </div>
       </div>
@@ -276,7 +276,7 @@
   }
 </script>
 <!--getBankDetailByID-->
-<style scoped >
+<style scoped>
   .backgroundChange{
     background-color: #FFFFFF ;
   }
@@ -303,7 +303,7 @@
   .imgName:hover{
     text-decoration: underline;
   }
-  .icon{
+  .iconSwitch{
     color: #fff;
     font-size: 30px;
     position: absolute;
@@ -328,142 +328,144 @@
   .size{
     font-size: 14px;
   }
-.main{
-  height: auto;
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 25px;
-}
-.main_left{
-  width: 719px;
-}
-.left_top{
-  display: flex;
-  height: auto;
-  justify-content: space-between;
-}
-.left_center{
-  margin-top: 16px;
-  display: flex;
-  justify-content: space-around;
-}
-.left_bottom{
-  height: 225px;
-  margin-top: 16px;
-  flex: 1;
-  background: #FFFFFF;
-  border-radius: 8px;
-}
-.rectangle_tit{
-  width: 168px;
-  height: 36px;
-  font-size: 14px;
-  color: #fff;
-}
-.main_center_test{
-  font-size: 14px;
-  margin:16px 0px 20px 16px;
-}
-.main_center{
-  width: 350px;
-  height: 185px;
-  background: #FFFFFF;
-  border-radius: 8px;
-}
-.main_right{
-  width: 268px;
-  height:546px;
-  overflow: auto;
-  border-radius: 8px;
-  background: #FFFFFF;
-}
-.right_rectangle{
-  cursor: pointer;
-  padding: 15px 0px 0px 8px;
-  box-sizing: border-box;
-  margin: 24px auto 32px auto;
-  position: relative;
-  width: 238px;
-  height: 97px;
-  /*border: 1px solid #bfbfbf;*/
-  border-radius: 8px;
-}
-.bottom_left{
-  width: 59px;
-  text-align: right;
-  margin-right: 8px;
-}
-.bottom_left_test{
- height: 19px;
- line-height: 19px
-}
-.red{
-  background: #f96767;
+  .main{
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 25px;
+  }
+  .main_left{
+    width: 719px;
+  }
+  .left_top{
+    display: flex;
+    height: auto;
+    justify-content: space-between;
+  }
+  .left_center{
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-around;
+  }
+  .left_bottom{
+    height: 225px;
+    margin-top: 16px;
+    flex: 1;
+    background: #FFFFFF;
+    border-radius: 8px;
+  }
+  .rectangle_tit{
+    width: 168px;
+    height: 36px;
+    font-size: 14px;
+    color: #fff;
+  }
+  .main_center_test{
+    font-size: 14px;
+    margin:16px 0 20px 16px;
+  }
+  .main_center{
+    width: 350px;
+    height: 185px;
+    background: #FFFFFF;
+    border-radius: 8px;
+  }
+  .main_right{
+    width: 268px;
+    height:546px;
+    overflow: auto;
+    border-radius: 8px;
+    background: #FFFFFF;
+  }
+  .right_rectangle{
+    cursor: pointer;
+    padding: 15px 0 0 8px;
+    box-sizing: border-box;
+    margin: 24px auto 32px auto;
+    position: relative;
+    width: 238px;
+    height: 97px;
+    /*border: 1px solid #bfbfbf;*/
+    border-radius: 8px;
+  }
+  .bottom_left{
+    width: 59px;
+    text-align: right;
+    margin-right: 8px;
+  }
+  .bottom_left_test{
+    height: 19px;
+    line-height: 19px
+  }
+  .red{
+    background: #f96767;
 
-}
-.blue{
-  cursor: pointer;
-  background: #49a9ea;
-  margin: 32px auto 31px auto;
-}
-.black{
-  color: black;
-}
-.img{
-  width: 73px;
-  height: 76px;
-  position: relative;
-  margin: 16px 0px 0px 10px;
-  background: url("../../../static/staticImage/unit/money.svg") no-repeat;
-  background-size: 73px 76px;
-}
-.img .img_right{
-  position: absolute;
-  right: 0;
-}
-.img_test{
-  color: #f00;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-}
-.title{
-  height: 50px;
-  line-height: 50px;
-  font-size: 18px;
-  font-weight: 550;
-  padding-left: 16px;
-  border-bottom: 1px solid #bfbfbf;
-}
-.title2{
-  font-size: 14px;
-  color: #333;
-}
+  }
+  .blue{
+    cursor: pointer;
+    background: #49a9ea;
+    margin: 32px auto 31px auto;
+  }
+  .black{
+    color: black;
+  }
+  .img{
+    width: 73px;
+    height: 76px;
+    position: relative;
+    margin: 16px 0 0 10px;
+    background: url("../../../static/staticImage/unit/money.svg") no-repeat;
+    background-size: 73px 76px;
+  }
+  .img .img_right{
+    position: absolute;
+    right: 0;
+  }
+  .img_test{
+    color: #f00;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  .title{
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+    font-weight: 550;
+    padding-left: 16px;
+    border-bottom: 1px solid #bfbfbf;
+  }
+  .title2{
+    font-size: 14px;
+    color: #333;
+  }
   .bottom_right{
     width: 640px;
   }
-.left{margin-left: 16px;}
-.text{
-  width: auto;
-  padding: 24px 8px 0px 8px;
-  font-size: 14px;
-}
-.col{color: #333;font-weight: 600;}
-.text2{
-  display: block;
-  margin: 28px 0px 25px 11px;
-  color: #333;
-}
-.test{
-  font-size: 18px;
-  margin-left: 12px;
-}
-.main_top{
-  width: 229px;
-  height: 104px;
-  background-color: #ffffff;
-  border-radius: 8px;
-}
+  .left{margin-left: 16px;}
+  .text{
+    width: auto;
+    padding: 24px 8px 0px 8px;
+    font-size: 14px;
+  }
+  .col{color: #333;font-weight: 600;}
+  .text2{
+    display: block;
+    margin: 28px 0px 25px 11px;
+    color: #333;
+  }
+  .test{
+    font-size: 18px;
+    margin-left: 12px;
+  }
+  .main_top{
+    width: 229px;
+    height: 104px;
+    background-color: #ffffff;
+    border-radius: 8px;
+  }
+
+
 
 </style>

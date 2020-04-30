@@ -13,6 +13,9 @@
         <yhm-form-textarea :show="eventShowB" title="款项用途" :value="useName" id="useName" rule="R0000"></yhm-form-textarea>
         <yhm-form-select title="收款账号" tip="value" :value="otherAccount" id="otherAccount" rule="R0000" @click="selectaccount" :no-click="isOtherAccount"></yhm-form-select>
         <yhm-form-text title="申请人" :value="person" id="person" rule="R0000" no-edit="1"></yhm-form-text>
+
+        <yhm-form-text :icon-shou="true" color="#666666" @call="billingDetails" title="出单明细" subtitle="" value="" id="person"  no-edit="1"></yhm-form-text>
+
         <yhm-form-radio width="1" title="发票类型" v-show="PrepaidHidden" @call="invoiceClick" :select-list="invoiceList" :value="invoice" id="invoice"></yhm-form-radio>
         <yhm-form-radio title="发票" v-show="PrepaidHidden" subtitle="二级类型" :select-list="secondLevelInvoiceList" :value="secondLevelInvoice" id="secondLevelInvoice"></yhm-form-radio>
 
@@ -78,14 +81,16 @@
         <div class="invoiceImgView" v-show="viewImgShow">
           <img :src="viewImg" alt="">
         </div>
-        <yhm-formupload :ownerID="id" :show="isUpFile" :value="fileList" id="fileList" title="支持单据" tag="payment" subtitle="" multiple="multiple" :rule="isRule"></yhm-formupload>
+
+
+
       </template>
     </yhm-formbody>
     <div class="f_split"></div>
     <yhm-formbody>
       <template #title >更多信息</template>
       <template #control  >
-        <yhm-form-text title="支付金额"  tip="money" before-icon="rmb" :value="money" id="money" rule="R3000" :no-edit="isInvoice" placeholder="请输入数字" error-message="纯数字输入"></yhm-form-text>
+        <yhm-form-text title="支付金额"   tip="money" before-icon="rmb" :value="money" id="money" rule="R3000" no-edit="1" placeholder="请输入数字" error-message="纯数字输入"></yhm-form-text>
         <yhm-form-text title="金额大写" :value="capitalMoney" id="capitalMoney" rule="R0000" no-edit="1"></yhm-form-text>
         <yhm-form-drop-down-select :show="isCause" title="付款事由" width="1" @select="selectCause" :select-list="ownerSysPsd" :selectValue="ownerSys" selectid="ownerSys" :value="subject" id="subject" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>
         <!--        <yhm-form-radio :show="PrepaidHiddenA" title="用途代码" @call="initCode" width="1" :select-list="useNumList" :value="useNum" id="useNum" :no-edit="disable"></yhm-form-radio>-->
@@ -384,6 +389,17 @@
       })
     },
     methods: {
+      billingDetails(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '650',
+          url: '/billingView?id=' + this.billingID,
+          title: "查看出单明细",
+          closeCallBack: () => {
+            this.initPageData(false)
+          }
+        })
+      },
       isAllocationBlur(){
         if(this.money && this.isAllocation === '1'){
           let money = parseFloat(this.money)

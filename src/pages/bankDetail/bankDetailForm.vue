@@ -66,7 +66,7 @@
     </div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton value="拨付资金" icon="btnSave" color="#f00" :flicker="true" @call="save()" category="ten"></yhm-commonbutton>
+        <yhm-commonbutton :value="saveTxt" icon="btnSave"  :flicker="true" @call="save()" :category="getBtnType"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
 
@@ -724,7 +724,27 @@
 
     },
     computed: {
-
+      saveTxt(){
+        if(this.bankDetailType === '11'){
+          return '确认收款'
+        }else {
+          return '拨付资金'
+        }
+      },
+      saveTxtColor(){
+        if(this.bankDetailType === '11'){
+          return '#f00'
+        }else{
+          return '#333'
+        }
+      },
+      getBtnType(){
+        if(this.bankDetailType === '11'){
+          return 'one'
+        }else{
+          return 'ten'
+        }
+      }
     }
   }
 </script>

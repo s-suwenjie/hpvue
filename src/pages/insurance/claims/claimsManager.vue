@@ -16,13 +16,14 @@
 
 
           <yhm-radiofilterdate title="时间" @initData="selectMonthEvent"></yhm-radiofilterdate>
-          <yhm-radiofilterday title="日" :yearMonth="yearMonth" @initData="initChoose"></yhm-radiofilterday>
+          <yhm-radiofilterday title="日" :yearMonth="yearMonth" @initData="initChooseTime"></yhm-radiofilterday>
 
 
         </template>
         <template #choose>
           <div v-show="choose" class="buttonBody mptZero">
             <yhm-radiofilter :before="bank" @initData="initChoose('bank')" title="银行"  :content="bankList"></yhm-radiofilter>
+            <yhm-radiofilter :before="operatorID" @initData="initChoose('operatorID')" title="业务员"  :content="operatorIDList"></yhm-radiofilter>
             <yhm-radiofilter :before="insuranceUnit" @initData="initChoose('insuranceUnit')" title="保险公司"  :content="insuranceUnitList"></yhm-radiofilter>
             <yhm-radiofilter :before="dateType" @initData="initChoose('dateType')" title="时间"  :content="dateTypeList"></yhm-radiofilter>
 
@@ -41,7 +42,6 @@
           <yhm-managerth style="width: 120px;" title="回款日期" value="moneyBackDate"></yhm-managerth>
           <yhm-managerth style="width: 80px" title="发生额" value="money"></yhm-managerth>
           <yhm-managerth style="width: 140px" title="收款银行" value="bankName"></yhm-managerth>
-          <yhm-managerth style="width: 120px" title="结算日期" value="settlementDate"></yhm-managerth>
 <!--          <yhm-managerth style="width: 140px" title="发票号"></yhm-managerth>-->
           <yhm-managerth style="width: 180px" title="备注" ></yhm-managerth>
         </template>
@@ -51,15 +51,16 @@
             <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
             <yhm-manager-td :value="item.customerName"></yhm-manager-td>
-            <yhm-manager-td :tip="true" :value="item.otherName"></yhm-manager-td>
+            <yhm-manager-td :tip="true" :value="item.otherName" v-if="item.otherName===''" @click="unitClickLeft(item)" ></yhm-manager-td>
+            <yhm-manager-td-center :tip="true" :value="item.otherName" v-else @click="unitClickLeft(item)" :menu-list="unitMenu" @rightClick="unitClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
             <yhm-manager-td :value="item.workOrderID"></yhm-manager-td>
-            <yhm-manager-td :value="item.operator"></yhm-manager-td>
+            <yhm-manager-td :value="item.operator" v-if="item.operatorID===''" @click="operatorClickLeft(item)"></yhm-manager-td>
+            <yhm-manager-td-center :value="item.operator" v-else :menu-list="operatorMenu" @click="operatorClickLeft(item)" @rightClick="unitClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
             <yhm-manager-td :value="item.vehicleType"></yhm-manager-td>
             <yhm-manager-td :value="item.licensePlateNumber"></yhm-manager-td>
             <yhm-manager-td-date :value="item.moneyBackDate"></yhm-manager-td-date>
             <yhm-manager-td-money :value="item.money === null ? ' ':item.money"></yhm-manager-td-money>
-            <yhm-manager-td-center :value="item.bankName"></yhm-manager-td-center>
-            <yhm-manager-td-date :value="item.settlementDate" ></yhm-manager-td-date>
+            <yhm-manager-td :value="item.bankName"></yhm-manager-td>
             <yhm-manager-td :value="item.remark === null ? ' ': item.remark"></yhm-manager-td>
           </tr>
         </template>
@@ -94,8 +95,16 @@
     mixins: [managermixin],
     data(){
       return{
+        unitMenu:['筛选当前公司'],
+        operatorMenu:['筛选当前联系人'],
+        unitItme:{},
         contentTotal: [],
         content:[],
+        operatorID:'0',
+        operatorIDList:{
+          value: '',
+          list: []
+        },
         bank:'0',
         yearMonth: '',
         isCategory: '1',
@@ -142,10 +151,53 @@
       }
     },
     methods:{
+      unitClickLeft(item){//点击时查看公司信息
+        if(item.otherName!==''){
+          console.log(item)
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '750',
+            url: '/unitView?id=' + item.otherID,
+            title: '查看公司信息',
+            closeCallBack: (data) => {
+              if (data) {
+                this.initPageData(false)
+              }
+            }
+          })
+        }
+      },
+      operatorClickLeft(item){//查看联系人信息
+        if(item.operatorID!==''){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '750',
+            url: '/personView?id=' + item.operatorID,
+            title: '查看联系人信息',
+            closeCallBack: (data) => {
+              if (data) {
+                this.initPageData(false)
+              }
+            }
+          })
+        }
+      },
+      unitClick(item){//点击右键菜单时获取当前点击的数据
+        this.unitItme = item
+      },
+      menuClick(item,index){//返回用户选中的菜单选项及索引值
+        if(item==='筛选当前公司'){
+          this.insuranceUnitList.value = this.unitItme.otherID
+          this.initPageData(false)
+        }else if(item==='筛选当前联系人'){
+          this.operatorIDList.value = this.unitItme.operatorID//通过索引值获取素材中的code值 赋给筛选字段
+          this.initPageData(false)
+        }
+      },
       totalClick(){
 
       },
-      initChoose(item){
+      initChooseTime(item){
         this.radioTime = item;
         this.initPageData(false)
       },
@@ -231,6 +283,7 @@
       //   })
       // },
       initPageData (initValue) {
+        let newRadioTime = this.radioTime
         let params = {};
         if (initValue) {
 
@@ -251,13 +304,15 @@
             endDate: endDate,
           }
         } else {
-
           params = {
             bankID: this.bankList.value,
             unitID: this.insuranceUnitList.value,
             dateType:this.dateTypeList.value,
-            startDate: this.radioTime.startDate,
-            endDate: this.radioTime.endDate,
+            operatorID:this.operatorIDList.value,
+            // startDate: this.radioTime.startDate,
+            // endDate: this.radioTime.endDate,
+            startDate: this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate,
+            endDate: this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate,
           }
         }
         this.init({
@@ -268,11 +323,15 @@
             //不管是不是初始化都需要执行的代码
             this.content = data.content
             this.contentTotal = data.total
+            // this.insuranceUnitList = data.insuranceUnit
+            this.bankList = data.bankList
+            // this.operatorIDList = data.operatorList
 
           },
           init: (data) => {
             this.insuranceUnitList = data.insuranceUnit
             this.bankList = data.bankList
+            this.operatorIDList = data.operatorList
             this.contentTotal = data.total
             //初始化时需要执行的代码
           }

@@ -90,8 +90,8 @@
           width: '1050',
           height: '680',
           url: '/cashierView?id=' + item.ownerID+'&cashierOperation='+item.cashierOperation+'&cashierMoney='+item.money+'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney
-            +'&insuredUnitAccountID='+item.insuredUnitAccountID+'&insuredUnitAccount='+item.insuredUnitAccount
-            +'&cashierRemake='+item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank+'&insuredUnitAccountID='+item.insuredUnitAccountID,
+            +'&insuredUnitID='+item.insuredUnitID+'&insuredUnitAccount='+item.insuredUnitAccount+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
+            +'&cashierRemake='+ item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank+'&insuredUnitAccountID='+item.insuredUnitAccountID,
           title: '查看客户信息',
           closeCallBack: (data)=>{
             if(data){

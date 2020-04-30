@@ -12,14 +12,13 @@
         <yhm-view-control title="投保类型"  :content="insuredTypeVal"></yhm-view-control>
         <yhm-view-control title="投保渠道" :content="insuredChannelVal"></yhm-view-control>
         <yhm-view-control title="投保项目" :content="insuredProjectVal"></yhm-view-control>
-
       </template>
     </yhm-view-body>
 
     <div class="f_split"></div>
     <yhm-view-tab>
       <template #tab>
-        <yhm-view-tab-button :list="tabState" :index="0" @click="listDetail(true)">跟踪信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="0">跟踪信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1">赠送信息</yhm-view-tab-button>
 
       </template>
@@ -125,6 +124,7 @@
         cashObject:'',
         cashObjectVal:'',
         cashObjectList:[],
+        discountList: [],
         code:'',//序号
         remark:'',//详细信息
         three:'',//三责
@@ -138,7 +138,7 @@
         specify:'',//指定特约店维修险
         carDamage:'', //车损
         driver:'',//车上人员司机
-        listDetails:[],
+        listDetail:[],
 
         isforceStart:true,
         isvehicle:true,
@@ -148,7 +148,7 @@
         isPay:true,
 
         insuredUnit: '',
-        insuredUnitList: '',
+        insuredUnitList: [],
         cashierOperation:'',
 
         ownerID:'',
@@ -186,28 +186,28 @@
             width: '1050',
             height: '690',
             title: '拨付资金',
-            url: '/cashierBankDetailForm?cashierMoney=' + this.cashierMoney + '&cashierDirection=' + this.cashierDirection + '&bankID=' + this.bankID + '&bankOwnerID=' + this.bankOwnerID + '&bankMoney=' + this.bankMoney
-              + '&insuredUnitAccountID=' + this.insuredUnitAccountID + '&insuredUnitAccount=' + this.insuredUnitAccount+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
-              +'&cashierRemake='+this.cashierRemake+'&publicandPrivateAccount='+this.publicandPrivateAccount+'&cashierBankTag='+this.cashierBankTag+'&insuredUnitAccountID='+item.insuredUnitAccountID,
+            url: '/cashierBankDetailForm?cashierMoney='+this.cashierMoney +'&cashierDirection='+this.cashierDirection+'&bankID='+this.bankID +'&bankOwnerID='+this.bankOwnerID+'&bankMoney='+this.bankMoney
+              +'&insuredUnitID='+this.insuredUnitID+'&insuredUnitAccount='+this.insuredUnitAccount+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
+              +'&cashierRemake='+ this.cashierRemake+'&publicandPrivateAccount='+this.publicandPrivateAccount+'&cashierBankTag='+this.cashierBankTag+'&insuredUnitAccountID='+this.insuredUnitAccountID,
             closeCallBack: (data) => {
               this.$dialog.setReturnValue(1)
               this.$dialog.close()
             }
           })
-        }else if (this.cashierOperation=== '1') {
-          this.$dialog.OpenWindow({
-            width: '1050',
-            height: '690',
-            title: '保险返利',
-            url: '/cashierBankDetailForm?cashierMoney=' + this.cashierMoney + '&cashierDirection=' + this.cashierDirection + '&bankID=' + this.bankID + '&bankOwnerID=' + this.bankOwnerID + '&bankMoney=' + this.bankMoney
-              + '&insuredUnitAccountID=' + this.insuredUnitAccountID + '&insuredUnitAccount=' + this.insuredUnitAccount+'&cashierSubject=支付客户返利 ------ 售后业务 ------ 其他业务&cashierSubjectID=D65A9EF9-DCB2-47B8-918B-F8DD9342B2CB'
-              +'&cashierRemake='+this.cashierRemake+'&publicandPrivateAccount='+this.publicandPrivateAccount+'&cashierBankTag='+this.cashierBankTag,
-            closeCallBack: (data) => {
-              this.$dialog.setReturnValue(1)
-              this.$dialog.close()
-            }
-          })
-        }
+        // }else if (this.cashierOperation=== '1') {
+        //   this.$dialog.OpenWindow({
+        //     width: '1050',
+        //     height: '690',
+        //     title: '保险返利',
+        //     url: '/cashierBankDetailForm?cashierMoney=' + this.cashierMoney + '&cashierDirection=' + this.cashierDirection + '&bankID=' + this.bankID + '&bankOwnerID=' + this.bankOwnerID + '&bankMoney=' + this.bankMoney
+        //       + '&insuredUnitAccountID=' + this.insuredUnitAccountID + '&insuredUnitAccount=' + this.insuredUnitAccount+'&cashierSubject=支付客户返利 ------ 售后业务 ------ 其他业务&cashierSubjectID=D65A9EF9-DCB2-47B8-918B-F8DD9342B2CB'
+        //       +'&cashierRemake='+this.cashierRemake+'&publicandPrivateAccount='+this.publicandPrivateAccount+'&cashierBankTag='+this.cashierBankTag,
+        //     closeCallBack: (data) => {
+        //       this.$dialog.setReturnValue(1)
+        //       this.$dialog.close()
+        //     }
+        //   })
+         }
       },
       editBtn(){
         this.$dialog.OpenWindow({
@@ -228,18 +228,36 @@
     created () {
       this.setQuery2Value('cashierOperation')
 
+      // this.setQuery2Value('ownerID')
+      // this.setQuery2Value('bankDetailType')
+      // this.setQuery2Value('bankID')
+      // this.setQuery2Value('bankOwnerID')
+      // this.setQuery2Value('cashierMoney')
+      // this.setQuery2Value('cashierDirection')
+      // this.setQuery2Value('bankMoney')
+      // this.setQuery2Value('insuredUnitAccountID')
+      // this.setQuery2Value('insuredUnitAccount')
+      // this.setQuery2Value('cashierRemake')
+      // this.setQuery2Value('publicandPrivateAccount')
+      // this.setQuery2Value('cashierBankTag')
       this.setQuery2Value('ownerID')
       this.setQuery2Value('bankDetailType')
+      this.setQuery2Value('directionBefore')
       this.setQuery2Value('bankID')
       this.setQuery2Value('bankOwnerID')
       this.setQuery2Value('cashierMoney')
       this.setQuery2Value('cashierDirection')
       this.setQuery2Value('bankMoney')
-      this.setQuery2Value('insuredUnitAccountID')
+      this.setQuery2Value('insuredUnitID')
       this.setQuery2Value('insuredUnitAccount')
+      this.setQuery2Value('insuredUnitAccountID')
+      this.setQuery2Value('cashierSubject')
+      this.setQuery2Value('cashierSubjectID')
       this.setQuery2Value('cashierRemake')
       this.setQuery2Value('publicandPrivateAccount')
       this.setQuery2Value('cashierBankTag')
+
+
       if (this.bankMoney==='0.00'){
         this.isPay=false
       }

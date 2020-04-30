@@ -87,7 +87,7 @@
       add () {
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '650',
+          height: '750',
           url: '/vehicleForm',
           title: '添加车辆信息',
           closeCallBack: (data) => {

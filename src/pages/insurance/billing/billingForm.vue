@@ -7,7 +7,7 @@
         <yhm-form-date title="投保日期" subtitle=""   :value="insuredDate" id="insuredDate " position="t"  rule="R0000"></yhm-form-date>
         <yhm-form-zh-select-text tip-before="value" tip-after="beinsuredidNo" @call="beinsuredEvent" :no-edit="true" :before="beinsuredName" before-id="beinsuredName" :after="beinsuredidNo" after-id="beinsuredidNo" before-rule="#" after-rule="R0000" title="被保险人" after-title="证件号" after-width="160"></yhm-form-zh-select-text>
         <yhm-form-zh-select-text tip-before="value" tip-after="contactPhone"  @call="contactEvent" :before="contactName" before-id="contactName" :after="contactPhone" after-id="contactPhone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="160"></yhm-form-zh-select-text>
-        <yhm-form-zh-select-text tip-before="value" tip-after="insuredPhone" @call="insuredEvent" :before="insuredName" before-id="insuredName" :after="insuredPhone" after-id="insuredPhone" before-rule="#" after-rule="R4000" title="投保人" after-title="手机号码" after-width="160"></yhm-form-zh-select-text>
+        <yhm-form-zh-select-text tip-before="value" tip-after="insuredPhone" @call="insuredEvent" :before="insuredName" before-id="insuredName" :after="insuredPhone" after-id="insuredPhone" before-rule="#" after-rule="R4000" title="投保人" after-title="手机号码" after-width="145"></yhm-form-zh-select-text>
         <yhm-form-radio title="与车主关系" subtitle=""  :select-list="relationshipList" :value="relationship" id="relationship"></yhm-form-radio>
         <yhm-form-radio title="投保类型" subtitle=""  width="1" :select-list="insuredTypeList" :value="insuredType" id="insuredType"></yhm-form-radio>
         <yhm-form-radio title="投保渠道" subtitle=""  width="1" :select-list="insuredChannelList" :value="insuredChannel" id="insuredChannel"></yhm-form-radio>
@@ -96,7 +96,7 @@
 
 <script>
   import { formmixin } from '@/assets/form.js'
-  import { accMul, accAdd, guid, formatDate, number2chinese,formatTime} from '@/assets/common.js'
+  import { accMul, accAdd, guid, formatDate, number2chinese,formatTime ,formatPhone, formatIdNo,} from '@/assets/common.js'
   export default {
     name: 'billingForm',
     mixins: [formmixin],
@@ -822,6 +822,27 @@
 
         }
       })
+    },
+    watch: {
+      insuredPhone(){
+        if(this.insuredPhone.length === 11){
+          this.insuredPhone = formatPhone(this.insuredPhone)
+        }
+        if(this.contactPhone.length === 11){
+          this.contactPhone = formatPhone(this.contactPhone)
+        }
+
+      },
+      contactPhone(){
+        if(this.contactPhone.length === 11){
+          this.contactPhone = formatPhone(this.contactPhone)
+        }
+      },
+      beinsuredidNo(){
+        if(this.beinsuredidNo.length === 18){
+          this.beinsuredidNo = formatIdNo(this.beinsuredidNo)
+        }
+      }
     }
 
   }

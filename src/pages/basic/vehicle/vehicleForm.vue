@@ -9,14 +9,15 @@
         <yhm-form-radio  title="所属类型" v-if="isAssort" :select-list="assortList" :value="assort" id="assort"></yhm-form-radio>
         <yhm-form-text placeholder="" @repeatverify="nameVerifyEvent" ref="plate"  title="车牌号" subtitle="" :show="isHide" :value="plate" id="plate" rule="R8000"></yhm-form-text>
         <yhm-form-select title="车辆颜色" tip="value" :value="color" id="color"  @click="selectColour"></yhm-form-select>
-        <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber" ></yhm-form-text>
+        <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber"></yhm-form-text>
         <yhm-form-text placeholder="" title="发动机号" subtitle="" :value="engineNumber" id="engineNumber" ></yhm-form-text>
         <yhm-form-select title="品牌" tip="value" :value="brand" id="brand"  @click="selectBrand"></yhm-form-select>
         <yhm-form-select title="车型" tip="value" :value="model" id="model"  @click="selectModel"></yhm-form-select>
         <yhm-form-select title="车辆版本" tip="value" :value="version" id="version"  @click="selectVersion"></yhm-form-select>
         <yhm-form-date title="登记日期" v-if="isHide" :value="registerDate" id="registerDate " position="u"  ></yhm-form-date>
         <yhm-form-select  title="车主信息" tip="value" @click="carOwnerIDEvent" :show="isHides"  :value="carOwner" id="carOwner" rule="R0000"></yhm-form-select>
-        <yhm-form-upload-image title="上传行车证" tag="drivingLicense" discription="点击图标或拖拽图片上传(不支持PDF格式)" :show="isHide" :value="drivingLicense" id="drivingLicense" ></yhm-form-upload-image>
+        <yhm-formupload :ownerID="id" :value="fileList"  id="fileList" title="行车证(支持单据)" tag="vehicle" multiple="multiple" category="3" rule="#"></yhm-formupload>
+<!--        <yhm-form-upload-image title="上传行车证" tag="drivingLicense" discription="点击图标或拖拽图片上传(不支持PDF格式)" :show="isHide" :value="drivingLicense" id="drivingLicense" ></yhm-form-upload-image>-->
       </template>
     </yhm-formbody>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -65,6 +66,7 @@
         isDisplacement:true,
         idNo: '',
         registrationNumber:'',
+        fileList:[],
 
       }
     },
@@ -306,6 +308,8 @@
             carOwner:this.carOwner,
             carOwnerID:this.carOwnerID,
             drivingLicense:this.drivingLicense,
+            files:this.fileList
+
 
           }
           this.ajaxJson({
@@ -365,6 +369,7 @@
           this.carOwner=data.carOwner
           this.carOwnerID=data.carOwnerID
           this.drivingLicense=data.drivingLicense
+          this.fileList = data.files
 
           if(this.category === '0'){
             this.isAssort = false

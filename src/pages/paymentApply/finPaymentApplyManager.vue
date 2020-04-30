@@ -64,7 +64,7 @@
           <yhm-manager-td-center @click="lookPerson(item)" :value="item.person"></yhm-manager-td-center>
           <yhm-manager-td :tip="true" @click="unitView(item)" :value="item.otherUnit" color="#7307dc" v-show="item.ownerID!==''"></yhm-manager-td>
           <yhm-manager-td :tip="true" @click="unitView(item)" :value="item.otherUnit"  v-show="item.ownerID==''"></yhm-manager-td>
-          <yhm-manager-td-psd :value="item.nature" :list="natureList"></yhm-manager-td-psd>
+          <yhm-manager-td-psd :is-left="true" :value="item.nature" :list="natureList"></yhm-manager-td-psd>
           <yhm-manager-td-psd :value="item.isChecks" :list="isChecksList"></yhm-manager-td-psd>
           <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.day+'天'" v-if="item.day<=7" style="color:#f00;font-weight: bold"></yhm-manager-td-center>

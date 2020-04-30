@@ -10,7 +10,8 @@
         <yhm-view-control title="车牌号" :content="plate"></yhm-view-control>
         <yhm-view-control title="车主" :content="carOwner"></yhm-view-control>
 
-        <yhm-view-control title="行车证信息"  category="3" type="smfiles" tag="drivingLicense" :content="drivingLicense"></yhm-view-control>
+<!--        <yhm-view-control title="行车证信息"  category="3" type="smfiles" tag="drivingLicense" :content="drivingLicense"></yhm-view-control>-->
+        <yhm-view-control category="3" title="行车证" type="files" :content="fileList"></yhm-view-control>
         <yhm-view-control title="车架号" :content="frameNumber"></yhm-view-control>
         <yhm-view-control title="登记日期" :content="registerDate" type="date"></yhm-view-control>
         <yhm-view-control title="发动机号" :content="engineNumber" ></yhm-view-control>
@@ -99,6 +100,7 @@
         lastYearUnitList:[],
         forceEndDate:'',  //交强险到期日
         businessEndDate:'', //商业险到期日
+        fileList:[],
 
         trackID:'',
         intention:'',
@@ -195,6 +197,7 @@
             this.engineNumber =data.engineNumber //发动机号
             this.forceEndDate =data.forceEndDate //交强险到期日
             this.businessEndDate =data.businessEndDate//商业险到期日
+            this.fileList=data.files
           }
         })
       }

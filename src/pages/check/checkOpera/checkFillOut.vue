@@ -136,19 +136,33 @@
           if( this.ownerSys !== '2'){
             this.ownerSys = '2'
           }
-          this.ownerSysNoList = ['0','1']
+          if(this.category==='2'){
+            this.ownerSysNoList = ['0','1']
+            this.isThisUnit=false
+          }else{
+            this.ownerSysNoList = ['0','1','3']
+          }
         }else{
+
           if(this.ownerSys !== '0' || this.ownerSys !== '1'){
             this.ownerSys = '0'
           }
-          this.ownerSysNoList = ['2']
+          if(this.category!=='2'){
+            this.ownerSysNoList = ['2','3']
+          }else{
+            this.ownerSysNoList = ['0','1','2']
+            this.ownerSys = '3'
+            this.isThisUnit=true
+          }
           this.isThisUnit = false
         }
       },
 
       categoryOtherTypeEvent(){
         if(this.category==='1'){
-          this.categoryOtherNoList = ['2']
+          this.categoryOtherNoList = ['2','3']
+        }else if(this.category==='2'){
+          this.ownerSysNoList = ['0','1','2']
         }
         this.switchSownerSys()
         this.other = ''
@@ -252,8 +266,8 @@
               this.isThisUnit = true
               this.isMoney = '1'
               this.useRemark=data.useRemark
-              this.switchSownerSys()
             }
+            this.categoryOtherTypeEvent()
           },
             add: (data)=>{
             this.id = guid()

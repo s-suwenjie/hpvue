@@ -22,7 +22,7 @@
         <yhm-managerth  title="剩余天数" value="forceDay"></yhm-managerth>
         <yhm-managerth  title="商业险到期日" value="businessEndDate"></yhm-managerth>
         <yhm-managerth  title="剩余天数" value="businessDay"></yhm-managerth>
-        <yhm-managerth  title="行驶证" ></yhm-managerth>
+<!--        <yhm-managerth  title="行驶证" ></yhm-managerth>-->
         <yhm-managerth style="width: 100px;" title="操作"></yhm-managerth>
       </template>
 
@@ -39,7 +39,7 @@
           <yhm-manager-td-center :value="item.forceDay+'  天'"></yhm-manager-td-center>
           <yhm-manager-td-date :value="item.businessEndDate"></yhm-manager-td-date>
           <yhm-manager-td-center  :value="item.businessEndDate==='1900-01-01'?'-----':item.businessDay+'  天'"></yhm-manager-td-center>
-          <yhm-manager-td-image :tip="true" width="850" height="500" :value="item.drivingLicense" tag="drivingLicense"></yhm-manager-td-image>
+<!--          <yhm-manager-td-image :tip="true" width="850" height="500" :value="item.drivingLicense" tag="drivingLicense"></yhm-manager-td-image>-->
           <yhm-manager-td-operate >
             <yhm-manager-td-operate-button  @click="track(item)" value="跟踪" icon="i-btn-applicationSm" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
