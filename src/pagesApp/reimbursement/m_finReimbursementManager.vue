@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div  ref="box">
     <yhm-app-structure-top-tap>
       <yhm-app-structure-top-tap-menu @call="backEvent" title="返回"></yhm-app-structure-top-tap-menu>
       <yhm-app-structure-top-tap-menu @call="waitEvent" title="进行中" :select="isFinish === '1'"></yhm-app-structure-top-tap-menu>
       <yhm-app-structure-top-tap-menu @call="finishEvent" title="已完成" :select="isFinish === '0'"></yhm-app-structure-top-tap-menu>
     </yhm-app-structure-top-tap>
-
-    <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="url" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">
+    <div style="overflow: auto" id="box">
+<!--    <yhm-app-scroll :pageIndex="pageIndex" :init-load-finish="loadFinish" :empty="empty" :params="params" :pull-down-refresh-url="url" @refreshCall="refreshEvent" :pull-up-load-url="url" @loadCall="loadEvent">-->
       <appSearch @change="change" @alertShow="rightAlert=true,key<1?key+=1:''" :list="shortcutSearchContent" ></appSearch>
 
       <yhm-app-structure-menu-group :url="getUrl(item.id,isFinish)" v-for="(item) in content" :key="item.id">
@@ -20,7 +20,8 @@
           <yhm-app-view-control title="状态" :content="item.stateVal"></yhm-app-view-control>
         </yhm-app-view-detail>
       </yhm-app-structure-menu-group>
-    </yhm-app-scroll>
+    </div>
+<!--    </yhm-app-scroll>-->
     <appfiltrate :alert-show="rightAlert" @close="rightAlert=false,key<1?key+=1:''" >
       <appRadiofilter :list="isPrettyCashOffList" title="是否核销" :key="key" @change="radioChange"></appRadiofilter>
       <div class="alert_bottom">
@@ -64,8 +65,28 @@
         params:{
           isFinish:'1'
         },
-        content:[]
+        content:[],
+        scrollTop:''
       }
+    },
+    //在页面离开时记录滚动位置
+    beforeRouteLeave (to, from, next) {
+      this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+      console.log(this.scrollTop,'离开时位置')
+      sessionStorage.boxTop = this.scrollTop;
+      next()
+    },
+    //进入该页面时，用之前保存的滚动位置赋值
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        if(vm && vm.$refs.box){//通过vm实例访问this
+          vm.$nextTick(()=>{
+            setTimeout(()=>{
+              window.scroll(0,sessionStorage.boxTop)
+            },100)
+          })
+        }
+      })
     },
     methods:{
       radioChange(index,item){//用户选择后触发 可接收选中的索引值以及类别

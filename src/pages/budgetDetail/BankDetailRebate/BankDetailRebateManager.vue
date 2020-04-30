@@ -28,7 +28,7 @@
           <yhm-managerth-check :check="allCheck" style="width: 40px;"></yhm-managerth-check>
           <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
           <yhm-managerth style="width: 180px" title="账户" value="bankName"></yhm-managerth>
-          <yhm-managerth style="width: 80px" title="交易对象" value="otherName"></yhm-managerth>
+          <yhm-managerth style="width: 160px" title="交易对象" value="otherName"></yhm-managerth>
           <yhm-managerth style="width: 120px;" title="交易日期" value="cccurDate"></yhm-managerth>
           <yhm-managerth style="width: 50px" title="方向" value="direction"></yhm-managerth>
           <yhm-managerth style="width: 80px;" title="事由" value="subject"></yhm-managerth>
@@ -43,7 +43,7 @@
             <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
             <yhm-manager-td :value="item.bankName + item.account + item.nature" @click="accountEvent(item)" :tip="true"></yhm-manager-td>
-            <yhm-manager-td-center :value="item.otherName" @click="otherNameEvent(item)"></yhm-manager-td-center>
+            <yhm-manager-td-html :value="item.otherName" @click="otherNameEvent(item)"></yhm-manager-td-html>
             <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
             <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
             <yhm-manager-td :value="item.subject"></yhm-manager-td>
@@ -96,6 +96,7 @@
         issueCode:'',
         searchStr:'',
         bankList:[],
+        subjectID:'1',
         endDate:'',
         startDate:'',
         contentTotal: [],
@@ -265,9 +266,9 @@
       initPageData(initValue){
         let params = {}
         if (initValue) {
-          // 页面初始化是需要的参数
+          // 页面初始化时需要的参数
           params = {
-
+            subjectID:this.subjectID
           }
         } else {
           // 页面非初始化时需要的参数
