@@ -23,6 +23,7 @@
             <yhm-managerth  title="新车费率"></yhm-managerth>
             <yhm-managerth  title="旧车费率"></yhm-managerth>
             <yhm-managerth  title="客户费率"></yhm-managerth>
+            <yhm-managerth  title="会员费率"></yhm-managerth>
 
           </template>
           <template #listBody>
@@ -32,6 +33,7 @@
               <yhm-manager-td-rgt  :value="item.newRate+'  %'"></yhm-manager-td-rgt>
               <yhm-manager-td-rgt :value="item.oldRate+'  %'" ></yhm-manager-td-rgt>
               <yhm-manager-td-rgt :value="item.clientRate+'  %'" ></yhm-manager-td-rgt>
+              <yhm-manager-td-rgt :value="item.vipRate+'  %'" ></yhm-manager-td-rgt>
             </tr>
           </template>
           <template #empty>

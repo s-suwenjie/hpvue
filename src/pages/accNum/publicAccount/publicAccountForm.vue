@@ -145,7 +145,7 @@
         list:[],
         isList:false,
 
-        url:'',//0是在对公账账户模块进入   ''是选择页面进入
+        url:'',//0是在账账户模块进入   ''是选择页面进入
         isUrl:false,
         isUnit:false,
       }

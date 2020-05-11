@@ -7,11 +7,12 @@ import Axios from 'axios'
 import '@/assets/index.js'
 import '@/assetsApp/index.js'
 import echarts from "echarts"
-
+import vant from 'vant';
 Vue.prototype.$echarts = echarts
 
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
+Vue.use(vant)
 
 
 import "../staticApp/global.css";

@@ -6,13 +6,15 @@
         <div v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
 
-<!--      <yhm-text :show="show"  v-if="!iconShou" :decimal-places="decimalPlaces" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>-->
-      <yhm-text :show="show" v-if="!iconShou" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>
-            <span class="list_look icon_look"  @click="iconClickEvent" v-show="iconShou"></span>
+<!--      <div v-show="!iconTextShow">-->
+        <yhm-text :show="show" v-if="!iconShou" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>
+        <span class="list_look icon_look"  @click="iconClickEvent" v-show="iconShou"></span>
+<!--      </div>-->
 
-<!--      <yhm-text :show="show" :decimal-places="decimalPlaces" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>-->
-
-<!--      <yhm-text :show="show" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>-->
+<!--      <div v-show="iconTextShow" class="keyboardCenter">-->
+<!--        <yhm-text  :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>-->
+<!--        <span :class="iconName" class="keyboard"  @click="iconClickEvent"></span>-->
+<!--      </div>-->
 
       <slot></slot>
     </div>
@@ -31,9 +33,17 @@
         }
       },
       props: {
+        iconTextShow:{
+          type:Boolean,
+          default: false
+        },
         iconShou:{
           type:Boolean,
           default :false
+        },
+        iconName:{
+          type:String,
+          default :'list_look'
         },
         decimalPlaces:{
           type:Number,
@@ -158,6 +168,9 @@
           this.$nextTick(() => {
             this.$emit("focus")
           })
+        },
+        verifications(){
+          this.$refs.control.verification()
         }
       },
       watch: {
@@ -180,6 +193,17 @@
 <style scoped>
   *{
     box-sizing: border-box;
+  }
+  .keyboardCenter{
+    display: flex;
+    justify-content: space-between;
+  }
+  .keyboard::before{
+    float: right;
+    margin-left: 10px;
+    font-size: 24px;
+    color: #49a9ea;
+    margin-top: 8px;
   }
   .icon_look{
     font-size: 20px;

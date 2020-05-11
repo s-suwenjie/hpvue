@@ -145,7 +145,7 @@
         this.$dialog.OpenWindow({
           width: '1050',
           height: '750',
-          title: '编辑客户信息',
+          title: '编辑保单信息',
           url: '/billingForm?id=' + this.id,
           closeCallBack: (data)=>{
             if(data){

@@ -5,7 +5,7 @@
       <template #navigationTab>
         <router-link class="menuTabDiv " :to="{path:'/home/policy/policyManager'}">保单管理</router-link>
         <router-link class="menuTabDiv " :to="{path:'/home/accountsReceivable/accountsReceivableManager'}">应收账款</router-link>
-        <router-link class="menuTabDiv " :to="{path:'/home/customerRebates/customerRebatesManager'}">客户返利</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/customerRebates/customerRebatesManager'}">客户直接优惠/返利</router-link>
         <router-link class="menuTabDiv menuTabActive"  :to="{path:'/home/paymentInsurance/payInsuranceFeeManager'}">付保险费</router-link>
       </template>
       <!--操作区-->
@@ -102,7 +102,7 @@
           list: []
         },
         listAccountsReceivableDate:{
-          value: '0', //默认为空
+          value: '3', //默认为空
           list: []
         },
         totalMoney:'0',

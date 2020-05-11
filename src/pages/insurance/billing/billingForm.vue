@@ -168,11 +168,10 @@
 
         discountList: [],
         num:'',
-        isaaa:'1',
         clientRate:'', //客户费率
         tipValue:'',
         // tipList:[
-        //   ['优惠点数超出保险公司提供的点数'+this.clientRate+'']
+          //   ['优惠点数超出保险公司提供的点数'+this.clientRate+'']
         // ],
         tipList:'',
       }
@@ -207,9 +206,9 @@
         $('.tipShow').css('display','none')
       },
       calcBeforeMoney(){
-        if (this.discountMoney!=='' &&this.premiumsTotal!==''){
+        if (this.discountMoney!=='' &&this.businessMoney!==''){
           this.receivedMoney=accAdd(parseFloat(this.premiumsTotal),parseFloat(this.discountMoney)*-1) +''
-          this.discountCount=(parseFloat(this.discountMoney)/parseFloat(this.premiumsTotal)).toFixed(2)*100 +''
+          this.discountCount=(parseFloat(this.discountMoney)/parseFloat(this.businessMoney)).toFixed(2)*100 +''
           if (this.cash ==='0'){
             this.receivedMoney=this.premiumsTotal
           }
@@ -218,7 +217,7 @@
       },
       calcAfterMoney(){
         if (this.discountCount!=='') {
-          this.discountMoney = parseFloat(this.premiumsTotal) * (parseFloat(this.discountCount)/100).toFixed(2) +''
+          this.discountMoney = parseFloat(this.businessMoney) * (parseFloat(this.discountCount)/100).toFixed(2) +''
           this.receivedMoney = accAdd(parseFloat(this.premiumsTotal), parseFloat(this.discountMoney) * -1) +''
           if (this.cash ==='0'){
             this.receivedMoney=this.premiumsTotal
@@ -227,9 +226,9 @@
         }
       },
       unitRate(){
-
           let params = {
-            num:this.insuredUnit
+            num:this.insuredUnit,
+            id:this.plateID
           }
           this.ajaxJson({
             url: '/Insurance/getUnitRate',
@@ -363,10 +362,10 @@
               this.contactID=data.contactPersonID //联系人id
               this.contactName=data.name
               this.contactPhone=data.phone
-
               this.beinsuredID=data.carOwnerID
               this.beinsuredName=data.carOwner
               this.beinsuredidNo=data.idNo
+
             }
           }
         })
@@ -421,7 +420,6 @@
         })
       },
       save(){
-
         if (this.hide==='1'){
           this.$dialog.confirm({
             width: '400',

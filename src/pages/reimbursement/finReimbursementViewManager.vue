@@ -9,6 +9,9 @@
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentApplyViewManager'}">付款申请</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/viewManager/reimbursementViewManager'}">报销申请</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
+
       </template>
 
       <!--操作区-->
@@ -31,7 +34,7 @@
 
       <!--数据表头-->
       <template #listHead>
-        <yhm-managerth-check :check="allCheck" style="width: 40px;"></yhm-managerth-check>
+        <yhm-managerth-check style="width: 40px;" :check="allCheck"></yhm-managerth-check>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="申请人" value="name"></yhm-managerth>
         <yhm-managerth style="width: 150px" title="申请日期" value="workDate"></yhm-managerth>

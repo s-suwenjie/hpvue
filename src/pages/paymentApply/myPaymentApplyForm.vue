@@ -1103,7 +1103,14 @@ export default {
         }
       })
     },
-    selectUnit () {
+    resetPersonOrUnit(op,personOrUnit){
+      if(op === 'i'){
+        this.personOrUnit = '0'
+      }else{
+        this.personOrUnit = '1'
+      }
+    },
+    selectUnit (op) {
       var url = '/selectUnit?ownerSys=1&ownerSysBefore=1&category=1&categoryBefore=1'
       var title = '选择单位信息'
       if(this.nature === '2'){
@@ -1215,6 +1222,13 @@ export default {
                   }
                 }
               })
+            }
+          }else{
+            if(this.personOrUnit === '0'){
+              //说明没有选中需要重置类型
+              this.personOrUnit='1'
+            }else{
+              this.personOrUnit='0'
             }
           }
         }

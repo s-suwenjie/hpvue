@@ -33,7 +33,7 @@
     </div>
 
     <slot v-if="!customize" name="choose"></slot>
-
+    <slot name="buttonSwitch"></slot>
     <div v-if="!customize" class="m_list" :class="[{w620: smTable},{iswAuto: isManager}]">
       <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table">
         <thead>

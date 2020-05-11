@@ -23,7 +23,7 @@
         </div>
       </template>
       <template #listHead>
-        <yhm-managerth-check :check="allCheck" title="全选"></yhm-managerth-check>
+        <yhm-managerth-check style="width: 50px" :check="allCheck"></yhm-managerth-check>
         <yhm-managerth style="width: 50px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="申请人" value="personID"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="批次号" value="code"></yhm-managerth>
@@ -58,6 +58,7 @@
             <yhm-manager-td-operate-button :no-click="item.isFinish !== '0' || item.state === '0'" @click="urge(item)" value="催促" icon="i-btn-urge" color="#2AA70B"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button  @click="chargeAgainst(item)" v-show="item.state === '15' && item.isChecks === '0'" value="报销冲抵" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button  @click="aFullReturn(item)" v-show="item.state === '15' && item.isChecks === '0'" value="全额退回" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  v-show="item.isChecks === '3'" @click="FullReturn(item)" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
 
             <yhm-manager-td-operate-button :no-click="item.state !== '0' || item.isFinish === '1'" @click="del(item)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
@@ -143,6 +144,19 @@
       }
     },
     methods:{
+      FullReturn(item){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 690,
+          title: '全额退回',
+          url: '/fullRefundForm?ownerID=' + item.id,
+          closeCallBack: (data) => {
+            if (data) {
+              this.initPageData(false)
+            }
+          }
+        });
+      },
       totalClick(item){
         if(item.val === '总数'){
           this.isFinishPsd.value = ''

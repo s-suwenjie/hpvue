@@ -31,10 +31,11 @@
 </template>
 
 <script>
-  import { ImagePreview,Tabbar, TabbarItem ,Tab,Tabs} from 'vant'
+  import { ImagePreview,Tabbar, TabbarItem ,Tab,Tabs,List} from 'vant'
   import 'vant/lib/index.css';
   export default {
     components: {
+      [List.name]: List,
       [Tab.name]: Tab,
       [Tabs.name]: Tabs,
       [Tabbar.name]: Tabbar,

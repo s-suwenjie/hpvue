@@ -51,13 +51,23 @@
         <yhm-form-select :show="contentTaB && isCauseIn" title="事由" @click="selectCause" :value="subject" id="subject" width="1" rule="R0000"></yhm-form-select>
         <yhm-form-textarea title="备注" :value="remark" id="remark"></yhm-form-textarea>
 
-        <yhm-form-drop-down-select title="对方" subtitle="账户类型" width="1" @select="selectaccountB" :no-click="isOtherAcc" no-edit="1" :select-list="otherAccountTypeList" :selectValue="otherAccountType" selectid="otherAccountType" :value="otherAccount" id="otherAccount" rule="R0000"></yhm-form-drop-down-select>
+        <yhm-form-drop-down-select title="对方" subtitle="账户类型" width="1" @select="selectaccountB" :no-click="isOtherAcc" no-edit="1" :select-list="otherAccountTypeList" :selectValue="otherAccountType" selectid="otherAccountType" :value="otherAccount" id="otherAccount" ></yhm-form-drop-down-select>
         <!--        <yhm-form-drop-down-select title="事件类型" width="1" @select="selectCause" :select-list="categoryList" :selectValue="category" selectid="category" :value="cause" id="cause" rule="R0000"></yhm-form-drop-down-select>-->
 
         <yhm-form-radio title="有无" subtitle="手续费" :select-list="feeTypepsd" :value="feeType" id="feeType" rule="R0000" @call="feeTypeA"></yhm-form-radio>
         <yhm-form-text title="手续费" subtitle="金额" :value="fee" id="fee" :no-edit="HandlingFee"></yhm-form-text>
-        <yhm-form-text title="凭证号" :value="voucherNo" id="voucherNo" width="1"></yhm-form-text>
-        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传凭证" tag="payment" subtitle="" multiple="multiple"></yhm-formupload>
+        <yhm-form-text title="凭证号" :value="voucherNo" id="voucherNo" width="1"  ></yhm-form-text>
+        <yhm-form-radio title="支付方式" subtitle=""  width="1"  :select-list="paymentMethodList" :value="paymentMethod" id="paymentMethod" @call="paymentMethodState"  ></yhm-form-radio>
+
+        <yhm-form-text title="参考号" subtitle="" :value="slipNumber" id="slipNumber" v-if="iseferenceeNo"></yhm-form-text>
+
+        <yhm-form-text title="支付单号" subtitle="" :value="slipNumber" id="slipNumber"  v-if="isslipNumber" placeholder="请输入后六位"></yhm-form-text>
+
+        <yhm-form-text title="交易" subtitle="流水号" :value="slipNumber" id="slipNumber" v-if="isrunningWater"></yhm-form-text>
+        <yhm-form-text title="单号" subtitle="" :value="slipNumber" id="slipNumber" v-if="isnumber"></yhm-form-text>
+
+
+        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传凭证" tag="payment" subtitle="" multiple="multiple" rule="#"></yhm-formupload>
       </template>
     </yhm-formbody>
 
@@ -98,6 +108,9 @@
         otherName: '',//对方公司名称
         otherID: '',//对方公司名称ID
         voucherNo: '',//凭证号
+        paymentMethod:'',  //支付方式
+        paymentMethodList:[],
+        slipNumber:'',//单号
         fileList: [],//上传凭证 不确定字段
         remark: '',//备注
         feeTypepsd: [],//手续费
@@ -137,9 +150,36 @@
         calcTrMoney: '',
         bankID:'',
         bankOwnerID:'',
+        iseferenceeNo:false,
+        isslipNumber:false,
+        isrunningWater:false,
+        isnumber:true,
       }
     },
     methods: {
+      paymentMethodState(){
+        if (this.paymentMethod==='0'){
+          this.iseferenceeNo=true
+          this.isslipNumber=false
+          this.isrunningWater=false
+          this.isnumber=false
+        }else if (this.paymentMethod==='1' || this.paymentMethod==='2' ){
+          this.isslipNumber=true
+          this.iseferenceeNo=false
+          this.isrunningWater=false
+          this.isnumber=false
+        }else if (this.paymentMethod==='3'){
+          this.isrunningWater=true
+          this.iseferenceeNo=false
+          this.isslipNumber=false
+          this.isnumber=false
+        }else if (this.paymentMethod==='4'){
+          this.isrunningWater=false
+          this.iseferenceeNo=false
+          this.isslipNumber=false
+          this.isnumber=true
+        }
+      },
       calcTrAfterMoney(){
         this.calcMoney()
       },
@@ -397,7 +437,7 @@
           this.$dialog.OpenWindow({
             width: 950,
             height: 640,
-            url: '/selectPrivateAccount?state=0&category=1&categoryUnitBefore=0&commonUse=1&categoryUnit=1&personID='+this.otherID,
+            url: '/selectPrivateAccount?state=0&category=1&categoryUnitBefore=0&commonUse=0&categoryUnit=1&personID='+this.otherID,
             title: '选择私人账号',
             closeCallBack: (data) => {
               if(data){
@@ -504,7 +544,23 @@
                       data: params,
                       loading: '0',
                       call: (data) => {
+
                         if (data.type === 0) {
+                          //添加第三方 支付方式表
+                          let dataMethod={
+                            id:guid(),
+                            ownerID:this.id,
+                            paymentMethod:this.paymentMethod,
+                            slipNumber:this.slipNumber,
+                          }
+                          this.ajaxJson({
+                            url:'/Fin/paymentMethodSave',
+                            data:dataMethod,
+                            closeCallBack: () => {
+
+                            }
+                          })
+
                          // this.$dialog.setReturnValue(this.id) //向父级页面id值
                           this.$dialog.alert({
                             tipValue: data.message,
@@ -569,6 +625,9 @@
           this.id = guid()
           this.ownerSysList = data.ownerSysPsd.list //收支分类
           this.ownerSys = data.ownerSysPsd.value
+
+          this.paymentMethodList = data.paymentMethodPsd.list //支付方式
+          this.paymentMethod = data.paymentMethodPsd.value
 
           this.selfAccount = data.selfAccount   //我方账户信息
           this.selfAccountID = data.selfAccountID

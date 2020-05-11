@@ -42,7 +42,7 @@
           <yhm-manager-td-checkbox :value="item"  ></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td @click="plateView(item)" :value="item.plate" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
-          <yhm-manager-td :value="item.contactName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
+          <yhm-manager-td  @click="contactView(item)" :value="item.contactName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td :tip="true" @click="personView(item)" :value="item.beinsuredName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td-date :value="item.insuredDate"  @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-date>
           <yhm-manager-td-psd  :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
@@ -52,7 +52,7 @@
           <yhm-manager-td :value="item.statusVal==='部门审批中'?item.causeList[0].insuranceFormulatorName:'-----'"></yhm-manager-td>
           <yhm-manager-td-state @click="appPay(item)" :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button v-show="item.category==='1' " @click="addPNumbering(item)" icon="i-export" value="上传保单"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.category==='1' " @click="addPNumbering(item)" icon="i-export" value="上传保单" color="#A344BB"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="editPayment(item)" v-show="item.category==='2' ||item.category==='3'" :no-click="item.cashierOperation==='1'?false:true" value="付款申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="editBtn(item)" :no-click="item.status===''|| item.status==='1'|| item.status==='4'" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="del(item)"   :no-click="item.status===''|| item.status==='1' || item.status==='4'" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
@@ -102,7 +102,7 @@
     },
     methods:{
       appPay(item){
-        if (item.statusVal==='返利审批中') {
+        if (item.statusVal==='返利审批中'||item.statusVal==='返利拨款中') {
           this.$dialog.OpenWindow({
             width: '1050',
             height: '750',
@@ -116,7 +116,7 @@
       },
       addPNumbering(item){
         let title = '上传保单号'
-        let url = '/poNumbering?id='+item.poNumber+'&ownerID='+item.id
+        let url = '/poNumbering?id='+item.poNumber+'&ownerID='+item.id+'&project='+item.project
         this.$dialog.OpenWindow({
           width: '1050',
           height: '550',
@@ -147,6 +147,19 @@
           width: '1050',
           height: '690',
           url:'/personView?id=' + item.beinsuredID+'&isBilling=0',
+          title:'查看被保险人信息',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      contactView (item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/personView?id=' + item.contactID+'&isBilling=0',
           title:'查看联系人信息',
           closeCallBack:(data) =>{
             if(data){
@@ -160,7 +173,7 @@
           width: '1050',
           height: '750',
           url: '/billingApprovalApplyForm?discountMoney='+item.discountMoney+'&billingID='+item.id+'&cashierSubject=支付客户返利 ------ 售后业务 ------ 其他业务&cashierSubjectID=D65A9EF9-DCB2-47B8-918B-F8DD9342B2CB'
-          +'&numbering='+item.numbering+'&plate='+item.plate+'&cashName='+item.cashName+'&cashNameID='+item.cashNameID+'&publicPrivate='+item.publicPrivate,
+          +'&numbering='+item.numbering+'&plate='+item.plate+'&cashName='+item.cashName+'&cashNameID='+item.cashNameID+'&publicPrivate='+item.publicPrivate+'&Billingnature=6',
           title: '添加返利付款申请',
           closeCallBack: (data)=>{
             if(data){
@@ -220,7 +233,7 @@
           width: '1050',
           height: '680',
           url: '/billingView?id=' + item.id+'&status='+item.status,
-          title: '查看客户信息',
+          title: '查看保单信息',
           closeCallBack: (data)=>{
             if(data){
               this.initPageData(false)

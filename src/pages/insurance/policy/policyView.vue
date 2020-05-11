@@ -260,18 +260,23 @@
             this.listPolicy=data.deatails
             this.listProfit=data.listProfit
 
-            for (let i in this.listProfit){
-              //计算保险公司优惠定额
-              this.quotaMoney= (this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100)).toFixed(2) + ''
-              //计算实际金额
-              this.profitAndLossMoney=((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney).toFixed(2) +''
-              //计算实际金额盈亏比例
-              this.profitAndLossProportion = (((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney) / this.listProfit[i].totalMoney *100 ).toFixed(2) + '%'
-            }
+
             for(let i in this.listPolicy){
               sum +=  parseFloat(this.listPolicy[i].bankMoney)
             }
             this.sumMoney = sum  + '' //计算实际金额
+
+            for (let i in this.listProfit){
+              //计算保险公司优惠定额(应收账款)
+              this.quotaMoney= (this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100)).toFixed(2) + ''
+
+              //计算实际金额 (预计盈亏)
+              this.profitAndLossMoney=((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney).toFixed(2) +''
+
+              //计算实际金额盈亏比例
+              this.profitAndLossProportion = (((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney) / this.listProfit[i].totalMoney *100 ).toFixed(2) + '%'
+            }
+
             if (this.cash==='0'){
               this.isCash=true
             }else{

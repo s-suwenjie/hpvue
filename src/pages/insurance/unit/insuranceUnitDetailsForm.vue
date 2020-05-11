@@ -3,10 +3,23 @@
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
+        <yhm-form-text placeholder=""  title="保险公司回款新车费率%" subtitle="" :value="inNewRate" id="inNewRate" rule="R1400"></yhm-form-text>
+        <yhm-form-text placeholder=""  title="保险公司回款旧车费率%" subtitle="" :value="inOldRate" id="inOldRate" rule="R1400"></yhm-form-text>
+        <yhm-form-text placeholder=""  title="保险公司回款客户费率%" subtitle="" :value="inClientRate" id="inClientRate" rule="R1400"></yhm-form-text>
+
+        <yhm-form-text placeholder=""  title="三方服务费回款新车费率%" subtitle="" :value="trNewRate" id="trNewRate" rule="R1400"></yhm-form-text>
+        <yhm-form-text placeholder=""  title="三方服务费回款旧车费率%" subtitle="" :value="trOldRate" id="trOldRate" rule="R1400"></yhm-form-text>
+        <yhm-form-text placeholder=""  title="三方服务费回款客户费率%" subtitle="" :value="trClientRate" id="trClientRate" rule="R1400"></yhm-form-text>
+
+        <yhm-form-text placeholder=""  title="VIP费率%" subtitle="" :value="vipRate" id="vipRate" rule="R1400"></yhm-form-text>
+
         <yhm-form-date title="启用日期" v-show="isNum" :value="startDate" id="startDate " position="t"  ></yhm-form-date>
         <yhm-form-text placeholder=""  title="新车费率%" subtitle="" :value="newRate" id="newRate" rule="R1400"></yhm-form-text>
         <yhm-form-text placeholder=""  title="旧车费率%" subtitle="" :value="oldRate" id="oldRate" rule="R1400"></yhm-form-text>
         <yhm-form-text placeholder=""  title="客户费率%" subtitle="" :value="clientRate" id="clientRate" rule="R1400"></yhm-form-text>
+
+
+
 
       </template>
     </yhm-formbody>
@@ -35,6 +48,15 @@
         isNum:false,
         unitID:'',
 
+        inNewRate:'',
+        inOldRate:'',
+        inClientRate:'',
+        trNewRate:'',
+        trOldRate:'',
+        trClientRate:'',
+        vipRate:'',
+
+
       }
     },
     methods:{
@@ -50,7 +72,17 @@
             newRate: this.newRate,
             oldRate: this.oldRate,
             clientRate: this.clientRate,
-          }
+
+            inNewRate:this.inNewRate,
+            inOldRate:this.inOldRate,
+            inClientRate:this.inClientRate,
+            trNewRate:this.trNewRate,
+            trOldRate:this.trOldRate,
+            trClientRate:this.trClientRate,
+            vipRate:this.vipRate
+
+        }
+          console.log( params )
           this.ajaxJson({
             url: '/Basic/saveUnitInsuranceDetails',
             data: params,
@@ -119,6 +151,15 @@
           this.newRate=data.newRate
           this.oldRate=data.oldRate
           this.clientRate=data.clientRate
+
+          this.inNewRate=data.inNewRate
+          this.inOldRate=data.inOldRate
+          this.inClientRate=data.inClientRate
+          this.trNewRate=data.trNewRate
+          this.trOldRate=data.trOldRate
+          this.trClientRate=data.trClientRate
+          this.vipRate=data.vipRate
+
         }
       })
     }

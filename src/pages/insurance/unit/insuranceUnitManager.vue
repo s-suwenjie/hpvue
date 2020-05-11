@@ -21,6 +21,7 @@
         <yhm-managerth style="width: 130px;" title="新车费率" value="newRate"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="旧车费率" value="oldRate"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="客户费率" value="clientRate"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="会员费率" value="vipRate"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="操作"></yhm-managerth>
       </template>
 
@@ -35,6 +36,7 @@
           <yhm-manager-td-rgt  :value="item.newRate===''?'------':item.newRate +'  %'"></yhm-manager-td-rgt>
           <yhm-manager-td-rgt :value="item.oldRate===''?'------':item.oldRate+'  %'" ></yhm-manager-td-rgt>
           <yhm-manager-td-rgt :value="item.clientRate===''?'------':item.clientRate+'  %'" ></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.vipRate===''?'------':item.vipRate+'  %'" ></yhm-manager-td-rgt>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button  @click="editBtn(item)" value="编辑" icon="i-edit"  color="#0033FF"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>

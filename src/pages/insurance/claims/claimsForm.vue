@@ -25,12 +25,14 @@
 
         <yhm-form-text title="发票" @call="invoiceEvent" :value="invoiceID" id="invoiceID"></yhm-form-text>
         <!--<yhm-form-date title="结算日期" :value="settlementDate" id="settlementDate" rule="R0000" position="u"></yhm-form-date>-->
+        <yhm-form-upload-image title="图片" :noUpload="true" :isShow="true" width="800" height="650" tag="bankDetail" discription=" " :value="storeName" id="storeName"></yhm-form-upload-image>
 
 
-        <yhm-form-textarea title="备注" :value="remark" id="remark"></yhm-form-textarea>
+        <yhm-form-textarea no-edit="1" title="银行摘要" :value="bankSummary" id="bankSummary"></yhm-form-textarea>
+        <yhm-form-radio title="状态" :state-show="true"  @call="callState" :select-list="signStateList" :value="signState" id="signState"></yhm-form-radio>
 
+        <yhm-form-textarea title="备注" :value="remark" id="remark" :rule="remarkRule"></yhm-form-textarea>
 
-        <yhm-form-upload-image title="图片" :noUpload="true" :isShow="true" width="800" height="650" tag="bankDetail" discription=" " :value="storeName" id="storeName" rule="#"></yhm-form-upload-image>
 
       </template>
     </yhm-formbody>
@@ -94,7 +96,27 @@
       return{
         isList:false,//重复信息显示隐藏
         list:[],
-
+        signState:'0',
+        signStateList:[
+          {
+            code:'',
+            num:'0',
+            img:'icon-correct iconSignState',
+            showName:'正常',
+          },
+          {
+            code:'',
+            num:'1',
+            img:'icon-InterestRW',
+            showName:'待核查',
+          },
+          {
+            code:'',
+            num:'2',
+            img:'icon-delete',
+            showName:'异常',
+          },
+        ],
         ownerID: '',
         moneyBackDate: '',
         workOrder: '',
@@ -123,7 +145,13 @@
 
         storeName: '',
 
+        createName:'',
+        insertDate:'',
+        updateName:'',
+        updateDate:'',
+
         money: '',
+        bankSummary:'',
         remark: '',
         vehicleBrandID:'',//车辆品牌ID
         vehicleBrand:'',//车辆品牌ID
@@ -138,6 +166,15 @@
 
         tipShow:false,
         getUrl:'',
+      }
+    },
+    computed:{
+      remarkRule(){
+        if(this.signState==0){
+          return ' '
+        }else{
+          return 'R0000'
+        }
       }
     },
     methods: {
@@ -302,6 +339,8 @@
             invoiceID: this.invoiceID,
             settlementDate: this.settlementDate,
             remark: this.remark,
+
+            signState:this.signState//标记
           }
           this.ajaxJson({
             url: '/Fin/bankDetailInsuranceSave',
@@ -373,15 +412,17 @@
             this.licensePlateNumber = data.licensePlateNumber
             // this.branch = data.branch
             // this.branchID = data.branchID
-
+            this.bankSummary = data.bankSummary
             this.vehicleBrandID = data.vehicleBrandID
             this.vehicleBrand = data.vehicleBrand
             this.storeName = data.storeName
-
-
             this.remark = data.remark
+            this.signState = data.signState
 
-
+            // this.createName = data.createName
+            // this.insertDate = data.insertDate
+            // this.updateName = data.updateName
+            // this.updateDate = data.updateDate
           }
         })
       },

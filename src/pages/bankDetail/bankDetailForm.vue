@@ -57,11 +57,13 @@
         <yhm-form-radio title="有无" subtitle="手续费" :select-list="feeTypepsd" :value="feeType" id="feeType" rule="R0000" @call="feeTypeA"></yhm-form-radio>
         <yhm-form-text title="手续费" subtitle="金额" :value="fee" id="fee" :no-edit="HandlingFee"></yhm-form-text>
         <yhm-form-text title="凭证号" :value="voucherNo" id="voucherNo" width="1"></yhm-form-text>
-        <yhm-form-upload-image title="上传凭证" tag="bankDetail" discription="点击图标或拖拽图片上传" @mouseover="lookImg" @mouseout="isLookImg"  :value="img" id="img" rule=""></yhm-form-upload-image>
+
+        <yhm-form-upload-image title="上传凭证" width="800" height="650" tag="bankDetail" discription="点击图标或拖拽图片上传" @mouseoverEvent="lookImg"   :value="img" id="img"></yhm-form-upload-image>
+
         <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传文件" tag="payment" subtitle="" multiple="multiple"></yhm-formupload>
       </template>
     </yhm-formbody>
-    <div id="lookImg" class="showImg" v-show="tipShow" >
+    <div id="lookImg" class="showImg" v-show="tipShow" @click="imgClick" @mouseout="imgClick">
       <img :src="getUrl">
     </div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -147,6 +149,8 @@
         getUrl:'',
         bankDetailImg:[],
         storeName: '',
+
+        saveHtml:'',//保存按钮文字
       }
     },
     methods: {
@@ -156,7 +160,7 @@
           this.getUrl='/UploadFile/bankDetail/'+this.img;
         }
       },
-      isLookImg(){
+      imgClick(){
         if(this.tipShow){
           this.tipShow=false;
         }
@@ -537,11 +541,10 @@
             subjectList: this.detail,//多事由
             bankDetailImg:this.bankDetailImg,//上传凭证集合
           }
-
           this.$dialog.confirm({
             alertImg: 'warn',
-            btnValueOk: '确定',
-            tipValue: '确定拨付资金?',
+            btnValueOk: '确认',
+            tipValue: '是否'+this.saveHtml+'?',
             okCallBack: ()=>{
               this.ajaxJson({
                 url: '/Fin/vueBankDetailSave',
@@ -645,6 +648,8 @@
             /* 支票入账 */
           }else if(this.bankDetailType === '6'){
             this.ownerID = data.ownerID
+          }else if(this.bankDetailType === '7'){
+            this.message = data.currentBalance////我方账户余额
           }
           if (data.selfAccountID!==''&&data.selfAccount!==''){
             this.isSelectaccount=true
@@ -726,8 +731,13 @@
     computed: {
       saveTxt(){
         if(this.bankDetailType === '11'){
+          this.saveHtml='确认收款'
+          return '确认收款'
+        }else if(this.bankDetailType === '7'){
+          this.saveHtml='确认收款'
           return '确认收款'
         }else {
+          this.saveHtml='拨付资金'
           return '拨付资金'
         }
       },
@@ -749,7 +759,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
   .buttomA {
     margin-bottom: 20px;
   }
@@ -768,6 +778,28 @@
     text-align: center;
   }
   .showImg{
-
+    width: 850px;
+    height: 600px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: center;
+    background-color: #FFFFFF;
+    position: fixed !important;
+    z-index: 999999;
+    -webkit-box-shadow: 0 0 20px #000000;
+    box-shadow: 0 0 20px #000000;
+    border-radius: 10px;
+    top: 0;
+    right: 0;
+    left: 140px;
+    bottom: 0;
+    margin: auto;
   }
 </style>

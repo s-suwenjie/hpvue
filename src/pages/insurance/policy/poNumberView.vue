@@ -3,7 +3,8 @@
     <yhm-view-body>
       <template #title>基本信息</template>
       <template #body>
-        <yhm-view-control title="保单号" :content="pNumber" ></yhm-view-control>
+        <yhm-view-control v-if="isB" title="商业险保单号" :content="businessNumber" ></yhm-view-control>
+        <yhm-view-control v-if="isP" title="交强险保单号" :content="payHighNumber" ></yhm-view-control>
         <yhm-view-control category="3" title="保单凭证" type="files" :content="fileList"></yhm-view-control>
 
       </template>
@@ -25,8 +26,11 @@
       return{
         id:'',
         ownerID:'',
-        pNumber:'',
+        businessNumber:'',
+        payHighNumber:'',
         fileList: [],
+        isB:true,
+        isP:true
       }
     },
     methods:{
@@ -47,8 +51,16 @@
           /* 需要查看的数据 */
 
           this.ownerID=data.ownerID
-          this.pNumber=data.pNumber
+          this.businessNumber=data.businessNumber
+          this.payHighNumber=data.payHighNumber
           this.fileList = data.files
+          if (this.businessNumber===''){
+            this.isB=false
+          }
+          if (this.payHighNumber===''){
+            this.isP=false
+          }
+
         }
       })
     },

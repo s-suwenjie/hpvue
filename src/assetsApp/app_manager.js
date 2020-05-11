@@ -8,6 +8,8 @@ const appmanagermixin = {
   },
   data(){
     return{
+      appScrollShow:false,//移动端页面 回到顶部按钮
+      scrollTop:'',//滚动条位置
       /*固定属性*/
       loadFinish:false,
       content: [], // 接收列表数据

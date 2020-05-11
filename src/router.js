@@ -143,10 +143,12 @@ import reimbursementReconDetailForm from './pages/reimbursement/reimbursementRec
 
 
 
-/* 财务-付款-收支明细 */
+/* 客户返利 */
 import BankDetailRebateManager from './pages/budgetDetail/BankDetailRebate/BankDetailRebateManager'
 import BankDetailRebateDetail from './pages/budgetDetail/BankDetailRebate/BankDetailRebateDetail'
 
+/* 续保 */
+import bankDetailRenewalManager from './pages/bankDetailRenewal/bankDetailRenewalManager'
 
 
 /* 打印报销单 */
@@ -606,6 +608,7 @@ export default new Router({
         { path: '/home/prewarningValueManager', name: 'prewarningValueManager.vue', component: prewarningValueManager},
 
         { path: '/home/BankDetailRebateManager', name: 'BankDetailRebateManager.vue', component: BankDetailRebateManager ,meta: {title: '收支明细'}},
+        { path: '/home/bankDetailRenewalManager', name: 'bankDetailRenewalManager.vue', component: bankDetailRenewalManager ,meta: {title: '续保管理'}},
 
       ]
     },

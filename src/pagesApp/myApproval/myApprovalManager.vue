@@ -218,6 +218,7 @@
       setTimeout(() => {
         this.loadFinish = !this.loadFinish
       },0)
+      sessionStorage.removeItem('list')
       this.ajaxJson({
         url: '/PersonOffice/m_approvalManagerAllNumber',
         loading:"0",

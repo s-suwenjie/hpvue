@@ -13,6 +13,10 @@
     name: 'yhm-manager-td-money',
     inject: ["p____page"],
     props: {
+      beforeSymbol:{
+        type:String,
+        default :''
+      },
       tipCategory:{
         type:Number,
         default :0
@@ -57,7 +61,7 @@
     computed:{
       getTxt(){
         return function (val) {
-          return tenThousandFormatHtml(val) + '&nbsp;'
+          return this.beforeSymbol + tenThousandFormatHtml(val) + '&nbsp;'
         }
       }
     }

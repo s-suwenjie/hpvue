@@ -3,23 +3,29 @@
       <yhm-managerpage category="1" :total-table="true" :total-width="true">
         <!--导航条-->
         <template #navigationTab>
-          <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/paymentDetails'}">收支明细</router-link>
-          <router-link class="menuTabDiv" :to="{path:'/home/viewManager/claimsManager'}">保险理赔</router-link>
+          <a class="menuTabDiv" href="/Fin/_bankDetailManager?menuType=1">收支明细</a>
+          <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentPlanViewManager'}">付款计划</router-link>
+          <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentApplyViewManager'}">付款申请</router-link>
+          <router-link class="menuTabDiv" :to="{path:'/home/viewManager/reimbursementViewManager'}">报销申请</router-link>
+          <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
+          <router-link class="menuTabDiv" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
+          <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
         </template>
         <!--操作区-->
         <template #operate>
           <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'"  :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
           <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData"></yhm-managersearch>
           <div @click="selectedList" v-show="isSelected" class="b_main one b_one mr5b">打开选中信息</div>
+          <yhm-radiofilterdate title="时间" @initData="selectMonthEvent"></yhm-radiofilterdate>
         </template>
         <!--筛选区-->
         <template #choose>
           <div v-show="choose" class="buttonBody mptZero">
             <yhm-radiofilter @initData="initChoose('bankBefore')" title="银行" :content="bankList"></yhm-radiofilter>
-            <yhm-form-date v-show="choose" title="开始时间" @call="initPageData" width="250" style="margin-right: 30px" :value="startDate"  id="startDate" position="b" ></yhm-form-date>
-            <yhm-form-date v-show="choose" title="结束时间" @call="initPageData" width="250" :value="endDate" id="endDate" position="b" ></yhm-form-date>
+            <!--<yhm-form-date v-show="choose" title="开始时间" @call="initPageData" width="250" style="margin-right: 30px" :value="startDate"  id="startDate" position="b" ></yhm-form-date>-->
+            <!--<yhm-form-date v-show="choose" title="结束时间" @call="initPageData" width="250" :value="endDate" id="endDate" position="b" ></yhm-form-date>-->
 
-            <yhm-radiofilter @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
+            <!--<yhm-radiofilter @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>-->
 
           </div>
         </template>
@@ -46,7 +52,7 @@
             <yhm-manager-td-html :value="item.otherName" @click="otherNameEvent(item)"></yhm-manager-td-html>
             <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
             <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
-            <yhm-manager-td :value="item.subject"></yhm-manager-td>
+            <yhm-manager-td :value="item.subject" @click="subjectEvent(item)"></yhm-manager-td>
             <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
             <yhm-manager-td :value="item.remark" :tip="true"></yhm-manager-td>
             <yhm-manager-td-input v-show="issueCodeIndex === index" @blur="blurIssueEvent" :id="item.id" :value="item.issueCode"></yhm-manager-td-input>
@@ -115,9 +121,44 @@
             {showName:"上一年", num: "9", code: "", img: ""},
           ]
         },
+        yearMonth: '',
+        radioTime: {},
       }
     },
     methods:{
+
+      selectMonthEvent(data,item){
+        this.yearMonth = data;
+        this.radioTime = item;
+        if(this.radioTime){
+          this.initPageData(false)
+        }
+      },
+      subjectEvent(item){
+        let url = '';
+        let title = '';
+        if(item.ownerIDType === '2'){  //ownerID
+          title = '查看付款申请信息'
+          url = '/reimbursementViewForm?id=' + item.ownerID
+        }else if(item.ownerIDType === '1'){
+          title = '查看付款申请信息'
+          url = '/paymentApplyViewForm?id=' + item.ownerID
+        }
+
+        // ownerIDType 0 不操作 1  付款view   2  报销主页面
+
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          title: title,
+          url: url,
+          closeCallBack: (data)=>{
+            if(data){
+
+            }
+          }
+        })
+      },
       /* 账户事件 */
       accountEvent(item){
         /* 对公 */
@@ -267,16 +308,25 @@
         let params = {}
         if (initValue) {
           // 页面初始化时需要的参数
+          // let nowDate = new Date();
+          // let newYear = nowDate.getFullYear();
+          // let newMonth = nowDate.getMonth() + 1;
+          //
+          // let startDate = newYear + '-' + newMonth + '-1 00:00:00'
+          // let endDate =newYear + '-' + newMonth + '-'+new Date(newYear, newMonth, 0).getDate() + ' 23:59:59';
+
           params = {
-            subjectID:this.subjectID
+            subjectID: this.subjectID,
+            dateType:''
           }
         } else {
           // 页面非初始化时需要的参数
           params = {
             bankID:this.bankList.value,
-            dateType:this.dateTypeList.value,
-            endDate:this.endDate,
-            startDate:this.startDate
+            dateType:'1',
+            subjectID:this.subjectID,
+            startDate: this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate,
+            endDate: this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate,
 
           }
         }

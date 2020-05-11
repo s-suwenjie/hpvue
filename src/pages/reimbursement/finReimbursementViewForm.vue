@@ -7,7 +7,7 @@
         <yhm-view-control title="交易日期" :content="workDate"></yhm-view-control>
         <yhm-view-control title="报销编号" :content="code"></yhm-view-control>
         <yhm-view-control title="是否核销" :content="isPrettyCashOff" :psd="isPrettyCashOffList"></yhm-view-control>
-        <yhm-view-control title="核销金额" :content="getPrettyCashMoney + getTotalCalcMoney" category="2" v-if="noPrettyCashMoney"></yhm-view-control>
+        <!--<yhm-view-control title="核销金额" :content="getPrettyCashMoney + getTotalCalcMoney" category="2" v-if="noPrettyCashMoney"></yhm-view-control>-->
       </template>
     </yhm-view-body>
     <div class="f_split"></div>
@@ -48,8 +48,14 @@
             <span class="m_listNoData" v-show="detail.length === 0">暂时没有数据</span>
           </template>
           <template #customize>
-            <yhm-view-control type="money" title="实际金额" :content="actualMoney" color="#4BB414"></yhm-view-control>
-            <yhm-view-control type="money" title="申请金额" :content="invoiceMoney" color="#f00"></yhm-view-control>
+            <!--<yhm-view-control type="money" title="实际金额" :content="actualMoney" color="#4BB414"></yhm-view-control>-->
+            <!--<yhm-view-control type="money" title="申请金额" :content="invoiceMoney" color="#f00"></yhm-view-control>-->
+            <yhm-view-control type="money" title="申请报销金额" :content="actualMoney" color="#4BB414"></yhm-view-control>
+            <!--<yhm-view-control type="money" title="申请发票金额" :content="invoiceMoney" color="#f00"></yhm-view-control>-->
+
+            <yhm-view-control type="money" v-if="noPrettyCashMoney" title="备用金金额" :content="prettyCashMoney" color="#0722e4"></yhm-view-control>
+            <yhm-view-control type="money" v-show="sumMoneyHide" :title="sumMoneyTotal" :content="sumMoney" color="#f00"></yhm-view-control>
+
           </template>
         </yhm-view-tab-list>
         <yhm-view-tab-list :customize="true"  v-show="tabState[1].select"  v-if="noPrettyCashMoney">
@@ -74,8 +80,12 @@
             </tr>
           </template>
           <template #customize>
-            <yhm-view-control type="money" category="5" title="申请金额" :content="actualMoney" color="#4BB414"></yhm-view-control>
-            <yhm-view-control type="money" title="实际金额"  :content="invoiceMoney" color="#4BB414"></yhm-view-control>
+            <!--<yhm-view-control type="money" category="5" title="申请金额" :content="actualMoney" color="#4BB414"></yhm-view-control>-->
+            <!--<yhm-view-control type="money" title="实际金额"  :content="invoiceMoney" color="#4BB414"></yhm-view-control>-->
+
+            <yhm-view-control type="money" title="申请报销金额" :content="actualMoney" color="#4BB414"></yhm-view-control>
+            <yhm-view-control type="money" v-if="noPrettyCashMoney" title="备用金金额" :content="prettyCashMoney" color="#0722e4"></yhm-view-control>
+            <yhm-view-control type="money" v-show="sumMoneyHide" :title="sumMoneyTotal" :content="sumMoney" color="#f00"></yhm-view-control>
           </template>
         </yhm-view-tab-list>
         <yhm-view-tab-list :customize="true"  v-show="tabState[2].select" v-if="noBankDetail">
@@ -156,6 +166,10 @@
 
         noBankDetail:false,
         bankDetail:[],
+
+        sumMoney:'',//退回金额  或  拨款金额
+        sumMoneyTotal:'',//退回金额  或  拨款金额  抬头
+        sumMoneyHide:false,
 
         isLeftID:false,//延长按钮
         leftID:'',//上一条ID
@@ -244,6 +258,7 @@
             if(this.bankDetail.length>0){
               this.noBankDetail=true
             }
+            this.getTotalCalcMoney()
           },
           add: (data) => {
             /* 需要添加的数据 */
@@ -274,7 +289,29 @@
             }
           }
         })
-      }
+      },
+
+      getTotalCalcMoney(){
+        let sumMoney = accAdd(accMul(this.actualMoney, -1), this.prettyCashMoney);
+          if(sumMoney === 0){
+            this.sumMoneyHide=false
+          }else if(sumMoney > 0){
+            this.sumMoneyTotal='需退回金额'
+            this.sumMoney=sumMoney+''
+            this.sumMoneyHide=true
+          }else{
+            let b = sumMoney+''
+            if(b.indexOf('-')!==-1){
+              let a = b.slice(1,b.length)
+              this.sumMoney = a
+            }else{
+              this.sumMoney = sumMoney
+            }
+            this.sumMoneyHide=true
+            this.sumMoneyTotal='需拨款金额'
+          }
+
+      },
     },
     created () {
       this.initData()
@@ -284,18 +321,6 @@
       getPrettyCashMoney(){
         return tenThousandFormatHtml(this.prettyCashMoney)
       },
-
-      getTotalCalcMoney(){
-        let sumMoney = accAdd(this.actualMoney, accMul(this.prettyCashMoney, -1));
-        if(sumMoney === 0){
-          return '&nbsp;&nbsp;' + '（报销金额：' + tenThousandFormatHtml(this.actualMoney)  + '）'
-        }else if(sumMoney > 0){
-          return '&nbsp;&nbsp;' + '（报销金额：' + tenThousandFormatHtml(this.actualMoney) + '&nbsp;&nbsp;' + '拨付金额：' + tenThousandFormatHtml(sumMoney + '')  + '）'
-        }else{
-          return '&nbsp;&nbsp;' + '（报销金额：' + tenThousandFormatHtml(this.actualMoney) + '&nbsp;&nbsp;' + '退回金额：' + tenThousandFormatHtml(Math.abs(sumMoney) + '')  + '）'
-        }
-      },
-
     }
   }
 

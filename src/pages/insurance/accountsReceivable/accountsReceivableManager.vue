@@ -5,7 +5,7 @@
       <template #navigationTab>
         <router-link class="menuTabDiv " :to="{path:'/home/policy/policyManager'}">保单管理</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/accountsReceivable/accountsReceivableManager'}">应收账款</router-link>
-        <router-link class="menuTabDiv " :to="{path:'/home/customerRebates/customerRebatesManager'}">客户返利</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/customerRebates/customerRebatesManager'}">客户直接优惠/返利</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/paymentInsurance/payInsuranceFeeManager'}">付保险费</router-link>
       </template>
       <!--操作区-->
@@ -25,6 +25,7 @@
         <yhm-managerth title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth title="保险公司" value="insuredUnit"></yhm-managerth>
+        <yhm-managerth title="应收账款"></yhm-managerth>
         <yhm-managerth title="预计盈亏"></yhm-managerth>
         <yhm-managerth title="实时盈亏"></yhm-managerth>
         <yhm-managerth title="申请编号" value="numbering"></yhm-managerth>
@@ -37,9 +38,10 @@
           <yhm-manager-td-checkbox :value="item" ></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
-          <yhm-manager-td :value="item.plate"></yhm-manager-td>
+          <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName"></yhm-manager-td>
-          <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
+          <yhm-manager-td-psd @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
+          <yhm-manager-td-money  :value="item.receivable" style="color: #2c9208" ></yhm-manager-td-money>
           <yhm-manager-td-money  :value="item.actualProfitLoss" ></yhm-manager-td-money>
           <yhm-manager-td-money  :value="item.realTimeProfitLoss"></yhm-manager-td-money>
           <yhm-manager-td-center :value="item.numbering"></yhm-manager-td-center>
@@ -65,7 +67,8 @@
               <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="预计盈亏"></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="实际盈亏"></yhm-managerth>
-            </tr>
+
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="应收账款"></yhm-managerth>            </tr>
             </thead>
             <tbody>
             <tr>
@@ -103,7 +106,7 @@
           list: []
         },
         listAccountsReceivableDate:{
-          value: '0', //默认为空
+          value: '3', //默认为空
           list: []
         },
         totalMoney:'0',
@@ -115,9 +118,36 @@
       }
     },
     methods:{
+      insuredUnitView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '570',
+          url: '/insuranceUnitView?id=' + item.insuredUnitID +'&isCustomer=0',
+          title: '查看保险信息',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      plateView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '500',
+          url: '/vehicleView?id=' + item.plateID+'&isCustomer=0',
+          title: '查看车辆信息',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
 
       //打开选中信息
       selectedList(){
+
         let params={
           selectValue:this.selectValue
         }

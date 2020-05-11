@@ -39,7 +39,7 @@
         </div>
       </template>
       <template #listHead>
-        <yhm-managerth-check :check="allCheck" title="全选"></yhm-managerth-check>
+        <yhm-managerth-check style="width: 50px;" :check="allCheck"></yhm-managerth-check>
         <yhm-managerth style="width: 50px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="申请人" value="personID"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="批次号" value="code"></yhm-managerth>
@@ -74,9 +74,10 @@
           <yhm-manager-td-operate>
 
             <yhm-manager-td-operate-button v-show="item.state === '9'||item.state === '15'||item.state==='-1'" @click="print(item)" value="打印借据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button v-show="item.state === '15' && item.isChecks === '2' ||item.state==='-1'" @click="printeceipt(item)" value="打印收据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.state === '15' && item.isChecks === '2' ||item.state==='-1' || item.isChecks === '4'" @click="printeceipt(item)" value="打印收据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isApproval === '0'&& item.approval !== '4' && item.isApproval === '0' && item.state !== '15'" :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state !== '15'" v-show="item.isApproval === '0'&& item.approval !== '4' && item.isApproval === '0' && item.state !== '15'" @click="rejectEvent(item)" value="驳回" icon="i-btn-turnDown" color="#FF0000"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  v-show="item.isChecks === '4'" @click="FullReturn(item)" value="确认收款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
 
             <!--            <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' && item.state === '15'" v-show="item.state === '15'&&item.isChecks!=='1'" @click="refundMoney(item)" value="备用金退款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>-->
             <yhm-manager-td-operate-button v-show="item.approval === '4'&&item.isApproval === '0'" :no-click="item.isApprovRal==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
@@ -161,6 +162,18 @@
       }
     },
     methods:{
+      FullReturn(item){
+        alert('aaa')
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          title: '备用金退款',
+          url: '/bankDetailForm?ownerID=' + item.id +'&bankDetailType=7&directionBefore=1',
+          closeCallBack: (data)=>{
+            this.initPageData(false)
+          }
+        })
+      },
       selectedSum(){
         let params={
           selectValue:this.selectValue
