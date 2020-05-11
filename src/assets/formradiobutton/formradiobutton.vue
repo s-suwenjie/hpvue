@@ -8,7 +8,8 @@
       <div class="content">
         <div @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="box" :class="{error:error,hover:mouseStyle,boxWidth:getWidth,c_disable_radio:noEdit}">
           <div v-show="getItemShow(item.num)" @contextmenu.prevent @click="selectItem(item)" v-for="(item,index) in selectList" :key="index" class="item" :class="{select:getSelect(item.num)}">
-            <div class="radiocheck" :class="{radiochecked:getSelect(item.num)}"></div>
+            <div class="radiocheck" v-show="!stateShow" :class="{radiochecked:getSelect(item.num)}"></div>
+            <div v-show="stateShow" :class="item.img" :style="{color:item.code}" style="font-size: 18px;"> </div>
             <div class="txt">{{item.showName}}</div>
           </div>
         </div>
@@ -38,6 +39,10 @@
           default:function () {
             return []
           }
+        },
+        stateShow:{
+          type:Boolean,
+          default:false
         },
         title:{
           type:String,
@@ -99,7 +104,7 @@
             this.txt = item.num
             this.code = item.code
             this.$nextTick(()=>{
-              this.$emit("call",oldVal)
+              this.$emit("call",oldVal,item)
             })
           }
         }
@@ -214,7 +219,7 @@
     line-height: 30px;
     font-size: 14px;
     margin-right: 15px;
-    padding: 0 5px;
+    padding: 0 9px;
     -webkit-touch-callout:none;  /*系统默认菜单被禁用*/
     -webkit-user-select:none; /*webkit浏览器*/
     -khtml-user-select:none; /*早期浏览器*/
@@ -228,6 +233,10 @@
   }
   .formradiobutton>.context>.content>.box>.item>.txt{
     margin-left: 5px;
+  }
+
+  .formradiobutton>.context>.content>.box>.item>.iconSignState::before{
+    color: #3ee208;
   }
   .formradiobutton>.context>.content>.box>.select{
     background-color: #49a9ea;

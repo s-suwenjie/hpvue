@@ -7,8 +7,11 @@
         <yhm-form-radio title="车辆类型" :select-list="vehicleTypeList" :value="vehicleType" id="vehicleType" @call="vehicleTypeEvent"></yhm-form-radio>
         <yhm-form-text placeholder=""  title="汽车排量" subtitle="" :show="isDisplacement" :value="displacement" id="displacement" rule="R0000"></yhm-form-text>
         <yhm-form-radio  title="所属类型" v-if="isAssort" :select-list="assortList" :value="assort" id="assort"></yhm-form-radio>
-        <yhm-form-text placeholder="" @repeatverify="nameVerifyEvent" ref="plate"  title="车牌号" subtitle="" :show="isHide" :value="plate" id="plate" rule="R8000"></yhm-form-text>
-        <yhm-form-select title="车辆颜色" tip="value" :value="color" id="color"  @click="selectColour"></yhm-form-select>
+
+        <yhm-form-text  placeholder="" @repeatverify="nameVerifyEvent" @call="iconCall"  ref="plate" title="车牌号" subtitle="" :show="isHide" :value="plate" id="plate" rule="R8000" @blur="plateValue(index),plateShow==false"></yhm-form-text>
+<!--        <yhm-form-select title="车辆颜色" style="margin-left:32px;"  tip="value" :value="color" id="color"  @click="selectColour"></yhm-form-select>-->
+        <yhm-form-select title="车辆颜色"   tip="value" :value="color" id="color"  @click="selectColour"></yhm-form-select>
+
         <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber"></yhm-form-text>
         <yhm-form-text placeholder="" title="发动机号" subtitle="" :value="engineNumber" id="engineNumber" ></yhm-form-text>
         <yhm-form-select title="品牌" tip="value" :value="brand" id="brand"  @click="selectBrand"></yhm-form-select>
@@ -16,10 +19,12 @@
         <yhm-form-select title="车辆版本" tip="value" :value="version" id="version"  @click="selectVersion"></yhm-form-select>
         <yhm-form-date title="登记日期" v-if="isHide" :value="registerDate" id="registerDate " position="u"  ></yhm-form-date>
         <yhm-form-select  title="车主信息" tip="value" @click="carOwnerIDEvent" :show="isHides"  :value="carOwner" id="carOwner" rule="R0000"></yhm-form-select>
-        <yhm-formupload :ownerID="id" :value="fileList"  id="fileList" title="行车证(支持单据)" tag="vehicle" multiple="multiple" category="3" rule="#"></yhm-formupload>
+        <yhm-formupload :ownerID="id" :value="fileList"  id="fileList" title="行车证(支持单据)" tag="vehicle" multiple="multiple" category="3" ></yhm-formupload>
 <!--        <yhm-form-upload-image title="上传行车证" tag="drivingLicense" discription="点击图标或拖拽图片上传(不支持PDF格式)" :show="isHide" :value="drivingLicense" id="drivingLicense" ></yhm-form-upload-image>-->
       </template>
     </yhm-formbody>
+<!--    <appLicencePlate class="guessSelector" @btnClick="btnClick" v-show="guessSelectorShow" :key="key" :plate-show="plateShow"  @input="selectArr">-->
+<!--    </appLicencePlate>-->
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
@@ -29,16 +34,26 @@
 </template>
 
 <script>
+  import appLicencePlate from '../../../pagesApp/common/appLicencePlate'
   import { accMul, accAdd, guid, formatDate,formatTime } from '@/assets/common.js'
   import { formmixin } from '@/assets/form.js'
+
 
   export default {
     name: 'vehicleForm',
     mixins: [formmixin],
+    components: {
+      appLicencePlate,
+    },
     data(){
       return {
         id:'',
         category:'',
+        index:'',
+        key:0,
+        guessSelectorShow:false,
+        plateShow:true,
+        carNum:true,
         categoryList:[],//车辆分类
         vehicleType:'',
         vehicleTypeList:[], //车辆类型
@@ -67,17 +82,39 @@
         idNo: '',
         registrationNumber:'',
         fileList:[],
-
       }
     },
     methods: {
-      vehicleTypeEvent(){
-        if (this.vehicleType ==='1' ){
-          this.isDisplacement=false
-          this.displacement=''
-        }else{
-          this.isDisplacement=true
+      iconCall(){
+        this.guessSelectorShow=false
+        if(this.guessSelectorShow==false){
+          this.guessSelectorShow=true
+          this.key++
         }
+      },
+      btnClick(){
+        this.$refs.plate.verifications()
+      },
+     selectArr(value){
+        if(value==undefined){return}
+        if(typeof value=='object'){
+          console.log(this.plate,value,value.join(''))
+          this.plate = value.join('')
+        }else{
+          this.list[this.index].plate = value
+        }
+      },
+      phoneValue(index){
+        this.index = index
+        this.$nextTick(()=>{
+          this.list[index].phone = this.$refs.plate[index].value
+        })
+      },
+      plateValue(index){
+        this.index = index
+      },
+      vehicleTypeEvent(){
+        // console.log(this.vehicleType)
       },
       categoryEvent(){
         if(this.category === '0'){
@@ -396,6 +433,49 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+  .list_look::before{
+    float: right;
+    margin-right: 10px;
+    font-size: 18px;
+    margin-top: 10px;
+  }
 
+
+  .plateTest{
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    color: #666666;
+    padding:0 12px;
+  }
+.plateInput{
+  text-indent: 8px;
+  width: 378px;
+  height: 38px;
+  line-height: 38px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  color: #333333;
+  white-space: nowrap;
+}
+.guessSelector{
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  margin-top: 0;
+  height: 40px;
+  align-items: center;
+}
+  .flex{
+    display: flex;
+    width: 100%;
+    padding: 0 35px 15px 20px;
+    margin: 0 auto;
+    justify-content: space-between;
+
+    align-items: center;
+  }
 </style>

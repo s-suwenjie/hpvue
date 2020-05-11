@@ -100,6 +100,12 @@
         </div>
       </div>
       </div>
+
+      <div class="i-left fs48b colorFFF lftSwitchArrow" title="上一条" v-show="isLeftID"  @click="leftStrip">
+      </div>
+      <div class="i-right fs48b colorFFF rgtSwitchArrow" title="下一条" v-show="isRightID" @click="rightStrip">
+      </div>
+
       <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       </yhm-formoperate>
     </div>
@@ -126,10 +132,21 @@
         backgroundShow:false,
         red:false,
         blue:false,
-        cccurDate:''
+        cccurDate:'',
+
+        isLeftID:false,//延长按钮
+        leftID:'',//上一条ID
+        isRightID:false,//延长按钮
+        rightID:'',//下一条ID
       }
     },
     methods:{
+      leftStrip(){
+        window.location='/unitDetailView?id='+this.leftID+'&information=0'
+      },
+      rightStrip(){
+        window.location='/unitDetailView?id='+this.rightID+'&information=0'
+      },
       imgSkip(item){
         let img = '/UploadFile/' + item.tag + '/' + item.storeName
         window.open(img)
@@ -194,10 +211,30 @@
 
           }
         })
+      },
+      selectedList() {
+        let params = {
+          id: this.id
+        }
+        this.ajaxJson({
+          url: '/Fin/commonSelectedID',
+          data: params,
+          call: (data) => {
+            if(data.leftID!==""){
+              this.leftID=data.leftID
+              this.isLeftID=true
+            }
+            if(data.rightID!==""){
+              this.rightID=data.rightID
+              this.isRightID=true
+            }
+          }
+        })
       }
     },
     created () {
       this.setQuery2Value('id')
+      this.selectedList()
       let params = {
         isPart:'1',
         id:this.id

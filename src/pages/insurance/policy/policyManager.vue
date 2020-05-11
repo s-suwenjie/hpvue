@@ -5,7 +5,7 @@
       <template #navigationTab>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/policy/policyManager'}">保单管理</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/accountsReceivable/accountsReceivableManager'}">应收账款</router-link>
-        <router-link class="menuTabDiv " :to="{path:'/home/customerRebates/customerRebatesManager'}">客户返利</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/customerRebates/customerRebatesManager'}">客户直接优惠/返利</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/paymentInsurance/payInsuranceFeeManager'}">付保险费</router-link>
       </template>
       <!--操作区-->
@@ -58,16 +58,16 @@
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
 
-          <yhm-manager-td-money v-if="isActual" :value="item.actualProfitLoss" style=" font-weight:bold;"></yhm-manager-td-money>
-          <yhm-manager-td-money v-if="isReal" :value="item.realTimeProfitLoss" style=" font-weight:bold;"></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isActual" :value="item.actualProfitLoss" :style="{'color':item.actualProfitLoss>0?'#2c9208':'#f00'}" style=" font-weight:bold;"></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isReal" :value="item.realTimeProfitLoss" :style="{'color':item.realTimeProfitLoss>0?'#2c9208':'#f00'}" style=" font-weight:bold;"></yhm-manager-td-money>
 
           <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
           <yhm-manager-td :value="item.numbering"></yhm-manager-td>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
-          <yhm-manager-td-operate-button v-show="item.boNumbering === ''?true:false" @click="addPNumbering(item)" icon="i-export" value="上传保单号"></yhm-manager-td-operate-button>
-          <yhm-manager-td-operate-button v-show="item.boNumbering !=''?true:false"  @click="addPNumbering(item)" icon="i-invoiceView" value="查看保单号" color="#fd6802"></yhm-manager-td-operate-button>
+          <yhm-manager-td-operate-button v-show="item.boNumbering === ''?true:false" @click="addPNumbering(item)" icon="i-export" value="上传保单"></yhm-manager-td-operate-button>
+          <yhm-manager-td-operate-button v-show="item.boNumbering !=''?true:false"  @click="addPNumbering(item)" icon="i-invoiceView" value="查看保单" color="#fd6802"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -184,7 +184,7 @@
         })
       },
       addPNumbering(item){
-        let title = '查看保单号'
+        let title = '查看保单信息'
         let url = '/poNumberView?id='+item.boNumbering+'&ownerID='+item.id
 
         this.$dialog.OpenWindow({
@@ -212,7 +212,7 @@
           width: '1050',
           height: '650',
           url: '/policyView?id=' + item.id,
-          title: '查看客户信息',
+          title: '查看保单信息',
           closeCallBack: (data)=>{
             if(data){
               this.initPageData(false)

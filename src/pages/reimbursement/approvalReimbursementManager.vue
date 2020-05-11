@@ -76,7 +76,7 @@
             <yhm-manager-td-operate-button v-show="item.category === '4'&&item.isChecks1 === '0'&&item.isChecks2 === '0'&&item.isChecks3 === '0' && item.isFinish !== '1'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.state === '-1' && item.isFinish === '0' && item.isPrint === '1'" @click="repayment(item)" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-manager-td-operate-button>
 
-            <yhm-manager-td-operate-button v-show="item.isChecks1 === '1'" :no-click="item.isApproval==='4'" @click="refundMoney(item)" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.isChecks1 === '4'" :no-click="item.isApproval==='4'" @click="refundMoney(item)" value="确认收款" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isChecks2 === '1'" :no-click="item.isApproval==='4'" @click="repayment(item)" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isChecks3 === '1'" :no-click="item.isApproval==='4'" @click="approFund(item)" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isChecks1 === '3'&&item.isChecks2 === '3'&&item.isChecks3 === '3'&&item.isFinish === '0'" :no-click="item.isApproval==='4'" @click="writeOff(item)" value="确认核销" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
@@ -267,7 +267,7 @@
         this.$dialog.OpenWindow({
           width: '1050',
           height: '690',
-          title: '备用金退款',
+          title: '确认收款',
           url: '/bankDetailForm?ownerID=' + item.prettyCashsID +'&bankDetailType=7&directionBefore=1',
           closeCallBack: (data)=>{
             this.initPageData(false)

@@ -239,7 +239,17 @@
       this.setQuery2Value('cashName')
       this.setQuery2Value('cashNameID')
       this.setQuery2Value('publicPrivate')
+      this.setQuery2Value('Billingnature')
 
+      // let branchParams = {
+      //   id: guid(),  //guid
+      //   insertDate: new Date(accAdd(new Date().getTime(), accMul(this.branchList.length, 1000))),
+      //   ownerID: this.id,  // this.id
+      //   selectID: "B055AB2C-EF53-4307-AAD7-FA6C940DA95A",
+      //   selectValue: "售后部",
+      //   value: this.discountMoney
+      // }
+      // this.branchList.push(branchParams)
       this.init({
         url: '/PersonOffice/initPaymentForm',
         all: (data) => {
@@ -293,6 +303,7 @@
           if(this.nature === '2'){
             this.isNoBeforeClick = true
           }
+
         },
         add: (data) => {
           /* 需要添加的数据 */
@@ -300,15 +311,17 @@
           this.subject=this.cashierSubject
           this.money=this.discountMoney
           this.useName=this.cashierSubject
-          this.remark='保单号:'+this.numbering+'车牌号:'+this.plate
+          this.remark='出单号:'+this.numbering+'车牌号:'+this.plate
 
           this.otherUnit=this.cashName
           this.otherUnitID=this.cashNameID
           this.personOrUnit=this.publicPrivate
+          this.nature =this.Billingnature
 
 
         },
         look: (data) => {
+          return
           this.bankDetailList = data.bankDetailList
           this.allocationList = data.allocationList
           this.invoiceList = data.invoicePsd.list
@@ -1464,6 +1477,7 @@
             tipValue: '收支明细总金额有误！！！'
           })
         }
+
         if (this.validator() && aa&&bankList&&bb) {
           let params = {
             id: this.id,

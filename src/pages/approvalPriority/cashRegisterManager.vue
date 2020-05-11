@@ -22,10 +22,9 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth title="名称" value="person"></yhm-managerth>
+<!--        <yhm-managerth title="收支方向" value="directionVal"></yhm-managerth>-->
         <yhm-managerth title="添加时间" value="insertDate"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="删除"></yhm-managerth>
-
-
       </template>
 
       <!--数据明细-->
@@ -33,6 +32,7 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td :value="item.person"></yhm-manager-td>
+<!--          <yhm-manager-td :value="item.directionVal"></yhm-manager-td>-->
           <yhm-manager-td-date :value="item.insertDate"></yhm-manager-td-date>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button  @click="del(item.id)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>

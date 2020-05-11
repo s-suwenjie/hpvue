@@ -20,7 +20,7 @@
         <label v-if="!noEdit" @click.stop="editShowNameEvent(item)"  :class="{image:item.image === '1',file:item.image === '0'}"></label>
         <label v-if="noEdit" :class="{image_1:item.image === '1',file_1:item.image === '0'}"></label>
         <label v-show="item.isEdit === '0'" class="txt">{{item.showName}}</label>
-        <input ref="edit" @keyup.enter="editBlurEvent(item)" @blur="editBlurEvent(item)" v-show="item.isEdit === '1'" class="updateTxt" type="text" v-model="item.showName" />
+        <input ref="edit" @keyup.enter="editBlurEvent(item)" @blur="editBlurEvent(item)" style="color:black" v-show="item.isEdit === '1'" class="updateTxt" type="text" v-model="item.showName" />
         <span v-if="!noEdit" @click.stop="deleteItem(item)"></span>
       </div>
       <template  v-for="item in uploadingFileKeys">
@@ -432,6 +432,7 @@
     padding-left: 5px;
     border-radius: 5px;
     width: 838px;
+    color: #49a9ea;
     border: none;
     outline: none;
   }

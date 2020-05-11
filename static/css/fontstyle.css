@@ -814,3 +814,24 @@
   font-family: 'icomoon' !important;
   content: "\e954";
 }
+/* 车辆管理 快捷选择键盘  */
+.i-uniE9A1:before{
+  font-family: 'icomoon' !important;
+  content: "\e9a1";
+}
+/* 保险理赔 正常 */
+icon-correct:before{
+  font-family: 'icomoon' !important;
+  content: "\e954";
+}
+/* 保险理赔 待核查 */
+icon-InterestRW:before{
+  font-family: 'icomoon' !important;
+  content: "\e98c";
+}
+/* 保险理赔 异常 */
+icon-delete:before{
+  font-family: 'icomoon' !important;
+  content: "\e904";
+}
+

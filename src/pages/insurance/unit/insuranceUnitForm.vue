@@ -21,6 +21,9 @@
         <yhm-managerth style="width: 80px" title="新车费率"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="旧车税率"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="客户税率"></yhm-managerth>
+        <yhm-managerth style="width: 100px" title="会员税率"></yhm-managerth>
+
+
         <yhm-managerth style="width: 38px" title="删除"></yhm-managerth>
       </template>
       <template #listBody >
@@ -30,6 +33,7 @@
           <yhm-manager-td-rgt class="aa"  :value="item.newRate+'  %'"></yhm-manager-td-rgt>
           <yhm-manager-td-rgt class="aa" :value="item.oldRate+'  %'" ></yhm-manager-td-rgt>
           <yhm-manager-td-rgt  class="aa" :value="item.clientRate+'  %'" ></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt  class="aa" :value="item.vipRate+'  %'" ></yhm-manager-td-rgt>
        <yhm-manager-td-operate class="aa">
             <yhm-manager-td-operate-button @click="del(item)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
@@ -70,7 +74,7 @@
         commercialVal:'',
         billingTypeList:[], //开票类型
         billingType:'',
-
+        vipRate:'',
       }
     },
     methods : {
@@ -78,7 +82,7 @@
      opSafe(item){
         this.$dialog.OpenWindow({
           width: '1100',
-          height: '450',
+          height: '650',
           title: '查看保险信息',
           url: '/insuranceUnitDetailsForm?ownerID=' + this.id +'&id='+item.id,
           closeCallBack: (data)=> {
@@ -116,7 +120,7 @@
         }else{
           this.$dialog.OpenWindow({
             width: '1100',
-            height: '450',
+            height: '650',
             title: '添加保险信息',
             url: '/insuranceUnitDetailsForm?ownerID=' + this.id +'&unitID='+this.unitID+ '&shortName='+this.shortName,
             closeCallBack: (data)=> {
@@ -128,6 +132,7 @@
                   newRate:data.newRate,
                   oldRate:data.oldRate,
                   clientRate:data.clientRate,
+                  vipRate:data.vipRate
                 })
                 this.$dialog.setReturnValue(data)
 

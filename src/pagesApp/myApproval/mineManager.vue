@@ -11,6 +11,8 @@
     name: 'mineManager',
     data(){
       return{
+        year:'',
+        month:'',
         day:[],
         money:[],
         moneyList:[
@@ -129,6 +131,20 @@
       }
     },
     created(){
+      let params = {
+        // year:this.year,
+        // month:this.month
+        year:'2019',
+        month: '10'
+      }
+      this.ajaxJson({
+        url: '/Fin/getBankDetailInsuranceStatistics',
+        loading:"0",
+        data: params,
+        call: (data) => {
+          console.log(data)
+        }
+      })
       this.forTheMonth()
 
     },

@@ -55,7 +55,7 @@
       </div>
 
     </transition>
-    <div class="shade"></div>
+<!--    <div class="shade"></div>-->
 
   </div>
 </template>
@@ -64,19 +64,21 @@
     name:'appLicencePlate',
     data () {
       return {
+        list:[],
         selectArr: [],
         allKeyWord: {
           province: ['京', '湘', '津', '鄂', '沪', '粤', '渝', '琼', '翼', '川', '晋', '贵', '辽', '云', '吉', '陕', '黑', '甘', '苏', '青', '浙', '皖', '藏', '闽', '蒙', '赣', '桂', '鲁', '宁', '豫', '新'],
           alphabet: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
         },
-        show: false,
-        showFirst: false
+        show: true,
+        showFirst: true,
+        length:'7'
       }
     },
   props:{
     plateShow: {
       type: Boolean,
-    default: false
+      default: false
     },
   },
     watch: {
@@ -97,8 +99,14 @@
         this.addSelect(item)
       },
       addSelect (item) {
+        this.list=this.selectArr.join('')
+        if(this.list.indexOf('D')==2||this.list.indexOf('F')==2){
+          this.length = '8'
+        }else{
+          this.length = '7'
+        }
         // 点击自定义键盘
-        if (this.selectArr.length < 7) {
+        if (this.selectArr.length < this.length) {
           this.selectArr.push(item)
         } else {
           // this.$createToast({
@@ -113,6 +121,7 @@
         this.showFirst = !(this.selectArr.length > 0)
       },
       close () {
+        this.$emit('btnClick')
         this.show = false
       },
       clickMask () {
@@ -192,6 +201,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            cursor: pointer;
             width: 100%;
             height: 100%;
             background-color: #fff;
@@ -228,6 +238,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
             font-size: 12/@rem;
             color: #333;
             width: 30/@rem;

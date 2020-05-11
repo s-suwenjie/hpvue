@@ -45,7 +45,7 @@
 
       <!--数据明细-->
       <template #listBody>
-        <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
+        <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0},{listDelLine: item.isFinish === '1' && item.state !== '-1'}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
@@ -61,6 +61,9 @@
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button v-show="item.isPrint === '1'" @click="printFund(item)" value="打印单据" icon="i-btn-print" color="#7307dc"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isPrint !== '1'" :no-click="item.state !== '0' || item.isFinish === '1'" @click="submit(item.id,item.state,item.isFinish,item.isRelevance)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
+
+            <yhm-manager-td-operate-button v-show="item.state==='9'&&item.isChecks1 === '1'" @click="aFullReturn(item)" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+
             <yhm-manager-td-operate-button :no-click="item.state === '0' || item.isFinish === '1' || item.state === '-1'" @click="urge(item)" value="催促" icon="i-btn-urge" color="#2AA70B"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.state !== '0' || item.isFinish === '1'" @click="del(item)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
@@ -176,6 +179,19 @@
       }
     },
     methods: {
+      aFullReturn(item){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 690,
+          title: '全额退回',
+          url: '/fullRefundForm?ownerID=' + item.prettyCashsID,
+          closeCallBack: (data) => {
+            if (data) {
+              this.initPageData(false)
+            }
+          }
+        });
+      },
       //汇总部分筛选
       totalClick(item){
         if(item.isFinish==='-1'){

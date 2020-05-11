@@ -88,10 +88,10 @@
                 <b class="icon i-checkFillOut"></b>
                 <b>支票填开</b>
               </p>
-<!--              <p v-show="inStock" @click="blackCheckOut(item)">-->
-<!--                <b class="icon i-blackCheckOut"></b>-->
-<!--                <b>空白支票外带</b>-->
-<!--              </p>-->
+              <p v-show="inStock" @click="blackCheckOut(item)">
+                <b class="icon i-blackCheckOut"></b>
+                <b>空白支票外带</b>
+              </p>
               <p v-show="inStock" @click="blackCheckVoid(item)">
                 <b class="icon i-blackCheckVoid"></b>
                 <b>空白支票作废</b>

@@ -17,6 +17,8 @@
 
 <!--        <yhm-formupload :ownerID="id" :value="list" id="list" title="支持单据" tag="bankDetail" subtitle="" multiple="multiple" rule="#"></yhm-formupload>-->
         <yhm-form-upload-image title="支持单据" tag="bankDetail" discription=" " :value="list" id="list" rule="#"></yhm-form-upload-image>
+        <yhm-form-text title="退备用金金额" no-edit="1" tip="money" before-icon="rmb" :value="money" id="money" rule="R3000" placeholder="请输入数字" error-message="纯数字输入"></yhm-form-text>
+
       </template>
     </yhm-formbody>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -53,6 +55,7 @@
         isCopyTip: false,
         nameTime: '',
         accountTime: '',
+        money:'',
       }
     },
     methods: {
@@ -103,24 +106,21 @@
         })
       },
       save(){
-
-        let index = this.list.indexOf('.');
-        this.suffix = this.list.substr(index+1);
-        let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.fileList.length, 1000)))
-        this.fileList.push({
-          id: guid(),
-          insertDate: formatTime(insertDate),
-          ownerID: this.id,
-          category: '',
-          storeName: this.list,
-          suffix: this.suffix,
-          image: '1',
-          showName: '2',
-          tag: 'bankDetail'
-        })
-
-
         if(this.validator()){
+          let index = this.list.indexOf('.');
+          this.suffix = this.list.substr(index+1);
+          let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.fileList.length, 1000)))
+          this.fileList.push({
+            id: guid(),
+            insertDate: formatTime(insertDate),
+            ownerID: this.id,
+            category: '',
+            storeName: this.list,
+            suffix: this.suffix,
+            image: '1',
+            showName: '2',
+            tag: 'bankDetail'
+          })
           let params = {
             id: this.id,
             selfAccount: this.selfAccount,
@@ -170,7 +170,7 @@
 
               this.accountUrl = data.accountUrl
               this.unitUrl = data.unitUrl
-
+              this.money = data.money
 
               // window.open("/UploadFile/ElectronicInvoice/" + item.pdfUrl)
             }

@@ -8,6 +8,9 @@
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentApplyViewManager'}">付款申请</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/reimbursementViewManager'}">报销申请</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
+
       </template>
       <!--操作区-->
       <template #operate>
@@ -26,7 +29,7 @@
         </div>
       </template>
       <template #listHead>
-        <yhm-managerth-check :check="allCheck" title="全选"></yhm-managerth-check>
+        <yhm-managerth-check :check="allCheck" style="width: 40px;"></yhm-managerth-check>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="申请人" value="personID"></yhm-managerth>
 
@@ -62,7 +65,7 @@
           <yhm-manager-td-center :value="item.workDateDay+'天'" style="color:#2c920b;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
 
-          <yhm-manager-td-money :value="item.bankDetailMoney" @click="detailView(item)" style="font-weight: bold"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.bankDetailMoney" @click="detailView(item)" style="font-weight: bold;color:#075af1;"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.reimbursementsMoney" @click="reimbursementView(item)"></yhm-manager-td-money>
 
           <yhm-manager-td-money :value="item.refundBalance" :before-icon="item.refundBalance>0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-money>
@@ -97,10 +100,10 @@
       </template>
       <template #listTotalHead>
         <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="已拨款" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#2c920b" title="" before-title="已核销" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="已退现金" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;background: #aceaea;" before-color="#2c920b" title="" before-title="已核销" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;background: #cdf5d0;" before-color="#c700df" title="" before-title="已退现金" ></yhm-managerth>
 <!--        <yhm-managerth style="width: 100px;" before-color="#08acc0" title="" before-title="备用金退款" ></yhm-managerth>-->
-        <yhm-managerth style="width: 100px;" before-color="#c700df" title="" before-title="待退回" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="待退回" ></yhm-managerth>
       </template>
       <template #listTotalLeft>
         <div class=" listTotalLeft">

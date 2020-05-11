@@ -4,6 +4,7 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-select title="用户" tip="value" rule="R0000" @click="selectPerson" :value="person" id="person" ></yhm-form-select>
+<!--        <yhm-form-radio title="收支方向" :select-list="directionList" :value="direction" id="direction" ></yhm-form-radio>-->
       </template>
     </yhm-formbody>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -25,6 +26,8 @@
         id: '',
         personID: '',
         person: '',
+        direction:'',
+        directionList:[],
 
       }
     },
@@ -48,6 +51,7 @@
           let params = {
             id: this.id,
             personID: this.personID,
+            direction:this.direction
           }
           this.ajaxJson({
             url: '/Com/cashRegisterSave',
@@ -74,6 +78,26 @@
           })
         }
       }
+    },
+    created () {
+      this.init({
+        url: '/Com/cashRegisInit',
+        all: (data) => {
+          this.directionList = data.directionPsd.list
+          this.direction = data.directionPsd.value
+
+        },
+        add: (data) => {
+          /* 需要添加的数据 */
+
+        },
+        look: (data) => {
+          /* 需要查看的数据 */
+
+
+
+        }
+      })
     }
   }
 </script>
