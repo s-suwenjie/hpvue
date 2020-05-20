@@ -112,18 +112,15 @@
       },
     },
     created () {
-      console.log(sessionStorage.content)
-      if(sessionStorage.content){
-        if(sessionStorage.content.length>5){
-          console.log(sessionStorage.content)
-          this.content = sessionStorage.content
-          this.finished = true
-          this.loading = false
-        }else{
-          this.finished = false
-          this.loading = true
-          this.onLoad();
-        }
+      let list =  JSON.parse(sessionStorage.list||0);
+
+      if(list.length>5){
+        this.content = list
+        this.list = list
+      }else{
+        this.finished = false
+        this.loading = true
+        this.onLoad();
       }
 
     }

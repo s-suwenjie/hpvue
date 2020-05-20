@@ -10,6 +10,7 @@
         </span>
       </div>
     </div>
+    <slot name="operate"></slot>
     <slot name="content"></slot>
   </div>
 </template>

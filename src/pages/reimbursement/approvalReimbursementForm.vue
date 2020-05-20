@@ -118,9 +118,9 @@
         <template #btn >
           <yhm-commonbutton v-show="state !== '9' && isFinish !== '1'" value="通过" :flicker="true" @call="tableAdoptEvent()" icon="i-btm-applicationSm" class="btnIcon"></yhm-commonbutton>
           <yhm-commonbutton v-show="state !== '9' && isFinish !== '1'" value="驳回" @call="tableRejectEvent()" icon="i-btn-turnDown" class="btnIcon btnIconColor"></yhm-commonbutton>
-          <yhm-commonbutton v-show="isChecks1 === '1'" @call="refundMoney" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
-          <yhm-commonbutton v-show="isChecks2 === '1'" @call="repayment()" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-commonbutton>
-          <yhm-commonbutton v-show="isChecks3 === '1' || state === '9'" @call="approFund()" value="拨付资金" icon="i-btn-grant" color="#be08e3" :flicker="true"></yhm-commonbutton>
+          <yhm-commonbutton v-show="isChecks1 === '4'" @call="refundMoney" value="确认收款" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
+          <yhm-commonbutton v-show="isChecks2 === '4'" @call="repayment()" value="确认还款" icon="i-complete" color="#6e19e1"></yhm-commonbutton>
+          <yhm-commonbutton v-show="isChecks3 === '1' && state === '9'" @call="approFund()" value="拨付资金" icon="i-btn-grant" color="#be08e3" :flicker="true"></yhm-commonbutton>
           <yhm-commonbutton v-show="isChecks1 === '3'&&isChecks2 === '3'&&isChecks3 === '3'&&isFinish === '0'" :no-click="item.isApproval==='4'" @call="writeOff()" value="确认核销" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
           <yhm-commonbutton v-show="state === '4'&&isChecks1 === '0'&&isChecks2 === '0'&&isChecks3 === '0'" @call="approFund()" value="拨付资金" icon="i-btn-grant" color="#be08e3"></yhm-commonbutton>
         </template>

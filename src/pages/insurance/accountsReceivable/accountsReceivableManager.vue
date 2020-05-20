@@ -25,11 +25,12 @@
         <yhm-managerth title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth title="应收账款"></yhm-managerth>
+        <yhm-managerth @call="actualEvent" v-if="isActual" title="应收账款金额"></yhm-managerth>
+        <yhm-managerth @call="realEvent" v-if="isReal" title="应收账款天数"></yhm-managerth>
         <yhm-managerth title="预计盈亏"></yhm-managerth>
         <yhm-managerth title="实时盈亏"></yhm-managerth>
         <yhm-managerth title="申请编号" value="numbering"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="状态" value="cashStatus"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="状态" ></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -41,7 +42,8 @@
           <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName"></yhm-manager-td>
           <yhm-manager-td-psd @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
-          <yhm-manager-td-money  :value="item.receivable" style="color: #2c9208" ></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isActual"  @click="listExpectedView(item)" :value="item.receivable" style="color: #2c9208" ></yhm-manager-td-money>
+          <yhm-manager-td-center v-if="isReal"  @click="listExpectedView(item)" :value="item.receivableDate+'天'" style="color: #2c9208" ></yhm-manager-td-center>
           <yhm-manager-td-money  :value="item.actualProfitLoss" ></yhm-manager-td-money>
           <yhm-manager-td-money  :value="item.realTimeProfitLoss"></yhm-manager-td-money>
           <yhm-manager-td-center :value="item.numbering"></yhm-manager-td-center>
@@ -65,10 +67,11 @@
             <thead>
             <tr>
               <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="应收账款"></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="预计盈亏"></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="实际盈亏"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="实时盈亏"></yhm-managerth>
 
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="应收账款"></yhm-managerth>            </tr>
+            </tr>
             </thead>
             <tbody>
             <tr>
@@ -113,11 +116,34 @@
         Count :'0',
         totalList:[],
         isSelected:false,
-        contentTotal: []
+        contentTotal: [],
+        isActual: true,
+        isReal: false,
 
       }
     },
     methods:{
+      actualEvent(){
+        this.isActual = false
+        this.isReal = true
+      },
+      realEvent(){
+        this.isReal = false
+        this.isActual = true
+      },
+      listExpectedView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '450',
+          url: '/accountExpectedView?id=' + item.id,
+          title: '查看应收账款',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       insuredUnitView(item){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -199,7 +225,7 @@
         this.$dialog.OpenWindow({
           width: '1050',
           height: '650',
-          url: '/accountsReceivableView?id=' + item.id,
+          url: '/policyView?id=' + item.id,
           title: '查看客户信息',
           closeCallBack: (data)=>{
             if(data){

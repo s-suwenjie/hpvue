@@ -7,7 +7,7 @@
       </div>
 
 <!--      <div v-show="!iconTextShow">-->
-        <yhm-text :show="show" v-if="!iconShou" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>
+        <yhm-text :is-upper-case="isUpperCase" :show="show" v-if="!iconShou" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>
         <span class="list_look icon_look"  @click="iconClickEvent" v-show="iconShou"></span>
 <!--      </div>-->
 
@@ -33,6 +33,10 @@
         }
       },
       props: {
+        isUpperCase:{
+          type:Boolean,
+          default: false
+        },
         iconTextShow:{
           type:Boolean,
           default: false

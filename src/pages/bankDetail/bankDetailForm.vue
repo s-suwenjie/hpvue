@@ -736,6 +736,9 @@
         }else if(this.bankDetailType === '7'){
           this.saveHtml='确认收款'
           return '确认收款'
+        }else if(this.bankDetailType === '3'){
+          this.saveHtml='确认收款'
+          return '确认收款'
         }else {
           this.saveHtml='拨付资金'
           return '拨付资金'

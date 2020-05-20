@@ -12,12 +12,14 @@
     <div v-if="category === '1'" class="menuTab" :class="{w620: smTable}">
       <div class="menuTabTit">
         <div class="menuTabLft">
-          <slot name="navigationTab"></slot>
 
+          <slot name="navigationTab"></slot>
         </div>
         <div class="navSwitchLft">
           <slot name="navigationLft"></slot>
         </div>
+        <div v-show="statisticalShow" @click="statisticalClick" class="uniE9A7 statistical"></div>
+
       </div>
     </div>
     <div class="m_operate" :class="[{w620: smTable},{iswAuto: isManager}]">
@@ -84,6 +86,10 @@
         type:String,
         default:'0'
       },
+      statisticalShow:{
+        type:Boolean,
+        default:false
+      },
       customize:{
         type:Boolean,
         default: false
@@ -108,6 +114,13 @@
         type: Boolean,
         default: false
       }
+    },
+    methods:{
+      statisticalClick(){
+        this.$nextTick(()=>{
+          this.$emit('statisticalClick')
+        })
+      }
     }
 
   }
@@ -128,5 +141,12 @@
 .iswAuto{
   width: auto !important;
 }
-
+.statistical{
+  position: absolute;
+  top: 12px;
+  font-size: 24px;
+  right: 14px;
+  color: #fff;
+  cursor: pointer;
+}
 </style>

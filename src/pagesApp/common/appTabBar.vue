@@ -39,7 +39,7 @@
       [Tab.name]: Tab,
       [Tabs.name]: Tabs,
       [Tabbar.name]: Tabbar,
-      [TabbarItem.name]: TabbarItem,
+      'van-tabbar-item': TabbarItem,
       [ImagePreview.name]: ImagePreview,
     },
     name: 'appTabBar',

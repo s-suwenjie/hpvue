@@ -14,19 +14,25 @@
           <div class="makeupIcon disabled" :class="iconValue" :style="getColor"></div>
           <div class="split"></div>
           <div class="makeupIcon selectColor color" :style="getColor">
-            <input type="color" v-model="colorValue">
+            <input type="text" v-model="colorValue" @click="colorEvent">
           </div>
         </div>
       </div>
     </div>
     <div class="error"><span v-if="error">{{errorTipMessage}}</span></div>
+    <sketch-picker class="sketchPicker" v-show="colorShow" v-model="colors" @cancel="outsideClick" @ok="confirm" ></sketch-picker>
+
   </div>
 </template>
 
 <script>
+  import { Photoshop } from 'vue-color'
   export default {
     name: 'yhm-titlenumimagecolor',
     inject: ["p____page"],
+    components: {
+      'sketch-picker': Photoshop,
+    },
     data(){
       return{
         isFocus:false,
@@ -40,7 +46,16 @@
         mouseOver:false,
 
         error:false,
-        errorTipMessage:""
+        errorTipMessage:"",
+        // color: '',
+        colorShow: false,
+        colors: {
+          hex: '',
+          hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
+          hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
+          rgba: { r: 25, g: 77, b: 51, a: 1 },
+          a: 1
+        }
       }
     },
     props:{
@@ -106,6 +121,25 @@
       }
     },
     methods:{
+      colorEvent(){
+        this.colorShow = true
+        this.colors.hex = this.colorValue
+      },
+      // 颜色选择器
+      outsideClick () {
+        if (this.colorShow) {
+          this.colorShow = false
+        } else {
+          this.colorShow = true
+        }
+      },
+      confirm(){
+        this.colorValue = this.colors.hex
+        this.outsideClick()
+        this.$nextTick(()=>{
+          this.$emit('colorConfirm',this.colors.hex)
+        })
+      },
       //初始化验证事件
       validatorEvent(category){
         if(this.rule !== "") {
@@ -176,6 +210,9 @@
         return "color:" + this.colorValue
       }
     },
+    created(){
+
+    },
     watch:{
       show(newVal,oldVal){
         if(!newVal){
@@ -218,8 +255,14 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
   *{
     box-sizing: border-box;
+  }
+  .sketchPicker{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
   }
 </style>

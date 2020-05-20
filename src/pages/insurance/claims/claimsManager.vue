@@ -1,10 +1,13 @@
 <template>
     <div>
-      <yhm-managerpage :category="isCategory" :total-table="true" :totalWidth="true">
+      <yhm-managerpage @statisticalClick="statisticalClick" :statisticalShow="true" :category="isCategory" :total-table="true" :totalWidth="true">
         <!--导航条-->
         <template #navigationTab v-if="isPersonalClaims">
           <a class="menuTabDiv" href="/Fin/bankDetailManager?menuType=0">收支明细</a>
           <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/viewManager/claimsManager'}">保险理赔</router-link>
+          <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRepairManager'}">散户维修费</router-link>
+          <router-link class="menuTabDiv" :to="{path:'/home/BankDetailCommissionManager'}">保险手续费</router-link>
+
         </template>
         <template #navigation v-if="!isPersonalClaims">个人办公&nbsp;&gt;&nbsp;个人办公&nbsp;&gt;&nbsp;保险理赔</template>
         <!--操作区-->
@@ -15,8 +18,6 @@
           <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
           <yhm-radiofilterdate title="时间" @initData="selectMonthEvent"></yhm-radiofilterdate>
           <yhm-radiofilterday title="日" :yearMonth="yearMonth" @initData="initChooseTime"></yhm-radiofilterday>
-
-          <yhm-commonbutton value="打开统计图" @call="selectedList"  category="three"></yhm-commonbutton>
 
         </template>
         <template #buttonSwitch>
@@ -34,13 +35,13 @@
             <yhm-radiofilter :before="bank" @initData="initChoose('bank')" title="银行"  :content="bankList"></yhm-radiofilter>
             <yhm-radiofilter :before="operatorID" @initData="initChoose('operatorID')" title="业务员"  :content="operatorIDList"></yhm-radiofilter>
             <yhm-radiofilter :before="insuranceUnit" @initData="initChoose('insuranceUnit')" title="保险公司"  :content="insuranceUnitList"></yhm-radiofilter>
-            <yhm-radiofilter :before="dateType" @initData="initChoose('dateType')" title="时间"  :content="dateTypeList"></yhm-radiofilter>
+            <!--<yhm-radiofilter :before="dateType" @initData="initChoose('dateType')" title="时间" :content="dateTypeList"></yhm-radiofilter>-->
             <yhm-radiofilter  @initData="initChoose('vehicleBrand')" title="车辆品牌" :content="vehicleBrandList"></yhm-radiofilter>
           </div>
         </template>
         <!--数据表头-->
         <template #listHead>
-          <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
+          <yhm-managerth-check style="width: 40px;" :check="allCheck"></yhm-managerth-check>
           <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
           <yhm-managerth style="width: 80px" title="客户姓名" value="customerName"></yhm-managerth>
           <yhm-managerth title="保险公司" value="otherName"></yhm-managerth>
@@ -90,16 +91,16 @@
         <template #listTotalHead >
           <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="总数" ></yhm-managerth>
           <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" :before-title="nowTotal" ></yhm-managerth>
-          <yhm-managerth :before-color="oldTotalColor" style="width: 60px;" width="60px" title="" :before-title="oldTotal" ></yhm-managerth>
-          <yhm-managerth v-show="isYearMoneyShow" :before-color="oldTotalColor" style="width: 60px;" width="60px" title="" :before-title="yearTotal" ></yhm-managerth>
+          <yhm-managerth v-show="!isSelected" :before-color="oldTotalColor" style="width: 60px;" width="60px" title="" :before-title="oldTotal" @call="oldTotalClick"></yhm-managerth>
+          <yhm-managerth v-show="isYearMoneyShow && !isSelected" :before-color="oldTotalColor" style="width: 60px;" width="60px" title="" :before-title="yearTotal" ></yhm-managerth>
         </template>
         <template #listTotalBody>
           <tr>
             <yhm-manager-td-rgt @click="totalClick(item)" style="text-align: center;" v-for="(item,key) in contentTotal" :key="key" :value="item.count"></yhm-manager-td-rgt>
             <yhm-manager-td-money @click="totalClick(item)" style="text-align: center;" v-for="(item,index) in contentTotal" :key="index+1" :value="item.money"></yhm-manager-td-money>
-            <yhm-manager-td-money :before-symbol="oldMoneySymbol" @click="totalClick(item)" before-color="#ff000c" :style="{color:oldTotalColor}" v-for="(item,index) in contentTotal" :key="index+2" :value="oldMoney"></yhm-manager-td-money>
-            <yhm-manager-td-money v-show="isYearMoneyShow" v-if="yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick(item)" before-color="#ff000c" :style="{color:oldTotalColor}"  :value="yearMoney"></yhm-manager-td-money>
-            <yhm-manager-td-money v-show="isYearMoneyShow" v-if="!yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick(item)" before-color="#ff000c" :style="{color:oldTotalColor}"  value="NaN"></yhm-manager-td-money>
+            <yhm-manager-td-money v-show="!isSelected" :before-symbol="oldMoneySymbol" @click="totalClick(item,'2')" before-color="#ff000c" :style="{color:oldTotalColor}" v-for="(item,index) in contentTotal" :key="index+2" :value="oldMoney"></yhm-manager-td-money>
+            <yhm-manager-td-money v-show="isYearMoneyShow && !isSelected" v-if="yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick(yearMoney)" before-color="#ff000c" :style="{color:oldTotalColor}"  :value="yearMoney"></yhm-manager-td-money>
+            <yhm-manager-td-money v-show="isYearMoneyShow && !isSelected" v-if="!yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick('0')" before-color="#ff000c" :style="{color:oldTotalColor}"  value="NaN"></yhm-manager-td-money>
 
           </tr>
 
@@ -123,9 +124,11 @@
         bankIDMenu:['筛选当前银行'],
         oldTotal:'比前一天(环比)',
         oldTotalColor:'#ff000c',
+        yearMoney:'',
         yearMoneyShow:true,
         yearTotal:'同比',
         yearMoneySymbol:'',
+        selectMonth:[],
         isYearMoneyShow:true,
         nowTotal:'本日',
         oldMoney:'',
@@ -143,6 +146,7 @@
         isCategory: '1',
         isPersonalClaims: true,
         isClaims: '',
+        index:'0',
         radioTime: {},
         bankList: {
           value: '',
@@ -163,30 +167,30 @@
         dateTypeList:{
           value:'',
           list:[
-            {
-              code:'',
-              num:'0',
-              showName:'本日'
-            },
-            {
-              code:'',
-              num:'1',
-              showName:'本周'
-            },
-            {
-              code:'',
-              num:'2',
-              showName:'本月'
-            },
-            {
-              code:'',
-              num:'3',
-              showName:'本年'
-            },
+            // {
+            //   code:'',
+            //   num:'0',
+            //   showName:'本日'
+            // },
+            // {
+            //   code:'',
+            //   num:'1',
+            //   showName:'本周'
+            // },
+            // {
+            //   code:'',
+            //   num:'2',
+            //   showName:'本月'
+            // },
+            // {
+            //   code:'',
+            //   num:'3',
+            //   showName:'本年'
+            // },
           ]
         },
         workOrderID:'',
-        
+
         topBtnShou:false,
 
         signStateList:{
@@ -232,10 +236,25 @@
             showName:'异常',
           },
         ],
-        profitAndLoss:'0'
+        profitAndLoss:'0',
+
+        dayCategory:'0',//环比点击事件变量
       }
     },
     methods:{
+      oldTotalClick(){
+      },
+      statisticalClick(){
+        this.$dialog.OpenWindow({
+          width: '1300',
+          height: '810',
+          title: '查看统计图',
+          url: '/insuranceCartogram',
+          closeCallBack: (dataTwo)=>{
+
+          }
+        })
+      },
       profitAndLossClick(){
         if(this.profitAndLoss === '0'){
           this.profitAndLoss = '1'
@@ -249,7 +268,6 @@
       },
       unitClickLeft(item){//点击时查看公司信息
         if(item.otherName!==''){
-          console.log(item)
           this.$dialog.OpenWindow({
             width: '1050',
             height: '750',
@@ -316,20 +334,119 @@
         }
         this.initPageData(false)
       },
-      totalClick(){
+      getMonthDay(year, month) {
+        let days = new Date(year, month, 0).getDate()
+        return days
+      },
+      totalClick(item,index){
 
+        if(this.dayCategory==='0'){
+          this.dayCategory='1'
+          let nowDate = new Date();
+          let newYear = nowDate.getFullYear();
+          let newMonth = nowDate.getMonth() + 1;
+          let newDate = nowDate.getDate()-1;
+          this.startDate = newYear + '-' +newMonth + '-' + newDate + ' 00:00:00'
+          this.endDate = newYear + '-' +newMonth + '-' + newDate + ' 23:59:59'
+          this.initPageData(false)
+        }else if(this.dayCategory==='2'){
+          this.dayCategory='3'
+          if(index==='2'&&this.oldTotal=='比前一天(环比)'){
+            let year = ''
+            let month = ''
+            let day = ''
+            let endDate = ''//结束日期
+            let startDate = ''//开始日期
+            if(this.selectMonth.slice(7,9)==1){//天数是第一天时 向月份减一
+              if(month = this.selectMonth.slice(5,6)==1){//月份是第一月时 向年份减一
+                year = this.selectMonth.slice(0,4)-1//年份减一
+                month = 12
+              }else{
+                month = this.selectMonth.slice(5,6)-1
+                year = this.selectMonth.slice(0,4)
+              }
+                day = this.getMonthDay(year,month)
+            }else{
+              year = this.selectMonth.slice(0,4)
+              month = this.selectMonth.slice(5,6)
+              day = this.selectMonth.slice(7,9) - 1
+            }
+            startDate = year + '-' + month + '-' + day + ' 00:00:00'
+            endDate = year + '-' + month + '-' + day + ' 23:59:59'
+            this.startDate = startDate
+            this.endDate = endDate
+            this.initPageData(false)
+          }
+
+          if(index==='2'&&this.oldTotal=='比前一月(环比)'){
+            let a = ''
+            let b = ''
+            let endDate = ''
+            let startDate = ''
+            if(this.yearMonth.indexOf('13')===-1){
+              if(this.yearMonth.slice(5,this.yearMonth.length)=='1'){
+                a =  12
+                b = this.yearMonth.slice(0,4)-1 + '-' + a
+                startDate = this.yearMonth.slice(0,4)-1 + '-' + a + '-' + '01'
+                endDate = this.yearMonth.slice(0,4)-1 + '-' + a + '-' + this.getMonthDay(this.yearMonth.slice(0,4)-1,a)
+              }else{
+                a =  this.yearMonth.slice(5,this.yearMonth.length)-1
+                b = this.yearMonth.slice(0,4) + '-' + a
+                startDate = this.yearMonth.slice(0,4) + '-' + a + '-' + '01'
+                endDate = this.yearMonth.slice(0,4) + '-' + a + '-' + this.getMonthDay(this.yearMonth.slice(0,4),a)
+              }
+              this.startDate = startDate + ' ' + '00:00:00'
+              this.endDate = endDate + ' ' + '23:59:59'
+              this.initPageData(false)
+            }
+          }
+          if(index==='2'&&this.oldTotal=='比前一年(环比)'){
+            if(this.yearMonth.indexOf('13')!==-1){
+              let month = this.yearMonth.slice(0,4)-1
+              const f = month + '-01-01 ' + ' 00:00:00'
+              const l = month + '-12-31 ' + ' 23:59:59'
+              this.startDate = f
+              this.endDate = l
+              this.initPageData(false)
+            }
+          }
+        }else{
+          if(this.dayCategory === '1'){
+            this.dayCategory='0'
+            this.initPageData(true)
+          }else if(this.dayCategory === '3'){
+            this.dayCategory='2'
+            this.initPageData(false)
+          }
+        }
+      },
+      initChoose(){
+        if(this.dayCategory === '1'||this.dayCategory === '0'){
+          this.dayCategory='0'
+        }else if(this.dayCategory === '3'||this.dayCategory === '2'){
+          this.dayCategory='2'
+        }
+        this.initPageData(false)
       },
       initChooseTime(item){
+        this.selectMonth = item.endDate
+        this.dayCategory='2'
         this.radioTime = item;
-        this.oldTotal='比前一天(环比)'
-        this.nowTotal='本日'
-        this.isYearMoneyShow=true
-        if(this.yearMoney>0){
-          console.log(this.yearMoney)
+        if(item.startDate.split("-")[1]<item.endDate.split("-")[1]){
+          this.oldTotal='比前一月(环比)'
+          this.nowTotal='本月'
+          this.isYearMoneyShow=true
+        }else{
+          this.oldTotal='比前一天(环比)'
+          this.nowTotal='本日'
+          this.isYearMoneyShow=true
         }
         this.initPageData(false)
       },
       selectMonthEvent(data,item){
+        this.dayCategory='2'
+        this.selectMonth = item.endDate
+
         this.yearMonth = data;
         this.radioTime = item;
         if(data.split("-")[1]==='13'){
@@ -341,13 +458,10 @@
           this.nowTotal='本月'
           this.isYearMoneyShow=true
         }
-        if(this.yearMoney<0){
-          console.log(this.yearMoney,'2333')
-          setTimeout(()=>{
-            this.yearMoney = '0'
-
-          },1000)
-
+        if(this.yearMoney==0){
+          this.yearMoneyShow = false
+        }else{
+          this.yearMoneyShow = true
         }
         if(this.radioTime){
           this.initPageData(false)
@@ -374,6 +488,17 @@
           }
         })
       },
+      // viewTheStatistics(){
+      //   this.$dialog.OpenWindow({
+      //     width: '1300',
+      //     height: '650',
+      //     title: '查看统计图',
+      //     url: '/cartogram',
+      //     closeCallBack: (dataTwo)=>{
+      //
+      //     }
+      //   })
+      // },
       //打开选中信息
       selectedList(){
         let params={
@@ -400,10 +525,16 @@
         })
       },
       listView(item){
+        let url = ''
+        // if(item.workOrderID){//原需求如工单号为空 跳到form维护页 不为空跳view
+        //   url = '/claimsView?id=' + item.id
+        // }else{
+          url = '/claimsForm?id=' + item.id
+        // }
         this.$dialog.OpenWindow({
           width: '1050',
           height: '750',
-          url: '/claimsForm?id=' + item.id,
+          url: url,
           title: '维护保险理赔',
           closeCallBack: (data) => {
             if (data) {
@@ -430,37 +561,59 @@
       initPageData (initValue) {
         let newRadioTime = this.radioTime
         let params = {};
+
         if (initValue) {
+          if(this.dayCategory==='0') {
+            let nowDate = new Date();
+            let newYear = nowDate.getFullYear();
+            let newMonth = nowDate.getMonth() + 1;
+            let newDate = nowDate.getDate();
+            let newHours = nowDate.getHours();
+            let newMin = nowDate.getMinutes();
+            let newSec = nowDate.getSeconds();
+            let lastDate = newDate - 1;
 
-          let nowDate = new Date();
-          let newYear = nowDate.getFullYear();
-          let newMonth = nowDate.getMonth() + 1;
-          let newDate = nowDate.getDate();
-          let newHours = nowDate.getHours();
-          let newMin = nowDate.getMinutes();
-          let newSec = nowDate.getSeconds();
-          let lastDate = newDate - 1;
-
-          let startDate = newYear + '-' + newMonth + '-' + lastDate + ' ' + '23:59:59';
-          let endDate = newYear + '-' + newMonth + '-' + newDate + ' ' + newHours + ':' + newMin + ':' + newSec;
-
-          params = {
-            startDate: startDate,
-            endDate: endDate,
+            let startDate = newYear + '-' + newMonth + '-' + lastDate + ' ' + '23:59:59';
+            let endDate = newYear + '-' + newMonth + '-' + newDate + ' ' + newHours + ':' + newMin + ':' + newSec;
+            params = {
+              startDate: startDate,
+              endDate: endDate,
+            }
           }
         } else {
-          params = {
-            bankID: this.bankList.value,
-            unitID: this.insuranceUnitList.value,
-            dateType:this.dateTypeList.value,
-            vehicleBrand:this.vehicleBrandList.value,
-            operatorID:this.operatorIDList.value,
-            // startDate: this.radioTime.startDate,
-            // endDate: this.radioTime.endDate,
-            workOrderID:this.workOrderID,
-            startDate: this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate,
-            endDate: this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate,
-            signState : this.signStateList.value,
+          if(this.dayCategory==='2'){
+            params = {
+              bankID: this.bankList.value,
+              unitID: this.insuranceUnitList.value,
+              dateType:this.dateTypeList.value,
+              vehicleBrand:this.vehicleBrandList.value,
+              operatorID:this.operatorIDList.value,
+              // startDate: this.radioTime.startDate,
+              // endDate: this.radioTime.endDate,
+              workOrderID:this.workOrderID,
+              startDate: this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate,
+              endDate: this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate,
+              signState : this.signStateList.value,
+            }
+          }else if(this.dayCategory==='3'){
+            params = {
+              bankID: this.bankList.value,
+              unitID: this.insuranceUnitList.value,
+              dateType:this.dateTypeList.value,
+              vehicleBrand:this.vehicleBrandList.value,
+              operatorID:this.operatorIDList.value,
+              // startDate: this.radioTime.startDate,
+              // endDate: this.radioTime.endDate,
+              workOrderID:this.workOrderID,
+              startDate: this.startDate,
+              endDate: this.endDate,
+              signState : this.signStateList.value,
+            }
+          }else if(this.dayCategory === '1'){
+            params = {
+              startDate: this.startDate,
+              endDate: this.endDate,
+            }
           }
         }
         this.init({
@@ -486,7 +639,7 @@
             if(data.total[0].yearMoney>0){
               this.yearMoney=data.total[0].yearMoney
               this.yearMoneySymbol='+'
-            }else{
+            }else if(data.total[0].yearMoney<0){
               this.yearMoney=data.total[0].yearMoney
               this.yearMoneySymbol=''
             }
@@ -521,6 +674,10 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+.statistical{
+  position: relative;
+  top: 0;
+  right: 0;
+}
 </style>

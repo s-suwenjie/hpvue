@@ -23,7 +23,7 @@
             <yhm-managerth  title="新车费率"></yhm-managerth>
             <yhm-managerth  title="旧车费率"></yhm-managerth>
             <yhm-managerth  title="客户费率"></yhm-managerth>
-            <yhm-managerth  title="会员费率"></yhm-managerth>
+            <yhm-managerth  title="特殊车型费率"></yhm-managerth>
 
           </template>
           <template #listBody>

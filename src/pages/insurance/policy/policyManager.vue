@@ -31,7 +31,7 @@
         <yhm-managerth style="width: 120px;" title="投保日期" value="insuredDate"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="联系人" value="contactName"></yhm-managerth>
-        <yhm-managerth  title="被保险人" value="beinsuredName"></yhm-managerth>
+        <yhm-managerth   title="被保险人" value="beinsuredName"></yhm-managerth>
 
         <yhm-managerth style="width: 120px;" title="保险公司" value="insuredUnit"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
@@ -42,7 +42,7 @@
         <yhm-managerth style="width: 100px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="实收金额" value="receivedMoney"></yhm-managerth>
         <yhm-managerth style="width: 170px;" title="申请编号" value="numbering"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="状态" value="status"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="状态" ></yhm-managerth>
         <yhm-managerth title="保单号" value="numbering"></yhm-managerth>
       </template>
 
@@ -54,12 +54,14 @@
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName"></yhm-manager-td>
-          <yhm-manager-td  :tip="true" :value="item.beinsuredName" ></yhm-manager-td>
+          <yhm-manager-td :tip="item.notEqual==='0'?false:true" :tip-show="true" tip-value="被保险人与车主不一致" :value="item.beinsuredName" >
+            <span v-if="item.notEqual==='0'?false:true" style=" color: #ffaa27;font-size: 18px;" class="uniE9A8 managerIcon"></span>
+          </yhm-manager-td>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
 
-          <yhm-manager-td-money v-if="isActual" :value="item.actualProfitLoss" :style="{'color':item.actualProfitLoss>0?'#2c9208':'#f00'}" style=" font-weight:bold;"></yhm-manager-td-money>
-          <yhm-manager-td-money v-if="isReal" :value="item.realTimeProfitLoss" :style="{'color':item.realTimeProfitLoss>0?'#2c9208':'#f00'}" style=" font-weight:bold;"></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isActual" @click="listExpectedView(item)" :value="item.actualProfitLoss" :style="{'color':item.actualProfitLoss>=0?'#2c9208':'#f00'}" style=" font-weight:bold;"></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isReal"  @click="listExpectedView(item)" :value="item.realTimeProfitLoss" :style="{'color':item.realTimeProfitLoss>=0?'#2c9208':'#f00'}" style=" font-weight:bold;"></yhm-manager-td-money>
 
           <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
@@ -134,6 +136,20 @@
       }
     },
     methods:{
+      listExpectedView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '450',
+          url: '/policyExpectedView?id=' + item.id,
+          title: '查看盈亏明细',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+
       //打开选中信息
       selectedList(){
         let params={
@@ -269,5 +285,8 @@
 </script>
 
 <style scoped>
-
+  .managerIcon{
+    position: absolute;
+    right: 4px;
+  }
 </style>

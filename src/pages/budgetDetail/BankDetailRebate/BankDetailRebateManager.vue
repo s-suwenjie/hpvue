@@ -1,6 +1,6 @@
 <template>
     <div>
-      <yhm-managerpage category="1" :total-table="true" :total-width="true">
+      <yhm-managerpage category="1" @statisticalClick="statisticalClick" :statisticalShow="true" :total-table="true" :total-width="true">
         <!--导航条-->
         <template #navigationTab>
           <a class="menuTabDiv" href="/Fin/_bankDetailManager?menuType=1">收支明细</a>
@@ -126,7 +126,17 @@
       }
     },
     methods:{
+      statisticalClick(){//右上角统计图点击事件
+        this.$dialog.OpenWindow({
+          width: '1300',
+          height: '780',
+          title: '查看统计图',
+          url: '/rebateCartogram',
+          closeCallBack: (dataTwo)=>{
 
+          }
+        })
+      },
       selectMonthEvent(data,item){
         this.yearMonth = data;
         this.radioTime = item;

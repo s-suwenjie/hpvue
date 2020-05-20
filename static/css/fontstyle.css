@@ -820,18 +820,29 @@
   content: "\e9a1";
 }
 /* 保险理赔 正常 */
-icon-correct:before{
+.icon-correct:before{
   font-family: 'icomoon' !important;
   content: "\e954";
 }
 /* 保险理赔 待核查 */
-icon-InterestRW:before{
+.icon-InterestRW:before{
   font-family: 'icomoon' !important;
   content: "\e98c";
 }
 /* 保险理赔 异常 */
-icon-delete:before{
+.icon-delete:before{
   font-family: 'icomoon' !important;
   content: "\e904";
 }
 
+/* 保险理赔 统计图图标 */
+.uniE9A6:before{
+  font-family: 'icomoon' !important;
+  content: "\e9a6";
+}
+
+/* 保险理赔 柱状图图标 */
+.uniE9A7:before{
+  font-family: 'icomoon' !important;
+  content: "\e9a7";
+}

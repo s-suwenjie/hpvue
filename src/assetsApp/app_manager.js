@@ -1,5 +1,8 @@
 import {formatDateHtml,tenThousandFormatHtml} from '@/assets/common.js'
 import Qs from 'qs'
+import Vue from 'vue'
+import vant from 'vant'
+Vue.use(vant)
 const appmanagermixin = {
   provide(){
     return{

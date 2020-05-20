@@ -14,15 +14,19 @@
         <yhm-form-radio title="是否" subtitle="重要联系人" :select-list="importantList" :value="important" id="important"></yhm-form-radio>
         <yhm-form-radio title="政治面貌" :show="isThisUnit" :select-list="politicsStatusList" :value="politicsStatus" id="politicsStatus"></yhm-form-radio>
         <yhm-form-text title="姓名" :value="name" id="name" ref="name" @repeatverify="repeatVerifyEvent" rule="R7000"></yhm-form-text>
-        <yhm-form-text title="手机号码" :value="phone" id="phone" ref="phone" tip="value" @repeatverify="repeatVerifyEvent" rule="R4000"></yhm-form-text>
+        <yhm-form-text title="手机号码" :value="phone" id="phone" ref="phone" tip="value" @repeatverify="repeatVerifyEvent" rule="R4000">
+          <div v-show="variable" class="formBoxIcon" @click="aaa">
+            <span class="icon-uniE9A9" style="font-size: 20px"></span>
+          </div>
+        </yhm-form-text>
         <yhm-form-select title="所属公司" v-if="isThisUnit" @click="selectUnit" tip="value" :value="unit" id="unit" rule="R0000" ></yhm-form-select>
         <yhm-form-text title="所属部门" :show="isThisUnit" :value="department" id="department" placeholder="请在部门管理中调整所属部门" no-edit="1"></yhm-form-text>
         <yhm-form-text title="身份证号" @input="isNoEvent" @repeatverify="repeatVerifyEvent" ref="idNo" tip="value" :value="idNo" id="idNo" :rule="idnoRule">
-          <div class="formBoxIcon" @click="copyEvent">
+          <div v-show="" class="formBoxIcon" @click="copyEvent" title="点击共用手机号">
             <span class="i-copy"></span>
           </div>
         </yhm-form-text>
-        <yhm-form-text title="籍贯" style="position: relative;" :no-edit="noedit" :value="nativePlace" @focus="nativePlaceFocus" id="nativePlace" rule="R0000" tip="value">
+        <yhm-form-text title="籍贯" style="position: relative;" :no-edit="noedit" :value="nativePlace" @focus="nativePlaceFocus" id="nativePlace" tip="value">
           <div class="nativePlaceBox" v-show="true"
                :class="{
                'nativePlaceBox':cityShow,
@@ -157,9 +161,22 @@
         tagSubmit:[],
         isThisUnit: true,
         isCopyTip: false,
+
+        variable:false,
+        variableType:'0',
       }
     },
     methods: {
+      aaa(){
+        this.$dialog.confirm({
+          width: '300',
+          tipValue: '是否共用手机号?',
+          alertImg: 'warn',
+          okCallBack: () => {
+            this.variableType='1'
+          },
+        })
+      },
       citiesClick(item){//点击选择市
         this.cityShow = false
         this.nativePlace = this.provinceAndCity+ '/' +item//将选中的值赋给输入框
@@ -406,15 +423,16 @@
             arr.push("'" + this.cutOutBack(data.html) + "'")
             this.$refs.name.errorEvent(name)
           }
-
         }
         if(data.message!==''){
           if(this.category==='0'){//本单位时
             this.flatTypes = true//标记 本单位手机号是否重复 true为重复
           }else{
             let phone = this.cutOutFront(data.message)//截取字符串并返回 电话号
-            arr.push("'" + this.cutOutBack(data.message) + "'")
             this.$refs.phone.errorEvent(phone)
+            arr.push("'" + this.cutOutBack(data.message) + "'")
+            this.variable = true
+            this.variableType = '2'
           }
         }
         if(data.val!==''){
@@ -443,6 +461,7 @@
 
       /* 验证 */
       repeatVerifyEvent() {
+        this.variableType='1'
         if(this.category === '1'){
           if (this.name && this.phone){
             let params = {
@@ -460,7 +479,7 @@
                 if (data.type === 1){
                   this.isList = true
                   this.switchIconShow = true
-                  this.duplicateAccount(data)
+                  this.duplicateAccount(data,'0')
                 }else{
                   this.isList = false//关闭底部重复信息
                   this.switchIconShow = false//关闭重复信息框的隐藏按钮
@@ -535,83 +554,171 @@
       async save(){
         let a = await this.isRepeatVerifyEvent()
         let b = this.validator()
-        if(a && b){
-          let params = {
-            id: this.id,
-            category: this.category,
-            sex: this.sex,
-            important: this.important,
-            politicsStatus: this.politicsStatus,
-            name: this.name,
-            phone: this.phone,
-            unit: this.unit,
-            unitID: this.unitID,
-            department: this.department,
-            idNo: this.idNo,
-            nativePlace: this.nativePlace,
-            calendar: this.calendar,
-            birthday: this.birthday,
-            birthdayLunar: this.birthdayLunar,
-            tagList: this.tagSubmit,
-            zodiacID: this.zodiacID,
-            zodiac: this.zodiac,
-            constellation: this.constellation,
-            constellationID: this.constellationID,
-            bloodType: this.bloodType,
-            bloodTypeID: this.bloodTypeID,
-            nation: this.nation,
-            nationID: this.nationID
-          }
-          if(this.flatType===false&&this.flatTypes===false){
-            this.ajaxJson({
-              url: '/Basic/personSaveVue',
-              data: params,
-              call: (data)=>{
-                if(data.type === 0){
-                  this.$dialog.setReturnValue(this.id)
-                  this.$dialog.alert({
-                    tipValue: data.message,
-                    closeCallBack: ()=>{
-                      this.$dialog.close()
+        if(this.variableType === '1'){
+          if(b){
+            let params = {
+              id: this.id,
+              category: this.category,
+              sex: this.sex,
+              important: this.important,
+              politicsStatus: this.politicsStatus,
+              name: this.name,
+              phone: this.phone,
+              unit: this.unit,
+              unitID: this.unitID,
+              department: this.department,
+              idNo: this.idNo,
+              nativePlace: this.nativePlace,
+              calendar: this.calendar,
+              birthday: this.birthday,
+              birthdayLunar: this.birthdayLunar,
+              tagList: this.tagSubmit,
+              zodiacID: this.zodiacID,
+              zodiac: this.zodiac,
+              constellation: this.constellation,
+              constellationID: this.constellationID,
+              bloodType: this.bloodType,
+              bloodTypeID: this.bloodTypeID,
+              nation: this.nation,
+              nationID: this.nationID
+            }
+            if(this.flatType===false&&this.flatTypes===false){
+              this.ajaxJson({
+                url: '/Basic/personSaveVue',
+                data: params,
+                call: (data)=>{
+                  if(data.type === 0){
+                    this.$dialog.setReturnValue(this.id)
+                    this.$dialog.alert({
+                      tipValue: data.message,
+                      closeCallBack: ()=>{
+                        this.$dialog.close()
+                      }
+                    })
+                  }else{
+                    this.$dialog.alert({
+                      alertImg: 'warn',
+                      tipValue: data.message
+                    })
+                  }
+                }
+              })
+            }
+            if(this.flatType === true){//外单位姓名重复时
+              this.$dialog.confirm({
+                tipValue: '是否是同一个人?',
+                okCallBack: (data) => {
+                  this.ajaxJson({
+                    url: '/Basic/personSaveVue',
+                    data: params,
+                    call: (data)=>{
+                      if(data.type === 0){
+                        this.$dialog.setReturnValue(this.id)
+                        this.$dialog.alert({
+                          tipValue: data.message,
+                          closeCallBack: ()=>{
+                            this.$dialog.close()
+                          }
+                        })
+                      }else{
+                        this.$dialog.alert({
+                          alertImg: 'warn',
+                          tipValue: data.message
+                        })
+                      }
                     }
-                  })
-                }else{
-                  this.$dialog.alert({
-                    alertImg: 'warn',
-                    tipValue: data.message
                   })
                 }
-              }
-            })
+              })
+            }
+
           }
-          if(this.flatType === true){//外单位姓名重复时
-            this.$dialog.confirm({
-              tipValue: '是否是同一个人?',
-              okCallBack: (data) => {
-                this.ajaxJson({
-                  url: '/Basic/personSaveVue',
-                  data: params,
-                  call: (data)=>{
-                    if(data.type === 0){
-                      this.$dialog.setReturnValue(this.id)
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        closeCallBack: ()=>{
-                          this.$dialog.close()
+        }else if(this.variableType === '2'){
+          this.$dialog.confirm({
+            width: '300',
+            tipValue: '是否共用手机号?',
+            alertImg: 'warn',
+            okCallBack: () => {
+              if(b){
+                let params = {
+                  id: this.id,
+                  category: this.category,
+                  sex: this.sex,
+                  important: this.important,
+                  politicsStatus: this.politicsStatus,
+                  name: this.name,
+                  phone: this.phone,
+                  unit: this.unit,
+                  unitID: this.unitID,
+                  department: this.department,
+                  idNo: this.idNo,
+                  nativePlace: this.nativePlace,
+                  calendar: this.calendar,
+                  birthday: this.birthday,
+                  birthdayLunar: this.birthdayLunar,
+                  tagList: this.tagSubmit,
+                  zodiacID: this.zodiacID,
+                  zodiac: this.zodiac,
+                  constellation: this.constellation,
+                  constellationID: this.constellationID,
+                  bloodType: this.bloodType,
+                  bloodTypeID: this.bloodTypeID,
+                  nation: this.nation,
+                  nationID: this.nationID
+                }
+                if(this.flatType===false&&this.flatTypes===false){
+                  this.ajaxJson({
+                    url: '/Basic/personSaveVue',
+                    data: params,
+                    call: (data)=>{
+                      if(data.type === 0){
+                        this.$dialog.setReturnValue(this.id)
+                        this.$dialog.alert({
+                          tipValue: data.message,
+                          closeCallBack: ()=>{
+                            this.$dialog.close()
+                          }
+                        })
+                      }else{
+                        this.$dialog.alert({
+                          alertImg: 'warn',
+                          tipValue: data.message
+                        })
+                      }
+                    }
+                  })
+                }
+                if(this.flatType === true){//外单位姓名重复时
+                  this.$dialog.confirm({
+                    tipValue: '是否是同一个人?',
+                    okCallBack: (data) => {
+                      this.ajaxJson({
+                        url: '/Basic/personSaveVue',
+                        data: params,
+                        call: (data)=>{
+                          if(data.type === 0){
+                            this.$dialog.setReturnValue(this.id)
+                            this.$dialog.alert({
+                              tipValue: data.message,
+                              closeCallBack: ()=>{
+                                this.$dialog.close()
+                              }
+                            })
+                          }else{
+                            this.$dialog.alert({
+                              alertImg: 'warn',
+                              tipValue: data.message
+                            })
+                          }
                         }
                       })
-                    }else{
-                      this.$dialog.alert({
-                        alertImg: 'warn',
-                        tipValue: data.message
-                      })
                     }
-                  }
-                })
-              }
-            })
-          }
+                  })
+                }
 
+              }
+            },
+          })
         }
       },
       initData(){

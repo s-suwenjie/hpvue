@@ -218,7 +218,8 @@
       setTimeout(() => {
         this.loadFinish = !this.loadFinish
       },0)
-      sessionStorage.removeItem('list')
+      //从其它页面返回到菜单页中 清除存储的滚动条位置及分页数据
+      sessionStorage.clear()
       this.ajaxJson({
         url: '/PersonOffice/m_approvalManagerAllNumber',
         loading:"0",

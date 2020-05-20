@@ -33,13 +33,13 @@
         <yhm-managerth style="width: 100px;" title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth style="width: 260px;" title="收款账户" value="otherAccount"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="返利对象" value="cashObjectVal"></yhm-managerth>
+        <yhm-managerth style="width: 260px;" v-if="isAct" title="收款账户" value="otherAccount"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" v-if="isAct" title="返利对象" value="cashObjectVal"></yhm-managerth>
         <yhm-managerth style="width: 120px;" v-if="isPre"  title="直接优惠金额" value="preferential"></yhm-managerth>
         <yhm-managerth style="width: 120px;" v-if="isAct" title="返利金额" value="actualProfitLoss"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="保险公司返利金额" value="realTimeProfitLoss"></yhm-managerth>
         <yhm-managerth title="申请编号" value="numbering"></yhm-managerth>
-        <yhm-managerth style="width: 130px;" title="状态" value="status"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="状态" ></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -50,9 +50,9 @@
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName"></yhm-manager-td>
-          <yhm-manager-td-psd @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
-          <yhm-manager-td @click="unitDetail(item)" :tip="true" :value="item.otherAccount" ></yhm-manager-td>
-          <yhm-manager-td :value="item.cash==='1'?'-------':item.cashObjectVal"></yhm-manager-td>
+          <yhm-manager-td-psd  @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
+          <yhm-manager-td v-if="isAct" @click="unitDetail(item)" :tip="true" :value="item.otherAccount" ></yhm-manager-td>
+          <yhm-manager-td v-if="isAct" :value="item.cash==='1'?'-------':item.cashObjectVal"></yhm-manager-td>
           <yhm-manager-td-money v-if="isPre" :value="item.preferential"></yhm-manager-td-money>
           <yhm-manager-td-money v-if="isAct" :value="item.actualProfitLoss"></yhm-manager-td-money>
           <yhm-manager-td-money  :value="item.realTimeProfitLoss"></yhm-manager-td-money>
@@ -297,7 +297,7 @@
         this.$dialog.OpenWindow({
           width: '1050',
           height: '650',
-          url: '/accountsReceivableView?id=' + item.id,
+          url: '/policyView?id=' + item.id,
           title: '查看客户信息',
           closeCallBack: (data)=>{
             if(data){

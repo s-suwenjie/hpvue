@@ -52,7 +52,7 @@
 @rem:375/10rem;
   .app_alert{
     z-index: 2;
-    position: absolute;
+    position: fixed;
     right: 0;
     bottom: 0;
     width: 70%;
@@ -109,7 +109,7 @@
     padding:8/@rem;
   }
   .hidden{
-    position: absolute;
+    position: fixed;
     right: -99%;
     transition: all 0.6s;
   }

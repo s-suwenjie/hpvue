@@ -3,13 +3,26 @@
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
-        <yhm-form-select  title="车牌号" tip="value"   @click="plateEvent" :value="plate" id="plate" rule="R0000"></yhm-form-select>
+        <yhm-form-select title="车牌号" tip="value"   @click="plateEvent" :value="plate" id="plate" rule="R0000"></yhm-form-select>
         <yhm-form-date title="投保日期" subtitle=""   :value="insuredDate" id="insuredDate " position="t"  rule="R0000"></yhm-form-date>
-        <yhm-form-zh-select-text tip-before="value" tip-after="beinsuredidNo" @call="beinsuredEvent" :no-edit="true" :before="beinsuredName" before-id="beinsuredName" :after="beinsuredidNo" after-id="beinsuredidNo" before-rule="#" after-rule="R0000" title="被保险人" after-title="证件号" after-width="160"></yhm-form-zh-select-text>
+        <yhm-form-zh-select-text tip-before="value" tip-after="beinsuredidNo" @call="beinsuredEvent"  :before="beinsuredName" before-id="beinsuredName" :after="beinsuredidNo" after-id="beinsuredidNo" before-rule="#" after-rule="R0000" title="被保险人" after-title="证件号" after-width="160">
+          <div  class="selectCenter" v-if="isNotEqual"  @mouseover="tipChange" @mouseout="tipOut">
+            <span class="uniE9A8 formBoxIcon beinSpan" ></span>
+          </div>
+          <div class="formBoxIcon">
+            <div  class="cbl_main_prompt tipShow">
+              <div class="cbl_main_prompt_content" style="font-size:14px;padding: 0px 2px; ">
+<!--                                {{tipValue}}-->
+                被保险人与车主不一致
+                <img src="/UploadFile/m_image/arrow.png" ref="imgRight">
+              </div>
+            </div>
+          </div>
+        </yhm-form-zh-select-text>
         <yhm-form-zh-select-text tip-before="value" tip-after="contactPhone"  @call="contactEvent" :before="contactName" before-id="contactName" :after="contactPhone" after-id="contactPhone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="160"></yhm-form-zh-select-text>
         <yhm-form-zh-select-text tip-before="value" tip-after="insuredPhone" @call="insuredEvent" :before="insuredName" before-id="insuredName" :after="insuredPhone" after-id="insuredPhone" before-rule="#" after-rule="R4000" title="投保人" after-title="手机号码" after-width="145"></yhm-form-zh-select-text>
         <yhm-form-radio title="与车主关系" subtitle=""  :select-list="relationshipList" :value="relationship" id="relationship"></yhm-form-radio>
-        <yhm-form-radio title="投保类型" subtitle=""  width="1" :select-list="insuredTypeList" :value="insuredType" id="insuredType"></yhm-form-radio>
+        <yhm-form-radio title="投保类型" @call="insuredTypeClick" subtitle=""  width="1" :select-list="insuredTypeList" :value="insuredType" id="insuredType"></yhm-form-radio>
         <yhm-form-radio title="投保渠道" subtitle=""  width="1" :select-list="insuredChannelList" :value="insuredChannel" id="insuredChannel"></yhm-form-radio>
         <yhm-form-check  title="投保项目" @click="Project" submit-value="insuredProject" :select-list="insuredProjectList" :value="insuredProject"  id="insuredProject" rule="#" width="1"></yhm-form-check>
       </template>
@@ -43,7 +56,7 @@
 
 
 
-        <yhm-form-zh-text-two v-if="isbusinessStart"   :before="discountMoney" before-id="discountMoney"  :after="discountCount" @afterblurEvent="calcAfterMoney" @beforeBlur="calcBeforeMoney" after-id="discountCount" title="优惠金额" before-icon="rmb" after-title="优惠点数(%)" after-width="50px;">
+        <yhm-form-zh-text-two  :no-edit="isDiscountShow" v-if="isbusinessStart"  :before="discountMoney" before-id="discountMoney"  :after="discountCount" @afterblurEvent="calcAfterMoney" @beforeBlur="calcBeforeMoney" after-id="discountCount" title="优惠金额" before-icon="rmb" after-title="优惠点数(%)" after-width="50px;">
 
           <div class="formBoxIcon" v-if="isDis" @mouseover="tipChange" @mouseout="tipOut">
             <div  class="cbl_main_prompt tipShow">
@@ -56,8 +69,7 @@
           </div>
 
         </yhm-form-zh-text-two>
-
-        <yhm-form-radio title="是否返利" subtitle="" @call="isCashObject" :no-edit="ISCash" :select-list="cashList" :value="cash" id="cash"></yhm-form-radio>
+        <yhm-form-radio title="是否返利" subtitle="" @call="isCashObject" :no-edit="isCashOb" :select-list="cashList" :value="cash" id="cash"></yhm-form-radio>
         <yhm-form-text placeholder="" title="实收金额" subtitle="" :no-edit="isTotal" :value="receivedMoney" id="receivedMoney" rule="R0000"></yhm-form-text>
 
         <yhm-form-radio title="返利对象" subtitle="" width="1" v-if="isCash" :select-list="cashObjectList" :value="cashObject" id="cashObject"></yhm-form-radio>
@@ -135,8 +147,8 @@
         invoicingMoney:'',//开票金额
         businessMoney:'',//商业险实际金额
         premiumsTotal:'',//保费合计
-        discountMoney:'',//优惠金额
-        discountCount:'',//优惠点位
+        discountMoney:'0',//优惠金额
+        discountCount:'0',//优惠点位
         receivedMoney:'',//实收金额
         cash:'',//是否返利
         cashList:[],
@@ -159,12 +171,14 @@
         isforceStart:true,
         isvehicle:true,
         isbusinessStart:true,
+        isDiscountShow:true,//优惠金额
         isCash:true,
         isDis:false,
         isTotal:'0',
         hide:'0',
         process:'',
-        ISCash:false,
+        isCashOb:true,
+        isNotEqual:false,
 
         discountList: [],
         num:'',
@@ -174,10 +188,13 @@
           //   ['优惠点数超出保险公司提供的点数'+this.clientRate+'']
         // ],
         tipList:'',
+        carOwnerID:'',
       }
     },
     methods:{
-
+      iconMouseover(){
+        // alert()
+      },
       forceDate(){
         let forceStartDate = new Date(this.forceStartDate).getTime();
         var y = new Date().getFullYear(),
@@ -276,8 +293,44 @@
           }
         })
       },
+      insuredTypeClick(){//点击投保类型
+        let  a=this.insuredProject.sort()
+        if(a.indexOf('2')!=-1&&this.insuredType!=0){
+          this.isDiscountShow = false
+          this.discountMoney=''
+          this.discountCount=''
+          this.isCashOb=false
+          this.cash='0'
+          this.isCashObject()
+
+        }else{
+          this.isDiscountShow = true
+          this.discountMoney='0'
+          this.discountCount='0'
+          this.unitRate()
+          this.isCashOb=true
+          this.cash='1'
+          this.isCashObject()
+        }
+      },
       Project(){
         let  a=this.insuredProject.sort()
+        if(a.indexOf('2')!=-1&&this.insuredType!=0){
+          this.isDiscountShow = false
+          this.discountMoney=''
+          this.discountCount=''
+          this.isCashOb=false
+          this.cash='0'
+          this.isCashObject()
+        }else{
+          this.isDiscountShow = true
+          this.discountMoney='0'
+          this.discountCount='0'
+          this.unitRate()
+          this.isCashOb=true
+          this.cash='1'
+          this.isCashObject()
+        }
         if (a.indexOf("0") != -1 ){
           this.isforceStart=true
           // this.insuredProject.push(
@@ -303,13 +356,13 @@
           this.receivedMoney=''
         }
         if (a.indexOf("2") != -1){
-          this.ISCash=false
+          this.isCashOb=false
           this.isTotal='0'
           this.isbusinessStart=true
           this.cash='0'
           this.isCashObject()
         }else {
-          this.ISCash=true
+          this.isCashOb=true
           this.isTotal='1'   //不选择商业险  保费合计/实收金额 不可输入
           this.isbusinessStart=false
           this.cash='1'  //没有商业险不返利
@@ -365,6 +418,7 @@
               this.beinsuredID=data.carOwnerID
               this.beinsuredName=data.carOwner
               this.beinsuredidNo=data.idNo
+              this.carOwnerID=data.carOwnerID
 
             }
           }
@@ -380,6 +434,11 @@
           title: '选择被保险人',
           closeCallBack: (data) => {
             if (data) {
+              if (data.id===this.carOwnerID){  //判断车主和被保险人是否是同一人
+                this.isNotEqual=false
+              }else {
+                this.isNotEqual=true
+              }
               this.beinsuredID=data.id
               this.beinsuredName=data.name
               this.beinsuredidNo = data.idNo
@@ -420,7 +479,7 @@
         })
       },
       save(){
-        if (this.hide==='1'){
+        if (this.hide==='1'){        //当hide=1是 需要保险部门审批
           this.$dialog.confirm({
             width: '400',
             alertImg: 'warn',
@@ -497,7 +556,7 @@
             }
           })
         }else{
-          if (this.validator()) {
+          if (this.validator()) {  //不需要保险部门审批
             let params = {
               id: this.id,
               process:this.hide,
@@ -720,6 +779,7 @@
     },
     created () {
       this.addDiscount()
+      this.isCashObject()
       this.init({
         url: '/Insurance/initBillingForm',
         all: (data) => {
@@ -758,6 +818,7 @@
 
           this.glassList=data.glassPsd.list
           this.glass=data.glassPsd.value
+
         },
         add: (data) => {
           /* 需要添加的数据 */
@@ -794,6 +855,13 @@
           this.carDamage=data.carDamage
           this.driver=data.driver
           this.discountList=data.discountList
+          this.carOwnerID=data.carOwnerID
+
+          if (this.beinsuredID==this.carOwnerID){    //判断车主和被保险人是否是同一人
+            this.isNotEqual=false
+          }else {
+            this.isNotEqual=true
+          }
           this.unitRate()
 
           let  a=this.insuredProject
@@ -851,6 +919,9 @@
     color: #ffaa27;
     font-size: 24px;
     cursor: pointer;
+  }
+  .beinSpan::before{
+    color: #ffaa27;
   }
 </style>
 <style scoped lang="less">

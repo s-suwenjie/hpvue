@@ -63,23 +63,25 @@
         </yhm-view-tab-list>
         <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[2].select">
           <template #listHead>
-            <yhm-managerth style="width: 100px;" title="所属类型" ></yhm-managerth>
+<!--            <yhm-managerth style="width: 100px;" title="所属类型" ></yhm-managerth>-->
             <yhm-managerth style="width: 80px;" title="收支方向"></yhm-managerth>
             <yhm-managerth title="基本信息"></yhm-managerth>
+            <yhm-managerth title="对方账户名称"></yhm-managerth>
             <yhm-managerth title="对方账户"></yhm-managerth>
             <yhm-managerth style="width: 100px;" title="总金额"></yhm-managerth>
             <yhm-managerth style="width: 100px;" title="交易金额"></yhm-managerth>
-            <yhm-managerth style="width: 150px;" title="编号"></yhm-managerth>
+<!--            <yhm-managerth style="width: 150px;" title="编号"></yhm-managerth>-->
           </template>
           <template #listBody>
             <tr v-for="(item,index) in listPolicy" :key="index" :class="{InterlacBg:index%2!==0}">
-              <yhm-manager-td :value="item.categoryVal"></yhm-manager-td>
+<!--              <yhm-manager-td :value="item.categoryVal"></yhm-manager-td>-->
               <yhm-manager-td-direction class="dfJcc" :direction="item.direction" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
               <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.ownAccount"></yhm-manager-td>
+              <yhm-manager-td :tip="true" node-class-name="f_main"  :value="item.otherAccountName"></yhm-manager-td>
               <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.otherAccount"></yhm-manager-td>
               <yhm-manager-td-money :value="Math.abs(item.money) + ''"></yhm-manager-td-money>
               <yhm-manager-td-money :value="Math.abs(item.bankMoney) + ''"></yhm-manager-td-money>
-              <yhm-manager-td  :value="item.number"></yhm-manager-td>
+<!--              <yhm-manager-td  :value="item.number"></yhm-manager-td>-->
             </tr>
           </template>
           <template #customize>
@@ -106,7 +108,7 @@
               <yhm-manager-td-date :value="item.startDate"></yhm-manager-td-date>
               <yhm-manager-td :value="item.clientRate+'%'"></yhm-manager-td>
               <yhm-manager-td-money :value="item.totalMoney"></yhm-manager-td-money>
-              <yhm-manager-td-money :value="quotaMoney"></yhm-manager-td-money>
+              <yhm-manager-td-money :value="item.quotaMoney"></yhm-manager-td-money>
 <!--              <yhm-manager-td-money :value="item.discountMoney"></yhm-manager-td-money>-->
             </tr>
           </template>
@@ -268,11 +270,11 @@
 
             for (let i in this.listProfit){
               //计算保险公司优惠定额(应收账款)
-              this.quotaMoney= (this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100)).toFixed(2) + ''
+              // this.quotaMoney= (this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100)).toFixed(2) + ''
 
               //计算实际金额 (预计盈亏)
-              this.profitAndLossMoney=((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney).toFixed(2) +''
-
+              // this.profitAndLossMoney=((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney).toFixed(2) +''
+              this.profitAndLossMoney=(this.listProfit[i].quotaMoney-this.listProfit[i].discountMoney).toFixed(2) +''
               //计算实际金额盈亏比例
               this.profitAndLossProportion = (((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney) / this.listProfit[i].totalMoney *100 ).toFixed(2) + '%'
             }

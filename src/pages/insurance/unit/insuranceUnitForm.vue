@@ -21,7 +21,7 @@
         <yhm-managerth style="width: 80px" title="新车费率"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="旧车税率"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="客户税率"></yhm-managerth>
-        <yhm-managerth style="width: 100px" title="会员税率"></yhm-managerth>
+        <yhm-managerth style="width: 100px" title="特殊车型税率"></yhm-managerth>
 
 
         <yhm-managerth style="width: 38px" title="删除"></yhm-managerth>
@@ -100,6 +100,7 @@
                   item.newRate=data.newRate
                   item.oldRate=data.oldRate
                   item.clientRate=data.clientRate
+                  item.vipRate=data.vipRate
                 }
               })
             }

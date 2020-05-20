@@ -35,12 +35,12 @@
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 140px" title="申请日期" value="workDate"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="报销方式" value="isPrettyCashOff"></yhm-managerth>
-        <yhm-managerth title="事由"></yhm-managerth>
+        <yhm-managerth style="width: 180px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="报销金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 110px" title="提交天数" value="day"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="编号" value="code"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="状态" value="state"></yhm-managerth>
-        <yhm-managerth style="width: 240px;" title="操作"></yhm-managerth>
+        <yhm-managerth title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -63,6 +63,7 @@
             <yhm-manager-td-operate-button v-show="item.isPrint !== '1'" :no-click="item.state !== '0' || item.isFinish === '1'" @click="submit(item.id,item.state,item.isFinish,item.isRelevance)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
 
             <yhm-manager-td-operate-button v-show="item.state==='9'&&item.isChecks1 === '1'" @click="aFullReturn(item)" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.isChecks2 === '1'" @click="repayment(item)" value="退款" icon="i-complete" color="#6e19e1"></yhm-manager-td-operate-button>
 
             <yhm-manager-td-operate-button :no-click="item.state === '0' || item.isFinish === '1' || item.state === '-1'" @click="urge(item)" value="催促" icon="i-btn-urge" color="#2AA70B"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.state !== '0' || item.isFinish === '1'" @click="del(item)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
@@ -179,11 +180,25 @@
       }
     },
     methods: {
+      /* 确认还款 */
+      repayment(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '740',
+          title: '退款',
+          url: '/fullRefundForm?ownerID=' + item.id + '&category=1',
+          closeCallBack: (data) => {
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       aFullReturn(item){
         this.$dialog.OpenWindow({
           width: 1050,
           height: 690,
-          title: '全额退回',
+          title: '退备用金',
           url: '/fullRefundForm?ownerID=' + item.prettyCashsID,
           closeCallBack: (data) => {
             if (data) {

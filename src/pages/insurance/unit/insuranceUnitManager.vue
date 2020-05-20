@@ -1,8 +1,13 @@
 <template>
   <div>
-    <yhm-managerpage>
+    <yhm-managerpage category="1">
       <!--导航条-->
-      <template #navigation>业务管理&nbsp;&gt;&nbsp;保险业务&nbsp;&gt;&nbsp;管理保险公司</template>
+      <template #navigationTab>
+
+        <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/unit/insuranceUnitManager'}">管理保险公司</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/cashGiveHP/cashGiveHPManager'}">保险给HP返利</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/vipRate/vipRateManager'}">特殊车型制定</router-link>
+      </template>
 
       <!--操作区-->
       <template #operate>
@@ -21,7 +26,7 @@
         <yhm-managerth style="width: 130px;" title="新车费率" value="newRate"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="旧车费率" value="oldRate"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="客户费率" value="clientRate"></yhm-managerth>
-        <yhm-managerth style="width: 130px;" title="会员费率" value="vipRate"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="特殊车型费率" value="vipRate"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="操作"></yhm-managerth>
       </template>
 

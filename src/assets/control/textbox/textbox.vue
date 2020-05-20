@@ -42,6 +42,11 @@
       }
     },
     props:{
+
+      isUpperCase:{
+        type:Boolean,
+        default: false
+      },
       decimalPlaces:{
         type:Number,
         default :null
@@ -384,6 +389,9 @@
       txt(newVal,oldVal){
         // console.log('txt')
         let val = newVal
+        if(this.isUpperCase){
+          val = newVal.toUpperCase()
+        }
         // if(val !== '' && this.type === 'number'){
         //   val = val.replace(/[^0123456789]/g,'')
         // }
@@ -395,6 +403,9 @@
       value(newVal,oldVal){
         // console.log('value：' + newVal)
         this.txt = newVal
+        if(this.isUpperCase){
+          this.txt = newVal.toUpperCase()
+        }
         //this.verification()
       },
       compared(newVal,oldVal){
