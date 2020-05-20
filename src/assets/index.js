@@ -247,6 +247,8 @@ Vue.use(formselectboxmore)
 import validator from '@/assets/validator/validator.js'
 Vue.use(validator)
 
+import formtestplate from '@/assets/form/control/formtestplate/formtestplate.js'
+Vue.use(formtestplate)
 
 
 

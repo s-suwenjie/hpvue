@@ -4,9 +4,9 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-radio :show="categoryShow" width="1" title="审批类型" :select-list="categoryList" :value="category" id="category" @call="categoryClickEvent"></yhm-form-radio>
-        <yhm-titlenumimagecolor title="节点信息" value-tip="节点名称" :value="title" valueID="title" num-tip="节点值" :num="titleVal" numID="titleVal" :icon="titleUrl" iconID="titleUrl" :color="titleColor" colorID="titleColor" rule="#"></yhm-titlenumimagecolor>
+        <yhm-titlenumimagecolor title="节点信息" @colorConfirm="colorConfirm" value-tip="节点名称" :value="title" valueID="title" num-tip="节点值" :num="titleVal" numID="titleVal" :icon="titleUrl" iconID="titleUrl" :color="titleColor" colorID="titleColor" rule="#"></yhm-titlenumimagecolor>
         <yhm-form-radio title="是否" subtitle="允许驳回" :select-list="isRejectList" :value="isReject" id="isReject" @call="isRejectClickEvent"></yhm-form-radio>
-        <yhm-titlenumimagecolor :show="rejectShow" title="驳回" subtitle="节点信息" value-tip="节点名称" :value="rejectTitle" valueID="rejectTitle" num-tip="节点值" :num="rejectTitleVal" numID="rejectTitleVal" :icon="rejectTitleUrl" iconID="rejectTitleUrl" :color="rejectTitleColor" colorID="rejectTitleColor" rule="#"></yhm-titlenumimagecolor>
+        <yhm-titlenumimagecolor :show="rejectShow" @colorConfirm="colorConfirm2" title="驳回" subtitle="节点信息" value-tip="节点名称" :value="rejectTitle" valueID="rejectTitle" num-tip="节点值" :num="rejectTitleVal" numID="rejectTitleVal" :icon="rejectTitleUrl" iconID="rejectTitleUrl" :color="rejectTitleColor" colorID="rejectTitleColor" rule="#"></yhm-titlenumimagecolor>
         <div v-show="rejectShow" class="f_br"></div>
         <yhm-form-radio title="是否" subtitle="需要审批" :select-list="isApprovalList" :value="isApproval" id="isApproval" @call="isApprovalClickEvent"></yhm-form-radio>
         <yhm-form-select-more :show="detailShow" title="审批" subtitle="人员明细" :value="details" id="details" @click="selectPerson()" rule="#"></yhm-form-select-more>
@@ -17,6 +17,7 @@
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
+
   </div>
 </template>
 
@@ -60,10 +61,17 @@ export default {
 
       categoryList: [], // 审批类型选项
       isRejectList: [], // 是否允许驳回选项
-      isApprovalList: [] // 是否需要审批选项
+      isApprovalList: [], // 是否需要审批选项
+
     }
   },
   methods: {
+    colorConfirm(colorValue){
+      this.titleColor = colorValue
+    },
+    colorConfirm2(colorValue){
+      this.rejectTitleColor = colorValue
+    },
     // 切换审批类型
     categoryClickEvent () {
       var categoryCode = this.categoryList[this.category].code
@@ -214,6 +222,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 
 </style>

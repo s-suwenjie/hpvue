@@ -258,7 +258,7 @@ export default {
         this.isAllocation = data.isAllocationPsd.value
 
         if(this.nature === '4'||this.nature === '5'){
-          this.isInvoice='1'
+          //this.isInvoice='1'
           let sumMoney = 0;
           for(let i in this.bankDetailList){
             let money = this.bankDetailList[i].money;
@@ -802,7 +802,7 @@ export default {
             width: '950',
             height: '692',
             title: '选择收支明细',
-            url: '/selectBankDetail?direction=0&categoryBefore=1',
+            url: '/selectBankDetail?direction=0&categoryBefore=1&selectType=1',
             closeCallBack: (data)=>{
               if(data){
                 this.isBankList = true
@@ -839,26 +839,28 @@ export default {
             width: '950',
             height: '692',
             title: '选择收支明细',
-            url: '/selectBankDetail?direction=0&categoryBefore=1'+'&otherAccountID=' + this.otherAccountID ,
+            url: '/selectBankDetail?direction=0&categoryBefore=1'+'&otherAccountID=' + this.otherAccountID +'&selectType=1',
             closeCallBack: (data)=>{
               if(data){
-                this.isBankList = true
-                this.isInvoice = ''
-                this.money=data.money
-                this.beforeMoney=data.money
-                let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.bankDetailList.length, 1000)))
-                this.bankDetailList.push({
-                  id: guid(),
-                  bankDetailID: data.id,
-                  insertDate: formatTime(insertDate),
-                  ownerID: this.id,
-                  remark: data.remark,
-                  subject: data.subject,
-                  cccurDate: data.cccurDate,
-                  direction: data.direction,
-                  otherAccount: data.bankName + data.account + data.nature,
-                  money: data.money
-                })
+                for(let i=0;i<data.length;i++){
+                  this.isBankList = true
+                  this.isInvoice = ''
+                  this.money=data[i].money
+                  this.beforeMoney=data[i].money
+                  let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.bankDetailList.length, 1000)))
+                  this.bankDetailList.push({
+                    id: guid(),
+                    bankDetailID: data[i].id,
+                    insertDate: formatTime(insertDate),
+                    ownerID: this.id,
+                    remark: data[i].remark,
+                    subject: data[i].subject,
+                    cccurDate: data[i].cccurDate,
+                    direction: data[i].direction,
+                    otherAccount: data[i].bankName + data[i].account + data[i].nature,
+                    money: data[i].money
+                  })
+                }
                 if(this.bankDetailList.length>0){
                   this.isBankDetailEmpty=false
                 }
@@ -1437,8 +1439,14 @@ export default {
       let bb=true
       if(this.bankDetailList.length>0){
         this.bankDetailMoney()
-        if(this.sumBankDetailMoney!==this.money){
-          bb=false
+        if (this.nature === '4'){
+          if(parseInt(this.sumBankDetailMoney)<parseInt(this.money)){
+            bb=false
+          }
+        }else{
+          if(this.sumBankDetailMoney !== this.money){
+            bb=false
+          }
         }
       }
       if(!bb){
@@ -1611,8 +1619,14 @@ export default {
       let bb=true
       if(this.bankDetailList.length>0){
         this.bankDetailMoney()
-        if(this.sumBankDetailMoney!==this.money){
-          bb=false
+        if (this.nature === '5'){
+          if(parseInt(this.sumBankDetailMoney)<parseInt(this.money)){
+            bb=false
+          }
+        }else{
+          if(this.sumBankDetailMoney !== this.money){
+            bb=false
+          }
         }
       }
       if(!bb){
@@ -1690,17 +1704,16 @@ export default {
       this.capitalMoney = number2chinese(this.money)
       this.actualMoney = this.money
     },
-    bankDetailList(){
-
-      if(this.nature === '4' || this.nature === '5'){
-        let sumMoney = 0;
-        for(let i in this.bankDetailList){
-          let money = this.bankDetailList[i].money;
-          sumMoney = accAdd( money,sumMoney)
-        }
-        this.money = sumMoney + ''
-      }
-    },
+    // bankDetailList(){
+    //   if(this.nature === '4' || this.nature === '5'){
+    //     let sumMoney = 0;
+    //     for(let i in this.bankDetailList){
+    //       let money = this.bankDetailList[i].money;
+    //       sumMoney = accAdd( money,sumMoney)
+    //     }
+    //     this.money = sumMoney + ''
+    //   }
+    // },
   },
   computed:{
     getIsElectronicInvoice(){

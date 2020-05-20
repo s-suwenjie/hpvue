@@ -11,6 +11,7 @@
         <router-link class="menuTabDiv " :to="{path:'/home/cashRegisterManager'}">收银审批制定</router-link>
         <router-link class="menuTabDiv " :to="{path:'/home/approPriationManager'}">批量拨款审批制定</router-link>
         <router-link class="menuTabDiv " :to="{path:'/home/unionCostsManager'}">工会审批制定</router-link>
+
       </template>
       <template #operate>
         <yhm-commonbutton value="添加人员" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>

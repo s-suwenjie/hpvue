@@ -44,7 +44,7 @@
     </div>
     <div @click="clickEvent" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box" :class="[{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_disable:noEdit},{c_smbox: isSm}]">
       <span class="c_icon" :class="[iconStyle,{c_icon_m:category === 'm'},{c_smicon: isSm}]"></span>
-      <div class="dp_content" :style="getTxtWidth" :class="[{dp_content_m:category === 'm'},{dt_smcontent: isSm}]">
+      <div class="dp_content" :style="{getTxtWidth,height:height==''?'auto':height}" :class="[{dp_content_m:category === 'm'},{dt_smcontent: isSm}]">
         {{txt}}
         <span v-show="txt !== ''" class="ml5" :class="{weekend:getWeekend}">{{getWeek}}</span>
         <span v-show="txt === ''" :style="{color: placeholderColor}">{{placeholder}}</span>
@@ -89,6 +89,10 @@
         default: false
       },
       width:{
+        type: String,
+        default:""
+      },
+      height:{
         type: String,
         default:""
       },
@@ -677,7 +681,8 @@
   }
   .dt_smcontent{
     height: 28px;
-    line-height: 28px;
+    display: flex;
+    align-items: center;
   }
   .c_smmain{
     min-height: 28px;

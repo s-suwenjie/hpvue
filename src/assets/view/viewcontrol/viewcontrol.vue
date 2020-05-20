@@ -1,8 +1,8 @@
 <template>
     <div class="v_control" :class="[getWidthClass]">
-      <div class="v_title">{{title}}：</div>
+      <div class="v_title" @click="clickEvent">{{title}}：</div>
 
-      <div v-if="getDefault" @click="clickEvent" class="v_content" :class="{rmb:getMoney,fs12b:getMoney}" :style="{color:colorValue,fontSize: fontSize + 'px'}" v-html="getContentShow ? getContentShow:'-----'"></div>
+      <div v-if="getDefault" @click="clickEvent" class="v_content" :class="{rmb:getMoney,fs12b:getMoney}" :style="{color:colorValue,fontSize: fontSize + 'px'}" v-html="Show ? Show:'-----'"></div>
       <span :class="fontIcon" @click="iconClick" v-if="fontIcon!==''" :style="{fontSize:iconFontSize+'px',color:iconColor}" style="display: flex;align-items: center;"></span>
 
       <div v-if="getFiles" class="v_content">
@@ -136,7 +136,7 @@
       getDateMoney(){
         return this.type === 'date-money'
       },
-      getContentShow(){
+      Show(){
         if(this.type === 'text'){
           if(this.psd.length === 0){
             return this.content

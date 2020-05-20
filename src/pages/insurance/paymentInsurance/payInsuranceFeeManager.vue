@@ -29,7 +29,7 @@
         <yhm-managerth  style="width: 300px;" title="收款账户明细" value="otherAccount"></yhm-managerth>
         <yhm-managerth title="支付金额" value="actualProfitLoss"></yhm-managerth>
         <yhm-managerth title="申请编号" value="numbering"></yhm-managerth>
-        <yhm-managerth style="width: 170px;" title="状态" value="status"></yhm-managerth>
+        <yhm-managerth style="width: 170px;" title="状态"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -213,7 +213,7 @@
         this.$dialog.OpenWindow({
           width: '1050',
           height: '650',
-          url: '/accountsReceivableView?id=' + item.id,
+          url: '/policyView?id=' + item.id,
           title: '查看客户信息',
           closeCallBack: (data)=>{
             if(data){

@@ -6,7 +6,7 @@
         <yhm-form-text v-if="isP" title="交强险" subtitle="保单号" @repeatverify="numberVerifyEvent" ref="payHighNumber"  tip="value" :value="payHighNumber" id="payHighNumber" rule="R0000"></yhm-form-text>
         <yhm-form-text v-if="isNumber" :icon-shou="true" color="#666666" @call="seNumber" title="查看" subtitle="重复保单号" value="" id="person"  no-edit="1"></yhm-form-text>
         <yhm-form-text v-if="isPayNumber" :icon-shou="true" color="#666666" @call="seNumber" title="查看" subtitle="重复保单号" value="" id="person"  no-edit="1"></yhm-form-text>
-        <yhm-formupload :ownerID="id" :value="fileList"  id="fileList" title="保单号(支持单据)" tag="poNumber" multiple="multiple" rule="#"></yhm-formupload>
+        <yhm-formupload :ownerID="id" :value="fileList"  id="fileList" title="保单(支持单据)" tag="poNumber" multiple="multiple" rule="#"></yhm-formupload>
       </template>
     </yhm-formbody>
     <div class="f_split"></div>

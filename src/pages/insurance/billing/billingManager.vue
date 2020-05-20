@@ -43,7 +43,9 @@
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td @click="plateView(item)" :value="item.plate" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td  @click="contactView(item)" :value="item.contactName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
-          <yhm-manager-td :tip="true" @click="personView(item)" :value="item.beinsuredName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
+          <yhm-manager-td  :tip="item.notEqual==='0'?false:true" :tip-show="true" tip-value="被保险人与车主不一致" @click="personView(item)" :value="item.beinsuredName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item">
+            <span v-if="item.notEqual==='0'?false:true" style=" color: #ffaa27;font-size: 18px;" class="uniE9A8 managerIcon"></span>
+          </yhm-manager-td>
           <yhm-manager-td-date :value="item.insuredDate"  @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-date>
           <yhm-manager-td-psd  :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
@@ -98,6 +100,7 @@
         isPoNumber:false,
         isAppPayment:false,
         isApp:false,
+        isPersonTip:false,
       }
     },
     methods:{
@@ -325,6 +328,7 @@
           data:params,
           all:(data) =>{
             //不管是不是初始化都需要执行的代码
+
           },
           init:(data)=>{
             //初始化时需要执行的代码
@@ -341,5 +345,8 @@
 </script>
 
 <style scoped>
-
+.managerIcon{
+  position: absolute;
+  right: 4px;
+}
 </style>

@@ -147,9 +147,14 @@ import reimbursementReconDetailForm from './pages/reimbursement/reimbursementRec
 import BankDetailRebateManager from './pages/budgetDetail/BankDetailRebate/BankDetailRebateManager'
 import BankDetailRebateDetail from './pages/budgetDetail/BankDetailRebate/BankDetailRebateDetail'
 
-/* 续保 */
-import bankDetailRenewalManager from './pages/bankDetailRenewal/bankDetailRenewalManager'
+/* 散户维修费 */
+import BankDetailRepairManager from './pages/budgetDetail/BankDetailRebate/BankDetailRepairManager'
 
+/* 续保 */
+import bankDetailRenewalManager from './pages/budgetDetail/BankDetailRebate/bankDetailRenewalManager'
+
+/* 保险手续费 */
+import BankDetailCommissionManager from './pages/budgetDetail/BankDetailRebate/BankDetailCommissionManager'
 
 /* 打印报销单 */
 import approvalPrintReimbursementTicket from './pages/reimbursement/approvalPrintReimbursementList/approvalPrintReimbursementTicket'
@@ -341,6 +346,10 @@ import insuranceCompanyForm from './pages/basic/insurancePolicy/lnsurance/insura
 import insuranceUnitManager from './pages/insurance/unit/insuranceUnitManager'
 import insuranceUnitForm from './pages/insurance/unit/insuranceUnitForm'
 
+/* 保险给HP返利*/
+import cashGiveHPManager from './pages/insurance/cashGiveHP/cashGiveHPManager'
+import cashGiveHPForm from './pages/insurance/cashGiveHP/cashGiveHPForm'
+
 /*财务信息*/
 import financialInformationManager from './pages/basic/insurancePolicy/lnsurance/financialInformation/financialInformationManager'
 import financialInformationForm from './pages/basic/insurancePolicy/lnsurance/financialInformation/financialInformationForm'
@@ -381,6 +390,13 @@ import mineManager from './pagesApp/myApproval/mineManager.vue'
 /* 采购计划 */
 import m_approvalPurchaseManager from './pagesApp/purchase/m_approvalPurchaseManager.vue'
 import m_approvalPurchaseView from './pagesApp/purchase/m_approvalPurchaseView.vue'
+
+/* 统计图->保险理赔->支付续保费->支付客户返利->散户维修费->保险手续费 */
+import insuranceCartogram from './pages/cartogram/insuranceCartogram'
+import renewPremiumCartogram from './pages/cartogram/renewPremiumCartogram'
+import rebateCartogram from './pages/cartogram/rebateCartogram'
+import maintenanceCostCartogram from './pages/cartogram/maintenanceCostCartogram'
+import BankDetailCommissionCartogram from './pages/cartogram/BankDetailCommissionCartogram'
 
 /* 驳回 */
 import m_rejectForm from './pagesApp/common/rejectForm.vue'
@@ -491,9 +507,16 @@ import policyManager from './pages/insurance/policy/policyManager'
 import policyView from './pages/insurance/policy/policyView'
 import poNumbering from './pages/insurance/policy/poNumbering'
 import poNumberView from './pages/insurance/policy/poNumberView'
+import policyExpectedView from './pages/insurance/policy/policyExpectedView'
+
+
+
+
 /* 应收账款*/
 import accountsReceivableManager from './pages/insurance/accountsReceivable/accountsReceivableManager'
 import accountsReceivableView from './pages/insurance/accountsReceivable/accountsReceivableView'
+import accountExpectedView from './pages/insurance/accountsReceivable/accountExpectedView'
+import unitDatailsView from './pages/insurance/accountsReceivable/unitDatailsView'
 /*客户返利*/
 import customerRebatesManager from './pages/insurance/customerRebates/customerRebatesManager'
 import customerRebatesView from './pages/insurance/customerRebates/customerRebatesView'
@@ -507,6 +530,9 @@ import insuranceProcessForm from './pages/approvalPriority/insuranceProcessForm'
 /*收银审批制定*/
 import cashRegisterManager from './pages/approvalPriority/cashRegisterManager'
 import cashRegisterForm from './pages/approvalPriority/cashRegisterForm'
+/*特殊车型制定*/
+import vipRateManager from './pages/insurance/vipRate/vipRateManager'
+import vipRateForm from './pages/insurance/vipRate/vipRateForm'
 /* 维护保险公司 */
 import insuranceUnitDetailsForm from './pages/insurance/unit/insuranceUnitDetailsForm'
 import insuranceUnitView from './pages/insurance/unit/insuranceUnitView'
@@ -585,7 +611,9 @@ export default new Router({
         { path: '/home/lnsurance/policyInformationManager', name: 'policyInformationManager.vue', component: policyInformationManager, meta: {title: '保单信息'}},
         { path: '/home/lnsurance/financialInformationManager', name: 'financialInformationManager.vue', component: financialInformationManager, meta: {title: '财务信息'}},
         { path: '/home/lnsurance/insuranceCompanyManager', name: 'insuranceCompanyManager.vue', component: insuranceCompanyManager, meta: {title: '保险公司'}},
-        { path: '/home/insuranceUnitManager', name: 'insuranceUnitManager.vue', component: insuranceUnitManager, meta: {title: '管理保险公司'}},
+        { path: '/home/unit/insuranceUnitManager', name: 'insuranceUnitManager.vue', component: insuranceUnitManager, meta: {title: '管理保险公司'}},
+        { path: '/home/cashGiveHP/cashGiveHPManager', name: 'cashGiveHPManager.vue', component: cashGiveHPManager, meta: {title: '保险公司给HP返利'}},
+
         { path: '/home/insurance/clientManager', name: 'clientManager.vue', component: clientManager, meta: {title: '客户管理'}},
 
         { path: '/home/approPriationManager', name: 'approPriationManager.vue', component: approPriationManager, meta: {title: '审批定制'}},
@@ -603,12 +631,16 @@ export default new Router({
 
         { path: '/home/trackDetails/trackDetailsManager', name: 'trackDetailsManager.vue', component: trackDetailsManager ,meta: {title: '跟踪细节'}},
         { path: '/home/insuranceProcessManager', name: 'insuranceProcessManager.vue', component: insuranceProcessManager ,meta: {title: '保险审批制定'}},
-        { path: '/home/cashRegisterManager', name: 'cashRegisterManager.vue', component: cashRegisterManager ,meta: {title: '收银审批制定'}},
+        { path: '/home/cashRegisterManager', name: 'cashRegisterManager.vue', component: cashRegisterManager ,meta: {title: '特殊车型制定'}},
+        { path: '/home/vipRate/vipRateManager', name: 'vipRateManager.vue', component: vipRateManager ,meta: {title: '管理特殊车型'}},
         { path: '/home/conductFinManager', name: 'conductFinManager.vue', component: conductFinManager ,meta: {title: '理财管理'}},
         { path: '/home/prewarningValueManager', name: 'prewarningValueManager.vue', component: prewarningValueManager},
 
         { path: '/home/BankDetailRebateManager', name: 'BankDetailRebateManager.vue', component: BankDetailRebateManager ,meta: {title: '收支明细'}},
         { path: '/home/bankDetailRenewalManager', name: 'bankDetailRenewalManager.vue', component: bankDetailRenewalManager ,meta: {title: '续保管理'}},
+        { path: '/home/BankDetailRepairManager', name: 'BankDetailRepairManager.vue',component: BankDetailRepairManager },
+        { path: '/home/BankDetailCommissionManager', name: 'BankDetailCommissionManager.vue',component: BankDetailCommissionManager },
+
 
       ]
     },
@@ -631,6 +663,12 @@ export default new Router({
     { path: '/dicForm089', name: 'dicForm089', component: dicForm089},
     { path: '/dicForm090', name: 'dicForm090', component: dicForm090},
     { path: '/dicForm091', name: 'dicForm091', component: dicForm091},
+
+    { path: '/insuranceCartogram', name: 'insuranceCartogram.vue', component: insuranceCartogram},
+    { path: '/renewPremiumCartogram', name: 'renewPremiumCartogram.vue', component: renewPremiumCartogram},
+    { path: '/rebateCartogram', name: 'rebateCartogram.vue', component: rebateCartogram},
+    { path: '/maintenanceCostCartogram', name: 'maintenanceCostCartogram.vue', component: maintenanceCostCartogram},
+    { path: '/BankDetailCommissionCartogram', name: 'BankDetailCommissionCartogram.vue', component: BankDetailCommissionCartogram},
 
     { path: '/selectPublicAccount', name: 'selectPublicAccount', component: selectPublicAccount},
     { path: '/selectPrivateAccount', name: 'selectPrivateAccount', component: selectPrivateAccount},
@@ -771,6 +809,7 @@ export default new Router({
     { path: '/BankDetailRebateDetail', name: 'BankDetailRebateDetail.vue',component: BankDetailRebateDetail },
 
 
+
     { path: '/openBankForm', name: 'openBankForm.vue',component: openBankForm },
     { path: '/openBankDetailForm', name: 'openBankDetailForm.vue',component: openBankDetailForm },
 
@@ -784,6 +823,7 @@ export default new Router({
     { path: '/insuranceUnitForm', name: 'insuranceUnitForm.vue',component: insuranceUnitForm },
     { path: '/insuranceUnitDetailsForm', name: 'insuranceUnitDetailsForm.vue',component: insuranceUnitDetailsForm },
     { path: '/insuranceUnitView', name: 'insuranceUnitView.vue',component: insuranceUnitView },
+    { path: '/cashGiveHPForm', name: 'cashGiveHPForm.vue',component: cashGiveHPForm },
     { path: '/clientForm', name: 'clientForm.vue',component: clientForm },
 
     { path: '/clientView', name: 'clientView.vue',component: clientView },
@@ -838,13 +878,17 @@ export default new Router({
     { path: '/billingApprovalApplyForm', name: 'billingApprovalApplyForm.vue',component: billingApprovalApplyForm },
 
     { path: '/policyView', name: 'policyView.vue',component: policyView },
+    { path: '/policyExpectedView', name: 'policyExpectedView.vue',component: policyExpectedView },
     { path: '/poNumbering', name: 'poNumbering.vue',component: poNumbering },
     { path: '/poNumberView', name: 'poNumberView.vue',component: poNumberView },
     { path: '/accountsReceivableView', name: 'accountsReceivableView.vue',component: accountsReceivableView },
+    { path: '/accountExpectedView', name: 'accountExpectedView.vue',component: accountExpectedView },
+    { path: '/unitDatailsView', name: 'unitDatailsView.vue',component: unitDatailsView },
     { path: '/customerRebatesView', name: 'customerRebatesView.vue',component: customerRebatesView },
 
     { path: '/insuranceProcessForm', name: 'insuranceProcessForm.vue',component: insuranceProcessForm },
     { path: '/cashRegisterForm', name: 'cashRegisterForm.vue',component: cashRegisterForm },
+    { path: '/vipRateForm', name: 'vipRateForm.vue',component: vipRateForm },
 
 
     /* APP端路由 */

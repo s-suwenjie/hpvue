@@ -5,7 +5,7 @@
     <yhm-datebox type="year" :maxYear="maxYear" :isSm="true" @call="selectYear" style="width: 120px" :value="yearTxt" id="yearTxt" position="b"></yhm-datebox>
     <div class="chooseMonth monthList">
       <button v-for="(item,index) in monthList" @click="clickMonthEvent(item,index)" class="btn"
-              :class="[{choice: index===onMonthChoice},{dp_no:!getIsMonthRange(item)}]">{{item}}月</button>
+              :class="[{choice: index===onMonthChoice},{dp_no:!getIsMonthRange(item)},{dp_no:edit}]">{{item}}月</button>
     </div>
     <div>
       <button class="allBtn" @click="clickMonthAllEvent" :class="{choice: onMonthAllChoice}">整年</button>
@@ -38,6 +38,10 @@
           type:String,
           default:""
         }
+      },
+      edit: {
+        type: Boolean,
+        default: false
       },
       isSm: {
         type: Boolean,

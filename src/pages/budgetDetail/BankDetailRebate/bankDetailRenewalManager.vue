@@ -1,6 +1,6 @@
 <template>
   <div>
-    <yhm-managerpage category="1" :total-table="true" :total-width="true">
+    <yhm-managerpage category="1" @statisticalClick="statisticalClick" :statisticalShow="true" :total-table="true" :total-width="true">
       <!--导航条-->
       <template #navigationTab>
         <a class="menuTabDiv" href="/Fin/_bankDetailManager?menuType=1">收支明细</a>
@@ -65,11 +65,18 @@
       <template #listTotalHead>
         <yhm-managerth before-color="black" title="" before-title="条数" ></yhm-managerth>
         <yhm-managerth before-color="black" title="" before-title="金额" ></yhm-managerth>
+<!--        <yhm-managerth v-show="!isSelected" :before-color="oldTotalColor" style="width: 60px;" width="60px" title="" :before-title="oldTotal" @call="oldTotalClick"></yhm-managerth>-->
+<!--        <yhm-managerth v-show="isYearMoneyShow && !isSelected" :before-color="oldTotalColor" style="width: 60px;" width="60px" title="" :before-title="yearTotal" ></yhm-managerth>-->
+
       </template>
       <template #listTotalBody>
         <tr>
           <yhm-manager-td-center v-for="(item,index) in contentTotal" :key="index + 1" :value="item.count"></yhm-manager-td-center>
           <yhm-manager-td-money v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+<!--          <yhm-manager-td-money v-show="!isSelected" :before-symbol="oldMoneySymbol" @click="totalClick(item,'2')" before-color="#ff000c" :style="{color:oldTotalColor}" v-for="(item,index) in contentTotal" :key="index+2" :value="oldMoney"></yhm-manager-td-money>-->
+<!--          <yhm-manager-td-money v-show="isYearMoneyShow && !isSelected" v-if="yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick(yearMoney)" before-color="#ff000c" :style="{color:oldTotalColor}"  :value="yearMoney"></yhm-manager-td-money>-->
+<!--          <yhm-manager-td-money v-show="isYearMoneyShow && !isSelected" v-if="!yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick('0')" before-color="#ff000c" :style="{color:oldTotalColor}"  value="NaN"></yhm-manager-td-money>-->
+
         </tr>
         <tr>
 
@@ -96,6 +103,10 @@
         endDate:'',
         subjectID: '2',
         startDate:'',
+        // oldTotalColor:'#ff000c',
+        // yearTotal:'同比',
+        // nowTotal:'本日',
+        // oldTotal:'比前一天(环比)',
         contentTotal: [],
         dateTypeList: {
           value: '',
@@ -114,6 +125,20 @@
       }
     },
     methods: {
+      oldTotalClick(){
+      },
+      statisticalClick(){//右上角统计图点击事件
+
+        this.$dialog.OpenWindow({
+          width: '1300',
+          height: '760',
+          title: '查看统计图',
+          url: '/renewPremiumCartogram',
+          closeCallBack: (dataTwo)=>{
+
+          }
+        })
+      },
       selectMonthEvent(data,item){
         this.yearMonth = data;
         this.radioTime = item;

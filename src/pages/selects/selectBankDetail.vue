@@ -84,6 +84,7 @@
         } else {
           // 页面非初始化时需要的参数
           params = {
+            otherAccountID: this.otherAccountID,
             direction: this.listCategory.value,
           }
         }

@@ -17,7 +17,7 @@
       <div v-if="pager" class="m_pager">
         <slot name="pager"></slot>
       </div>
-      <div class="v_customize">
+      <div class="v_customize" :style="getCustomizeBgColor" >
         <slot v-if="customize" name="customize"></slot>
       </div>
     </div>
@@ -31,9 +31,23 @@
         type:Boolean,
         default:true
       },
+      customizeBgColor:{
+        type:String,
+        default:''
+      },
       customize:{
         type:Boolean,
         default: false
+      }
+    },
+    computed:{
+      getCustomizeBgColor(){
+        if(this.customizeBgColor === ''){
+          return ''
+        }
+        else{
+          return 'border-radius: 0 0 8px 8px;background-color: ' + this.customizeBgColor
+        }
       }
     }
   }
@@ -47,5 +61,6 @@
   float: none;
   margin-bottom: 0;
   position: relative;
+
 }
 </style>

@@ -56,6 +56,8 @@
         nameTime: '',
         accountTime: '',
         money:'',
+
+        category:'',//空  是备用金退款  1是报销退款
       }
     },
     methods: {
@@ -128,9 +130,12 @@
             ownerID: this.ownerID,
             list: this.fileList
           };
-
+          let url='/PersonOffice/prettyCashsRefund'
+          if(this.category === '1' ){
+            url='/PersonOffice/reimbursementsRefund'
+          }
           this.ajaxJson({
-            url: '/PersonOffice/prettyCashsRefund',
+            url: url,
             data: params,
             call: (data)=>{
               if(data.type === 0){
@@ -155,8 +160,12 @@
         let params = {
           id: this.ownerID
         }
+        let url='/PersonOffice/prettyCashsRefundInformation'
+        if(this.category === '1' ){
+          url='/PersonOffice/reimbursementsRefundInformation'
+        }
         this.ajaxJson({
-          url: '/PersonOffice/prettyCashsRefundInformation',
+          url: url,
           data: params,
           call: (data)=>{
             if(data){
@@ -180,6 +189,7 @@
     },
     created() {
       this.setQuery2Value('ownerID')
+      this.setQuery2Value('category')
       this.initData()
     }
   }

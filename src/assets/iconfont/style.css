@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?a85a74');
-  src:  url('fonts/icomoon.eot?a85a74#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?a85a74') format('truetype'),
-    url('fonts/icomoon.woff?a85a74') format('woff'),
-    url('fonts/icomoon.svg?a85a74#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?4t77n3');
+  src:  url('fonts/icomoon.eot?4t77n3#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?4t77n3') format('truetype'),
+    url('fonts/icomoon.woff?4t77n3') format('woff'),
+    url('fonts/icomoon.svg?4t77n3#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,12 +25,44 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-uniE9A9:before {
+  content: "\e9a9";
+  color: #666;
+}
+.icon-uniE9A7:before {
+  content: "\e9a7";
+  color: #666;
+}
 .icon-uniE9A0:before {
   content: "\e9a0";
   color: #49a9ea;
 }
 .icon-uniE99F:before {
   content: "\e99f";
+  color: #666;
+}
+.icon-uniE9A8:before {
+  content: "\e9a8";
+  color: #707070;
+}
+.icon-uniE9A6:before {
+  content: "\e9a6";
+  color: #666;
+}
+.icon-uniE9A2:before {
+  content: "\e9a2";
+  color: #666;
+}
+.icon-5:before {
+  content: "\e9a3";
+  color: #666;
+}
+.icon-6:before {
+  content: "\e9a4";
+  color: #666;
+}
+.icon-7:before {
+  content: "\e9a5";
   color: #666;
 }
 .icon-uniE9A1:before {

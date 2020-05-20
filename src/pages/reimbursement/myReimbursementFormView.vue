@@ -48,8 +48,8 @@
             <span class="m_listNoData" v-show="detail.length === 0">暂时没有数据</span>
           </template>
           <template #customize>
-            <yhm-view-control type="money" title="申请报销金额" :content="actualMoney" color="#4BB414"></yhm-view-control>
-
+            <yhm-view-control type="money" title="申请报销金额" :content="money" color="#4BB414"></yhm-view-control>
+            <yhm-view-control type="money" v-if="noActualMoney" title="实际金额" :content="actualMoney" color="#0c61e0"></yhm-view-control>
             <yhm-view-control type="money" v-if="noPrettyCashMoney" title="备用金金额" :content="prettyCashMoney" color="#0722e4"></yhm-view-control>
             <yhm-view-control type="money" v-show="sumMoneyHide" :title="sumMoneyTotal" :content="sumMoney" color="#f00"></yhm-view-control>
           </template>
@@ -76,7 +76,8 @@
             </tr>
           </template>
           <template #customize>
-            <yhm-view-control type="money" title="申请报销金额" :content="actualMoney" color="#4BB414"></yhm-view-control>
+            <yhm-view-control type="money" title="申请报销金额" :content="money" color="#4BB414"></yhm-view-control>
+            <yhm-view-control type="money" v-if="noActualMoney" title="实际金额" :content="actualMoney" color="#0c61e0"></yhm-view-control>
 
             <yhm-view-control type="money" v-if="noPrettyCashMoney" title="备用金金额" :content="prettyCashMoney" color="#0722e4"></yhm-view-control>
             <yhm-view-control type="money" v-show="sumMoneyHide" :title="sumMoneyTotal" :content="sumMoney" color="#f00"></yhm-view-control>
@@ -140,7 +141,6 @@
         invoiceMoney:'0',
         code: '',
 
-
         relevanceID:'',
         relevanceType:'',
         unitID:'',
@@ -152,6 +152,7 @@
         isAddBtn: true,
         isState: false,
 
+        noActualMoney:false,
         isPrettyCashOff:'',
         isPrettyCashOffList:[],
         noPrettyCashMoney:false,
@@ -275,6 +276,10 @@
             this.prettyCashMoney = data.prettyCashMoney
             if(this.isPrettyCashOff==='1'){
               this.noPrettyCashMoney=true
+              this.noActualMoney=false
+            }else{
+              this.noActualMoney=true
+              this.noPrettyCashMoney=false
             }
             this.prettyCashsList=data.prettyCashsList
 
@@ -304,23 +309,44 @@
         })
       },
       getTotalCalcMoney(){
-        let sumMoney = accAdd(accMul(this.actualMoney, -1), this.prettyCashMoney);
-        if(sumMoney === 0){
-          this.sumMoneyHide=false
-        }else if(sumMoney > 0){
-          this.sumMoneyTotal='需退回金额'
-          this.sumMoney=sumMoney+''
-          this.sumMoneyHide=true
-        }else{
-          let b = sumMoney+''
-          if(b.indexOf('-')!==-1){
-            let a = b.slice(1,b.length)
-            this.sumMoney = a
+        if(this.isPrettyCashOff === '1'){
+          let sumMoney = accAdd(accMul(this.money, -1), this.prettyCashMoney);
+          if(sumMoney === 0){
+            this.sumMoneyHide=false
+          }else if(sumMoney > 0){
+            this.sumMoneyTotal='需退回金额'
+            this.sumMoney=sumMoney+''
+            this.sumMoneyHide=true
           }else{
-            this.sumMoney = sumMoney
+            let b = sumMoney+''
+            if(b.indexOf('-')!==-1){
+              let a = b.slice(1,b.length)
+              this.sumMoney = a
+            }else{
+              this.sumMoney = sumMoney
+            }
+            this.sumMoneyHide=true
+            this.sumMoneyTotal='需拨款金额'
           }
-          this.sumMoneyHide=true
-          this.sumMoneyTotal='需拨款金额'
+        }else{
+          let sumMoney = accAdd(accMul(this.actualMoney, -1), this.money);
+          if(sumMoney === 0){
+            this.sumMoneyHide=false
+          }else if(sumMoney > 0){
+            this.sumMoneyTotal='需退回金额'
+            this.sumMoney=sumMoney+''
+            this.sumMoneyHide=true
+          }else{
+            let b = sumMoney+''
+            if(b.indexOf('-')!==-1){
+              let a = b.slice(1,b.length)
+              this.sumMoney = a
+            }else{
+              this.sumMoney = sumMoney
+            }
+            this.sumMoneyHide=true
+            this.sumMoneyTotal='需拨款金额'
+          }
         }
       },
     },

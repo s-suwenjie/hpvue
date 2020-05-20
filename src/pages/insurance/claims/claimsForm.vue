@@ -18,7 +18,7 @@
 
         <yhm-form-select title="车辆品牌" @click="selectVehicleBrandID" :value="vehicleBrand" id="vehicleBrand" rule="R0000"></yhm-form-select>
         <yhm-form-select title="车型" @click="vehicleTypeEvent" :value="vehicleType" id="vehicleType" rule="R0000"></yhm-form-select>
-        <yhm-form-text title="车牌号" :value="licensePlateNumber" id="licensePlateNumber" rule="R8000"></yhm-form-text>
+        <yhm-form-text title="车牌号" is-upper-case :value="licensePlateNumber" id="licensePlateNumber" rule="R8000"></yhm-form-text>
 
 <!--        <yhm-form-text title="车辆品牌" :value="brand" id="brand" rule="R0000"></yhm-form-text>-->
 
@@ -29,7 +29,7 @@
 
 
         <yhm-form-textarea no-edit="1" title="银行摘要" :value="bankSummary" id="bankSummary"></yhm-form-textarea>
-        <yhm-form-radio title="状态" :state-show="true"  @call="callState" :select-list="signStateList" :value="signState" id="signState"></yhm-form-radio>
+        <yhm-form-radio title="状态" :state-show="true" :select-list="signStateList" :value="signState" id="signState"></yhm-form-radio>
 
         <yhm-form-textarea title="备注" :value="remark" id="remark" :rule="remarkRule"></yhm-form-textarea>
 

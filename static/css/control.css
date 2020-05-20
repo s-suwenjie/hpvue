@@ -727,7 +727,9 @@
   outline: none;
   cursor: pointer;
   border-radius: 5px;
-  line-height: 38px;
+  display: flex;
+  align-items: center;
+  /*line-height: 38px;*/
   overflow: hidden;
   text-align: left;
 }
