@@ -18,7 +18,7 @@
           <yhm-app-view-control contentTitle="保险审批"  style="font-size: 18px;border-bottom: 1px solid #bfbfbf;margin-bottom: 0.5rem;" :content="item.insuredDate" type="date"></yhm-app-view-control>
           <yhm-app-view-detail>
             <yhm-app-view-control title="联系人" :content="item.contactName"></yhm-app-view-control>
-            <yhm-app-view-control title="被投保人" :content="item.beinsuredName"></yhm-app-view-control>
+            <yhm-app-view-control title="被保险人" :content="item.beinsuredName"></yhm-app-view-control>
             <yhm-app-view-control title="车牌号" :content="item.plate"></yhm-app-view-control>
             <yhm-app-view-control title="投保类型" :content="item.insuredTypeVal"></yhm-app-view-control>
             <yhm-app-view-control title="投保公司" :content="item.insuredUnitVal"></yhm-app-view-control>

@@ -24,6 +24,7 @@
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
+        <yhm-managerth style="width: 150px" title="别名" value="alias" ></yhm-managerth>
         <yhm-managerth style="width: 250px" title="户名" value="person"></yhm-managerth>
         <yhm-managerth style="width: 250px" title="账号" value="account"></yhm-managerth>
         <yhm-managerth style="width: 250px" title="开户行" value="bank"></yhm-managerth>
@@ -38,6 +39,8 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
+          <yhm-manager-td-input v-show="aliasIndex === index" :isFocus="aliasIndex === index" @blur="blurAliasEvent" :id="item.id" :value="item.alias"></yhm-manager-td-input>
+          <yhm-manager-td  v-show="aliasIndex !== index" @dblclick="dbAliasEvent(item,index)" :value="item.alias"></yhm-manager-td>
           <yhm-manager-td-tip-img :unitUrl="item.personUrl" icon="icon-uniE999" :tip="true" color="#333" node-class-name="m_main" :value="item.person"></yhm-manager-td-tip-img>
           <yhm-manager-td-tip-img :custom="true" v-if="item.category!=='0'&&item.accountUrl !== ''"  :unitUrl="item.accountUrl" :tip="true" color="#333" icon="icon-3" node-class-name="m_main" :value="item.account"></yhm-manager-td-tip-img>
           <yhm-manager-td :value="item.account" v-else></yhm-manager-td>
@@ -95,9 +98,39 @@
         empty: true,
 
         isCopyTip:false,
+        aliasIndex: '0',
       }
     },
     methods:{
+      dbAliasEvent(item,index){
+        this.oldAlias = item.alias
+        this.aliasIndex = index
+        // $("#"+item.id).focus();
+        // alert($("#"+item.id).val())
+      },
+      blurAliasEvent(id, value){
+        this.aliasIndex = -1
+        if(this.oldAlias !== value) {
+          let params = {
+            id: id,
+            alias: value
+          }
+          this.ajaxJson({
+            url: '/Fin/privateAccountAliasSave',
+            data: params,
+            call: (data) => {
+              if (data.type === 0) {
+                this.initPageData()
+              }else{
+                this.$dialog.alert({
+                  alertImg: 'warn',
+                  tipValue: data.message
+                })
+              }
+            }
+          })
+        }
+      },
       sendSelf(item){
         let personID = sessionStorage.getItem('____currentUserID')
         let params = {

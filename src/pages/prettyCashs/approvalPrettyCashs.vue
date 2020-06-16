@@ -51,6 +51,7 @@
         <yhm-managerth style="width: 100px;" title="发票类型"></yhm-managerth>
 
         <yhm-managerth title="事由" value="subjectID"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="状态" value=""></yhm-managerth>
         <yhm-managerth style="width: 350px;" title="操作" value=""></yhm-managerth>
       </template>
@@ -70,6 +71,7 @@
           <yhm-manager-td-psd :value="item.invoiceCategory" :list="invoiceCategoryList"></yhm-manager-td-psd>
 
           <yhm-manager-td :value="item.subject"></yhm-manager-td>
+          <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
 
@@ -162,6 +164,18 @@
       }
     },
     methods:{
+      SelectApprovalMessage(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
+      },
       FullReturn(item){
         alert('aaa')
         this.$dialog.OpenWindow({
@@ -292,39 +306,48 @@
       adoptEvent (item) { //
         if(item.isApproval!=='1'){
           if(item.id){
-            let params = {
-              id: item.id,
-              kind: '0',
-              tableName: '47'
-            }
-            this.$dialog.confirm({
-              width: 300,
-              tipValue: '是否通过?',
-              alertImg: 'warn',
-              okCallBack: (data)=>{
-                this.ajaxJson({
-                  url: '/PersonOffice/approvalYesVue',
-                  data: params,
-                  call: (data)=>{
-                    if(data.type === 0){
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        closeCallBack: () => {
-                          this.initPageData(false)
-                        }
-                      })
-                    }else if(data.type === 1){
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        alertImg: 'error',
-                        closeCallBack: () => {
-                        }
-                      })
-                    }
-                  }
-                })
+            this.$dialog.OpenWindow({
+              width: 650,
+              height: 230,
+              title: '审批留言',
+              url: '/passMessage?id=' + item.id+ '&tableName=47&kind=0',
+              closeCallBack: (acc)=>{
+                this.initPageData(false)
               }
             })
+            // let params = {
+            //   id: item.id,
+            //   kind: '0',
+            //   tableName: '47'
+            // }
+            // this.$dialog.confirm({
+            //   width: 300,
+            //   tipValue: '是否通过?',
+            //   alertImg: 'warn',
+            //   okCallBack: (data)=>{
+            //     this.ajaxJson({
+            //       url: '/PersonOffice/approvalYesVue',
+            //       data: params,
+            //       call: (data)=>{
+            //         if(data.type === 0){
+            //           this.$dialog.alert({
+            //             tipValue: data.message,
+            //             closeCallBack: () => {
+            //               this.initPageData(false)
+            //             }
+            //           })
+            //         }else if(data.type === 1){
+            //           this.$dialog.alert({
+            //             tipValue: data.message,
+            //             alertImg: 'error',
+            //             closeCallBack: () => {
+            //             }
+            //           })
+            //         }
+            //       }
+            //     })
+            //   }
+            // })
           }
         }
       },

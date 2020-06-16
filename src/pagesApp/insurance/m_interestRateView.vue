@@ -8,7 +8,7 @@
     <div style="overflow: auto;">
       <yhm-app-structure-menu-group title="基本信息">
         <yhm-app-view-control title="投保人" :content="insuredName"  color="#4BB414"></yhm-app-view-control>
-        <yhm-app-view-control title="被投保人" :content="beinsuredName"  color="#4BB414"></yhm-app-view-control>
+        <yhm-app-view-control title="被保险人" :content="beinsuredName"  color="#4BB414"></yhm-app-view-control>
         <yhm-app-view-control title="联系人" :content="contactName + '-' + contactPhone"></yhm-app-view-control>
 
         <yhm-app-view-control title="车牌号" :content="plate"></yhm-app-view-control>
@@ -92,7 +92,7 @@
         submit:'',//完成状态
         insuredProject:[],//投保项目数组
         insuredName:'',//投保人姓名
-        beinsuredName:'',//被投保人姓名
+        beinsuredName:'',//被保险人姓名
         insuredDate:'',//商业险开始日
         insuredUnitVal:'',//投保公司
         cashObjectVal:'',//返利对象
@@ -217,7 +217,7 @@
           this.content = data.content
           this.id = data.id
           this.insuredName=data.insuredName //投保人姓名
-          this.beinsuredName = data.beinsuredName,//被投保人姓名
+          this.beinsuredName = data.beinsuredName,//被保险人姓名
           this.insuredDate = data.insuredDate,//投保日期
           this.cashObjectVal = data.cashObjectVal,//返利对象
           this.forceStartDate = data.forceStartDate,//交强险开始日期

@@ -1,6 +1,6 @@
 import request from 'axios'
 import qs from "qs";
-import {accMul} from '@/assets/common.js'
+import {accMul,accAdd} from '@/assets/common.js'
 import { isLogin } from '@/assetsApp/app_login.js'
 const requestInstance = request.create();
 
@@ -123,7 +123,47 @@ AjaxRequest.prototype.request = function () {
   }
   requestInstance.post(this.url,this.data).then(function (data) {
     if(data.type === 9){
+      //没有获取到session
       window.location = '/login'
+    }
+    else if(data.type === 8){
+      //Sql异常
+      let width = accAdd(200, accMul(data.message.length,13));
+      that.$dialog.alert({
+        tipValue: data.message,
+        alertImg: "error",
+        width: width
+      })
+    }
+    else if(data.type === 7){
+      //重复异常
+      let width = accAdd(200, accMul(data.message.length,13));
+      that.$dialog.alert({
+        tipValue: data.message,
+        alertImg: "error",
+        width: width,
+        closeCallBack:()=>{
+          that.autoVerify(data.controlID,data.message)
+        }
+      })
+    }
+    else if(data.type === 6){
+      //验证异常
+      let width = accAdd(200, accMul(data.message.length,13));
+      that.$dialog.alert({
+        tipValue: data.message,
+        alertImg: "error",
+        width: width
+      })
+    }
+    else if(data.type === 5){
+      //继承异常
+      let width = accAdd(200, accMul(data.message.length,13));
+      that.$dialog.alert({
+        tipValue: data.message,
+        alertImg: "error",
+        width: width
+      })
     }
     else {
       if (ajaxRequest.successCall) {

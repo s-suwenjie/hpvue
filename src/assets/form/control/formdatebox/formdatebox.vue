@@ -9,7 +9,7 @@
       <slot>
       </slot>
     </div>
-    <div class="fc_error"><span v-if="error">{{errorTipMessage}}</span></div>
+    <div class="fc_error" v-show="errorShow"><span v-if="error">{{errorTipMessage}}</span></div>
 
   </div>
 </template>
@@ -28,6 +28,10 @@ export default {
     type:{
       type:String,
       default:'date'
+    },
+    errorShow:{
+      type:Boolean,
+      default:true
     },
     title: {
       type: String,

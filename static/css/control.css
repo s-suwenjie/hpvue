@@ -180,7 +180,9 @@
   resize: none;
   font-size: 14px;
 }
-
+.c_width500{
+  width: 500px;
+}
 .c_content{
    flex: 1;
    min-height: 38px;
@@ -786,9 +788,9 @@
   margin: auto;
 }
 .preview_showImg>img{
-  /*max-width: 1000px;*/
+  max-width: 1000px;
   /*width: 95%;*/
-  /*max-height: 100%;*/
+  max-height: 100%;
   border-radius: 10px;
 }
 

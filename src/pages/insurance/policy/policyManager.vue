@@ -28,21 +28,22 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
+        <yhm-managerth title="业务员" value="salsesman"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="投保日期" value="insuredDate"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth   title="被保险人" value="beinsuredName"></yhm-managerth>
 
-        <yhm-managerth style="width: 120px;" title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
+        <yhm-managerth style="width: 110px;" title="保险公司" value="insuredUnit"></yhm-managerth>
+        <yhm-managerth style="width: 110px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
 
-        <yhm-managerth @call="actualEvent" v-if="isActual" style="width: 120px ;" title="预计盈亏"></yhm-managerth>
-        <yhm-managerth @call="realEvent" v-if="isReal" style="width: 120px; " title="实时盈亏"></yhm-managerth>
+        <yhm-managerth @call="actualEvent" v-if="isActual" style="width: 120px ;" title="预计盈亏(可点击)"></yhm-managerth>
+        <yhm-managerth @call="realEvent" v-if="isReal" style="width: 120px; " title="实时盈亏(可点击)"></yhm-managerth>
 
-        <yhm-managerth style="width: 100px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="实收金额" value="receivedMoney"></yhm-managerth>
-        <yhm-managerth style="width: 170px;" title="申请编号" value="numbering"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="状态" ></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="保费合计(优惠前)" value="premiumsTotal"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="实收金额(优惠后)" value="receivedMoney"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="申请编号" value="numbering"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="状态" ></yhm-managerth>
         <yhm-managerth title="保单号" value="numbering"></yhm-managerth>
       </template>
 
@@ -51,10 +52,11 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
+          <yhm-manager-td-center :value="item.salsesman" :menu-list="salsesmanIDMenu" @click="vehicleBrandLeft(item)" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
-          <yhm-manager-td :value="item.plate"></yhm-manager-td>
-          <yhm-manager-td :value="item.contactName"></yhm-manager-td>
-          <yhm-manager-td :tip="item.notEqual==='0'?false:true" :tip-show="true" tip-value="被保险人与车主不一致" :value="item.beinsuredName" >
+          <yhm-manager-td @click="plateView(item)"  :value="item.plate"></yhm-manager-td>
+          <yhm-manager-td @click="contactView(item)" :value="item.contactName"></yhm-manager-td>
+          <yhm-manager-td @click="beinsuredView(item)" :tip="item.notEqual==='0'?false:true" :tip-show="true" tip-value="被保险人与车主不一致" :value="item.beinsuredName" >
             <span v-if="item.notEqual==='0'?false:true" style=" color: #ffaa27;font-size: 18px;" class="uniE9A8 managerIcon"></span>
           </yhm-manager-td>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
@@ -63,8 +65,8 @@
           <yhm-manager-td-money v-if="isActual" @click="listExpectedView(item)" :value="item.actualProfitLoss" :style="{'color':item.actualProfitLoss>=0?'#2c9208':'#f00'}" style=" font-weight:bold;"></yhm-manager-td-money>
           <yhm-manager-td-money v-if="isReal"  @click="listExpectedView(item)" :value="item.realTimeProfitLoss" :style="{'color':item.realTimeProfitLoss>=0?'#2c9208':'#f00'}" style=" font-weight:bold;"></yhm-manager-td-money>
 
-          <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
-          <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
+          <yhm-manager-td :value="item.premiumsTotal"></yhm-manager-td>
+          <yhm-manager-td-money :value="item.receivedMoney" style="color: #0909F7" ></yhm-manager-td-money>
           <yhm-manager-td :value="item.numbering"></yhm-manager-td>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
@@ -88,17 +90,26 @@
           <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
             <thead>
             <tr>
-              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数"></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="保费合计" ></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="实收金额" ></yhm-managerth>
+              <yhm-managerth v-if="isActual" style="width: 100px;" before-color="#49a9ea" title="" before-title="预计盈亏总额"></yhm-managerth>
+              <yhm-managerth v-if="isReal" style="width: 100px;" before-color="#49a9ea" title="" before-title="实时盈亏总额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="保费合计(优惠前)" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="实收金额(优惠后)" ></yhm-managerth>
             </tr>
             </thead>
             <tbody>
             <tr>
-              <yhm-manager-td-money  v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td-money v-if="isActual"  :value="contentTotal[0].money"  :style="{'color':contentTotal[0].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
+              <yhm-manager-td-money v-if="isReal" :value="contentTotal[1].money"  :style="{'color':contentTotal[1].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
+              <yhm-manager-td-money  :value="contentTotal[2].money"  :style="{'color':contentTotal[2].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
+              <yhm-manager-td-money  :value="contentTotal[3].money"  :style="{'color':contentTotal[3].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
+
             </tr>
             <tr>
-              <yhm-manager-td-rgt  v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
+              <yhm-manager-td-rgt v-if="isActual" :value="contentTotal[0].count"></yhm-manager-td-rgt>
+              <yhm-manager-td-rgt v-if="isReal" :value="contentTotal[1].count"></yhm-manager-td-rgt>
+              <yhm-manager-td-rgt  :value="contentTotal[2].count"></yhm-manager-td-rgt>
+              <yhm-manager-td-rgt  :value="contentTotal[3].count"></yhm-manager-td-rgt>
+
             </tr>
             </tbody>
           </table>
@@ -120,6 +131,7 @@
     mixins: [managermixin],
     data(){
       return{
+        salsesmanIDMenu:['筛选当前业务员'],
         insuredUnitBefore:'0',// 默认选择状态为可以选择，1为不可以选择
         listInsuredUnit:{
           value: '', //默认为空
@@ -132,10 +144,64 @@
         insuredUnitList:[],
         isActual: true,
         isReal: false,
-        contentTotal: []
+        contentTotal: [],
+        unitItme:{},
       }
     },
     methods:{
+      rightClick(item){//点击右键菜单时获取当前点击的数据
+        this.unitItme = item
+      },
+      menuClick(item,index) {//返回用户选中的菜单选项及索引值
+        if(item==='筛选当前业务员'){
+          this.salsesmanIDMenu=['取消业务员筛选']
+          this.salsesmanID = this.unitItme.salsesmanID
+        }else if(item==='取消业务员筛选'){
+          this.salsesmanIDMenu=['筛选当前业务员']
+          this.salsesmanID = ''
+        }
+        console.log(this.salsesmanID)
+        this.initPageData(false)
+      },
+      plateView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '500',
+          url: '/vehicleView?id=' + item.plateID+'&isCustomer=0',
+          title: '查看车辆信息',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      beinsuredView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/personView?id=' + item.beinsuredID+'&isBilling=0',
+          title:'查看被保险人信息',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      contactView (item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/personView?id=' + item.contactID+'&isBilling=0',
+          title:'查看联系人信息',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       listExpectedView(item){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -226,7 +292,7 @@
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '650',
+          height: '700',
           url: '/policyView?id=' + item.id,
           title: '查看保单信息',
           closeCallBack: (data)=>{
@@ -253,11 +319,13 @@
 
         if (initValue) {
           params = {
+            salsesmanID:this.salsesmanID,
             insuredUnit:this.listInsuredUnit.value,
             accountsReceivableDate:this.listAccountsReceivableDate.value
           }
         } else {
           params = {
+            salsesmanID:this.salsesmanID,
             insuredUnit:this.listInsuredUnit.value,
             accountsReceivableDate:this.listAccountsReceivableDate.value
           }

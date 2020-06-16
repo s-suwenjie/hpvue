@@ -429,6 +429,7 @@
 }
 .invoiceImgView img {
   width: 95%;
+  height: 100%;
 }
 /* 报销界面 无票理由 */
 .noInvoiceBox {

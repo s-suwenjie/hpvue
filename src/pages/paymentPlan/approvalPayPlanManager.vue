@@ -50,6 +50,7 @@
         <yhm-managerth style="width: 200px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 140px" title="付款计划金额" value="money"></yhm-managerth>
 
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 180px" title="状态" value="state"></yhm-managerth>
         <yhm-managerth style="width: 200px;" title="操作"></yhm-managerth>
       </template>
@@ -65,6 +66,7 @@
           <yhm-manager-td-date :value="item.lastDate" :before-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-date>
           <yhm-manager-td :value="item.cause" :after-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td-money :value="item.money" :before-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-money>
+          <yhm-manager-td-leaveword @iconClick="add(item.id)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button :no-click="item.isApproval!=='0'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
@@ -254,9 +256,9 @@
               if (isAdd) {
                 this.lastData = data
               }
-              this.initPageData(false)
               /*false->非初始化=>!import  true->初始化*/
             }
+            this.initPageData(false)
           }
         })
       },
@@ -311,59 +313,82 @@
             id: item.id,
             tableName: 43
           }
-
-          this.$dialog.confirm({
-            width: 300,
-            tipValue: '是否通过?',
-            alertImg: 'warn',
-            okCallBack: (data)=>{
-              this.ajaxJson({
-                url: '/PersonOffice/getPressIDVue',
-                data: params,
-                call: (data) => {
-                  this.category = data.message
-                  if (this.category) {
-                    let params = {
-                      id: data.message,
-                      kind: '1',
-                      tableName: '43',
-                      tableDetailName: '44',
-                      location: '0'
-                    }
-                    this.ajaxJson({
-                      url: '/PersonOffice/approvalYesVue',
-                      data: params,
-                      call: (data)=>{
-                        if(data.type === 0){
-                          this.$dialog.alert({
-                            tipValue: data.message,
-                            closeCallBack: () => {
-                              this.initPageData(false)
-                            }
-                          })
-                        }else if(data.type === 1){
-                          this.$dialog.alert({
-                            tipValue: data.message,
-                            alertImg: 'error',
-                            closeCallBack: () => {
-                            }
-                          })
-                        } else if(data.type === 2){
-                          this.$dialog.alert({
-                            tipValue: data.message,
-                            alertImg: 'error',
-                            closeCallBack: () => {
-                            }
-                          })
-                        }
-                      }
-                    })
+          this.ajaxJson({
+            url: '/PersonOffice/getPressIDVue',
+            data: params,
+            call: (data) => {
+              this.$dialog.OpenWindow({
+                width: 650,
+                height: 230,
+                title: '审批留言',
+                url: '/passMessage?category='+ data.message +'&id=' + item.id+ '&tableName=43&tableDetailName=44&kind=1',
+                closeCallBack: (acc)=>{
+                  if(acc){
+                    this.initPageData(false)
                   }
                 }
               })
             }
           })
         }
+        // if(item.id){
+        //   let params = {
+        //     id: item.id,
+        //     tableName: 43
+        //   }
+        //
+        //   this.$dialog.confirm({
+        //     width: 300,
+        //     tipValue: '是否通过?',
+        //     alertImg: 'warn',
+        //     okCallBack: (data)=>{
+        //       this.ajaxJson({
+        //         url: '/PersonOffice/getPressIDVue',
+        //         data: params,
+        //         call: (data) => {
+        //           this.category = data.message
+        //           if (this.category) {
+        //             let params = {
+        //               id: data.message,
+        //               kind: '1',
+        //               tableName: '43',
+        //               tableDetailName: '44',
+        //               location: '0'
+        //             }
+        //             this.ajaxJson({
+        //               url: '/PersonOffice/approvalYesVue',
+        //               data: params,
+        //               call: (data)=>{
+        //                 if(data.type === 0){
+        //                   this.$dialog.alert({
+        //                     tipValue: data.message,
+        //                     closeCallBack: () => {
+        //                       this.initPageData(false)
+        //                     }
+        //                   })
+        //                 }else if(data.type === 1){
+        //                   this.$dialog.alert({
+        //                     tipValue: data.message,
+        //                     alertImg: 'error',
+        //                     closeCallBack: () => {
+        //                     }
+        //                   })
+        //                 } else if(data.type === 2){
+        //                   this.$dialog.alert({
+        //                     tipValue: data.message,
+        //                     alertImg: 'error',
+        //                     closeCallBack: () => {
+        //                     }
+        //                   })
+        //                 }
+        //               }
+        //             })
+        //           }
+        //         }
+        //       })
+        //     }
+        //   })
+        // }
       },
       rejectEvent (item) {
         if(this.listIsFinish.value==0){

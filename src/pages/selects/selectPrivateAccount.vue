@@ -15,21 +15,17 @@
 
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
-        <yhm-managerth width="300px" title="户名"></yhm-managerth>
+        <yhm-managerth width="200" title="别名"></yhm-managerth>
+        <yhm-managerth width="100" title="户名"></yhm-managerth>
         <yhm-managerth title="账户信息"></yhm-managerth>
         <yhm-managerth width="120" title="常用账户"></yhm-managerth>
       </template>
 
       <template #listBody>
-        <tr v-for="(item,index) in content"
-            :class="{InterlacBg:index%2!=0}"
-            :key="item.id"
-            @click="selectEvent(item)"
-            @dblclick="dblclickEvent(item)"
-            @mousemove="mousemoveEvent"
-            @mouseover="mouseoverEvent"
-            @mouseout="mouseoutEvent">
+        <tr v-for="(item,index) in content":class="{InterlacBg:index%2!=0}":key="item.id" @click="selectEvent(item)" @dblclick="dblclickEvent(item)"
+            @mousemove="mousemoveEvent"@mouseover="mouseoverEvent" @mouseout="mouseoutEvent">
           <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
+          <yhm-manager-td :value="item.alias"></yhm-manager-td>
           <yhm-manager-td :value="item.person"></yhm-manager-td>
           <yhm-manager-td :value="item.publicAccountExplain"></yhm-manager-td>
           <yhm-manager-td-center-html>
@@ -73,7 +69,7 @@
         },
         isState: false,
         personID: '',
-
+        commonUse:'',
       }
     },
     methods: {

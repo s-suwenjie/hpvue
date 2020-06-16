@@ -5,7 +5,7 @@
       <template #body>
         <yhm-view-control title="车牌号" :content="plate"></yhm-view-control>
         <yhm-view-control title="投保日期" :content="insuredDate" type="date"></yhm-view-control>
-        <yhm-view-control title="被投保人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
+        <yhm-view-control title="被保险人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
         <yhm-view-control title="联系人" :content="contactName+'-'+contactPhone"></yhm-view-control>
         <yhm-view-control title="投保人" :content="insuredName+'-'+insuredPhone"></yhm-view-control>
         <yhm-view-control title="与车主关系" :content="relationshipVal"></yhm-view-control>

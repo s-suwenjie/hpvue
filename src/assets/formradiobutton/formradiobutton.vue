@@ -272,7 +272,9 @@
     font-size: 16px !important;
   }
 
-
+.iconCorrect:before{
+  color: #A81AFF;
+}
   .aaa{
     border: 1px solid #FF0000;
   }

@@ -1,10 +1,25 @@
 <template>
     <div>
       <div class="top">
-        <yhm-radiofilterdate title="时间" style="margin: 10px auto;" :edit="editShow" @initData="selectMonthEvent"></yhm-radiofilterdate>
+        <yhm-radiofilterdate title="时间" :year-txts="yearTxts" :custom-time="customTime" style="margin: 10px auto;" :edit="editShow" @initData="selectMonthEvent"></yhm-radiofilterdate>
+        <yhm-commonbutton value="置空筛选字段"  v-show="screenShow" :flicker="true" @call="buttonClick" icon="" class="btn"></yhm-commonbutton>
+        <yhm-commonbutton value="恢复筛选字段"  v-show="!screenShow" :flicker="true" @call="buttonClick" icon="" class="btn"></yhm-commonbutton>
+
         <div class="total" v-show="totalShow">
-          <p style="color: #FF0000">最大金额 {{moneyMax}}  日期 {{dateMax}}</p>
-          <p style="color: #49a9ea">最小金额 {{moneyMin}}  日期 {{dateMin}}</p>
+          <div class="flex">
+            <div class="topMoeny"  style="color: #FF0000">
+              <span >最大金额:</span>
+              <span v-html="segmentation"></span>
+            </div>
+            <span style="color: black;">  日期:  {{dateMax}}</span>
+          </div>
+          <div class="flex">
+            <div class="topMoeny"  style="color: #49a9ea">
+              <span >最小金额:</span>
+              <span v-html="segmentations"></span>
+            </div>
+            <span style="color: black;">  日期:  {{dateMin}}</span>
+          </div>
         </div>
         <div class="total" v-show="!totalShow">
           <p style="color: #FF0000">暂无数据</p>
@@ -18,14 +33,17 @@
 </template>
 
 <script>
-  import { getDayNumByYearMonth } from '@/assets/common.js'
-
+  import { formmixin } from '@/assets/form.js'
+  import { formatDate,getDayNumByYearMonth,tenThousandFormatHtml } from '@/assets/common.js'
   export default {
     name: 'insuranceCartogram.vue',
+    mixins: [formmixin],
     data(){
       return{
         year:'',//年份
         month:'',//月份
+        customTime:'',
+        yearTxts:'',
         day:[],
         money:[],
         sequence:true,//true的是从大到小序,false是从小到大排序
@@ -42,10 +60,61 @@
         moneyMax:'1',
         dateMin:'',
         dateMax:'',
-        totalShow:true
+        totalShow:true,
+        screenList:[],
+        screenShow:true,
+        type:'',
+        bankID:'',
+        unitID:'',
+        downloadTime:'',
+        operatorID:'',
+        vehicleBrand:'',
+        unitOrPersonList:'',
+        text:'',
+        colorList:['#f15bb5','#eeef20','#00f5d4','#f15bb5','#00bbf9','#ffbf69', '#90e0ef','#9b5de5','#f3ffbd','#70d6ff','#deaaff','#f7d9c4'],//颜色数组
+
+      }
+    },
+    computed:{
+      segmentation(){
+        return tenThousandFormatHtml(this.moneyMax+'')
+      },
+      segmentations(){
+        if(!this.moneyMin){
+          this.moneyMin = '0'
+        }
+        return tenThousandFormatHtml(this.moneyMin+'')
       }
     },
     methods: {
+      buttonClick(){
+        if(this.screenShow==true){
+          this.scrennings(1)
+        }else{
+          this.scrennings()
+        }
+        this.screenShow = !this.screenShow
+        this.initPageData(false)
+      },
+      scrennings(type){
+        if(type!=1){
+          this.screenList = JSON.parse(sessionStorage.cartogramScreen)[0]
+          this.type = this.screenList.type
+          this.bankID = this.screenList.bankID
+          this.unitID = this.screenList.unitID
+          this.operatorID = this.screenList.operatorID
+          this.vehicleBrand = this.screenList.vehicleBrand
+          this.unitOrPersonList = this.screenList.unitOrPerson
+        }else{
+          this.type = ''
+          this.bankID = ''
+          this.unitID = ''
+          this.operatorID = ''
+          this.vehicleBrand = ''
+          this.unitOrPersonList = ''
+        }
+
+      },
       selectMonthEvent(data,item){
         this.day = []
         this.money = []
@@ -122,7 +191,7 @@
             padding: 20,
             show: true,
             x:1010,
-            y:0,
+            y:2,
             feature: {
               // dataView: {show: true, readOnly: true},
               mark: { show: true, },
@@ -155,48 +224,6 @@
                           // 根据名字对应到相应的系列
                           name: '金额',
                           data: that.money,
-                          // markPoint: {
-                          //   data: [
-                          //     {type: 'max', name: '最大值'},
-                          //     {type: 'min', name: '最小值'}
-                          //   ]
-                          // },
-                          // markLine: {
-                          //   data: [
-                          //     [
-                          //       {
-                          //         symbol: 'none',
-                          //         x: '30%',
-                          //         y: '10%',
-                          //         yAxis: 'max'
-                          //       }, {
-                          //         symbol: 'circle',
-                          //         label: {
-                          //           position: 'start',
-                          //           formatter: that.formatterMax
-                          //         },
-                          //         type: 'max',
-                          //         name: '最大值',
-                          //       },
-                          //     ],
-                          //     [
-                          //       {
-                          //         symbol: 'none',
-                          //         x: '70%',
-                          //         y: '18%',
-                          //         xAxis: 'min'
-                          //       }, {
-                          //       symbol: 'circle',
-                          //       label: {
-                          //         position: 'start',
-                          //         formatter: that.formatterMin
-                          //       },
-                          //       type: 'min',
-                          //       name: '最大值',
-                          //     },
-                          //     ]
-                          //   ]
-                          // },
                         },
 
                       ]
@@ -232,7 +259,8 @@
                   });
                 }
               },
-              saveAsImage: { show: true },
+              saveAsImage: { show: true, name:this.text + " " + that.downloadTime},
+
 
             }
           },
@@ -266,60 +294,41 @@
             {
               name: '金额',
               type: 'bar',
-              barWidth: '60%',
               data: that.money,
-              // markLine: {
-              //   data: [
-              //     [
-              //       {
-              //         symbol: 'none',
-              //         x: '50%',
-              //         y: '15%',
-              //         yAxis: 'max'
-              //       }, {
-              //       symbol: 'circle',
-              //       label: {
-              //         position: 'start',
-              //         formatter: that.formatterMax
-              //       },
-              //       type: 'max',
-              //       name: '最大值',
-              //     },
-              //     ],
-              //     [
-              //       {
-              //         symbol: 'none',
-              //         y: '30%',
-              //         x: '60%',
-              //         xAxis: 'min'
-              //       }, {
-              //       symbol: 'circle',
-              //       label: {
-              //         position: 'start',
-              //         formatter: that.formatterMin
-              //       },
-              //       type: 'min',
-              //       name: '最大值',
-              //     },
-              //     ]
-              //   ]
-              // },
+              barWidth:30,
+              markLine : {
+                data : [
+                  {type : 'average', name: '平均值'}
+                ],
+              },
+              itemStyle: {
+                //通常情况下：
+                normal:{
+                  //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+                  color: function (params){
+                    let j = 0
+                    let colorList = []
+                    for(let i in that.money){
+                      if(colorList.length%12==0==true){
+                        j=0
+                        colorList.push(that.colorList[j])
+                      }else{
+                        j++
+                        colorList.push(that.colorList[j])
+                      }
+                    }
+                    return colorList[params.dataIndex];
+                  }
+                },
+                //鼠标悬停时：
+                emphasis: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              },
+
             },
-
-            // {
-            //   data: that.workDateList,
-            //   name: '日期',
-            //   color:['#49a9ea'],  //折线条的颜色
-            //   type: 'bar',
-            //   markPoint : {
-            //     data : [
-            //       {type : 'max', name: '最大值'},
-            //       {type : 'min', name: '最小值'}
-            //     ]
-            //   },
-            // }
-
-
           ]
         }
 
@@ -346,42 +355,17 @@
           }
         }
       },
-      sortBySize(){
-        for(let i in this.moneyList){
-          if(i === '0'){
-            this.moneyMax = this.moneyList[i].money
-            this.moneyMin = '999999999'
-          }else{
-            if(this.moneyList[i].money> this.moneyMax){
-              if(this.month!=='13'){
-                this.dateMax = this.year + '年' + this.month + '月' + this.moneyList[i].day +'日'
-              }else{
-                this.dateMax = this.year + '年' + this.moneyList[i].day + '月'
-              }
-              this.moneyMax = this.moneyList[i].money
-            }
-            if(0<this.moneyList[i].money && this.moneyList[i].money < this.moneyMin){
-              if(this.month!=='13'){
-                this.dateMin = this.year + '年' + this.month + '月' + this.moneyList[i].day +'日'
-              }else{
-                this.dateMin = this.year + '年' + this.moneyList[i].day + '月'
-              }
-              this.moneyMin = this.moneyList[i].money
-            }
-          }
-        }
-        setTimeout(()=>{
-          if(this.moneyMin == '999999999'){
-            this.moneyMin = ''
-          }
-          this.elementCountInArray(this.money)
-        },0)
-      },
       initPageData(){
         // this.forTheMonth()
         let params = {
           year:this.year,
-          month:this.month
+          month:this.month,
+          type:this.type,
+          bankID:this.bankID,
+          unitID:this.unitID,
+          operatorID:this.operatorID,
+          vehicleBrand:this.vehicleBrand,
+          unitOrPersonList:this.unitOrPersonList
         }
         this.ajaxJson({
           url: '/Fin/getBankDetailInsuranceStatistics',
@@ -394,21 +378,41 @@
             this.dateMax = ''
             this.dateMin = ''
             this.backupsList = this.moneyList.concat()//将数据集合赋给备份的集合中 深拷贝
+            let money = []
+            let day  = []
+            let maxSchedule = ''
+            let minSchedule = ''
             if(this.month!=='13'){
               for(let i in data){
                 this.day.push(data[i].day)
                 this.money.push(data[i].money)
+                if(data[i].money!='0'){
+                  money.push(data[i].money)
+                  day.push(data[i].day)
+                }
               }
-              this.sortBySize()
+              maxSchedule = Math.max.apply(null,money);//最大值
+              minSchedule = Math.min.apply(null,money);//最小值
+              this.elementCountInArray(this.money)
+              this.dateMax = this.year + '年' + this.month + '月' + day[money.indexOf(maxSchedule)] + '日'
+              this.dateMin = this.year + '年' + this.month + '月' + day[money.indexOf(minSchedule)] + '日'
             }else{
-              this.sortBySize()
-
               for(let i in data){
                 this.day.push(this.year + '年' + data[i].day + '月')
                 this.money.push(data[i].money)
+                if(data[i].money!='0'){
+                  money.push(data[i].money)
+                  day.push(data[i].day)
+                }
               }
+              maxSchedule = Math.max.apply(null,money);//最大值
+              minSchedule = Math.min.apply(null,money);//最小值
+              this.elementCountInArray(this.money)
+              this.dateMax = this.year + '年' + day[money.indexOf(maxSchedule)]+ '月'
+              this.dateMin = this.year + '年' + day[money.indexOf(minSchedule)] + '月'
             }
-
+            this.moneyMax = maxSchedule
+            this.moneyMin = minSchedule
             this.rank()
             this.drawChart()//调用echarts实例
 
@@ -416,12 +420,36 @@
         })
       }
     },
+    watch:{
+      type(val){
+        if(this.type == '0'){
+          this.text = '保险理赔'
+        }else if(this.type == '1'){
+          this.text = '自费维修'
+        }
+      }
+    },
     created(){
+      this.setQuery2Value('type')
+      this.screenList = JSON.parse(sessionStorage.cartogramScreen)[0]
+      this.scrennings()
+      let month = ''
+      this.yearTxts = this.screenList.Year.toString()
+
+      if(this.screenList.Month.toString().indexOf('0')!=-1&&this.screenList.Month!='10'){
+        month = this.screenList.Month.slice(1,2)+''
+      }else{
+        month = this.screenList.Month+''
+      }
+
+      this.customTime = (month-1)+''
       let nowDate = new Date();
       let newYear = nowDate.getFullYear();
       let newMonth = nowDate.getMonth() + 1;
-      this.year = newYear
-      this.month = newMonth
+      let newDay = nowDate.getDate();
+      this.downloadTime = newYear + '年' + newMonth + '月' + newDay + '日'
+      this.year = this.screenList.Year
+      this.month = this.screenList.Month
       this.initPageData()
 
     },
@@ -439,17 +467,24 @@
     display: flex;
     justify-content: space-between;
     margin:auto;
-    padding: 16px 20px 24px 20px;
+    padding: 16px 5px 24px 5px;
     background: #fff;
     position: relative;
     z-index: 999;
     border-radius: 10px 10px 0;
     top: 24px;
+    .topMoeny{
+      width: 188px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      span{
+        white-space: nowrap;  //强制不换行
+      }
+    }
     .total{
-      width: 300px;
-      /*display: flex;*/
+      width: 350px;
       border: 1px solid #bfbfbf;
-      /*justify-content: space-between;*/
       border-radius: 10px;
       background-color: #fff;
       padding: 10px;
@@ -457,6 +492,15 @@
     p{
       font-size: 15px;
     }
+    span{
+      font-size: 15px;
+      white-space: nowrap;  //强制不换行
+      text-overflow:ellipsis; //省略号显示
+    }
+  }
+  .flex{
+    display: flex;
+    justify-content: space-between;
   }
 .insuranceCartogram{
   width: 95%;
@@ -469,4 +513,10 @@
   background-color: #FFFFFF;
   /*padding: 20px;*/
 }
+  .btn{
+    position: fixed;
+    bottom: -4px;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
 </style>

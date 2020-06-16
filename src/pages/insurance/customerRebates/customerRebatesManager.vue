@@ -14,7 +14,6 @@
         <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('insuredUnit')" title=" 保险公司" :content="listInsuredUnit"></yhm-radiofilter>
 
 
-
         <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('cash')" title=" 是否返利" :content="listCash"></yhm-radiofilter>
 
 
@@ -49,7 +48,7 @@
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
-          <yhm-manager-td :value="item.contactName"></yhm-manager-td>
+          <yhm-manager-td  @click="contactView(item)"  :value="item.contactName"></yhm-manager-td>
           <yhm-manager-td-psd  @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td v-if="isAct" @click="unitDetail(item)" :tip="true" :value="item.otherAccount" ></yhm-manager-td>
           <yhm-manager-td v-if="isAct" :value="item.cash==='1'?'-------':item.cashObjectVal"></yhm-manager-td>
@@ -190,7 +189,19 @@
       }
     },
     methods:{
-
+      contactView (item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/personView?id=' + item.contactID+'&isBilling=0',
+          title:'查看联系人信息',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       insuredUnitView(item){
           this.$dialog.OpenWindow({
             width: '1050',
@@ -296,7 +307,7 @@
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '650',
+          height: '700',
           url: '/policyView?id=' + item.id,
           title: '查看客户信息',
           closeCallBack: (data)=>{

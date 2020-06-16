@@ -10,7 +10,12 @@
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
         <yhm-managerth title="商品名称"></yhm-managerth>
+        <yhm-managerth title="商品名称(英文)"></yhm-managerth>
+        <yhm-managerth title="类型"></yhm-managerth>
+        <yhm-managerth title="适用车型"></yhm-managerth>
         <yhm-managerth width="100" title="计量单位"></yhm-managerth>
+        <yhm-managerth width="100" title="是否拆分出库"></yhm-managerth>
+        <yhm-managerth width="100" title="拆分出库单位"></yhm-managerth>
       </template>
 
       <template #listBody>
@@ -18,13 +23,15 @@
             :class="{InterlacBg:index%2!=0}"
             :key="item.id"
             @click="selectEvent(item)"
-            @dblclick="dblclickEvent(item)"
-            @mousemove="mousemoveEvent"
-            @mouseover="mouseoverEvent"
-            @mouseout="mouseoutEvent">
+            @dblclick="dblclickEvent(item)">
           <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td :value="item.name"></yhm-manager-td>
-          <yhm-manager-td :value="item.unit"></yhm-manager-td>
+          <yhm-manager-td-center :value="item.englishName"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.storageTypeVal"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.stockTypeVal"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.unit"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.splitVal"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.splitDeliveryUnit"></yhm-manager-td-center>
         </tr>
       </template>
 

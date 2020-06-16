@@ -18,6 +18,9 @@ const formmixin = {
     }
   },
   methods:{
+    autoVerify(controlID,message){
+      eval('this.$refs.' + controlID + '.errorEvent("' + message + '")')
+    },
     //格式化日期带周几
     formatDateShow (data) {
       return formatDateHtml(data)

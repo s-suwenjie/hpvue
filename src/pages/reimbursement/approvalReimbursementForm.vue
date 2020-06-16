@@ -33,6 +33,7 @@
             <yhm-managerth style="width: 90px" title="发票总金额"></yhm-managerth>
             <yhm-managerth style="width: 150px" title="发票类型"></yhm-managerth>
             <yhm-managerth style="width: 110px;" title="备注" ></yhm-managerth>
+            <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
             <yhm-managerth style="width: 80px;" title="审批状态"></yhm-managerth>
             <yhm-managerth style="width: 120px;" title="操作"></yhm-managerth>
           </template>
@@ -44,6 +45,7 @@
               <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
               <yhm-manager-td-center @click="listView(item)" :value="item.invoiceCategoryName" color="#49a9ea"></yhm-manager-td-center>
               <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.remark" @click="listView(item)" color="#49a9ea"></yhm-manager-td>
+              <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
               <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
               <yhm-manager-td-operate>
                 <yhm-manager-td-operate-button :no-click="item.isApproval!=='0' || item.state === '9' || item.isFinish === '1'" @click="adoptEvent(item)" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
@@ -185,7 +187,18 @@
       rightStrip(){
         window.location='/approvalReimbursementForm?id='+this.rightID
       },
-
+      SelectApprovalMessage(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
+      },
       approFund(){
         if (this.isPrettyCashOff === '0'){
           this.$dialog.OpenWindow({
@@ -283,37 +296,56 @@
             kind:2,
             tableDetailName:41,
           }
-
-          this.$dialog.confirm({
-            width: '300',
-            tipValue: '是否通过?',
-            alertImg: 'warn',
-            okCallBack: (data)=>{
-              this.ajaxJson({
-                url: '/PersonOffice/approvalYesVue',
-                data: params,
-                call: (data)=>{
-                  if(data.type === 0){
-                    this.$dialog.setReturnValue(this.id)
-                    this.$dialog.alert({
-                      tipValue: data.message,
-                      closeCallBack: () => {
-                        location.reload()
-                      }
-                    })
-                  }else{
-                    this.$dialog.alert({
-                      tipValue: data.message,
-                      alertImg: 'error',
-                      closeCallBack: () => {
-                      }
-                    })
-                  }
-                }
-              })
+          this.$dialog.OpenWindow({
+            width: 650,
+            height: 230,
+            title: '审批留言',
+            url: '/passMessage?id=' + item.id+ '&tableName=40&tableDetailName=41&kind=2',
+            closeCallBack: (acc)=>{
+              if(acc){
+                location.reload()
+              }
             }
           })
         }
+        // if(item.id){
+        //   let params = {
+        //     id: item.id,
+        //     tableName: 40,
+        //     kind:2,
+        //     tableDetailName:41,
+        //   }
+        //
+        //   this.$dialog.confirm({
+        //     width: '300',
+        //     tipValue: '是否通过?',
+        //     alertImg: 'warn',
+        //     okCallBack: (data)=>{
+        //       this.ajaxJson({
+        //         url: '/PersonOffice/approvalYesVue',
+        //         data: params,
+        //         call: (data)=>{
+        //           if(data.type === 0){
+        //             this.$dialog.setReturnValue(this.id)
+        //             this.$dialog.alert({
+        //               tipValue: data.message,
+        //               closeCallBack: () => {
+        //                 location.reload()
+        //               }
+        //             })
+        //           }else{
+        //             this.$dialog.alert({
+        //               tipValue: data.message,
+        //               alertImg: 'error',
+        //               closeCallBack: () => {
+        //               }
+        //             })
+        //           }
+        //         }
+        //       })
+        //     }
+        //   })
+        // }
       },
       rejectEvent (item) { //子表驳回
         if(item.isApproval==='1'){
@@ -335,59 +367,82 @@
           })
         }
       },
-      tableAdoptEvent (item) { //主表通过
+      tableAdoptEvent () { //主表通过
         if(this.id){
           let params = {
             id: this.id,
-            tableName: 40,
+            tableName: 40
           }
-
-          this.$dialog.confirm({
-            width: '300',
-            tipValue: '是否通过?',
-            alertImg: 'warn',
-            okCallBack: (data)=>{
-              this.ajaxJson({
-                url: '/PersonOffice/getPressIDVue',
-                data: params,
-                call: (data) => {
-                  this.category = data.message
-                  if (this.category) {
-                    let params = {
-                      id: data.message,
-                      kind: '1',
-                      tableName: '40',
-                      tableDetailName: '41',
-                      location: '0'
-                    }
-                    this.ajaxJson({
-                      url: '/PersonOffice/approvalYesVue',
-                      data: params,
-                      call: (data)=>{
-                        if(data.type === 0){
-                          this.$dialog.setReturnValue(this.id)
-                          this.$dialog.alert({
-                            tipValue: data.message,
-                            closeCallBack: () => {
-                              location.reload()
-                            }
-                          })
-                        }else {
-                          this.$dialog.alert({
-                            tipValue: data.message,
-                            alertImg: 'error',
-                            closeCallBack: () => {
-                            }
-                          })
-                        }
-                      }
-                    })
+          this.ajaxJson({
+            url: '/PersonOffice/getPressIDVue',
+            data: params,
+            call: (data) => {
+              this.$dialog.OpenWindow({
+                width: 650,
+                height: 230,
+                title: '审批留言',
+                url: '/passMessage?category='+ data.message +'&id=' + this.id+ '&tableName=40&tableDetailName=41&kind=1',
+                closeCallBack: (acc)=>{
+                  if(acc){
+                    location.reload()
                   }
                 }
               })
             }
           })
         }
+        // if(this.id){
+        //   let params = {
+        //     id: this.id,
+        //     tableName: 40,
+        //   }
+        //
+        //   this.$dialog.confirm({
+        //     width: '300',
+        //     tipValue: '是否通过?',
+        //     alertImg: 'warn',
+        //     okCallBack: (data)=>{
+        //       this.ajaxJson({
+        //         url: '/PersonOffice/getPressIDVue',
+        //         data: params,
+        //         call: (data) => {
+        //           this.category = data.message
+        //           if (this.category) {
+        //             let params = {
+        //               id: data.message,
+        //               kind: '1',
+        //               tableName: '40',
+        //               tableDetailName: '41',
+        //               location: '0'
+        //             }
+        //             this.ajaxJson({
+        //               url: '/PersonOffice/approvalYesVue',
+        //               data: params,
+        //               call: (data)=>{
+        //                 if(data.type === 0){
+        //                   this.$dialog.setReturnValue(this.id)
+        //                   this.$dialog.alert({
+        //                     tipValue: data.message,
+        //                     closeCallBack: () => {
+        //                       location.reload()
+        //                     }
+        //                   })
+        //                 }else {
+        //                   this.$dialog.alert({
+        //                     tipValue: data.message,
+        //                     alertImg: 'error',
+        //                     closeCallBack: () => {
+        //                     }
+        //                   })
+        //                 }
+        //               }
+        //             })
+        //           }
+        //         }
+        //       })
+        //     }
+        //   })
+        // }
       },
       tableRejectEvent (item) { //主表驳回
         if(this.id){

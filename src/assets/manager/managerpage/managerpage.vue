@@ -1,5 +1,5 @@
 <template >
-  <div class="m_main" :class="{ism_Main: isManager}">
+  <div class="m_main" :class="{ism_Main: isManager}"  :style="{width:mainWidth+'px',height:mainHeight+'px',minHeight:mainHeight+'px'}">
     <div>
       <slot name="title"></slot>
     </div>
@@ -8,8 +8,10 @@
       <div class="navLft">
         <slot name="navigationLft"></slot>
       </div>
+      <div v-show="statisticalShow" style="top: 0;" @click="statisticalClick" :class="iconStatistical" class="statistical"></div>
+
     </div>
-    <div v-if="category === '1'" class="menuTab" :class="{w620: smTable}">
+    <div v-if="category === '1'" class="menuTab" :class="{w620: smTable}" :style="{width:menuTabWidth+'px'}">
       <div class="menuTabTit">
         <div class="menuTabLft">
 
@@ -18,11 +20,11 @@
         <div class="navSwitchLft">
           <slot name="navigationLft"></slot>
         </div>
-        <div v-show="statisticalShow" @click="statisticalClick" class="uniE9A7 statistical"></div>
+        <div v-show="statisticalShow" @click="statisticalClick" :class="iconStatistical" class="statistical"></div>
 
       </div>
     </div>
-    <div class="m_operate" :class="[{w620: smTable},{iswAuto: isManager}]">
+    <div class="m_operate" :class="[{w620: smTable},{iswAuto: isManager}]" :style="{width:menuTabWidth+'px'}">
       <slot name="operate"></slot>
       <div class="operaLft">
         <slot name="video"></slot>
@@ -36,7 +38,7 @@
 
     <slot v-if="!customize" name="choose"></slot>
     <slot name="buttonSwitch"></slot>
-    <div v-if="!customize" class="m_list" :class="[{w620: smTable},{iswAuto: isManager}]">
+    <div v-if="!customize" class="m_list" :class="[{w620: smTable},{iswAuto: isManager}]" :style="{width:menuTabWidth+'px'}">
       <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table">
         <thead>
           <tr>
@@ -86,9 +88,25 @@
         type:String,
         default:'0'
       },
+      mainWidth:{
+        type:String,
+        default:''
+      },
+      mainHeight:{
+        type:String,
+        default:''
+      },
+      menuTabWidth:{
+        type:String,
+        default:''
+      },
       statisticalShow:{
         type:Boolean,
         default:false
+      },
+      iconStatistical:{
+        type:String,
+        default:'uniE9A7'
       },
       customize:{
         type:Boolean,

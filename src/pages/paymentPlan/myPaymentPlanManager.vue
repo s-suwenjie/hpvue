@@ -28,10 +28,11 @@
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 350px;" title="收款方" value="id"></yhm-managerth>
+        <yhm-managerth style="width: 300px;" title="收款方" value="id"></yhm-managerth>
         <yhm-managerth style="width: 150px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="付款计划金额" value="planMoney"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="状态" value="state"></yhm-managerth>
         <yhm-managerth style="width: 190px;" title="操作"></yhm-managerth>
       </template>
@@ -44,6 +45,7 @@
           <yhm-manager-td-date :before-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" :value="item.lastDate"></yhm-manager-td-date>
           <yhm-manager-td :after-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" :value="item.cause"></yhm-manager-td>
           <yhm-manager-td-money :before-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" :value="item.planMoney"></yhm-manager-td-money>
+          <yhm-manager-td-leaveword @iconClick="listView(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button :no-click="item.state !== '0' || item.isFinish === '1'" @click="submit(item)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
@@ -165,6 +167,7 @@ export default {
         url: '/PersonOffice/commonSelectedsave',
         data:params,
         call:(data) =>{
+          console.log(data)
           if(data.type===0){
             this.ajaxJson({
               url: '/PersonOffice/paymentPlanManagerTotal',

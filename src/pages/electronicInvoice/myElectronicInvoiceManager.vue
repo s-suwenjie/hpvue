@@ -15,7 +15,7 @@
         <template #listHead>
           <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
           <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-          <yhm-managerth style="width: 200px;" title="所属单位" value="selfNameID"></yhm-managerth>
+          <yhm-managerth style="width: 200px;" title="发票抬头" value="selfNameID"></yhm-managerth>
           <yhm-managerth style="width: 120px;" title="发票代码" value="code"></yhm-managerth>
           <yhm-managerth style="width: 120px;" title="发票号码" value="num"></yhm-managerth>
           <yhm-managerth style="width: 120px;" title="开票日期" value="openDate"></yhm-managerth>

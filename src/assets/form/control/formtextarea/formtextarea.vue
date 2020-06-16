@@ -1,12 +1,12 @@
 <template>
-  <div v-if="show" class="fc_main fc_main_w">
+  <div v-if="show" class="fc_main fc_main_w"  :style="{width:textWidth==true?'auto':''}">
     <div class="fc_box">
-      <div class="fc_title">
+      <div class="fc_title" :style="{width:textWidth==true?'155px':''}">
         <div>{{title}}</div>
         <div v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
       <div class="c_main c_main_t c_textarea" v-validator="validatorEvent">
-        <div @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box c_textarea" :class="{c_error:error,c_hover:mouseStyle,c_focus:focusStyle}">
+        <div @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box c_textarea" :class="{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_width500:textWidth}">
           <textarea :readonly="noEdit === '1'" v-model="txt" ref="control" :class="{c_disable:noEdit === '1'}" @focus="focusEvent" @blur="blurEvent" @input="autoTextarea"></textarea>
         </div>
         <div class="c_box c_textarea c_copy">
@@ -40,6 +40,10 @@
         maxHeight:{
           type: Number,
           default:0
+        },
+        textWidth:{
+          type: Boolean,
+          default:false
         },
         title: {
           type: String,

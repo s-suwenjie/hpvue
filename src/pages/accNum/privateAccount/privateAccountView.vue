@@ -6,6 +6,7 @@
         <yhm-view-control title="账户分类" :content="category" :psd="categoryList"></yhm-view-control>
         <yhm-view-control title="银行卡类型" v-if="isIntBank" :content="bankCartCategor" :psd="bankCartCategoryList"></yhm-view-control>
         <yhm-view-control title="开户行" v-if="isIntBank" :content="bank"></yhm-view-control>
+        <yhm-view-control title="账户别名" v-show="isAlias" :content="alias"></yhm-view-control>
         <yhm-view-control title="户名" v-if="!isCash" :content="person"></yhm-view-control>
         <yhm-view-control title="账号" :content="account"></yhm-view-control>
         <yhm-view-control title="户名类型" v-if="!isCash" :content="isThirdPart" :psd="isThirdPartList"></yhm-view-control>
@@ -44,6 +45,8 @@
         webAccountTypeList:[],
         files:[],
 
+        isAlias:false,
+        alias:'',
 
         isCash: false,
         isIntBank: false,
@@ -90,6 +93,10 @@
             this.webAccountType = data.webAccountTypePsd.value
             this.files = data.files
 
+            this.alias = data.alias
+            if(data.alias!==''){
+              this.isAlias=true
+            }
             if(this.category === '0'){
               this.isCash = true
               this.isIntBank = false

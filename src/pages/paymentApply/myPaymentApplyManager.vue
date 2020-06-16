@@ -45,6 +45,7 @@
         <yhm-managerth style="width: 120px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 110px" title="计划申请金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 220px;" title="编号" value="code"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="状态" value="state"></yhm-managerth>
         <yhm-managerth style="width: 300px;" title="操作"></yhm-managerth>
 
@@ -68,9 +69,10 @@
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #f00;font-weight: bold"></yhm-manager-td-center>
 
 
-          <yhm-manager-td-center :value="item.subject"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.subject" @click="skipEvent(item)" :color="item.ownerID!=''&&item.ownerType=='1'?'#49a9ea':''"></yhm-manager-td-center>
           <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" :value-object="item" @mouseout="tableTipHideEvent" :value="item.money"></yhm-manager-td-money>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
+          <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
 
           <yhm-manager-td-operate>
@@ -219,6 +221,32 @@
       }
     },
     methods: {
+      skipEvent(item){
+        if(item.ownerID!=''&&item.isRelevance=='1'){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '700',
+            title: '查看保单信息',
+            url:'/billingView?id='+item.ownerID,
+            closeCallBack: (data)=>{
+              if(data){
+              }
+            }
+          })
+        }
+      },
+      SelectApprovalMessage(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
+      },
       //选中汇总
       selectedSum(){
         let params={

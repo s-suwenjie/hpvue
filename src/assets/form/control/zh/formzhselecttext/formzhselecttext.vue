@@ -25,6 +25,7 @@
           <div v-if="noEdit" class="c_after fs14 mr10 c_disable_div" :style="getAfterWidth">{{afterVal}}</div>
         </div>
       </div>
+      <slot></slot>
     </div>
     <div class="fc_error"><span v-if="error">{{errorTipMessage}}</span></div>
   </div>
@@ -274,5 +275,14 @@
 <style scoped>
   *{
     box-sizing: border-box;
+  }
+  .selectCenter{
+    display: flex;
+    align-items: center;
+  }
+  .formBoxIcon{
+    font-size: 26px;
+    cursor: pointer;
+    color: #49a9ea;
   }
 </style>

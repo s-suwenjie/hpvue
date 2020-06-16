@@ -45,6 +45,7 @@
         <yhm-managerth style="width: 140px" title="预计使用日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 240px;" title="编号" value="code"></yhm-managerth>
         <yhm-managerth style="width: 140px" title="预计金额" value="money"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth title="状态" value="state"></yhm-managerth>
         <yhm-managerth style="width: 140px" title="操作"></yhm-managerth>
       </template>
@@ -59,6 +60,7 @@
           <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+          <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-psd :is-left="true" :list="stateItems" fsb="fs20b" :value="item.state"></yhm-manager-td-psd>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button @click="adoptEvent(item)" :no-click="item.isFinish === '1'" value="通过" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
@@ -103,7 +105,18 @@
       }
     },
     methods:{
-
+      SelectApprovalMessage(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
+      },
       //初始化页面数据
       initPageData (initValue) {
         let params = {}
@@ -154,50 +167,59 @@
       adoptEvent(item){
         if(item.isFinish ==='0'){
           if(item.id){
-            let params = {
-              id: item.id,
-              kind: '0',
-              tableName: '46'
-            }
-            this.$dialog.confirm({
-              width: 300,
-              tipValue: '是否通过?',
-              alertImg: 'warn',
-              okCallBack: (data)=>{
-                this.ajaxJson({
-                  url: '/PersonOffice/approvalYesVue',
-                  data: params,
-                  call: (data)=>{
-                    if(data.type === 0){
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        closeCallBack: () => {
-                          this.initPageData(false)
-                        }
-                      })
-                    }else if(data.type === 1){
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        alertImg: 'error',
-                        closeCallBack: () => {
-                          this.initPageData(false)
-                        }
-                      })
-                    }
-                    else if(data.type === 2){
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        alertImg: 'error',
-                        width:'450',
-                        closeCallBack: () => {
-                          this.initPageData(false)
-                        }
-                      })
-                    }
-                  }
-                })
+            this.$dialog.OpenWindow({
+              width: 650,
+              height: 230,
+              title: '审批留言',
+              url: '/passMessage?id=' + item.id+ '&tableName=46&kind=0',
+              closeCallBack: (acc)=>{
+                this.initPageData(false)
               }
             })
+            // let params = {
+            //   id: item.id,
+            //   kind: '0',
+            //   tableName: '46'
+            // }
+            // this.$dialog.confirm({
+            //   width: 300,
+            //   tipValue: '是否通过?',
+            //   alertImg: 'warn',
+            //   okCallBack: (data)=>{
+            //     this.ajaxJson({
+            //       url: '/PersonOffice/approvalYesVue',
+            //       data: params,
+            //       call: (data)=>{
+            //         if(data.type === 0){
+            //           this.$dialog.alert({
+            //             tipValue: data.message,
+            //             closeCallBack: () => {
+            //               this.initPageData(false)
+            //             }
+            //           })
+            //         }else if(data.type === 1){
+            //           this.$dialog.alert({
+            //             tipValue: data.message,
+            //             alertImg: 'error',
+            //             closeCallBack: () => {
+            //               this.initPageData(false)
+            //             }
+            //           })
+            //         }
+            //         else if(data.type === 2){
+            //           this.$dialog.alert({
+            //             tipValue: data.message,
+            //             alertImg: 'error',
+            //             width:'450',
+            //             closeCallBack: () => {
+            //               this.initPageData(false)
+            //             }
+            //           })
+            //         }
+            //       }
+            //     })
+            //   }
+            // })
           }
         }
       },

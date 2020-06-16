@@ -33,6 +33,7 @@
         <yhm-managerth title="事由" value="subjectID"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="预计核销日期" value="estimateDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="状态" value=""></yhm-managerth>
         <yhm-managerth style="width: 400px" title="操作" value=""></yhm-managerth>
       </template>
@@ -51,6 +52,7 @@
           <yhm-manager-td-center :value="item.day+'天'" v-else-if="item.day>2&&item.day<=5" style="color:#0511a5;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #f00;font-weight: bold"></yhm-manager-td-center>
 
+          <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button v-show="item.state === '-1' && item.isDelay === '0'&&item.isFinish !== '1'" @click="delayEvent(item)" value="延期核销" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
@@ -144,6 +146,18 @@
       }
     },
     methods:{
+      SelectApprovalMessage(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
+      },
       FullReturn(item){
         this.$dialog.OpenWindow({
           width: 1050,

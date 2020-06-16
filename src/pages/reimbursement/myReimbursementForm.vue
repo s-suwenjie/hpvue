@@ -51,7 +51,7 @@
     <yhm-form-list-show>
       <template #title>事件信息</template>
       <template #operate>
-        <yhm-commonbutton value="添加" icon="btnAdd" @call="addDetail()" category="three"></yhm-commonbutton>
+        <yhm-commonbutton value="添加" :flicker="true" icon="btnAdd" @call="addDetail()" category="three"></yhm-commonbutton>
       </template>
       <template #listHead>
         <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
@@ -375,12 +375,13 @@
           id: this.id,
           tableName:40
         }
-        // this.$dialog.confirm({
-        //   width: 300,
-        //   tipValue: '确定提交申请?',
-        //   btnValueOk: '确定',
-        //   alert: 'warn',
-        //   okCallBack: (data) => {
+        this.$dialog.confirm({
+          width: 300,
+          tipValue: '是否还有其它报销,可多事由一并提交?',
+          btnValueOk: '去添加',
+          btnValueCancel:'保存',
+          alert: 'warn',
+          cancelCallBack: (data) => {
             this.ajaxJson({
               url: '/PersonOffice/getSubmitCatrgoryVue',
               data: params,
@@ -425,8 +426,11 @@
                 }
               }
             })
-          // }
-        // })
+          },
+          okCallBack:() => {
+            this.addDetail()
+          }
+        })
       },
 
       reimbursementsDetailIsAutoAdd(){

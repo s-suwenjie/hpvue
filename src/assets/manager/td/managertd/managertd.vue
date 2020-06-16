@@ -6,13 +6,16 @@
     <div v-if="!getEmpty" class="md_left md_relative" :style="{color: color}">
       {{value}}
       <div v-if="afterIcon !== ''" class="md_afterIcon" :style="{color:afterIconColor}" :class="[afterIcon,afterIconFontSize]"></div>
+      <slot></slot>
+
     </div>
     <div ref="tip" v-if="tip" v-show="showTip" class="c_tip" :style="getPosition">
       <div>
-        {{value}}
+        {{tipShow?tipValue:value}}
         <img src="./images/arrow.png">
       </div>
     </div>
+
   </td>
 </template>
 
@@ -40,6 +43,14 @@
       tip:{
         type: Boolean,
         default: false
+      },
+      tipShow: {
+        type: Boolean,
+        default: false
+      },
+      tipValue: {
+        type: String,
+        default: ''
       },
       value: {
         type: String,

@@ -24,6 +24,7 @@
               <yhm-managerth style="width: 120px" title="最迟日期"></yhm-managerth>
               <yhm-managerth style="width: 90px" title="付款金额"></yhm-managerth>
               <yhm-managerth style="width: 200px" title="编号"></yhm-managerth>
+              <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
               <yhm-managerth style="width: 200px" title="状态"></yhm-managerth>
             </template>
             <template #listBody>
@@ -33,6 +34,7 @@
                 <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
                 <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
                 <yhm-manager-td :value="item.code"></yhm-manager-td>
+                <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
                 <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
               </tr>
             </template>
@@ -90,6 +92,18 @@
       },
       rightStrip(){
         window.location='/PaymentPlanFormView?id='+this.rightID
+      },
+      SelectApprovalMessage(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
       },
       addDetail () {
         if (this.validator()) {

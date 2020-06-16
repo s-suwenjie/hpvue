@@ -39,6 +39,7 @@
         <yhm-managerth style="width: 120px" title="报销金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 110px" title="提交天数" value="day"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="编号" value="code"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="状态" value="state"></yhm-managerth>
         <yhm-managerth title="操作"></yhm-managerth>
       </template>
@@ -56,6 +57,7 @@
           <yhm-manager-td-center :value="item.day+'天'" v-else-if="item.day>2&&item.day<=5" style="color:#0511a5;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #f00;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
+          <yhm-manager-td-leaveword @iconClick="listView(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal"  @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
 
           <yhm-manager-td-operate>

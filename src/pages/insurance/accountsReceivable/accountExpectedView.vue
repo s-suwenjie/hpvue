@@ -9,8 +9,8 @@
         <yhm-view-tab-list :customize="true" :pager="true" customize-bg-color="#e2f1f0" v-show="tabState[0].select">
           <template #listHead>
             <yhm-managerth  style="width: 160px;" title="活动启用时间"></yhm-managerth>
-            <yhm-managerth  title="商业险返利①"></yhm-managerth>
-            <yhm-managerth  title="商业险返利②"></yhm-managerth>
+            <yhm-managerth  title="保险公司返利"></yhm-managerth>
+            <yhm-managerth  title="三方服务费返利"></yhm-managerth>
             <yhm-managerth  title="交强险返利"></yhm-managerth>
             <yhm-managerth  title="总计应返利金额"></yhm-managerth>
           </template>
@@ -108,9 +108,9 @@
             }
 
             for (let i in  this.deatails){
-              this.commercialOne=(data.businessMoney*this.deatails[i].one*(this.deatails[i].two/100)).toFixed(2)+''
-              this.commercialTwo=(data.businessMoney*this.deatails[i].one*(this.deatails[i].three/100)*(this.deatails[i].four/100)).toFixed(2)+''
-              this.toPayHigh=(data.forceMoney*this.deatails[i].one*(this.deatails[i].fives/100)).toFixed(2)+''
+              this.commercialOne=(data.businessMoney/this.deatails[i].one*(this.deatails[i].two/100)).toFixed(2)+''
+              this.commercialTwo=(data.businessMoney/this.deatails[i].one*(this.deatails[i].three/100)*(this.deatails[i].four/100)).toFixed(2)+''
+              this.toPayHigh=(data.forceMoney/this.deatails[i].one*(this.deatails[i].fives/100)).toFixed(2)+''
             }
 
             for(let i in this.listPolicy){

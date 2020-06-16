@@ -90,7 +90,7 @@ function ConfirmLogout (language) {
       }, function () {
       }, '确定退出', '取消')
     } else {
-      //表示Session不在
+      //表示Se不在
       window.location = '/Common/Default.aspx?clear=clear'
       //$.Logout(userID);
     }

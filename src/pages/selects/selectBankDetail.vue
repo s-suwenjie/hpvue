@@ -10,12 +10,13 @@
       </template>
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
+        <yhm-managerth title="我方账户"></yhm-managerth>
+        <yhm-managerth width="110" title="交易日期"></yhm-managerth>
         <yhm-managerth title="对方账户"></yhm-managerth>
-        <yhm-managerth width="130" title="交易日期"></yhm-managerth>
-        <yhm-managerth width="80" title="收支方向"></yhm-managerth>
-        <yhm-managerth width="150" title="事由"></yhm-managerth>
-        <yhm-managerth width="120" title="交易金额"></yhm-managerth>
-        <yhm-managerth width="180" title="备注"></yhm-managerth>
+        <yhm-managerth width="40" title="收支"></yhm-managerth>
+        <yhm-managerth width="110" title="事由"></yhm-managerth>
+        <yhm-managerth width="105" title="交易金额"></yhm-managerth>
+        <yhm-managerth width="345" title="备注"></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in content"
@@ -29,12 +30,13 @@
           <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
 <!--          <yhm-manager-td :value="item.otherName"></yhm-manager-td>-->
 <!--          <td style="text-indent: 5px;" v-html="item.otherName"></td>-->
-          <yhm-manager-td-html :value="item.otherName"></yhm-manager-td-html>
+          <yhm-manager-td-html :tip="true" node-class-name="f_main f_main_customize mb16" :value="item.selfAccount"></yhm-manager-td-html>
           <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
+          <yhm-manager-td-html :tip="true" node-class-name="f_main f_main_customize mb16" :value="item.otherName"></yhm-manager-td-html>
           <yhm-manager-td-direction :direction="item.direction" value=" " class="dfJcc"></yhm-manager-td-direction>
-          <yhm-manager-td :value="item.subject"></yhm-manager-td>
+          <yhm-manager-td :tip="true" node-class-name="f_main f_main_customize mb16" :value="item.subject"></yhm-manager-td>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
-          <yhm-manager-td :value="item.remark"></yhm-manager-td>
+          <yhm-manager-td :tip="true" node-class-name="f_main f_main_customize mb16" :value="item.remark"></yhm-manager-td>
         </tr>
       </template>
       <template #empty>
@@ -62,7 +64,11 @@
         },
         otherAccountID: '',
         direction: '',
-        content: []
+        content: [],
+
+        subjectID:'',//是由ID
+        selfAccountID:'',//我方账户ID
+        type:'',//1是付款用到收支明细选择
       }
     },
     methods: {
@@ -79,13 +85,19 @@
           // 页面初始化是需要的参数
           params = {
             otherAccountID: this.otherAccountID,
-            direction: this.direction
+            direction: this.direction,
+            subjectID:this.subjectID,
+            selfAccountID:this.selfAccountID,
+            type:this.type
           }
         } else {
           // 页面非初始化时需要的参数
           params = {
             otherAccountID: this.otherAccountID,
             direction: this.listCategory.value,
+            subjectID:this.subjectID,
+            selfAccountID:this.selfAccountID,
+            type:this.type
           }
         }
         this.init({
@@ -108,6 +120,10 @@
       this.setQuery2Value('categoryBefore')
       this.setQuery2Value('otherAccountID')
       this.setQuery2Value('direction')
+      this.setQuery2Value('subjectID')
+      this.setQuery2Value('selfAccountID')
+      this.setQuery2Value('type')
+
     }
   }
 </script>

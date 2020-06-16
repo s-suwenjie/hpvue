@@ -386,7 +386,7 @@
           this.$dialog.OpenWindow({
             width: 950,
             height: 690,
-            url: '/selectPublicAccount?categoryUnit=1&categoryUnitBefore=1&category=1&categoryInit=2' + '&unitID=' + this.otherID,
+            url: '/selectPublicAccount?categoryUnit=1&categoryUnitBefore=1&category=1&categoryInit=2' + '&unitID=' + this.insuredUnitID,
             title: '选择公司账号',
             closeCallBack: (data) => {
               if (data) {
@@ -399,7 +399,7 @@
           this.$dialog.OpenWindow({
             width: 950,
             height: 640,
-            url: '/selectPrivateAccount?state=0&category=1&categoryUnit=1&categoryUnitBefore=0&personID='+this.otherID,
+            url: '/selectPrivateAccount?state=0&category=1&categoryUnit=1&categoryUnitBefore=0&personID='+this.insuredUnitID,
             title: '选择私人账号',
             closeCallBack: (data) => {
               if(data){
@@ -502,8 +502,6 @@
                 loading: '0',
                 call: (data) => {
                   if (data.type === 0) {
-
-
                     this.ajaxJson({
                       url: '/Fin/modifyBankDetailPayment',
                       data: dataParams,

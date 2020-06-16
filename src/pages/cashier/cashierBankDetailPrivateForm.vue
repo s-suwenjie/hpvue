@@ -66,11 +66,14 @@
         <yhm-form-text title="交易" subtitle="流水号" :value="slipNumber" id="slipNumber" v-if="isrunningWater"></yhm-form-text>
         <yhm-form-text title="单号" subtitle="" :value="slipNumber" id="slipNumber" v-if="isnumber"></yhm-form-text>
 
+        <yhm-form-upload-image title="上传凭证" width="800" height="650" tag="bankDetail" discription="点击图标或拖拽图片上传" @mouseoverEvent="lookImg" rule="#" :value="img" id="img"></yhm-form-upload-image>
 
-        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传凭证" tag="payment" subtitle="" multiple="multiple" rule="#"></yhm-formupload>
+        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传凭证" tag="payment" subtitle="" multiple="multiple"></yhm-formupload>
       </template>
     </yhm-formbody>
-
+    <div id="lookImg" class="showImg" v-show="tipShow" @click="imgClick" @mouseout="imgClick">
+      <img :src="getUrl">
+    </div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="收款" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
@@ -154,9 +157,26 @@
         isslipNumber:false,
         isrunningWater:false,
         isnumber:true,
+
+        img:'',
+        tipShow:false,
+        getUrl:'',
+        bankDetailImg:[],
+        storeName: '',
       }
     },
     methods: {
+      lookImg(){
+        if(this.img){
+          this.tipShow=true;
+          this.getUrl='/UploadFile/bankDetail/'+this.img;
+        }
+      },
+      imgClick(){
+        if(this.tipShow){
+          this.tipShow=false;
+        }
+      },
       paymentMethodState(){
         if (this.paymentMethod==='0'){
           this.iseferenceeNo=true
@@ -481,22 +501,21 @@
         }
       },
       save () {//保存
-        let money = parseFloat(this.money)
-        let aa = true
-
-        if(parseFloat(this.calcTrMoney) < money){
-          aa = false
+        if(this.img){
+          let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.detail.length, 1000)))
+          let item = {
+            id: guid(),
+            insertDate: formatTime(insertDate),
+            ownerID: this.id,
+            category:'',
+            tag: 'bankDetail',
+            showName:this.img,
+            storeName:this.img,
+            suffix: (this.img.split('.')[(this.img.split('.').length)-1]).toUpperCase(),
+          }
+          this.bankDetailImg.push(item)
         }
-
-        if(!aa){
-          this.$dialog.alert({
-            width: '300',
-            alertImg: 'error',
-            tipValue: '金额大于剩余可拨付余额'
-          })
-        }
-
-        if (this.validator() && aa) {
+        if (this.validator()) {
           let params = {
             id: this.id,
             ownerID: this.bankID,
@@ -522,29 +541,30 @@
             voucherNo: this.voucherNo,//凭证号
             files: this.fileList,//上传文件
             useMoney: this.autoCalcIpt,//多事由计算金额
-            subjectList: this.detail//多事由
+            subjectList: this.detail,//多事由
+            bankDetailImg:this.bankDetailImg,//上传凭证集合
           }
           this.$dialog.confirm({
             alertImg: 'warn',
             btnValueOk: '确定',
             tipValue: '确定收款(客户)?',
             okCallBack: ()=>{
-              let dataParams = {
-                id:this.bankID,
-                ownerID:this.bankOwnerID,
-                money:this.money
-              }
+
               this.ajaxJson({
-                url: '/Fin/modifyBankDetailClueState',
-                data: dataParams,
+                url: '/Fin/vueBankDetailSave',
+                data: params,
                 call: (data) => {
                   if(data.type === 0){
+                    let dataParams = {
+                      id:this.bankID,
+                      ownerID:this.bankOwnerID,
+                      money:this.money
+                    }
                     this.ajaxJson({
-                      url: '/Fin/vueBankDetailSave',
-                      data: params,
+                      url: '/Fin/modifyBankDetailClueState',
+                      data: dataParams,
                       loading: '0',
                       call: (data) => {
-
                         if (data.type === 0) {
                           //添加第三方 支付方式表
                           let dataMethod={
@@ -557,7 +577,6 @@
                             url:'/Fin/paymentMethodSave',
                             data:dataMethod,
                             closeCallBack: () => {
-
                             }
                           })
 
@@ -754,5 +773,30 @@
 
   input {
     text-align: center;
+  }
+  .showImg{
+    width: 850px;
+    height: 600px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: center;
+    background-color: #FFFFFF;
+    position: fixed !important;
+    z-index: 999999;
+    -webkit-box-shadow: 0 0 20px #000000;
+    box-shadow: 0 0 20px #000000;
+    border-radius: 10px;
+    top: 0;
+    right: 0;
+    left: 140px;
+    bottom: 0;
+    margin: auto;
   }
 </style>

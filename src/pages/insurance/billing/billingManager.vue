@@ -105,21 +105,21 @@
     },
     methods:{
       appPay(item){
-        if (item.statusVal==='返利审批中'||item.statusVal==='返利拨款中') {
+        if (item.statusVal==='返利审批中'||item.statusVal==='返利拨款中') {    //待完善
           this.$dialog.OpenWindow({
             width: '1050',
             height: '750',
             url: '/paymentApplyFormView?id=' + item.cashID +'&isState=1&isFinish=0',
             title: "查看付款申请信息",
             closeCallBack: () => {
-              this.initPageData(false)
+                this.initPageData(false)
             }
           })
         }
       },
       addPNumbering(item){
-        let title = '上传保单号'
-        let url = '/poNumbering?id='+item.poNumber+'&ownerID='+item.id+'&project='+item.project
+        let title = '上传保单'
+        let url = '/poNumbering?id='+item.poNumber+'&ownerID='+item.id+'&project='+item.project+'&forceEndDate='+item.forceEndDate+'&businessEndDate='+item.businessEndDate
         this.$dialog.OpenWindow({
           width: '1050',
           height: '550',
@@ -302,7 +302,7 @@
         })
       },
       // 筛选事件
-      initChoose (op) {
+          initChoose (op) {
         if (op === 'insuredUnit') {
           this.selectValue = []
         }

@@ -5,9 +5,10 @@
       <template #control>
         <!--@call="selectUnit" 账户分类 银行卡类型 网络账户类型 户名类型 -->
         <yhm-form-radio @call="categoryEvent" title="账户分类" :select-list="categoryList" :value="category" id="category" rule="R0000" :no-edit="isEditBl "></yhm-form-radio>
+        <yhm-form-select title="户名" :noClick="isPerson" tip="person" rule="R0000" @click="selectUnit" :value="person" id="person" :no-edit="isEdit"></yhm-form-select>
         <yhm-form-radio :show="isIntBank && isNtwork" title="银行卡类型" :select-list="bankCartCategoryList" :value="bankCartCategor" id="bankCartCategor" rule="R0000" :no-edit="isEditBl"></yhm-form-radio>
         <yhm-form-select :show="isIntBank && isNtwork" title="开户行" @click="selectEvent" :value="bank" id="bank" rule="R0000" :no-edit='1' tip="value"></yhm-form-select>
-        <yhm-form-select title="户名" :noClick="isPerson" tip="person" rule="R0000" @click="selectUnit" :value="person" id="person" :no-edit="isEdit"></yhm-form-select>
+        <yhm-form-text title="账户别名" :value="alias" id="alias" ref="alias" @blur="isAliasVerifyEvent()" tip="value"></yhm-form-text>
         <yhm-form-text :show="isCash" @repeatverify="repeatverifyAccountEvent" ref="account" title="账号" :value="account" id="account"  rule="R0000" tip="account"></yhm-form-text>
         <yhm-form-radio :show="isCash" @call="isThirdPartEvent" title="户名类型" :select-list="isThirdPartPsd"  :value="isThirdPart" id="isThirdPart" rule="R0000" :no-edit="isEditBl"></yhm-form-radio>
         <yhm-form-text :show="isCash" tip="value" ref="thirdPartName" title="其他" subtitle="账户户名" :value="thirdPartName" id="thirdPartName" :no-edit="isEdit" :rule="isRule"></yhm-form-text>
@@ -87,13 +88,12 @@
         isNtwork: true,
         isNStwork: true,
         isRule: '',
-
         list:[],
         isList:false,
-
         url:'',//0是在对公账账户模块进入   ''是选择页面进入
         isUrl:false,
         isPerson:false,//
+        alias:'',
       }
     },
     created () {
@@ -124,6 +124,7 @@
 
           this.isThirdPartPsd = data.isThirdPartPsd.list
           this.isThirdPart = data.isThirdPartPsd.value
+          this.alias = data.alias
           if(this.personID){
             this.person=data.person
           }
@@ -371,6 +372,26 @@
           }
         })
       },
+      async isAliasVerifyEvent(){
+        if(this.alias!==''){
+          let result = await this.ajaxAsync({
+            url:"/Fin/verifyPrivateAccountVueAlias",
+            data:{
+              alias:this.alias,
+              id:this.id
+            },
+            loading:"0"
+          })
+          if(result.type === 1){//说明存在，调用控件验证显示规则
+            this.$refs.alias.errorEvent("别名重复")
+            return false
+          }
+          return true
+        }else {
+          return true
+        }
+
+      },
       async save () { //保存
         let cc = true
         if(this.isThirdPart==='1'){
@@ -379,9 +400,10 @@
             cc = false
           }
         }
+       let c = await this.isAliasVerifyEvent()
        let a = await this.isAccountVerifyEvent()
        let b = this.validator()
-          if (a && b && cc) {
+          if (a && b && cc && c) {
             let params = {
               id:this.id,
               personID:this.personID,
@@ -393,7 +415,7 @@
               account:this.account,
               bankCartCategory:this.bankCartCategor,
               files:this.fileList,
-
+              alias:this.alias
             }
 
             this.ajaxJson({

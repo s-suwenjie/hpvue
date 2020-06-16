@@ -5,11 +5,12 @@
         <template #navigationTab v-if="isPersonalClaims">
           <a class="menuTabDiv" href="/Fin/bankDetailManager?menuType=0">收支明细</a>
           <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/viewManager/claimsManager'}">保险理赔</router-link>
-          <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRepairManager'}">散户维修费</router-link>
+          <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRepairManager'}">自费维修</router-link>
           <router-link class="menuTabDiv" :to="{path:'/home/BankDetailCommissionManager'}">保险手续费</router-link>
-
+          <router-link class="menuTabDiv " :to="{path:'/home/finPosAccountManager'}">Pos账户</router-link>
         </template>
-        <template #navigation v-if="!isPersonalClaims">个人办公&nbsp;&gt;&nbsp;个人办公&nbsp;&gt;&nbsp;保险理赔</template>
+        <template #navigation v-if="!isPersonalClaims" @statisticalClick="statisticalClick" :statisticalShow="true">售后业务&nbsp;&gt;&nbsp;业务回款&nbsp;&gt;&nbsp;保险理赔</template>
+        <!--<template #navigation v-if="!isPersonalClaims">个人办公&nbsp;&gt;&nbsp;个人办公&nbsp;&gt;&nbsp;保险理赔</template>-->
         <!--操作区-->
         <template #operate>
 <!--          <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>-->
@@ -21,16 +22,19 @@
 
         </template>
         <template #buttonSwitch>
-          <div class="buttonSwitch">
-            <span :class="{loss:topBtnShou,profit:!topBtnShou}">表示盈利</span>
-            <img src="/HtmlStatic/images/ColorSwop.png" @click="profitAndLossClick" v-show="!topBtnShou" alt="">
-            <img src="/HtmlStatic/images/ColorSwopFilp.png" @click="profitAndLossClick" v-show="topBtnShou" alt="">
-            <span :class="{loss:!topBtnShou,profit:topBtnShou}">表示亏损</span>
+          <!--<div class="buttonSwitch">-->
+            <!--<span :class="{loss:topBtnShou,profit:!topBtnShou}">表示增加</span>-->
+            <!--<img src="/HtmlStatic/images/ColorSwop.png" @click="profitAndLossClick" v-show="!topBtnShou" alt="">-->
+            <!--<img src="/HtmlStatic/images/ColorSwopFilp.png" @click="profitAndLossClick" v-show="topBtnShou" alt="">-->
+            <!--<span :class="{loss:!topBtnShou,profit:topBtnShou}">表示减少</span>-->
+          <!--</div>-->
+          <div v-show="!isPersonalClaims" @click='incomeClick' id="incomeContent" style='background:linear-gradient(0deg, #1ea0ff, #77c6ff);color:#fff;border-radius:5px;text-align:center;line-height:36px;display: inline-block;position:absolute;top:56px;right: 8px;border:1px solid #ccc;height:36px;width: 100px;font-size: 15px;align-content: center'>
+            全部维修收入
           </div>
-
         </template>
         <template #choose>
           <div v-show="choose" class="buttonBody mptZero">
+            <yhm-radiofilter v-show="!isPersonalClaims" @initData="initChoose('type')" title="回款方式" :content="typeList"></yhm-radiofilter>
             <yhm-radiofilter  @initData="initChoose('signState')" title="数据状态" :content="signStateList"></yhm-radiofilter>
             <yhm-radiofilter :before="bank" @initData="initChoose('bank')" title="银行"  :content="bankList"></yhm-radiofilter>
             <yhm-radiofilter :before="operatorID" @initData="initChoose('operatorID')" title="业务员"  :content="operatorIDList"></yhm-radiofilter>
@@ -43,8 +47,8 @@
         <template #listHead>
           <yhm-managerth-check style="width: 40px;" :check="allCheck"></yhm-managerth-check>
           <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-          <yhm-managerth style="width: 80px" title="客户姓名" value="customerName"></yhm-managerth>
-          <yhm-managerth title="保险公司" value="otherName"></yhm-managerth>
+          <yhm-managerth style="width: 180px" title="客户姓名" value="customerName"></yhm-managerth>
+          <yhm-managerth title="收入来源" value="otherName"></yhm-managerth>
           <yhm-managerth style="width: 140px;" title="工单号" value="workOrderID"></yhm-managerth>
           <yhm-managerth style="width: 120px" title="业务员" value="operator"></yhm-managerth>
           <yhm-managerth style="width: 100px;" title="车型品牌" value="vehicleBrandID"></yhm-managerth>
@@ -61,9 +65,10 @@
           <tr  v-for="(item,index) in content" :key="index">
             <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-            <yhm-manager-td :value="item.customerName"></yhm-manager-td>
-            <yhm-manager-td :tip="true" :value="item.otherName" v-if="item.otherName===''" @click="unitClickLeft(item)" ></yhm-manager-td>
-            <yhm-manager-td-center :tip="true" :value="item.otherName" v-else @click="unitClickLeft(item)" :menu-list="unitMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
+            <yhm-manager-td :value="item.customer" v-if="item.customer==''"></yhm-manager-td>
+            <yhm-manager-td-center :value="item.customer" v-else @click="viewUnitOrPerson(item)" :menu-list="customerMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
+            <yhm-manager-td :tip="true" :value="item.otherName" :color='item.subjectID=="008F808E-C79C-4F8B-9D16-986093FAB86A"&&incomeType==="1"?"#0b26e8":""' v-if="item.otherName===''" @click="unitClickLeft(item)" ></yhm-manager-td>
+            <yhm-manager-td-center :tip="true" :value="item.otherName" :color='item.subjectID=="008F808E-C79C-4F8B-9D16-986093FAB86A"&&incomeType==="1"?"#0b26e8":""' v-else @click="unitClickLeft(item)" :menu-list="unitMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
             <yhm-manager-td :value="item.workOrderID" v-if="item.workOrderID===''" ></yhm-manager-td>
             <yhm-manager-td-center :value="item.workOrderID"  v-else :menu-list="jobNumberMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
 
@@ -71,7 +76,7 @@
             <yhm-manager-td-center :value="item.operator" v-else :menu-list="operatorMenu" @click="operatorClickLeft(item)" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
             <yhm-manager-td :value="item.vehicleBrand" v-if="item.vehicleBrand===''"></yhm-manager-td>
             <yhm-manager-td-center :value="item.vehicleBrand" v-else :menu-list="vehicleBrandMenu" @click="vehicleBrandLeft(item)" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
-            <yhm-manager-td :value="item.licensePlateNumber"></yhm-manager-td>
+            <yhm-manager-td-center :value="item.licensePlateNumber" :menu-list="licensePlateMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
             <yhm-manager-td-date :value="item.moneyBackDate"></yhm-manager-td-date>
             <yhm-manager-td-money :value="item.money === null ? ' ':item.money"></yhm-manager-td-money>
             <yhm-manager-td :value="item.bankName" v-if="item.bankName===''"></yhm-manager-td>
@@ -91,16 +96,16 @@
         <template #listTotalHead >
           <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="总数" ></yhm-managerth>
           <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" :before-title="nowTotal" ></yhm-managerth>
-          <yhm-managerth v-show="!isSelected" :before-color="oldTotalColor" style="width: 60px;" width="60px" title="" :before-title="oldTotal" @call="oldTotalClick"></yhm-managerth>
-          <yhm-managerth v-show="isYearMoneyShow && !isSelected" :before-color="oldTotalColor" style="width: 60px;" width="60px" title="" :before-title="yearTotal" ></yhm-managerth>
+          <yhm-managerth v-show="!isSelected" :before-color="oldTotalColor" @call="profitAndLossClick" style="width: 60px;" width="60px" title="" :before-title="oldTotal"></yhm-managerth>
+          <yhm-managerth v-show="isYearMoneyShow && !isSelected" :before-color="oldTotalColor1" style="width: 60px;" width="60px" title="" :before-title="yearTotal" ></yhm-managerth>
         </template>
         <template #listTotalBody>
           <tr>
             <yhm-manager-td-rgt @click="totalClick(item)" style="text-align: center;" v-for="(item,key) in contentTotal" :key="key" :value="item.count"></yhm-manager-td-rgt>
             <yhm-manager-td-money @click="totalClick(item)" style="text-align: center;" v-for="(item,index) in contentTotal" :key="index+1" :value="item.money"></yhm-manager-td-money>
             <yhm-manager-td-money v-show="!isSelected" :before-symbol="oldMoneySymbol" @click="totalClick(item,'2')" before-color="#ff000c" :style="{color:oldTotalColor}" v-for="(item,index) in contentTotal" :key="index+2" :value="oldMoney"></yhm-manager-td-money>
-            <yhm-manager-td-money v-show="isYearMoneyShow && !isSelected" v-if="yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick(yearMoney)" before-color="#ff000c" :style="{color:oldTotalColor}"  :value="yearMoney"></yhm-manager-td-money>
-            <yhm-manager-td-money v-show="isYearMoneyShow && !isSelected" v-if="!yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick('0')" before-color="#ff000c" :style="{color:oldTotalColor}"  value="NaN"></yhm-manager-td-money>
+            <yhm-manager-td-money v-show="isYearMoneyShow && !isSelected" v-if="yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick(yearMoney)" before-color="#ff000c" :style="{color:oldTotalColor1}"  :value="yearMoney"></yhm-manager-td-money>
+            <yhm-manager-td-money v-show="isYearMoneyShow && !isSelected" v-if="!yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick('0')" before-color="#ff000c" :style="{color:oldTotalColor1}"  value="NaN"></yhm-manager-td-money>
 
           </tr>
 
@@ -116,57 +121,64 @@
     name: 'claimsManager',
     mixins: [managermixin],
     data(){
-      return{
-        jobNumberMenu:['筛选当前工单号'],
-        unitMenu:['筛选当前公司'],
-        operatorMenu:['筛选当前联系人'],
-        vehicleBrandMenu:['筛选当前车辆品牌'],
-        bankIDMenu:['筛选当前银行'],
-        oldTotal:'比前一天(环比)',
-        oldTotalColor:'#ff000c',
-        yearMoney:'',
-        yearMoneyShow:true,
-        yearTotal:'同比',
-        yearMoneySymbol:'',
-        selectMonth:[],
-        isYearMoneyShow:true,
-        nowTotal:'本日',
-        oldMoney:'',
-        oldMoneySymbol:'',
-        unitItme:{},
+      return {
+        jobNumberMenu: ['筛选当前工单号'],
+        unitMenu: ['筛选当前公司','转到自费维修','修改事由'],
+        operatorMenu: ['筛选当前联系人'],
+        vehicleBrandMenu: ['筛选当前车辆品牌'],
+        bankIDMenu: ['筛选当前银行'],
+        customerMenu:['筛选当前客户'],
+        customerName:'',//客户ID
+        licensePlateMenu:['筛选当前车牌'],
+        licensePlateNumber:'',
+        oldTotal: '比前一天(环比)',
+        oldTotalColor: '#ff000c',
+        oldTotalColor1: '#ff000c',
+        yearMoney: '',
+        yearMoneyShow: true,
+        yearTotal: '同比',
+        yearMoneySymbol: '',
+        selectMonth: [],
+        isYearMoneyShow: true,
+        nowTotal: '本日',
+        oldMoney: '',
+        oldMoneySymbol: '',
+        unitItme: {},
         contentTotal: [],
-        content:[],
-        operatorID:'0',
-        operatorIDList:{
+        content: [],
+        operatorID: '0',
+        operatorIDList: {
           value: '',
           list: []
         },
-        bank:'0',
+        endDate: '',
+        startDate: '',
+        bank: '0',
         yearMonth: '',
         isCategory: '1',
         isPersonalClaims: true,
         isClaims: '',
-        index:'0',
+        index: '0',
         radioTime: {},
         bankList: {
           value: '',
           list: []
         },
-        insuranceUnit:'0',
+        insuranceUnit: '0',
         insuranceUnitList: {
           value: '',
           list: []
         },
-        vehicleBrand:'',
+        vehicleBrand: '',
         vehicleBrandList: {
           value: '',
           list: []
         },
-        dateType:'0',
+        dateType: '0',
         timeParams: '',
-        dateTypeList:{
-          value:'',
-          list:[
+        dateTypeList: {
+          value: '',
+          list: [
             // {
             //   code:'',
             //   num:'0',
@@ -189,85 +201,207 @@
             // },
           ]
         },
-        workOrderID:'',
+        workOrderID: '',
 
-        topBtnShou:false,
+        topBtnShou: false,
 
-        signStateList:{
-          value:'',
-          list:[
+        signStateList: {
+          value: '',
+          list: [
             {
-              code:'',
-              num:'0',
-              img:'icon-correct iconSignState',
-              showName:'正常',
+              code: '',
+              num: '0',
+              img: 'icon-correct iconSignState',
+              showName: '正常',
+            },
+            {
+              code: '',
+              num: '1',
+              img: 'icon-InterestRW',
+              showName: '待核查',
+            },
+            {
+              code: '',
+              num: '2',
+              img: 'icon-delete',
+              showName: '异常',
             },
             {
               code:'',
-              num:'1',
-              img:'icon-InterestRW',
-              showName:'待核查',
-            },
-            {
-              code:'',
-              num:'2',
-              img:'icon-delete',
-              showName:'异常',
+              num:'4',
+              img:'icon-correct',
+              showName:'待完善',
             },
           ]
         },
-        isSignStateList:[
+        isSignStateList: [
           {
-            code:'#3EE208',
-            num:'0',
-            img:'icon-correct iconSignState',
-            showName:'正常',
+            code: '#3EE208',
+            num: '0',
+            img: 'icon-correct iconSignState',
+            showName: '正常',
           },
           {
-            code:'#FDD000',
-            num:'1',
-            img:'icon-InterestRW',
-            showName:'待核查',
+            code: '#151EE2',
+            num: '3',
+            img: 'icon-correct iconSignState',
+            showName: '正常',
           },
           {
-            code:'#FF0000',
-            num:'2',
-            img:'icon-delete',
-            showName:'异常',
+            code: '#FDD000',
+            num: '1',
+            img: 'icon-InterestRW',
+            showName: '待核查',
+          },
+          {
+            code: '#FF0000',
+            num: '2',
+            img: 'icon-delete',
+            showName: '异常',
+          },
+          {
+            code:'#A81AFF',
+            num:'4',
+            img:'icon-correct',
+            showName:'待完善',
           },
         ],
-        profitAndLoss:'0',
+        profitAndLoss: '0',
 
-        dayCategory:'0',//环比点击事件变量
+        dayCategory: '0',//环比点击事件变量
+        type: '0',//0 是保险理赔  1是自费维修
+        oldType: '0',//0 是保险理赔  1是自费维修
+        typeList: {
+          value: '0',
+          list: [
+            {
+              code: '',
+              num: '0',
+              img: 'icon-correct iconSignState',
+              showName: '保险理赔',
+            },
+            {
+              code: '',
+              num: '1',
+              img: 'icon-InterestRW',
+              showName: '自费维修',
+            },
+          ]
+        },
+        incomeType:'0',
+        screen:''
       }
     },
     methods:{
-      oldTotalClick(){
+      viewUnitOrPerson(item){
+        if(item.unitOrPerson=='0'){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '810',
+            title: '联系人信息',
+            url: '/personView?id='+item.customerName,
+            closeCallBack: (data)=>{
+              if(data){
+                this.initPageData(false)
+              }
+            }
+          })
+        }else if(item.unitOrPerson=='1'){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '810',
+            title: '单位信息',
+            url: '/unitView?id='+item.customerName,
+            closeCallBack: (data)=>{
+              if(data){
+                this.initPageData(false)
+              }
+            }
+          })
+        }
+      },
+      incomeClick(){
+        if(this.incomeType === '0'){
+          this.incomeType = '1'
+          this.type = ''
+          this.typeList.value = ''
+          $('#incomeContent').html('返回')
+        }else{
+          this.incomeType = '0'
+          this.type = this.oldType
+          this.typeList.value = this.oldType
+          $('#incomeContent').html('全部维修收入')
+        }
+        this.pager.pageIndex = 1
+        this.initPageData(false)
       },
       statisticalClick(){
+        let screen = []
+        let Year = ''
+        let Month = ''
+        if(this.dayCategory=='0'){
+          let nowDate = new Date();
+          let newYear = nowDate.getFullYear();
+          let newMonth = nowDate.getMonth() + 1;
+          Year = newYear
+          Month = newMonth
+          console.log(Year,Month  )
+        }else{
+          Year = this.endDate.slice(0,4)
+          Month = this.endDate.slice(5,7)
+          console.log(this.endDate.slice(0,4),this.endDate.slice(5,7), )
+        }
+        if(Month.toString().indexOf('-')!==-1){
+          Month = this.endDate.slice(5,6)
+        }
+        if(this.screen.slice(5,8)=='13'){
+          Month = '13'
+        }
+        screen.push({
+          'Year':Year,
+          'Month':Month,
+          'type':this.typeList.value,
+          'signState':this.signStateList.value,
+          'bankID':this.bankList.value,
+          'operatorID':this.operatorIDList.value,
+          'unitID':this.insuranceUnitList.value,
+          'vehicleBrand':this.vehicleBrandList.value,
+          'unitOrPerson':''
+        })
+        sessionStorage.cartogramScreen = JSON.stringify(screen)
         this.$dialog.OpenWindow({
           width: '1300',
           height: '810',
-          title: '查看统计图',
-          url: '/insuranceCartogram',
+          title: '保险理赔统计图',
+          url: '/insuranceCartogram?type='+this.type,
           closeCallBack: (dataTwo)=>{
-
+            sessionStorage.removeItem('cartogramScreen')
           }
         })
       },
       profitAndLossClick(){
-        if(this.profitAndLoss === '0'){
-          this.profitAndLoss = '1'
+        // if(this.profitAndLoss === '0'){
+        //   this.profitAndLoss = '1'
+        //   this.oldTotalColor='#09B300'
+        //   this.topBtnShou = true
+        // }else{
+        //   this.profitAndLoss = '0'
+        //   this.oldTotalColor='#ff000c'
+        //   this.topBtnShou = false
+        // }
+        if (this.oldTotalColor==='#ff000c'){
           this.oldTotalColor='#09B300'
-          this.topBtnShou = true
         }else{
-          this.profitAndLoss = '0'
           this.oldTotalColor='#ff000c'
-          this.topBtnShou = false
+        }
+        if (this.oldTotalColor1==='#ff000c'){
+          this.oldTotalColor1='#09B300'
+        }else{
+          this.oldTotalColor1='#ff000c'
         }
       },
       unitClickLeft(item){//点击时查看公司信息
-        if(item.otherName!==''){
+        if(item.otherAccountType === '0'){
           this.$dialog.OpenWindow({
             width: '1050',
             height: '750',
@@ -331,8 +465,98 @@
         }else if(item==='取消银行筛选'){
           this.bankIDMenu=['筛选当前银行']
           this.bankList.value = ''
+        }else if(item==='筛选当前客户'){
+          this.customerMenu=['取消客户筛选']
+          this.customerName = this.unitItme.customerName
+        }else if(item==='取消客户筛选'){
+          this.customerMenu=['筛选当前客户']
+          this.customerName = ''
+        }else if(item==='筛选当前车牌'){
+          this.licensePlateMenu=['取消车牌筛选']
+          this.licensePlateNumber = this.unitItme.licensePlateNumber
+        }else if(item==='取消车牌筛选'){
+          this.licensePlateMenu=['筛选当前车牌']
+          this.licensePlateNumber = ''
+        }else if(item==='转到自费维修'){
+          this.updateSubjectID(this.unitItme.ownerID,this.unitItme.subjectType,'008F808E-C79C-4F8B-9D16-986093FAB86A','转到自费维修')
+          return
+        }else if(item==='修改事由'){
+          let name ='64'
+          this.$dialog.OpenWindow({
+            width: 950,
+            height: 603,
+            url: '/selectDic?name=' + name,
+            title: '选择事由',
+            closeCallBack: (data) => {
+              if(data){
+                this.$dialog.confirm({
+                  width: 300,
+                  tipValue: '确定修改收支明细事由?',
+                  btnValueOk: '确定',
+                  alertImg: 'warn',
+                  okCallBack: () => {
+                      this.updateSubjectID(this.unitItme.ownerID,this.unitItme.subjectType,data.id)
+                    }
+                })
+              }
+            }
+          })
+          return
+        }else if(item==='提示财务修改事由'){
+          this.$dialog.confirm({
+            width: 300,
+            tipValue: '确定修改收支明细事由?',
+            btnValueOk: '确定',
+            alertImg: 'warn',
+            okCallBack: () => {
+              let params={
+                id:this.unitItme.ownerID
+              }
+              this.ajaxJson({
+                url: '/Fin/bankDetailAbnormalWX',
+                data:params,
+                call: (data)=>{
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                      this.initPageData(false)
+                    }
+                  })
+                }
+              })
+            }
+          })
+          return
         }
+        this.pager.pageIndex = 1
         this.initPageData(false)
+      },
+      updateSubjectID(id,subjectType,subjectID,update){
+        this.$dialog.confirm({
+          width: 300,
+          tipValue: '确定'+update+'?',
+          btnValueOk: '确定',
+          alertImg: 'warn',
+          okCallBack: () => {
+            let params={
+              id:id,
+              subjectType:subjectType,
+              subjectID:subjectID,
+            }
+            this.ajaxJson({
+              url: '/Fin/bankDetailUpdateSubject',
+              data:params,
+              call: (data)=>{
+                this.$dialog.alert({
+                  tipValue: data.message,
+                  closeCallBack: () => {
+                    this.initPageData(false)
+                  }
+                })
+              }
+            })
+          }
+        })
       },
       getMonthDay(year, month) {
         let days = new Date(year, month, 0).getDate()
@@ -348,6 +572,7 @@
           let newDate = nowDate.getDate()-1;
           this.startDate = newYear + '-' +newMonth + '-' + newDate + ' 00:00:00'
           this.endDate = newYear + '-' +newMonth + '-' + newDate + ' 23:59:59'
+          this.pager.pageIndex = 1
           this.initPageData(false)
         }else if(this.dayCategory==='2'){
           this.dayCategory='3'
@@ -365,7 +590,7 @@
                 month = this.selectMonth.slice(5,6)-1
                 year = this.selectMonth.slice(0,4)
               }
-                day = this.getMonthDay(year,month)
+              day = this.getMonthDay(year,month)
             }else{
               year = this.selectMonth.slice(0,4)
               month = this.selectMonth.slice(5,6)
@@ -375,6 +600,7 @@
             endDate = year + '-' + month + '-' + day + ' 23:59:59'
             this.startDate = startDate
             this.endDate = endDate
+            this.pager.pageIndex = 1
             this.initPageData(false)
           }
 
@@ -397,6 +623,7 @@
               }
               this.startDate = startDate + ' ' + '00:00:00'
               this.endDate = endDate + ' ' + '23:59:59'
+              this.pager.pageIndex = 1
               this.initPageData(false)
             }
           }
@@ -407,31 +634,42 @@
               const l = month + '-12-31 ' + ' 23:59:59'
               this.startDate = f
               this.endDate = l
+              this.pager.pageIndex = 1
               this.initPageData(false)
             }
           }
         }else{
           if(this.dayCategory === '1'){
             this.dayCategory='0'
+            this.pager.pageIndex = 1
             this.initPageData(true)
           }else if(this.dayCategory === '3'){
             this.dayCategory='2'
+            this.pager.pageIndex = 1
             this.initPageData(false)
           }
         }
       },
-      initChoose(){
+      initChoose(obj){
         if(this.dayCategory === '1'||this.dayCategory === '0'){
           this.dayCategory='0'
         }else if(this.dayCategory === '3'||this.dayCategory === '2'){
           this.dayCategory='2'
         }
+        if(obj === 'type'){
+          this.type=this.typeList.value
+          $('#incomeContent').html('全部维修收入')
+          this.incomeType = '0'
+        }
+        this.pager.pageIndex = 1
         this.initPageData(false)
       },
       initChooseTime(item){
         this.selectMonth = item.endDate
         this.dayCategory='2'
         this.radioTime = item;
+        this.startDate = this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate;
+        this.endDate = this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate;
         if(item.startDate.split("-")[1]<item.endDate.split("-")[1]){
           this.oldTotal='比前一月(环比)'
           this.nowTotal='本月'
@@ -441,14 +679,19 @@
           this.nowTotal='本日'
           this.isYearMoneyShow=true
         }
+        this.pager.pageIndex = 1
         this.initPageData(false)
       },
       selectMonthEvent(data,item){
+        console.log( 'color:red',data,item, )
+        this.screen = data
         this.dayCategory='2'
         this.selectMonth = item.endDate
 
         this.yearMonth = data;
         this.radioTime = item;
+        this.startDate = this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate;
+        this.endDate = this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate;
         if(data.split("-")[1]==='13'){
           this.oldTotal='比前一年(环比)'
           this.nowTotal='本年'
@@ -464,6 +707,7 @@
           this.yearMoneyShow = true
         }
         if(this.radioTime){
+          this.pager.pageIndex = 1
           this.initPageData(false)
         }
       },
@@ -529,7 +773,7 @@
         // if(item.workOrderID){//原需求如工单号为空 跳到form维护页 不为空跳view
         //   url = '/claimsView?id=' + item.id
         // }else{
-          url = '/claimsForm?id=' + item.id
+        url = '/claimsForm?id=' + item.id
         // }
         this.$dialog.OpenWindow({
           width: '1050',
@@ -573,27 +817,32 @@
             let newSec = nowDate.getSeconds();
             let lastDate = newDate - 1;
 
-            let startDate = newYear + '-' + newMonth + '-' + lastDate + ' ' + '23:59:59';
-            let endDate = newYear + '-' + newMonth + '-' + newDate + ' ' + newHours + ':' + newMin + ':' + newSec;
+            this.startDate = newYear + '-' + newMonth + '-' + lastDate + ' ' + '23:59:59';
+            this.endDate = newYear + '-' + newMonth + '-' + newDate + ' ' + newHours + ':' + newMin + ':' + newSec;
+
             params = {
-              startDate: startDate,
-              endDate: endDate,
+              startDate: this.startDate,
+              endDate: this.endDate,
+              type:this.type,
             }
           }
         } else {
-          if(this.dayCategory==='2'){
+          if(this.dayCategory==='2' || this.dayCategory==='0'){
             params = {
               bankID: this.bankList.value,
               unitID: this.insuranceUnitList.value,
               dateType:this.dateTypeList.value,
               vehicleBrand:this.vehicleBrandList.value,
               operatorID:this.operatorIDList.value,
-              // startDate: this.radioTime.startDate,
-              // endDate: this.radioTime.endDate,
               workOrderID:this.workOrderID,
-              startDate: this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate,
-              endDate: this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate,
+              // startDate: this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate,
+              // endDate: this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate,
+              startDate: this.startDate,
+              endDate: this.endDate,
               signState : this.signStateList.value,
+              type:this.type,
+              customerName:this.customerName,
+              licensePlateNumber:this.licensePlateNumber
             }
           }else if(this.dayCategory==='3'){
             params = {
@@ -608,11 +857,17 @@
               startDate: this.startDate,
               endDate: this.endDate,
               signState : this.signStateList.value,
+              type:this.type,
+              customerName:this.customerName,
+              licensePlateNumber:this.licensePlateNumber
             }
           }else if(this.dayCategory === '1'){
             params = {
               startDate: this.startDate,
               endDate: this.endDate,
+              type:this.type,
+              customerName:this.customerName,
+              licensePlateNumber:this.licensePlateNumber
             }
           }
         }
@@ -629,21 +884,24 @@
             this.operatorIDList = data.operatorList
             this.vehicleBrandList = data.vehicleBrandList
 
-            if(data.total[0].oldMoney>0){
+            if(data.total[0].oldMoney>=0){
+              this.oldTotalColor= '#ff000c'
               this.oldMoney=data.total[0].oldMoney
               this.oldMoneySymbol='+'
             }else{
               this.oldMoney=data.total[0].oldMoney
               this.oldMoneySymbol=''
+              this.oldTotalColor= '#09B300'
             }
-            if(data.total[0].yearMoney>0){
+            if(data.total[0].yearMoney>=0){
+              this.oldTotalColor1= '#ff000c'
               this.yearMoney=data.total[0].yearMoney
               this.yearMoneySymbol='+'
-            }else if(data.total[0].yearMoney<0){
+            }else{
               this.yearMoney=data.total[0].yearMoney
               this.yearMoneySymbol=''
+              this.oldTotalColor1= '#09B300'
             }
-
           },
           init: (data) => {
             this.insuranceUnitList = data.insuranceUnit
@@ -662,6 +920,7 @@
       if(this.isClaims === '0'){
         this.isPersonalClaims = false;
         this.isCategory = '0'
+        this.unitMenu=['筛选当前公司','转到自费维修','提示财务修改事由']
       }
     },
     watch: {

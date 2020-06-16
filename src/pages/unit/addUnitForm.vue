@@ -18,6 +18,7 @@
         <yhm-form-text title="单位代码" :value="code" id="code" rule="R0000"></yhm-form-text>
         <yhm-form-text title="单位简称" :value="abbreviation" id="abbreviation" rule="R0000"></yhm-form-text>
         <yhm-form-text title="公司电话" :value="tel" id="tel" rule="R0000"></yhm-form-text>
+        <yhm-form-radio title="是否黑名单" :select-list="blacklistList" :value="blacklist" id="blacklist"></yhm-form-radio>
         <yhm-form-textarea title="地址" :value="addressCN" id="addressCN" rule="R0000" width="1"></yhm-form-textarea>
 
         <yhm-form-text title="统一社会" @repeatverify="verifyRegistrationNumber" subtitle="信用代码" ref="registrationNumber" :value="registrationNumber" id="registrationNumber" rule="R0000">
@@ -104,6 +105,8 @@
       return {
         id: '',
         categoryList: [] ,
+        blacklistList:[],
+        blacklist:'',
         isList:false,
         switchIconShow:false,
         list:[],
@@ -391,6 +394,7 @@
             code: this.code,   //单位代码
             abbreviation: this.abbreviation,   //单位简称
             category: this.category,   //单位分类
+
             tagList: this.tagSubmit,
             tel: this.tel,
             addressCN: this.addressCN,
@@ -429,6 +433,7 @@
             approvalDate: this.approvalDate,
             registerState: this.registerState,
             management: this.management,
+            blacklist:this.blacklist,   //是否加入黑名单
           }
           this.ajaxJson({
             url: '/Basic/unitVueSave',
@@ -461,6 +466,10 @@
         all: (data)=>{
           this.categoryList = data.categoryPsd.list
           this.category = data.categoryPsd.value
+
+          this.blacklistList = data.blacklistPsd.list
+          this.blacklist = data.blacklistPsd.value
+
           this.tagList = data.tagPsd.list
           this.tag = data.tagPsd.value
 
@@ -517,7 +526,7 @@
   }
   .duplicateAccount{
     position: fixed;
-    bottom: -300px;
+    bottom: -99%;
     transition: all 0.5s;
     width: 100%;
     box-sizing: border-box;

@@ -63,7 +63,7 @@
     data() {
       return {
 
-
+        personName:'',
         categoryBefore: '0', // 单位按钮是否可以切换(0表示能切换,1表示不能切换)
         listCategory: { // 接受单位筛选数据
           value: '',
@@ -112,10 +112,10 @@
         this.initPageData()
       },
       selectAddEvent () {
-        let url = '/addPersonForm?isUrl=0'
+        let url = '/addPersonForm?isUrl=0&name=' + this.personName
         let height = '692'
         if(this.simplify === '1'){
-           url = '/addPersonSimplifyForm'
+           url = '/addPersonSimplifyForm?&name=' + this.personName
            height = '500'
         }
         this.$dialog.OpenWindow({
@@ -145,13 +145,15 @@
               category: this.listCategory.value,
               prefixLetter: this.prefixLetter.value,
               commonUse: '1',
+              personName:this.personName
             }
           }
           else{
             params = {
               category: this.listCategory.value,
               prefixLetter: this.prefixLetter.value,
-              commonUse:0
+              commonUse:0,
+              personName:this.personName
             }
 
           }
@@ -162,6 +164,7 @@
             category: this.listCategory.value,
             prefixLetter: this.prefixLetter.value,
             commonUse:this.commonUsePsd.value,
+            personName:this.personName
           }
         }
         this.init({
@@ -184,7 +187,7 @@
       this.setQuery2Value('categoryBefore')
       this.setQuery2Value('simplify')
       this.setQuery2Value('commonClientUse')
-
+      this.setQuery2Value('personName')
       setTimeout(()=>{
         this.commonUsePsd.value = this.commonClientUse
 

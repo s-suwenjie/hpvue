@@ -34,20 +34,30 @@
             </div>
           </yhm-form-text>
 <!--          {{selfNameID}}-->
-          <yhm-form-text title="所属单位" :value="selfName" id="selfName" rule="R0000" tip="value" @blur="selfNameEvent">
+
+          <yhm-form-zh-text-checkbox check-disabled title="发票抬头" check-title="个人发票" :value="selfName" id="selfName" :check-value="selfCategory" check-value-id="selfCategory" rule="R0000">
             <div class="vs">
               <div v-if="selfNameShow" class="invoice category0" :style="getVs(selfNamePosition,1)"></div>
               <p :class="getVerifyState(confirmArr[3])" @mouseover.self="showSource('selfNameShow')" @mouseout.self="hideSource('selfNameShow')" @click="confirm('3')"></p>
               <p class="confirmTip" v-show="selfNameShow">点击确认</p>
             </div>
-          </yhm-form-text>
-          <yhm-form-text title="纳税人" subtitle="识别号" :value="selfCode" id="selfCode" rule="R0000">
+          </yhm-form-zh-text-checkbox>
+
+          <!--<yhm-form-text title="所属单位" :value="selfName" id="selfName" rule="R0000" tip="value" @blur="selfNameEvent">
+            <div class="vs">
+              <div v-if="selfNameShow" class="invoice category0" :style="getVs(selfNamePosition,1)"></div>
+              <p :class="getVerifyState(confirmArr[3])" @mouseover.self="showSource('selfNameShow')" @mouseout.self="hideSource('selfNameShow')" @click="confirm('3')"></p>
+              <p class="confirmTip" v-show="selfNameShow">点击确认</p>
+            </div>
+          </yhm-form-text>-->
+          <yhm-form-text :show="selfCategory == 0" title="纳税人" subtitle="识别号" :value="selfCode" id="selfCode" rule="R0000">
             <div class="vs">
               <div v-if="selfCodeShow" class="invoice category0" :style="getVs(selfCodePosition,1)"></div>
               <p :class="getVerifyState(confirmArr[4])" @mouseover.self="showSource('selfCodeShow')" @mouseout.self="hideSource('selfCodeShow')" @click="confirm('4')"></p>
               <p class="confirmTip" v-show="selfCodeShow">点击确认</p>
             </div>
           </yhm-form-text>
+          <yhm-form-text :show="selfCategory == 1" title="纳税人" subtitle="身份证号" :value="selfCode" id="selfCode"></yhm-form-text>
           <yhm-form-text tip="money" title="金额" before-icon="rmb" :value="money" id="money" @input="getMoneyEvent" rule="R1500">
             <div class="vs">
               <div v-if="moneyShow" class="invoice category0" :style="getVs(moneyPosition,1)"></div>
@@ -107,7 +117,7 @@
 
 <script>
   import { formmixin } from '@/assets/form.js'
-  import {accAdd} from "../../assets/common";
+  import {accAdd} from "../../assets/common.js";
   export default {
     name: 'myElectronicInvoiceForm',
     mixins: [formmixin],
@@ -128,6 +138,7 @@
         num:'',
         numShow:false,
         numPosition:[],
+        selfCategory:'1',
         selfNameID:'',//'9EC315DA-FD76-416A-B22A-3B7C754B62D6',
         selfName:'',
         selfNameShow:false,
@@ -174,16 +185,37 @@
     methods:{
       confirm(index){
         if(this.validator()){
-          this.confirmArr[index] = true
-          this.confirmArr.push(false)
-          this.confirmArr.splice(this.confirmArr.length - 1,1)
-          if(this.confirmArr.indexOf(false) === -1){
-            this.onOff = true
-          }else{
-            this.onOff = false
+          if(index == 3 && this.selfCategory == 1){
+            this.$dialog.OpenWindow({
+              url: '/selectPerson?commonClientUse=1&personName=' + encodeURI(this.selfName),
+              title:'选择纳税人',
+              width: 950,
+              height: 690,
+              closeCallBack: (data) => {
+                if(data){
+                  this.selfName = data.name
+                  this.selfNameID = data.id
+                  this.selfCode = data.idNo
+                  this.confirmOperate(index)
+                  this.confirmOperate('4')
+                }
+              }
+            })
+          }
+          else{
+            this.confirmOperate(index)
           }
         }
-
+      },
+      confirmOperate(index){
+        this.confirmArr[index] = true
+        this.confirmArr.push(false)
+        this.confirmArr.splice(this.confirmArr.length - 1,1)
+        if(this.confirmArr.indexOf(false) === -1){
+          this.onOff = true
+        }else{
+          this.onOff = false
+        }
       },
       selfNameEvent(){
         if(this.thisUnit !== null){
@@ -255,6 +287,7 @@
                 url:'/Fin/judgeRepetitionElectronicInvoice',
                 data:p,
                 call:(dataResult) =>{
+
                   if(dataResult.type === 0){
                     this.uploadShow = false
                   }
@@ -300,32 +333,46 @@
               this.codePosition = result.codePosition.split(',')
               this.num = result.num
               this.numPosition = result.numPosition.split(',')
+              this.selfCategory = result.selfCategory
               this.selfName = result.selfName
 
-              let sign = true
-              for(var i = 0; i < this.thisUnit.length; i++){
-                if(this.thisUnit[i].name === result.selfName){
-                  this.selfNameID = this.thisUnit[i].id
-                  sign = false
-                  break;
+              if(this.selfCategory == 0){
+                //公司抬头的时候检测
+                let sign = true
+                for(var i = 0; i < this.thisUnit.length; i++){
+                  if(this.thisUnit[i].name === result.selfName){
+                    this.selfNameID = this.thisUnit[i].id
+                    sign = false
+                    break;
+                  }
                 }
-              }
-              if(sign){
-                this.$dialog.alert({
-                  tipValue:'请确认发票抬头准确无误，系统检测到抬头可能异常，如确认无误，请忽略。',
-                  width:'650',
-                  alertImg:'warn'
-                })
+                if(sign){
+                  this.$dialog.alert({
+                    tipValue:'请确认发票抬头准确无误，系统检测到抬头可能异常，如确认无误，请忽略。',
+                    width:'650',
+                    alertImg:'warn'
+                  })
+                }
               }
 
               this.selfNamePosition = result.selfNamePosition.split(',')
               this.selfCode = result.selfCode
               this.selfCodePosition = result.selfCodePosition.split(',')
-              this.money = result.money
+              if (result.money == null){
+                this.money = ''
+              }else{
+                this.money = result.money
+              }
               this.moneyPosition = result.moneyPosition.split(',')
               this.tax = result.tax
               this.taxPosition = result.taxPosition.split(',')
-              this.totalMoney = result.totalMoney
+              if(result.totalMoney==null){
+                this.totalMoney = ''
+              }else{
+                this.totalMoney = result.totalMoney
+              }
+              this.pdfUrl = sourceFilePath
+              this.imgUrl = targetFilePath
               this.totalMoneyPosition = result.totalMoneyPosition.split(',')
               this.otherName = result.otherName
               this.otherNamePosition = result.otherNamePosition.split(',')
@@ -333,8 +380,8 @@
               this.otherCodePosition = result.otherCodePosition.split(',')
               this.remark = result.remark
               this.remarkPosition = result.remarkPosition.split(',')
-              this.pdfUrl = sourceFilePath
-              this.imgUrl = targetFilePath
+
+
             }
             else{
               this.$dialog.confirm({
@@ -364,10 +411,6 @@
               okCallBack:() => {
 
                 this.manualInvoice()
-
-                this.uploadShow = false
-                this.pdfUrl = sourceFilePath
-                this.imgUrl = targetFilePath
 
                 this.uploadShow = false
                 this.pdfUrl = sourceFilePath
@@ -447,6 +490,7 @@
             codePositionArray:this.codePosition,
             num:this.num,
             numPositionArray:this.numPosition,
+            selfCategory:this.selfCategory,
             selfNameID:this.selfNameID,
             selfName:this.selfName,
             selfNamePositionArray:this.selfNamePosition,
@@ -580,6 +624,7 @@
           this.codePosition = data.codePosition.split(',')
           this.num = data.num
           this.numPosition = data.numPosition.split(',')
+          this.selfCategory = data.selfCategory
           this.selfNameID = data.selfNameID
           this.selfName = data.selfName
           this.selfNamePosition = data.selfNamePosition.split(',')
@@ -589,6 +634,7 @@
           this.moneyPosition = data.moneyPosition.split(',')
           this.tax = data.tax
           this.taxPosition = data.taxPosition.split(',')
+
           this.totalMoney = data.totalMoney
           this.totalMoneyPosition = data.totalMoneyPosition.split(',')
           this.otherName = data.otherName

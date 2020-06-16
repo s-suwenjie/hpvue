@@ -3,6 +3,7 @@
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
+        <yhm-form-select  title="业务员"  tip="value" width="1" aria-autocomplete="both" @click="principalEvent" :value="salsesman" id="salsesman" rule="R0000"></yhm-form-select>
         <yhm-form-select title="车牌号" tip="value"   @click="plateEvent" :value="plate" id="plate" rule="R0000"></yhm-form-select>
         <yhm-form-date title="投保日期" subtitle=""   :value="insuredDate" id="insuredDate " position="t"  rule="R0000"></yhm-form-date>
         <yhm-form-zh-select-text tip-before="value" tip-after="beinsuredidNo" @call="beinsuredEvent"  :before="beinsuredName" before-id="beinsuredName" :after="beinsuredidNo" after-id="beinsuredidNo" before-rule="#" after-rule="R0000" title="被保险人" after-title="证件号" after-width="160">
@@ -20,7 +21,10 @@
           </div>
         </yhm-form-zh-select-text>
         <yhm-form-zh-select-text tip-before="value" tip-after="contactPhone"  @call="contactEvent" :before="contactName" before-id="contactName" :after="contactPhone" after-id="contactPhone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="160"></yhm-form-zh-select-text>
-        <yhm-form-zh-select-text tip-before="value" tip-after="insuredPhone" @call="insuredEvent" :before="insuredName" before-id="insuredName" :after="insuredPhone" after-id="insuredPhone" before-rule="#" after-rule="R4000" title="投保人" after-title="手机号码" after-width="145"></yhm-form-zh-select-text>
+        <yhm-form-zh-select-text tip-before="value" tip-after="insuredPhone" @call="insuredEvent" :before="insuredName" before-id="insuredName" :after="insuredPhone" after-id="insuredPhone" before-rule="#"  title="投保人" after-title="证件号" after-width="160">
+          <span class="formBoxIcon beinSpan" :class="'i-uniE9b0'+insuredState" @click="iconClick"></span>
+
+        </yhm-form-zh-select-text>
         <yhm-form-radio title="与车主关系" subtitle=""  :select-list="relationshipList" :value="relationship" id="relationship"></yhm-form-radio>
         <yhm-form-radio title="投保类型" @call="insuredTypeClick" subtitle=""  width="1" :select-list="insuredTypeList" :value="insuredType" id="insuredType"></yhm-form-radio>
         <yhm-form-radio title="投保渠道" subtitle=""  width="1" :select-list="insuredChannelList" :value="insuredChannel" id="insuredChannel"></yhm-form-radio>
@@ -31,13 +35,19 @@
     <yhm-formbody>
       <template #title>保险信息</template>
       <template #control>
-        <yhm-form-date title="交强险" subtitle="开始日期" @call="forceDate"  v-if="isforceStart" :value="forceStartDate" id="forceStartDate " position="u"  rule="R0000"></yhm-form-date>
+
+
+        <yhm-form-date title="交强险" subtitle="" @call="forceDate"  v-if="isforceStart" :value="forceStartDate" id="forceStartDate " position="u"  rule="R0000"></yhm-form-date>
         <yhm-form-date title="交强险" subtitle="结束日期" :min="forceStartDate"  v-if="isforceStart" :value="forceEndDate" id="forceEndDate " position="u"  rule="R0000"></yhm-form-date>
         <yhm-form-text placeholder="" v-if="isforceStart" title="交强险金额" subtitle="" @input="isaMoney" :value="forceMoney" id="forceMoney" ></yhm-form-text>
         <yhm-form-text placeholder="" v-if="isvehicle" title="车船税金额" subtitle="" @input="isaMoney" :value="vehicleMoney" id="vehicleMoney" ></yhm-form-text>
         <yhm-form-date title="商业险" subtitle="开始日期" @call="businessDate" v-if="isbusinessStart"  :value="businessStartDate" id="businessStartDate " position="u"  rule="R0000"></yhm-form-date>
         <yhm-form-date title="商业险" subtitle="结束日期" :min="businessStartDate" v-if="isbusinessStart"  :value="businessEndDate" id="businessEndDate " position="u"  rule="R0000"></yhm-form-date>
-        <yhm-form-radio title="投保公司"  subtitle=""  width="1" :select-list="insuredUnitList" :value="insuredUnit" id="insuredUnit"></yhm-form-radio>
+        <yhm-form-radio title="投保公司"  @call="insuredUnitEvent" subtitle=""  width="1" :select-list="insuredUnitList" :value="insuredUnit" id="insuredUnit"></yhm-form-radio>
+        <yhm-form-radio title="是否返利" subtitle="" @call="isCashObject" :no-edit="isCashOb" :select-list="cashList" :value="cash" id="cash"></yhm-form-radio>
+        <yhm-form-radio title="返利对象" subtitle=""  v-if="isCash" :select-list="cashObjectList" :value="cashObject" id="cashObject"></yhm-form-radio>
+
+        <yhm-form-select v-if="isPromotions" title="选择" subtitle="活动方案" tip="value"   @click="promotionsEvent" :value="name" id="name"></yhm-form-select>
 
         <yhm-form-select-insurance  title="商业险种" :is-content="true" v-if="isbusinessStart"
                                    :passenger-value="passenger" passenger-id="passenger"
@@ -54,10 +64,7 @@
         <yhm-form-text placeholder="" title="开票金额" subtitle=""  :value="invoicingMoney" id="invoicingMoney" rule="R0000"></yhm-form-text>
         <yhm-form-text placeholder="" title="保费合计" subtitle="" :no-edit="isTotal" :value="premiumsTotal" id="premiumsTotal" ></yhm-form-text>
 
-
-
         <yhm-form-zh-text-two  :no-edit="isDiscountShow" v-if="isbusinessStart"  :before="discountMoney" before-id="discountMoney"  :after="discountCount" @afterblurEvent="calcAfterMoney" @beforeBlur="calcBeforeMoney" after-id="discountCount" title="优惠金额" before-icon="rmb" after-title="优惠点数(%)" after-width="50px;">
-
           <div class="formBoxIcon" v-if="isDis" @mouseover="tipChange" @mouseout="tipOut">
             <div  class="cbl_main_prompt tipShow">
               <div class="cbl_main_prompt_content" style="font-size:14px;padding: 0 12px; ">
@@ -69,11 +76,10 @@
           </div>
 
         </yhm-form-zh-text-two>
-        <yhm-form-radio title="是否返利" subtitle="" @call="isCashObject" :no-edit="isCashOb" :select-list="cashList" :value="cash" id="cash"></yhm-form-radio>
+
+
+<!--        <yhm-form-zh-text-two :no-edit="isDiscountShow" v-if="isbusinessStart"  :before="premium" before-id="premium"  :after="electronic"  after-id="electronic" title="保费优惠" before-icon="rmb" after-title="电子券优惠" after-width="60px;"> </yhm-form-zh-text-two>-->
         <yhm-form-text placeholder="" title="实收金额" subtitle="" :no-edit="isTotal" :value="receivedMoney" id="receivedMoney" rule="R0000"></yhm-form-text>
-
-        <yhm-form-radio title="返利对象" subtitle="" width="1" v-if="isCash" :select-list="cashObjectList" :value="cashObject" id="cashObject"></yhm-form-radio>
-
 
       </template>
     </yhm-formbody>
@@ -116,8 +122,8 @@
       return{
         plate:'',//车主
         plateID:'',
-        insuredDate:'',//投保日期
-        beinsuredID:'',//被投保人
+        insuredDate:formatDate( new Date((new Date()).getTime())),//投保日期
+        beinsuredID:'',//被保险人
         beinsuredName:'',
         beinsuredidNo:'',
         contactID:'',//联系人
@@ -189,13 +195,72 @@
         // ],
         tipList:'',
         carOwnerID:'',
+        insuredState:'0',//0联系人
+        // premium:'',  //保费优惠
+        // electronic:'',  //电子卷优惠
+
+        salsesman:'',
+        salsesmanID:'', //业务员
+        promotionsID:'',//优惠方案id
+        name:'',   //优惠方案别名
+        promotionsQuota:'',  //优惠方案额度
+        isPromotions:false,
       }
     },
     methods:{
-      iconMouseover(){
-        // alert()
+      insuredUnitEvent(){
+        this.name=''
+        this.promotionsID=''
+        this.promotionsQuota=''
       },
-      forceDate(){
+      promotionsEvent(){
+        if (this.plateID==''){
+          this.$dialog.alert({
+            tipValue:'请先选择车牌!!!',
+            alertImg: 'warn',
+            width:'300'
+          })
+        }else {
+          this.$dialog.OpenWindow({
+            width: 950,
+            height: 692,
+            url: '/selectPromotions?brand='+this.plateID+'&insuredUnit='+this.insuredUnit,
+            title: '选择优惠活动',
+            closeCallBack: (data) => {
+              if (data) {
+                this.name=data.name
+                this.promotionsID=data.id
+                this.promotionsQuota=data.amount
+                this.discountMoney=''//优惠金额
+                this.discountCount=''//优惠点位
+                this.unitRate()
+                this.discountList[0].remark = data.discount
+
+              }
+            }
+          })
+        }
+
+      },
+      //选择负责人
+      principalEvent () {
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 692,
+          url: '/selectPerson?category=0&categoryBefore=1',
+          title: '选择联系人',
+          closeCallBack: (data) => {
+            if (data) {
+              this.salsesmanID=data.id
+              this.salsesman = data.name
+            }
+          }
+        })
+      },
+      // iconMouseover(){
+      //   // alert()
+      // },
+      forceDate(){   //根据开始日期自动获取一年后的结束日期
         let forceStartDate = new Date(this.forceStartDate).getTime();
         var y = new Date().getFullYear(),
         isLeap = (0===y%4) && (0===y%100) || (0===y%400),
@@ -225,14 +290,23 @@
       calcBeforeMoney(){
         if (this.discountMoney!=='' &&this.businessMoney!==''){
           this.receivedMoney=accAdd(parseFloat(this.premiumsTotal),parseFloat(this.discountMoney)*-1) +''
-          this.discountCount=(parseFloat(this.discountMoney)/parseFloat(this.businessMoney)).toFixed(2)*100 +''
+          this.discountCount= this.accMul((parseFloat(this.discountMoney)/parseFloat(this.businessMoney)).toFixed(4),100)+''
           if (this.cash ==='0'){
             this.receivedMoney=this.premiumsTotal
           }
           this.unitRate()
         }
       },
+      accMul(arg1,arg2)    //两个小数相乘
+      {
+        var m=0,s1=arg1.toString(),s2=arg2.toString();
+        try{m+=s1.split(".")[1].length}catch(e){}
+        try{m+=s2.split(".")[1].length}catch(e){}
+        return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)
+      },
+
       calcAfterMoney(){
+
         if (this.discountCount!=='') {
           this.discountMoney = parseFloat(this.businessMoney) * (parseFloat(this.discountCount)/100).toFixed(2) +''
           this.receivedMoney = accAdd(parseFloat(this.premiumsTotal), parseFloat(this.discountMoney) * -1) +''
@@ -243,31 +317,44 @@
         }
       },
       unitRate(){
-          let params = {
-            num:this.insuredUnit,
-            id:this.plateID
-          }
-          this.ajaxJson({
-            url: '/Insurance/getUnitRate',
-            data: params,
-            call: (data) => {
-              for(let i in data){
-                if (parseFloat(this.discountCount)>data[i].clientRate){
-                  this.tipList = '优惠点数超出保险公司提供的点数'
-                    + data[i].showName
-                    +'优惠额度为:'
-                    + data[i].clientRate
-                    +'%'
-                  this.isDis=true
-                  this.hide='1'
-                }else {
-                  this.hide='0'
-                  this.isDis=false
-                }
-              }
-            }
-          })
 
+        if (parseFloat(this.discountCount)>this.promotionsQuota){
+          this.tipList = '优惠点数超出保险公司提供的点数'
+            // + data[i].showName
+            +'优惠额度为:'
+            + this.promotionsQuota
+            +'%'
+          this.isDis=true
+          this.hide='1'
+        }else {
+          this.hide='0'
+          this.isDis=false
+        }
+
+          // let params = {
+          //   num:this.insuredUnit,
+          //   id:this.plateID
+          // }
+          // this.ajaxJson({
+          //   url: '/Insurance/getUnitRate',
+          //   data: params,
+          //   call: (data) => {
+          //     for(let i in data){
+          //       if (parseFloat(this.discountCount)>this.promotionsQuota){
+          //         this.tipList = '优惠点数超出保险公司提供的点数'
+          //          // + data[i].showName
+          //           +'优惠额度为:'
+          //           + this.promotionsQuota
+          //           +'%'
+          //         this.isDis=true
+          //         this.hide='1'
+          //       }else {
+          //         this.hide='0'
+          //         this.isDis=false
+          //       }
+          //     }
+          //   }
+          // })
       },
 
       /* 优惠信息 */
@@ -295,14 +382,14 @@
       },
       insuredTypeClick(){//点击投保类型
         let  a=this.insuredProject.sort()
-        if(a.indexOf('2')!=-1&&this.insuredType!=0){
+        if(a.indexOf('2')!=-1&&this.insuredType!=0){   //投保类型不是新保 并且投保项目包含商业险
           this.isDiscountShow = false
           this.discountMoney=''
           this.discountCount=''
           this.isCashOb=false
           this.cash='0'
+          this.isPromotions=true
           this.isCashObject()
-
         }else{
           this.isDiscountShow = true
           this.discountMoney='0'
@@ -310,8 +397,12 @@
           this.unitRate()
           this.isCashOb=true
           this.cash='1'
+          this.isPromotions=false
           this.isCashObject()
         }
+        this.name=''
+        this.promotionsID=''
+        this.promotionsQuota=''
       },
       Project(){
         let  a=this.insuredProject.sort()
@@ -376,13 +467,13 @@
         //计算合计金额
         let sum =0.00
         if (this.forceMoney!==''){
-          sum+=parseFloat(this.forceMoney)
+          sum = accAdd(sum,this.forceMoney)
         }
         if (this.vehicleMoney!==''){
-          sum+=parseFloat(this.vehicleMoney)
+          sum = accAdd(sum,this.vehicleMoney)
         }
         if (this.businessMoney!==''){
-          sum+=parseFloat(this.businessMoney)
+          sum = accAdd(sum,this.businessMoney)
         }
         this.premiumsTotal=sum + ''
         this.calcBeforeMoney()
@@ -420,10 +511,54 @@
               this.beinsuredidNo=data.idNo
               this.carOwnerID=data.carOwnerID
 
+              if (data.carOwnerID=='' ||data.brand==''){
+                 this.updataSelectVehicle(data.vehicleID)
+              }
+              this.forceStartDate=''
+              this.forceEndDate=''
+              this.businessEndDate=''
+              this.businessStartDate=''
+
+
+
+              let day1 = new Date(data.forceEndDate);
+              day1.setTime(day1.getTime()+24*60*60*1000);
+              let s1 = day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate();
+
+              this.forceStartDate=s1   //交强险结束日期
+
+              let day2 = new Date(data.businessEndDate);
+              day2.setTime(day2.getTime()+24*60*60*1000);
+              let s2 = day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate();
+
+              this.businessEndDate=s2
+              if (data.businessEndDate==='1900-01-01'){  //商业险结束日期
+                this.businessEndDate=''
+              }else{
+                this.businessStartDate=s2
+                this.businessDate()
+              }
+              this.forceDate()
+
+
             }
           }
         })
 
+      },
+      updataSelectVehicle(id){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          title: '编辑客户信息',
+          url: '/vehicleForm?id=' + id,
+          closeCallBack: (data)=>{
+            if(data){
+              this.$dialog.setReturnValue(this.id)
+              this.initData()
+            }
+          }
+        })
       },
       //被保险人
       beinsuredEvent(){
@@ -442,22 +577,107 @@
               this.beinsuredID=data.id
               this.beinsuredName=data.name
               this.beinsuredidNo = data.idNo
+              if(this.beinsuredidNo === ''){
+                this.updataSelectPerson(data.id)
+              }
+
+            }
+          }
+        })
+      },
+      updataSelectPerson(id){   //维护联系人
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 692,
+          url: '/addPersonForm?id=' + id,
+          title: '选择联系人',
+          closeCallBack: (data) => {
+            if (data) {
+
+            }else{
+              this.beinsuredID= ''
+              this.beinsuredName=  ''
+              this.beinsuredidNo = ''
+            }
+          }
+        })
+      },
+      iconClick(){
+        if(this.insuredState == '0'){
+          this.insuredState = '1'
+        }else if(this.insuredState == '1') {
+          this.insuredState = '0'
+        }
+      },
+      updatainsuredSelectPerson(id){   //维护联系人
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 692,
+          url: '/addPersonForm?id=' + id,
+          title: '选择联系人',
+          closeCallBack: (data) => {
+            if (data) {
+
+            }else{
+              this.insuredID=''
+              this.insuredName = ''
+              this.insuredPhone = ''
             }
           }
         })
       },
       //投保人
       insuredEvent(){
+        if(this.insuredState == '0'){
+          this.$dialog.OpenWindow({
+            width: 950,
+            height: 692,
+            url: '/selectPerson?category=1',
+            title: '选择投保人',
+            closeCallBack: (data) => {
+              if (data) {
+                this.insuredID=data.id
+                this.insuredName = data.name
+                this.insuredPhone = data.phone
+                if (this.insuredPhone==''){
+                  this.updatainsuredSelectPerson(data.id)
+                }
+              }
+            }
+          })
+        }else if(this.insuredState == '1'){
+          this.$dialog.OpenWindow({
+            width: 950,
+            height: 692,
+            url: '/selectUnit?category=1',
+            title: '选择投保公司',
+            closeCallBack: (data) => {
+              if (data) {
+                this.insuredID=data.id
+                this.insuredName = data.name
+                this.insuredPhone = data.registrationNumber
+                if (this.insuredPhone==''){
+                    this.updataselectUnit(data.id)
+                }
+              }
+            }
+          })
+        }
+
+      },
+      updataselectUnit(id){
         this.$dialog.OpenWindow({
-          width: 950,
+          width: 1050,
           height: 692,
-          url: '/selectPerson?category=1',
-          title: '选择投保人',
+          url: '/addUnitForm?id=' + id,
+          title: '选择单位信息',
           closeCallBack: (data) => {
             if (data) {
-              this.insuredID=data.id
-              this.insuredName = data.name
-              this.insuredPhone = data.phone
+
+            }else {
+              this.insuredID=''
+              this.insuredName = ''
+              this.insuredPhone =''
             }
           }
         })
@@ -471,7 +691,7 @@
           title: '选择联系人',
           closeCallBack: (data) => {
             if (data) {
-              this.contactPersonID=data.id
+              this.contactID=data.id
               this.contactName = data.name
               this.contactPhone = data.phone
             }
@@ -490,6 +710,7 @@
                 let params = {
                   id: this.id,
                   process:this.hide,
+                  salsesmanID:this.salsesmanID, //业务员
                   plate:this.plate,
                   plateID:this.plateID,
                   insuredDate:this.insuredDate,
@@ -530,7 +751,8 @@
                   passenger:this.passenger,
                   selfGlass:this.selfGlass,
                   glass:this.glass,
-                  discountList: this.discountList
+                  discountList: this.discountList,
+                  promotionsID:this.promotionsID,
                 }
                 this.ajaxJson({
                   url: '/Insurance/preserveBilling',
@@ -560,6 +782,7 @@
             let params = {
               id: this.id,
               process:this.hide,
+              salsesmanID:this.salsesmanID, //业务员
               plate:this.plate,
               plateID:this.plateID,
               insuredDate:this.insuredDate,
@@ -600,7 +823,8 @@
               passenger:this.passenger,
               selfGlass:this.selfGlass,
               glass:this.glass,
-              discountList: this.discountList
+              discountList: this.discountList,
+              promotionsID:this.promotionsID,
             }
 
             this.ajaxJson({
@@ -640,6 +864,7 @@
                 let params = {
                   id: this.id,
                   process:'1',
+                  salsesmanID:this.salsesmanID, //业务员
                   plate:this.plate,
                   plateID:this.plateID,
                   insuredDate:this.insuredDate,
@@ -680,7 +905,8 @@
                   passenger:this.passenger,
                   selfGlass:this.selfGlass,
                   glass:this.glass,
-                  discountList: this.discountList
+                  discountList: this.discountList,
+                  promotionsID:this.promotionsID,
                 }
                 this.ajaxJson({
                   url: '/Insurance/saveBilling',
@@ -710,6 +936,7 @@
             let params = {
               id: this.id,
               process:'0',
+              salsesmanID:this.salsesmanID, //业务员
               plate:this.plate,
               plateID:this.plateID,
               insuredDate:this.insuredDate,
@@ -750,7 +977,8 @@
               passenger:this.passenger,
               selfGlass:this.selfGlass,
               glass:this.glass,
-              discountList: this.discountList
+              discountList: this.discountList,
+              promotionsID:this.promotionsID,
             }
             this.ajaxJson({
               url: '/Insurance/saveBilling',
@@ -819,12 +1047,17 @@
           this.glassList=data.glassPsd.list
           this.glass=data.glassPsd.value
 
+
         },
         add: (data) => {
           /* 需要添加的数据 */
+          this.salsesman=this.createName
+          this.salsesmanID = data.personID
         },
         look: (data) => {
           /* 需要查看的数据 */
+          this.salsesman=data.salsesman
+          this.salsesmanID=data.salsesmanID, //业务员
           this.plate=data.plate
           this.plateID=data.plateID
           this.insuredDate=data.insuredDate
@@ -856,6 +1089,18 @@
           this.driver=data.driver
           this.discountList=data.discountList
           this.carOwnerID=data.carOwnerID
+          this.name=data.promotionsName
+          this.promotionsID=data.promotionsID
+
+          if (this.insuredType==0){
+            this.isCashOb=true
+            this.isDiscountShow=true
+            this.isPromotions=false
+          }else{
+            this.isCashOb=false
+            this.isDiscountShow=false
+            this.isPromotions=true
+          }
 
           if (this.beinsuredID==this.carOwnerID){    //判断车主和被保险人是否是同一人
             this.isNotEqual=false
@@ -916,12 +1161,12 @@
 
 <style scoped>
   .i-yellowWarn{
-    color: #ffaa27;
+    color: #1AE642;
     font-size: 24px;
     cursor: pointer;
   }
   .beinSpan::before{
-    color: #ffaa27;
+    color: #1AE642;
   }
 </style>
 <style scoped lang="less">

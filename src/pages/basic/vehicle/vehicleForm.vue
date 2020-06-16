@@ -5,11 +5,15 @@
       <template #control>
         <yhm-form-radio title="车辆分类" :select-list="categoryList" :value="category" id="category" @call="categoryEvent"></yhm-form-radio>
         <yhm-form-radio title="车辆类型" :select-list="vehicleTypeList" :value="vehicleType" id="vehicleType" @call="vehicleTypeEvent"></yhm-form-radio>
-        <yhm-form-text placeholder=""  title="汽车排量" subtitle="" :show="isDisplacement" :value="displacement" id="displacement" rule="R0000"></yhm-form-text>
+        <yhm-form-text placeholder=""  title="汽车排量" subtitle="" :show="isDisplacement" :value="displacement" id="displacement" :rule="isYhmSelect"></yhm-form-text>
         <yhm-form-radio  title="所属类型" v-if="isAssort" :select-list="assortList" :value="assort" id="assort"></yhm-form-radio>
 
-        <yhm-form-text is-upper-case placeholder="" @repeatverify="nameVerifyEvent" @call="iconCall"  ref="plate" title="车牌号" subtitle="" :show="isHide" :value="plate" id="plate" rule="R8000" @blur="plateValue(index),plateShow==false"></yhm-form-text>
-<!--        <yhm-form-select title="车辆颜色" style="margin-left:32px;"  tip="value" :value="color" id="color"  @click="selectColour"></yhm-form-select>-->
+        <yhm-form-text is-upper-case placeholder=""   @repeatverify="nameVerifyEvent" @call="iconCall"  ref="plate" title="车牌号" subtitle="" :show="isHide" :value="plate" id="plate" :rule="isPlate" @blur="plateValue(index),plateShow==false">
+            <div style="padding-top: 10px; margin-left: -2px; ">
+                <span style="font-size: 27px;"  class="i-uniE9A1 icon_look" @click="spshow()" v-show="FormShow"></span>
+            </div>
+        </yhm-form-text>
+
         <yhm-form-select title="车辆颜色"   tip="value" :value="color" id="color"  @click="selectColour"></yhm-form-select>
 
         <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber"></yhm-form-text>
@@ -17,14 +21,15 @@
         <yhm-form-select title="品牌" tip="value" :value="brand" id="brand"  @click="selectBrand"></yhm-form-select>
         <yhm-form-select title="车型" tip="value" :value="model" id="model"  @click="selectModel"></yhm-form-select>
         <yhm-form-select title="车辆版本" tip="value" :value="version" id="version"  @click="selectVersion"></yhm-form-select>
-        <yhm-form-date title="登记日期" v-if="isHide"  :value="registerDate" id="registerDate " position="u"  ></yhm-form-date>
-        <yhm-form-select  title="车主信息" tip="value" @click="carOwnerIDEvent" :show="isHides"  :value="carOwner" id="carOwner" rule="R0000"></yhm-form-select>
+        <yhm-form-date title="上牌日期" v-if="isHide"  :value="registerDate" id="registerDate " position="u"  ></yhm-form-date>
+        <yhm-form-select  title="车主信息" tip="value" @click="carOwnerIDEvent" :show="isHides"  :value="carOwner" id="carOwner" :rule="isYhmSelect"></yhm-form-select>
         <yhm-formupload :ownerID="id" :value="fileList"  id="fileList" title="行车证(支持单据)" tag="vehicle" multiple="multiple" category="3" ></yhm-formupload>
+        <appLicencePlate class="guessSelector" v-show="PShow" :key="index" :plate-show="plateShow" v-model="carNum" @btnClick="btnClick"  @input="selectArr" >
+        </appLicencePlate>
 <!--        <yhm-form-upload-image title="上传行车证" tag="drivingLicense" discription="点击图标或拖拽图片上传(不支持PDF格式)" :show="isHide" :value="drivingLicense" id="drivingLicense" ></yhm-form-upload-image>-->
       </template>
     </yhm-formbody>
-<!--    <appLicencePlate class="guessSelector" @btnClick="btnClick" v-show="guessSelectorShow" :key="key" :plate-show="plateShow"  @input="selectArr">-->
-<!--    </appLicencePlate>-->
+
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
@@ -82,6 +87,12 @@
         idNo: '',
         registrationNumber:'',
         fileList:[],
+        FormShow: true,
+        PShow:false,
+        isPlate:'R8000',
+        isYhmSelect:'R0000', // 客户过来
+        urlType:'',//1保险理赔  自费维修 过来
+
       }
     },
     methods: {
@@ -115,7 +126,11 @@
         this.nameVerifyEvent()//调用验证
       },
       vehicleTypeEvent(){
-        // console.log(this.vehicleType)
+        if (this.vehicleType ==='1' ){
+          this.isDisplacement=false
+        }else{
+          this.isDisplacement=true
+        }
       },
       categoryEvent(){
         if(this.category === '0'){
@@ -133,6 +148,8 @@
          this.isHides=true
          this.isHide=true
           this.assort = '1'
+        } else if (this.category === '3'){
+          this.isPlate=''
         }
       },
       carOwnerIDEvent () {
@@ -140,7 +157,7 @@
         this.$dialog.OpenWindow({
           width: 950,
           height: 692,
-          url: '/selectPerson?category=1&simplify=1',
+          url: '/selectPerson?category=1&commonClientUse=1',
           title: '选择车辆所有人',
           closeCallBack: (data) => {
             if(data){
@@ -355,13 +372,23 @@
             data: params,
             call: (data) => {
               if (data.type === 0) {
-                this.$dialog.setReturnValue(this.id)
-                this.$dialog.alert({
-                  tipValue: data.message,
-                  closeCallBack: () => {
-                    this.$dialog.close()
-                  }
-                })
+                if(this.urlType === '1'){
+                  this.$dialog.setReturnValue(this.model+'◇'+this.modelID+'◇'+this.brand+'◇'+this.brandID+'◇'+this.carOwnerID+'◇'+this.carOwner)
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                      this.$dialog.close()
+                    }
+                  })
+                }else{
+                  this.$dialog.setReturnValue(this.id)
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                      this.$dialog.close()
+                    }
+                  })
+                }
               }else if(data.type === 1){
                 this.$dialog.alert({
                   alertImg:'warn',
@@ -371,10 +398,24 @@
             }
           })
         }
-      }
+      },
+      spshow(){
+        this.PShow=true
+        this.index++
+      },
+      selectArr(value){
+        this.plate = value.join('')
+      },
     },
     created () {
       this.setQuery2Value('id')
+      this.setQuery2Value('urlType')
+      this.setQuery2Value('isReule')
+      if (this.isReule==1){
+        this.isYhmSelect=''
+      }else {
+        this.isYhmSelect='R0000'
+      }
       this.init({
         url: '/Basic/initVehicleForm',
         all: (data) => {
@@ -440,6 +481,7 @@
     margin-right: 10px;
     font-size: 18px;
     margin-top: 10px;
+
   }
 
 
@@ -478,5 +520,16 @@
     justify-content: space-between;
 
     align-items: center;
+  }
+  .icon_look{
+    font-size: 20px;
+    color: #49a9ea;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: absolute;
+
+
   }
 </style>

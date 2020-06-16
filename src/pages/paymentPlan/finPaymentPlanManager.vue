@@ -1,6 +1,6 @@
 <template>
   <div>
-    <yhm-managerpage category="1" :total-table="true">
+    <yhm-managerpage @statisticalClick="statisticalClick" :statisticalShow="true" icon-statistical="i-input-date" category="1" :total-table="true">
       <!--导航条-->
 
       <template #navigationTab>
@@ -11,6 +11,8 @@
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/finPurchaseManager'}">采购计划</router-link>
+
 
       </template>
 <!--      &lt;!&ndash;操作区&ndash;&gt;-->
@@ -41,6 +43,7 @@
         <yhm-managerth style="width: 180px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 180px" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 140px" title="付款计划金额" value="planMoney"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="状态" value="state"></yhm-managerth>
       </template>
       <!--数据明细-->
@@ -53,6 +56,7 @@
           <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
           <yhm-manager-td :value="item.cause" :after-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td-money :value="item.planMoney" :before-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-money>
+          <yhm-manager-td-leaveword @iconClick="add(item.id)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
         </tr>
       </template>
@@ -125,6 +129,19 @@
       }
     },
     methods:{
+      statisticalClick(){
+        this.$dialog.OpenWindow({
+          width: '1600',
+          height: '800',
+          title: '付款计划',
+          url: '/paymentPlanDate',
+          closeCallBack: (data)=>{
+            if(data){
+
+            }
+          }
+        })
+      },
       selectedSum(){
         let params={
           selectValue:this.selectValue

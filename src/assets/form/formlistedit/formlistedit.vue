@@ -1,5 +1,5 @@
 <template>
-  <div class="f_area" v-if="show">
+  <div class="f_area" v-if="show" :style="{width:areaWidth+'px'}">
     <slot name="switchIcon"></slot>
     <div class="f_title f_listtitle">
       <p class="f_titleTxt">
@@ -35,7 +35,12 @@
       show:{
         type:Boolean,
         default:true
-      }
+      },
+      areaWidth:{
+        type:String,
+        default:''
+      },
+
     }
   }
 </script>

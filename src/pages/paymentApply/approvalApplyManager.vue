@@ -51,6 +51,7 @@
         <yhm-managerth style="width: 120px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="付款申请金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 240px;" title="编号"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="状态" value="state"></yhm-managerth>
         <yhm-managerth style="width: 320px;" title="操作"></yhm-managerth>
       </template>
@@ -71,11 +72,12 @@
           <yhm-manager-td-center :value="item.day+'天'" v-else-if="item.day>2&&item.day<=5" style="color:#0511a5;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #f00;font-weight: bold"></yhm-manager-td-center>
 
-          <yhm-manager-td-center :value="item.subject"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.subject" @click="skipEvent(item)" :color="item.ownerID!=''&&item.ownerType=='1'?'#49a9ea':''"></yhm-manager-td-center>
 
           <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" :value-object="item" @mouseout="tableTipHideEvent" :value="item.money"></yhm-manager-td-money>
 
           <yhm-manager-td-center :value="item.code" :class="{priority:item.isPriority === '1'}"></yhm-manager-td-center>
+          <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button :tip-category="0"  @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" v-show="item.isPrint === '1' " :no-click="item.nature === '2'" @click="printFund(item)" value="打印单据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
@@ -206,6 +208,32 @@
       }
     },
     methods: {
+      skipEvent(item){
+        if(item.ownerID!=''&&item.isRelevance=='1'){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '700',
+            title: '查看保单信息',
+            url:'/billingView?id='+item.ownerID,
+            closeCallBack: (data)=>{
+              if(data){
+              }
+            }
+          })
+        }
+      },
+      SelectApprovalMessage(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
+      },
       /* 批量拨付 */
       batchAllca(){
         this.$dialog.OpenWindow({
@@ -566,39 +594,48 @@
       adoptEvent (item) { //
         if(item.isApproval!=='1'){
           if(item.id){
-            let params = {
-              id: item.id,
-              kind: '0',
-              tableName: '45'
-            }
-            this.$dialog.confirm({
-              width: 300,
-              tipValue: '是否通过?',
-              alertImg: 'warn',
-              okCallBack: (data)=>{
-                this.ajaxJson({
-                  url: '/PersonOffice/approvalYesVue',
-                  data: params,
-                  call: (data)=>{
-                    if(data.type === 0){
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        closeCallBack: () => {
-                          this.initPageData(false)
-                        }
-                      })
-                    }else if(data.type === 1){
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        alertImg: 'error',
-                        closeCallBack: () => {
-                        }
-                      })
-                    }
-                  }
-                })
+            this.$dialog.OpenWindow({
+              width: 650,
+              height: 230,
+              title: '审批留言',
+              url: '/passMessage?id=' + item.id+ '&tableName=45&kind=0',
+              closeCallBack: (acc)=>{
+                this.initPageData(false)
               }
             })
+            // let params = {
+            //   id: item.id,
+            //   kind: '0',
+            //   tableName: '45'
+            // }
+            // this.$dialog.confirm({
+            //   width: 300,
+            //   tipValue: '是否通过?',
+            //   alertImg: 'warn',
+            //   okCallBack: (data)=>{
+            //     this.ajaxJson({
+            //       url: '/PersonOffice/approvalYesVue',
+            //       data: params,
+            //       call: (data)=>{
+            //         if(data.type === 0){
+            //           this.$dialog.alert({
+            //             tipValue: data.message,
+            //             closeCallBack: () => {
+            //               this.initPageData(false)
+            //             }
+            //           })
+            //         }else if(data.type === 1){
+            //           this.$dialog.alert({
+            //             tipValue: data.message,
+            //             alertImg: 'error',
+            //             closeCallBack: () => {
+            //             }
+            //           })
+            //         }
+            //       }
+            //     })
+            //   }
+            // })
           }
         }
       },

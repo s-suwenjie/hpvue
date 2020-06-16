@@ -12,6 +12,7 @@
         <yhm-managerth  title="车牌号"></yhm-managerth>
         <yhm-managerth  title="车主"></yhm-managerth>
         <yhm-managerth  title="联系人"></yhm-managerth>
+        <yhm-managerth  title="品牌"></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in content"
@@ -27,6 +28,7 @@
           <yhm-manager-td-center :value="item.plate"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.carOwner"></yhm-manager-td-center>
           <yhm-manager-td :value="item.name"></yhm-manager-td>
+          <yhm-manager-td :value="item.brandVal"></yhm-manager-td>
         </tr>
       </template>
       <template #empty>

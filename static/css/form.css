@@ -37,7 +37,9 @@
 .f_area1200{
   width: 1200px;
 }
-
+.f_areaWidth1235{
+  width: 1235px;
+}
 .h_image{
   height: 500px;
   display:flex;
@@ -84,7 +86,10 @@
     flex-direction: column;
     padding-bottom: 16px;
 }
-
+.cancelColumn{
+  border: 0 !important;
+  background-color: #fff;
+}
 /*选择页面的操作区*/
 .s_operate{
     display: flex;

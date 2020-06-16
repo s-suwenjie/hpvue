@@ -1,6 +1,6 @@
 <template>
-    <td class="fd_in_txt" :style="getWidth">
-      <yhm-text @change="changeEvent" @focus="focusEvent" @input="inputEvent" :tip-left="tipLeft" :tip-arrow-left="tipArrowLeft" :width="getTxtWidth" @blur="blurEvent" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :noEdit="noEdit" :value="txt" :id="txtKey" :rule="rule" category="m"></yhm-text>
+    <td v-show="show" class="fd_in_txt" :style="getWidth">
+      <yhm-text :show="show" @change="changeEvent" @focus="focusEvent" @input="inputEvent" :tip-left="tipLeft" :tip-arrow-left="tipArrowLeft" :width="getTxtWidth" @blur="blurEvent" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :noEdit="noEdit" :value="txt" :id="txtKey" :rule="rule" category="m"></yhm-text>
     </td>
 </template>
 

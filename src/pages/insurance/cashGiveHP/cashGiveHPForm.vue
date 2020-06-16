@@ -1,11 +1,12 @@
 <template>
     <div>
       <div class="center">
+
         <yhm-form-date  title="启用日期  "  :value="time" id="time" position="t" ></yhm-form-date>
 
         <div class="flex">
           <span>商业险金额:</span>
-          <span>X</span>
+          <span>/</span>
           <input type="text"  v-model="one">
           <span>X</span>
           <div class="cashGiveHPinput">
@@ -16,7 +17,7 @@
         </div>
         <div class="flex flex2">
           <span>商业险金额:</span>
-          <span>X</span>
+          <span>/</span>
           <input type="text"  v-model="one">
           <span>X</span>
           <div class="cashGiveHPinput">
@@ -31,7 +32,7 @@
         </div>
         <div class="flex flex3">
           <span>交强险金额:</span>
-          <span>X</span>
+          <span>/</span>
           <input type="text"  v-model="one">
           <span>X</span>
           <div class="cashGiveHPinput">
@@ -62,23 +63,20 @@
         two:'',
         three:'',
         four:'',
-        fives:''
+        fives:'',
+        unitID:'',
+        unit:'',
+        ownerID: '',
       }
     },
     methods:{
-      // oninputEvent(){
-      //   var text = document.getElementById("input");
-      //   text.onkeyup = function(){
-      //     this.value=this.value.replace(/\D/g,'');
-      //     if(text.value>100){
-      //       text.value = 100;
-      //     }
-      //   }
-      // },
+
       save(){
         let params = {
-          id:guid(),
+          id:this.id,
+          ownerID:this.ownerID,
           time:this.time,
+          unitID:this.unitID,
           one:this.one,
           two:this.two,
           three:this.three,
@@ -90,11 +88,21 @@
           data:params,
           call:(data) =>{
             if(data.type === 0){
-
+              let details={
+                id:this.id,
+                ownerID: this.ownerID,
+                time:this.time,
+                one:this.one,
+                two:this.two,
+                three:this.three,
+                four:this.four,
+                fives:this.fives
+              }
+              this.$dialog.setReturnValue(details) //向父级页面传递参数
               this.$dialog.alert({
                 tipValue: data.message,
                 closeCallBack: () => {
-                  this.$dialog.setReturnValue(this.id) //向父级页面传递参数
+
                   this.$dialog.close()
                 }
               })
@@ -108,7 +116,38 @@
             }
           }
         })
-      }
+      },
+
+    },
+    created () {
+      this.setQuery2Value('ownerID')
+      this.setQuery2Value('unitID')
+
+      this.init({
+        url: '/Insurance/initCashGiveHPDetailsForm',
+        all: (data) => {
+
+        },
+        add: (data) => {
+          /* 需要添加的数据 */
+        },
+        look: (data) => {
+          /* 需要查看的数据 */
+          this.id=data.id
+          this.ownerID=data.ownerID
+          this.time=data.time
+          this.one=data.one
+          this.two=data.two
+          this.three=data.three
+          this.four=data.four
+          this.fives=data.fives
+          this.unitID=data.unitID
+
+        }
+      })
+
+
+
     }
   }
 </script>

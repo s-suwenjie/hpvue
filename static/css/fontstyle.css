@@ -846,3 +846,38 @@
   font-family: 'icomoon' !important;
   content: "\e9a7";
 }
+.uniE9A8:before{
+  font-family: 'icomoon' !important;
+  content: "\e9a8";
+}
+/* 留言 */
+.i-uniE9AD:before{
+  font-family: 'icomoon' !important;
+  content: "\e9ad";
+}
+/*待入账*/
+.i-uniE9AE:before{
+  font-family: 'icomoon' !important;
+  content: "\e9ae";
+}
+/**待验证*/
+.i-uniE9AF:before{
+  font-family: 'icomoon' !important;
+  content: "\e9af";
+}
+/*已验证*/
+.i-uniE9b0:before{
+  font-family: 'icomoon' !important;
+  content: "\e9b0";
+}
+
+/*公司*/
+.i-uniE9b01:before{
+  font-family: 'icomoon' !important;
+  content: "\e9b1";
+}
+/*联系人*/
+.i-uniE9b00:before{
+  font-family: 'icomoon' !important;
+  content: "\e9b2";
+}

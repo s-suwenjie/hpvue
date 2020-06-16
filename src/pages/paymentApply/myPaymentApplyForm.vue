@@ -799,7 +799,7 @@ export default {
       if(this.nature === '4'){
         if(this.otherAccountID){
           this.$dialog.OpenWindow({
-            width: '950',
+            width: '1050',
             height: '692',
             title: '选择收支明细',
             url: '/selectBankDetail?direction=0&categoryBefore=1&selectType=1',
@@ -836,7 +836,7 @@ export default {
       }else if(this.nature === '5'){
         if(this.otherAccountID){
           this.$dialog.OpenWindow({
-            width: '950',
+            width: '1050',
             height: '692',
             title: '选择收支明细',
             url: '/selectBankDetail?direction=0&categoryBefore=1'+'&otherAccountID=' + this.otherAccountID +'&selectType=1',

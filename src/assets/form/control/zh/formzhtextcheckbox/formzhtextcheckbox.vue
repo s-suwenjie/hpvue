@@ -9,13 +9,16 @@
         <div @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box" :class="{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_disable:noEdit}">
           <span v-if="beforeIcon !== ''" @click="getFocus" class="c_icon" :class="beforeIcon"></span>
           <input v-if="!noEdit" ref="txt" class="c_content" v-model="txt" :class="{pl10:beforeIcon === '',pr10:1===1}" :type="type" @focus="focusEvent" @blur="blurEvent"/>
+          <!--<yhm-text v-if="!noEdit" ref="txt" class="c_content" :value="txt" :class="{pl10:beforeIcon === '',pr10:1===1}" :type="type" @focus="focusEvent" @blur="blurEvent"></yhm-text>-->
+
           <div v-if="noEdit" class="c_content_show" :style="getTxtWidth" :class="{pl10:beforeIcon === '',pr10:1===1}">{{txt}}</div>
-          <div @click="clickCheckBoxEvent" class="text_checkbox disable_menu" :class="{text_checkbox_select:checked}">
+          <div @click="clickCheckBoxEvent" class="text_checkbox disable_menu " :class="{text_checkbox_select:checked,c_disable:checkDisabled}">
             <div class="check_button_icon" :class="{check_button_icon_select:checked}"></div>
             <div class="pl5">{{checkTitle}}</div>
           </div>
         </div>
       </div>
+      <slot></slot>
     </div>
     <div class="fc_error"><span v-if="error">{{errorTipMessage}}</span></div>
   </div>
@@ -38,7 +41,6 @@
         }
       },
       props: {
-
         type:{
           type: String,
           default:"text"
@@ -50,6 +52,10 @@
         subtitle: {
           type: String,
           default: ''
+        },
+        checkDisabled: {
+          type:Boolean,
+          default:false
         },
         checkTitle:{
           type:String,
@@ -148,6 +154,10 @@
           //   this.$emit("verify")
           // })
         },
+        //主动显示控件错误
+        errorEvent(errorMessage){
+          this.$refs.txt.errorEvent(errorMessage)
+        },
         //让文文本框获取焦点
         getFocus(){
           if(!this.noEdit) {
@@ -158,10 +168,17 @@
           }
         },
         clickCheckBoxEvent(){
-          this.checked = !this.checked
-          this.$nextTick(() => {
-            this.$emit("clickCheckBox")
-          })
+          if(!this.checkDisabled) {
+            this.checked = !this.checked
+            this.$nextTick(() => {
+              this.$emit("clickCheckBox")
+            })
+          }
+        },
+        //主动显示控件错误
+        errorEvent(errorMessage){
+          this.error = true
+          this.errorTipMessage = errorMessage
         },
         //验证
         verification(paramVal){
@@ -193,7 +210,7 @@
             }
           }
           this.error = !result
-          return result;
+          return result
         }
       },
       watch:{

@@ -4,7 +4,7 @@
         <!--导航条-->
         <template #navigationTab>
           <router-link class="menuTabDiv " :to="{path:'/home/unit/insuranceUnitManager'}">管理保险公司</router-link>
-          <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/cashGiveHP/cashGiveHPManager'}">保险给HP返利</router-link>
+          <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/cashGiveHP/cashGiveHPManager'}">保险公司给海派返利</router-link>
           <router-link class="menuTabDiv " :to="{path:'/home/vipRate/vipRateManager'}">特殊车型制定</router-link>
         </template>
         <!--操作区-->
@@ -21,16 +21,22 @@
         </template>
         <!--数据表头-->
         <template #listHead>
+          <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
+          <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
           <yhm-managerth   title="启用时间"></yhm-managerth>
-          <yhm-managerth   title="商业险返利①"></yhm-managerth>
-          <yhm-managerth   title="商业险返利②"></yhm-managerth>
+          <yhm-managerth   title="保险公司"></yhm-managerth>
+          <yhm-managerth   title="保险公司返利"></yhm-managerth>
+          <yhm-managerth   title="三方服务费返利"></yhm-managerth>
           <yhm-managerth   title="交强险返利"></yhm-managerth>
           <yhm-managerth style="width: 100px;" title="删除"></yhm-managerth>
         </template>
         <!--数据明细-->
         <template #listBody>
           <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
+            <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
+            <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
             <yhm-manager-td-date  :value="item.time"></yhm-manager-td-date>
+            <yhm-manager-td  :value="item.unit"></yhm-manager-td>
             <yhm-manager-td  :value="item.commercialOne"></yhm-manager-td>
             <yhm-manager-td  :value="item.commercialTwo"></yhm-manager-td>
             <yhm-manager-td  :value="item.toPayHigh"></yhm-manager-td>
@@ -62,12 +68,25 @@
       }
     },
     methods:{
+      listView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '620',
+          title: '添加保险公司返利公式',
+          url: '/cashGiveForm?id='+item.id,
+          closeCallBack: (dataTwo)=>{
+            if(dataTwo){
+              this.initPageData()
+            }
+          }
+        })
+      },
       add(){
         this.$dialog.OpenWindow({
           width: '1050',
           height: '620',
           title: '添加保险公司返利公式',
-          url: '/cashGiveHPForm',
+          url: '/cashGiveForm',
           closeCallBack: (dataTwo)=>{
             if(dataTwo){
               this.initPageData()
@@ -125,7 +144,7 @@
           data:params,
           all:(data) =>{
             //不管是不是初始化都需要执行的代码
-            this.content=data.details
+
           },
           init:(data)=>{
             //初始化时需要执行的代码

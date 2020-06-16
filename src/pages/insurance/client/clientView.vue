@@ -13,7 +13,7 @@
 <!--        <yhm-view-control title="行车证信息"  category="3" type="smfiles" tag="drivingLicense" :content="drivingLicense"></yhm-view-control>-->
         <yhm-view-control category="3" title="行车证" type="files" :content="fileList"></yhm-view-control>
         <yhm-view-control title="车架号" :content="frameNumber"></yhm-view-control>
-        <yhm-view-control title="登记日期" :content="registerDate" type="date"></yhm-view-control>
+        <yhm-view-control title="上牌日期" :content="registerDate" type="date"></yhm-view-control>
         <yhm-view-control title="发动机号" :content="engineNumber" ></yhm-view-control>
       </template>
     </yhm-view-body>

@@ -102,6 +102,9 @@
     },
     filters:{
       formats(data,format,emptyValue,isEmpty){
+        if(data===null){
+          data = ''
+        }
         if(data === '' || isEmpty){
           return emptyValue
         }
@@ -130,17 +133,22 @@
 <style lang="less" scoped>
 .menuRight{
   position: absolute;
-  width: 100px;
+  width: auto;
+  min-width: 100px;
+  max-width: 200px;
   height: auto;
   padding: 5px 0;
   background: #fff;
   z-index: 999;
-  border: 1px solid black;
+  border: 1px solid #D3D3D3;
   border-radius: 5px;
   p{
-   height: 32px;
-    line-height: 32px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    /*margin: 0 5px;*/
+    height: 32px;
   }
   p:hover{
     background: #49a9ea;

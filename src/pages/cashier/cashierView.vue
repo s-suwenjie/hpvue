@@ -3,9 +3,10 @@
     <yhm-view-body>
       <template #title>基本信息</template>
       <template #body>
+        <yhm-view-control title="业务员" :content="salsesman"></yhm-view-control>
         <yhm-view-control title="车牌号" :content="plate"></yhm-view-control>
         <yhm-view-control title="投保日期" :content="insuredDate" type="date"></yhm-view-control>
-        <yhm-view-control title="被投保人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
+        <yhm-view-control title="被保险人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
         <yhm-view-control title="联系人" :content="contactName+'-'+contactPhone"></yhm-view-control>
         <yhm-view-control title="投保人" :content="insuredName+'-'+insuredPhone"></yhm-view-control>
         <yhm-view-control title="与车主关系" :content="relationshipVal"></yhm-view-control>
@@ -40,7 +41,7 @@
           <yhm-view-control title="实收金额" :content="receivedMoney" type="money"></yhm-view-control>
           <yhm-view-control title="是否返利" :content="cashVal"></yhm-view-control>
           <yhm-view-control title="返利对象" v-if="isCash" :content="cashObjectVal" ></yhm-view-control>
-
+          <yhm-view-control v-if="isPromotions" title="活动方案" :content="promotionsName"></yhm-view-control>
 
         </yhm-view-tab-content>
         <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[1].select">
@@ -80,6 +81,7 @@
       return{
         id:'',
         tabState:[{select:true},{select:false}],
+        salsesman:'', //业务员
         plate:'',//车主
         insuredDate:'',//投保日期
         beinsuredName:'',
@@ -160,7 +162,7 @@
         bankMoney:'',
         insuredUnitAccountID:'',
         insuredUnitAccount:'',
-
+        isPromotions:false,
 
       }
     },
@@ -269,6 +271,7 @@
         data: params,
         call: (data) => {
           this.id=data.id
+          this.salsesman=data.salsesman
           this.plate=data.plate
           this.insuredDate=data.insuredDate
           this.beinsuredName=data.beinsuredName
@@ -301,6 +304,7 @@
           this.cashVal=data.cashVal
           this.cashObjectVal=data.cashObjectVal
           this.discountList=data.discountList
+          this.promotionsName=data.promotionsName
 
           this.insuredUnit = data.insuredUnit
           this.insuredUnitList = data.insuredUnitPsd.list
@@ -310,7 +314,11 @@
           }else{
             this.isCash=false
           }
-
+          if (data.promotionsID==''){
+            this.isPromotions=false
+          }else {
+            this.isPromotions=true
+          }
 
           if (this.discountList.length===0){
             this.empty=true

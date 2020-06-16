@@ -4,8 +4,10 @@
       <template #title>基本信息</template>
       <template #body>
         <yhm-view-control title="车牌号" :content="plate"></yhm-view-control>
+        <yhm-view-control title="车辆品牌" :content="brand"></yhm-view-control>
+        <yhm-view-control title="车型" :content="model"></yhm-view-control>
         <yhm-view-control title="投保日期" :content="insuredDate" type="date"></yhm-view-control>
-        <yhm-view-control title="被投保人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
+        <yhm-view-control title="被保险人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
         <yhm-view-control title="联系人" :content="contactName+'-'+contactPhone"></yhm-view-control>
         <yhm-view-control title="投保人" :content="insuredName+'-'+insuredPhone"></yhm-view-control>
         <yhm-view-control title="与车主关系" :content="relationshipVal"></yhm-view-control>
@@ -41,10 +43,11 @@
           <yhm-view-control title="商业险实际金额"  v-if="isbusinessStart" :content="businessMoney" type="money"></yhm-view-control>
           <yhm-view-control title="开票金额" :content="invoicingMoney" type="money"></yhm-view-control>
           <yhm-view-control title="保费合计" :content="premiumsTotal" type="money"></yhm-view-control>
-          <yhm-view-control title="优惠金额/点数" v-if="isbusinessStart" :content="discountMoney+'／'+discountCount"></yhm-view-control>
+          <yhm-view-control title="优惠金额/点数" v-if="isbusinessStart" :content="discountMoney+'／'+discountCount" color="red"></yhm-view-control>
           <yhm-view-control title="实收金额" :content="receivedMoney" type="money"></yhm-view-control>
           <yhm-view-control title="是否返利" :content="cashVal"></yhm-view-control>
           <yhm-view-control title="返利对象" v-if="isCash" :content="cashObjectVal" ></yhm-view-control>
+          <yhm-view-control @click="promotionsEvent" style="cursor: pointer;" color="#49a9ea" v-if="isPromotions" title="活动方案" :content="promotionsName"> </yhm-view-control>
         </yhm-view-tab-content>
         <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[1].select">
           <template #listHead>
@@ -97,7 +100,7 @@
           <template #listHead>
             <yhm-managerth title="保险公司" ></yhm-managerth>
             <yhm-managerth style="width: 110px;" title="活动启用时间"></yhm-managerth>
-            <yhm-managerth style="width: 150px;" title="保险公司优惠额度比例"></yhm-managerth>
+            <yhm-managerth style="width: 180px;" title="所选套餐最大优惠额度比例"></yhm-managerth>
             <yhm-managerth style="width: 150px;" title="支付保险公司金额"></yhm-managerth>
             <yhm-managerth style="width: 150px;" title="应收账款金额"></yhm-managerth>
 <!--            <yhm-managerth  style="width: 100px;" title="返利金额"></yhm-managerth>-->
@@ -117,8 +120,8 @@
             <yhm-view-control type="money" category="1" title="预计盈亏" :content="profitAndLossMoney" v-show="parseFloat(profitAndLossMoney) < 0 " color="#f00"></yhm-view-control>
             <yhm-view-control type="money" category="1" title="实时盈亏" :content="sumMoney" v-show="parseFloat(sumMoney)>=0" color="#4BB414"></yhm-view-control>
             <yhm-view-control type="money" category="1" title="实时盈亏" :content="sumMoney" v-show="parseFloat(sumMoney)<0" color="#f00"></yhm-view-control>
-            <yhm-view-control  category="3" title="盈亏比例" :content="profitAndLossProportion" v-show="parseFloat(profitAndLossMoney) >= 0 " color="#4BB414"></yhm-view-control>
-            <yhm-view-control  category="3" title="盈亏比例" :content="profitAndLossProportion" v-show="parseFloat(profitAndLossMoney) < 0 " color="#f00"></yhm-view-control>
+<!--            <yhm-view-control  category="3" title="盈亏比例" :content="profitAndLossProportion" v-show="parseFloat(profitAndLossMoney) >= 0 " color="#4BB414"></yhm-view-control>-->
+<!--            <yhm-view-control  category="3" title="盈亏比例" :content="profitAndLossProportion" v-show="parseFloat(profitAndLossMoney) < 0 " color="#f00"></yhm-view-control>-->
           </template>
           <template #empty>
             <span class="m_listNoData" v-show="empty">暂时没有数据</span>
@@ -141,6 +144,8 @@
         id:'',
         tabState:[{select:true},{select:false},{select:false},{select:false}],
         plate:'',//车主
+        brand:'',//品牌
+        model:'',//车型
         insuredDate:'',//投保日期
         beinsuredName:'',
         beinsuredidNo:'',
@@ -200,16 +205,31 @@
         discountList:[],
         quotaMoney:'',   //
         profitAndLossMoney:'', //实际盈亏金额
-        profitAndLossProportion:'', //盈亏比例
+        // profitAndLossProportion:'', //盈亏比例
         value: '',
         getNumColor: '',
         isLeftID:false,//延长按钮
         leftID:'',//上一条ID
         isRightID:false,//延长按钮
         rightID:'',//下一条ID
+        isPromotions:true,
+        promotionsID:'',
       }
     },
     methods:{
+      promotionsEvent(){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 692,
+          url: '/promotionsForm?id=' + this.promotionsID +'&isDel=0',
+          title: '查看优惠政策',
+          closeCallBack: (data) => {
+            if (data) {
+
+            }
+          }
+        })
+      },
       leftStrip(){
         window.location='/policyView?id='+this.leftID
       },
@@ -228,6 +248,8 @@
           call: (data) => {
             this.id=data.id
             this.plate=data.plate
+            this.brand=data.brand
+            this.model=data.model
             this.insuredDate=data.insuredDate
             this.beinsuredName=data.beinsuredName
             this.beinsuredidNo=data.beinsuredidNo
@@ -261,6 +283,8 @@
             this.insuredUnitList = data.insuredUnitPsd.list
             this.listPolicy=data.deatails
             this.listProfit=data.listProfit
+            this.promotionsName=data.promotionsName
+            this.promotionsID=data.promotionsID
 
 
             for(let i in this.listPolicy){
@@ -276,7 +300,7 @@
               // this.profitAndLossMoney=((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney).toFixed(2) +''
               this.profitAndLossMoney=(this.listProfit[i].quotaMoney-this.listProfit[i].discountMoney).toFixed(2) +''
               //计算实际金额盈亏比例
-              this.profitAndLossProportion = (((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney) / this.listProfit[i].totalMoney *100 ).toFixed(2) + '%'
+              //this.profitAndLossProportion = (((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney) / this.listProfit[i].totalMoney *100 ).toFixed(2) + '%'
             }
 
             if (this.cash==='0'){
@@ -305,6 +329,11 @@
               this.isbusinessStart=true
             }else {
               this.isbusinessStart=false
+            }
+            if (data.promotionsID==''){
+              this.isPromotions=false
+            }else {
+              this.isPromotions=true
             }
           },
         })

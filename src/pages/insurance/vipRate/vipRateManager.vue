@@ -4,7 +4,7 @@
       <!--导航条-->
       <template #navigationTab>
         <router-link class="menuTabDiv " :to="{path:'/home/unit/insuranceUnitManager'}">管理保险公司</router-link>
-        <router-link class="menuTabDiv " :to="{path:'/home/cashGiveHP/cashGiveHPManager'}">保险给HP返利</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/cashGiveHP/cashGiveHPManager'}">保险公司给海派返利</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/vipRate/vipRateManager'}">特殊车型制定</router-link>
       </template>
       <!--操作区-->
@@ -17,7 +17,6 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth title="名称" value="showName"></yhm-managerth>
-
         <yhm-managerth title="添加时间" value="insertDate"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="删除"></yhm-managerth>
       </template>
@@ -27,7 +26,6 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td :value="item.showName"></yhm-manager-td>
-          <!--          <yhm-manager-td :value="item.directionVal"></yhm-manager-td>-->
           <yhm-manager-td-date :value="item.insertDate"></yhm-manager-td-date>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button  @click="del(item.id)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>

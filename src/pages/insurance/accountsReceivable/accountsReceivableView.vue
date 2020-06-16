@@ -5,7 +5,7 @@
       <template #body>
         <yhm-view-control title="车牌号" :content="plate"></yhm-view-control>
         <yhm-view-control title="投保日期" :content="insuredDate" type="date"></yhm-view-control>
-        <yhm-view-control title="被投保人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
+        <yhm-view-control title="被保险人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
         <yhm-view-control title="联系人" :content="contactName+'-'+contactPhone"></yhm-view-control>
         <yhm-view-control title="投保人" :content="insuredName+'-'+insuredPhone"></yhm-view-control>
         <yhm-view-control title="与车主关系" :content="relationshipVal"></yhm-view-control>
@@ -153,11 +153,11 @@
         insuredChannelVal:'',//投保渠道
         insuredProject:[], //投保项目
         insuredProjectVal:'',
-        forceStartDate:'',//交强险开始日期
+        forceStartDate:'',//交强险
         forceEndDate:'',//交强险结束日期
         forceMoney:'',//交强险金额
         vehicleMoney:'',//车船税金额
-        businessStartDate:'',//商业险开始日期
+        businessStartDate:'',//商业险
         businessEndDate:'',//商业险结束日期
         insuredUnitVal:'', //投保公司
         commercialVal:'', //商业险种

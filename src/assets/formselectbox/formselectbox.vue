@@ -13,10 +13,14 @@
       </div>
       <div class="c_main" :class="{boxWidth:getWidth}">
         <div @click="clickEvent" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box"  :class="{c_error:error,c_hover:mouseStyle,c_disable:noClick}">
-          <div class="pl10 c_content_div">{{txt}}</div>
+          <div class="pl10 c_content_div" v-if="txt!=''">{{txt}}</div>
+          <div class="pl10 c_content_div" style="color: #D3D3D3;" v-else>{{defaultTxt}}</div>
           <span class="c_icon" @click.stop="iconClickEvent" @mouseout="mouseoutIconEvent" @mouseover="mouseoverIconEvent" :class="[afterIcon,{red:iconMouseStyle}]"></span>
         </div>
       </div>
+
+      <slot></slot>
+
     </div>
     <div class="fc_error"><span v-if="error">{{errorTipMessage}}</span></div>
   </div>
@@ -42,6 +46,10 @@ export default {
     title: {
       type: String,
       default: '标题'
+    },
+    defaultTxt:{
+      type:String,
+      default:''
     },
     subtitle: {
       type: String,
@@ -111,7 +119,9 @@ export default {
     },
     //主动显示控件错误
     errorEvent(errorMessage){
-      this.error = true
+      setTimeout(()=>{
+        this.error = true
+      },0)
       if(errorMessage){
         this.errorTipMessage = errorMessage
       }
@@ -147,7 +157,7 @@ export default {
     clickEvent () {
       if(!this.noClick){
       this.error = false
-      this.mouseStyle = false
+        this.mouseStyle = false
       this.mouseOver = false
       this.$emit('click')
       }
@@ -195,6 +205,7 @@ export default {
           }
         }
         this.error = !result
+
       }
       return result
     }
@@ -247,5 +258,14 @@ export default {
   }
   .boxWidth{
     width: 880px;
+  }
+  .selectCenter{
+    display: flex;
+    align-items: center;
+  }
+  .formBoxIcon{
+    font-size: 26px;
+    cursor: pointer;
+    color: #49a9ea;
   }
 </style>

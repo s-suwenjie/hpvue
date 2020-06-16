@@ -47,15 +47,18 @@
 
         error:false,
         errorTipMessage:"",
-        // color: '',
+        // color: '#194D33',
         colorShow: false,
         colors: {
           hex: '',
-          hsl: { h: 150, s: 0.5, l: 0.2, a: 1 },
-          hsv: { h: 150, s: 0.66, v: 0.30, a: 1 },
-          rgba: { r: 25, g: 77, b: 51, a: 1 },
+          // hsl: { h: 204, s: 0.69, l: 0.2, a: 1 },
+          // hsv: { h: 204, s: 0.72, v: 0.30, a: 1 },
+          rgba: { r: 73, g: 169, b: 234, a: 1 },
           a: 1
-        }
+        },
+        uncolor:'',
+        redcolor:''
+
       }
     },
     props:{
@@ -100,7 +103,7 @@
         required: true
       },
       color:{
-        type:String,
+        // type:String,
         required: true
       },
       colorID:{
@@ -122,8 +125,16 @@
     },
     methods:{
       colorEvent(){
+
+        if(this.colorValue  == 'undefined'){
+          this.colors=this.uncolor
+        }else{
+          this.uncolor =this.colors
+          this.colors = this.colorValue
+        }
         this.colorShow = true
-        this.colors.hex = this.colorValue
+        // this.colors.hex=this.colorValue
+
       },
       // 颜色选择器
       outsideClick () {
@@ -135,6 +146,16 @@
       },
       confirm(){
         this.colorValue = this.colors.hex
+        if(this.colors == 'undefined'){
+          this.color=this.uncolor.hex
+        }
+        if(this.colors == '#FF0000'){
+          this.redcolor=this.colors
+          this.color=this.redcolor.toString()
+        }
+        if(this.colors == '#FF0000'){
+          this.uncolor=this.colors
+        }
         this.outsideClick()
         this.$nextTick(()=>{
           this.$emit('colorConfirm',this.colors.hex)

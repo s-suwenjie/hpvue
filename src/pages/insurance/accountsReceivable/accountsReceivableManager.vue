@@ -40,12 +40,12 @@
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
-          <yhm-manager-td :value="item.contactName"></yhm-manager-td>
+          <yhm-manager-td @click="contactView(item)" :value="item.contactName"></yhm-manager-td>
           <yhm-manager-td-psd @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
-          <yhm-manager-td-money v-if="isActual"  @click="listExpectedView(item)" :value="item.receivable" style="color: #2c9208" ></yhm-manager-td-money>
-          <yhm-manager-td-center v-if="isReal"  @click="listExpectedView(item)" :value="item.receivableDate+'天'" style="color: #2c9208" ></yhm-manager-td-center>
-          <yhm-manager-td-money  :value="item.actualProfitLoss" ></yhm-manager-td-money>
-          <yhm-manager-td-money  :value="item.realTimeProfitLoss"></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isActual"  @click="listExpectedView(item)" :value="item.receivable" style="color: #2c9208;font-weight:bold;" ></yhm-manager-td-money>
+          <yhm-manager-td-center v-if="isReal"  @click="listExpectedView(item)" :value="item.receivableDate+'天'" ></yhm-manager-td-center>
+          <yhm-manager-td-money  @click="listPolicyExpectedView(item)" :value="item.actualProfitLoss" :style="{'color':item.actualProfitLoss>=0?'#2c9208':'#f00'}"  ></yhm-manager-td-money>
+          <yhm-manager-td-money  @click="listPolicyExpectedView(item)" :value="item.realTimeProfitLoss" :style="{'color':item.realTimeProfitLoss>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
           <yhm-manager-td-center :value="item.numbering"></yhm-manager-td-center>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
         </tr>
@@ -66,11 +66,9 @@
           <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
             <thead>
             <tr>
-              <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="应收账款"></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="预计盈亏"></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="实时盈亏"></yhm-managerth>
-
             </tr>
             </thead>
             <tbody>
@@ -83,10 +81,7 @@
             </tbody>
           </table>
         </div>
-
       </template>
-
-
       <!--分页控件-->
       <template #pager>
         <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
@@ -123,6 +118,32 @@
       }
     },
     methods:{
+      contactView (item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/personView?id=' + item.contactID+'&isBilling=0',
+          title:'查看联系人信息',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      listPolicyExpectedView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '450',
+          url: '/policyExpectedView?id=' + item.id,
+          title: '查看盈亏明细',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       actualEvent(){
         this.isActual = false
         this.isReal = true

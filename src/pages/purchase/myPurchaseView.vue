@@ -51,7 +51,7 @@
     <div v-html="approvalHtml"></div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton value="催促" icon="i-btn-urge" :flicker="true" @call="urge"></yhm-commonbutton>
+        <yhm-commonbutton  v-show="btnShow" value="催促" icon="i-btn-urge" :flicker="true" @call="urge"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
   </div>
@@ -77,7 +77,8 @@
         money:'',           //预估价值
         state: '',
         isFinish : '',
-        approvalHtml:''
+        approvalHtml:'',
+        btnShow:false,
       }
     },
     methods:{
@@ -124,6 +125,12 @@
       }
     },
     created () {
+        if(this.$route.query.btnType== '1'){
+          this.btnShow = false
+        }else{
+          this.btnShow = true
+        }
+
       this.init({
         url: '/PersonOffice/initPurchaseForm',
         call:(data)=>{

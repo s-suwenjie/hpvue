@@ -69,6 +69,7 @@
 <script>
   import { viewmixin } from '@/assets/view.js'
   import {tenThousandFormatHtml}  from '@/assets/common.js'
+  import { accAdd } from '../../../assets/common'
   export default {
     name: 'policyExpectedView',
     mixins: [viewmixin],
@@ -167,7 +168,9 @@
             this.listProfit=data.listProfit
 
             for(let i in this.listPolicy){
-              sum +=  parseFloat(this.listPolicy[i].money)
+              if (this.listPolicy[i].stateClue==='0' ||this.listPolicy[i].stateClue==='1' ){
+                sum = accAdd(parseFloat(this.listPolicy[i].bankMoney),sum)
+              }
             }
             this.sumMoney = sum  + '' //计算实际金额
             if (data.cash==='0'){
@@ -175,14 +178,25 @@
             } else {
               this.sumMoneyProportion=((this.sumMoney/data.receivedMoney)*100).toFixed(2) + '%'
             }
+            let a=0.00
+            for(let i in this.listPolicy){
+              if(this.listPolicy[i].direction=='1'){
+                a=accAdd(this.listPolicy[i].bankMoney,a)
+              }
+            }
 
             for (let i=0; i<this.listProfit.length; i++){
               //计算保险公司优惠定额(应收账款)
-              // this.quotaMoney= (this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100)).toFixed(2) + ''
+              // this.quotaMoney= (this.listProfit[i].totalMoney * (this.
+              // listProfit[i].clientRate/100)).toFixed(2) + ''
               //计算实际金额 (预计盈亏)
                this.profitAndLossMoney=(this.listProfit[i].quotaMoney-this.listProfit[i].discountMoney).toFixed(2) +''
+
+
+              this.profitAndLossProportion =(parseFloat(this.profitAndLossMoney) /  Math.abs(( Math.abs (a)-this.listPolicy[this.listPolicy.length-1].bankMoney)))  .toFixed(2)+''
+
               //计算实际金额盈亏比例
-              this.profitAndLossProportion = (((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney) / this.listProfit[i].totalMoney *100 ).toFixed(2) + '%'
+              //his.profitAndLossProportion = (((this.listProfit[i].totalMoney * (this.listProfit[i].clientRate/100))-this.listProfit[i].discountMoney) / this.listProfit[i].totalMoney *100 ).toFixed(2) + '%'
             }
           },
         })

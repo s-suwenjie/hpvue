@@ -123,10 +123,12 @@
       close () {
         this.$emit('btnClick')
         this.show = false
+
       },
       clickMask () {
         // console.log('clickMask')
         this.close()
+        this.$emit('btnClick')
       }
     },
     mounted () {

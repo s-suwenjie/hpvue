@@ -49,6 +49,8 @@ Vue.use(viewshowfiles)
 import tabletip from '@/assets/control/tabletip/tabletip.js'
 Vue.use(tabletip)
 
+import formtab from '@/assets/formtab/formtab.js'
+Vue.use(formtab)
 
 import formdatebox from '@/assets/form/control/formdatebox/formdatebox.js'
 Vue.use(formdatebox)
@@ -124,6 +126,9 @@ import managertdlogo from '@/assets/manager/td/managertdlogo/managertdlogo.js'
 Vue.use(managertdlogo)
 import managertdcenter from '@/assets/manager/td/managertdcenter/managertdcenter.js'
 Vue.use(managertdcenter)
+
+import managertdleaveword from '@/assets/manager/td/managertdleaveword/managertdleaveword.js'
+Vue.use(managertdleaveword)
 import managertdcenterhtml from '@/assets/manager/td/managertdcenterhtml/managertdcenterhtml.js'
 Vue.use(managertdcenterhtml)
 import managertddate from '@/assets/manager/td/managertddate/managertddate.js'
@@ -247,8 +252,6 @@ Vue.use(formselectboxmore)
 import validator from '@/assets/validator/validator.js'
 Vue.use(validator)
 
-import formtestplate from '@/assets/form/control/formtestplate/formtestplate.js'
-Vue.use(formtestplate)
 
 
 

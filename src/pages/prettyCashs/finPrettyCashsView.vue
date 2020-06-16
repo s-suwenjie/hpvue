@@ -188,8 +188,9 @@
         let params = {
           isFinish: this.stateList.value,
           pageIndex: this.pager.pageIndex,
-          pageSize: this.pager.pageSize
-
+          pageSize: this.pager.pageSize,
+          personID:this.personID,
+          id:this.id
         }
         this.ajaxJson({
           url: '/PersonOffice/prettyCashsPersonManager',
@@ -219,6 +220,8 @@
             this.unitID=data.unitID
             this.invoiceCategoryList = data.invoiceCategoryPsd.list
             this.appropriationMoney = data.bankDetailList
+            this.personID=data.personID
+            this.person=data.person
             if(this.appropriationMoney.length>0){
               this.isAppropriationMoney=true
             }
@@ -233,8 +236,6 @@
 
           },
           look: (data)=>{
-            this.personID=data.personID
-            this.person=data.person
             this.money=data.money
             this.code=data.code
             this.workDate=data.workDate

@@ -15,7 +15,7 @@
 <!--        <yhm-text  :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>-->
 <!--        <span :class="iconName" class="keyboard"  @click="iconClickEvent"></span>-->
 <!--      </div>-->
-
+      <span class="i-uniE9A1 icon_look" @click="spshow()" v-show="FormShow"></span>
       <slot></slot>
     </div>
     <div class="fc_error"><span v-if="error">{{errorTipMessage}}</span></div>
@@ -29,7 +29,8 @@
       data () {
         return {
           error: false,
-          errorTipMessage: ''
+          errorTipMessage: '',
+          // FormShow:false,
         }
       },
       props: {
@@ -136,7 +137,11 @@
         color: {
           type: String,
           default: '#333'
-        }
+        },
+        FormShow:{
+          type:Boolean,
+          default:false
+        },
       },
       methods: {
         iconClickEvent(){
@@ -175,6 +180,9 @@
         },
         verifications(){
           this.$refs.control.verification()
+        },
+        spshow(){
+          this.$emit("iconClick")
         }
       },
       watch: {
@@ -216,5 +224,6 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    margin-left: 10px;
   }
 </style>

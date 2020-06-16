@@ -10,6 +10,8 @@
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
         <yhm-managerth title="商品规格型号"></yhm-managerth>
+        <yhm-managerth title="商品规格型号(英文)"></yhm-managerth>
+        <yhm-managerth title="编号"></yhm-managerth>
         <yhm-managerth width="100" title="参考价格"></yhm-managerth>
       </template>
 
@@ -18,12 +20,12 @@
             :class="{InterlacBg:index%2!=0}"
             :key="item.id"
             @click="selectEvent(item)"
-            @dblclick="dblclickEvent(item)"
-            @mousemove="mousemoveEvent"
-            @mouseover="mouseoverEvent"
-            @mouseout="mouseoutEvent">
+            @dblclick="dblclickEvent(item)">
+
           <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
-          <yhm-manager-td :value="item.name"></yhm-manager-td>
+          <yhm-manager-td-center :value="item.name"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.englishName"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.productNumber"></yhm-manager-td-center>
           <yhm-manager-td-money :value="item.price"></yhm-manager-td-money>
         </tr>
       </template>

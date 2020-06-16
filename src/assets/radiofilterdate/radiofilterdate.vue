@@ -5,7 +5,7 @@
     <yhm-datebox type="year" :maxYear="maxYear" :isSm="true" @call="selectYear" style="width: 120px" :value="yearTxt" id="yearTxt" position="b"></yhm-datebox>
     <div class="chooseMonth monthList">
       <button v-for="(item,index) in monthList" @click="clickMonthEvent(item,index)" class="btn"
-              :class="[{choice: index===onMonthChoice},{dp_no:!getIsMonthRange(item)},{dp_no:edit}]">{{item}}月</button>
+              :class="[{choice: index==onMonthChoice},{dp_no:!getIsMonthRange(item)},{dp_no:edit}]">{{item}}月</button>
     </div>
     <div>
       <button class="allBtn" @click="clickMonthAllEvent" :class="{choice: onMonthAllChoice}">整年</button>
@@ -39,6 +39,10 @@
           default:""
         }
       },
+      customTime:{
+        type:String,
+        default:''
+      },
       edit: {
         type: Boolean,
         default: false
@@ -46,7 +50,11 @@
       isSm: {
         type: Boolean,
         default: false
-      }
+      },
+      yearTxts:{
+        type:String,
+        default:''
+      },
 
     },
     methods: {
@@ -176,7 +184,28 @@
     created() {
       let nowMonth = new Date().getMonth();
       let newYear = new Date().getFullYear();
-      this.onMonthChoice = nowMonth;
+      if(this.yearTxts!==''){
+        this.yearTxt = this.yearTxts
+        setTimeout(()=>{
+          this.onMonthAllChoice = false
+        },0)
+      }
+      setTimeout(()=>{
+        this.$nextTick(()=>{
+
+          if(this.customTime!==''){
+            this.onMonthChoice = this.customTime
+          }else{
+            this.onMonthChoice = nowMonth;
+          }
+          if(this.customTime=='12'){
+            this.onMonthChoice = '-1'
+            this.onMonthAllChoice = true
+          }else{
+            this.onMonthAllChoice = false
+          }
+        })
+      },0)
 
       let newMonth = nowMonth + 1;
       this.maxMonth = newYear + '-' + newMonth

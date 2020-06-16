@@ -32,6 +32,7 @@
         <yhm-managerth title="姓名" value="name"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="性别" value="sex"></yhm-managerth>
         <yhm-managerth style="width: 200px" title="部门" value="departmentID"></yhm-managerth>
+        <yhm-managerth style="width: 150px" title="身份证号" value="idNo"></yhm-managerth>
         <yhm-managerth style="width: 150px" title="手机号码" value="phone"></yhm-managerth>
         <yhm-managerth style="width: 220px;" title="重要级别" value="important"></yhm-managerth>
       </template>
@@ -44,6 +45,7 @@
           <yhm-manager-td-thisexter :value="item.name" :category="item.category"></yhm-manager-td-thisexter>
           <yhm-manager-td-psd :value="item.sex" :list="sexItems"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.department" ></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.idNo"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.phone" format="phone*"></yhm-manager-td-center>
           <yhm-manager-td-psd :value="item.important" :list="importantItems"></yhm-manager-td-psd>
         </tr>

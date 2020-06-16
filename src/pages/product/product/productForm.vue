@@ -4,7 +4,12 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-text title="商品名称" @repeatverify="nameVerifyEvent" ref="name" :value="name" id="name"></yhm-form-text>
+        <yhm-form-text title="商品名称" subtitle="(英文)" :value="englishName" id="englishName"></yhm-form-text>
         <yhm-form-select title="计量单位" :value="unit" id="unit" @clear="clearUnit" @click="selectUnit" rule="R0000"></yhm-form-select>
+        <yhm-form-radio title="类型" @call="storageTypeClick" :select-list="storageTypeList" :value="storageType" id="storageType" ></yhm-form-radio>
+        <yhm-form-radio v-if="isSorck" title="适用车型" :select-list="stockTypeList" :value="stockType" id="stockType" ></yhm-form-radio>
+        <yhm-form-radio title="是否" subtitle="拆分出库" @call="splitClick" :select-list="splitList" :value="split" id="split" ></yhm-form-radio>
+        <yhm-form-select title="拆分" v-if="isSplit" subtitle="出库单位" :value="splitDeliveryUnit" id="splitDeliveryUnit" @clear="clearUnit" @click="splitUnit" rule="R0000"></yhm-form-select>
       </template>
     </yhm-formbody>
 
@@ -18,6 +23,8 @@
       <template #listHead>
         <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
         <yhm-managerth title="规格型号"></yhm-managerth>
+        <yhm-managerth title="规格型号(英文)"></yhm-managerth>
+        <yhm-managerth title="物品编号"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="参考单价"></yhm-managerth>
         <yhm-managerth style="width: 38px" title="删除"></yhm-managerth>
       </template>
@@ -25,6 +32,8 @@
         <tr v-for="(item,index) in modelDetails" :key="index" :class="{InterlacBg:index%2!==0}">
           <yhm-manager-td-look @click="add(item.id)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.name"></yhm-manager-td>
+          <yhm-manager-td :value="item.englishName"></yhm-manager-td>
+          <yhm-manager-td :value="item.productNumber"></yhm-manager-td>
           <yhm-manager-td-money :value="item.price"></yhm-manager-td-money>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-delete  @click="delModel(item)"></yhm-manager-td-operate-delete>
@@ -54,14 +63,43 @@
         name:'',          //商品名称
         unitID:'',        //计量单位ID
         unit:'',          //计量单位
+        englishName:'',   //商品名称英文
+
+        storageType:'',   //入库类型
+        storageTypeList:[],
+        stockType:'',    //库存类型
+        stockTypeList:[],
+
+        split:'',    //是否拆分出库
+        splitList:[],
+        splitDeliveryUnitID:'',
+        splitDeliveryUnit:'',  //拆分出库单位
+
 
         modelDetails:[],  //规格型号数据
 
         showModel:false,  //是否显示规格型号信息
-        empty: true       //规格型号为空
+        empty: true,       //规格型号为空
+        isSorck:false,     //库存类型默认不显示
+        isSplit:false      //拆分出库单位 默认不显示
       }
     },
     methods:{
+      splitClick(){
+        if (this.split==0){
+          this.isSplit=true
+        }else{
+          this.isSplit=false
+        }
+
+      },
+      storageTypeClick(){
+        if (this.storageType==='0' ||this.storageType==='1'){
+          this.isSorck=true
+        }else {
+          this.isSorck=false
+        }
+      },
       //重复验证,基于控件操作的验证
       nameVerifyEvent(){
         this.ajaxJson({
@@ -94,6 +132,21 @@
           return false
         }
         return true
+      },
+      splitUnit(){
+        let name = '3'
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 603,
+          url: '/selectDic?name=' + name,
+          title: '选择计量单位',
+          closeCallBack: (data) => {
+            if (data) {
+              this.splitDeliveryUnitID = data.id
+              this.splitDeliveryUnit = data.showName
+            }
+          }
+        })
       },
       //选择计量单位
       selectUnit(){
@@ -171,6 +224,11 @@
             name:this.name,
             unitID:this.unitID,
             unit:this.unit,
+            storageType:this.storageType,
+            stockType:this.stockType,
+            englishName:this.englishName,
+            split:this.split,
+            splitDeliveryUnitID:this.splitDeliveryUnitID
           }
           this.ajaxJson({
             url: '/Basic/saveProduct',
@@ -195,6 +253,13 @@
         url: '/Basic/initProductFrom',
         all: (data) => {
           //添加查看的时候都需要的代码
+          this.storageTypeList = data.storageTypePsd.list
+          this.storageType = data.storageTypePsd.value
+          this.stockTypeList = data.stockTypePsd.list
+          this.stockType = data.stockTypePsd.value
+
+          this.splitList=data.splitPsd.list
+          this.split=data.splitPsd.value
         },
         add: (data) => {
           //添加时独有的代码
@@ -205,9 +270,22 @@
           this.name = data.name
           this.unitID = data.unitID
           this.unit = data.unit
+          this.englishName=data.englishName
+          this.splitDeliveryUnitID=data.splitDeliveryUnitID
+          this.splitDeliveryUnit=data.splitDeliveryUnit
           this.modelDetails = data.modelDetails
           this.empty = this.modelDetails.length === 0
           this.showModel = true
+          if (this.storageType==='0' ||this.storageType==='1'){
+            this.isSorck=true
+          }else {
+            this.isSorck=false
+          }
+          if (this.split==0){
+            this.isSplit=true
+          }else {
+            this.isSplit=false
+          }
         }
       })
     }

@@ -31,6 +31,7 @@
             <yhm-managerth style="width: 110px" title="发票总金额"></yhm-managerth>
             <yhm-managerth style="width: 110px" title="发票类型"></yhm-managerth>
             <yhm-managerth  title="备注"></yhm-managerth>
+            <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
             <yhm-managerth style="width: 120px" title="审批状态"></yhm-managerth>
           </template>
           <template #listBody>
@@ -41,6 +42,7 @@
               <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
               <yhm-manager-td-center @click="listView(item.id)" :value="item.invoiceCategoryName" color="#49a9ea"></yhm-manager-td-center>
               <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.remark" @click="listView(item.id)" color="#49a9ea"></yhm-manager-td>
+              <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
               <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
             </tr>
           </template>
@@ -182,6 +184,18 @@
       },
       rightStrip(){
         window.location='/reimbursementFormView?id='+this.rightID
+      },
+      SelectApprovalMessage(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
       },
       prettyCashsView(item){
         let url='/prettyCashsView?id='+item.prettyCashsID

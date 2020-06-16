@@ -4,15 +4,15 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-select  title="负责人" tip="value" @click="principalEvent" :value="principal" id="principal" rule="R0000"></yhm-form-select>
-        <yhm-form-radio  title="客户状态"  width="1" :select-list="stateList" :value="state" id="state"></yhm-form-radio>
+        <yhm-form-radio  title="客户状态"  @call="stateEvent" width="1" :select-list="stateList" :value="state" id="state"></yhm-form-radio>
         <yhm-form-zh-select-text tip-before="value" tip-after="phone" @call="contactEvent" :before="name" before-id="name" :after="phone" after-id="phone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="100"></yhm-form-zh-select-text>
-        <yhm-form-select  title="车牌号" tip="value"   @click="plateEvent" :value="plate" id="plate" rule="R0000"></yhm-form-select>
-        <yhm-form-select  title="车主" tip="value" @click="carOwnerEvent" :value="carOwner" id="carOwner" rule="R0000" :no-click="isEdit" ></yhm-form-select>
+        <yhm-form-select  title="车牌号" tip="value"   @click="plateEvent" :value="plate" id="plate" :rule="isRule"></yhm-form-select>
+        <yhm-form-select  title="车主" tip="value" @click="carOwnerEvent" :value="carOwner" id="carOwner" :rule="isRule" :no-click="isEdit" ></yhm-form-select>
 <!--        <yhm-form-upload-image title="行车证信息"  discription="点击图标或拖拽图片上传(不支持PDF格式)" tag="drivingLicense" :value="drivingLicense" id="drivingLicense" rule="#"></yhm-form-upload-image>-->
-        <yhm-form-text placeholder="" tip="value"  title="身份证号" subtitle="" :value="idNo" id="idNo" rule="R5000"></yhm-form-text>
-        <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber" rule="R1600"></yhm-form-text>
-        <yhm-form-date title="登记日期"  :value="registerDate" id="registerDate " position="u"  rule="R0000"></yhm-form-date>
-        <yhm-form-text placeholder="" title="发动机号" subtitle="" :value="engineNumber" id="engineNumber" rule="R0000"></yhm-form-text>
+        <yhm-form-text placeholder="" tip="value"  title="身份证号" subtitle="" :value="idNo" id="idNo" :rule="isRule"></yhm-form-text>
+        <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber" :rule="isRule"></yhm-form-text>
+        <yhm-form-date title="上牌日期"  :value="registerDate" id="registerDate " position="u"  :rule="isRule"></yhm-form-date>
+        <yhm-form-text placeholder="" title="发动机号" subtitle="" :value="engineNumber" id="engineNumber" :rule="isRule"></yhm-form-text>
         <yhm-formupload :ownerID="vehicleID" :value="fileList"  id="fileList" title="行车证(支持单据)" tag="vehicle" multiple="multiple" category="3"></yhm-formupload>
       </template>
     </yhm-formbody>
@@ -21,7 +21,7 @@
       <template #title>保险信息</template>
       <template #control>
         <yhm-form-radio title="往年" subtitle="投保公司"  width="1" :select-list="lastYearUnitList" :value="lastYearUnit" id="lastYearUnit"></yhm-form-radio>
-        <yhm-form-date title="交强险" subtitle="到期日"  :value="forceEndDate" id="forceEndDate " position="u"  rule="R0000"></yhm-form-date>
+        <yhm-form-date title="交强险" subtitle="到期日"  :value="forceEndDate" id="forceEndDate " position="u"  :rule="isRule"></yhm-form-date>
         <yhm-form-date title="商业险" subtitle="到期日"  :value="businessEndDate" id="businessEndDate " position="u" >
           <div class="formBoxIcon" @click="dateClick">
             <span id="capitalType" class="synchronize i-synchronize"></span>
@@ -69,11 +69,18 @@
         businessEndDate:'', //商业险到期日
         fileList:[],
         isAssort:'',
-        isEdit:false
-
+        isEdit:false,
+        isRule:'R0000',
       }
     },
     methods: {
+      stateEvent(){
+        if (this.state==4){
+          this.isRule=''
+        }else{
+          this.isRule='R0000'
+        }
+      },
       dateClick(){
         this.businessEndDate=this.forceEndDate
       },
@@ -82,7 +89,7 @@
           this.$dialog.OpenWindow({
             width: 950,
             height: 603,
-            url: '/selectPlate?carOwnerID=' + this.contactPersonID,
+            url: '/selectPlate?carOwnerID=' + this.contactPersonID +'&isReule=1',
             title: '选择车牌号',
             closeCallBack: (data) => {
               if (data) {
@@ -95,20 +102,6 @@
                 this.frameNumber=data.frameNumber
                 this.engineNumber=data.engineNumber
                 this.drivingLicense=data.drivingLicense
-                // let fileParams = {
-                //   id: guid(),
-                //   insertDate: formatTime(insertDate),
-                //   ownerID: this.id,
-                //   category: '',
-                //   storeName: this.list,
-                //   suffix: this.suffix,
-                //   image: '1',
-                //   showName: '2',
-                //   tag: 'bankDetail'
-                // }
-                // this.fileList.push(fileParams)
-                //
-                // console.log(this.fileList)
                 let params = {
                   id:this.vehicleID,
                 }
@@ -335,6 +328,11 @@
 
           if (data.carOwnerID != ''){
             this.isEdit=true
+          }
+          if (this.state==4){
+            this.isRule=''
+          }else{
+            this.isRule='R0000'
           }
         }
       })

@@ -14,22 +14,25 @@
         <yhm-form-select title="业务员" @click="operatorEvent" :value="operator" id="operator" rule="R0000"></yhm-form-select>
 
         <yhm-form-text title="工单号" @change="VerifyworkOrder" ref="workOrderID" :value="workOrderID" id="workOrderID" rule="R0000"></yhm-form-text>
-        <yhm-form-text title="客户" :value="customerName" id="customerName" rule="R0000"></yhm-form-text>
 
-        <yhm-form-select title="车辆品牌" @click="selectVehicleBrandID" :value="vehicleBrand" id="vehicleBrand" rule="R0000"></yhm-form-select>
-        <yhm-form-select title="车型" @click="vehicleTypeEvent" :value="vehicleType" id="vehicleType" rule="R0000"></yhm-form-select>
-        <yhm-form-text title="车牌号" is-upper-case :value="licensePlateNumber" id="licensePlateNumber" rule="R8000"></yhm-form-text>
+        <yhm-form-radio title="客户类型" :select-list="unitOrPersonList" @call="selectUnitOrPerson" :value="unitOrPerson" id="unitOrPerson"></yhm-form-radio>
+        <yhm-form-select title="客户" @click="plateEvent"  :value="customer" id="customer" rule="R0000"></yhm-form-select>
+
+        <yhm-form-select title="车牌号" is-upper-case :value="licensePlateNumber" no-click="" id="licensePlateNumber"  @click="plateEvent" rule="R8000"></yhm-form-select>
+        <yhm-form-select title="车辆品牌" @click="selectVehicleBrandID" no-click="" :value="vehicleBrand" id="vehicleBrand" rule="R0000"></yhm-form-select>
+        <yhm-form-select title="车型" @click="vehicleTypeEvent" no-click="" :value="vehicleType" id="vehicleType" rule="R0000"></yhm-form-select>
 
 <!--        <yhm-form-text title="车辆品牌" :value="brand" id="brand" rule="R0000"></yhm-form-text>-->
 
 
         <yhm-form-text title="发票" @call="invoiceEvent" :value="invoiceID" id="invoiceID"></yhm-form-text>
         <!--<yhm-form-date title="结算日期" :value="settlementDate" id="settlementDate" rule="R0000" position="u"></yhm-form-date>-->
-        <yhm-form-upload-image title="图片" :noUpload="true" :isShow="true" width="800" height="650" tag="bankDetail" discription=" " :value="storeName" id="storeName"></yhm-form-upload-image>
+        <yhm-form-upload-image title="图片" :noUpload="true" width="800" height="650" tag="bankDetail" discription=" " @mouseoverEvent="lookImg" :value="storeName" id="storeName"></yhm-form-upload-image>
+<!--        <yhm-form-upload-image title="图片" width="800" height="650" tag="bankDetail" :noUpload="true" @mouseoverEvent="lookImg"   :value="storeName" id="storeName"></yhm-form-upload-image>-->
 
 
         <yhm-form-textarea no-edit="1" title="银行摘要" :value="bankSummary" id="bankSummary"></yhm-form-textarea>
-        <yhm-form-radio title="状态" :state-show="true" :select-list="signStateList" :value="signState" id="signState"></yhm-form-radio>
+        <yhm-form-radio title="状态" :state-show="true" :no-show-item="noSignStateList" @call="selectSignState" :select-list="signStateList" :value="signState" id="signState"></yhm-form-radio>
 
         <yhm-form-textarea title="备注" :value="remark" id="remark" :rule="remarkRule"></yhm-form-textarea>
 
@@ -73,7 +76,7 @@
       </template>
     </yhm-form-list-edit>
 
-    <div id="lookImg" class="showImg" v-show="tipShow" >
+    <div id="lookImg" class="showImg" v-show="tipShow" @click="imgClick" @mouseout="imgClick">
       <img :src="getUrl">
     </div>
 
@@ -97,10 +100,17 @@
         isList:false,//重复信息显示隐藏
         list:[],
         signState:'0',
+        noSignStateList:['3'],
         signStateList:[
           {
             code:'',
             num:'0',
+            img:'icon-correct iconSignState',
+            showName:'正常',
+          },
+          {
+            code:'',
+            num:'3',
             img:'icon-correct iconSignState',
             showName:'正常',
           },
@@ -116,7 +126,28 @@
             img:'icon-delete',
             showName:'异常',
           },
+          {
+            code:'red',
+            num:'4',
+            img:'icon-correct iconCorrect',
+            showName:'待完善',
+          },
         ],
+        unitOrPersonList:[
+          {
+            code:'',
+            num:'0',
+            img:'',
+            showName:'个人客户',
+          },
+          {
+            code:'',
+             num:'1',
+            img:'',
+            showName:'单位客户',
+          },
+        ],
+        unitOrPerson:'0',
         ownerID: '',
         moneyBackDate: '',
         workOrder: '',
@@ -137,6 +168,8 @@
         accountID: '',
         licensePlateNumber: '',
         customerName: '',
+        customer:'',
+        customers:'',
 
         branch: '',
         branchID: '',
@@ -166,11 +199,19 @@
 
         tipShow:false,
         getUrl:'',
+        licensePlateNumberID:'',
+        modelNoEdit:false,
+
       }
     },
     computed:{
+      selectSignState(){
+        if(this.signState === '3'){
+          this.remark = ''
+        }
+      },
       remarkRule(){
-        if(this.signState==0){
+        if(this.signState==0||this.signState==4){
           return ' '
         }else{
           return 'R0000'
@@ -178,6 +219,117 @@
       }
     },
     methods: {
+      //选择车牌号
+      plateEvent(){
+        let assort=''
+        if (this.unitOrPerson === '0'){
+          assort='1'
+        }else{
+          assort='0'
+        }
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 603,
+          url: '/selectPlate?carOwnerID=' + this.operatorID+'&assort='+assort,
+          title: '选择车辆信息',
+          closeCallBack: (data) => {
+            if (data) {
+              this.customer = data.carOwner
+              this.customerName = data.carOwnerID
+              this.vehicleType = data.model//型号
+              this.licensePlateNumber = data.plate//车牌号
+              this.vehicleBrand = data.brand//车辆品牌
+              this.vehicleBrandID = data.brandID
+              this.vehicleTypeID = data.modelID
+
+              this.modelNoEdit = true
+              if(data.brand === '' || data.model === '' || data.carOwner == ''){
+                this.$dialog.OpenWindow({
+                  width: '1050',
+                  height: '700',
+                  url: '/vehicleForm?id='+ data.id + '&urlType=1',
+                  title: '维护车辆信息',
+                  closeCallBack: (acc) => {
+                    if (acc) {
+                      acc=acc.split('◇');
+                      this.vehicleType = acc[0]//型号
+                      this.vehicleTypeID = acc[1]
+                      this.vehicleBrand = acc[2]//车辆品牌
+                      this.vehicleBrandID = acc[3]
+                      this.customerName = acc[4]
+                      this.customer = acc[5]//型号
+                    }
+                  }
+                })
+              }
+            }
+          }
+        })
+      },
+      // plateEvent(carOwnerID){
+      //   this.$dialog.OpenWindow({
+      //     width: 950,
+      //     height: 603,
+      //     url: '/selectPlate?carOwnerID=' + carOwnerID,
+      //     title: '选择车辆信息',
+      //     closeCallBack: (data) => {
+      //       if (data) {
+      //         this.vehicleType = data.model//型号
+      //         this.vehicleBrand = data.brand//车辆品牌
+      //         this.vehicleBrandID = data.brandID
+      //         this.vehicleTypeID = data.modelID
+      //         this.licensePlateNumberID = data.id
+      //         this.licensePlateNumber = data.plate
+      //
+      //         this.modelNoEdit = true
+      //         if(data.brand === '' || data.model === ''){
+      //           this.$dialog.OpenWindow({
+      //             width: '1050',
+      //             height: '700',
+      //             url: '/vehicleForm?id='+ data.id + '&urlType=1',
+      //             title: '维护车辆信息',
+      //             closeCallBack: (acc) => {
+      //               if (acc) {
+      //                 acc=acc.split('◇');
+      //                 this.vehicleType = acc[0]//型号
+      //                 this.vehicleTypeID = acc[1]
+      //                 this.vehicleBrand = acc[2]//车辆品牌
+      //                 this.vehicleBrandID = acc[3]
+      //               }
+      //             }
+      //           })
+      //         }
+      //       }
+      //     }
+      //   })
+      //
+      // },
+      // //客户类型
+      selectUnitOrPerson(){
+        this.plateEvent()
+        // this.$dialog.OpenWindow({
+        //   width: 950,
+        //   height: 603,
+        //   url: '/selectFormPlate',
+        //   title: '选择车牌号',
+        //   closeCallBack: (data) => {
+        //     if (data) {
+        //       this.customerName = data.contactPersonID
+        //       this.customer = data.name
+        //       this.plateEvent(data.carOwnerID)
+        //     }
+        //   }
+        // })
+      },
+      lookImg(){
+          this.tipShow=true;
+          this.getUrl='/UploadFile/bankDetail/'+this.storeName;
+      },
+      imgClick(){
+        if(this.tipShow){
+          this.tipShow=false;
+        }
+      },
       viewDetails(item){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -253,7 +405,9 @@
       // },
       /* 选择业务员 */
       operatorEvent(){
+
         this.$dialog.OpenWindow({
+
           width: 950,
           height: 692,
           title: '选择业务员',
@@ -265,6 +419,21 @@
             }
           }
         })
+      },
+      SelectCustomer(){
+        this.selectUnitOrPerson()
+        // this.$dialog.OpenWindow({
+        //   width: 950,
+        //   height: 692,
+        //   title: '选择业务员',
+        //   url: '/selectPerson?category=1',
+        //   closeCallBack: (data)=>{
+        //     if(data){
+        //       this.customerName = data.id
+        //       this.customer = data.name
+        //     }
+        //   }
+        // })
       },
       getInformation(id){
         let params = {
@@ -314,6 +483,7 @@
 
       },
       save(){
+        console.log(this.validator(),this.workOrderNumber)
         if(this.validator()&&this.workOrderNumber!=='1'){
           let params = {
             id: this.id,
@@ -330,6 +500,7 @@
             workOrderID: this.workOrderID,
 
             customerName: this.customerName,
+            customer: this.customer,
             vehicleTypeID: this.vehicleTypeID,
             vehicleType: this.vehicleType,
             licensePlateNumber: this.licensePlateNumber,
@@ -409,6 +580,8 @@
             this.accountID = data.accountID
             this.money = data.money
             this.customerName = data.customerName
+            this.customer = data.customer
+            this.customers = data.customer
             this.licensePlateNumber = data.licensePlateNumber
             // this.branch = data.branch
             // this.branchID = data.branchID
@@ -418,7 +591,12 @@
             this.storeName = data.storeName
             this.remark = data.remark
             this.signState = data.signState
-
+            this.unitOrPerson = data.unitOrPerson
+            if (this.signState > 0 && this.signState < 4){
+              this.noSignStateList='0,4'
+            }else if(this.signState === 0){
+              this.noSignStateList='3,4'
+            }
             // this.createName = data.createName
             // this.insertDate = data.insertDate
             // this.updateName = data.updateName
@@ -461,7 +639,7 @@
   }
   .duplicateAccount{
     position: fixed;
-    bottom: -300px;
+    bottom: -99%;
     transition: all 0.5s;
     width: 100%;
     box-sizing: border-box;
@@ -501,5 +679,30 @@
       display: inline-block;
       float: right;
     }
+  }
+  .showImg{
+    width: 850px;
+    height: 600px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: center;
+    background-color: #FFFFFF;
+    position: fixed !important;
+    z-index: 999999;
+    -webkit-box-shadow: 0 0 20px #000000;
+    box-shadow: 0 0 20px #000000;
+    border-radius: 10px;
+    top: 0;
+    right: 0;
+    left: 140px;
+    bottom: 0;
+    margin: auto;
   }
 </style>

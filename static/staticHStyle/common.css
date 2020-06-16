@@ -129,7 +129,7 @@ input {
 #topmenu {
     width: 100%;
     min-width: 1660px;
-    height: 70px;
+    height: 84px;
     background-color: #49a9ea;
     box-shadow: 0 0 4px #999;
 }
@@ -144,7 +144,7 @@ input {
 
 .logo {
     width: 145px;
-    height: 64px;
+    height: 76px;
     background-color: #0888d8;
     /*background: url('/StaticMHtml/Images/logoBG.png') no-repeat;*/
     float: left;
@@ -186,7 +186,7 @@ input {
 
 }
 .topmenu_nav ul li {
-    width: 66px;
+    width: 84px;
     height: 55px;
     margin-left: 12px;
     *margin-left: 10px;
@@ -200,18 +200,18 @@ input {
     color: #fff;
 }
 .topmenu_nav ul li a img{
-    height: 28px;
+    height: 40px;
 }
 
 /*顶部菜单图标*/
 /*.topmenu_nav ul li a img{ height: 48px; }*/
 
 .topmenu_nav ul li a span {
-    width: 66px;
-    height: 18px;
+    width: 84px;
+    height: 22px;
     display: inline-block;
-    line-height: 18px;
-    font-size: 14px;
+    line-height: 22px;
+    font-size: 16px;
     /*margin-top: 5px;*/
 }
 
@@ -233,7 +233,7 @@ input {
     padding-right: 4px;
     background-color: #f4f5fb;
     border-radius: 8px;
-    margin: 5px 0;
+    margin: 12px 0;
 }
 
 .userTop {
@@ -511,7 +511,7 @@ input {
 }
 .desktopDiv {
     width: 50px;
-    height: 40px;
+    height: 50px;
     font-size: 12px;
     cursor: pointer;
     background-color: #49a9ea;
@@ -535,7 +535,7 @@ input {
 }
 
 .SiteLeftParentA {
-    height: 40px;
+    height: 50px;
     font-size: 12px;
     cursor: pointer;
     color: #fff;
@@ -550,7 +550,7 @@ input {
 }
 
 .SiteLeftParentB {
-    height: 40px;
+    height: 50px;
     font-size: 12px;
     cursor: pointer;
     color: #fff;
@@ -574,7 +574,7 @@ input {
 
 .SiteLeftChild li {
     width: 50px;
-    height: 34px;
+    height: 50px;
     position: relative;
     vertical-align: middle;
     display: flex;
@@ -582,14 +582,14 @@ input {
     justify-content: center;
     background-color: #fff;
     border-radius: 5px;
-    margin: 3px 0;
+    margin: 8px 0;
 }
 
 
 .SiteLeftChild li a{
     display: flex;
     width: 100%;
-    height: 34px;
+    height: 50px;
     justify-content: center;
     align-items: center;
     border-radius: 5px;
@@ -606,8 +606,8 @@ input {
 .SiteLeftChild li a img {
     vertical-align: middle;
     *margin-top: 8px;
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
 }
 
 
@@ -799,7 +799,7 @@ hr {
 }
 #leftmenu:hover .SiteLeftChild li a{
     width: 100%;
-    height: 34px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: flex-start;

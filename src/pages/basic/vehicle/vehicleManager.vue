@@ -20,7 +20,7 @@
         <yhm-managerth  title="品牌" value="brand"></yhm-managerth>
         <yhm-managerth  title="车型" value="model"></yhm-managerth>
         <yhm-managerth  title="车辆版本" value="version"></yhm-managerth>
-        <yhm-managerth title="登记日期" value="registerDate"></yhm-managerth>
+        <yhm-managerth title="上牌日期" value="registerDate"></yhm-managerth>
 
         <yhm-managerth style="width: 100px;" title="删除"></yhm-managerth>
       </template>

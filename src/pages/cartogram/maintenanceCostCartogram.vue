@@ -3,12 +3,24 @@
       <div class="top">
         <yhm-datebox type="year" width="200" height="40px" style="border-radius: 5px;" :maxYear="maxYear" :isSm="true" @call="selectYear"  :value="yearTxt" id="yearTxt" position="b"></yhm-datebox>
         <div class="total" v-show="totalShow">
-          <span style="color: #FF0000">最大金额 {{moneyMax}}  日期 {{dateMax}}</span>
-          <span style="color: #49a9ea">最小金额 {{moneyMin}}  日期 {{dateMin}}</span>
+          <div class="flex">
+            <div class="topMoeny"  style="color: #FF0000">
+              <span >最大金额:</span>
+              <span v-html="segmentation"></span>
+            </div>
+            <span style="color: black;">  日期:  {{dateMax}}</span>
+          </div>
+          <div class="flex">
+            <div class="topMoeny"  style="color: #49a9ea">
+              <span >最小金额:</span>
+              <span v-html="segmentations"></span>
+            </div>
+            <span style="color: black;">  日期:  {{dateMin}}</span>
+          </div>
         </div>
         <div class="total" v-show="!totalShow">
-          <span style="color: #FF0000">暂无数据</span>
-          <span style="color: #49a9ea">暂无数据</span>
+          <p style="color: #FF0000">暂无数据</p>
+          <p style="color: #49a9ea">暂无数据</p>
         </div>
       </div>
       <!--统计图渲染标签 避坑 id具有唯一性 不允许当id与其他页面ID相同 否则不显示     -->
@@ -18,7 +30,7 @@
 </template>
 
 <script>
-  import {zero,formatDate ,getDayNumByYearMonth} from '@/assets/common.js'
+  import {zero,formatDate ,getDayNumByYearMonth,tenThousandFormatHtml} from '@/assets/common.js'
   export default {
     name: 'maintenanceCostCartogram',
     data(){
@@ -41,7 +53,20 @@
         moneyMax:'1',
         dateMin:'',
         dateMax:'',
-        totalShow:true
+        totalShow:true,
+        colorList:['#f15bb5','#eeef20','#00f5d4','#f15bb5','#00bbf9','#ffbf69', '#90e0ef','#9b5de5','#f3ffbd','#70d6ff','#deaaff','#f7d9c4'],//颜色数组
+
+      }
+    },
+    computed:{
+      segmentation(){
+        return tenThousandFormatHtml(this.moneyMax+'')
+      },
+      segmentations(){
+        if(!this.moneyMin){
+          this.moneyMin = '0'
+        }
+        return tenThousandFormatHtml(this.moneyMin+'')
       }
     },
     methods: {
@@ -219,8 +244,39 @@
             {
               name: '金额',
               type: 'bar',
-              barWidth: '60%',
               data: that.money,
+              barWidth:30,
+              markLine : {
+                data : [
+                  {type : 'average', name: '平均值'}
+                ]
+              },
+              itemStyle: {
+                //通常情况下：
+                normal:{
+                  //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+                  color: function (params){
+                    let j = 0
+                    let colorList = []
+                    for(let i in that.money){
+                      if(colorList.length%12==0==true){
+                        j=0
+                        colorList.push(that.colorList[j])
+                      }else{
+                        j++
+                        colorList.push(that.colorList[j])
+                      }
+                    }
+                    return colorList[params.dataIndex];
+                  }
+                },
+                //鼠标悬停时：
+                emphasis: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              },
 
             },
 
@@ -267,36 +323,26 @@
             this.dateMax = ''
             this.dateMin = ''
             this.backupsList = this.moneyList.concat()//将数据集合赋给备份的集合中 深拷贝
+            let money = []
+            let day  = []
+            let maxSchedule = ''
+            let minSchedule = ''
             for(let i in data){
               this.day.push(data[i].day)
               this.money.push(data[i].money)
+              if(data[i].money!='0'){
+                money.push(data[i].money)
+                day.push(data[i].day)
+              }
             }
             setTimeout(()=>{
-              for(let i in this.moneyList){
-                if(i === '0'){
-                  this.moneyMax = this.moneyList[i].money
-                  this.moneyMin = '999999999'
-                }else{
-                  if(this.moneyList[i].money> this.moneyMax){
-                    if(this.month!=='13'){
-                      this.dateMax = this.year + '年' + this.moneyList[i].day + '月'
-                    }else{
-                      this.dateMax = this.year + '年' + this.moneyList[i].day + '月'
-                    }
-                    this.moneyMax = this.moneyList[i].money
-                  }
-                  if(0<this.moneyList[i].money && this.moneyList[i].money < this.moneyMin){
-                    if(this.month!=='13'){
-                      this.dateMin = this.year + '年' + this.moneyList[i].day + '月'
-                    }else{
-                      this.dateMin = this.year + '年' + this.moneyList[i].day + '月'
-                    }
-                    this.moneyMin = this.moneyList[i].money
-                  }
-                }
-              }
+              maxSchedule = Math.max.apply(null,money);//最大值
+              minSchedule = Math.min.apply(null,money);//最小值
+              this.moneyMax = maxSchedule
+              this.moneyMin = minSchedule
+              this.dateMax = this.year + '年' + day[money.indexOf(maxSchedule)]+ '月'
+              this.dateMin = this.year + '年' + day[money.indexOf(minSchedule)] + '月'
               this.elementCountInArray(this.money)//判断数组中全部money字段是否为0
-
             },0)
             this.rank()
             this.drawChart()//调用echarts实例
@@ -329,18 +375,35 @@
     z-index: 999;
     border-radius: 10px 10px 0;
     top: 24px;
-    .total{
-      width: 600px;
+    .topMoeny{
+      width: 188px;
       display: flex;
-      border: 1px solid #bfbfbf;
       justify-content: space-between;
+      align-items: center;
+      span{
+        white-space: nowrap;  //强制不换行
+      }
+    }
+    .total{
+      width: 350px;
+      border: 1px solid #bfbfbf;
       border-radius: 10px;
       background-color: #fff;
       padding: 10px;
     }
-    span{
+    p{
       font-size: 15px;
     }
+    span{
+      font-size: 15px;
+      white-space: nowrap;  //强制不换行
+      text-overflow:ellipsis; //省略号显示
+    }
+  }
+
+  .flex{
+    display: flex;
+    justify-content: space-between;
   }
   .maintenanceCostCartogram{
     width: 95%;

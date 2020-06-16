@@ -22,28 +22,31 @@
 <!--          <yhm-view-control title="图片" :content="engineNumber" ></yhm-view-control>-->
 
           <yhm-view-control title="银行摘要" :content="bankSummary" ></yhm-view-control>
-          <yhm-form-radio style="width: 434px;font-weight: bold;" title="状态" :state-show="true" @call="callState" :select-list="signStateList" :value="signState" id="signState"></yhm-form-radio>
+          <yhm-view-control title="状态" :psd="signStateList" :content="signState"></yhm-view-control>
+
+<!--          <yhm-form-radio style="width: 434px;font-weight: bold;" title="状态" :state-show="true" @call="callState" :select-list="signStateList" :value="signState" id="signState"></yhm-form-radio>-->
 <!--          <yhm-form-textarea style="width: 934px;" title="备注" :value="remark" id="remark" ref="remark" ></yhm-form-textarea>-->
+          <yhm-view-control title="备注" category="2" :content="remark" ></yhm-view-control>
 
-          <div style="width: 100%;" class="remark">
-            <div class="remark2">
-              <span>备注:</span>
-              <textarea  v-model="remark" :class="{textareaError:errorShow,textarea:!errorShow}" type="text" @blur="stateChange"/>
-            </div>
+<!--          <div style="width: 100%;" class="remark">-->
+<!--            <div class="remark2">-->
+<!--              <span>备注:</span>-->
+<!--              <textarea  v-model="remark" :class="{textareaError:errorShow,textarea:!errorShow}" type="text" @blur="stateChange"/>-->
+<!--            </div>-->
 
-          </div>
-          <div class="error">{{error}}</div>
+<!--          </div>-->
+<!--          <div class="error">{{error}}</div>-->
 
         </template>
       </yhm-view-body>
 
       <div class="f_split"></div>
 
-      <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
-        <template #btn>
-          <yhm-commonbutton value="保存" style="margin-right: 20px" icon="i-edit" :flicker="true" @call="save()"></yhm-commonbutton>
-        </template>
-      </yhm-formoperate>
+<!--      <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">-->
+<!--        <template #btn>-->
+<!--          <yhm-commonbutton value="保存" style="margin-right: 20px" icon="i-edit" :flicker="true" @call="save()"></yhm-commonbutton>-->
+<!--        </template>-->
+<!--      </yhm-formoperate>-->
     </div>
 </template>
 
@@ -78,6 +81,12 @@
           },
           {
             code:'',
+            num:'3',
+            img:'icon-correct iconSignState',
+            showName:'正常',
+          },
+          {
+            code:'',
             num:'1',
             img:'icon-InterestRW',
             showName:'待核查',
@@ -87,6 +96,12 @@
             num:'2',
             img:'icon-delete',
             showName:'异常',
+          },
+          {
+            code:'red',
+            num:'4',
+            img:'icon-correct iconCorrect',
+            showName:'待完善',
           },
         ],
         error:'',
@@ -216,7 +231,6 @@
           url: '/Fin/bankDetailInsuranceByID',
           data:params,
           call: (data)=>{
-            console.log( data )
             this.moneyBackDate=data.moneyBackDate//回款日期
             this.money=data.money,//金额
             this.account=data.account,//我方账户

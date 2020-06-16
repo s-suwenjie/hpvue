@@ -37,7 +37,7 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item.id)"></yhm-manager-td-look>
-          <yhm-manager-td-input v-show="aliasIndex === index" @blur="blurAliasEvent" :id="item.id" :value="item.alias"></yhm-manager-td-input>
+          <yhm-manager-td-input v-show="aliasIndex === index" :isFocus="aliasIndex === index" @blur="blurAliasEvent" :id="item.id" :value="item.alias"></yhm-manager-td-input>
           <yhm-manager-td  v-show="aliasIndex !== index" @dblclick="dbAliasEvent(item.alias,index)" :value="item.alias"></yhm-manager-td>
 
           <yhm-manager-td-tip-img :value="item.name" :unitUrl="item.unitUrl" icon="icon-uniE999" :tip="true" color="#333" node-class-name="m_main"></yhm-manager-td-tip-img>

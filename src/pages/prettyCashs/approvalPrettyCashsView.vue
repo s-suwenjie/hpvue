@@ -82,40 +82,50 @@
       adoptEvent () { //
         if(this.isApproval!=='1'){
           if(this.id){
-            let params = {
-              id: this.id,
-              kind: '0',
-              tableName: '47'
-            }
-            this.$dialog.confirm({
-              width: 300,
-              tipValue: '是否通过?',
-              alertImg: 'warn',
-              okCallBack: (data)=>{
-                this.ajaxJson({
-                  url: '/PersonOffice/approvalYesVue',
-                  data: params,
-                  call: (data)=>{
-                    if(data.type === 0){
-                      this.$dialog.setReturnValue(this.id)
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        closeCallBack: () => {
-                          this.approvalNext()
-                        }
-                      })
-                    }else{
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        alertImg: 'error',
-                        closeCallBack: () => {
-                        }
-                      })
-                    }
-                  }
-                })
+            this.$dialog.OpenWindow({
+              width: 650,
+              height: 230,
+              title: '审批留言',
+              url: '/passMessage?id=' + this.id+ '&tableName=47&kind=0',
+              closeCallBack: (data)=>{
+                this.$dialog.setReturnValue(this.id)
+                this.approvalNext()
               }
             })
+            // let params = {
+            //   id: this.id,
+            //   kind: '0',
+            //   tableName: '47'
+            // }
+            // this.$dialog.confirm({
+            //   width: 300,
+            //   tipValue: '是否通过?',
+            //   alertImg: 'warn',
+            //   okCallBack: (data)=>{
+            //     this.ajaxJson({
+            //       url: '/PersonOffice/approvalYesVue',
+            //       data: params,
+            //       call: (data)=>{
+            //         if(data.type === 0){
+            //           this.$dialog.setReturnValue(this.id)
+            //           this.$dialog.alert({
+            //             tipValue: data.message,
+            //             closeCallBack: () => {
+            //               this.approvalNext()
+            //             }
+            //           })
+            //         }else{
+            //           this.$dialog.alert({
+            //             tipValue: data.message,
+            //             alertImg: 'error',
+            //             closeCallBack: () => {
+            //             }
+            //           })
+            //         }
+            //       }
+            //     })
+            //   }
+            // })
           }
         }
       },

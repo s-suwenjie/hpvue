@@ -20,8 +20,8 @@
           <template #listHead>
             <!--<yhm-managerth style="width:40px" title="查看" ></yhm-managerth>-->
             <yhm-managerth  title="启用日期" ></yhm-managerth>
-            <yhm-managerth  title="新车费率"></yhm-managerth>
-            <yhm-managerth  title="旧车费率"></yhm-managerth>
+            <yhm-managerth  title="客户新车费率"></yhm-managerth>
+<!--            <yhm-managerth  title="旧车费率"></yhm-managerth>-->
             <yhm-managerth  title="客户费率"></yhm-managerth>
             <yhm-managerth  title="特殊车型费率"></yhm-managerth>
 
@@ -31,7 +31,7 @@
               <!--<yhm-manager-td-look @click="listView(item.id)"></yhm-manager-td-look>-->
               <yhm-manager-td-date :value="item.startDate==='1900-01-01'?'-----':item.startDate" typeof="data"></yhm-manager-td-date>
               <yhm-manager-td-rgt  :value="item.newRate+'  %'"></yhm-manager-td-rgt>
-              <yhm-manager-td-rgt :value="item.oldRate+'  %'" ></yhm-manager-td-rgt>
+<!--              <yhm-manager-td-rgt :value="item.oldRate+'  %'" ></yhm-manager-td-rgt>-->
               <yhm-manager-td-rgt :value="item.clientRate+'  %'" ></yhm-manager-td-rgt>
               <yhm-manager-td-rgt :value="item.vipRate+'  %'" ></yhm-manager-td-rgt>
             </tr>

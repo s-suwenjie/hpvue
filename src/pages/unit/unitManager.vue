@@ -13,6 +13,7 @@
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
           <yhm-radiofilter @initData="initChoose('state')" title="状态" :content="listCategory"></yhm-radiofilter>
+          <yhm-radiofilter @initData="initChoose('blacklist')" title="是否黑名单" all="0" :content="listBlacklist"></yhm-radiofilter>
           <yhm-radiofilterletter @initData="initChoose('prefixLetter')" :selectValue="prefixLetterList"></yhm-radiofilterletter>
         </div>
       </template>
@@ -64,6 +65,10 @@
           value: '',
           list: []
         },
+        listBlacklist:{
+          value:'1',
+          list:[]
+        },
       }
     },
     methods:{
@@ -110,6 +115,7 @@
           params = {
             prefixLetter: this.prefixLetterList.value,
             category: this.listCategory.value,
+            blacklist:this.listBlacklist.value,
             init: false
           }
         }
@@ -124,6 +130,7 @@
             // 初始化时需要执行的代码
             // 这边初始化筛选信息
             this.listCategory=data.categoryPsd
+            this.listBlacklist=data.blacklistPsd
           }
         })
       },

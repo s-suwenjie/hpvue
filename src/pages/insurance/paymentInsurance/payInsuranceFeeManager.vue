@@ -26,7 +26,7 @@
         <yhm-managerth title="车牌号" value="plate"></yhm-managerth>
         <yhm-managerth title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth  style="width: 300px;" title="收款账户明细" value="otherAccount"></yhm-managerth>
+        <yhm-managerth style="width: 300px;" title="收款账户明细" value="otherAccount"></yhm-managerth>
         <yhm-managerth title="支付金额" value="actualProfitLoss"></yhm-managerth>
         <yhm-managerth title="申请编号" value="numbering"></yhm-managerth>
         <yhm-managerth style="width: 170px;" title="状态"></yhm-managerth>
@@ -39,10 +39,10 @@
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
-          <yhm-manager-td :value="item.contactName"></yhm-manager-td>
+          <yhm-manager-td @click="contactView(item)" :value="item.contactName"></yhm-manager-td>
           <yhm-manager-td-psd  @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td @click="unitDetail(item)" :tip="true" :value="item.otherAccount" ></yhm-manager-td>
-          <yhm-manager-td-money  :value="item.invoicingMoney"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.invoicingMoney"></yhm-manager-td-money>
           <yhm-manager-td :value="item.numbering"></yhm-manager-td>
           <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
         </tr>
@@ -114,6 +114,19 @@
       }
     },
     methods:{
+      contactView (item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/personView?id=' + item.contactID+'&isBilling=0',
+          title:'查看联系人信息',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       unitDetail(item){
         if (item.bankDetailID===''){
           this.$dialog.alert({
@@ -177,7 +190,6 @@
                 url: '/customerRebatesView?id='+data.val,
                 closeCallBack: (dataTwo)  =>{
                   if(dataTwo){
-
                   }
                 }
               })
@@ -212,7 +224,7 @@
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '650',
+          height: '700',
           url: '/policyView?id=' + item.id,
           title: '查看客户信息',
           closeCallBack: (data)=>{

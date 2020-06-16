@@ -11,6 +11,7 @@
         <yhm-view-control title="公司电话" :content="tel" ></yhm-view-control>
         <yhm-view-control title="统一社会信用代码" :content="registrationNumber" ></yhm-view-control>
         <yhm-view-control title="邮箱" :content="email" ></yhm-view-control>
+        <yhm-view-control title="是否加入黑名单" :content="blacklist" :psd="blacklistList"></yhm-view-control>
         <yhm-view-control category="2" title="标签" :content="tag" :psd="tagList" v-show="isTagShow"></yhm-view-control>
         <yhm-view-control category="3" title="地址" :content="addressCN" ></yhm-view-control>
       </template>
@@ -20,6 +21,8 @@
       <template #tab>
         <yhm-view-tab-button :list="tabState" :index="0">更多信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1" @click="listDetail">往来明细</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="2" @click="maintain">保险理赔</yhm-view-tab-button>
+
       </template>
       <template #tab_total>
         <div v-show="tabState[1].select" style="background: #c5daeb;margin-right: 2px;">
@@ -30,7 +33,7 @@
             <th style="color: #ff0000;">支出金额</th>
             </thead>
             <tbody>
-            <tr v-for="(item,index) in totalTotal" style="background: #fff;">
+            <tr v-for="(item,index) in totalTotal" :key="index" style="background: #fff;">
               <td v-html="tenThousandFormatShow(item.balance)" style="text-align: right;"></td>
               <td v-html="tenThousandFormatShow(item.income)" style="text-align: right;color: #49a9ea;"></td>
               <td v-html="tenThousandFormatShow(item.expend)" style="text-align: right;color: #ff0000;"></td>
@@ -38,6 +41,25 @@
             </tbody>
           </table>
 
+        </div>
+        <div style="display:flex;align-items: center;">
+          <div  v-show="tabState[2].select" style="margin-right: 30px">
+            <yhm-datebox type="year" width="200px" :maxYear="maxYear" :isSm="true" @call="selectYear" style="width: 120px" :value="yearTxt" id="yearTxt" position="r"></yhm-datebox>
+          </div>
+          <div v-show="tabState[2].select" style="background: #c5daeb;margin-right: 2px;">
+            <table style="width:250px;height: 50px;" >
+              <thead>
+              <th >总数</th>
+              <th style="color: #49a9ea; width: 150px;">总金额</th>
+              </thead>
+              <tbody>
+              <tr  style="background: #fff;box-sizing: border-box;">
+                <td style="text-align: center;">{{totalNumber}} </td>
+                <td v-html="tenThousandFormatShow(aggregateAmount+'')" style="text-align: right;box-sizing: border-box;padding-right:10px "></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </template>
       <template #content>
@@ -90,6 +112,47 @@
             <yhm-pagination :pager="pager" is-page-size="false" @initData="listDetail(false)"></yhm-pagination>
           </template>
         </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[2].select">
+          <template #operate>
+            <yhm-radiofilter @initData="maintain('screening')" title="查看" :content="screening" style="margin: 5px 0;"></yhm-radiofilter>
+          </template>
+          <template #listHead>
+            <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
+            <yhm-managerth style="width: 80px" title="客户姓名"></yhm-managerth>
+            <yhm-managerth title="收入来源"></yhm-managerth>
+            <yhm-managerth style="width: 120px;" title="工单号"></yhm-managerth>
+            <yhm-managerth style="width: 60px" title="业务员"></yhm-managerth>
+            <yhm-managerth style="width:60px;" title="车型品牌"></yhm-managerth>
+            <yhm-managerth style="width: 70px" title="车牌号"></yhm-managerth>
+            <yhm-managerth style="width: 100px;" title="回款日期"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="发生额"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="收款银行"></yhm-managerth>
+            <yhm-managerth style="width: 160px" title="银行摘要" ></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in content" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-manager-td-look @click="lookOver(item)"></yhm-manager-td-look>
+              <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.customer" ></yhm-manager-td>
+              <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.otherName" @click="unitClickLeft(item)" ></yhm-manager-td>
+              <yhm-manager-td :value="item.workOrderID" ></yhm-manager-td>
+
+              <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.operator" @click="operatorClickLeft(item)"></yhm-manager-td>
+              <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.vehicleBrand" ></yhm-manager-td>
+              <yhm-manager-td :value="item.licensePlateNumber" :tip="true" node-class-name="f_main"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.moneyBackDate"></yhm-manager-td-date>
+
+              <yhm-manager-td-money :value="item.money === null ? ' ':item.money"></yhm-manager-td-money>
+              <yhm-manager-td :value="item.bankName"></yhm-manager-td>
+              <yhm-manager-td :value="item.bankSummary === null ? ' ': item.bankSummary"></yhm-manager-td>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="content.length=='0'?true:false">暂时没有数据</span>
+          </template>
+          <template #pager>
+            <yhm-pagination :pager="pager" is-page-size="false" @initData="initPageData(false)"></yhm-pagination>
+          </template>
+        </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
     <div class="f_split"></div>
@@ -103,6 +166,8 @@
 <!--capital*capitalCompany-->
 <script>
   import { viewmixin } from '@/assets/view.js'
+  import {formatDate} from '@/assets/common.js'
+
   export default {
     name: 'unitView',
     mixins: [viewmixin],
@@ -131,12 +196,14 @@
         capital: '',//注册资本
         currency:'',//币种类型
         content:[],
-        tabState:[{select:true},{select:false}],
+        tabState:[{select:true},{select:false},{select:false}],
         empty:false,
         isTagShow: false,
 
         id: '',
         categoryList: [] ,
+        blacklistList:[],
+        blacklist:'',
         tagList: [],
         isEmpty: true,
 
@@ -152,9 +219,60 @@
         capitalCompany: '',              //金额单位
         management: '',              //经营范围
         stateBefore: '0', // 默认选择状态为可以选择，1为不可以选择,
+        yearTxt:'',
+        maxYear: parseInt(formatDate(new Date()).substr(0, 4)),
+        screening:{
+          list:[
+            {
+              code:"",
+              img:'',
+              num:'0',
+              showName:'保险理赔'
+            },
+            {
+              code:"",
+              img:'',
+              num:'1',
+              showName:'自费维修'
+            },
+          ],
+          value:'0',
+        },
       }
     },
     methods: {
+      selectYear(val){
+        this.yearTxt = val+''
+        this.maintain()
+      },
+      maintain(){
+        let params = {
+          year:this.yearTxt,
+          type:this.screening.value,
+          customerName:this.id,
+        }
+        this.ajaxJson({
+          url: '/Fin/getPersonBankDetailInsurance',
+          data: params,
+          call: (data) => {
+            this.content = data.content
+            this.pager.total = data.count
+            this.contentTotal = data.total
+            this.totalNumber = data.total[0].count
+            this.aggregateAmount = data.total[0].money
+          }
+        })
+      },
+      lookOver(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '450',
+          url: '/claimsView?id=' + item.id ,
+          title: '查看'+this.screening.list[this.screening.value].showName +'详情',
+          closeCallBack: (data)=>{
+          }
+        })
+      },
       initChoose(){
         this.listDetail(false)
       },
@@ -238,7 +356,9 @@
       }
     },
     created () {
-
+      let nowDate = new Date();
+      let newYear = nowDate.getFullYear();
+      this.yearTxt = newYear+''
       let params = {
         id:this.id
       }
@@ -254,6 +374,9 @@
           this.registrationNumber = data.registrationNumber
           this.categoryList = data.categoryPsd.list
           this.category = data.categoryPsd.value
+          this.blacklistList=data.blacklistPsd.list
+          this.blacklist=data.blacklistPsd.value
+
           this.tagList = data.tagPsd.list
           this.tag = data.tagPsd.value
 

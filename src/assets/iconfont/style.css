@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?4t77n3');
-  src:  url('fonts/icomoon.eot?4t77n3#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?4t77n3') format('truetype'),
-    url('fonts/icomoon.woff?4t77n3') format('woff'),
-    url('fonts/icomoon.svg?4t77n3#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?hwdn7l');
+  src:  url('fonts/icomoon.eot?hwdn7l#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?hwdn7l') format('truetype'),
+    url('fonts/icomoon.woff?hwdn7l') format('woff'),
+    url('fonts/icomoon.svg?hwdn7l#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-uniE9B1:before {
+  content: "\e9b1";
+  color: #606060;
+}
+.icon-12:before {
+  content: "\e9b2";
+  color: #606060;
+}
+.icon-uniE9AE:before {
+  content: "\e9ae";
+  color: #606060;
+}
+.icon-10:before {
+  content: "\e9af";
+  color: #606060;
+}
+.icon-11:before {
+  content: "\e9b0";
+  color: #606060;
+}
 .icon-uniE9A9:before {
   content: "\e9a9";
   color: #666;
@@ -39,6 +59,22 @@
 }
 .icon-uniE99F:before {
   content: "\e99f";
+  color: #666;
+}
+.icon-uniE9AD:before {
+  content: "\e9ad";
+  color: #666;
+}
+.icon-uniE9AA:before {
+  content: "\e9aa";
+  color: #666;
+}
+.icon-9:before {
+  content: "\e9ab";
+  color: #666;
+}
+.icon-8:before {
+  content: "\e9ac";
   color: #666;
 }
 .icon-uniE9A8:before {

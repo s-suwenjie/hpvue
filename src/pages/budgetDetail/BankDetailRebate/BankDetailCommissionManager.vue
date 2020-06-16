@@ -5,9 +5,9 @@
       <template #navigationTab v-if="isPersonalClaims">
         <a class="menuTabDiv" href="/Fin/bankDetailManager?menuType=0">收支明细</a>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/claimsManager'}">保险理赔</router-link>
-        <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRepairManager'}">散户维修费</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRepairManager'}">散户维修</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/BankDetailCommissionManager'}">保险手续费</router-link>
-
+        <router-link class="menuTabDiv " :to="{path:'/home/finPosAccountManager'}">Pos账户</router-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -86,6 +86,9 @@
         yearMoneySymbol:'',
         oldMoneySymbol:'',
         oldMoney:'',
+        dateType:'0',
+        endDate:'',
+        startDate:'',
 
         yearMoney:'',
         bank:'',
@@ -95,7 +98,7 @@
         topBtnShou:false,
         oldTotalColor:'#ff000c',
         radioTime:{},
-        nowTotal:'本日',
+        nowTotal:'本月',
         selectMonth:'',
         isYearMoneyShow:true,
         yearMoneyShow:true,
@@ -112,6 +115,19 @@
           url: '/BankDetailCommissionCartogram',
           closeCallBack: (dataTwo)=>{
 
+          }
+        })
+      },
+      listView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/unitDetailView?id=' + item.id ,
+          title: '查看收支明细信息',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
           }
         })
       },
@@ -133,10 +149,15 @@
       selectMonthEvent(data,item){
         this.yearMonth = data;
         this.radioTime = item;
-
+        this.dateType = '1';
         if(this.radioTime){
           this.dayCategory = '2'
           this.initPageData(false)
+        }
+        if(data.split("-")[1]==='13'){
+          this.nowTotal='本年'
+        }else if(data.split("-")[1]>0&&data.split("-")[1]<13){
+          this.nowTotal='本月'
         }
       },
       initChoose(){
@@ -145,6 +166,7 @@
         }else if(this.dayCategory === '3'||this.dayCategory === '2'){
           this.dayCategory='2'
         }
+        this.pager.pageIndex = 1
         this.initPageData(false)
       },
       initChooseTime(item){
@@ -167,21 +189,42 @@
         let params = {};
 
         if (initValue) {
+          let nowDate = new Date();
+          let newYear = nowDate.getFullYear();
+          let newMonth = nowDate.getMonth() + 1;
+          let newDate = nowDate.getDate();
+          let newHours = nowDate.getHours();
+          let newMin = nowDate.getMinutes();
+          let newSec = nowDate.getSeconds();
+          let lastDate = newDate - 1;
+
+          this.startDate = newYear + '-' + newMonth + '-1 ' + '00:00:00';
+          this.endDate = newYear + '-' + newMonth + '-' + newDate + ' ' + newHours + ':' + newMin + ':' + newSec;
           params = {
-            dateType: ''
+            subjectID: '3',
+            startDate: this.startDate,
+            endDate: this.endDate,
           }
         }else{
-          params = {
-            bankID: this.bankList.value,
-            startDate: this.radioTime.startDate,
-            endDate: this.radioTime.endDate,
-            dateType: '1'
-
+          if (this.dateType==='0'){
+            params = {
+              bankID: this.bankList.value,
+              startDate: this.startDate,
+              endDate: this.endDate,
+              subjectID: '3',
+            }
+          }else{
+            params = {
+              bankID: this.bankList.value,
+              startDate: this.radioTime.startDate,
+              endDate: this.radioTime.endDate,
+              subjectID: '3',
+            }
           }
         }
         this.init({
           initValue:initValue,
-          url: '/Fin/getBankDetailRepairManager',
+          url: '/Fin/getBankDetailRebateManager',
           data:params,
           all:(data) =>{
             //不管是不是初始化都需要执行的代码

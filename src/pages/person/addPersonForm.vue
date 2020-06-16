@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="f_main">
     <yhm-formbody>
       <template #title>基本信息</template>
@@ -10,23 +10,39 @@
       </template>
       <template #control>
         <yhm-form-radio title="单位类型" :select-list="categoryList" @call="categoryEvent" :value="category" id="category"></yhm-form-radio>
-        <yhm-form-radio title="性别" :select-list="sexList" :value="sex" id="sex"></yhm-form-radio>
+        <yhm-form-radio title="性别" :select-list="sexList" :value="sex" id="sex" :noEdit="idNo.length=='18'?true:false"></yhm-form-radio>
         <yhm-form-radio title="是否" subtitle="重要联系人" :select-list="importantList" :value="important" id="important"></yhm-form-radio>
         <yhm-form-radio title="政治面貌" :show="isThisUnit" :select-list="politicsStatusList" :value="politicsStatus" id="politicsStatus"></yhm-form-radio>
-        <yhm-form-text title="姓名" :value="name" id="name" ref="name" @repeatverify="repeatVerifyEvent" rule="R7000"></yhm-form-text>
+<!--        <yhm-form-text title="姓名" :value="name" id="name" ref="name" @repeatverify="repeatVerifyEvent" rule="R0000"></yhm-form-text>-->
+
+        <yhm-form-zh-text-checkbox ref="name" @clickCheckBox="clickLoginNameReset" @repeatverify="repeatVerifyEvent" title="姓名" check-title="是否外籍"  :value="name" id="name"  rule="R0000" :check-value="expatriate" check-value-id="expatriate"></yhm-form-zh-text-checkbox>
+
         <yhm-form-text title="手机号码" :value="phone" id="phone" ref="phone" tip="value" @repeatverify="repeatVerifyEvent" rule="R4000">
           <div v-show="variable" class="formBoxIcon" @click="aaa">
             <span class="icon-uniE9A9" style="font-size: 20px"></span>
           </div>
         </yhm-form-text>
-        <yhm-form-select title="所属公司" v-if="isThisUnit" @click="selectUnit" tip="value" :value="unit" id="unit" rule="R0000" ></yhm-form-select>
+        <yhm-form-select  title="所属公司" v-if="isThisUnit" @click="selectUnit" tip="value" :value="unit" id="unit" rule="R0000" ></yhm-form-select>
         <yhm-form-text title="所属部门" :show="isThisUnit" :value="department" id="department" placeholder="请在部门管理中调整所属部门" no-edit="1"></yhm-form-text>
-        <yhm-form-text title="身份证号" @input="isNoEvent" @repeatverify="repeatVerifyEvent" ref="idNo" tip="value" :value="idNo" id="idNo" :rule="idnoRule">
-          <div v-show="" class="formBoxIcon" @click="copyEvent" title="点击共用手机号">
+
+        <yhm-form-text v-if="isPortNo" title="身份证号" @input="isNoEvent" @repeatverify="isRepeatVerifyEvent" ref="idNo" tip="value" :value="idNo" id="idNo" :rule="idnoRule">
+
+
+          <div v-show="variable" class="formBoxIcon" @click="copyEvent" title="点击共用手机号">
             <span class="i-copy"></span>
           </div>
         </yhm-form-text>
+
+        <yhm-form-text v-if="!isPortNo" title="护照号" @input="isNoEvent" @repeatverify="isRepeatVerifyEvent" ref="idNo" tip="value" :value="idNo" id="idNo" :rule="idnoRule">
+          <div v-show="variable" class="formBoxIcon" @click="copyEvent" title="点击共用手机号">
+            <span class="i-copy"></span>
+          </div>
+        </yhm-form-text>
+
+        <yhm-form-radio title="生日历法" @call="calendarEvent" :select-list="calendarList" :value="calendar" id="calendar"></yhm-form-radio>
+
         <yhm-form-text title="籍贯" style="position: relative;" :no-edit="noedit" :value="nativePlace" @focus="nativePlaceFocus" id="nativePlace" tip="value">
+<!--          <div :class="{'shade':cityShow}" @click="shadeClick"></div>-->
           <div class="nativePlaceBox" v-show="true"
                :class="{
                'nativePlaceBox':cityShow,
@@ -35,6 +51,7 @@
                'nativePlaceBox0':category==='0'}">
             <span v-for="(item,index) in cityList" v-show="cityListShow" :key="index" @click="nativePlaceClick(item,index)">{{item.name}}</span>
             <span v-for="(items) in cities" v-show="!cityListShow" :key="items" @click="citiesClick(items)">{{items}}</span>
+            <span style="position: absolute;right: 4px;bottom: 4px;font-size: 22px" @click="shadeClick" class="icon-delete2"></span>
           </div>
 
           <div class="formBoxIcon" @click="personNative">
@@ -42,12 +59,11 @@
           </div>
 
         </yhm-form-text>
-        <yhm-form-radio title="生日历法" @call="calendarEvent" :select-list="calendarList" :value="calendar" id="calendar"></yhm-form-radio>
 
-        <yhm-form-text title="公历生日" :value="birthday" id="birthday" no-edit="1"></yhm-form-text>
-        <yhm-form-text title="农历生日" :value="birthdayLunar" id="birthdayLunar" no-edit="1"></yhm-form-text>
-        <yhm-form-text title="属相" :value="zodiac" id="zodiac" no-edit="1"></yhm-form-text>
-        <yhm-form-text title="星座" :value="constellation" id="constellation" no-edit="1"></yhm-form-text>
+        <yhm-form-text title="公历生日" :value="birthday" id="birthday" :no-edit="isExpatriate"></yhm-form-text>
+        <yhm-form-text title="农历生日" :value="birthdayLunar" id="birthdayLunar" :no-edit="isExpatriate"></yhm-form-text>
+        <yhm-form-text title="属相" :value="zodiac" id="zodiac" :no-edit="isExpatriate"></yhm-form-text>
+        <yhm-form-text title="星座" :value="constellation" id="constellation" :no-edit="isExpatriate"></yhm-form-text>
         <yhm-form-select title="民族" @click="nationEvent" tip="value" :value="nation" id="nation"></yhm-form-select>
         <yhm-form-select title="血型" @click="bloodTypeEvent" tip="bloodType" :value="bloodType" id="bloodType" ></yhm-form-select>
         <yhm-form-textarea title="备注" :show="isThisUnit" :value="remarkStr" id="remarkStr"></yhm-form-textarea>
@@ -164,13 +180,31 @@
 
         variable:false,
         variableType:'0',
+        isPortNo:true,
+        expatriate:'',  //是否外籍  0是 1 否
+        isExpatriate:'1',
       }
     },
     methods: {
+      shadeClick(){
+        this.cityShow=false
+      },
+      clickLoginNameReset(){
+        this.isPortNo=!this.isPortNo
+        if(this.expatriate==0){
+
+          this.isExpatriate='1'
+        }else{
+          this.isExpatriate='0'
+
+        }
+      },
       aaa(){
         this.$dialog.confirm({
           width: '300',
           tipValue: '是否共用手机号?',
+          btnValueOk:'是',
+          btnValueCancel:'否',
           alertImg: 'warn',
           okCallBack: () => {
             this.variableType='1'
@@ -344,9 +378,15 @@
           }
         })
       },
+
       /* 获取生日属相等 */
       isNoEvent(){
         if(this.idNo.length === 18){
+          if (parseInt(this.idNo.substr(16, 1)) % 2 == 1) {
+            this.sex = '1'
+          } else {
+            this.sex = '0'
+          }
           let params = {
             idNo: this.idNo,
             calendar: this.calendar
@@ -364,6 +404,11 @@
                 this.constellationID = data.constellationID
                 this.nativePlace = data.nativePlace
                 this.noedit = '1'
+                if(parseInt(this.idNo.substring(16,17))%2===1){
+                  this.sex = '1'
+                }else{
+                  this.sex = '0'
+                }
               }else {
                 this.$dialog.alert({
                   alertImg: 'error',
@@ -389,7 +434,6 @@
       },
       /* 单位类型切换 */
       categoryEvent(){
-        // console.log(this.category)
         if(this.category === '1'){
           this.idnoRule=''
           this.isThisUnit = false
@@ -397,6 +441,7 @@
           this.idnoRule = 'R5000'
           this.isThisUnit = true
         }
+        this.isRepeatVerifyEvent()
       },
       cutOutFront(item){//截取特定字符串前边的
         let tr = item.match(/(\S*)%/)[1];
@@ -418,32 +463,36 @@
         if(data.html!==''){//姓名已存在
           if(this.category==='1'){//外单位时
             this.flatType = true//标记 外单位姓名是否重复 true为重复
-          }else{
-            let name = this.cutOutFront(data.html)//截取字符串并返回 姓名
-            arr.push("'" + this.cutOutBack(data.html) + "'")
-            this.$refs.name.errorEvent(name)
           }
+          let name = this.cutOutFront(data.html)//截取字符串并返回 姓名
+
+          arr.push("'" + this.cutOutBack(data.html) + "'")
+            this.$refs.name.errorEvent(name)
+          // }
         }
         if(data.message!==''){
           if(this.category==='0'){//本单位时
             this.flatTypes = true//标记 本单位手机号是否重复 true为重复
-          }else{
+          }
             let phone = this.cutOutFront(data.message)//截取字符串并返回 电话号
             this.$refs.phone.errorEvent(phone)
             arr.push("'" + this.cutOutBack(data.message) + "'")
             this.variable = true
             this.variableType = '2'
-          }
         }
         if(data.val!==''){
           let identityCard = this.cutOutFront(data.val)//截取字符串并返回 身份证
           arr.push("'" + this.cutOutBack(data.val) + "'")
           this.$refs.idNo.errorEvent(identityCard)
+          this.variableType = '4'
         }
+
         this.verificationId = arr.join(',')
+        let verificationId = this.verificationId.replace(/☆/g,"'"+','+"'")
         let params = {
-          id:this.verificationId
+          id:verificationId
         }
+
         if(this.verificationId){
           this.ajaxJson({
             url: '/Basic/getPersonID',
@@ -490,7 +539,7 @@
             })
           }
         }else {
-          // if (this.name && this.phone && this.idNo.length === 18){
+          if (this.name && this.phone && this.idNo.length === 18){
             let params = {
               id:this.id,
               name: this.name,
@@ -502,6 +551,7 @@
               data: params,
               loading: "0",
               call: (data) => {
+                alert(data)
                 if (data.type === 1) {
                   this.isList = true
                   this.switchIconShow = true
@@ -515,48 +565,59 @@
                 }
               }
             })
-          // }
+          }
         }
       },
       async isRepeatVerifyEvent(){
-        let params = {
-          name: this.name,
-          phone: this.phone,
-          idNo: this.idNo,
-          id: this.id
-        }
-        let result = await this.ajaxAsync({
-          url: '/Basic/verifyPersonVueName',
-          data: params,
-          loading:"0"
-        })
-        if(result.type === 1){
-          this.duplicateAccount(result)
-          // this.$refs.name.errorEvent('联系人已存在')
-          if(this.category==='1'){//外单位
-            if(this.flatType === true){//外单位姓名重复时 允许
-              return true
-            }else{
-              this.flatType = false
-            }
-            return false
-          }else if(this.category==='0'){
-            if(this.flatTypes === true){//本单位手机号重复时 允许
-              return true
-            }else{
-              this.flatTypes = false
-            }
-            return false
+        if (this.name && this.phone) {
+          let params = {
+            name: this.name,
+            phone: this.phone,
+            idNo: this.idNo,
+            id: this.id
           }
+          let result = await this.ajaxAsync({
+            url: '/Basic/verifyPersonVueName',
+            data: params,
+            loading:"0"
+          })
+          if(result.type === 1){
+            this.duplicateAccount(result)
+            // this.$refs.name.errorEvent('联系人已存在')
+            if(this.category==='1'){//外单位
+              if(this.flatType === true){//外单位姓名重复时 允许
+                return true
+              }else{
+                this.flatType = false
+              }
+              return false
+            }else if(this.category==='0'){
+              if(this.flatTypes === true){//本单位手机号重复时 允许
+                return true
+              }else{
+                this.flatTypes = false
+              }
+              return false
+            }
+          }
+          return true
         }
-        return true
+
       },
       async save(){
+
         let a = await this.isRepeatVerifyEvent()
         let b = this.validator()
+        if (this.variableType === '0'){
+          this.variableType = '3'
+        }
+        if (this.variableType === '3'){
+          this.save()
+        }else
         if(this.variableType === '1'){
           if(b){
             let params = {
+
               id: this.id,
               category: this.category,
               sex: this.sex,
@@ -580,9 +641,10 @@
               bloodType: this.bloodType,
               bloodTypeID: this.bloodTypeID,
               nation: this.nation,
-              nationID: this.nationID
+              nationID: this.nationID,
+              expatriate:this.expatriate
             }
-            if(this.flatType===false&&this.flatTypes===false){
+            if(this.flatType===false&&this.flatTypes===false&&a){
               this.ajaxJson({
                 url: '/Basic/personSaveVue',
                 data: params,
@@ -607,6 +669,8 @@
             if(this.flatType === true){//外单位姓名重复时
               this.$dialog.confirm({
                 tipValue: '是否是同一个人?',
+                btnValueOk:'否',
+                btnValueCancel:'是',
                 okCallBack: (data) => {
                   this.ajaxJson({
                     url: '/Basic/personSaveVue',
@@ -634,9 +698,27 @@
 
           }
         }else if(this.variableType === '2'){
+          let datas = {}
+          let params = {
+            id:this.id,
+            name: this.name,
+            phone: this.phone,
+            idNo: this.idNo,
+          }
+          this.ajaxJson({
+            url: '/Basic/verifyPersonVueName',
+            data: params,
+            loading: "0",
+            call: (data) => {
+              datas = data
+
+            }
+          })
           this.$dialog.confirm({
             width: '300',
             tipValue: '是否共用手机号?',
+            btnValueOk:'是',
+            btnValueCancel:'否',
             alertImg: 'warn',
             okCallBack: () => {
               if(b){
@@ -664,9 +746,10 @@
                   bloodType: this.bloodType,
                   bloodTypeID: this.bloodTypeID,
                   nation: this.nation,
-                  nationID: this.nationID
+                  nationID: this.nationID,
+                  expatriate:this.expatriate
                 }
-                if(this.flatType===false&&this.flatTypes===false){
+                if(datas.html==''&&datas.val==''||this.flatTypes == true){
                   this.ajaxJson({
                     url: '/Basic/personSaveVue',
                     data: params,
@@ -691,6 +774,8 @@
                 if(this.flatType === true){//外单位姓名重复时
                   this.$dialog.confirm({
                     tipValue: '是否是同一个人?',
+                    btnValueOk:'否',
+                    btnValueCancel:'是',
                     okCallBack: (data) => {
                       this.ajaxJson({
                         url: '/Basic/personSaveVue',
@@ -719,6 +804,13 @@
               }
             },
           })
+        }else if(this.variableType = '4'){
+          this.$dialog.alert({
+            alertImg: 'warn',
+            tipValue: '身份证号重复不能保存',
+            closeCallBack: ()=>{
+            }
+          })
         }
       },
       initData(){
@@ -733,7 +825,6 @@
             this.important = data.importantPsd.value
             this.politicsStatusList = data.politicsStatusPsd.list  //政治面貌
             this.politicsStatus = data.politicsStatusPsd.value
-            this.name = data.name   //姓名
             this.phone = data.phone   //手机号码
             this.unit = data.unit   //单位
             this.unitID = data.unitID
@@ -747,7 +838,6 @@
             this.birthdayLunar = data.birthdayLunar  //农历生日
             this.tagList = data.tagPsd.list  //标签
             this.tag = data.tagPsd.value
-
             if(this.category == '1'){
               this.idnoRule=''
               this.isThisUnit = false
@@ -757,7 +847,7 @@
             }
           },
           add: (data)=>{
-            this.id = guid()
+
           },
           look: (data)=>{
             this.birthday = data.birthday   //公历生日
@@ -769,12 +859,24 @@
             this.nationID = data.nationID
             this.bloodType = data.bloodType  //血型
             this.bloodTypeID = data.bloodTypeID
+            this.name = data.name   //姓名
+            this.expatriate=data.expatriate
+
+            if(this.expatriate==0){
+              this.isPortNo=true
+              this.isExpatriate='1'
+            }else{
+              this.isExpatriate='0'
+              this.isPortNo=false
+            }
+
           }
         })
       }
     },
     created () {
       this.setQuery2Value('isUrl')
+      this.setQuery2Value('name')
       this.initData()
     },
     watch: {
@@ -791,6 +893,14 @@
 </script>
 
 <style lang="less" scoped>
+  .shade{
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    opacity: 0;
+  }
   .nativePlaceBoxHide{
     height: 0 !important;
     margin: 0 !important;
@@ -801,12 +911,12 @@
     overflow: hidden;
   }
   .nativePlaceBox1{
-    left: 84px;
+    right: 34px;
     top: 42px;
   }
   .nativePlaceBox0{
     top: 42px;
-    right: 34px;
+    left: 84px;
   }
   .nativePlaceBox{
     position: absolute;
@@ -840,7 +950,7 @@
   }
   .duplicateAccount{
     position: fixed;
-    bottom: -300px;
+    bottom: -99%;
     transition: all 0.5s;
     width: 100%;
     box-sizing: border-box;
@@ -882,3 +992,4 @@
     }
   }
 </style>
+                                                                                                             从v

@@ -11,6 +11,8 @@
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/finPurchaseManager'}">采购计划</router-link>
+
 
       </template>
 
@@ -53,6 +55,7 @@
         <yhm-managerth style="width: 100px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="申请金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 215px;" title="编号" value="code"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="状态" value="state"></yhm-managerth>
         <yhm-managerth style="width: 90px" title="最后操作人" value="lastOperatorPerson"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="操作时间" value="lastOperatorDate"></yhm-managerth>
@@ -73,10 +76,11 @@
           <yhm-manager-td-center :value="item.day+'天'" v-if="item.day<=7" style="color:#f00;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else-if="item.day>20" style="color:#2c920b;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #0511a5;font-weight: bold"></yhm-manager-td-center>
-          <yhm-manager-td-center :value="item.subject"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.subject" @click="skipEvent(item)" :color="item.ownerID!=''&&item.ownerType=='1'?'#49a9ea':''"></yhm-manager-td-center>
           <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" :value-object="item" @mouseout="tableTipHideEvent" :value="item.money"></yhm-manager-td-money>
 
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
+          <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
           <yhm-manager-td-center :value="item.lastOperatorPerson"></yhm-manager-td-center>
           <yhm-manager-td-date :value="item.lastOperatorDate"></yhm-manager-td-date>
@@ -191,12 +195,38 @@
 
         dateType:'',
         dateTypeList: {
-          value: '',
+          value: '1',
           list: [{showName:"本周", num: "0", code: "", img: ""},{showName:"本月", num: "1", code: "", img: ""},{showName:"本季度", num: "2", code: "", img: ""},{showName:"本年", num: "3", code: "", img: ""},]
         },
       }
     },
     methods: {
+      skipEvent(item){
+        if(item.ownerID!=''&&item.ownerType=='1'){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '700',
+            title: '查看保单信息',
+            url:'/billingView?id='+item.ownerID,
+            closeCallBack: (data)=>{
+              if(data){
+              }
+            }
+          })
+        }
+      },
+      SelectApprovalMessage(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
+      },
       /* 对账明细 */
       reconDetail(){
         this.$router.push('/home/finPayApplyReconDetailManager')
@@ -373,7 +403,8 @@
 
         if (initValue) {
           params = {
-            state:''
+            state:'1',
+            dateType: this.dateTypeList.value,
           }
         } else {
           params = {

@@ -2,11 +2,8 @@
 
   <td >
 
-    <div v-if="getEmpty" class="md_center">
-      -----
-    </div>
-    <div v-if="!getEmpty" class="md_left md_relative">
-      <input type="text" v-model="valueIpt" @blur="blurEvent" @focus="focusEvent">
+    <div class="md_left md_relative">
+      <input type="text" v-model="valueIpt" ref="inputFocus" @blur="blurEvent" @focus="focusEvent">
     </div>
 
   </td>
@@ -25,6 +22,10 @@
       value: {
         type: String,
         required: true
+      },
+      isFocus: {
+        type: Boolean,
+        default: false
       },
       id: {
         type: String,
@@ -45,9 +46,12 @@
       },
     },
     computed: {
-      getEmpty () {
-        return this.value === ''
-      },
+
+    },
+    watch: {
+      isFocus(){
+        this.$refs.inputFocus.focus()
+      }
     },
     created () {
       this.valueIpt = this.value

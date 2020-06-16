@@ -10,6 +10,8 @@
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/finPurchaseManager'}">采购计划</router-link>
+
 
       </template>
       <!--操作区-->
@@ -23,7 +25,7 @@
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
           <yhm-radiofilter @initData="initChoose('bankBefore')" title="银行" :content="bankList"></yhm-radiofilter>
-
+          <yhm-radiofilter @initData="initChoose('bankBefore')" title="保险公司" :content="unitList"></yhm-radiofilter>
         </div>
       </template>
 
@@ -98,11 +100,12 @@
         issueCodeIndex: '0',
         policyCOdeIndex:'0',
         content:[],
-        dateType:'',
+        dateType:'0',
         bankList:[],
+        unitList:[],
         endDate:'',
-        subjectID: '2',
         startDate:'',
+        subjectID: '2',
         // oldTotalColor:'#ff000c',
         // yearTotal:'同比',
         // nowTotal:'本日',
@@ -131,8 +134,8 @@
 
         this.$dialog.OpenWindow({
           width: '1300',
-          height: '760',
-          title: '查看统计图',
+          height: '810',
+          title: '支付续保费统计图',
           url: '/renewPremiumCartogram',
           closeCallBack: (dataTwo)=>{
 
@@ -142,6 +145,7 @@
       selectMonthEvent(data,item){
         this.yearMonth = data;
         this.radioTime = item;
+        this.dateType='1';
         if(this.radioTime){
           this.initPageData(false)
         }
@@ -263,19 +267,41 @@
         let params = {}
         if (initValue) {
           // 页面初始化是需要的参数
+          let nowDate = new Date();
+          let newYear = nowDate.getFullYear();
+          let newMonth = nowDate.getMonth() + 1;
+          let newDate = nowDate.getDate();
+          let newHours = nowDate.getHours();
+          let newMin = nowDate.getMinutes();
+          let newSec = nowDate.getSeconds();
+          let lastDate = newDate - 1;
+
+          this.startDate = newYear + '-' + newMonth + '-1 ' + '00:00:00';
+          this.endDate = newYear + '-' + newMonth + '-' + newDate + ' ' + newHours + ':' + newMin + ':' + newSec;
           params = {
             subjectID: this.subjectID,
-            dateType:'',
+            startDate:this.startDate,
+            endDate:this.endDate,
           }
         } else {
           // 页面非初始化时需要的参数
-          params = {
-            subjectID: this.subjectID,
-            bankID:this.bankList.value,
-            dateType:'1',
+          if (this.dateType==='0'){
+            params = {
+              subjectID: this.subjectID,
+              bankID:this.bankList.value,
+              unitID:this.unitList.value,
 
-            startDate: this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate,
-            endDate: this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate,
+              startDate: this.startDate,
+              endDate: this.endDate,
+            }
+          }else{
+            params = {
+              subjectID: this.subjectID,
+              bankID:this.bankList.value,
+              unitID:this.unitList.value,
+              startDate: this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate,
+              endDate: this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate,
+            }
           }
         }
         this.init({
@@ -286,13 +312,13 @@
             // 不管是不是初始化都需要执行的代码
             this.content = data.content
             this.contentTotal = data.total
+            this.bankList = data.bankList
+            this.unitList = data.unitList
           },
           init: (data) => {
             // 初始化时需要执行的代码
             this.shortcutSearchContent = data.shortcutSearchContent
             this.bankList = data.bankList
-            this.startDate = data.startDate
-            this.endDate = data.endDate
           }
         })
       }

@@ -5,7 +5,7 @@
       <template #navigationTab>
 
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/unit/insuranceUnitManager'}">管理保险公司</router-link>
-        <router-link class="menuTabDiv " :to="{path:'/home/cashGiveHP/cashGiveHPManager'}">保险给HP返利</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/cashGiveHP/cashGiveHPManager'}">保险公司给海派返利</router-link>
         <router-link class="menuTabDiv " :to="{path:'/home/vipRate/vipRateManager'}">特殊车型制定</router-link>
       </template>
 
@@ -24,8 +24,8 @@
         <yhm-managerth  title="保险公司名称" value="unit"></yhm-managerth>
         <yhm-managerth style="width: 220px;" title="发票类型" value="billingTypeVal"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="新车费率" value="newRate"></yhm-managerth>
-        <yhm-managerth style="width: 130px;" title="旧车费率" value="oldRate"></yhm-managerth>
-        <yhm-managerth style="width: 130px;" title="客户费率" value="clientRate"></yhm-managerth>
+<!--        <yhm-managerth style="width: 130px;" title="旧车费率" value="oldRate"></yhm-managerth>-->
+        <yhm-managerth style="width: 130px;" title="客户新车费率" value="clientRate"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="特殊车型费率" value="vipRate"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="操作"></yhm-managerth>
       </template>
@@ -39,7 +39,7 @@
           <yhm-manager-td :value="item.unit"></yhm-manager-td>
           <yhm-manager-td :value="item.billingTypeVal"></yhm-manager-td>
           <yhm-manager-td-rgt  :value="item.newRate===''?'------':item.newRate +'  %'"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.oldRate===''?'------':item.oldRate+'  %'" ></yhm-manager-td-rgt>
+<!--          <yhm-manager-td-rgt :value="item.oldRate===''?'&#45;&#45;&#45;&#45;&#45;&#45;':item.oldRate+'  %'" ></yhm-manager-td-rgt>-->
           <yhm-manager-td-rgt :value="item.clientRate===''?'------':item.clientRate+'  %'" ></yhm-manager-td-rgt>
           <yhm-manager-td-rgt :value="item.vipRate===''?'------':item.vipRate+'  %'" ></yhm-manager-td-rgt>
           <yhm-manager-td-operate>

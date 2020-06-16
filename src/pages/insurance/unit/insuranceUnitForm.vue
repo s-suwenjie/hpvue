@@ -10,6 +10,7 @@
       </template>
     </yhm-formbody>
     <div class="f_split"></div>
+
     <yhm-form-list-edit>
       <template #title>保险信息</template>
       <template #operate>
@@ -18,9 +19,9 @@
       <template #listHead>
         <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="启用时间"></yhm-managerth>
-        <yhm-managerth style="width: 80px" title="新车费率"></yhm-managerth>
-        <yhm-managerth style="width: 100px" title="旧车税率"></yhm-managerth>
-        <yhm-managerth style="width: 100px" title="客户税率"></yhm-managerth>
+        <yhm-managerth style="width: 80px" title="客户新车费率"></yhm-managerth>
+<!--        <yhm-managerth style="width: 100px" title="旧车税率"></yhm-managerth>-->
+        <yhm-managerth style="width: 100px" title="客户费率"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="特殊车型税率"></yhm-managerth>
 
 
@@ -31,7 +32,7 @@
           <yhm-manager-td-look class="aa"   @click="opSafe(item)"></yhm-manager-td-look>
           <yhm-manager-td-date class="aa" :value="item.startDate" typeof="data"></yhm-manager-td-date>
           <yhm-manager-td-rgt class="aa"  :value="item.newRate+'  %'"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt class="aa" :value="item.oldRate+'  %'" ></yhm-manager-td-rgt>
+<!--          <yhm-manager-td-rgt class="aa" :value="item.oldRate+'  %'" ></yhm-manager-td-rgt>-->
           <yhm-manager-td-rgt  class="aa" :value="item.clientRate+'  %'" ></yhm-manager-td-rgt>
           <yhm-manager-td-rgt  class="aa" :value="item.vipRate+'  %'" ></yhm-manager-td-rgt>
        <yhm-manager-td-operate class="aa">
@@ -43,6 +44,7 @@
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>
     </yhm-form-list-edit>
+
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>

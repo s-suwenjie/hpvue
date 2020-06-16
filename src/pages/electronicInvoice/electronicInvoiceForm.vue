@@ -23,14 +23,14 @@
                 <img @mouseover.self="showSource('numShow')" @mouseout.self="hideSource('numShow')" src="../../../static/css/images/contrastIcon.svg">
               </div>
             </yhm-form-text>
-            <yhm-form-text title="所属单位" :value="selfName" id="selfName">
+            <yhm-form-text title="发票抬头" :value="selfName" id="selfName">
               <div class="vs">
                 <div v-if="selfNameShow" class="invoice category0" :style="getVs(selfNamePosition,1)"></div>
                 <img @mouseover.self="showSource('selfNameShow')" @mouseout.self="hideSource('selfNameShow')" src="../../../static/css/images/contrastIcon.svg">
               </div>
             </yhm-form-text>
-            <yhm-form-text title="纳税人" subtitle="识别号" :value="selfCode" id="selfCode">
-              <div class="vs">
+            <yhm-form-text title="纳税人" :subtitle="selfCategory == 0 ? '识别号':'身份证号'" :value="selfCode" id="selfCode">
+              <div v-if="selfCategory == 0" class="vs">
                 <div v-if="selfCodeShow" class="invoice category0" :style="getVs(selfCodePosition,1)"></div>
                 <img @mouseover.self="showSource('selfCodeShow')" @mouseout.self="hideSource('selfCodeShow')" src="../../../static/css/images/contrastIcon.svg">
               </div>
@@ -99,6 +99,7 @@
         num:'',
         numShow:false,
         numPosition:[],
+        selfCategory:'0',
         selfNameID:'F7D1D940-EA66-4E7C-B38D-992862118311',
         selfName:'',
         selfNameShow:false,
@@ -189,6 +190,7 @@
           this.codePosition = data.codePosition.split(',')
           this.num = data.num
           this.numPosition = data.numPosition.split(',')
+          this.selfCategory = data.selfCategory
           this.selfNameID = data.selfNameID
           this.selfName = data.selfName
           this.selfNamePosition = data.selfNamePosition.split(',')

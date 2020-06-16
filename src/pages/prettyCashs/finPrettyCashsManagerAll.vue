@@ -10,6 +10,8 @@
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/finPurchaseManager'}">采购计划</router-link>
+
 
       </template>
       <!--操作区-->
@@ -51,6 +53,7 @@
         <yhm-managerth style="width: 120px;" title="预计核销日期" value="estimateDate"></yhm-managerth>
         <yhm-managerth style="width: 60px;" title="倒计时" value="day"></yhm-managerth>
 
+        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="状态" value=""></yhm-managerth>
       </template>
       <template #listBody>
@@ -82,6 +85,7 @@
           <yhm-manager-td-center :value="item.day+'天'" v-else-if="item.day>2&&item.day<=5" style="color:#0511a5;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #f00;font-weight: bold"></yhm-manager-td-center>
 
+          <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
 
         </tr>
@@ -157,7 +161,7 @@
         contentTotal:[],
         dateType:'',
         dateTypeList: {
-          value: '',
+          value: '1',
           list: [{showName:"本周", num: "0", code: "", img: ""},{showName:"本月", num: "1", code: "", img: ""},{showName:"本季度", num: "2", code: "", img: ""},{showName:"本年", num: "3", code: "", img: ""},]
         },
         suppArr: [
@@ -179,6 +183,18 @@
       }
     },
     methods:{
+      SelectApprovalMessage(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
+      },
       clickTipEvent(item,title){
         let id = ''
         if(title==='退备用金'){
@@ -354,7 +370,8 @@
 
         if (initValue) {
           params = {
-            isFinish:'1'
+            isFinish:'1',
+            dateType: this.dateTypeList.value,
           }
         } else {
           params = {

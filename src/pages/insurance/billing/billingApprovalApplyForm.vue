@@ -1481,11 +1481,11 @@
         if (this.validator() && aa&&bankList&&bb) {
           let params = {
             id: this.id,
+            ownerID:this.billingID,
             unitID: this.unitID,
             otherUnitID: this.otherUnitID,
             otherUnit: this.otherUnit,
             isRelevance: this.isRelevance, // 是否关联
-            ownerID: this.ownerID,
             name: this.useName, // 计划事件
             otherAccount: this.otherAccount, // 收款账号
             otherAccountID: this.otherAccountID, // 收款账号

@@ -8,8 +8,8 @@
         <yhm-form-radio title="性别" :select-list="sexList" :value="sex" id="sex"></yhm-form-radio>
         <yhm-form-radio title="是否" subtitle="重要联系人" :select-list="importantList" :value="important" id="important"></yhm-form-radio>
 <!--        <yhm-form-radio title="政治面貌" :show="isThisUnit" :select-list="politicsStatusList" :value="politicsStatus" id="politicsStatus"></yhm-form-radio>-->
-        <yhm-form-text title="姓名" :value="name" id="name" ref="name" @repeatverify="repeatVerifyEvent" rule="R7000"></yhm-form-text>
-        <yhm-form-text title="手机号码" :value="phone" id="phone" tip="value" @repeatverify="repeatVerifyEvent" rule="R4000"></yhm-form-text>
+        <yhm-form-text title="姓名" :value="name" id="name" ref="name" @change="repeatVerifyEvent" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="手机号码" :value="phone" id="phone" ref="phone" tip="value" @change="repeatVerifyEvent" rule="R4000"></yhm-form-text>
 <!--        <yhm-form-select title="所属公司" v-if="isThisUnit" @click="selectUnit" tip="value" :value="unit" id="unit" rule="R0000" ></yhm-form-select>-->
 <!--        <yhm-form-text title="所属部门" :show="isThisUnit" :value="department" id="department" placeholder="请在部门管理中调整所属部门" no-edit="1"></yhm-form-text>-->
 <!--        <yhm-form-text title="身份证号" @input="isNoEvent" @repeatverify="repeatVerifyEvent" tip="value" :value="idNo" id="idNo" rule="R5000"></yhm-form-text>-->
@@ -79,6 +79,8 @@
         tag: [],
         tagSubmit:[],
         isThisUnit: true,
+
+        variableType:'',//判断电话是否公用
       }
     },
     methods: {
@@ -183,7 +185,24 @@
               loading: "0",
               call: (data) => {
                 if (data.type === 1){
-                  this.$refs.name.errorEvent('已存在！！！')
+                  if(data.message){
+                    this.$refs.phone.errorEvent('电话已存在！！！')
+                    this.variableType='0'
+                    this.$dialog.confirm({
+                      width: '300',
+                      tipValue: '是否共用手机号?',
+                      alertImg: 'warn',
+                      okCallBack: () => {
+                        this.variableType='1'
+
+                      },
+                    })
+                  }else{
+                    this.variableType='1'
+                  }
+                  if(data.html){
+                    this.$refs.name.errorEvent('姓名已存在！！！')
+                  }
                 }
               }
             })
@@ -201,7 +220,23 @@
               loading: "0",
               call: (data) => {
                 if (data.type === 1) {
-                  this.$refs.name.errorEvent("用户名已存在")
+                  if(data.message){
+                    this.$refs.phone.errorEvent('电话已存在！！！')
+                    this.variableType='0'
+                    this.$dialog.confirm({
+                      width: '300',
+                      tipValue: '是否共用手机号?',
+                      alertImg: 'warn',
+                      okCallBack: () => {
+                        this.variableType='1'
+                      },
+                    })
+                  }else{
+                    this.variableType='1'
+                  }
+                  if(data.html){
+                    this.$refs.name.errorEvent('姓名已存在！！！')
+                  }
                 }
               }
             })
@@ -220,61 +255,136 @@
           loading:"0"
         })
         if(result.type === 1){
-          this.$refs.name.errorEvent('联系人已存在')
-          return false
+          if(result.message){
+            this.$refs.phone.errorEvent('电话已存在！！！')
+            if(this.variableType === '0') {
+              this.variableType = '0'
+            }
+          }else{
+            this.variableType='1'
+          }
+          if(result.html){
+            this.$refs.name.errorEvent('姓名已存在！！！')
+            return false
+          }
         }
         return true
       },
       async save(){
         let a = await this.isRepeatVerifyEvent()
         let b = this.validator()
-        if(a && b){
-          let params = {
-            id: this.id,
-            category: this.category,
-            sex: this.sex,
-            important: this.important,
-            // politicsStatus: this.politicsStatus,
-            name: this.name,
-            phone: this.phone,
-            // unit: this.unit,
-            // unitID: this.unitID,
-            // department: this.department,
-            // idNo: this.idNo,
-            // nativePlace: this.nativePlace,
-            // calendar: this.calendar,
-            // birthday: this.birthday,
-            // birthdayLunar: this.birthdayLunar,
-            tagList: this.tagSubmit,
-            // zodiacID: this.zodiacID,
-            // zodiac: this.zodiac,
-            // constellation: this.constellation,
-            // constellationID: this.constellationID,
-            // bloodType: this.bloodType,
-            // bloodTypeID: this.bloodTypeID,
-            // nation: this.nation,
-            // nationID: this.nationID
-          }
-          this.ajaxJson({
-            url: '/Basic/addPersonSelectSave',
-            data: params,
-            call: (data)=>{
-              if(data.type === 0){
-                this.$dialog.setReturnValue(this.id)
-                this.$dialog.alert({
-                  tipValue: data.message,
-                  closeCallBack: ()=>{
-                    this.$dialog.close()
+        let c = true
+        if(this.variableType){
+          if(this.variableType === '0'){
+            this.$dialog.confirm({
+              width: '300',
+              tipValue: '是否共用手机号?',
+              alertImg: 'warn',
+              okCallBack: () => {
+                if(a && b && c){
+                  let params = {
+                    id: this.id,
+                    category: this.category,
+                    sex: this.sex,
+                    important: this.important,
+                    // politicsStatus: this.politicsStatus,
+                    name: this.name,
+                    phone: this.phone,
+                    // unit: this.unit,
+                    // unitID: this.unitID,
+                    // department: this.department,
+                    // idNo: this.idNo,
+                    // nativePlace: this.nativePlace,
+                    // calendar: this.calendar,
+                    // birthday: this.birthday,
+                    // birthdayLunar: this.birthdayLunar,
+                    tagList: this.tagSubmit,
+                    // zodiacID: this.zodiacID,
+                    // zodiac: this.zodiac,
+                    // constellation: this.constellation,
+                    // constellationID: this.constellationID,
+                    // bloodType: this.bloodType,
+                    // bloodTypeID: this.bloodTypeID,
+                    // nation: this.nation,
+                    // nationID: this.nationID
                   }
-                })
-              }else{
-                this.$dialog.alert({
-                  alertImg: 'warn',
-                  tipValue: data.message
-                })
+                  this.ajaxJson({
+                    url: '/Basic/addPersonSelectSave',
+                    data: params,
+                    call: (data)=>{
+                      if(data.type === 0){
+                        this.$dialog.setReturnValue(this.id)
+                        this.$dialog.alert({
+                          tipValue: data.message,
+                          closeCallBack: ()=>{
+                            this.$dialog.close()
+                          }
+                        })
+                      }else{
+                        this.$dialog.alert({
+                          alertImg: 'warn',
+                          tipValue: data.message
+                        })
+                      }
+                    }
+                  })
+                }
+              },
+              cancelCallBack:() => {
+                this.variableType = '0'
+                c = false
               }
+            })
+          }
+        }else{
+          if(a && b && c){
+            let params = {
+              id: this.id,
+              category: this.category,
+              sex: this.sex,
+              important: this.important,
+              // politicsStatus: this.politicsStatus,
+              name: this.name,
+              phone: this.phone,
+              // unit: this.unit,
+              // unitID: this.unitID,
+              // department: this.department,
+              // idNo: this.idNo,
+              // nativePlace: this.nativePlace,
+              // calendar: this.calendar,
+              // birthday: this.birthday,
+              // birthdayLunar: this.birthdayLunar,
+              tagList: this.tagSubmit,
+              // zodiacID: this.zodiacID,
+              // zodiac: this.zodiac,
+              // constellation: this.constellation,
+              // constellationID: this.constellationID,
+              // bloodType: this.bloodType,
+              // bloodTypeID: this.bloodTypeID,
+              // nation: this.nation,
+              // nationID: this.nationID
             }
-          })
+            this.ajaxJson({
+              url: '/Basic/addPersonSelectSave',
+              data: params,
+              call: (data)=>{
+                if(data.type === 0){
+                  this.$dialog.setReturnValue(this.id)
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: ()=>{
+                      this.$dialog.close()
+                    }
+                  })
+                }else{
+                  this.$dialog.alert({
+                    alertImg: 'warn',
+                    tipValue: data.message
+                  })
+                }
+              }
+            })
+          }
         }
       },
       initData(){

@@ -4,7 +4,9 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-text title="规格型号"  @repeatverify="nameVerifyEvent" ref="name"  :value="name" id="name" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="规格型号"  subtitle="(英文)" :value="englishName" id="englishName" ></yhm-form-text>
         <yhm-form-text title="参考单价" :value="price" id="price" before-icon="rmb" rule="R3000"></yhm-form-text>
+        <yhm-form-text title="物品编号" :value="productNumber" id="productNumber"  ></yhm-form-text>
       </template>
     </yhm-formbody>
     <div class="f_split"></div>
@@ -51,6 +53,8 @@
         ownerID:'',
         name:'',
         price:'',
+        productNumber:'',  //物品编号
+        englishName:'',    //英文名称
 
         supplierDetails:[],        //供应商明细
 
@@ -149,6 +153,8 @@
             name:this.name,
             price:this.price,
             supplierDetails:this.supplierDetails,
+            productNumber:this.productNumber,
+            englishName:this.englishName
           }
           this.ajaxJson({
             url: '/Basic/saveModel',
@@ -185,6 +191,8 @@
           this.name = data.name
           this.price = data.price
           this.supplierDetails = data.supplierDetails
+          this.productNumber=data.productNumber
+          this.englishName=data.englishName
           this.empty = this.supplierDetails.length === 0
         }
       })
