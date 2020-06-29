@@ -5,8 +5,8 @@
       <template #title>修改{{name}}信息</template>
 
       <template #control>
-        <yhm-form-text title="销售单价" :value="salesprice" id="salesprice" @input="gerter()" rule="R0000"></yhm-form-text>
-        <yhm-form-text title="销售总价" :value="saletotal" id="saletotal" @focus="gerter()" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="销售单价" :value="salesprice+''" id="salesprice" @input="gerter()" @blur="gener()" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="销售总价" :value="saletotal+''" id="saletotal" @blur="gener()" rule="R0000"></yhm-form-text>
 
       </template>
 
@@ -19,25 +19,31 @@
       <template #content>
         <yhm-view-tab-list :customize="true" :pager="false" v-show="tabState[0].select">
           <template #listHead>
-            <yhm-managerth style="width: 180px" title="商品名称"></yhm-managerth>
-            <yhm-managerth style="width: 200px" title="销售价"></yhm-managerth>
-            <yhm-managerth style="width: 80px" title="销售总价"></yhm-managerth>
+            <yhm-managerth title="商品名称"></yhm-managerth>
             <yhm-managerth style="width: 80px" title="商品型号"></yhm-managerth>
+            <yhm-managerth title="销售价"></yhm-managerth>
+            <yhm-managerth title="销售总价"></yhm-managerth>
+            <yhm-managerth title="权单价"></yhm-managerth>
+            <yhm-managerth title="权总价"></yhm-managerth>
             <yhm-managerth style="width: 60px" title="数量"></yhm-managerth>
+            <yhm-managerth style="width: 60px" title="能否拆分"></yhm-managerth>
           </template>
           <template #listBody>
             <tr v-for="(item,index) in content" :key="index" :class="{InterlacBg:index%2!==0}">
               <yhm-manager-td :value="item.product+''"></yhm-manager-td>
-              <yhm-manager-td :value="item.salesprice+''"></yhm-manager-td>
-              <yhm-manager-td-money :value="item.saletotal+''"></yhm-manager-td-money>
               <yhm-manager-td :value="item.model"></yhm-manager-td>
-              <yhm-manager-td :value="item.quantity+''"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.salesprice+''"></yhm-manager-td-money>
+              <yhm-manager-td-money :value="item.saletotal+''"></yhm-manager-td-money>
+              <yhm-manager-td-money :value="item.price"></yhm-manager-td-money>
+              <yhm-manager-td-money :value="item.total"></yhm-manager-td-money>
+              <yhm-manager-td-rgt :value="item.quantity+''"></yhm-manager-td-rgt>
+              <yhm-manager-td-center :value="item.spilt+''"></yhm-manager-td-center>
             </tr>
           </template>
         </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
-    <yhm-formoperate>
+    <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
       </template>
@@ -63,12 +69,15 @@
         name:'',
         salespriceing:'销售单价为空',
         saletotaling:'销售总价为空',
-
+        createName:'',
+        insertDate:'',
+        updateName:'',
+        updateDate:'',
       }
     },
     created(){
+      //console
       this.setQuery2Value("id")
-      console.log(this.id+'111')
       this.init()
     },
     methods:{
@@ -82,8 +91,6 @@
             salesprice:this.salesprice,
             saletotal:this.saletotal,
           }
-
-
           this.ajaxJson({
             url: '/stock/stockPosition/StockUpdate',
             data: params,
@@ -112,26 +119,50 @@
       init(){
         this.ajaxJson({
           url: '/stock/stockPosition/queryForProduct',
-          data: '',
+          data:{postid:this.id},
           call: (data) => {
-            this.content=data.content
-            for(let i=0;i<data.content.length;i++){
-              if(this.id==data.content[i].id){
-                this.name=data.content[i].product
+            this.updateName=data.updateName
+            this.createName=data.createName
+            if(data.insertDate){
+              this.insertDate=data.insertDate
+              this.updateDate=data.updateDate
+            }else{
+              this.insertDate='当前时间'
+              this.updateDate='当前时间'
+            }
+            if(data){
+              this.content=data.content
+              for (let i in this.content) {
+                if(this.content[i].spilt == 0 ){
+                  this.content[i].spilt ='是'
+                }else{
+                  this.content[i].spilt ='否'
+                }
               }
             }
-            this.content=data.content
-            console.log(this.content)
           }
         })
-
-
       },
       gerter(){
-        if(this.salesprice>this.saletotal){
-          this.saletotal=this.salesprice
-        }
+        this.saletotal=this.salesprice*this.content[0].quantity
+
       },
+      gener(){
+        let n =0
+        if(Number(this.salesprice)<Number(this.content[0].price)) {
+          this.salesprice=this.content[0].price
+          this.saletotal=this.salesprice*this.content[0].quantity
+          n=this.saletotal=this.salesprice*this.content[0].quantity
+          if (Number(this.salesprice) > n) {
+          this.saletotal=this.salesprice*this.content[0].quantity
+          }
+        }else{
+          n=this.saletotal=this.salesprice*this.content[0].quantity
+          if (Number(this.salesprice) > n) {
+            this.saletotal=this.salesprice*this.content[0].quantity
+          }
+        }
+      }
 
     }
   }

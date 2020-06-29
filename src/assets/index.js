@@ -89,6 +89,10 @@ Vue.use(formzhselecttext)
 import formzhtextcheckbox from '@/assets/form/control/zh/formzhtextcheckbox/formzhtextcheckbox.js'
 Vue.use(formzhtextcheckbox)
 
+
+import formzhtextmorecheckbox from '@/assets/form/control/zh/formzhtextmorecheckbox/formzhtextmorecheckbox.js'
+Vue.use(formzhtextmorecheckbox)
+
 import formimage from '@/assets/form/control/formimage/formimage.js'
 Vue.use(formimage)
 import previewimage from '@/assets/manager/previewimage/previewimage.js'

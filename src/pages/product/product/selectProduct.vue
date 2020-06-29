@@ -51,10 +51,15 @@
   export default {
     name: 'selectProduct',
     mixins: [selectmixin],
+    data(){
+      return{
+        value:''
+      }
+    },
     methods:{
       selectAddEvent () {
         this.$dialog.OpenWindow({
-          width: 1050,
+          width: 1072,
           height: 650,
           url:'/productForm',
           title:'添加商品信息',

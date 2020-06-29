@@ -23,9 +23,9 @@
             @dblclick="dblclickEvent(item)">
 
           <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
-          <yhm-manager-td-center :value="item.name"></yhm-manager-td-center>
-          <yhm-manager-td-center :value="item.englishName"></yhm-manager-td-center>
-          <yhm-manager-td-center :value="item.productNumber"></yhm-manager-td-center>
+          <yhm-manager-td :value="item.name"></yhm-manager-td>
+          <yhm-manager-td :value="item.englishName"></yhm-manager-td>
+          <yhm-manager-td :value="item.productNumber"></yhm-manager-td>
           <yhm-manager-td-money :value="item.price"></yhm-manager-td-money>
         </tr>
       </template>

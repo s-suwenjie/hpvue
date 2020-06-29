@@ -190,6 +190,7 @@
         this.mouseOver = false
       },
       deleteItem(item){
+        console.log( item,'783' )
         let index = this.value.indexOf(item)
         let js = "this.p____page." + this.id + ".splice(" + index + ", 1)"
         eval(js)

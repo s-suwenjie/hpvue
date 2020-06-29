@@ -1,8 +1,11 @@
 <template>
     <div class="aaa">
-      name:{{name}}<br>
-      phone:{{phone}}
+      moneyCheck:{{moneyCheck}}
+      <!--name:{{name}}<br>
+      phone:{{phone}}-->
 
+      <yhm-form-zh-text-more-checkbox @clickCheckBox="clickCheckBoxEvent" title="金额" :value="money" id="money" :check-value="moneyCheck" check-value-id="moneyCheck" :check-list="moneyCheckList"></yhm-form-zh-text-more-checkbox>
+<!--
 
       <div style="margin-top: 20px;" @click="payApplyReconDetailForm">批量拨付 - 付款申请</div>
       <div style="margin-top: 20px;" @click="reimbursementReconDetailForm">批量拨付 - 报销</div>
@@ -11,6 +14,7 @@
       <div style="margin-top: 20px;" @click="noTicket">无票</div>
       <div style="margin-top: 20px;" @click="boardDire">董事费</div>
       <div style="margin-top: 20px;" @click="ticket">有票</div>
+-->
 
 
       <br>
@@ -26,8 +30,9 @@
           <yhm-view-list-block @call="rightMenuEvent" :item="item" :menu="menu" :psd="psd" category-value="1" category="3" code="1234567891234568" color="#FF0000">44</yhm-view-list-block>
         </div>
       </div>-->
-      <br>
+     <!-- <br>
       <yhm-app-view-control title="申请日期" content="1900-01-01" type="date"></yhm-app-view-control>
+      <yhm-searchfilter :value="search" id="search" :searchList=searchList @keyup="initData"></yhm-searchfilter>
       <br>
       {{details}}<br>
       carDamage:{{carDamage}}<br>
@@ -48,7 +53,7 @@
       <br>
       <br>
       <br>
-      <br>
+      <br>-->
 
       <!--//车上人员乘客
       passenger:'',
@@ -56,7 +61,7 @@
       selfGlass:'',-->
       <!--<yhm-form-zh-select-text tip-before="value" tip-after="phone" @call="selectName" :before="name" before-id="name" :after="phone" after-id="phone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="100"></yhm-form-zh-select-text>
       <yhm-form-date title="日期" :value="workDate" id="workDate"></yhm-form-date>-->
-      <yhm-form-text title="金额" type="number" :decimal-places="2" tip="money" :value="actualMoney" id="actualMoney"></yhm-form-text>
+      <!--<yhm-form-text title="金额" type="number" :decimal-places="2" tip="money" :value="actualMoney" id="actualMoney"></yhm-form-text>
       <yhm-form-select-insurance :is-content="true"
                                  title="商业险种"
                                  :psd="psd"
@@ -70,8 +75,8 @@
                                  :self-glass-value="selfGlass" self-glass-id="selfGlass"
                                  :value="details" id="details" rule="#"></yhm-form-select-insurance>
       <yhm-form-zh-select-more @click="selectPlan" :min="min" category="date" title="部门分配" :total="actualMoney" :value="details" text-width="82" id="details" rule="#" rule-item="R3000"></yhm-form-zh-select-more>
-      <!--<yhm-date-panel :show="show" id="workDate" :value="workDate" min="2019-11-12" max="2020-01-21"></yhm-date-panel>-->
-      <br>
+      &lt;!&ndash;<yhm-date-panel :show="show" id="workDate" :value="workDate" min="2019-11-12" max="2020-01-21"></yhm-date-panel>&ndash;&gt;
+      <br>-->
       <br>
     </div>
 
@@ -79,8 +84,10 @@
 
 <script>
   import { accMul, accAdd, guid, formatDate,formatTime } from '@/assets/common.js'
+  import { selectItem,managermixin } from '@/assets/manager.js'
   export default {
-    name: 'myApprovalManager',
+    name: 'demo',
+    mixins: [managermixin],
     provide(){
       return{
         p____page:this
@@ -88,6 +95,9 @@
     },
     data(){
       return{
+        money:'',
+        moneyCheck:"",
+        moneyCheckList:[{name:"向上取整",value:"0"},{name:"向下取整",value:"1"}],
         min:'2019-12-30',
         show:true,
         item:{id:'1'},
@@ -167,10 +177,44 @@
         // }],
         phone:'',
         menu:['添加','删除删除删除删除删除'],
-        p____rule:[]
+        p____rule:[],
+        search: '',
+        searchList: [
+          {
+            number: 36,
+            searchStr: "111111111111"
+          },
+          {
+            number: 36,
+            searchStr: "2222222222"
+          },
+          {
+            number: 36,
+            searchStr: "333333333"
+          },
+          {
+            number: 36,
+            searchStr: "444444444"
+          },
+          {
+            number: 36,
+            searchStr: "55555555"
+          },
+          {
+            number: 36,
+            searchStr: "666666666"
+          }
+        ]
       }
     },
     methods : {
+      clickCheckBoxEvent(value){
+        console.log(this.moneyCheck)
+        console.log(value)
+      },
+      initData(data){
+        console.log(data);
+      },
       selectPlan(val){
         this.min = val
         let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.details.length, 1000)))

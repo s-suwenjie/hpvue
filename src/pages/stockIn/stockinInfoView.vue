@@ -6,6 +6,7 @@
           <yhm-view-control title="商品名称" :content="product"></yhm-view-control>
           <yhm-view-control title="规格型号" :content="model"></yhm-view-control>
           <yhm-view-control title="总数量" :content="quantity"></yhm-view-control>
+          <yhm-view-control title="拆分总数量" :content="splitnum+''"></yhm-view-control>
         </template>
       </yhm-view-body>
 
@@ -19,18 +20,25 @@
           <yhm-view-tab-list :customize="true" v-show="tabState[0].select">
             <template #listHead>
               <yhm-managerth style="width: 180px" title="商品名称"></yhm-managerth>
-              <yhm-managerth style="width: 180px" title="商品规格"></yhm-managerth>
+              <yhm-managerth  title="商品型号"></yhm-managerth>
               <yhm-managerth style="width: 125px" title="商品数量"></yhm-managerth>
+              <yhm-managerth style="width: 125px" title="单位"></yhm-managerth>
+              <yhm-managerth  title="能否拆分"></yhm-managerth>
+              <yhm-managerth style="width: 125px" title="拆分后数量"></yhm-managerth>
+              <yhm-managerth style="width: 125px" title="拆分单位"></yhm-managerth>
               <yhm-managerth style="width: 125px" title="库位名称"></yhm-managerth>
-
 
             </template>
             <template #listBody>
               <tr v-for="(item,index) in content" :key="index" :class="{InterlacBg:index%2!=0}" >
                 <yhm-manager-td :value="item.product"></yhm-manager-td>
                 <yhm-manager-td :value="item.model"></yhm-manager-td>
-                <yhm-manager-td-center :value="item.quantity"></yhm-manager-td-center>
-                <yhm-manager-td-center :value="item.stockPosition"></yhm-manager-td-center>
+                <yhm-manager-td-rgt :value="item.quantity+''"></yhm-manager-td-rgt>
+                <yhm-manager-td :value="item.uuStr"></yhm-manager-td>
+                <yhm-manager-td-center :value="item.spilt+''"></yhm-manager-td-center>
+                <yhm-manager-td-rgt :value="item.sumStr+''"></yhm-manager-td-rgt>
+                <yhm-manager-td :value="item.mdoStr+''"></yhm-manager-td>
+                <yhm-manager-td :value="item.stockPosition"></yhm-manager-td>
               </tr>
             </template>
             <template #pager>
@@ -58,7 +66,7 @@
         product:'',
         content:'',
         quantity:'',
-
+        splitnum:'',
       }
     },
     methods:{
@@ -72,7 +80,8 @@
         } else {
           // 页面非初始化时需要的参数
           params = {
-            postid:this.id
+            postid:this.id,
+            chaFlag:'1',
           }
         }
         this.ajaxJson({
@@ -83,6 +92,16 @@
             this.model = data.model
             this.product = data.product
             this.quantity = data.quantity+""
+            for (let i in this.content) {
+              if(this.content[i].spilt == 0 ){
+                this.content[i].spilt ='是'
+                this.splitnum=Number(this.splitnum) + Number(this.content[i].sumStr)
+              }else{
+                this.content[i].spilt ='否'
+                this.content[i].sumStr='---'
+                this.content[i].mdoStr='---'
+              }
+            }
           }
         })
       },

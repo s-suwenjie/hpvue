@@ -130,6 +130,7 @@ export default {
       personID: '',
       person: '',
       personOrUnit:'',//付款方
+      personOrUnitOld:'',//记录收款方
       personOrUnitList:[],//付款方
       otherAccount: '', // 收款账号
       subjectID: '', // 事由ID(事件)
@@ -839,7 +840,7 @@ export default {
             width: '1050',
             height: '692',
             title: '选择收支明细',
-            url: '/selectBankDetail?direction=0&categoryBefore=1'+'&otherAccountID=' + this.otherAccountID +'&selectType=1',
+            url: '/selectBankDetail?direction=0&categoryBefore=1'+'&otherID=' + this.otherUnitID +'&selectType=1',
             closeCallBack: (data)=>{
               if(data){
                 for(let i=0;i<data.length;i++){
@@ -1042,6 +1043,7 @@ export default {
                 }else{
                   this.otherAccount = data.publicAccountExplain
                   this.otherAccountID = data.id
+                  this.selectBankDetail()
                 }
               }
             }
@@ -1226,7 +1228,7 @@ export default {
               })
             }
           }else{
-            if(this.personOrUnit === '0'){
+            if(this.personOrUnit === '0' && this.otherUnitID !== ''){
               //说明没有选中需要重置类型
               this.personOrUnit='1'
             }else{

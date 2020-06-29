@@ -21,7 +21,8 @@
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth  style="width: 100px;"  title="别名" value="shortName"></yhm-managerth>
-        <yhm-managerth  title="保险公司名称" value="unit"></yhm-managerth>
+        <yhm-managerth  title="汇款公司名称" value="unit"></yhm-managerth>
+        <yhm-managerth  title="回款公司名称" value="incomeUnit"></yhm-managerth>
         <yhm-managerth style="width: 220px;" title="发票类型" value="billingTypeVal"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="新车费率" value="newRate"></yhm-managerth>
 <!--        <yhm-managerth style="width: 130px;" title="旧车费率" value="oldRate"></yhm-managerth>-->
@@ -37,6 +38,7 @@
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.shortName"></yhm-manager-td>
           <yhm-manager-td :value="item.unit"></yhm-manager-td>
+          <yhm-manager-td :value="item.incomeUnit"></yhm-manager-td>
           <yhm-manager-td :value="item.billingTypeVal"></yhm-manager-td>
           <yhm-manager-td-rgt  :value="item.newRate===''?'------':item.newRate +'  %'"></yhm-manager-td-rgt>
 <!--          <yhm-manager-td-rgt :value="item.oldRate===''?'&#45;&#45;&#45;&#45;&#45;&#45;':item.oldRate+'  %'" ></yhm-manager-td-rgt>-->

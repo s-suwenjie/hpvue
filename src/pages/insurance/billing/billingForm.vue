@@ -23,7 +23,6 @@
         <yhm-form-zh-select-text tip-before="value" tip-after="contactPhone"  @call="contactEvent" :before="contactName" before-id="contactName" :after="contactPhone" after-id="contactPhone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="160"></yhm-form-zh-select-text>
         <yhm-form-zh-select-text tip-before="value" tip-after="insuredPhone" @call="insuredEvent" :before="insuredName" before-id="insuredName" :after="insuredPhone" after-id="insuredPhone" before-rule="#"  title="投保人" after-title="证件号" after-width="160">
           <span class="formBoxIcon beinSpan" :class="'i-uniE9b0'+insuredState" @click="iconClick"></span>
-
         </yhm-form-zh-select-text>
         <yhm-form-radio title="与车主关系" subtitle=""  :select-list="relationshipList" :value="relationship" id="relationship"></yhm-form-radio>
         <yhm-form-radio title="投保类型" @call="insuredTypeClick" subtitle=""  width="1" :select-list="insuredTypeList" :value="insuredType" id="insuredType"></yhm-form-radio>
@@ -35,8 +34,6 @@
     <yhm-formbody>
       <template #title>保险信息</template>
       <template #control>
-
-
         <yhm-form-date title="交强险" subtitle="" @call="forceDate"  v-if="isforceStart" :value="forceStartDate" id="forceStartDate " position="u"  rule="R0000"></yhm-form-date>
         <yhm-form-date title="交强险" subtitle="结束日期" :min="forceStartDate"  v-if="isforceStart" :value="forceEndDate" id="forceEndDate " position="u"  rule="R0000"></yhm-form-date>
         <yhm-form-text placeholder="" v-if="isforceStart" title="交强险金额" subtitle="" @input="isaMoney" :value="forceMoney" id="forceMoney" ></yhm-form-text>
@@ -47,7 +44,7 @@
         <yhm-form-radio title="是否返利" subtitle="" @call="isCashObject" :no-edit="isCashOb" :select-list="cashList" :value="cash" id="cash"></yhm-form-radio>
         <yhm-form-radio title="返利对象" subtitle=""  v-if="isCash" :select-list="cashObjectList" :value="cashObject" id="cashObject"></yhm-form-radio>
 
-        <yhm-form-select v-if="isPromotions" title="选择" subtitle="活动方案" tip="value"   @click="promotionsEvent" :value="name" id="name"></yhm-form-select>
+        <yhm-form-select v-if="isPromotions" title="选择" subtitle="活动方案" tip="value" @click="promotionsEvent" :value="name" id="name" rule="R0000"></yhm-form-select>
 
         <yhm-form-select-insurance  title="商业险种" :is-content="true" v-if="isbusinessStart"
                                    :passenger-value="passenger" passenger-id="passenger"
@@ -61,10 +58,10 @@
                                    :psd="commercialList" :value="commercial"  id="commercial" rule="#"></yhm-form-select-insurance>
 
         <yhm-form-text placeholder="" title="商业险" subtitle="实际金额"  @input="isaMoney" v-if="isbusinessStart" :value="businessMoney" id="businessMoney" ></yhm-form-text>
-        <yhm-form-text placeholder="" title="开票金额" subtitle=""  :value="invoicingMoney" id="invoicingMoney" rule="R0000"></yhm-form-text>
-        <yhm-form-text placeholder="" title="保费合计" subtitle="" :no-edit="isTotal" :value="premiumsTotal" id="premiumsTotal" ></yhm-form-text>
+        <yhm-form-text placeholder="" title="开票金额" subtitle=""  :value="invoicingMoney" id="invoicingMoney" rule="R3000"></yhm-form-text>
+        <yhm-form-text placeholder="" title="保费合计" subtitle="" :no-edit="isTotal" :value="premiumsTotal" id="premiumsTotal"  rule="R3000"></yhm-form-text>
 
-        <yhm-form-zh-text-two  :no-edit="isDiscountShow" v-if="isbusinessStart"  :before="discountMoney" before-id="discountMoney"  :after="discountCount" @afterblurEvent="calcAfterMoney" @beforeBlur="calcBeforeMoney" after-id="discountCount" title="优惠金额" before-icon="rmb" after-title="优惠点数(%)" after-width="50px;">
+        <yhm-form-zh-text-two  ref="rromotions"   :no-edit="isDiscountShow" v-if="isbusinessStart"  :before="discountMoney" before-id="discountMoney"  :after="discountCount" @afterblurEvent="calcAfterMoney" @beforeBlur="calcBeforeMoney" after-id="discountCount" title="优惠金额"  before-icon="rmb" after-title="优惠点数(%)" after-width="50px;">
           <div class="formBoxIcon" v-if="isDis" @mouseover="tipChange" @mouseout="tipOut">
             <div  class="cbl_main_prompt tipShow">
               <div class="cbl_main_prompt_content" style="font-size:14px;padding: 0 12px; ">
@@ -74,12 +71,9 @@
             </div>
             <span class="i-yellowWarn"  ></span>
           </div>
-
         </yhm-form-zh-text-two>
-
-
 <!--        <yhm-form-zh-text-two :no-edit="isDiscountShow" v-if="isbusinessStart"  :before="premium" before-id="premium"  :after="electronic"  after-id="electronic" title="保费优惠" before-icon="rmb" after-title="电子券优惠" after-width="60px;"> </yhm-form-zh-text-two>-->
-        <yhm-form-text placeholder="" title="实收金额" subtitle="" :no-edit="isTotal" :value="receivedMoney" id="receivedMoney" rule="R0000"></yhm-form-text>
+        <yhm-form-text placeholder="" title="实收金额" subtitle=""  :value="receivedMoney" id="receivedMoney" rule="R3000"></yhm-form-text>
 
       </template>
     </yhm-formbody>
@@ -111,7 +105,6 @@
     </yhm-formoperate>
   </div>
 </template>
-
 <script>
   import { formmixin } from '@/assets/form.js'
   import { accMul, accAdd, guid, formatDate, number2chinese,formatTime ,formatPhone, formatIdNo,} from '@/assets/common.js'
@@ -208,6 +201,7 @@
       }
     },
     methods:{
+
       insuredUnitEvent(){
         this.name=''
         this.promotionsID=''
@@ -231,10 +225,11 @@
                 this.name=data.name
                 this.promotionsID=data.id
                 this.promotionsQuota=data.amount
-                this.discountMoney=''//优惠金额
-                this.discountCount=''//优惠点位
+                this.discountMoney='0'//优惠金额
+                this.discountCount='0'//优惠点位
                 this.unitRate()
                 this.discountList[0].remark = data.discount
+                this.$refs.rromotions.errorEvent("请重新输入优惠金额")
 
               }
             }
@@ -452,15 +447,19 @@
           this.isbusinessStart=true
           this.cash='0'
           this.isCashObject()
+          if (this.insuredType!=0){
+            this.isPromotions=true
+          }
         }else {
           this.isCashOb=true
-          this.isTotal='1'   //不选择商业险  保费合计/实收金额 不可输入
+          this.isTotal='1'   //不选择商业险  保费合计 不可输入
           this.isbusinessStart=false
           this.cash='1'  //没有商业险不返利
           this.isCashObject()
           this.businessMoney=''
           this.premiumsTotal=''
           this.receivedMoney=''
+          this.isPromotions=false
         }
       },
       isaMoney(){
@@ -699,214 +698,217 @@
         })
       },
       save(){
-        if (this.hide==='1'){        //当hide=1是 需要保险部门审批
-          this.$dialog.confirm({
-            width: '400',
-            alertImg: 'warn',
-            tipValue: '因为优惠点数超出保险公司提供的点数、所以此条数据需要经过领导审批?',
-            btnValueOk: '确定',
-            okCallBack: ()=>{
-              if (true) {
-                let params = {
-                  id: this.id,
-                  process:this.hide,
-                  salsesmanID:this.salsesmanID, //业务员
-                  plate:this.plate,
-                  plateID:this.plateID,
-                  insuredDate:this.insuredDate,
-                  beinsuredID:this.beinsuredID,
-                  beinsuredName:this.beinsuredName,
-                  beinsuredidNo:this.beinsuredidNo,
-                  contactID:this.contactID,
-                  contactName:this.contactName,
-                  contactPhone:this.contactPhone,
-                  insuredID:this.insuredID,
-                  insuredName:this.insuredName,
-                  insuredPhone:this.insuredPhone,
-                  commercial:this.commercial,
-                  relationship:this.relationship,
-                  insuredType:this.insuredType,
-                  insuredChannel:this.insuredChannel,
-                  insuredProject:this.insuredProject,
-                  forceStartDate:this.forceStartDate,
-                  forceEndDate:this.forceEndDate,
-                  forceMoney:this.forceMoney===''?'0.00':this.forceMoney,
-                  vehicleMoney:this.vehicleMoney===''?'0.00':this.vehicleMoney,
-                  businessStartDate:this.businessStartDate,
-                  businessEndDate:this.businessEndDate,
-                  insuredUnit:this.insuredUnit,
-                  invoicingMoney:this.invoicingMoney===''?'0.00':this.invoicingMoney,
-                  businessMoney:this.businessMoney===''?'0.00':this.businessMoney,
-                  premiumsTotal:this.premiumsTotal,
-                  discountMoney:this.discountMoney===''?'0.00':this.discountMoney,
-                  discountCount:this.discountCount,
-                  receivedMoney:this.receivedMoney===''?'0.00':this.receivedMoney,
-                  carDamage:this.carDamage,
-                  cash:this.cash,
-                  cashObject:this.cashObject,
-                  three:this.three,
-                  driver:this.driver,
-                  scratch:this.scratch,
-                  specify:this.specify,
-                  passenger:this.passenger,
-                  selfGlass:this.selfGlass,
-                  glass:this.glass,
-                  discountList: this.discountList,
-                  promotionsID:this.promotionsID,
-                }
-                this.ajaxJson({
-                  url: '/Insurance/preserveBilling',
-                  data: params,
-                  call: (data) => {
-                    if (data.type === 0) {
-                      this.$dialog.setReturnValue(this.id)
-                      this.$dialog.alert({
-                        tipValue: data.message,
-                        closeCallBack: () => {
-                          this.$dialog.close()
-                        }
-                      })
-                    }else{
-                      this.$dialog.alert({
-                        alertImg:'warn',
-                        tipValue: data.message
-                      })
-                    }
+        if (this.validator()) {
+          if (this.hide === '1') {        //当hide=1是 需要保险部门审批
+            this.$dialog.confirm({
+              width: '400',
+              alertImg: 'warn',
+              tipValue: '因为优惠点数超出保险公司提供的点数、所以此条数据需要经过领导审批?',
+              btnValueOk: '确定',
+              okCallBack: () => {
+                if (true) {
+                  let params = {
+                    id: this.id,
+                    process: this.hide,
+                    salsesmanID: this.salsesmanID, //业务员
+                    plate: this.plate,
+                    plateID: this.plateID,
+                    insuredDate: this.insuredDate,
+                    beinsuredID: this.beinsuredID,
+                    beinsuredName: this.beinsuredName,
+                    beinsuredidNo: this.beinsuredidNo,
+                    contactID: this.contactID,
+                    contactName: this.contactName,
+                    contactPhone: this.contactPhone,
+                    insuredID: this.insuredID,
+                    insuredName: this.insuredName,
+                    insuredPhone: this.insuredPhone,
+                    commercial: this.commercial,
+                    relationship: this.relationship,
+                    insuredType: this.insuredType,
+                    insuredChannel: this.insuredChannel,
+                    insuredProject: this.insuredProject,
+                    forceStartDate: this.forceStartDate,
+                    forceEndDate: this.forceEndDate,
+                    forceMoney: this.forceMoney === '' ? '0.00' : this.forceMoney,
+                    vehicleMoney: this.vehicleMoney === '' ? '0.00' : this.vehicleMoney,
+                    businessStartDate: this.businessStartDate,
+                    businessEndDate: this.businessEndDate,
+                    insuredUnit: this.insuredUnit,
+                    invoicingMoney: this.invoicingMoney === '' ? '0.00' : this.invoicingMoney,
+                    businessMoney: this.businessMoney === '' ? '0.00' : this.businessMoney,
+                    premiumsTotal: this.premiumsTotal,
+                    discountMoney: this.discountMoney === '' ? '0.00' : this.discountMoney,
+                    discountCount: this.discountCount,
+                    receivedMoney: this.receivedMoney === '' ? '0.00' : this.receivedMoney,
+                    carDamage: this.carDamage,
+                    cash: this.cash,
+                    cashObject: this.cashObject,
+                    three: this.three,
+                    driver: this.driver,
+                    scratch: this.scratch,
+                    specify: this.specify,
+                    passenger: this.passenger,
+                    selfGlass: this.selfGlass,
+                    glass: this.glass,
+                    discountList: this.discountList,
+                    promotionsID: this.promotionsID,
                   }
-                })
-              }
-            }
-          })
-        }else{
-          if (this.validator()) {  //不需要保险部门审批
-            let params = {
-              id: this.id,
-              process:this.hide,
-              salsesmanID:this.salsesmanID, //业务员
-              plate:this.plate,
-              plateID:this.plateID,
-              insuredDate:this.insuredDate,
-              beinsuredID:this.beinsuredID,
-              beinsuredName:this.beinsuredName,
-              beinsuredidNo:this.beinsuredidNo,
-              contactID:this.contactID,
-              contactName:this.contactName,
-              contactPhone:this.contactPhone,
-              insuredID:this.insuredID,
-              insuredName:this.insuredName,
-              insuredPhone:this.insuredPhone,
-              commercial:this.commercial,
-              relationship:this.relationship,
-              insuredType:this.insuredType,
-              insuredChannel:this.insuredChannel,
-              insuredProject:this.insuredProject,
-              forceStartDate:this.forceStartDate,
-              forceEndDate:this.forceEndDate,
-              forceMoney:this.forceMoney===''?'0.00':this.forceMoney,
-              vehicleMoney:this.vehicleMoney===''?'0.00':this.vehicleMoney,
-              businessStartDate:this.businessStartDate,
-              businessEndDate:this.businessEndDate,
-              insuredUnit:this.insuredUnit,
-              invoicingMoney:this.invoicingMoney===''?'0.00':this.invoicingMoney,
-              businessMoney:this.businessMoney===''?'0.00':this.businessMoney,
-              premiumsTotal:this.premiumsTotal,
-              discountMoney:this.discountMoney===''?'0.00':this.discountMoney,
-              discountCount:this.discountCount,
-              receivedMoney:this.receivedMoney===''?'0.00':this.receivedMoney,
-              carDamage:this.carDamage,
-              cash:this.cash,
-              cashObject:this.cashObject,
-              three:this.three,
-              driver:this.driver,
-              scratch:this.scratch,
-              specify:this.specify,
-              passenger:this.passenger,
-              selfGlass:this.selfGlass,
-              glass:this.glass,
-              discountList: this.discountList,
-              promotionsID:this.promotionsID,
-            }
-
-            this.ajaxJson({
-              url: '/Insurance/preserveBilling',
-              data: params,
-              call: (data) => {
-                if (data.type === 0) {
-                  this.$dialog.setReturnValue(this.id)
-                  this.$dialog.alert({
-                    tipValue: data.message,
-                    closeCallBack: () => {
-                      this.$dialog.close()
+                  this.ajaxJson({
+                    url: '/Insurance/preserveBilling',
+                    data: params,
+                    call: (data) => {
+                      if (data.type === 0) {
+                        this.$dialog.setReturnValue(this.id)
+                        this.$dialog.alert({
+                          tipValue: data.message,
+                          closeCallBack: () => {
+                            this.$dialog.close()
+                          }
+                        })
+                      } else {
+                        this.$dialog.alert({
+                          alertImg: 'warn',
+                          tipValue: data.message
+                        })
+                      }
                     }
-                  })
-                }else{
-                  this.$dialog.alert({
-                    alertImg:'warn',
-                    tipValue: data.message
                   })
                 }
               }
             })
+          } else {
+             //不需要保险部门审批
+              let params = {
+                id: this.id,
+                process: this.hide,
+                salsesmanID: this.salsesmanID, //业务员
+                plate: this.plate,
+                plateID: this.plateID,
+                insuredDate: this.insuredDate,
+                beinsuredID: this.beinsuredID,
+                beinsuredName: this.beinsuredName,
+                beinsuredidNo: this.beinsuredidNo,
+                contactID: this.contactID,
+                contactName: this.contactName,
+                contactPhone: this.contactPhone,
+                insuredID: this.insuredID,
+                insuredName: this.insuredName,
+                insuredPhone: this.insuredPhone,
+                commercial: this.commercial,
+                relationship: this.relationship,
+                insuredType: this.insuredType,
+                insuredChannel: this.insuredChannel,
+                insuredProject: this.insuredProject,
+                forceStartDate: this.forceStartDate,
+                forceEndDate: this.forceEndDate,
+                forceMoney: this.forceMoney === '' ? '0.00' : this.forceMoney,
+                vehicleMoney: this.vehicleMoney === '' ? '0.00' : this.vehicleMoney,
+                businessStartDate: this.businessStartDate,
+                businessEndDate: this.businessEndDate,
+                insuredUnit: this.insuredUnit,
+                invoicingMoney: this.invoicingMoney === '' ? '0.00' : this.invoicingMoney,
+                businessMoney: this.businessMoney === '' ? '0.00' : this.businessMoney,
+                premiumsTotal: this.premiumsTotal,
+                discountMoney: this.discountMoney === '' ? '0.00' : this.discountMoney,
+                discountCount: this.discountCount,
+                receivedMoney: this.receivedMoney === '' ? '0.00' : this.receivedMoney,
+                carDamage: this.carDamage,
+                cash: this.cash,
+                cashObject: this.cashObject,
+                three: this.three,
+                driver: this.driver,
+                scratch: this.scratch,
+                specify: this.specify,
+                passenger: this.passenger,
+                selfGlass: this.selfGlass,
+                glass: this.glass,
+                discountList: this.discountList,
+                promotionsID: this.promotionsID,
+              }
+
+              this.ajaxJson({
+                url: '/Insurance/preserveBilling',
+                data: params,
+                call: (data) => {
+                  if (data.type === 0) {
+                    this.$dialog.setReturnValue(this.id)
+                    this.$dialog.alert({
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                        this.$dialog.close()
+                      }
+                    })
+                  } else {
+                    this.$dialog.alert({
+                      alertImg: 'warn',
+                      tipValue: data.message
+                    })
+                  }
+                }
+              })
+
           }
         }
 
       },
       //保存并提交
       btnSubSave () {
-        if (this.hide==='1'){
-          this.$dialog.confirm({
-            width: '400',
-            alertImg: 'warn',
-            tipValue: '因为优惠点数超出保险公司提供的点数、所以此条数据需要经过领导审批?',
-            btnValueOk: '确定',
-            okCallBack: ()=>{
-              if (this.validator()) {
+        if (this.validator()) {
+          if (this.hide === '1') {
+            this.$dialog.confirm({
+              width: '400',
+              alertImg: 'warn',
+              tipValue: '因为优惠点数超出保险公司提供的点数、所以此条数据需要经过领导审批?',
+              btnValueOk: '确定',
+              okCallBack: () => {
+
                 let params = {
                   id: this.id,
-                  process:'1',
-                  salsesmanID:this.salsesmanID, //业务员
-                  plate:this.plate,
-                  plateID:this.plateID,
-                  insuredDate:this.insuredDate,
-                  beinsuredID:this.beinsuredID,
-                  beinsuredName:this.beinsuredName,
-                  beinsuredidNo:this.beinsuredidNo,
-                  contactID:this.contactID,
-                  contactName:this.contactName,
-                  contactPhone:this.contactPhone,
-                  insuredID:this.insuredID,
-                  insuredName:this.insuredName,
-                  insuredPhone:this.insuredPhone,
-                  commercial:this.commercial,
-                  relationship:this.relationship,
-                  insuredType:this.insuredType,
-                  insuredChannel:this.insuredChannel,
-                  insuredProject:this.insuredProject,
-                  forceStartDate:this.forceStartDate,
-                  forceEndDate:this.forceEndDate,
-                  forceMoney:this.forceMoney===''?'0.00':this.forceMoney,
-                  vehicleMoney:this.vehicleMoney===''?'0.00':this.vehicleMoney,
-                  businessStartDate:this.businessStartDate,
-                  businessEndDate:this.businessEndDate,
-                  insuredUnit:this.insuredUnit,
-                  invoicingMoney:this.invoicingMoney===''?'0.00':this.invoicingMoney,
-                  businessMoney:this.businessMoney===''?'0.00':this.businessMoney,
-                  premiumsTotal:this.premiumsTotal,
-                  discountMoney:this.discountMoney===''?'0.00':this.discountMoney,
-                  discountCount:this.discountCount,
-                  receivedMoney:this.receivedMoney===''?'0.00':this.receivedMoney,
-                  carDamage:this.carDamage,
-                  cash:this.cash,
-                  cashObject:this.cashObject,
-                  three:this.three,
-                  driver:this.driver,
-                  scratch:this.scratch,
-                  specify:this.specify,
-                  passenger:this.passenger,
-                  selfGlass:this.selfGlass,
-                  glass:this.glass,
+                  process: '1',
+                  salsesmanID: this.salsesmanID, //业务员
+                  plate: this.plate,
+                  plateID: this.plateID,
+                  insuredDate: this.insuredDate,
+                  beinsuredID: this.beinsuredID,
+                  beinsuredName: this.beinsuredName,
+                  beinsuredidNo: this.beinsuredidNo,
+                  contactID: this.contactID,
+                  contactName: this.contactName,
+                  contactPhone: this.contactPhone,
+                  insuredID: this.insuredID,
+                  insuredName: this.insuredName,
+                  insuredPhone: this.insuredPhone,
+                  commercial: this.commercial,
+                  relationship: this.relationship,
+                  insuredType: this.insuredType,
+                  insuredChannel: this.insuredChannel,
+                  insuredProject: this.insuredProject,
+                  forceStartDate: this.forceStartDate,
+                  forceEndDate: this.forceEndDate,
+                  forceMoney: this.forceMoney === '' ? '0.00' : this.forceMoney,
+                  vehicleMoney: this.vehicleMoney === '' ? '0.00' : this.vehicleMoney,
+                  businessStartDate: this.businessStartDate,
+                  businessEndDate: this.businessEndDate,
+                  insuredUnit: this.insuredUnit,
+                  invoicingMoney: this.invoicingMoney === '' ? '0.00' : this.invoicingMoney,
+                  businessMoney: this.businessMoney === '' ? '0.00' : this.businessMoney,
+                  premiumsTotal: this.premiumsTotal,
+                  discountMoney: this.discountMoney === '' ? '0.00' : this.discountMoney,
+                  discountCount: this.discountCount,
+                  receivedMoney: this.receivedMoney === '' ? '0.00' : this.receivedMoney,
+                  carDamage: this.carDamage,
+                  cash: this.cash,
+                  cashObject: this.cashObject,
+                  three: this.three,
+                  driver: this.driver,
+                  scratch: this.scratch,
+                  specify: this.specify,
+                  passenger: this.passenger,
+                  selfGlass: this.selfGlass,
+                  glass: this.glass,
                   discountList: this.discountList,
-                  promotionsID:this.promotionsID,
+                  promotionsID: this.promotionsID,
                 }
                 this.ajaxJson({
                   url: '/Insurance/saveBilling',
@@ -920,65 +922,64 @@
                           this.$dialog.close()
                         }
                       })
-                    }else{
+                    } else {
                       this.$dialog.alert({
-                        alertImg:'warn',
+                        alertImg: 'warn',
                         tipValue: data.message
                       })
                     }
                   }
                 })
               }
-            }
-          })
-        }else{
-          if (this.validator()) {  //不需要审批
+            })
+          } else {
+            //不需要审批
             let params = {
               id: this.id,
-              process:'0',
-              salsesmanID:this.salsesmanID, //业务员
-              plate:this.plate,
-              plateID:this.plateID,
-              insuredDate:this.insuredDate,
-              beinsuredID:this.beinsuredID,
-              beinsuredName:this.beinsuredName,
-              beinsuredidNo:this.beinsuredidNo,
-              contactID:this.contactID,
-              contactName:this.contactName,
-              contactPhone:this.contactPhone,
-              insuredID:this.insuredID,
-              insuredName:this.insuredName,
-              insuredPhone:this.insuredPhone,
-              commercial:this.commercial,
-              relationship:this.relationship,
-              insuredType:this.insuredType,
-              insuredChannel:this.insuredChannel,
-              insuredProject:this.insuredProject,
-              forceStartDate:this.forceStartDate,
-              forceEndDate:this.forceEndDate,
-              forceMoney:this.forceMoney===''?'0.00':this.forceMoney,
-              vehicleMoney:this.vehicleMoney===''?'0.00':this.vehicleMoney,
-              businessStartDate:this.businessStartDate,
-              businessEndDate:this.businessEndDate,
-              insuredUnit:this.insuredUnit,
-              invoicingMoney:this.invoicingMoney===''?'0.00':this.invoicingMoney,
-              businessMoney:this.businessMoney===''?'0.00':this.businessMoney,
-              premiumsTotal:this.premiumsTotal,
-              discountMoney:this.discountMoney===''?'0.00':this.discountMoney,
-              discountCount:this.discountCount,
-              receivedMoney:this.receivedMoney===''?'0.00':this.receivedMoney,
-              carDamage:this.carDamage,
-              cash:this.cash,
-              cashObject:this.cashObject,
-              three:this.three,
-              driver:this.driver,
-              scratch:this.scratch,
-              specify:this.specify,
-              passenger:this.passenger,
-              selfGlass:this.selfGlass,
-              glass:this.glass,
+              process: '0',
+              salsesmanID: this.salsesmanID, //业务员
+              plate: this.plate,
+              plateID: this.plateID,
+              insuredDate: this.insuredDate,
+              beinsuredID: this.beinsuredID,
+              beinsuredName: this.beinsuredName,
+              beinsuredidNo: this.beinsuredidNo,
+              contactID: this.contactID,
+              contactName: this.contactName,
+              contactPhone: this.contactPhone,
+              insuredID: this.insuredID,
+              insuredName: this.insuredName,
+              insuredPhone: this.insuredPhone,
+              commercial: this.commercial,
+              relationship: this.relationship,
+              insuredType: this.insuredType,
+              insuredChannel: this.insuredChannel,
+              insuredProject: this.insuredProject,
+              forceStartDate: this.forceStartDate,
+              forceEndDate: this.forceEndDate,
+              forceMoney: this.forceMoney === '' ? '0.00' : this.forceMoney,
+              vehicleMoney: this.vehicleMoney === '' ? '0.00' : this.vehicleMoney,
+              businessStartDate: this.businessStartDate,
+              businessEndDate: this.businessEndDate,
+              insuredUnit: this.insuredUnit,
+              invoicingMoney: this.invoicingMoney === '' ? '0.00' : this.invoicingMoney,
+              businessMoney: this.businessMoney === '' ? '0.00' : this.businessMoney,
+              premiumsTotal: this.premiumsTotal,
+              discountMoney: this.discountMoney === '' ? '0.00' : this.discountMoney,
+              discountCount: this.discountCount,
+              receivedMoney: this.receivedMoney === '' ? '0.00' : this.receivedMoney,
+              carDamage: this.carDamage,
+              cash: this.cash,
+              cashObject: this.cashObject,
+              three: this.three,
+              driver: this.driver,
+              scratch: this.scratch,
+              specify: this.specify,
+              passenger: this.passenger,
+              selfGlass: this.selfGlass,
+              glass: this.glass,
               discountList: this.discountList,
-              promotionsID:this.promotionsID,
+              promotionsID: this.promotionsID,
             }
             this.ajaxJson({
               url: '/Insurance/saveBilling',
@@ -992,17 +993,17 @@
                       this.$dialog.close()
                     }
                   })
-                }else{
+                } else {
                   this.$dialog.alert({
-                    alertImg:'warn',
+                    alertImg: 'warn',
                     tipValue: data.message
                   })
                 }
               }
             })
+
           }
         }
-
       }
     },
     created () {
@@ -1091,6 +1092,7 @@
           this.carOwnerID=data.carOwnerID
           this.name=data.promotionsName
           this.promotionsID=data.promotionsID
+          this.promotionsQuota=data.promotionsQuota
 
           if (this.insuredType==0){
             this.isCashOb=true

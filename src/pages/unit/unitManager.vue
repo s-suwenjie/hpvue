@@ -23,8 +23,10 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth title="单位名称" value="name" ></yhm-managerth>
+        <yhm-managerth style="width:300px" title="单位简称" value="abbreviation" ></yhm-managerth>
+        <yhm-managerth style="width:300px" title="单位代码" value="code" ></yhm-managerth>
         <yhm-managerth style="width:200px" title="统一社会信用代码" value="registrationNumber"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="公司电话" value="tel"></yhm-managerth>
+        <yhm-managerth style="width: 170px;" title="公司电话" value="tel"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -33,6 +35,8 @@
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td-thisexter :category="item.category" :value="item.name"></yhm-manager-td-thisexter>
+          <yhm-manager-td-center :value="item.abbreviation"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.registrationNumber"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.tel" format="phone*"></yhm-manager-td-center>
         </tr>

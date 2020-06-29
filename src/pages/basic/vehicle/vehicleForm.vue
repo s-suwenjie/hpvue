@@ -5,7 +5,7 @@
       <template #control>
         <yhm-form-radio title="车辆分类" :select-list="categoryList" :value="category" id="category" @call="categoryEvent"></yhm-form-radio>
         <yhm-form-radio title="车辆类型" :select-list="vehicleTypeList" :value="vehicleType" id="vehicleType" @call="vehicleTypeEvent"></yhm-form-radio>
-        <yhm-form-text placeholder=""  title="汽车排量" subtitle="" :show="isDisplacement" :value="displacement" id="displacement" :rule="isYhmSelect"></yhm-form-text>
+        <yhm-form-date title="上牌日期" v-if="isHide"  :value="registerDate" id="registerDate " position="t"  ></yhm-form-date>
         <yhm-form-radio  title="所属类型" v-if="isAssort" :select-list="assortList" :value="assort" id="assort"></yhm-form-radio>
 
         <yhm-form-text is-upper-case placeholder=""   @repeatverify="nameVerifyEvent" @call="iconCall"  ref="plate" title="车牌号" subtitle="" :show="isHide" :value="plate" id="plate" :rule="isPlate" @blur="plateValue(index),plateShow==false">
@@ -21,7 +21,8 @@
         <yhm-form-select title="品牌" tip="value" :value="brand" id="brand"  @click="selectBrand"></yhm-form-select>
         <yhm-form-select title="车型" tip="value" :value="model" id="model"  @click="selectModel"></yhm-form-select>
         <yhm-form-select title="车辆版本" tip="value" :value="version" id="version"  @click="selectVersion"></yhm-form-select>
-        <yhm-form-date title="上牌日期" v-if="isHide"  :value="registerDate" id="registerDate " position="u"  ></yhm-form-date>
+        <yhm-form-text placeholder=""  title="汽车排量" subtitle="" :show="isDisplacement" :value="displacement" id="displacement" :rule="isYhmSelect"></yhm-form-text>
+
         <yhm-form-select  title="车主信息" tip="value" @click="carOwnerIDEvent" :show="isHides"  :value="carOwner" id="carOwner" :rule="isYhmSelect"></yhm-form-select>
         <yhm-formupload :ownerID="id" :value="fileList"  id="fileList" title="行车证(支持单据)" tag="vehicle" multiple="multiple" category="3" ></yhm-formupload>
         <appLicencePlate class="guessSelector" v-show="PShow" :key="index" :plate-show="plateShow" v-model="carNum" @btnClick="btnClick"  @input="selectArr" >
@@ -252,7 +253,6 @@
               this.brand = data.showName
               this.model = ''
               this.version = ''
-
             }
           }
         })
@@ -280,6 +280,7 @@
               if (data) {
                 this.model = data.showName
                 this.modelID=data.id
+                this.displacement=data.value11
               }
             }
           })

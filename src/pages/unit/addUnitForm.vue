@@ -15,8 +15,8 @@
             <span class="i-copy"></span>
           </div>
         </yhm-form-zh-text-two>
-        <yhm-form-text title="单位代码" :value="code" id="code" rule="R0000"></yhm-form-text>
-        <yhm-form-text title="单位简称" :value="abbreviation" id="abbreviation" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="单位代码" :value="code" id="code" ref="code" rule="R0000" @blur="codeBlur"></yhm-form-text>
+        <yhm-form-text title="单位简称" :value="abbreviation" id="abbreviation" rule="R0000" ref="abbreviation" @blur="abbreviationBlur"></yhm-form-text>
         <yhm-form-text title="公司电话" :value="tel" id="tel" rule="R0000"></yhm-form-text>
         <yhm-form-radio title="是否黑名单" :select-list="blacklistList" :value="blacklist" id="blacklist"></yhm-form-radio>
         <yhm-form-textarea title="地址" :value="addressCN" id="addressCN" rule="R0000" width="1"></yhm-form-textarea>
@@ -146,15 +146,54 @@
         management: '',              //经营范围
         isCopyTip: false,
         videoUrl: '',
-
-        list:[],
-        isList:false,
-
         isUrl:'',
 
+        codeVerify:true,//单位代码验证
+        abbreviationVerify:true//单位简称验证
       }
     },
     methods: {
+      abbreviationBlur(){//单位简称验证
+        if(this.abbreviation){
+          this.ajaxJson({
+            url: '/Basic/verifyAbbreviationVue',
+            data: {
+              abbreviation:this.abbreviation
+            },
+            loading:"0",
+            call: (data)=>{
+              if(data.type==0){
+                this.$refs.abbreviation.errorEvent(data.message)
+                this.abbreviationVerify = false
+              }else if(data.type==1){
+                this.abbreviationVerify = true
+              }
+              console.log(  data)
+            }
+          })
+        }
+
+      },
+      codeBlur(){//单位代码验证
+        if(this.code){
+          this.ajaxJson({
+            url: '/Basic/verifyCodeVue',
+            data: {
+              code:this.code
+            },
+            loading:"0",
+            call: (data)=>{
+              if(data.type==0){
+                this.$refs.code.errorEvent(data.message)
+                this.codeVerify = false
+              }else if(data.type==1){
+                this.codeVerify = true
+              }
+              console.log(  data)
+            }
+          })
+        }
+      },
       switchClick(){//重复账号信息显示隐藏
         this.isList=!this.isList
       },
@@ -242,6 +281,7 @@
               this.switchIconShow = true
               this.$refs.registrationNumber.errorEvent(data.message)
               this.getUnitInformation(data.id)
+              return false
             }else{
               this.isList = false
               this.switchIconShow = false
@@ -249,25 +289,25 @@
           }
         })
       },
-      async isVerifyRegistrationNumber(){
-        let params = {
-          id: this.id,
-          registrationNumber: this.registrationNumber
-        }
-        let result = await this.ajaxAsync({
-          url:"/Basic/verifyRegistrationNumber",
-          data: params,
-          loading:"0"
-        })
-        if(result.type === 0){//说明存在，调用控件验证显示规则
-          this.isList = true
-          this.switchIconShow = true
-          this.$refs.registrationNumber.errorEvent(result.message)
-          this.getUnitInformation(result.id)
-          return false
-        }
-        return true
-      },
+      // async isVerifyRegistrationNumber(){
+      //   let params = {
+      //     id: this.id,
+      //     registrationNumber: this.registrationNumber
+      //   }
+      //   let result = await this.ajaxAsync({
+      //     url:"/Basic/verifyRegistrationNumber",
+      //     data: params,
+      //     loading:"0"
+      //   })
+      //   if(result.type === 0){//说明存在，调用控件验证显示规则
+      //     this.isList = true
+      //     this.switchIconShow = true
+      //     this.$refs.registrationNumber.errorEvent(result.message)
+      //     this.getUnitInformation(result.id)
+      //     return false
+      //   }
+      //   return true
+      // },
       /* 视频播放 */
       videoPlay(){
         this.$dialog.OpenWindow({
@@ -351,11 +391,14 @@
           call: (data)=>{
             if(data.type === 1) {
               // if(this.code === '')
-              this.code = data.html
+              if(this.code==''){
+                this.code = data.html
+              }
               // if(this.prefixLetter === '')
               this.prefixLetter = data.val
               this.isList = false
               this.switchIconShow = false
+              this.codeBlur()
             }else{
               this.$refs.name.errorEvent(data.message)
               this.getUnitInformation(data.id)
@@ -383,11 +426,17 @@
       },
       async save(){
         this.prefixLetterRule = 'R0000'
-        let a = await this.isRepeatVerifyEvent()
+        // let a = await this.isRepeatVerifyEvent()
         let b = this.validator()
-        let c = this.isVerifyRegistrationNumber()
+        // let c = this.isVerifyRegistrationNumber()
         this.prefixLetterRule = ''
-        if (a && b && c) {
+        if(this.codeVerify==false){
+          this.$refs.code.errorEvent("单位代码已存在")
+        }
+        if(this.abbreviationVerify==false){
+          this.$refs.abbreviation.errorEvent("单位简称已存在")
+        }
+        if ( b && this.codeVerify && this.abbreviationVerify) {
           let params = {
             id: this.id,  //id
             name: this.name,   //单位名称

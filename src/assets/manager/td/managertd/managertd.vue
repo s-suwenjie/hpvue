@@ -9,13 +9,18 @@
       <slot></slot>
 
     </div>
-    <div ref="tip" v-if="tip" v-show="showTip" class="c_tip" :style="getPosition">
-      <div>
+    <div ref="tip" v-if="tip&&tipType!='r'" v-show="showTip" class="c_tip" :style="getPosition">
+      <div class="c_tip_img">
         {{tipShow?tipValue:value}}
         <img src="./images/arrow.png">
       </div>
     </div>
-
+    <div ref="tip" v-if="tipType=='r'?true:false&&tip" v-show="showTip" class="c_tip c_tipRight"  :style="getPositionRight">
+      <div>
+        {{tipShow?tipValue:value}}
+        <img style="position: absolute;right: 100px;bottom: -16px;" src="./images/arrow.png">
+      </div>
+    </div>
   </td>
 </template>
 
@@ -28,7 +33,9 @@
         x:0,
         y:0,
         left:'',
-        top:''
+        right:'',
+        top:'',
+        bottom:''
       }
     },
     props: {
@@ -43,6 +50,10 @@
       tip:{
         type: Boolean,
         default: false
+      },
+      tipType:{//等于 r 时 是做当回显在列表最后一个显示不全的处理
+        type: String,
+        default: ''
       },
       tipShow: {
         type: Boolean,
@@ -127,6 +138,19 @@
     computed:{
       getEmpty(){
         return this.value === ''
+      },
+      getPositionRight(){
+        let result = ''
+        if(this.left !== ''){
+          result += 'left:' + (this.left-100) + 'px;'
+        }
+        if(this.top !== ''){
+          result += 'top:' + this.top + 'px;'
+        }
+        if(result !== ''){
+          result += 'bottom:auto;'
+        }
+        return result
       },
       getPosition(){
         let result = ''

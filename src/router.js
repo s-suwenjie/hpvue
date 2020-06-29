@@ -32,6 +32,7 @@ import handleImageForm from './pages/common/handleImageForm.vue'
 import rejectReason from './pages/common/rejectReason'
 
 import passMessage from './pages/common/passMessage'
+import gainsayMessage from './pages/common/gainsayMessage'
 
 /* 跳转非谷歌页面 */
 import onlyGoogle from './pages/common/onlyGoogle'
@@ -67,6 +68,7 @@ import configForm from './pages/config/configForm.vue'
 /*项目管理*/
 import projectManager from './pages/project/projectManager.vue'
 import projectForm from './pages/project/projectForm.vue'
+import projectDetailForm from './pages/project/projectDetailForm.vue'
 
 
 /* 支票功能 */
@@ -93,6 +95,10 @@ import myReceivableView from './pages/receivable/myReceivableView'
 import myReceivableRegisterForm from './pages/receivable/myReceivableRegisterForm'
 import finReceivableManager from './pages/receivable/finReceivableManager'
 import finReceivableView from './pages/receivable/finReceivableView'
+
+/*应收账款明细*/
+import receivableCenterView from './pages/receivableCenter/receivableCenterView.vue'
+
 
 /* 发票功能 */
 import invoiceTilingManager from './pages/invoice/invoiceTilingManager'
@@ -241,6 +247,7 @@ import visitPersonForm from './pages/visitPerson/visitPersonForm'
 
 /* 测试demo */
 import demo from './pages/selects/demo'
+import exercise from './test/exercise'
 import selectPage from './test/selectPage'
 import testApp from './pagesApp/testApp.vue'
 
@@ -419,6 +426,7 @@ import warehouseExitManager from './pages/Inventory/warehouseExitManager'
 import warehouseExitForm from './pages/Inventory/warehouseExitForm'
 import warehouseExitView from './pages/Inventory/warehouseExitView'
 
+
 /* 手机页面 */
 import homeApp from './views/homeApp.vue'
 
@@ -559,10 +567,19 @@ import accountsReceivableView from './pages/insurance/accountsReceivable/account
 import accountExpectedView from './pages/insurance/accountsReceivable/accountExpectedView'
 import unitDatailsView from './pages/insurance/accountsReceivable/unitDatailsView'
 
+/*财务管理=>资金=>应收账款*/
 import receivableManager from './pages/insurance/accountsReceivable/receivableManager'
 import receivableForm from './pages/insurance/accountsReceivable/receivableForm'
-import receivableManagerView from './pages/insurance/accountsReceivable/receivableManagerView'
+import receivableView from './pages/insurance/accountsReceivable/receivableView'
 
+import receivableManagerView from './pages/insurance/accountsReceivable/receivableManagerView'
+import receivableBadDebtForm from './pages/insurance/accountsReceivable/receivableBadDebtForm'
+
+import receivableSourceForm from './pages/insurance/accountsReceivable/receivableSourceForm'
+
+
+import receivableSourceManagerView from './pages/insurance/accountsReceivable/receivableSourceManagerView'
+import receivableBadDebtView from './pages/insurance/accountsReceivable/receivableBadDebtView'
 
 
 /*客户返利*/
@@ -573,6 +590,7 @@ import payInsuranceFeeManager from './pages/insurance/paymentInsurance/payInsura
 
 /* 保险返利费管理*/
 import commissionFeeManager from './pages/insurance/commissionFee/commissionFeeManager'
+import commissionFeeForm from './pages/insurance/commissionFee/commissionFeeForm'
 
 /* 保险审批制定 */
 import insuranceProcessManager from './pages/approvalPriority/insuranceProcessManager'
@@ -601,6 +619,15 @@ import stockOutForm from './pages/stockOut/stockOutForm'
 import stockOutView from './pages/stockOut/stockOutView'
 import stockOutDetailsForm from './pages/stockOut/stockOutDetailsForm'
 import stockInModifyView from './pages/stockIn/stockInModifyView'
+import stockOutOperateManager from './pages/stockOut/stockOutOperateManager'
+import stockOutOperateView from './pages/stockOut/stockOutOperateView'
+import stockOutSelectProductView from './pages/stockOut/stockOutSelectProductView'
+import stockOutselectModelview from './pages/stockOut/stockOutselectModelview'
+import stockOperateView from './pages/stockIn/stockOperateView'
+import stockinLocationFrom from './pages/stockIn/stockinLocationFrom'
+import stockOperateviewView from './pages/stockIn/stockOperateviewView'
+import stockOutOperateForm from './pages/stockOut/stockOutOperateForm'
+
 
 export default new Router({
   mode: 'history',
@@ -713,7 +740,7 @@ export default new Router({
         { path: '/home/BankDetailRepairManager', name: 'BankDetailRepairManager.vue',component: BankDetailRepairManager },
         { path: '/home/BankDetailCommissionManager', name: 'BankDetailCommissionManager.vue',component: BankDetailCommissionManager },
         { path: '/home/stockOutManager', name: 'stockOutManager.vue',component: stockOutManager ,meta: {title: '出库管理'}},
-
+        { path: '/home/stockOutOperateManager', name:'stockOutOperateManager.vue', component:stockOutOperateManager,meta: {title: '出库操作'} }
 
       ]
     },
@@ -721,6 +748,8 @@ export default new Router({
     { path: '/login', name: 'login', component: login , meta: {title: '北京海派奥特经贸有限公司办公系统'}},
     { path: '/configForm', name: 'configForm', component: configForm},
     { path: '/projectForm', name: 'projectForm', component: projectForm},
+    { path: '/projectDetailForm', name: 'projectDetailForm', component: projectDetailForm},
+
     { path: '/paymentPlanDate', name: 'paymentPlanDate.vue', component: paymentPlanDate , meta: {title: '付款计划'}},
 
     { path: '/stockInForm', name: 'stockInForm', component: stockInForm},
@@ -777,8 +806,9 @@ export default new Router({
     { path: '/selectFormPlate', name: 'selectFormPlate.vue',component: selectFormPlate },
     { path: '/selectPrint', name: 'selectPrint.vue',component: selectPrint },
     { path: '/selectLocation', name: 'selectLocation.vue',component: selectLocation },
+    { path: '/commissionFeeForm', name: 'commissionFeeForm.vue',component: commissionFeeForm },
 
-
+    { path: '/exercise', name: 'exercise.vue', component: exercise ,meta: {title: '测试页面'}},
     { path: '/demo', name: 'demo.vue', component: demo ,meta: {title: '组件测试'}},
 
     { path: '/checkForm', name: 'checkForm.vue', component: checkForm},
@@ -845,6 +875,7 @@ export default new Router({
     { path: '/myElectronicInvoiceReimburseManager', name: 'myElectronicInvoiceReimburseManager', component: myElectronicInvoiceReimburseManager},
     { path: '/rejectReason', name: 'rejectReason', component: rejectReason},
     { path: '/passMessage', name: 'passMessage', component: passMessage},
+    { path: '/gainsayMessage', name: 'gainsayMessage', component: gainsayMessage},
     { path: '/electronicInvoiceForm', name: 'electronicInvoiceForm', component: electronicInvoiceForm},
     { path: '/electronicInvoiceView', name: 'electronicInvoiceView', component: electronicInvoiceView},
     { path: '/usersForm', name: 'usersForm', component: usersForm},
@@ -974,6 +1005,8 @@ export default new Router({
     { path: '/poNumbering', name: 'poNumbering.vue',component: poNumbering },
     { path: '/poNumberView', name: 'poNumberView.vue',component: poNumberView },
     { path: '/receivableForm', name: 'receivableForm.vue',component: receivableForm },
+    { path: '/receivableView', name: 'receivableView.vue',component: receivableView },
+
     { path: '/accountsReceivableView', name: 'accountsReceivableView.vue',component: accountsReceivableView },
     { path: '/accountExpectedView', name: 'accountExpectedView.vue',component: accountExpectedView },
     { path: '/unitDatailsView', name: 'unitDatailsView.vue',component: unitDatailsView },
@@ -988,7 +1021,22 @@ export default new Router({
     { path:'/stockOutDetailsForm',name:'stockOutDetailsForm.vue',component: stockOutDetailsForm},
     { path:'/approvalMessage', name:'approvalMessage.vue',component: approvalMessage},
     { path:'/stockInModifyView', name:'stockInModifyView.vue',component: stockInModifyView},
+    { path:'/receivableCenterView', name:'receivableCenterView.vue',component: receivableCenterView},
+
+    { path:'/stockOutOperateView', name:'stockOutOperateView.vue', component:stockOutOperateView },
+    { path:'/stockOutSelectProductView', name:'stockOutSelectProductView.vue', component:stockOutSelectProductView },
+    { path:'/stockOutselectModelview', name:'stockOutselectModelview.vue', component:stockOutselectModelview },
+    { path:'/stockOperateView', name:'stockOperateView.vue', component:stockOperateView },
+    { path:'/stockinLocationFrom', name:'stockinLocationFrom.vue', component:stockinLocationFrom },
+    { path:'/stockOperateviewView', name:'stockOperateviewView.vue', component:stockOperateviewView },
+    { path:'/stockOutOperateForm', name:'stockOutOperateForm.vue', component:stockOutOperateForm },
     { path:'/receivableManagerView', name:'receivableManagerView.vue',component: receivableManagerView},
+    { path:'/receivableBadDebtForm', name:'receivableBadDebtForm.vue',component: receivableBadDebtForm},
+
+    { path:'/receivableSourceForm', name:'receivableSourceForm.vue',component: receivableSourceForm},
+
+    { path:'/receivableSourceManagerView', name:'receivableSourceManagerView.vue',component: receivableSourceManagerView},
+    { path:'/receivableBadDebtView', name:'receivableBadDebtView.vue',component: receivableBadDebtView},
 
 /* APP端路由 */
     {
@@ -1050,3 +1098,6 @@ export default new Router({
 
   ]
 })
+
+
+

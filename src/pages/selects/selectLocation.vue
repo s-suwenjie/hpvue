@@ -19,7 +19,7 @@
             @mouseover="mouseoverEvent"
             @mouseout="mouseoutEvent">
           <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
-          <yhm-manager-td-center :value="item.name"></yhm-manager-td-center>
+          <yhm-manager-td :value="item.name"></yhm-manager-td>
         </tr>
       </template>
       <template #empty>
@@ -39,7 +39,8 @@
     mixins: [selectmixin],
     data(){
       return{
-        content:[]
+        content:[],
+        category:'',
       }
     },
     methods:{
@@ -81,7 +82,9 @@
         }
         this.init({
           url:"/stock/stockPosition/select",
-          data:{},
+          data:{
+            category:this.category
+          },
           all:(data) =>{
             this.content = data.content
           }
@@ -89,7 +92,7 @@
       }
     },
     created(){
-
+      this.setQuery2Value('category')
     }
   }
 </script>

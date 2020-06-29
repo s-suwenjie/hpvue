@@ -12,6 +12,7 @@
       <template #operate>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData(false)"></yhm-managersearch>
         <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('insuredUnit')" title=" 保险公司" :content="listInsuredUnit"></yhm-radiofilter>
+        <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('realState')" title=" 状态" :content="listRealState"></yhm-radiofilter>
         <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
       </template>
 
@@ -105,6 +106,10 @@
         },
         listAccountsReceivableDate:{
           value: '3', //默认为空
+          list: []
+        },
+        listRealState:{
+          value: '0', //默认为空
           list: []
         },
         totalMoney:'0',
@@ -264,6 +269,11 @@
         if (op === 'accountsReceivableDate') {
           this.selectValue = []
         }
+        if (op === 'realState') {
+          this.selectValue = []
+        }
+
+
         this.initPageData(false)
       },
       //搜索
@@ -272,12 +282,14 @@
         if (initValue) {
           params = {
             insuredUnit:this.listInsuredUnit.value,
-            accountsReceivableDate:this.listAccountsReceivableDate.value
+            accountsReceivableDate:this.listAccountsReceivableDate.value,
+            realState:this.listRealState.value
           }
         } else {
           params = {
             insuredUnit:this.listInsuredUnit.value,
-            accountsReceivableDate:this.listAccountsReceivableDate.value
+            accountsReceivableDate:this.listAccountsReceivableDate.value,
+            realState:this.listRealState.value
           }
         }
         this.init({
@@ -293,6 +305,7 @@
             this.listInsuredUnit=data.insuredUnitPsd
             this.insuredUnitList=data.insuredUnitList
             this.listAccountsReceivableDate=data.accountsReceivableDatePsd
+            this.listRealState=data.realStatePsd
 
 
           }

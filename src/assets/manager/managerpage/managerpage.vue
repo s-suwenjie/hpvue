@@ -70,6 +70,8 @@
           <slot name="listTotalBody"></slot>
           </tbody>
         </table>
+        <slot name="listTotalRight"></slot>
+
       </div>
 
     </div>

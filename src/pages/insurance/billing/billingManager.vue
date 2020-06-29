@@ -7,7 +7,7 @@
       </template>
       <!--操作区-->
       <template #operate>
-        <yhm-table-tip :show="tableTip" :content="tableTipInfo" :column="tableTipColumnInfo" :mouse-control="tableTipControl"></yhm-table-tip>
+
         <yhm-commonbutton  value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData(false)"></yhm-managersearch>
@@ -31,7 +31,7 @@
         <yhm-managerth  style="width: 100px;" title="投保类型" value="insuredTypeVal"></yhm-managerth>
         <yhm-managerth  style="width: 100px;" title="保费合计" value="premiumsTotal"></yhm-managerth>
         <yhm-managerth  style="width: 100px;" title="实收金额" value="receivedMoney"></yhm-managerth>
-        <yhm-managerth  style="width: 100px;" title="审批人员" value="insuranceFormulatorName"></yhm-managerth>
+        <yhm-managerth  style="width: 100px;" title="审批信息" value="status"></yhm-managerth>
         <yhm-managerth  title="状态" value="status"></yhm-managerth>
 
         <yhm-managerth  style="width: 230px;" title="操作"></yhm-managerth>
@@ -41,17 +41,18 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"  ></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td @click="plateView(item)" :value="item.plate" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
-          <yhm-manager-td  @click="contactView(item)" :value="item.contactName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
-          <yhm-manager-td  :tip="item.notEqual==='0'?false:true" :tip-show="true" tip-value="被保险人与车主不一致" @click="personView(item)" :value="item.beinsuredName" :before-icon="item.status==='-1'?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item">
+          <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
+          <yhm-manager-td  @click="contactView(item)" :value="item.contactName" ></yhm-manager-td>
+          <yhm-manager-td  :tip="item.notEqual==='0'?false:true" :tip-show="true" tip-value="被保险人与车主不一致" @click="personView(item)" :value="item.beinsuredName" >
             <span v-if="item.notEqual==='0'?false:true" style=" color: #ffaa27;font-size: 18px;" class="uniE9A8 managerIcon"></span>
           </yhm-manager-td>
-          <yhm-manager-td-date :value="item.insuredDate"  @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-date>
+          <yhm-manager-td-date :value="item.insuredDate" ></yhm-manager-td-date>
           <yhm-manager-td-psd  :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
           <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.receivedMoney"></yhm-manager-td-money>
-          <yhm-manager-td :value="item.statusVal==='部门审批中'?item.causeList[0].insuranceFormulatorName:'-----'"></yhm-manager-td>
+<!--          <yhm-manager-td :value="item.statusVal==='部门审批中'?item.causeList[0].insuranceFormulatorName:'-&#45;&#45;&#45;&#45;'"></yhm-manager-td>-->
+          <yhm-manager-td-leaveword @iconClick="listDetailsView(item)" :leave-word-show="item.status === '-1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state @click="appPay(item)" :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button v-show="item.category==='1' " @click="addPNumbering(item)" icon="i-export" value="上传保单" color="#A344BB"></yhm-manager-td-operate-button>
@@ -87,16 +88,6 @@
         },
         insuredUnitList:[],
 
-        tableTip:false,         //记录表格是否显示
-        tableTipControl:{},
-        tableTipColumnInfo:[
-          {width:'100',title:'驳回人员',category:'',key:'insuranceFormulatorName'},
-          {width:'130',title:'驳回时间',category:'date',key:'refuseDate'},
-          {width:'280',title:'驳回理由',category:'',key:'remark'},
-
-
-        ],
-        tableTipInfo:[],
         isPoNumber:false,
         isAppPayment:false,
         isApp:false,
@@ -104,6 +95,18 @@
       }
     },
     methods:{
+      listDetailsView(item){
+        this.$dialog.OpenWindow({
+          width: '650',
+          height: '300',
+          title: '查看审批留言信息',
+          url:'/approvalMessage?id='+item.id,
+          closeCallBack: (data)=>{
+            if(data){
+            }
+          }
+        })
+      },
       appPay(item){
         if (item.statusVal==='返利审批中'||item.statusVal==='返利拨款中') {    //待完善
           this.$dialog.OpenWindow({
@@ -220,16 +223,7 @@
            }
          })
       },
-      tableTipShowEvent(item,control){
-        if(item.status==='-1') {
-          this.tableTipInfo = item.causeList
-          this.tableTipControl = control
-          this.tableTip = true
-        }
-      },
-      tableTipHideEvent(){
-        this.tableTip = false
-      },
+
 
       listView(item){
         this.$dialog.OpenWindow({

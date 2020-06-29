@@ -55,6 +55,7 @@
           <yhm-manager-td-operate v-if="isBankManey">
 <!--            <yhm-manager-td-operate-button v-if="item.bankMoney==='0.00'?true:false"  @click="Application(item)" :value="'付款申请'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>-->
             <yhm-manager-td-operate-button v-if="item.cashierOperation==='3'?true:false"  @click="approFund(item)" :value="'收款(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-if="item.cashierOperation==='3'?true:false"  @click="gainsay(item)" :value="'驳回'" icon="i-toVoidCheck" color="#f00"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-if="item.cashierOperation==='2'?true:false"  @click="approFund(item)" :value="'代付(保险公司)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-if="item.cashierOperation==='1'?true:false"  @click="approFund(item)" :value="'返利(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
@@ -103,6 +104,19 @@
       }
     },
     methods:{
+      gainsay(item){
+        this.$dialog.OpenWindow({
+          width: 650,
+          height: 230,
+          url:'/gainsayMessage?id='+item.ownerID,
+          title: '驳回',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       callDate(){
         this.startDate=this.yearMonth+' 00:00:00'
         this.endDate = this.yearMonth+' 23:59:59'

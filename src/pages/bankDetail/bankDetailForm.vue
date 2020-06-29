@@ -584,8 +584,6 @@
         this.isMoney = ''
       }
 
-
-
       if(this.directionBefore === '1'){
         this.isDirectionEdit = true
         this.isCause = true
@@ -655,7 +653,9 @@
             this.isSelectaccount=true
             this.message=data.currentBalance
           }
-
+          if(this.bankDetailType === '0'){
+            this.isSelectaccount=false
+          }
           if(this.ownerSys === '2'){
             this.isCauseIn = false
           }

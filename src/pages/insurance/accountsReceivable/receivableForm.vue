@@ -6,18 +6,17 @@
       <yhm-formbody>
           <template #title>基本信息</template>
           <template #control>
-            <yhm-form-drop-down-select title="欠款方" width="1" @select="selectUnit" :select-list="unitOrPersonList.list" :selectValue="unitOrPerson" selectid="unitOrPerson" :value="other" id="other" rule="R0000"></yhm-form-drop-down-select>
+            <yhm-form-drop-down-select title="欠款方" width="1" @select="selectUnit" :select-list="unitOrPersonList.list" :selectValue="unitOrPerson" selectid="unitOrPerson" :value="ownerName" id="ownerName" rule="R0000"></yhm-form-drop-down-select>
             <yhm-form-select title="负责人" @click="salesmanSelect" :value="principal" id="principal" rule="R0000"></yhm-form-select>
             <yhm-form-radio title="来源" :no-edit="type=='2'?true:false" :select-list="receivableSourceList.list" :value="receivableSource" id="receivableSource"></yhm-form-radio>
             <yhm-form-radio title="核销类型" :select-list="writeOffTypeList.list" :value="writeOffType" id="writeOffType"></yhm-form-radio>
 
-            <yhm-form-text title="欠款金额" tip="money" before-icon="rmb" :value="money" id="money"></yhm-form-text>
-            <yhm-form-date title="欠款" subtitle="发生日期" :max="currentDate" :value="workDate" id="workDate" rule="R0000"></yhm-form-date>
-            <yhm-form-date title="预计" subtitle="收款日期" :min="currentDate" :value="collectMoneyDate" id="collectMoneyDate" rule="R0000"></yhm-form-date>
-            <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="" tag="paymentPlan" multiple="multiple"></yhm-formupload>
-
+            <yhm-form-text title="欠款金额" tip="money" before-icon="rmb" :value="money" id="money" rule="R1800"></yhm-form-text>
+            <yhm-form-date title="欠款" subtitle="发生日期" :max="currentDate" :max-year="Number(currentDate.slice(0,4))" :value="workDate" id="workDate" rule="R0000"></yhm-form-date>
+            <yhm-form-date title="预计" subtitle="收款日期" :min="currentDate" :min-year="Number(currentDate.slice(0,4))" :value="collectMoneyDate" id="collectMoneyDate" rule="R0000"></yhm-form-date>
+            <yhm-form-textarea title="事件说明" :value="remark" id="remark" rule="R0000"></yhm-form-textarea>
+            <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="" tag="receivable" multiple="multiple"></yhm-formupload>
             <!--            <yhm-form-date title="发票" subtitle="开具日期" :no-edit="true" :value="openDate" id="openDate" rule="R0000"></yhm-form-date>-->
-
           </template>
         </yhm-formbody>
         <div class="f_split"></div>
@@ -39,8 +38,8 @@
       return {
         id: '',
         currentDate: formatDate(new Date()),//当前日期
-        other: '',//对方姓名  或  单位
-        otherID: '',//欠款方ID
+        ownerName: '',//对方姓名  或  单位
+        ownerID: '',//欠款方ID
         money: '',//欠款方金额
         workDate: '',//欠款发生日期
         invoiceID: '',//发票开具日期
@@ -48,6 +47,7 @@
         principal: '',//负责人
         principalID: '',//负责人ID
         isFinish: '',//是否收款
+        remark:'',//事件说明
         openDate: formatDate(new Date()),//发票开具日期
         isFinishList: {
           list: [
@@ -75,6 +75,7 @@
         fileList:[],
         ID:'',
         index:0,
+        debtorType:'0',
         isRightID:false,
         isLeftID:false,
       }
@@ -156,12 +157,12 @@
             title: '选择单位信息',
             closeCallBack: (data) => {
               if (data) {
-                this.other = data.name
-                this.otherID = data.id
-              }
-              else{
+                this.ownerName = data.name
+                this.ownerID = data.id
+                this.debtorType = '0'
+              }else{
+                this.unitOrPerson = this.debtorType
                 //说明没有选中需要重置类型
-                this.resetPersonOrUnit(op,'1')
               }
             }
           })
@@ -169,26 +170,19 @@
           this.$dialog.OpenWindow({
             width: '950',
             height: '700',
-            url: '/selectPerson?category=1&categoryBefore=1',
+            url: '/selectPerson?category=0',
             title: '选择联系人信息',
             closeCallBack: (data) => {
               if (data) {
-                this.other = data.name
-                this.otherID = data.id
-              }
-              else{
+                this.ownerName = data.name
+                this.ownerID = data.id
+                this.debtorType = '1'
+              }else{
+                this.unitOrPerson = this.debtorType
                 //说明没有选中需要重置类型
-                this.resetPersonOrUnit(op,'0')
               }
             }
           })
-        }
-      },
-      resetPersonOrUnit(op,personOrUnit){
-        if(op === 'i'){
-          this.personOrUnit = '0'
-        }else{
-          this.personOrUnit = '1'
         }
       },
       initData(){
@@ -202,7 +196,7 @@
           a = true
         }
         this.init({
-          url: '/finance/receivable/initForm',
+          url: '/finance/receivableDetail/initForm',
           data: params,
           all: (data)=>{
           },
@@ -216,8 +210,8 @@
 
             if(a){
               this.id=data.id,
-              this.other=data.other,
-              this.otherID=data.otherID,
+              this.ownerName=data.ownerName,
+              this.ownerID=data.ownerID,
               this.principal=data.principal,
               this.principalID=data.principalID,
               this.money=data.money,//欠款方金额
@@ -225,7 +219,8 @@
               this.receivableSourceID=data.receivableSourceID,
               this.workDate=data.workDate.slice(0,10),//欠款发生日期
               this.collectMoneyDate=data.collectMoneyDate.slice(0,10),//预计收款日期
-              this.unitOrPerson=data.unitOrPerson
+              this.unitOrPerson=data.unitOrPerson,
+              this.remark = data.remark
             }
           },
           look: (data)=>{
@@ -234,11 +229,11 @@
       },
       save(){
         let a = this.validator()
-        if(a){
+        if(a&&this.money.toString().indexOf('-')==-1){//二次验证金额不能为负数
           let params = {
             id:this.id,
-            other:this.other,
-            otherID:this.otherID,
+            ownerName:this.ownerName,
+            ownerID:this.ownerID,
             principal:this.principal,
             principalID:this.principalID,
             money:this.money,//欠款方金额
@@ -249,10 +244,11 @@
             // openDate:this.openDate+' 00:00:00',//发票开具日期
             collectMoneyDate:this.collectMoneyDate+' 00:00:00',//预计收款日期
             unitOrPerson:this.unitOrPerson,
-            fileList:this.fileList
+            fileList:this.fileList,
+            remark:this.remark
           }
           this.ajaxJson({
-            url: '/finance/receivable/save',
+            url: '/finance/receivableDetail/save',
             data: params,
             call: (data)=>{
               if(data.type === 0){

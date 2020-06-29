@@ -6,8 +6,8 @@
         <yhm-form-radio title="商品类型" :no-edit="categoryNoEdit" :select-list="categoryList" @call="motorcycleTypeRadio" :value="category" id="category"></yhm-form-radio>
         <yhm-form-text title="入库编号" no-edit="1" :value="code" id="code"></yhm-form-text>
         <yhm-form-radio title="适用车型" width="1" :no-edit="modelsNoEdit" @call="motorcycleTypeRadio" :select-list="applicableModelsList" :value="applicableModels" id="applicableModels"></yhm-form-radio>
-        <yhm-form-date title="入库日期" :max="maxWorkDate" :value="workDate" id="workDate" rule="R0000"></yhm-form-date>
-        <yhm-form-select title="入库人员" @click="selectWareHouser" @clear="clearWareHouser()" :value="wareHouser" id="wareHouser" rule="R0000"></yhm-form-select>
+        <yhm-form-date title="入库日期" :max="maxWorkDate" :value="workDate" id="workDate" @call="motorcycleTypeRadio" :no-edit="categoryNoEdit" rule="R0000" ></yhm-form-date>
+        <yhm-form-select title="入库人员" @click="selectWareHouser" @clear="clearWareHouser()" :value="wareHouser" id="wareHouser" :no-edit="categoryNoEdit" rule="R0000"></yhm-form-select>
       </template>
     </yhm-formbody>
     <yhm-form-list-show style="margin-top: 20px;" v-show="detailsShow">
@@ -18,9 +18,10 @@
       <template #listHead>
         <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
         <yhm-managerth title="商品名称"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="规格型号"></yhm-managerth>
+        <yhm-managerth title="规格型号"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="数量"></yhm-managerth>
-        <yhm-managerth style="width: 180px;" title="单价"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="拆分数量"></yhm-managerth>
+        <yhm-managerth title="单价"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="总价"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="含税单价"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="含税总价"></yhm-managerth>
@@ -31,7 +32,8 @@
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.product"></yhm-manager-td>
           <yhm-manager-td :value="item.model"></yhm-manager-td>
-          <yhm-manager-td-center :value="item.quantity+''"></yhm-manager-td-center>
+          <yhm-manager-td-rgt :value="item.quantity+item.uuStr"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.mdo+item.mdoStr"></yhm-manager-td-rgt>
           <yhm-manager-td-money :value="item.price+''"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.totalPrice+''"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.priceTax+''"></yhm-manager-td-money>
@@ -50,6 +52,7 @@
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
+        <yhm-commonbutton value="提交申请" icon="btnSave" @call="printFund(idm,state)" v-show="!empty"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
   </div>
@@ -63,68 +66,13 @@
     mixins: [formmixin],
     data () {
       return {
+        show:'false',
         quantity:'10',//数量
         price:'123',//单价
         category: '',
-        categoryList: [
-            {
-              code: "",
-              img: "",
-              num: "0",
-              showName:'精品'
-            },
-            {
-              code: "",
-              img: "",
-              num: "1",
-              showName:'零部件'
-            },
-            {
-              code: "",
-              img: "",
-              num: "2",
-              showName:'整车'
-            },
-            {
-              code: "",
-              img: "",
-              num: "3",
-              showName:'行政'
-            },
-        ],
+        categoryList: [],
         applicableModels:'',
-        applicableModelsList:[
-            {
-              code: "",
-              img: "",
-              num: "0",
-              showName:'阿尔法罗密欧'
-            },
-            {
-              code: "",
-              img: "",
-              num: "1",
-              showName:'特斯拉'
-            },
-            {
-              code: "",
-              img: "",
-              num: "2",
-              showName:'韩国现代'
-            },
-            {
-              code: "",
-              img: "",
-              num: "3",
-              showName:'异系'
-            },
-            {
-              code: "",
-              img: "",
-              num: "4",
-              showName:'所有'
-            },
-          ],
+        applicableModelsList:[],
         maxWorkDate:'',
         workDate:'',            //入库日期
         wareHouserId:'',        //入库人ID
@@ -137,9 +85,56 @@
         empty:false,
         categoryNoEdit:false,
         modelsNoEdit:false,
+        idm:'',
+        cid:'',
+        aid:'',
       }
     },
     methods:{
+      //console
+      //from内保存
+      printFund(idm,state){
+        let tipValue = ''
+        if(state=='1'){
+          tipValue = '是否提交申请?'
+        }else{
+          tipValue = '是否入库?'
+        }
+        let params = {
+          id:idm,
+          state:1,
+        }
+        this.$dialog.confirm({
+          width: 300,
+          tipValue: tipValue,
+          alertImg: 'warn',
+          okCallBack: (data)=>{
+            this.ajaxJson({
+              url: '/stock/stockIn/updateForState',
+              data: params,
+              call: (data) => {
+                if (data.type === 0) {
+                  this.$dialog.setReturnValue(this.id)
+                  this.$dialog.alert({
+                    alertImg: 'ok',
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                      this.$dialog.close()
+                      // this.initData()
+
+                    }
+                  })
+                } else {
+                  this.$dialog.alert({
+                    alertImg: 'warn',
+                    tipValue: data.message
+                  })
+                }
+              }
+            })
+          }
+        })
+      },
       motorcycleTypeRadio(){
         let params = {}
         if(this.type=='1'){
@@ -201,13 +196,17 @@
           }
         })
       },
+      //查看商品详情
       listView(item){
         this.$dialog.OpenWindow({
           width: 1050,
           height: 610,
-          url: '/stockInDetailForm?id='+item.id+'&ownerID='+this.id,
+          url: '/stockInDetailForm?id='+item.id+'&ownerID='+this.id+'&cid='+this.cid +'&aid='+this.aid,
           title: '查看入库详情',
           closeCallBack: (data) => {
+            if(data){
+              this.initData()
+            }
           }
         })
       },
@@ -215,14 +214,15 @@
         this.$dialog.OpenWindow({
           width: 1050,
           height: 610,
-          url: '/stockInDetailForm?type=1&ownerID='+this.id,
+          url: '/stockInDetailForm?type=1&ownerID='+this.id+'&cid='+this.cid +'&aid='+this.aid,
           title: '添加入库详情',
           closeCallBack: (data) => {
             if(data){
               this.initData()
               this.$dialog.setReturnValue(this.id)
+
             }
-           
+
           }
         })
       },
@@ -252,7 +252,9 @@
             code: this.code,
             state: this.state,
           }
-
+          this.cid=this.category
+          this.aid=this.applicableModels
+          this.idm=params.id
           this.ajaxJson({
             url: '/stock/stockIn/save',
             data: params,
@@ -289,6 +291,7 @@
             params = {
               id:this.id
             }
+            this.idm=params.id
           }
           this.init({
             url: '/stock/stockIn/initForm',
@@ -311,6 +314,12 @@
                 this.empty = true
                 this.modelsNoEdit = false
               }
+              for(let i in this.detailList){
+                if(this.detailList[i].mdo == '0'){
+                  this.detailList[i].mdoStr =''
+                }
+              }
+
 
             },
             add: (data)=>{
@@ -333,7 +342,6 @@
       this.setQuery2Value('type')
       this.setQuery2Value('id')
       this.initData()
-     
     }
   }
 </script>

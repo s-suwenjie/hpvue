@@ -96,7 +96,7 @@
         })
       },
       del(id){
-        this.$dialog.confirm({
+        this.$dialog.rm({
           width: 300,
           tipValue: '是否删除?',
           btnValueOk: '确定',

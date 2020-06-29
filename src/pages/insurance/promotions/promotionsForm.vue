@@ -6,7 +6,7 @@
         <yhm-form-text title="别名" :value="name" id="name"></yhm-form-text>
         <yhm-form-radio title="品牌" subtitle=""  :select-list="brandList" :value="brand" id="brand"></yhm-form-radio>
         <yhm-form-check  title="保险公司"  submit-value="insuredUnit" :select-list="insuredUnitList" :value="insuredUnit"  id="insuredUnit" rule="#" ></yhm-form-check>
-        <yhm-form-text title="优惠额度" :value="amount" id="amount"></yhm-form-text>
+        <yhm-form-text title="优惠额度%" :value="amount" id="amount"></yhm-form-text>
         <yhm-form-radio title="启用状态" subtitle=""  :select-list="enableList" :value="enable" id="enable"></yhm-form-radio>
       </template>
     </yhm-formbody>

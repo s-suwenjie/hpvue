@@ -376,10 +376,10 @@
           tableName:40
         }
         this.$dialog.confirm({
-          width: 300,
+          width: 400,
           tipValue: '是否还有其它报销,可多事由一并提交?',
           btnValueOk: '去添加',
-          btnValueCancel:'保存',
+          btnValueCancel:'提交申请',
           alert: 'warn',
           cancelCallBack: (data) => {
             this.ajaxJson({

@@ -13,7 +13,7 @@
         <tr v-for="(item,index) in content" :key="index">
           <yhm-manager-td-center :value="item.person"></yhm-manager-td-center>
           <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
-          <yhm-manager-td-center :value="item.remark"></yhm-manager-td-center>
+          <yhm-manager-td :tip="true" tip-type="r" node-class-name="m_main" :value="item.remark"></yhm-manager-td>
         </tr>
       </template>
 

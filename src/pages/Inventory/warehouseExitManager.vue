@@ -38,9 +38,6 @@
           <yhm-manager-td :value="item.code"></yhm-manager-td>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
           <yhm-manager-td :value="item.remark"></yhm-manager-td>
-<!--          <yhm-manager-td-operate>-->
-
-<!--          </yhm-manager-td-operate>-->
         </tr>
       </template>
       <!--数据空提示-->
@@ -69,6 +66,8 @@
         //   list: []
         // },
       }
+    },
+    created(){
     },
     methods:{
       add() {
@@ -103,7 +102,7 @@
           this.$dialog.OpenWindow({
             width: 1050,
             height: 520,
-            url:'/warehouseExitView?id=' + item.id,
+            url:'/approvalMessage?id=' + item.id,
             title:'查看出库信息'
           })
 

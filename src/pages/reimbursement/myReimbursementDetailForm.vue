@@ -1010,6 +1010,10 @@
             this.invoiceTypeEvent();
             this.invoiceDetails = data.invoiceList
           }
+          if(this.invoiceCategory === '3'){
+            this.noInvoice = false
+            this.invoiceDetails = data.invoiceList
+          }
           if(this.invoiceCategory === '1'){
             this.noInvoice = false
           }

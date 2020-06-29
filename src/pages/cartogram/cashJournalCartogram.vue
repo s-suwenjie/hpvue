@@ -256,6 +256,11 @@
               stack: '总量',
               data:that.netWorth,
               barWidth:20,
+              markLine : {
+                data : [
+                  {type : 'average', name: '平均值'}
+                ],
+              },
               itemStyle: {
                 //通常情况下：
                 normal:{
@@ -596,6 +601,11 @@
               stack: '总量',
               data:that.money,
               barWidth:20,
+              markLine : {
+                data : [
+                  {type : 'average', name: '平均值'}
+                ],
+              },
               itemStyle: {
                 //通常情况下：
                 normal:{

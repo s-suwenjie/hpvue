@@ -8,7 +8,7 @@
         <yhm-form-select title="计量单位" :value="unit" id="unit" @clear="clearUnit" @click="selectUnit" rule="R0000"></yhm-form-select>
         <yhm-form-radio title="类型" @call="storageTypeClick" :select-list="storageTypeList" :value="storageType" id="storageType" ></yhm-form-radio>
         <yhm-form-radio v-if="isSorck" title="适用车型" :select-list="stockTypeList" :value="stockType" id="stockType" ></yhm-form-radio>
-        <yhm-form-radio title="是否" subtitle="拆分出库" @call="splitClick" :select-list="splitList" :value="split" id="split" ></yhm-form-radio>
+        <yhm-form-radio title="是否" subtitle="拆分出库" @call="splitClick" :select-list="splitList" :value="split" id="split"></yhm-form-radio>
         <yhm-form-select title="拆分" v-if="isSplit" subtitle="出库单位" :value="splitDeliveryUnit" id="splitDeliveryUnit" @clear="clearUnit" @click="splitUnit" rule="R0000"></yhm-form-select>
       </template>
     </yhm-formbody>
@@ -82,6 +82,8 @@
         empty: true,       //规格型号为空
         isSorck:false,     //库存类型默认不显示
         isSplit:false      //拆分出库单位 默认不显示
+
+
       }
     },
     methods:{

@@ -39,6 +39,7 @@ var rule = {
     R1500:{empty:"*",emptyMessage:"不能为空",rules:"RS00004",errormessage:"格式错误"} ,  //大于等于0的所有数字
     R1600:{empty:"*",emptyMessage:"不能为空",rules:"RS00015",errormessage:"车架号为17位,请仔细核查"} ,
     R1700:{empty:"*",emptyMessage:"不能为空",rules:"RS00016",errormessage:"发动机号为7-8位,请仔细核查"} ,
+    R1800:{empty:"*",emptyMessage:"不能为空",rules:"RS00004",errormessage:"不能为负数"} ,  //不能为空并且不能为负数
 }
 
 function verify(value,ruleKey) {

@@ -6,7 +6,6 @@
           <yhm-view-control title="商品类型" content="1"  :psd="isPrettyCashOffList"></yhm-view-control>
           <yhm-view-control title="入库编号" :content="code"></yhm-view-control>
           <yhm-view-control title="车型" :content="code"></yhm-view-control>
-<!--          <yhm-view-control title="入库日期" :content="isPrettyCashOff" type="date"></yhm-view-control>-->
           <yhm-view-control  title="入库人员" v-if="noPrettyCashMoney" :content="prettyCashMoney" type="money"></yhm-view-control>
         </template>
       </yhm-view-body>
@@ -68,6 +67,7 @@
       }
     },
     methods:{
+      //console
       initData(){
         let params = {
             id:this.id

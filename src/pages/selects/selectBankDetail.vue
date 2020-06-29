@@ -84,6 +84,7 @@
         if (initValue) {
           // 页面初始化是需要的参数
           params = {
+            otherID:this.otherID,
             otherAccountID: this.otherAccountID,
             direction: this.direction,
             subjectID:this.subjectID,
@@ -93,6 +94,7 @@
         } else {
           // 页面非初始化时需要的参数
           params = {
+            otherID:this.otherID,
             otherAccountID: this.otherAccountID,
             direction: this.listCategory.value,
             subjectID:this.subjectID,
@@ -121,6 +123,7 @@
       this.setQuery2Value('otherAccountID')
       this.setQuery2Value('direction')
       this.setQuery2Value('subjectID')
+      this.setQuery2Value('otherID')
       this.setQuery2Value('selfAccountID')
       this.setQuery2Value('type')
 

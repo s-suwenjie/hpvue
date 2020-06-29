@@ -4,7 +4,8 @@
       <template #title>基本信息</template>
       <template #body>
         <yhm-view-control title="别名" :content="shortName"></yhm-view-control>
-        <yhm-view-control title="公司名称" category="2" :content="unit" ></yhm-view-control>
+        <yhm-view-control title="汇款公司名称" category="2" :content="unit" ></yhm-view-control>
+        <yhm-view-control title="回款公司名称" category="2" :content="incomeUnit" ></yhm-view-control>
         <yhm-view-control title="开票类型" category="3" :content="billingTypeVal" ></yhm-view-control>
         <yhm-view-control title="商业险种" category="3" :content="commercialVal" ></yhm-view-control>
        </template>
@@ -64,6 +65,7 @@
         tabState: [{ select: true }],
         shortName:'',
         unit:'',
+        incomeUnit:'',
         details:[],
 
         createName:'',
@@ -107,6 +109,7 @@
         call: (data)=>{
           this.shortName=data.shortName
           this.unit=data.unit
+          this.incomeUnit=data.incomeUnit
           this.commercialVal=data.commercialVal
           this.billingTypeVal=data.billingTypeVal
           this.createName=data.createName

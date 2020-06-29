@@ -15,7 +15,7 @@
         <yhm-form-radio title="政治面貌" :show="isThisUnit" :select-list="politicsStatusList" :value="politicsStatus" id="politicsStatus"></yhm-form-radio>
 <!--        <yhm-form-text title="姓名" :value="name" id="name" ref="name" @repeatverify="repeatVerifyEvent" rule="R0000"></yhm-form-text>-->
 
-        <yhm-form-zh-text-checkbox ref="name" @clickCheckBox="clickLoginNameReset" @repeatverify="repeatVerifyEvent" title="姓名" check-title="是否外籍"  :value="name" id="name"  rule="R0000" :check-value="expatriate" check-value-id="expatriate"></yhm-form-zh-text-checkbox>
+        <yhm-form-zh-text-checkbox ref="name" @clickCheckBox="clickLoginNameReset" @repeatverify="repeatVerifyEvent" title="姓名" check-title="外籍"  :value="name" id="name"  rule="R0000" :check-value="expatriate" check-value-id="expatriate"></yhm-form-zh-text-checkbox>
 
         <yhm-form-text title="手机号码" :value="phone" id="phone" ref="phone" tip="value" @repeatverify="repeatVerifyEvent" rule="R4000">
           <div v-show="variable" class="formBoxIcon" @click="aaa">
@@ -605,13 +605,12 @@
 
       },
       async save(){
-
         let a = await this.isRepeatVerifyEvent()
         let b = this.validator()
         if (this.variableType === '0'){
           this.variableType = '3'
         }
-        if (this.variableType === '3'){
+        if (this.variableType === '3'&&this.name!==''&&this.phone!==''){
           this.save()
         }else
         if(this.variableType === '1'){
@@ -804,7 +803,7 @@
               }
             },
           })
-        }else if(this.variableType = '4'){
+        }else if(this.variableType == '4'){
           this.$dialog.alert({
             alertImg: 'warn',
             tipValue: '身份证号重复不能保存',

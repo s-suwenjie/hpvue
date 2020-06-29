@@ -8,8 +8,8 @@
         <template #navigation>基本信息</template>
         <template #choose>
           <div style="padding-bottom: 20px;width: 1014px;margin: 0 auto;display: flex;">
-            <yhm-radiofilter @initData="initChooses('receivableSource')" title="收入来源" :content="receivableSourceList"></yhm-radiofilter>
-            <yhm-radiofilter @initData="initChooses('writeOffType')" title="核销类型" :content="writeOffTypeList"></yhm-radiofilter>
+<!--            <yhm-radiofilter @initData="initChooses('receivableSource')" title="收入来源" :content="receivableSourceList"></yhm-radiofilter>-->
+<!--            <yhm-radiofilter @initData="initChooses('writeOffType')" title="核销类型" :content="writeOffTypeList"></yhm-radiofilter>-->
             <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
           </div>
         </template>
@@ -22,8 +22,9 @@
           <yhm-managerth style="width:100px" title="欠款金额"></yhm-managerth>
           <yhm-managerth style="width: 150px;" title="欠款发生日期" ></yhm-managerth>
           <yhm-managerth style="width: 150px;" title="预计收款日期" ></yhm-managerth>
-          <yhm-managerth style="width: 150px;" title="账龄" ></yhm-managerth>
-          <yhm-managerth style="width: 80px;" title="状态" ></yhm-managerth>
+          <yhm-managerth style="width:60px;" title="账龄" ></yhm-managerth>
+<!--          <yhm-managerth style="width: 80px;" title="状态" ></yhm-managerth>-->
+          <yhm-managerth style="width:130px;" title="操作"></yhm-managerth>
         </template>
 
         <!--数据明细-->
@@ -31,22 +32,26 @@
           <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
             <yhm-manager-td-checkbox :value="item" @call="checkboxEvent"></yhm-manager-td-checkbox>
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-            <yhm-manager-td :value="item.other"></yhm-manager-td>
+            <yhm-manager-td :value="item.ownerName"></yhm-manager-td>
             <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
             <yhm-manager-td-date :value="item.workDate.slice(0,10)"></yhm-manager-td-date>
             <yhm-manager-td-date :value="item.collectMoneyDate.slice(0,10)" ></yhm-manager-td-date>
             <yhm-manager-td-center :value="item.accountAge+'天'"></yhm-manager-td-center>
-            <yhm-manager-td-center :value="item.isFinish=='0'?'待收款':''" ></yhm-manager-td-center>
+<!--            <yhm-manager-td-center :value="item.isFinish=='0'?'待收款':''" ></yhm-manager-td-center>-->
+            <yhm-manager-td-operate>
+              <yhm-manager-td-operate-button @click="badDebtEvent(item)" v-show="item.isFinish==0" value="坏账登记" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
+              <yhm-manager-td-operate-button @click="registerEvent(item)" v-show="item.isFinish==1" value="查看登记信息" icon="i-btn-applicationSm" color="#333"></yhm-manager-td-operate-button>
+            </yhm-manager-td-operate>
           </tr>
         </template>
-        <template #listTotalHead >
+        <template #listTotalHead>
           <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="总数" ></yhm-managerth>
           <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="金额" ></yhm-managerth>
         </template>
         <template #listTotalBody>
           <tr>
-            <yhm-manager-td-rgt @click="totalClick(item)" style="text-align: center;" v-for="(item,key) in contentTotal" :key="key" :value="item.count"></yhm-manager-td-rgt>
-            <yhm-manager-td-money @click="totalClick(item)" style="text-align: center;" v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+            <yhm-manager-td-rgt @click="totalClick(item)" style="text-align: center;" :value="contentTotal[0].count"></yhm-manager-td-rgt>
+            <yhm-manager-td-money @click="totalClick(item)" style="text-align: center;" :value="contentTotal[0].money"></yhm-manager-td-money>
           </tr>
         </template>
         <!--数据空提示-->
@@ -70,7 +75,12 @@
       return{
         receivableSourceList:{},//收入来源
         writeOffTypeList:{},//核销类型
-        contentTotal:[],
+        contentTotal:[
+          {
+            count:'',
+            money:''
+          }
+        ],
         backupsTotal:[],//备份的汇总数据
         name:'',
         content:[],
@@ -78,6 +88,7 @@
         isLeftID:false,
         isRightID:false,
         isSelected:false,
+        lastData:'',
         pager: {
           total: 0, // 总条数
           pageSize: 5, // 每页条数
@@ -88,22 +99,49 @@
       }
     },
     methods:{
+      //查看坏账登记信息
+      registerEvent(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '360',
+          url: '/receivableBadDebtView?id='+item.id,
+          title: '查看坏账登记信息',
+          closeCallBack: (data) => {
+            if (data) {
+              this.initData(false)
+            }
+          }
+        })
+      },
+      //坏账登记
+      badDebtEvent(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '600',
+          url: '/receivableBadDebtForm?balance='+ item.money+'&ownerID='+item.id,
+          title: '坏账登记',
+          closeCallBack: (data) => {
+            if (data) {
+              this.initData(false)
+            }
+          }
+        })
+      },
       //打开选中信息
       selectedList(){
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '750',
-          url: '/receivableForm?type=1',
-          title: '查看应收账款',
+          height: '370',
+          url: '/receivableView?type=1&id=1',
+          title: '查看应收账款详情',
           closeCallBack: (data) => {
             if (data) {
-              this.initPageData(false)
+              this.initData(false)
             }
           }
         })
       },
       checkboxEvent(selectValue){//用户点击选中信息
-        console.log(selectValue  )
         let arr = []
         let s = 0;
         if(selectValue.length!='0'){
@@ -131,12 +169,12 @@
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '700',
-          url: '/receivableForm?ID='+item.id,
-          title: '编辑应收账款',
+          height: '370',
+          url: '/receivableView?id='+item.id,
+          title: '查看应收账款详情',
           closeCallBack: (data) => {
-            if (data) {
-              this.initPageData(false)
+            if(data){
+              this.initData(false)
             }
           }
         })
@@ -156,7 +194,7 @@
           this.isRightID = false
           this.isLeftID = false
         }
-        let a =selectList.indexOf(this.otherID)
+        let a =selectList.indexOf(this.ownerID)
         if(a!=-1){//如果当前数据id不在全部id中的最前或者最后时 显示左右按钮
           if(a!=0||a!=selectList.length-1){
             this.isLeftID = true
@@ -183,9 +221,9 @@
       switchover (){
         if(this.type=='1'){//等于1的时候代表是从选中信息进来的
           let selectList = JSON.parse(sessionStorage.receivablesSelectValue)//选中的数据的id
-          this.otherID=selectList[this.index]
+          this.ownerID=selectList[this.index]
         }else{
-          this.setQuery2Value('otherID')
+          this.setQuery2Value('ownerID')
         }
         this.initData()
       },
@@ -193,12 +231,12 @@
         let params = {}
         if (initValue) {
           params = {
-            otherID:this.otherID
+            ownerID:this.ownerID
           }
         } else {
           params = {
             init:true,
-            otherID:this.otherID,
+            ownerID:this.ownerID,
             receivableSource:this.receivableSourceList.value,
             writeOffType:this.writeOffTypeList.value
           }
@@ -206,13 +244,14 @@
 
         this.init({
           initValue:initValue,
-          url: '/finance/receivable/getManager',
+          url: '/finance/receivableDetail/getManager',
           data:params,
           all:(data) =>{
             this.receivableSourceList = data.receivableSourceList
             this.writeOffTypeList = data.writeOffTypeList
             this.contentTotal = data.total
             this.backupsTotal = data.total
+            this.lastData = data.lastData
           },
           init:(data)=>{
 

@@ -11,7 +11,7 @@
         </template>
         <template #choose>
           <div v-show="choose" class="buttonBody mptZero">
-            <yhm-radiofilter @initData="initChoose()" title="状态" :content="listCategory"></yhm-radiofilter>
+            <yhm-radiofilter @initData="initChoose()" title="库位类型" :content="listCategory"></yhm-radiofilter>
           </div>
         </template>
 
@@ -19,9 +19,8 @@
         <template #listHead>
           <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
           <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-          <yhm-managerth style="width: 150px;" title="库位类型" value="name" ></yhm-managerth>
-          <yhm-managerth style="width: 200px" title="库位名称" value="registrationNumber"></yhm-managerth>
-          <yhm-managerth title="操作"></yhm-managerth>
+          <yhm-managerth style="width: 250px;" title="库位类型"></yhm-managerth>
+          <yhm-managerth  title="库位名称"></yhm-managerth>
         </template>
 
         <!--数据明细-->
@@ -31,7 +30,6 @@
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
             <yhm-manager-td-psd :list="listCategory.list" :value="item.category"></yhm-manager-td-psd>
             <yhm-manager-td-center :value="item.name"></yhm-manager-td-center>
-            <yhm-manager-td-operate></yhm-manager-td-operate>
           </tr>
         </template>
 
@@ -84,9 +82,9 @@
           url:'/stockPositionView?id=' + item.id,
           title:'查看库位信息',
           closeCallBack:(data) =>{
+            this.initPageData(false)
             if (data) {
               this.lastData = data   //最后添加一条数据给与动态闪烁
-              this.initPageData(false)
               // /!*false->非初始化=>!import  true->初始化*!/
             }
           }

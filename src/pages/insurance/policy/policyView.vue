@@ -288,7 +288,7 @@
 
 
             for(let i in this.listPolicy){
-              sum +=  parseFloat(this.listPolicy[i].bankMoney)
+              sum = accAdd(parseFloat(this.listPolicy[i].bankMoney),sum)
             }
             this.sumMoney = sum  + '' //计算实际金额
 

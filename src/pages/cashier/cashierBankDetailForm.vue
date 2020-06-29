@@ -64,6 +64,7 @@
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="拨付资金"   color="#fff" bg-color="#f00" :flicker="true" icon="btnSave" @call="save()"></yhm-commonbutton>
+
       </template>
     </yhm-formoperate>
 
@@ -505,8 +506,8 @@
                     this.ajaxJson({
                       url: '/Fin/modifyBankDetailPayment',
                       data: dataParams,
-                      call: (data) => {
-                        if(data.type === 0){
+                      call: (dataParams) => {
+                        if(dataParams.type === 0){
                         }else{
                           //第一次请求失败
                           // this.$dialog.alert({
@@ -541,6 +542,7 @@
           })
         }
       },
+
     },
 
     created () {

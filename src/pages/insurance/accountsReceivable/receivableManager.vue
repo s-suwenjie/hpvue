@@ -9,7 +9,9 @@
           <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()" category="one"></yhm-commonbutton>
           <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
           <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
-          <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+          <yhm-commonbutton value="打开选中来源信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
+<!--          :show="isSelected"-->
+<!--          <yhm-commonbutton value="查看测试登记信息页面" icon="i-btn-applicationSm" @call="selectBadDebtList" category="three"></yhm-commonbutton>-->
         </template>
         <template #choose>
           <div v-show="choose" class="buttonBody mptZero">
@@ -30,7 +32,7 @@
           <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
             <yhm-manager-td-checkbox :value="item" @call="checkboxEvent"></yhm-manager-td-checkbox>
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-            <yhm-manager-td :value="item.other" @click="skiPdetails(item)"></yhm-manager-td>
+            <yhm-manager-td :value="item.belong" @click="skiPdetails(item)"></yhm-manager-td>
             <yhm-manager-td-center :value="item.certificateNo"></yhm-manager-td-center>
             <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
           </tr>
@@ -42,8 +44,8 @@
         </template>
         <template #listTotalBody>
           <tr>
-            <yhm-manager-td-rgt @click="totalClick(item)" style="text-align: center;" v-for="(item,key) in contentTotal" :key="key" :value="item.count"></yhm-manager-td-rgt>
-            <yhm-manager-td-money @click="totalClick(item)" style="text-align: center;" v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+            <yhm-manager-td-rgt @click="totalClick(item)" style="text-align: center;" :value="contentTotal[0].count"></yhm-manager-td-rgt>
+            <yhm-manager-td-money @click="totalClick(item)" style="text-align: center;"  :value="contentTotal[0].money"></yhm-manager-td-money>
           </tr>
         </template>
         <!--数据空提示-->
@@ -60,19 +62,21 @@
 
 <script>
   import { managermixin } from '@/assets/manager.js'
-  // import {formatDate } from '@/assets/common.js'
-
   export default {
     name: 'receivableManager',
     mixins: [managermixin],
     data(){
       return{
         unitOrPersonList:{},//收入来源
-        contentTotal:[],
+        contentTotal:[
+          {
+            count:'',
+            money:''
+          }
+        ],
         backupsTotal:[],//备份的汇总数据
         name:'',
-        content:[],
-
+        lastData:''
       }
     },
     methods:{
@@ -128,15 +132,15 @@
           this.contentTotal = this.backupsTotal
           this.isSelected = false
         }
-        sessionStorage.receivablesSelectValue = JSON.stringify(selectValue)
+        sessionStorage.receivableSourceManagerView = JSON.stringify(selectValue)
       },
-      //打开选中信息
-      selectedList(){
+      //打开坏账登记列表
+      selectBadDebtList(){
         this.$dialog.OpenWindow({
           width: '1050',
           height: '550',
-          url: '/receivableManagerView?type=1',
-          title: '查看应收账款',
+          url: '/receivableBadDebtView',
+          title: '查看坏账登记信息',
           closeCallBack: (data) => {
             if (data) {
               this.initPageData(false)
@@ -144,40 +148,28 @@
           }
         })
       },
-      // //计算账龄
-      // dateDiff(sDate2) {
-      //   let sDate1 = formatDate(new Date())
-      //   //sDate1和sDate2的格式为xxxx-xx-xx
-      //   let aDate,oDate1,oDate2,iDays
-      //   //转换为xx-xx-xxxx格式
-      //   aDate = sDate1.split("-")
-      //   oDate1 = new Date(aDate[1] + "," + aDate[2] + "," + aDate[0])
-      //   aDate = sDate2.split("-")
-      //   oDate2 = new Date(aDate[1] + "," + aDate[2] + "," + aDate[0])
-      //   //把相差的毫秒数转换为天数
-      //   iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24 )
-      //   return iDays
-      // },
-      // payment(item){
-      //   this.$dialog.OpenWindow({
-      //     width: '1050',
-      //     height: '700',
-      //     url: '/receivableBankDetailForm',
-      //     title: '添加收支明细',
-      //     closeCallBack: (data) => {
-      //       if (data) {
-      //         this.initPageData(false)
-      //       }
-      //     }
-      //   })
-      // },
-      listView(item){
-        console.log( item )
+      //打开选中来源信息
+      selectedList(){
+        let id = JSON.parse(sessionStorage.receivableSourceManagerView)[0].id//选中的数据的id
+
         this.$dialog.OpenWindow({
           width: '1050',
           height: '550',
-          url: '/receivableManagerView?otherID='+item.otherID,
-          title: '查看应收账款',
+          url: '/receivableCenterView?type=1&id='+id,//receivableSourceManagerView
+          title: '查看来源信息列表',
+          closeCallBack: (data) => {
+            if (data) {
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      listView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '550',
+          url: '/receivableCenterView?id='+item.id,
+          title: '查看来源信息列表',
           closeCallBack: (data) => {
             if (data) {
               this.initPageData(false)
@@ -211,16 +203,18 @@
         }
         this.init({
           initValue:initValue,
-          url: '/finance/receivable/getManagerAll',
+          url: '/finance/receivableCenter/getManager',
           data:params,
           all:(data) =>{
+            this.selectValue=[]
             this.contentTotal = data.total
             this.backupsTotal = data.total
+            this.lastData = data.lastData
           },
           init:(data)=>{
             //初始化时需要执行的代码
             // 这边初始化筛选信息
-            this.unitOrPersonList = data.unitOrPersonList
+            this.unitOrPersonList = data.unitOrPersonPsd
 
           }
         })

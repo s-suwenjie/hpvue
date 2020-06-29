@@ -94,22 +94,23 @@
               <yhm-managerth v-if="isReal" style="width: 100px;" before-color="#49a9ea" title="" before-title="实时盈亏总额"></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="保费合计(优惠前)" ></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="实收金额(优惠后)" ></yhm-managerth>
-            </tr>
+              <yhm-managerth  style="width: 100px;" width="100px" title="" :before-title="oldTotal"></yhm-managerth>
+           </tr>
             </thead>
             <tbody>
             <tr>
               <yhm-manager-td-money v-if="isActual"  :value="contentTotal[0].money"  :style="{'color':contentTotal[0].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
               <yhm-manager-td-money v-if="isReal" :value="contentTotal[1].money"  :style="{'color':contentTotal[1].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
-              <yhm-manager-td-money  :value="contentTotal[2].money"  :style="{'color':contentTotal[2].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
-              <yhm-manager-td-money  :value="contentTotal[3].money"  :style="{'color':contentTotal[3].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
-
+              <yhm-manager-td-money  :value="contentTotal[2].money"  ></yhm-manager-td-money>
+              <yhm-manager-td-money  :value="contentTotal[3].money" style="color: #0909F7"></yhm-manager-td-money>
+              <yhm-manager-td-money    :value="oldMoney"></yhm-manager-td-money>
             </tr>
             <tr>
               <yhm-manager-td-rgt v-if="isActual" :value="contentTotal[0].count"></yhm-manager-td-rgt>
               <yhm-manager-td-rgt v-if="isReal" :value="contentTotal[1].count"></yhm-manager-td-rgt>
               <yhm-manager-td-rgt  :value="contentTotal[2].count"></yhm-manager-td-rgt>
               <yhm-manager-td-rgt  :value="contentTotal[3].count"></yhm-manager-td-rgt>
-
+              <yhm-manager-td-rgt  :value="oldMoney"></yhm-manager-td-rgt>
             </tr>
             </tbody>
           </table>
@@ -131,6 +132,10 @@
     mixins: [managermixin],
     data(){
       return{
+        oldTotal: '比前一天(环比)',
+
+        oldMoney: '',
+
         salsesmanIDMenu:['筛选当前业务员'],
         insuredUnitBefore:'0',// 默认选择状态为可以选择，1为不可以选择
         listInsuredUnit:{

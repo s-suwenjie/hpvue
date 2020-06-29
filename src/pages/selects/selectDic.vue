@@ -52,6 +52,7 @@
         </template>
         <template v-if="getName(['91'])">
           <yhm-managerth title="车型"></yhm-managerth>
+          <yhm-managerth title="排量"></yhm-managerth>
         </template>
         <template v-if="getName(['92'])">
           <yhm-managerth title="车辆版本"></yhm-managerth>
@@ -100,6 +101,9 @@
           </template>
           <template v-if="getName(['93'])">
             <yhm-manager-td :value="item.value1"></yhm-manager-td>
+          </template>
+          <template v-if="getName(['91'])">
+            <yhm-manager-td :value="item.value11"></yhm-manager-td>
           </template>
 
         </tr>

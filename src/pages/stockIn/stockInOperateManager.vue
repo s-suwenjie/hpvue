@@ -14,7 +14,6 @@
           <yhm-radiofilter @initData="initChoose('categoryUnit')" title="商品类型"  :content="listCategory"></yhm-radiofilter>
           <yhm-radiofilter @initData="initChoose('applicableModels')" title="规格型号" :content="applicableModelsPsd"></yhm-radiofilter>
           <yhm-radiofilter all="0" @initData="initChoose('state')" title="状态" :content="state"></yhm-radiofilter>
-
         </div>
       </template>
       <!--数据表头-->
@@ -22,9 +21,10 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="入库人员"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="库存类型" value="applicableModels" ></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="商品类型"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="库存类型"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="入库时间" value="workDate" ></yhm-managerth>
-        <yhm-managerth  title="入库编号" value="code"></yhm-managerth>
+        <yhm-managerth  title="入库编号"></yhm-managerth>
         <yhm-managerth style="width: 200px" title="操作"></yhm-managerth>
       </template>
       <!--数据明细-->
@@ -34,13 +34,14 @@
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td-center :value="item.wareHouser"></yhm-manager-td-center>
+          <yhm-manager-td-center :value="item.category"></yhm-manager-td-center>
 
           <yhm-manager-td-psd :value="item.applicableModels" :list="applicableModelsList"></yhm-manager-td-psd>
 
           <yhm-manager-td-date :value="item.workDate.slice(0,10)"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button @click="printFund(item,'2')" :no-click="item.state == '1'?false:true"  value="入库" icon="i-btn-applicationSm" :color="item.state == '1'?'#8e08e3':'#333'"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="printFund(item)" :no-click="item.state == '1'?false:true"  value="入库" icon="i-btn-applicationSm" :color="item.state == '1'?'#8e08e3':'#333'"></yhm-manager-td-operate-button>
 
           </yhm-manager-td-operate>
           <!--<yhm-manager-td-money :value="item.money" :before-icon="item.subjectList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-money>-->
@@ -67,9 +68,27 @@
     data () {
       return{
         listCategory: {
-          value: '',
-          list: [],
-
+          value: '3',
+          list:[
+            {
+              code:'',
+              img:'',
+              num:'1',
+              showName:'进行中'
+            },
+            {
+              code:'',
+              img:'',
+              num:'2',
+              showName:'已完成'
+            },
+            {
+              code:'',
+              img:'',
+              num:'3',
+              showName:'全部'
+            },
+          ]
         },
         state:{
           value:'3',
@@ -95,64 +114,51 @@
           ]
         },
         applicableModelsPsd:{
-          value:'',
-          list:[]
+          value:'3',
+          list:[
+            {
+              code:'',
+              img:'',
+              num:'1',
+              showName:'进行中'
+            },
+            {
+              code:'',
+              img:'',
+              num:'2',
+              showName:'已完成'
+            },
+            {
+              code:'',
+              img:'',
+              num:'3',
+              showName:'全部'
+            },
+          ]
         },
         applicableModelsList:[]
       }
     },
     methods:{
-      printFund(item,state){
-        let tipValue = ''
-        if(state=='1'){
-          tipValue = '是否提交申请?'
-        }else{
-          tipValue = '是否入库?'
-        }
-        let params = {
-          id:item.id,
-          state:state
-        }
-        this.$dialog.confirm({
-          width: 300,
-          tipValue: tipValue,
-          alertImg: 'warn',
-          okCallBack: (data)=>{
-            this.ajaxJson({
-              url: '/stock/stockIn/updateForState',
-              data: params,
-              call: (data) => {
-                if (data.type === 0) {
-                  this.$dialog.setReturnValue(this.id)
-                  this.$dialog.alert({
-                    alertImg: 'ok',
-                    tipValue: data.message,
-                    closeCallBack: () => {
-                      // this.$dialog.close()
-                      this.initData()
-                    }
-                  })
-                } else {
-                  this.$dialog.alert({
-                    alertImg: 'warn',
-                    tipValue: data.message
-                  })
-                }
-              }
-            })
+      //console
+      printFund(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url:'/stockinLocationFrom?id='+item.id,
+          title:'添加库位信息',
+          closeCallBack:(data) =>{
+            if (data) {
+              this.initPageData(false)
+            }
           }
         })
       },
       listView(item){
         let url = ''
         let title = ''
-        // if(item.state!=='0'){
-        //   url = '/stockInView?id=' + item.id
-        //   title = '查看入库信息'
-        // }else{
-          url = '/stockInForm?id=' + item.id
-          title = '编辑入库单'
-        // }
+          url = '/stockOperateView?id=' + item.id
+          title = '查看入库单'
         this.$dialog.OpenWindow({
           width: '1050',
           height: '690',
@@ -180,6 +186,7 @@
             category: this.listCategory.value,
             applicableModels:this.applicableModelsPsd.value,
             init: false,
+            searchStr:this.searchStr,
             stateStr: this.state.value
           }
         }
@@ -190,6 +197,9 @@
           all: (data) => {
             // 不管是不是初始化都需要执行的代码
             this.content = data.content
+            for (let i in this.content){
+                this.content[i].category=data.categoryPsd.list[this.content[i].category].showName
+            }
           },
           init: (data) => {
             // 初始化时需要执行的代码

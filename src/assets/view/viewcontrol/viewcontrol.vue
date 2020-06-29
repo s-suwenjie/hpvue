@@ -2,7 +2,7 @@
     <div class="v_control" :class="[getWidthClass]">
       <div class="v_title" @click="clickEvent">{{title}}：</div>
 
-      <div v-if="getDefault" @click="clickEvent" class="v_content" :class="{rmb:getMoney,fs12b:getMoney}" :style="{color:colorValue,fontSize: fontSize + 'px'}" v-html="Show ? Show:'-----'"></div>
+      <div v-if="getDefault" @click="clickEvent" class="v_content" :class="{rmb:getMoney,fs12b:getMoney}" :style="{color:colorValue,fontSize: fontSize + 'px'}" v-html="ShowValue(content) ? ShowValue(content):'-----'"></div>
       <span :class="fontIcon" @click="iconClick" v-if="fontIcon!==''" :style="{fontSize:iconFontSize+'px',color:iconColor}" style="display: flex;align-items: center;"></span>
 
       <div v-if="getFiles" class="v_content">
@@ -115,7 +115,6 @@
       getSmShow(){
         let fir = this.content.indexOf('_') + 1;
         let last = this.content.indexOf('.');
-
         return this.content.substring(fir, last)
       },
       getMoney(){
@@ -136,60 +135,61 @@
       getDateMoney(){
         return this.type === 'date-money'
       },
-      Show(){
-        if(this.type === 'text'){
-          if(this.psd.length === 0){
-            return this.content
-          }
-          else{
-            let result = ''
-            if(typeof this.content === 'string') {
-              for (let i = 0; i < this.psd.length; i++) {
-                if (this.psd[i].num === this.content) {
-                  result = this.psd[i].showName
-                  if(this.color === '#333'){
-                    if(this.psd[i].img.indexOf('#') === 0){
-                      this.colorValue = this.psd[i].img
+      ShowValue(){
+        return function (content) {
+
+
+          if (this.type === 'text') {
+            if (this.psd.length === 0) {
+              return content
+            } else {
+              let result = ''
+              if (typeof content === 'string') {
+                for (let i = 0; i < this.psd.length; i++) {
+                  if (this.psd[i].num === content) {
+                    result = this.psd[i].showName
+                    if (this.color === '#333') {
+                      if (this.psd[i].img.indexOf('#') === 0) {
+                        this.colorValue = this.psd[i].img
+                      }
+                      if (this.psd[i].code.indexOf('#') === 0) {
+                        this.colorValue = this.psd[i].code
+                      }
                     }
-                    if(this.psd[i].code.indexOf('#') === 0){
-                      this.colorValue = this.psd[i].code
-                    }
-                  }
-                  break
-                }
-              }
-            }
-            if(typeof this.content === 'object'){
-              for(let j = 0; j < this.psd.length; j++){
-                for(let k = 0; k < this.content.length; k++){
-                  if(this.psd[j].num === this.content[k]){
-                    result += this.psd[j].showName + '、'
+                    break
                   }
                 }
               }
-              if(result.length > 0){
-                result = result.substring(0, result.length-1)
+              if (typeof content === 'object') {
+                for (let j = 0; j < this.psd.length; j++) {
+                  for (let k = 0; k < content.length; k++) {
+                    if (this.psd[j].num === content[k]) {
+                      result += this.psd[j].showName + '、'
+                    }
+                  }
+                }
+                if (result.length > 0) {
+                  result = result.substring(0, result.length - 1)
+                }
+                return result
               }
               return result
             }
-            return result
-          }
-        } else if(this.type === 'date'){
-          if(new Date(this.content).getTime() === new Date('1900-01-01').getTime()){
-            return ''
-          }
+          } else if (this.type === 'date') {
+            if (new Date(content).getTime() === new Date('1900-01-01').getTime()) {
+              return ''
+            }
 
-          if(this.getWeekend(this.content)) {
-            return this.content + '<span class="ml5 weekend">' + this.getWeek(this.content)  + '</span>'
+            if (this.getWeekend(content)) {
+              return content + '<span class="ml5 weekend">' + this.getWeek(content) + '</span>'
+            } else {
+              return content + '<span class="ml5">' + this.getWeek(content) + '</span>'
+            }
+          } else if (this.type === 'money') {
+            return tenThousandFormatHtml(content)
           }
-          else{
-            return this.content + '<span class="ml5">' + this.getWeek(this.content)  + '</span>'
-          }
+          return content
         }
-        else if(this.type === 'money'){
-          return tenThousandFormatHtml(this.content)
-        }
-        return this.content
       },
       getWidthClass(){
         if(this.category === '2'){

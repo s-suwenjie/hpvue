@@ -483,9 +483,9 @@
     created () {
       // this.initPageData(true)
 
-      setTimeout(()=>{
+      // setTimeout(()=>{
         this.initWarnData();
-      },0)
+      // },0)
 
     },
     watch:{

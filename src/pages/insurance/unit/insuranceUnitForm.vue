@@ -4,7 +4,9 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-text title="别名" :value="shortName" id="shortName" rule="R0000"></yhm-form-text>
-        <yhm-form-select title="保险公司" @clear="clearUnit" @click="selectUnit" :value="unit"  id="unit" rule="R0000"></yhm-form-select>
+        <yhm-form-select title="汇款公司" @clear="clearUnit" @click="selectUnit" :value="unit"  id="unit" rule="R0000"></yhm-form-select>
+        <yhm-form-select title="回款公司" subtitle=""  @click="selectIncomeUnit" :value="incomeUnit"  id="incomeUnit" rule="R0000"></yhm-form-select>
+
         <yhm-form-radio  title="开票状态"  width="1" :select-list="billingTypeList" :value="billingType" id="billingType"></yhm-form-radio>
         <yhm-form-select-insurance title="商业险种" :psd="commercialList" :value="commercial"  id="commercial" rule="#"></yhm-form-select-insurance>
       </template>
@@ -77,6 +79,8 @@
         billingTypeList:[], //开票类型
         billingType:'',
         vipRate:'',
+        incomeUnit:'',
+        incomeUnitID:'',
       }
     },
     methods : {
@@ -105,6 +109,20 @@
                   item.vipRate=data.vipRate
                 }
               })
+            }
+          }
+        })
+      },
+      selectIncomeUnit(){
+        this.$dialog.OpenWindow({
+          width: '950',
+          height: '700',
+          url: '/selectUnit?category=1&categoryBefore=1',
+          title: '选择保险公司',
+          closeCallBack: (data) => {
+            if (data) {
+              this.incomeUnitID = data.id
+              this.incomeUnit = data.name
             }
           }
         })
@@ -159,6 +177,7 @@
             let params = {
               id: this.id,
               unitID:this.unitID,
+              incomeUnitID:this.incomeUnitID,
               shortName:this.shortName,
               commercial:this.commercial,
               billingType:this.billingType
@@ -267,6 +286,8 @@
           this.shortName=data.shortName
           this.unitID=data.unitID
           this.unit=data.unit
+          this.incomeUnitID=data.incomeUnitID
+          this.incomeUnit=data.incomeUnit
           this.saveList=data.details
           if (this.saveList.length === '0'){
             this.empty=true

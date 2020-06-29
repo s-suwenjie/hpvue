@@ -37,7 +37,6 @@
         }
         else{
           selectValue[data.id] = null
-          console.log(selectValue,index)
           selectValue.splice(index,1)
         }
         return selectValue

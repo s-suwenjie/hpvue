@@ -10,7 +10,9 @@
         <yhm-form-select title="我方" subtitle="账户信息" @click="selectaccount" :value="selfAccount" v-if="isSelfAcc" id="selfAccount" width="1" rule="R0000" tip="value"></yhm-form-select>
         <yhm-form-text title="我方" subtitle="账户信息" :value="selfAccount" v-if="!isSelfAcc" id="selfAccount" rule="R0000" no-edit="1"></yhm-form-text>
         <yhm-form-text title="当前余额" :value="message" id="message" no-edit="1"></yhm-form-text>
-        <yhm-form-text title="交易金额" :value="money" ref="money" id="money" rule="R3000" @input="calcTrAfterMoney" ></yhm-form-text>
+<!--        <yhm-form-text title="交易金额" :value="money" ref="money" id="money" rule="R3000" @input="calcTrAfterMoney" >-->
+<!--        </yhm-form-text>-->
+        <yhm-form-zh-text-more-checkbox @clickCheckBox="clickCheckBoxEvent" title="金额" :value="money" id="money" :check-value="moneyCheck" check-value-id="moneyCheck" :check-list="moneyCheckList" @input="calcTrAfterMoney"></yhm-form-zh-text-more-checkbox>
         <yhm-form-text title="交易" :value="balance" subtitle="后余额" id="balance" no-edit="1"></yhm-form-text>
         <yhm-form-radio :show="clickB && isCauseIn" title="事由类型" @call="subjectTypeEvent" :select-list="subjectTypeList" :value="subjectType" id="subjectType" :no-edit="isCause"></yhm-form-radio>
         <div class="buttomA" v-show="contentTaA">
@@ -51,7 +53,7 @@
         <yhm-form-select :show="contentTaB && isCauseIn" title="事由" @click="selectCause" :value="subject" id="subject" width="1" rule="R0000"></yhm-form-select>
         <yhm-form-textarea title="备注" :value="remark" id="remark"></yhm-form-textarea>
 
-        <yhm-form-drop-down-select title="对方" subtitle="账户类型" width="1" @select="selectaccountB" :no-click="isOtherAcc" no-edit="1" :select-list="otherAccountTypeList" :selectValue="otherAccountType" selectid="otherAccountType" :value="otherAccount" id="otherAccount" ></yhm-form-drop-down-select>
+        <yhm-form-drop-down-select title="对方" subtitle="账户类型" width="1" @select="selectaccountB" :no-click="isOtherAcc" no-edit="1" :select-list="otherAccountTypeList" :selectValue="otherAccountType" selectid="otherAccountType" :value="otherAccount" id="otherAccount" rule="R0000"></yhm-form-drop-down-select>
         <!--        <yhm-form-drop-down-select title="事件类型" width="1" @select="selectCause" :select-list="categoryList" :selectValue="category" selectid="category" :value="cause" id="cause" rule="R0000"></yhm-form-drop-down-select>-->
 
         <yhm-form-radio title="有无" subtitle="手续费" :select-list="feeTypepsd" :value="feeType" id="feeType" rule="R0000" @call="feeTypeA"></yhm-form-radio>
@@ -77,6 +79,7 @@
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="收款" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
+        <yhm-commonbutton value="收款并打印收据" icon="btnSave" @call="btnSave()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
 
@@ -93,6 +96,8 @@
     mixins: [formmixin],
     data () {
       return {
+        moneyCheck:"",
+        moneyCheckList:[{name:"向上取整",value:"0"},{name:"向下取整",value:"1"}],
         ownerID: '',
         ownerSys: '',//收支分类
         ownerSysList: [],
@@ -166,6 +171,13 @@
       }
     },
     methods: {
+      clickCheckBoxEvent(){
+        if (this.moneyCheck=='0'){
+          this.money=Math.ceil(parseFloat(this.money))+''
+        }else {
+          this.money=Math.floor(parseFloat(this.money))+''
+        }
+      },
       lookImg(){
         if(this.img){
           this.tipShow=true;
@@ -462,6 +474,9 @@
             closeCallBack: (data) => {
               if(data){
                 this.otherAccount = data.publicAccountExplain
+                if (this.otherAccount==''){
+                  this.otherAccount = data.account
+                }
                 this.otherAccountID = data.id
               }
             }
@@ -581,6 +596,137 @@
                           })
 
                          // this.$dialog.setReturnValue(this.id) //向父级页面id值
+                          this.$dialog.alert({
+                            tipValue: data.message,
+                            closeCallBack: () => {
+                              this.$dialog.setReturnValue('1')
+                              this.$dialog.close();
+                            }
+                          })
+                        } else {
+                          this.$dialog.alert({
+                            alertImg: 'error',
+                            tipValue: data.message,
+                            closeCallBack: () => {
+                            }
+                          })
+                        }
+                      }
+                    })
+                  }else{
+                    //第一次请求失败
+                    this.$dialog.alert({
+                      alertImg: 'error',
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                      }
+                    })
+                  }
+                }
+              })
+            }
+          })
+        }
+      },
+      btnSave(){
+        if(this.img){
+          let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.detail.length, 1000)))
+          let item = {
+            id: guid(),
+            insertDate: formatTime(insertDate),
+            ownerID: this.id,
+            category:'',
+            tag: 'bankDetail',
+            showName:this.img,
+            storeName:this.img,
+            suffix: (this.img.split('.')[(this.img.split('.').length)-1]).toUpperCase(),
+          }
+          this.bankDetailImg.push(item)
+        }
+        if (this.validator()) {
+          let params = {
+            id: this.id,
+            ownerID: this.bankID,
+            ownerSys: this.ownerSys, //收支分类
+            brand: this.brand,//品牌
+            direction: this.direction,//收支方向
+            cccurDate: this.cccurDate,//交易日期
+            selfAccountID: this.selfAccountID,//我方ID账户信息
+            selfAccount: this.selfAccount,//我方账户信息
+            money: this.money,//交易金额额
+            balance: this.balance,//交易后余额
+            subjectType: this.subjectType,//事由类型
+            subjectID: this.subjectID,//事由ID
+            subject: this.subject,//事由
+            otherName: this.otherName,//对方账户说明
+            otherAccountType: this.otherAccountType,//对方账户类型
+            otherID:this.otherID,//对方公司ID
+            otherAccountID: this.otherAccountID,//对方账户ID
+            otherAccount: this.otherAccount,//对方账户类型
+            remark: this.remark,//备注
+            feeType: this.feeType,//有无手续费
+            fee: this.fee,//手续费金额
+            voucherNo: this.voucherNo,//凭证号
+            files: this.fileList,//上传文件
+            useMoney: this.autoCalcIpt,//多事由计算金额
+            subjectList: this.detail,//多事由
+            bankDetailImg:this.bankDetailImg,//上传凭证集合
+          }
+          this.$dialog.confirm({
+            alertImg: 'warn',
+            btnValueOk: '确定',
+            tipValue: '确定收款(客户)?',
+            okCallBack: ()=>{
+
+              this.ajaxJson({
+                url: '/Fin/vueBankDetailSave',
+                data: params,
+                call: (data) => {
+                  if(data.type === 0){
+
+                    let dataParams = {
+                      id:this.bankID,
+                      ownerID:this.bankOwnerID,
+                      money:this.money
+                    }
+                    this.ajaxJson({
+                      url: '/Fin/modifyBankDetailClueState',
+                      data: dataParams,
+                      loading: '0',
+                      call: (data) => {
+                        if (data.type === 0) {
+                          let paramsData={
+                            id:this.bankID
+                          }
+                          this.ajaxJson({
+                            url: '/Fin/bankDetailPrintingReceiptVue',
+                            data: paramsData,
+                            call: (receipt) => {
+                              if (receipt.type === 0) {
+                                window.open(receipt.html)
+                              }else if(receipt.type === 1){
+                                this.$dialog.alert({
+                                  alertImg:'warn',
+                                  tipValue: receipt.message
+                                })
+                              }
+                            }
+                          })
+                          //添加第三方 支付方式表
+                          let dataMethod={
+                            id:guid(),
+                            ownerID:this.id,
+                            paymentMethod:this.paymentMethod,
+                            slipNumber:this.slipNumber,
+                          }
+                          this.ajaxJson({
+                            url:'/Fin/paymentMethodSave',
+                            data:dataMethod,
+                            closeCallBack: () => {
+                            }
+                          })
+
+                          // this.$dialog.setReturnValue(this.id) //向父级页面id值
                           this.$dialog.alert({
                             tipValue: data.message,
                             closeCallBack: () => {

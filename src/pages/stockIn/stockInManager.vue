@@ -6,6 +6,7 @@
       <!--操作区-->
       <template #operate>
         <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
+        <yhm-commonbutton value="入库单打印"  icon="btnAdd" :flicker="true" @call="shuibian" category="one"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
       </template>
@@ -23,19 +24,20 @@
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="入库人员"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="库存类型" value="applicableModels" ></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="商品类型"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="库存类型"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="入库时间" value="workDate" ></yhm-managerth>
-        <yhm-managerth  title="入库编号" value="code"></yhm-managerth>
+        <yhm-managerth  title="入库编号"></yhm-managerth>
         <yhm-managerth style="width: 200px" title="操作"></yhm-managerth>
       </template>
       <!--数据明细-->
       <template #listBody>
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content"
             :key="index">
-          <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
+          <yhm-manager-td-checkbox :value="item" @call="check(selectValue,index)"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td-center :value="item.wareHouser"></yhm-manager-td-center>
-
+          <yhm-manager-td-center :value="item.category"></yhm-manager-td-center>
           <yhm-manager-td-psd :value="item.applicableModels" :list="applicableModelsList"></yhm-manager-td-psd>
 
           <yhm-manager-td-date :value="item.workDate.slice(0,10)"></yhm-manager-td-date>
@@ -67,6 +69,7 @@
     mixins: [managermixin],
     data () {
       return{
+        searchStr:'',
         listCategory: {
           value: '',
           list: [],
@@ -82,13 +85,13 @@
             {
               code:'',
               img:'',
-              num:'0',
+              num:'4',
               showName:'进行中'
             },
             {
               code:'',
               img:'',
-              num:'1',
+              num:'2',
               showName:'已完成'
             },
             {
@@ -99,10 +102,57 @@
             },
           ]
         },
-        applicableModelsList:[]
+        applicableModelsList:[],
+        select:'',
+        ns:false,
+        iid:[],
       }
     },
     methods:{
+      check(selectValue){
+        this.select=selectValue
+        console.log(selectValue)
+        // let arr = []
+        for(let i in selectValue){
+          this.iid=selectValue[i]
+        }
+        console.log(this.iid)
+      },
+      //入库单打印-----------
+      shuibian(){
+        if(this.select.length==1 ) {
+          console.log(this.select[1]);
+          this.ajaxJson({
+            url: '/stock/stockIn/print',
+            data:{
+              id:this.iid.id
+            },
+            call: (data) => {
+              console.log(data);
+              window.open('/UploadFile/' + data.message)
+            }
+          })
+        }else if(this.select.length==0){
+          this.$dialog.confirm({
+            width: 300,
+            tipValue: ' 必须选择一条数据',
+            btnValueOk: '确定',
+            alertImg: 'warn',
+            okCallBack: (data) => {
+            }
+          })
+        }else{
+          this.$dialog.confirm({
+            width: 300,
+            tipValue: ' 只能选择一条',
+            btnValueOk: '确定',
+            alertImg: 'warn',
+            okCallBack: (data) => {
+            }
+          })
+        }
+      },
+      //console
       printFund(item,state){
         let tipValue = ''
         if(state=='1'){
@@ -152,6 +202,7 @@
           url:'/stockInForm?type=1',
           title:'添加入库单',
           closeCallBack:(data) =>{
+            this.initPageData()
             if (data) {
               this.lastData = data   //最后添加一条数据给与动态闪烁
               this.initPageData(false)
@@ -161,26 +212,40 @@
         })
       },
       listView(item){
-        let url = ''
-        let title = ''
-        // if(item.state!=='0'){
-        //   url = '/stockInView?id=' + item.id
-        //   title = '查看入库信息'
-        // }else{
+        if(item.state=='0'){
+          let url = ''
+          let title = ''
           url = '/stockInForm?id=' + item.id
           title = '编辑入库单'
-        // }
-        this.$dialog.OpenWindow({
-          width: '1050',
-          height: '690',
-          url:url,
-          title:title,
-          closeCallBack:(data) =>{
-            if (data) {
-              this.initPageData(false)
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '690',
+            url:url,
+            title:title,
+            closeCallBack:(data) =>{
+              if (data) {
+                this.initPageData(false)
+              }
             }
-          }
-        })
+          })
+        }else{
+          let url = ''
+          let title = ''
+          url = '/stockOperateView?id=' + item.id
+          title = '查看入库单'
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '690',
+            url:url,
+            title:title,
+            closeCallBack:(data) =>{
+              if (data) {
+                this.initPageData(false)
+              }
+            }
+          })
+
+        }
       },
       // 搜索
       initPageData (initValue) {
@@ -189,7 +254,8 @@
           // 页面初始化是需要的参数
           params = {
             init: true,
-            searchStr:this.state.value
+            // searchStr:'0'
+            __OwnerID:sessionStorage.getItem('____currentUserID'),
           }
         } else {
           // 页面非初始化时需要的参数
@@ -197,8 +263,10 @@
             category: this.listCategory.value,
             applicableModels:this.applicableModelsPsd.value,
             init: false,
-            searchStr:this.state.value
-
+            searchStr:this.searchStr,
+            stateStr:this.state.value,
+            __OwnerID:sessionStorage.getItem('____currentUserID'),
+            // pageDetail: this.pager.pageIndex,
           }
         }
         this.init({
@@ -208,6 +276,9 @@
           all: (data) => {
             // 不管是不是初始化都需要执行的代码
             this.content = data.content
+            for (let i in this.content){
+              this.content[i].category=data.categoryPsd.list[this.content[i].category].showName
+            }
           },
           init: (data) => {
             // 初始化时需要执行的代码
@@ -220,6 +291,9 @@
           }
         })
       }
+    },
+    created() {
+
     }
   }
 </script>

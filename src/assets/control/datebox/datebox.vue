@@ -544,12 +544,12 @@
       getIsYearRange(){
         return function (val) {
           var result = true
-          if(this.maxYear !== ""){
+          if(this.maxYear !== 0){
             if(new Date(this.maxYear).getTime() < new Date(val).getTime()){
               result = false
             }
           }
-          if (this.minYear !== ""){
+          if (this.minYear !== 0){
             if(new Date(this.minYear).getTime() > new Date(val).getTime()){
               result = false
             }

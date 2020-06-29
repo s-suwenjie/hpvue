@@ -160,14 +160,6 @@
           }
         })
       },
-      // 筛选事件
-      initChoose (op) {
-        if (op === 'state') {
-          this.selectValue = []
-        }
-        this.initPageData(false)
-
-      },
       initPageData (initValue) {
         let params = {}
 

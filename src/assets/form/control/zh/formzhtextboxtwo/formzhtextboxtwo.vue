@@ -19,7 +19,7 @@
         </div>
         <div class="c_box" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" :class="{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_disable:noEdit}">
           <span v-if="beforeIcon !== ''" class="c_icon" :class="[beforeIcon,{c_icon_m:category === 'm'}]"></span>
-          <input v-if="!noEdit" @focus="focusEvent" @blur="blurBeforeEvent" class="c_before fs14" :placeholder="beforePlaceholder" :class="{pl10:beforeIcon === ''}" v-model="beforeVal" />
+          <input v-if="!noEdit" @focus="focusEvent" @blur="blurBeforeEvent" class="c_before fs14" :placeholder="beforePlaceholder" :class="{pl10:beforeIcon === ''}" v-model="beforeVal" @input="inputEvent"/>
           <div v-if="noEdit" class="c_before fs14 c_disable_div" :class="{pl10:beforeIcon === ''}">{{beforeVal}}</div>
           <span class="c_icon c_afterTitle fs14 ml10 mr3">{{afterTitle}}：</span>
           <input v-if="!noEdit" @focus="focusEvent" @blur="blurEvent" class="c_after fs14 mr10" :style="getAfterWidth" :placeholder="afterPlaceholder" v-model="afterVal" />
@@ -166,6 +166,12 @@
           this.mouseStyle = false
         }
         this.mouseOver = false
+      },
+      //动态改变事件
+      inputEvent(){
+        this.$nextTick(() =>{
+          this.$emit("input")
+        })
       },
       //文本框获取焦点
       focusEvent(){

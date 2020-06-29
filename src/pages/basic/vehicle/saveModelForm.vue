@@ -5,6 +5,7 @@
       <template #control>
         <yhm-form-select title="品牌" tip="value" :value="brand" id="brand" rule="R0000" @click="selectBrand"></yhm-form-select>
         <yhm-form-text placeholder=""  @repeatverify="nameVerifyEvent" ref="model"  title="车型" subtitle="" :value="model" id="model" rule="R0000"></yhm-form-text>
+        <yhm-form-text placeholder="" title="汽车排量" subtitle="" :value="displacement" id="displacement" ></yhm-form-text>
       </template>
     </yhm-formbody>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -24,7 +25,8 @@
       return {
         id:'',
         brand:'',//车辆品牌
-        brandID:''
+        brandID:'',
+        displacement:'',
       }
     },
     methods: {
@@ -87,6 +89,7 @@
             id: this.id,
             name: '91',
             showName:this.model,
+            value11:this.displacement,
             value12:this.brandID,
           }
           this.ajaxJson({

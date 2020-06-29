@@ -22,13 +22,13 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth title="投保日期" value="insuredDate"></yhm-managerth>
-        <yhm-managerth title="车牌号" value="plate"></yhm-managerth>
-        <yhm-managerth title="联系人" value="contactName"></yhm-managerth>
-        <yhm-managerth title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth style="width: 300px;" title="收款账户明细" value="otherAccount"></yhm-managerth>
-        <yhm-managerth title="支付金额" value="actualProfitLoss"></yhm-managerth>
-        <yhm-managerth title="申请编号" value="numbering"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="投保日期" value="insuredDate"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="车牌号" value="plate"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="联系人" value="contactName"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="保险公司" value="insuredUnit"></yhm-managerth>
+        <yhm-managerth title="收款账户明细" value="otherAccount"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="支付金额" value="actualProfitLoss"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="申请编号" value="numbering"></yhm-managerth>
         <yhm-managerth style="width: 170px;" title="状态"></yhm-managerth>
       </template>
 

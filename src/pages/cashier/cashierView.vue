@@ -5,6 +5,8 @@
       <template #body>
         <yhm-view-control title="业务员" :content="salsesman"></yhm-view-control>
         <yhm-view-control title="车牌号" :content="plate"></yhm-view-control>
+        <yhm-view-control title="品牌" :content="brand"></yhm-view-control>
+        <yhm-view-control title="车型" :content="model"></yhm-view-control>
         <yhm-view-control title="投保日期" :content="insuredDate" type="date"></yhm-view-control>
         <yhm-view-control title="被保险人" :content="beinsuredName+'-'+beinsuredidNo"></yhm-view-control>
         <yhm-view-control title="联系人" :content="contactName+'-'+contactPhone"></yhm-view-control>
@@ -273,6 +275,8 @@
           this.id=data.id
           this.salsesman=data.salsesman
           this.plate=data.plate
+          this.brand=data.brand
+          this.model=data.model
           this.insuredDate=data.insuredDate
           this.beinsuredName=data.beinsuredName
           this.beinsuredidNo=data.beinsuredidNo

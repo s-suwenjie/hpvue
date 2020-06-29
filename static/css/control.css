@@ -455,7 +455,7 @@
   white-space: normal;
   margin: 8px;
 }
-.c_tip>div>img{
+.c_tip>.c_tip_img>img{
   position: absolute;
   left: 20px;
   bottom: -16px;

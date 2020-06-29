@@ -59,7 +59,7 @@
 </template>
 <script>
   import Qs from 'qs'
-  import { selectClick, selectComputedSelected, selectConfirm, selectdbClick, number2chinese } from '@/assets/common.js'
+  import { selectClick, selectComputedSelected, selectrm, selectdbClick, number2chinese } from '@/assets/common.js'
   import { selectItem,managermixin } from '@/assets/manager.js'
   export default {
     name: 'paymentApplyManager',
@@ -159,7 +159,7 @@
               id: id,
               tableName:40
             }
-            this.$dialog.confirm({
+            this.$dialog.rm({
               width: 300,
               tipValue: '确定提交申请?',
               btnValueOk: '确定',

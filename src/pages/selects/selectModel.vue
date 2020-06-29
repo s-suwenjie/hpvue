@@ -10,6 +10,7 @@
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
         <yhm-managerth  title="车型"></yhm-managerth>
+        <yhm-managerth  title="排量"></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in content"
@@ -23,6 +24,7 @@
 
         <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
         <yhm-manager-td :value="item.showName"></yhm-manager-td>
+        <yhm-manager-td :value="item.value11"></yhm-manager-td>
         </tr>
       </template>
       <template #empty>

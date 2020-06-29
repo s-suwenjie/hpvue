@@ -3,18 +3,19 @@
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
-        <yhm-form-select title="商品名称" @click="selectProduct" @clear="clearProduct" :value="product" id="product" rule="R0000"></yhm-form-select>
+        <yhm-form-select title="商品名称" @click="selectProduct" @clear="clearProduct" :value="product" id="product" rule="R0000" ref="pros"></yhm-form-select>
         <yhm-form-select title="规格型号" @click="selectModel" @clear="clearWareHouser" :value="model" id="model" rule="R0000"></yhm-form-select>
         <yhm-form-select title="供货商" @click="selectSupplierId" @clear="clearWareHouser" :value="supplier" id="supplier" rule="R0000"></yhm-form-select>
-        <yhm-form-zh-text-two ref="name" @blur="calculationTotalPrice" @repeatverify="calculationTotalPrice" before-placeholder="" after-placeholder="" :before="quantity" before-id="quantity" :after="unit" after-id="unit" after-width="60" title="数量" after-title="单位" before-rule="R0000" >
+        <yhm-form-zh-text-two ref="name" @input="calculationTotalPrice" @repeatverify="calculationTotalPrice" before-placeholder="" after-placeholder="" :before="quantity+''" before-id="quantity" :after="unit" after-id="unit" after-width="60" title="数量" after-title="单位" before-rule="R0000" >
         </yhm-form-zh-text-two>
-<!--        <yhm-form-text title="数量" max-length="8" :value="quantity" id="quantity" @input="calculationTotalPrice" rule="R0000"></yhm-form-text>-->
-
-        <yhm-form-text title="价格" :value="price" id="price"  @input="calculationTotalPrice" rule="R0000"></yhm-form-text>
-        <yhm-form-text title="总价" tip="money" before-icon="rmb" id="totalPrice"  :value="totalPrice" no-edit="1"></yhm-form-text>
-        <yhm-form-text title="含税单价"  id="priceTax" :value="priceTax"></yhm-form-text>
-        <yhm-form-text title="含税总价" id="totalPriceTax"  before-icon="rmb" :value="totalPriceTax"></yhm-form-text>
-        <yhm-form-zh-select-more  @click="selectDeparment" :total="quantity" input-before-icon=" " title="库位" :value="list" id="list" rule="#" rule-item="R3000"></yhm-form-zh-select-more>
+        <yhm-form-radio title="是否" subtitle="拆分入库" @call="splitClick" :select-list="splitList" :value="split+''" id="split" v-show="show == 0" :no-edit="true"></yhm-form-radio>
+        <yhm-form-zh-text-two @blur="calculationTotalPrice" @repeatverify="calculationTotalPrice" before-placeholder="" after-placeholder="" :before="splitQuantity" before-id="splitQuantity" :after="splitunit" after-id="splitunit" after-width="60" title="拆分数量" after-title="单位" before-rule="R0000" v-if="shows == 0" >
+        </yhm-form-zh-text-two>
+        <yhm-form-text title="价格" :value="price+''" id="price"  @input="calculationTotalPrice" rule="R0000" @blur="toprice"></yhm-form-text>
+        <yhm-form-text title="总价" tip="money" before-icon="rmb" id="totalPrice"  :value="totalPrice+''" no-edit="1"></yhm-form-text>
+        <yhm-form-text title="含税单价"  id="priceTax" :value="priceTax+'' " @blur="toprice" @input="calculationTotalPrice"></yhm-form-text>
+        <yhm-form-text title="含税总价" id="totalPriceTax"  before-icon="rmb" :value="totalPriceTax+''"  no-edit="1"></yhm-form-text>
+<!--        <yhm-form-zh-select-more  @click="selectDeparment" :total="quantity+''" input-before-icon=" " title="库位" :value="list" id="list" rule="#" rule-item="R3000"></yhm-form-zh-select-more>-->
 
       </template>
     </yhm-formbody>
@@ -55,6 +56,14 @@
         model:'',//规格信息
         supplier:'',//单位名称
         supplierId:'',//单位id
+        splitList:[],//是否拆分
+        splitunit:'',
+        split:'',
+        splitQuantity:'',
+        show:'5',
+        shows:'5',
+        cid:'',
+        aid:'',
       }
     },
     methods:{
@@ -69,20 +78,32 @@
             if (data) {
               this.supplier = data.name
               this.supplierId = data.id
-              console.log(data)
             }
           }
         })
       },
+      //确定商品总价
       calculationTotalPrice(){
         this.totalPrice = this.price * this.quantity
-        this.totalPriceTax = this.totalPrice
+
+        this.totalPriceTax = this.priceTax * this.quantity
+        if(Number(this.price)>Number(this.priceTax)){
+          this.priceTax = this.price
+        }
+      },
+      //确定单价明细
+      toprice(){
+        if(Number(this.price)>Number(this.priceTax)){
+          this.priceTax = this.price
+        }
+
+        this.totalPriceTax = this.priceTax * this.quantity
       },
       selectProduct(){
         this.$dialog.OpenWindow({
           width: 950,
           height: 603,
-          url: '/selectProduct',
+          url: '/selectProduct?cid='+this.cid+'&aid='+this.aid,
           title: '选择商品信息',
           closeCallBack: (data) => {
             if (data) {
@@ -90,29 +111,45 @@
               this.productID = data.id
               this.quantity = '1'
               this.unit= data.unit
-              console.log(data)
+              this.model=''
+              this.supplier=''
+              if(data.split == 0){
+                this.show=0
+                this.shows=0
+                this.split='0'
+                this.splitunit=data.splitDeliveryUnit
+              }else{
+                this.show=1
+                this.shows=1
+                this.split='0'
+                this.splitunit=''
+              }
             }
           }
         })
       },
       //选择商品型号
       selectModel(){
-        this.$dialog.OpenWindow({
-          width: 950,
-          height: 603,
-          url: '/selectProductModel?ownerID='+this.productID,
-          title: '选择商品规格型号信息',
-          closeCallBack: (data) => {
-            if (data) {
-              this.modelID = data.id
-              this.model = data.name
-              this.price = data.price.split(".")[0]
-              this.priceTax = this.price
-              this.calculationTotalPrice()
-              console.log(data)
+        if(this.product!=''){
+          this.$dialog.OpenWindow({
+            width: 950,
+            height: 603,
+            url: '/selectProductModel?ownerID='+this.productID,
+            title: '选择商品规格型号信息',
+            closeCallBack: (data) => {
+              if (data) {
+                this.modelID = data.id
+                this.model = data.name
+                this.price = data.price.split(".")[0]
+                this.priceTax = this.price
+                this.calculationTotalPrice()
+              }
             }
-          }
-        })
+          })
+        }else{
+          this.$refs.pros.errorEvent("商品名称为空")
+        }
+
       },
       clearWareHouser(){
         this.productID = ""
@@ -167,6 +204,7 @@
         })
       },
       save(){
+        this.toprice()
         let a = this.validator()
         if(a){
           let params = {
@@ -180,9 +218,9 @@
             priceTax:this.priceTax,//含税单价
             totalPriceTax:this.totalPriceTax,//含税总价
             supplierId:this.supplierId,//单位
-            list:this.list
+            // list:this.list,
+            mdo:this.splitQuantity,
           }
-          console.log( this.ownerID )
           this.ajaxJson({
             url: '/stock/stockInDetail/save',
             data: params,
@@ -190,28 +228,47 @@
               if (data.type === 0) {
                 this.$dialog.setReturnValue(this.id)
                 this.$dialog.alert({
-                  alertImg: 'ok',
                   tipValue: data.message,
                   closeCallBack: () => {
                     this.$dialog.close()
                   }
                 })
-              } else {
+              }else{
                 this.$dialog.alert({
-                  alertImg: 'warn',
+                  alertImg:'warn',
                   tipValue: data.message
                 })
               }
             }
           })
         }
-      }
+      },
+      splitClick(){
+          if (this.split==0){
+            this.shows=0
+          }else{
+            this.shows=1
+            this.splitQuantity=''//--------------
+          }
+      },
+      form(){
+        this.ajaxJson({
+          url: '/stock/stockInDetail/initForm',
+          call: (data) => {
+            this.splitList=data.splitPsd.list
+            this.split=data.splitPsd.value
+          }
+        })
+      },
     },
     created () {
       this.setQuery2Value('type')
       this.setQuery2Value('ownerID')
+      this.setQuery2Value('cid')
+      this.setQuery2Value('aid')
+      this.form()
       if(this.type=='1'){
-       return
+        return
       }else{}
       let params = {
         id:this.id
@@ -232,14 +289,19 @@
           this.productID = data.productID
           this.supplierId = data.supplierId
           this.list = data.list
-          console.log( data )
+          this.show = data.split
+          this.shows = data.split
+          this.splitQuantity = data.mdo+''
+          this.splitunit=data.splitunit
+          this.unit=data.unitStr
+          if(data.split == 0)[
+            this.split=0
+          ]
         }
       })
-    }
 
+    }
   }
 </script>
-
 <style scoped>
-
 </style>

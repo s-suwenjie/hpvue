@@ -30,6 +30,7 @@
     inject: ["p____page"],
     data(){
       return{
+        //input
         txt:this.value,
         txtBig:'',
         focusStyle:false,

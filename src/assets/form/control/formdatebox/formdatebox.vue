@@ -5,7 +5,7 @@
         <div>{{title}}</div>
         <div v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
-      <yhm-datebox :placeholder="placeholder" :placeholder-color="placeholderColor" :width="width" ref="control" @formVerification="verificationEvent" :no-edit="noEdit" @call="callEvent" :type="type" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :position="position" :max="max" :min="min" :value="value" :id="id" :rule="rule"></yhm-datebox>
+      <yhm-datebox :placeholder="placeholder" :placeholder-color="placeholderColor" :min-year="minYear" :max-year="maxYear" :width="width" ref="control" @formVerification="verificationEvent" :no-edit="noEdit" @call="callEvent" :type="type" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :position="position" :max="max" :min="min" :value="value" :id="id" :rule="rule"></yhm-datebox>
       <slot>
       </slot>
     </div>
@@ -36,6 +36,14 @@ export default {
     title: {
       type: String,
       default: '标题'
+    },
+    maxYear:{
+      type:Number,
+      default: 0
+    },
+    minYear:{
+      type:Number,
+      default: 0
     },
     width: {
       type: String,
