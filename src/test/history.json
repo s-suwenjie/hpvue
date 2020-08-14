@@ -1,0 +1,338 @@
+[
+  {
+    "datetimeString": "26",
+    "dateAndTime": "2020-04-26",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "27",
+    "dateAndTime": "2020-04-27",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "28",
+    "dateAndTime": "2020-04-28",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "29",
+    "dateAndTime": "2020-04-29",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "1",
+    "dateAndTime": "2020-03-01",
+    "autoOrder": "0",
+    "guessOrder":"0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "2",
+    "dateAndTime": "2020-03-02",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "3",
+    "dateAndTime": "2020-03-03",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "4",
+    "dateAndTime": "2020-03-04",
+    "autoOrder": "1",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": "3"
+  },
+  {
+    "datetimeString": "5",
+    "dateAndTime": "2020-03-05",
+    "autoOrder": "0",
+    "guessOrder": "1",
+    "autoGuessOrder": "0",
+    "guessNum": "6"
+  },
+  {
+    "datetimeString": "6",
+    "dateAndTime": "2020-03-06",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "1",
+    "guessNum": "3"
+  },
+  {
+    "datetimeString": "7",
+    "dateAndTime": "2020-03-07",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "8",
+    "dateAndTime": "2020-03-08",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "9",
+    "dateAndTime": "2020-03-09",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "10",
+    "dateAndTime": "2020-03-10",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "11",
+    "dateAndTime": "2020-03-11",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "12",
+    "dateAndTime": "2020-03-12",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "13",
+    "dateAndTime": "2020-03-13",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "14",
+    "dateAndTime": "2020-03-14",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "15",
+    "dateAndTime": "2020-03-15",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "16",
+    "dateAndTime": "2020-03-16",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "17",
+    "dateAndTime": "2020-03-17",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "18",
+    "dateAndTime": "2020-03-18",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "19",
+    "dateAndTime": "2020-03-19",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "20",
+    "dateAndTime": "2020-03-20",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "21",
+    "dateAndTime": "2020-03-21",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "22",
+    "dateAndTime": "2020-03-22",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "23",
+    "dateAndTime": "2020-03-23",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "24",
+    "dateAndTime": "2020-03-24",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "25",
+    "dateAndTime": "2020-03-25",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "26",
+    "dateAndTime": "2020-03-26",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "27",
+    "dateAndTime": "2020-03-27",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "28",
+    "dateAndTime": "2020-03-28",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "29",
+    "dateAndTime": "2020-03-29",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "30",
+    "dateAndTime": "2020-03-30",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "31",
+    "dateAndTime": "2020-03-31",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "1",
+    "dateAndTime": "2020-04-01",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "2",
+    "dateAndTime": "2020-04-02",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "3",
+    "dateAndTime": "2020-04-03",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "4",
+    "dateAndTime": "2020-04-04",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "5",
+    "dateAndTime": "2020-04-05",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "6",
+    "dateAndTime": "2020-04-06",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  },
+  {
+    "datetimeString": "7",
+    "dateAndTime": "2020-04-07",
+    "autoOrder": "0",
+    "guessOrder": "0",
+    "autoGuessOrder": "0",
+    "guessNum": ""
+  }
+]

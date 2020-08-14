@@ -1,0 +1,233 @@
+@charset "UTF-8";
+@rem: 375/10rem;
+
+.fundCharts{
+  width: 100%;
+  padding-bottom: 32/@rem;
+  border-bottom: 1px dashed #bfbfbf;
+  display: flex;
+  align-items: center;
+  .chartsImg{
+    width: 68/@rem;
+    height: 68/@rem;
+  }
+  .chartsInfo{
+    height: 48/@rem;
+    margin-left: 8/@rem;
+    .chartInfoDetail{
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      .dot{
+        min-width: 14/@rem;
+        min-height: 14/@rem;
+        border-radius: 50%;
+        margin-right: 10/@rem;
+      }
+      .txt{
+        font-size: 16/@rem;
+        color: #333;
+        white-space: nowrap;
+        line-height: 26/@rem;
+      }
+      .moneyDiv{
+        width: 100%;
+        text-align: right;
+        .money{
+          font-size: 16/@rem;
+        }
+      }
+    }
+  }
+}
+
+.fundHist{
+  width: 100%;
+  padding-bottom: 1.2rem;
+  .histInfoBox{
+    margin-top: 10/@rem;
+    display: flex;
+    justify-content: flex-end;
+    .histInfo{
+      display: flex;
+      .histInfoDetail{
+        display: flex;
+        align-items: center;
+        .rect{
+          width: 16/@rem;
+          height: 6/@rem;
+          margin-right: 4/@rem;
+        }
+        .txt{
+          font-size: 14/@rem;
+          color: #333;
+        }
+      }
+      .histInfoDetail:last-child{
+        margin-left: 16/@rem;
+      }
+    }
+  }
+}
+
+.histCharts{
+  margin: 16/@rem 0;
+}
+
+
+.abscissalLine{
+  width: 240/@rem;
+  height: 2px;
+  background-color: #bfbfbf;
+  margin-left: 48/@rem;
+  position: relative;
+}
+.abscissalLine:before{
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid #bfbfbf;
+  position: absolute;
+  top: -0.233333rem;
+  right: -0.2rem;
+}
+
+.shortLine{
+  margin-left: 92/@rem;
+  display: flex;
+  p{
+    width: 2/@rem;
+    height: 5/@rem;
+    background-color: #bfbfbf;
+    margin-right: 32/@rem;
+  }
+}
+
+.shortZiseLine{
+  margin-left: 92/@rem;
+  display: flex;
+  position: absolute;
+  z-index: 1;
+  p{
+    width: 2/@rem;
+    border-right: 1px dashed #bfbfbf;
+    opacity: .7;
+    margin-right: 32/@rem;
+  }
+}
+
+
+.shortSize{
+  margin-left: 92/@rem;
+  display: flex;
+  p{
+    width: 24/@rem;
+    height: 24/@rem;
+    font-size: 12/@rem;
+    color: #333;
+    margin-right: 10/@rem;
+    transform: rotate(-30deg);
+  }
+}
+
+.abscissa{
+  display: inline-block;
+  float: right;
+  font-size: 14/@rem;
+  color: #333;
+  margin-top: -0.3rem;
+  margin-right: 0.3rem;
+}
+
+.ordinateName{
+  width: 60/@rem;
+  float: left;
+  p{
+    display: flex;
+    align-items: center;
+    width: 60/@rem;
+    height: 58/@rem;
+    margin-top: 20/@rem;
+    span{
+      font-size: 14/@rem;
+      color: #333;
+    }
+    img{
+      width: 16/@rem;
+      height: 16/@rem;
+      margin-right: 3/@rem;
+    }
+  }
+}
+.ordinateLine{
+  float: left;
+  width: 2px;
+  background-color: #bfbfbf;
+  margin-top: -0.35rem;
+  position: relative;
+}
+.ordinateLine:before{
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 10px solid #bfbfbf;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  position: absolute;
+  bottom: -0.2rem;
+  left: -0.22rem;
+}
+.ordinateLine:after{
+  content: "银行";
+  font-size: 14/@rem;
+  color: #333;
+  position: absolute;
+  white-space: nowrap;
+  bottom: -0.72rem;
+  left: -0.32rem;
+}
+
+.ordinateConLine{
+  height: 58/@rem;
+  margin-top: 20/@rem;
+  div{
+    display: flex;
+    margin-bottom: 2/@rem;
+    span{
+      font-size: 14/@rem;
+    }
+    .ordinateRect{
+      display: flex;
+      height: 16/@rem;
+      border-radius: 0 2px 2px 0;
+      margin-right: 4/@rem;
+    }
+    .ordinateTxt{
+    }
+  }
+}
+.ordinateContent{
+  height: 100%;
+  position: absolute;
+  z-index: 9;
+  left: 2.06rem;
+}
+.ordinateBlance{
+  font-size: 12/@rem;
+  margin-top: 4/@rem;
+  margin-left: 4/@rem;
+  display: flex;
+  align-items: center;
+  span:first-child{
+    margin-left: 0.1rem;
+  }
+  span:last-child{
+    font-style: italic;
+  }
+}
+
+
+
+/* m_fundDynamicsView */

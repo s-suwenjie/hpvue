@@ -1,0 +1,277 @@
+@charset "UTF-8";
+
+/* 格式化页面布局 *****************
+<div class=“form_format”>
+  <div>控件</div>
+  <div>控件</div>
+</div>
+*******************************/
+.form_format{
+  display: flex;
+  flex-direction: row;
+}
+.form_format>div{
+  flex: 1;
+}
+
+.f_main {
+  border-radius: 8px;
+  margin-top: 16px;
+  position: relative;
+  margin-bottom: 90px;
+}
+
+.f_main_customize{
+    padding: 0 20px;
+}
+
+
+.f_area {
+  width: 1000px;
+  margin: 0 auto;
+  background-color: #e9e9e9;
+  border-radius: 8px;
+  border: solid 1px #d9d9d9;
+}
+
+.f_area1200{
+  width: 1200px;
+}
+.f_areaWidth1235{
+  width: 1235px;
+}
+.h_image{
+  height: 500px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.h_image img{
+  max-height: 500px;
+  max-width: 1000px;
+}
+
+.f_main_customize .f_area{
+  width:auto;
+}
+
+.f_title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.f_tab_title{
+  display: flex;
+}
+
+.f_tab_title_btn{
+  padding: 15px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+}
+
+.f_tab_title_active{
+  color: #49a9ea;
+  border-bottom: 2px solid #49a9ea;
+}
+
+.f_flex_column{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 16px;
+}
+.cancelColumn{
+  border: 0 !important;
+  background-color: #fff;
+}
+/*选择页面的操作区*/
+.s_operate{
+    display: flex;
+    padding: 16px 20px 8px 20px;
+    align-items: center;
+  justify-content: space-between;
+}
+
+.s_db_select{
+  position: absolute;
+  z-index: 99;
+  background-color: #49a9ea;
+  color: #FFFFFF;
+  padding: 4px;
+  font-size: 12px;
+}
+
+.s_choose{
+    margin: 0 20px 0;
+    padding: 8px 10px 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    border: 1px solid #bfbfbf;
+    border-radius: 8px;
+}
+
+.s_choose>.chooseBtnBox {
+    margin-bottom: 8px;
+}
+
+.f_between{
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+
+.f_listtitle {
+  background-color: #fff;
+  margin: 16px 20px 0;
+  border-radius: 8px 8px 0 0;
+  position: relative;
+}
+.f_titleTxt{
+  font-size: 16px;
+  color: #333;
+  padding: 15px 0 15px 0;
+}
+.f_controls {
+  background-color: #e9e9e9;
+  border-radius: 8px;
+  margin: 16px 0 0;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.f_split{
+  height: 16px;
+}
+
+.f_buttom{
+  height: 20px;
+  width: 998px;
+}
+
+.f_table{
+  overflow: inherit;
+  margin: 0 20px;
+  table-layout: fixed
+}
+
+.f_table th{
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+  font-weight: normal;
+  background-color: #d4ecfc;
+  box-shadow: 0 1px 0 0 #d9d9d9;
+  position: relative;
+}
+.f_table th:after{
+  content: '';
+  position: absolute;
+  top: 7px;
+  right: 0;
+  width: 1px;
+  height: 20px;
+  background-color: #7975a0;
+}
+.f_table th:last-child:after{
+  display: none;
+}
+.f_table tbody{
+  background-color: #FFFFFF;
+}
+
+.f_table tbody tr{
+  height: 34px;
+  line-height: 34px;
+}
+
+.f_table tbody td{
+  padding-left: 10px;
+  font-size: 14px;
+  color: #666;
+  overflow: hidden;
+  white-space: nowrap;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+
+.f_table tbody tr:hover {
+  background-color: #b1e0ff;
+  cursor: pointer;
+}
+
+.f_table tbody .InterlacBg{
+  background-color: #dcdbdb;
+}
+
+.f_table tbody tr .center{
+  padding-left: 0;
+  text-align: center;
+}
+
+.f_table tbody tr .right{
+  padding-left: 0;
+  text-align: right;
+}
+
+
+.f_br{
+  width: 500px;
+}
+
+.f_operate{
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  z-index: 9;
+  text-align: center;
+  background-color: #dedede;
+  box-shadow: 0 -1px 0 0 #ccc;
+}
+.f_operate .btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.f_operate .btn>div{
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.f_operate .btn>.icon{
+  margin:0 15px;
+  color: #666;
+}
+
+.f_operate .btn>.icon:hover{
+  color: #49a9ea;
+  cursor: pointer;
+}
+
+.f_operate .info{
+  padding: 2px 25px;
+  display: flex;
+  justify-content: space-between;
+  border-top: 2px solid #ccc;
+}
+
+.f_operate .info  > div > p{
+  font-size: 12px;
+  color: #999;
+  display: inline-block;
+}
+.f_operate .info  > div > p:last-child{
+  margin-left: 15px;
+}

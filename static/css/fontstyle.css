@@ -1,0 +1,888 @@
+@charset "UTF-8";
+
+/*日期选择框*/
+.i-input-date:before{
+  font-family: 'icomoon' !important;
+  content: "\e908";
+}
+
+.i-more2:before{
+  font-family: 'icomoon' !important;
+  content: "\e98c";
+}
+
+.i-btn-upload:before{
+   font-family: 'icomoon' !important;
+   content: "\e90f";
+ }
+
+.i-btn-image:before{
+  font-family: 'icomoon' !important;
+  content: "\e906";
+}
+
+.i-btn-file:before{
+  font-family: 'icomoon' !important;
+  content: "\e90d";
+}
+
+/*上一年*/
+.i-btn-prev-year:before{
+  font-family: 'icomoon' !important;
+  content: "\e905";
+}
+/*下一年*/
+.i-btn-next-year:before{
+  font-family: 'icomoon' !important;
+  content: "\e90e";
+}
+/*向左*/
+.i-input-left-arrow:before{
+  font-family: 'icomoon' !important;
+  content: "\e90c";
+}
+/*向右*/
+.i-input-right-arrow:before{
+  font-family: 'icomoon' !important;
+  content: "\e90b";
+}
+
+/*向下*/
+.i-input-down-arrow:before{
+  font-family: 'icomoon' !important;
+  content: "\e90a";
+}
+
+/* 加号 */
+.i-input-right-add:before{
+  font-family: 'icomoon' !important;
+  content: "\e957";
+}
+.delete:before {
+  font-family: 'icomoon' !important;
+  content: "\e904";
+}
+
+.rmb:before {
+  font-family: 'icomoon' !important;
+  content: "\e907";
+}
+/*login界面用户名*/
+.userIcon:before {
+  font-family: 'icomoon' !important;
+  content: "\e945";
+}
+/*login界面用户密码*/
+.pwdIcon:before {
+  font-family: 'icomoon' !important;
+  content: "\e944";
+}
+
+.tree_no:before{
+  font-family: 'icomoon' !important;
+  content: "\e947";
+}
+.tree_open:before{
+  font-family: 'icomoon' !important;
+  content: "\e912";
+}
+.tree_close:before{
+  font-family: 'icomoon' !important;
+  content: "\e946";
+}
+.tree_purview:before{
+  font-family: 'icomoon' !important;
+  content: "\e944";
+}
+
+
+
+
+.radio_button_icon:before{
+  font-family: 'icomoon' !important;
+  content: "\e900";
+}
+
+.radio_button_icon_select:before{
+  font-family: 'icomoon' !important;
+  content: "\e901";
+}
+
+.check_button_icon:before{
+  font-family: 'icomoon' !important;
+  content: "\e902";
+}
+
+.check_button_icon_select:before{
+  font-family: 'icomoon' !important;
+  content: "\e94c";
+}
+
+/*提交申请,催促Icon图标*/
+.i-btn-applicationSm:before{
+  font-family: 'icomoon' !important;
+  content: "\e91f";
+}
+.i-btn-urge:before{
+  font-family: 'icomoon' !important;
+  content: "\e93d";
+}
+.list_look:before{
+  font-family: 'icomoon' !important;
+  content: "\E91B";
+}
+
+/*删除按钮Icon*/
+.btnDel:before{
+  font-family: 'icomoon' !important;
+  content: "\e910";
+}
+
+.i-btn-del:before{
+  font-family: 'icomoon' !important;
+  content: "\e910";
+}
+
+/*内容明细*/
+.i-detail:before{
+  font-family: 'icomoon' !important;
+  content: "\e97a";
+}
+
+/*刷新、转让*/
+.i-btn-refresh:before{
+  font-family: 'icomoon' !important;
+  content: "\e94b";
+}
+
+/*go*/
+.i-btn-go:before{
+  font-family: 'icomoon' !important;
+  content: "\e94a";
+}
+
+/*可报销*/
+.i-btn-reimbursable:before{
+  font-family: 'icomoon' !important;
+  content: "\e94d";
+}
+
+/*已报销*/
+.i-btn-reimbursabled:before{
+  font-family: 'icomoon' !important;
+  content: "\e94e";
+}
+
+/*已占用*/
+.i-btn-occupied:before{
+  font-family: 'icomoon' !important;
+  content: "\e94f";
+}
+
+/*已作废*/
+.i-btn-invalid:before{
+  font-family: 'icomoon' !important;
+  content: "\e950";
+}
+
+/* 通过 -- 驳回 */
+.i-btn-applicationSm:before{
+  font-family: 'icomoon' !important;
+  content: "\e91f";
+}
+.i-btn-turnDown:before{
+  font-family: 'icomoon' !important;
+  content: "\e91c";
+}
+
+/* 付款状态 */
+.i-btn-pendingSm:before{
+  font-family: 'icomoon' !important;
+  content: "\e93e";
+}
+
+/*圆圈对号*/
+.i-complete:before{
+  font-family: 'icomoon' !important;
+  content: "\e913";
+}
+
+
+/*圆圈对号*/
+.i-warn:before{
+  font-family: 'icomoon' !important;
+  content: "\e989";
+}
+
+
+
+/* 保存并添加 */
+.btnAddSave:before{
+  font-family: 'icomoon' !important;
+  content: "\e953";
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+/* 保存并提交 */
+.btnSubSave:before{
+  font-family: 'icomoon' !important;
+  content: "\e952";
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+/*编辑*/
+.i-edit:before{
+  font-family: 'icomoon' !important;
+  content: "\e971";
+}
+
+.i-btn-grant:before{
+  font-family: 'icomoon' !important;
+  content: "\e92d";
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+
+/* 底部通过驳回按钮 */
+.i-btm-applicationSm:before{
+  font-family: 'icomoon' !important;
+  content: "\e91f";
+}
+.icon-btm-urge:before{
+  font-family: 'icomoon' !important;
+  content: "\e93d";
+}
+
+.i-btn-disable:before{
+  font-family: 'icomoon' !important;
+  content: "\e956";
+}
+
+.i-btn-check-number:before{
+  font-family: 'icomoon' !important;
+  content: "\e954";
+}
+
+.i_tableSort:before {
+  font-family: 'icomoon' !important;
+  content: "\e941";
+}
+
+
+/* 感叹号*/
+.i-btn-prompt:before{
+  font-family: 'icomoon' !important;
+  content: "\e918";
+  /*color: #49a9ea;
+  border-radius: 50%;*/
+}
+
+/* 打印 */
+.i-btn-print:before{
+  font-family: 'icomoon' !important;
+  content: "\e958";
+}
+
+/*性别*/
+.i-sex-male:before{
+  font-family: 'icomoon' !important;
+  content: "\e959";
+}
+.i-sex-female:before{
+  font-family: 'icomoon' !important;
+  content: "\e95a";
+}
+
+/*是*/
+.i-whether0:before{
+  font-family: 'icomoon' !important;
+  content: "\e943";
+}
+/*否*/
+.i-whether1:before{
+  font-family: 'icomoon' !important;
+  content: "\e942";
+}
+
+/* 帮助 */
+.i-help:before{
+  font-family: 'icomoon' !important;
+  content: "\e95e";
+}
+
+/* 设置常用*/
+.i-pentagram:before{
+  font-family: 'icomoon' !important;
+  content: "\e95f";
+}
+
+/* 已设置常用*/
+.i-pentagramed:before{
+  font-family: 'icomoon' !important;
+  content: "\e960";
+}
+
+
+/* 左右箭头 */
+.i-leftArrow:before{
+  font-family: 'icomoon' !important;
+  content: "\e90c";
+}
+.i-rightArrow:before{
+  font-family: 'icomoon' !important;
+  content: "\e90b";
+}
+
+/* 左右旋转图标 */
+.i-rotateLeft:before{
+  font-family: 'icomoon' !important;
+  content: "\e962";
+}
+.i-rotateRight:before{
+  font-family: 'icomoon' !important;
+  content: "\e961";
+}
+
+/* 左右旋转图标 */
+.i-rotateLeft90:before{
+  font-family: 'icomoon' !important;
+  content: "\e96a";
+}
+.i-rotateLeft180:before{
+  font-family: 'icomoon' !important;
+  content: "\e96b";
+}
+.i-rotateRight90:before{
+  font-family: 'icomoon' !important;
+  content: "\e968";
+}
+.i-rotateRight180:before{
+  font-family: 'icomoon' !important;
+  content: "\e969";
+}
+
+/* 放大缩小图标 */
+.i-zoom:before{
+  font-family: 'icomoon' !important;
+  content: "\e963";
+}
+.i-narrow:before{
+  font-family: 'icomoon' !important;
+  content: "\e964";
+}
+
+
+/* 冲账 有票 无票图标 董事费*/
+.i-offset:before{
+  font-family: 'icomoon' !important;
+  content: "\e965";
+}
+.i-noTicks:before{
+  font-family: 'icomoon' !important;
+  content: "\e966";
+}
+.i-haveTicks:before{
+  font-family: 'icomoon' !important;
+  content: "\e967";
+}
+.i-directorFees:before{
+  font-family: 'icomoon' !important;
+  content: "\e96c";
+}
+
+/* 上传 */
+.i-export:before{
+  font-family: 'icomoon' !important;
+  content: "\e95b";
+}
+
+/* 发票查看 */
+.i-invoiceView:before{
+  font-family: 'icomoon' !important;
+  content: "\e96d";
+}
+
+/* 确认还款 */
+.i-complete:before{
+  font-family: 'icomoon' !important;
+  content: "\e913";
+}
+
+
+/*长按*/
+.i-long-tap:before{
+  font-family: 'icomoon' !important;
+  content: "\e974";
+}
+
+/* 元 */
+.i-yuan:before{
+  font-family: 'icomoon' !important;
+  content: "\e970";
+}
+
+/* 万元 */
+.i-wYuan:before{
+  font-family: 'icomoon' !important;
+  content: "\e96e";
+}
+
+/* 亿元 */
+.i-yYuan:before{
+  font-family: 'icomoon' !important;
+  content: "\e96f";
+}
+
+/* 收支明细 向上箭头 */
+.i-income:before{
+  font-family: 'icomoon' !important;
+  content: "\e95d";
+}
+
+/* 收支明细 向下箭头 */
+.i-expenditure:before{
+  font-family: 'icomoon' !important;
+  content: "\e977";
+}
+.i-separate:before{
+  font-family: 'icomoon' !important;
+  content: "\e978";
+}
+
+/* 优先级提示 */
+.i-priority:before{
+  font-family: 'icomoon' !important;
+  content: "\e979";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*审批相关图标*/
+/*已提交*/
+.i-submitApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e93e";
+}
+
+/*已完成*/
+.i-finishApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e913";
+}
+
+/*部门审批*/
+.i-departmentApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e939";
+}
+/*部门审批通过*/
+.i-departmentApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e937";
+}
+/*部门驳回申请*/
+.i-departmentApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e938";
+}
+
+/*财务审批*/
+.i-financeApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e936";
+}
+/*财务审批通过*/
+.i-financeApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e934";
+}
+/*财务驳回申请*/
+.i-financeApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e935";
+}
+
+/*审计审批*/
+.i-auditApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e933";
+}
+/*审计审批通过*/
+.i-auditApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e931";
+}
+/*审计驳回申请*/
+.i-auditApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e932";
+}
+/*高层审批*/
+.i-highLevelApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e930";
+}
+/*高层审批通过*/
+.i-highLevelApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e92e";
+}
+/*高层驳回申请*/
+.i-highLevelApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e92f";
+}
+
+/*拨款操作*/
+.i-grantApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e92d";
+}
+/*拨款操作通过*/
+.i-grantApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e92b";
+}
+/*拨款操作驳回申请*/
+.i-sealApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e92c";
+}
+
+/*盖章操作*/
+.i-sealApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e92a";
+}
+/*盖章操作审批通过*/
+.i-sealApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e928";
+}
+/*盖章操作驳回申请*/
+.i-sealApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e929";
+}
+
+/*董事长审批*/
+.i-shareholderApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e927";
+}
+/*董事长审批通过*/
+.i-shareholderApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e925";
+}
+/*董事长驳回申请*/
+.i-shareholderApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e926";
+}
+
+/*股东审批*/
+.i-chairmanApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e924";
+}
+/*股东审批通过*/
+.i-chairmanApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e922";
+}
+/*股东驳回申请*/
+.i-chairmanApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e923";
+}
+
+/* 复制图标 */
+.i-copy:before{
+  font-family: 'icomoon' !important;
+  content: "\e979";
+}
+
+
+/* 支票右上角按钮   支出 - home - 收入 - 平铺*/
+.i-expendCheck:before{
+  font-family: 'icomoon' !important;
+  content: "\e97c";
+}
+.i-homeCheck:before{
+  font-family: 'icomoon' !important;
+  content: "\e97d";
+}
+.i-incomeCheck:before{
+  font-family: 'icomoon' !important;
+  content: "\e97b";
+}
+.i-tiling:before{
+  font-family: 'icomoon' !important;
+  content: "\e98a";
+}
+
+/* 查看票样  */
+.i-viewCheck:before{
+  font-family: 'icomoon' !important;
+  content: "\e982";
+}
+/*支票填开*/
+.i-checkFillOut:before{
+  font-family: 'icomoon' !important;
+  content: "\e986";
+}
+/*作废*/
+.i-toVoidCheck:before{
+  font-family: 'icomoon' !important;
+  content: "\e987";
+}
+/*空白支票外带*/
+.i-blackCheckOut:before{
+  font-family: 'icomoon' !important;
+  content: "\e983";
+}
+/*空白支票作废*/
+.i-blackCheckVoid:before{
+  font-family: 'icomoon' !important;
+  content: "\e984";
+}
+/*入账*/
+.i-accEntry:before{
+  font-family: 'icomoon' !important;
+  content: "\e985";
+}
+
+/* 视频播放提示 */
+.i-videoPlay:before{
+  font-family: 'icomoon' !important;
+  content: "\e988";
+}
+
+
+/* 发票右上角按钮   平铺 - 列表 - 入库*/
+.i-tilingInvoice:before{
+  font-family: 'icomoon' !important;
+  content: "\e98a";
+}
+.i-listInvoice:before{
+  font-family: 'icomoon' !important;
+  content: "\e98b";
+}
+.i-warehouInvoice:before{
+  font-family: 'icomoon' !important;
+  content: "\e97e";
+}
+
+/* 发票作废 */
+.toVoid:before{
+  font-family: 'icomoon' !important;
+  content: "\e903";
+
+}
+
+/* 百分号 - 千分号 - 万分号 */
+.i-percentage:before{
+  font-family: 'icomoon' !important;
+  content: "\e98d";
+}
+.i-thousandPer:before{
+  font-family: 'icomoon' !important;
+  content: "\e98e";
+}
+.i-thousandExte:before{
+  font-family: 'icomoon' !important;
+  content: "\e98f";
+}
+
+.i-yellowWarn:before{
+  font-family: 'icomoon' !important;
+  content: "\e98c";
+}
+
+/* 延期核销  */
+.i-delay:before{
+  font-family: 'icomoon' !important;
+  content: "\e990";
+}
+
+/* 更换联系人 */
+.i-replace:before{
+  font-family: 'icomoon' !important;
+  content: "\e994";
+}
+/* 暂不提交  */
+.i-noSub:before{
+  font-family: 'icomoon' !important;
+  content: "\e991";
+}
+
+
+/* 分批拨付  -  分批拨付查看*/
+.i-allocation:before{
+  font-family: 'icomoon' !important;
+  content: "\e993";
+}
+
+.i-allocationView:before{
+  font-family: 'icomoon' !important;
+  content: "\e992";
+}
+.i-right:before {
+  font-family: 'icomoon' !important;
+  content: "\e90b";
+}
+.i-left:before {
+  font-family: 'icomoon' !important;
+  content: "\e90c";
+}
+
+/*同步*/
+.i-synchronize:before {
+  font-family: 'icomoon' !important;
+  content: "\e995";
+}
+
+
+/* 利息入账 */
+.i-interest:before {
+  font-family: 'icomoon' !important;
+  content: "\e996";
+}
+/* 赎回本金 */
+.i-redeem:before {
+  font-family: 'icomoon' !important;
+  content: "\e997";
+}
+/* 转款 */
+.i-tranPayment:before {
+  font-family: 'icomoon' !important;
+  content: "\e998";
+}
+
+
+/* 发送微信 */
+.i-sendwx:before {
+  font-family: 'icomoon' !important;
+  content: "\e99b";
+}
+
+/* 打开选中信息 */
+.i-selectAll:before {
+  font-family: 'icomoon' !important;
+  content: "\e99c";
+}
+
+/* 批量拨付 */
+.i-batchAllca:before {
+  font-family: 'icomoon' !important;
+  content: "\e99d";
+}
+
+/* 批量拨付 撤回批量拨付图标*/
+.i-uniE99F:before {
+  font-family: 'icomoon' !important;
+  content: "\e99f";
+}
+
+/*财务 付款申请 view 记录图标*/
+.uniE99E:before {
+  font-family: 'icomoon' !important;
+  content: "\e99e";
+}
+
+/* 电子发票对比图标 */
+.i-vsIcon:before{
+  font-family: 'icomoon' !important;
+  content: "\e9a0";
+}
+.i-check:before{
+  font-family: 'icomoon' !important;
+  content: "\e954";
+}
+/* 车辆管理 快捷选择键盘  */
+.i-uniE9A1:before{
+  font-family: 'icomoon' !important;
+  content: "\e9a1";
+}
+/* 保险理赔 正常 */
+.icon-correct:before{
+  font-family: 'icomoon' !important;
+  content: "\e954";
+}
+/* 保险理赔 待核查 */
+.icon-InterestRW:before{
+  font-family: 'icomoon' !important;
+  content: "\e98c";
+}
+/* 保险理赔 异常 */
+.icon-delete:before{
+  font-family: 'icomoon' !important;
+  content: "\e904";
+}
+
+/* 保险理赔 统计图图标 */
+.uniE9A6:before{
+  font-family: 'icomoon' !important;
+  content: "\e9a6";
+}
+
+/* 保险理赔 柱状图图标 */
+.uniE9A7:before{
+  font-family: 'icomoon' !important;
+  content: "\e9a7";
+}
+.uniE9A8:before{
+  font-family: 'icomoon' !important;
+  content: "\e9a8";
+}
+/* 留言 */
+.i-uniE9AD:before{
+  font-family: 'icomoon' !important;
+  content: "\e9ad";
+}
+/*待入账*/
+.i-uniE9AE:before{
+  font-family: 'icomoon' !important;
+  content: "\e9ae";
+}
+/**待验证*/
+.i-uniE9AF:before{
+  font-family: 'icomoon' !important;
+  content: "\e9af";
+}
+/*已验证*/
+.i-uniE9b0:before{
+  font-family: 'icomoon' !important;
+  content: "\e9b0";
+}
+
+/*公司*/
+.i-uniE9b01:before{
+  font-family: 'icomoon' !important;
+  content: "\e9b1";
+}
+/*联系人*/
+.i-uniE9b00:before{
+  font-family: 'icomoon' !important;
+  content: "\e9b2";
+}
+/*工单流程图 半圆*/
+.i-semicircle:before{
+  font-family: 'icomoon' !important;
+  content: "\e9b9";
+}

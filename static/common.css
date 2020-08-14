@@ -1,0 +1,503 @@
+.choiceTable {
+  padding: 0;
+  border-bottom: 1px solid red;
+}
+.container {
+  border-radius: 8px;
+  margin-top: 16px;
+  position: relative;
+}
+.contentBody {
+  width: 1000px;
+  margin: 0 auto;
+  background-color: #e9e9e9;
+  border-radius: 8px;
+  border: solid 1px #d9d9d9;
+}
+.contentBody:last-child {
+  margin-bottom: 91px;
+}
+.bodyTit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid #d9d9d9;
+}
+.bodyTit .titTxt {
+  font-size: 16px;
+  color: #333;
+  padding: 15px 0 15px 0;
+}
+.bodyTit .titBtn {
+  display: flex;
+  align-items: center;
+  background-color: #49a9ea;
+  border-radius: 4px;
+  border: solid 1px #49a9ea;
+  text-align: center;
+  padding: 0 20px;
+  line-height: 32px;
+  color: #fff;
+  cursor: pointer;
+}
+.bodyTit .titBtn .icon {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background: url("../static/staticImage/addIcon.svg") no-repeat center center;
+  -webkit-background-size: cover;
+  background-size: cover;
+  margin-right: 10px;
+}
+.bodyTit .titBtn:hover {
+  background-color: #1489d7;
+}
+.selectTit {
+  display: flex;
+  padding: 16px 20px 8px 20px;
+  align-items: center;
+}
+.selectTit .titIpt {
+  width: 360px;
+  display: flex;
+  height: 36px;
+  align-items: center;
+  font-size: 14px;
+  text-indent: 0.5em;
+  border-radius: 4px;
+  border: 1px solid #bfbfbf;
+  background: #fff url("../static/staticImage/searchIcon.png") no-repeat;
+  background-position: center right 10px;
+}
+.selectTit .selectAdd {
+  padding: 0 20px;
+  margin-right: 10px;
+  border: 1px solid #49a9ea;
+  background-color: #fff;
+  line-height: 34px;
+  color: #333;
+  border-radius: 4px;
+}
+.selectTit .selectAdd:hover {
+  background-color: #49a9ea;
+  color: #fff;
+}
+.lftSwitchArrow {
+  width: 48px;
+  height: 70px;
+  background: #000000;
+  opacity: 0.3;
+  position: fixed;
+  left: 0;
+  top: -20px;
+  bottom: 0;
+  margin: auto;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.rgtSwitchArrow {
+  width: 48px;
+  height: 70px;
+  background: #000000;
+  opacity: 0.3;
+  position: fixed;
+  right: 0;
+  top: -20px;
+  bottom: 0;
+  margin: auto;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.formCont {
+  background-color: #e9e9e9;
+  border-radius: 8px;
+  margin: 16px 0 0;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.formCont .table table {
+  /*padding: 0;*/
+}
+.footer {
+  width: 100%;
+  height: 65px;
+  position: fixed;
+  bottom: 0;
+  z-index: 9;
+  padding-top: 10px;
+  text-align: center;
+  background-color: #dedede;
+  box-shadow: 0px -1px 0px 0px #ccc;
+}
+.footer .ftBtn {
+  align-items: center;
+  background-color: #49a9ea;
+  border-radius: 4px;
+  border: solid 1px #49a9ea;
+  text-align: center;
+  padding: 0 20px;
+  line-height: 32px;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.footer .footInfo {
+  padding: 0 25px;
+  display: flex;
+  justify-content: space-between;
+  border-top: 2px solid #ccc;
+}
+.footer .footInfo > div > p {
+  font-size: 12px;
+  color: #999;
+  display: inline-block;
+}
+.isWeek {
+  color: #F20B2B !important;
+  font-weight: bold !important;
+}
+/* 列表页面顶部消息提示 */
+.noticeNum {
+  width: 22px;
+  height: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 12px;
+  position: absolute;
+  top: 10px;
+  right: 4px;
+  font-style: normal;
+  border-radius: 8px;
+  padding: 2px;
+  background-color: #f00;
+}
+/* form帮助 */
+.formBoxIcon {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+.formBoxIcon .i-help {
+  color: #49a9ea;
+  font-size: 24px;
+  display: flex;
+  cursor: pointer;
+}
+.formBoxIcon .i-help:before {
+  color: #f00;
+}
+.formBoxIcon .iconYuan {
+  font-size: 24px;
+  color: #49a9ea;
+  cursor: pointer;
+  display: flex;
+}
+.formBoxIcon .i-copy {
+  font-size: 18px;
+  cursor: pointer;
+  color: #333;
+  display: flex;
+}
+.formBoxIcon .i-copy:hover {
+  color: #49a9ea;
+}
+/* 视频播放按钮 */
+.operaLft {
+  font-size: 18px;
+  color: #49a9ea;
+  cursor: pointer;
+}
+.operaLft .videoIcon {
+  margin-right: 4px;
+}
+.operaLft .videoHelp {
+  font-size: 14px;
+  white-space: nowrap;
+}
+/* 复制提示内容 */
+.copyTip {
+  position: fixed;
+  top: 8px;
+  z-index: 9999;
+  background-color: #49a9ea;
+  color: #fff;
+  padding: 16px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: max-content;
+  border-radius: 4px;
+  font-size: 14px;
+}
+/*公共单独样式*/
+.mb16 {
+  margin-bottom: 16px;
+}
+.ptZero {
+  padding-top: 0 !important;
+}
+.bdtNone {
+  border-top: none;
+}
+.bdbNone {
+  border-bottom: none;
+}
+.dfAiFS {
+  align-items: flex-start !important;
+}
+.dfJcc {
+  display: flex !important;
+  justify-content: center !important;
+}
+.opHide {
+  height: 0 !important;
+  line-height: 0 !important;
+}
+.opHide td {
+  font-size: 0;
+}
+.bdNone {
+  border: none;
+}
+.autoIpt {
+  line-height: 28px;
+  padding: 0 10px;
+  background-color: #fff;
+}
+.fcTable {
+  margin: 0 20px 0;
+}
+.fcSeltTable {
+  margin: 16px 20px 0;
+}
+.posRt {
+  position: relative !important;
+}
+.mptZero {
+  padding-top: 0 !important;
+  margin: 0 !important;
+}
+.pZero {
+  padding: 0 !important;
+}
+.gray {
+  -webkit-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+.grayColor {
+  color: #bfbfbf !important;
+}
+.mt10 {
+  margin-top: 10px !important;
+}
+.mr40 {
+  margin-right: 40px !important;
+}
+/* 优先级提示 */
+.priority {
+  color: #49a9ea;
+}
+/* form 删除线 */
+.formListDelLine {
+  position: relative;
+}
+.formListDelLine > td:after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width: 1000px;
+  height: 2px;
+  left: 25px;
+  background-color: #f00;
+  z-index: 9;
+  margin-top: -18px;
+}
+/* manager删除线 */
+.listDelLine {
+  position: relative;
+}
+.listDelLine > td:after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width: 1580px;
+  height: 2px;
+  left: 10px;
+  background-color: #f00;
+  z-index: 9;
+  margin-top: -18px;
+}
+.listLine:last-child:after {
+  display: none;
+}
+/* 发票支票列表显示 */
+.check_main {
+  width: 180px;
+  height: 30px;
+  line-height: 30px;
+  margin: 8px 5.5px 0 5.5px;
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  float: left;
+  font-size: 15px;
+  padding: 0 5px 0 3px;
+}
+.check {
+  width: 100%;
+  margin: -16px 16px 8px 16px;
+}
+.delete {
+  float: right;
+  font-size: 16px;
+}
+.red {
+  color: #FF0000;
+}
+/* 支票和发票颜色提示 */
+.colorTip {
+  width: 520px;
+  float: left;
+  margin-left: 20px;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.colorTip div {
+  display: flex;
+  align-items: center;
+  width: 33%;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+.colorTip div p.shape {
+  margin-right: 3px;
+  border-radius: 4px;
+  width: 36px;
+  height: 20px;
+}
+.colorTip div p {
+  white-space: nowrap;
+}
+.delete {
+  float: right;
+  font-size: 16px;
+}
+.red {
+  color: #FF0000;
+}
+/* 平铺界面没有数据提示 */
+.tilingEmpty {
+  text-align: center;
+  margin-top: 108px;
+}
+.tilingEmpty .tilingIcon {
+  font-size: 108px;
+}
+.tilingEmpty .tilingIcon:before {
+  color: #bfbfbf;
+}
+.tilingEmpty p:last-child {
+  font-size: 16px;
+  color: #666;
+}
+/* 报销界面 图片预览 */
+.invoiceImgView {
+  width: 850px;
+  height: 550px;
+  display: block;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: -130px;
+  margin: auto;
+  box-shadow: 0 0 15px #333;
+  border-radius: 8px;
+  background-color: #fff;
+  overflow: hidden;
+}
+.invoiceImgView img {
+  width: 95%;
+  height: 100%;
+}
+/* 报销界面 无票理由 */
+.noInvoiceBox {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.7;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+.twinkleBgColor {
+  background-color: #66c0ff !important;
+  color: #fff !important;
+}
+.twinkleBgColor span {
+  color: #fff !important;
+}
+.twinkleBgColor p:before {
+  color: #fff !important;
+}
+.twinkleBgColor .i-btn-prompt:before {
+  color: #fff !important;
+}
+.twinkleBgColor .mt_button {
+  color: #fff !important;
+}
+.twinkleBgColor div > div {
+  color: #fff !important;
+}
+.twinkleBgColor td > div {
+  color: #fff !important;
+}
+.twinkleBgColor input {
+  background-color: #66c0ff !important;
+}
+.slowTwinkleBgColor {
+  background-color: #66c0ff !important;
+  color: #fff !important;
+}
+.slowTwinkleBgColor span {
+  color: #fff !important;
+}
+.slowTwinkleBgColor p:before {
+  color: #fff !important;
+}
+.slowTwinkleBgColor .i-btn-prompt:before {
+  color: #fff !important;
+}
+.slowTwinkleBgColor .mt_button {
+  color: #fff !important;
+}
+.slowTwinkleBgColor div > div {
+  color: #fff !important;
+}
+.slowTwinkleBgColor td > div {
+  color: #fff !important;
+}
+.slowTwinkleBgColor .cbl_main_more > div {
+  background-color: #fff !important;
+}
+.slowTwinkleBgColor .cbl_main_right_menu {
+  background-color: #fff !important;
+}
+.slowTwinkleBgColor .cbl_main_right_menu div {
+  color: #333 !important;
+}
+/*# sourceMappingURL=common.css.map */

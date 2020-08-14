@@ -1,0 +1,122 @@
+
+*{ margin:0; padding:0; border:0; font-family: "Microsoft YaHei",sans-serif;}
+input,a,button{outline:none;}
+.Red{ color:#f00 !important;}
+/************模态窗口**************/
+.PopBg{ z-index:99999990;width:100%; height:100%;background:#000; position: fixed;top: 0px;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; /*IE8*/
+    filter:alpha(opacity=50);  /*IE5、IE5.5、IE6、IE7*/
+    opacity: .5;  /*Opera9.0+、Firefox1.5+、Safari、Chrome*/}
+.AlertBoxMove{
+    position:absolute;
+    left:50%;
+    top:50%;
+    border:3px dashed #f0eeee;
+    z-index:99999991;
+    cursor:move;
+}
+.AlertBox{
+    position:absolute;
+    left:50%;
+    top:50%;
+    border-radius:8px;
+    box-shadow:0px 0px 12px #000;
+    background-color:#fff;
+}
+.AlertBoxHead {
+    height:40px;
+    width:100%;
+    background-color:#329EE7;
+    border-radius:8px 8px 0 0;
+    cursor:move;
+}
+.AlertBoxHead h3{
+    font-size:16px;
+    font-family:"宋体";
+    font-weight:bold;
+    color:#fff;
+    line-height:40px;
+    padding-left:16px;}
+.AlertBoxHead h3 span{ float:left;}
+.AlertBoxHead h3 img{ float:right; cursor:pointer; margin-top:12px; margin-right:10px; width:18px; height:18px;}
+.AlertBoxMain{
+    overflow:hidden;
+    border-radius: 0 0 8px 8px;
+}
+.AlertBox{
+    position:absolute;
+    left:50%;
+}
+
+/*中间内容样式*/
+.AlertBoxBody {
+}
+.AlertTest{  width:100%; text-align:center; vertical-align:middle;}
+.AlertTest img{ vertical-align:middle; margin-top:20px;}
+.AlertTest span{ vertical-align:middle; margin-left:10px; margin-top:20px; display:inline-block; text-align:left;}
+.AlertBottom{ width:100%; padding-top:10px; text-align:center;}
+.AlertInput{ width:160px; height:25px; border:1px solid #333; margin-top:10px; text-align:center;}
+.AlertTipA{ color:#f00;}
+.AlertTipB{ border-color:#f00;}
+
+.ChatInput{ width:380px; height:30px; border:1px solid #B2B2B2; margin-top:40px; margin-bottom:20px;}/*输入网址文本框*/
+.input_over{ background-color:#f4ffd4 !important;}
+.InputError{ background-color:#FFCCCC !important; border:1px solid #FF0000 !important;}/*文本框输入错误样式*/
+/*弹窗内表格样式*/
+.AlertBoxList{
+    width:100%;
+    margin:0 auto;
+    height:auto;
+    overflow: hidden;
+    font-size: 13px;
+    color:#000;}
+.AlertBoxList th
+{
+    border:1px solid #1c80c4;
+}
+.AlertBoxList td a{ color:#000;}
+
+.AlertButton{
+    width:auto;
+    padding:0 15px;
+    border:1px solid #a2a2a2;
+    border-radius: 4px;
+    background: linear-gradient(0deg, #f1effa, #e8e9ed);
+    font-size: 14px !important;
+    font-family: "Microsoft YaHei",sans-serif !important;
+    color: #5988a6;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 30px;
+    height:30px;
+}
+.AlertButton img{ vertical-align:middle;}
+.AlertButton span{ vertical-align:middle; margin-left:5px;}
+.AlertButton span b{ color:#f00; font-weight:normal;}
+.AlertButton:hover{
+    color:#fdfdfd;
+    border:1px solid #037dca;
+    background: linear-gradient(0deg, #1ea0ff, #77c6ff);
+}
+.AlertButtonHover{
+    color:#fdfdfd;
+    border:1px solid #037dca;
+    background: linear-gradient(0deg, #1ea0ff, #77c6ff);
+}
+.AlertButtonRed{
+    color:#fdfdfd;
+    border:1px solid #660703;
+    background: linear-gradient(0deg, #cf0505, #f51e23);
+}
+/*重新登录*/
+.AlertLoginWindow{width:470px; height:400px; background-color:#fff; overflow:hidden; margin-left:-235px; top:50%; margin-top:-260px; z-index:22;}
+.AlertRootWindow{width:470px; height:260px; background-color:#fff; overflow:hidden; margin-left:-235px; top:50%; margin-top:-260px; z-index:22;}
+
+.tabspan{ font-size:14px; margin-left:30px; vertical-align:middle; margin-top:10px !important;}
+.tabinput{
+    background-color: #fff;
+    border: 1px solid #C0C0C0;
+    vertical-align:middle;
+    text-align:left !important;
+    padding-left:3px;
+}
+.tabbtn{ margin-top:30px; margin-left:30px;}

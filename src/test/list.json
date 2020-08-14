@@ -1,0 +1,36 @@
+{
+  "id": "6204CC8E-4A02-463F-9154-0E88A00CA57A",
+  "insertDate": "2019-10-15",
+  "isHead": 0,
+  "completeness": 0,
+  "createName": "34342BB3-412B-49BF-B587-A7F9C30A9E8C",
+  "updateName": "34342BB3-412B-49BF-B587-A7F9C30A9E8C",
+  "updateDate": "2019-10-15",
+  "ownerID": "820CC74D-65B3-486E-8858-0E28F4ACED31",
+  "name": "事件1",
+  "category": 0,
+  "causeID": "",
+  "cause": null,
+  "useNum": "2",
+  "money": 320.0,
+  "lastDate": "2019-10-14",
+  "code": "plan001",
+  "isAuto": 0,
+  "state": 0,
+  "isFinish": 0,
+  "listBrand": [
+    {
+      "id": "B3F4E3EB-E864-445C-B60C-78974BF8E468",
+      "insertDate": "2019-10-15",
+      "ownerID": "6204CC8E-4A02-463F-9154-0E88A00CA57A",
+      "brandNum": 0
+    },
+    {
+      "id": "CD18A823-CB76-4427-BF44-34236ED342F2",
+      "insertDate": "2019-10-15",
+      "ownerID": "6204CC8E-4A02-463F-9154-0E88A00CA57A",
+      "brandNum": 1
+    }
+  ],
+  "brand": null
+}

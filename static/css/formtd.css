@@ -1,0 +1,23 @@
+@charset "UTF-8";
+.fd_in_txt{
+  padding: 0 3px !important;
+  overflow:inherit !important;
+}
+
+.fd_upload_main{
+
+}
+
+.fd_center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.td_yes{
+  color: #49a9ea !important;
+}
+
+.td_no{
+  color: #F00 !important;
+}

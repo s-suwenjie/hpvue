@@ -1,0 +1,38 @@
+@charset "UTF-8";
+@import "./css/common.css";
+@import "./css/control.css";
+@import "./css/fontstyle.css";
+@import "./css/margin.css";
+@import "./css/padding.css";
+@import "./css/fontcolor.css";
+@import "./css/formcontrol.css";
+@import "./css/formtd.css";
+@import "./css/fontsize.css";
+@import "./css/tree.css";
+@import "./css/manager.css";
+@import "./css/managertd.css";
+@import "./css/form.css";
+@import "./css/table.css";
+@import "./css/button.css";
+@import "./css/view.css";
+@import "./css/color.css";
+
+*{
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+.disable_menu{
+  -webkit-touch-callout:none;  /*系统默认菜单被禁用*/
+  -webkit-user-select:none; /*webkit浏览器*/
+  -khtml-user-select:none; /*早期浏览器*/
+  -moz-user-select:none;/*火狐*/
+  -ms-user-select:none; /*IE10*/
+  user-select:none;
+  -moz-touch-callout:none;
+  -ms-touch-callout:none;
+  touch-callout:none;
+}
+
+

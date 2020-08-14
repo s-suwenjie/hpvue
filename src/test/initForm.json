@@ -1,0 +1,182 @@
+{
+  "content": null,
+  "pager": null,
+  "type": 0,
+  "listCategory": {
+    "value": "0",
+    "list": [
+      {
+        "showName": "业务相关",
+        "num": "0",
+        "code": "#297c25"
+      },
+      {
+        "showName": "日常办公",
+        "num": "1",
+        "code": "#2d2798"
+      },
+      {
+        "showName": "内部互转",
+        "num": "2",
+        "code": "#bb262b"
+      }
+    ]
+  },
+  "listBrand": {
+    "value": "0",
+    "list": [
+      {
+        "showName": "供应商付款",
+        "num": "0",
+        "code": "#373737"
+      },
+      {
+        "showName": "店面升级",
+        "num": "1",
+        "code": "#373737"
+      },
+      {
+        "showName": "预付款",
+        "num": "2",
+        "code": "#373737"
+      }
+    ]
+  },
+  "listUseNum": {
+    "value": "0",
+    "list": [
+      {
+        "showName": "供应商付款",
+        "num": "0",
+        "code": "#373737"
+      },
+      {
+        "showName": "店面升级",
+        "num": "1",
+        "code": "#373737"
+      },
+      {
+        "showName": "预付款",
+        "num": "2",
+        "code": "#373737"
+      },
+      {
+        "showName": "非业务付款",
+        "num": "3",
+        "code": "#373737"
+      },
+      {
+        "showName": "佣金返利",
+        "num": "4",
+        "code": "#373737"
+      },
+      {
+        "showName": "备用金",
+        "num": "5",
+        "code": "#373737"
+      },
+      {
+        "showName": "内部账户互转",
+        "num": "6",
+        "code": "#373737"
+      },
+      {
+        "showName": "税费缴纳",
+        "num": "7",
+        "code": "#373737"
+      },
+      {
+        "showName": "工资福利",
+        "num": "8",
+        "code": "#373737"
+      }
+    ]
+  },
+  "listIsAuto": {
+    "value": "0",
+    "list": [
+      {
+        "showName": "自动",
+        "num": "0",
+        "code": "#373737"
+      },
+      {
+        "showName": "手动",
+        "num": "1",
+        "code": "#373737"
+      }
+    ]
+  }
+}
+
+
+{
+  "content": [
+    {
+      "id": "D8087E54-0636-4B40-BCAD-379FF1FDC443",
+      "insertDate": "2019-09-02",
+      "isHead": null,
+      "completeness": null,
+      "createName": "",
+      "updateName": "",
+      "updateDate": null,
+      "category": 0,
+      "name": "哥斯拉"
+    },
+    {
+      "id": "4D423B3F-3B5E-4A76-97C3-7D1210AF10E0",
+      "insertDate": "2019-09-02",
+      "isHead": null,
+      "completeness": null,
+      "createName": "",
+      "updateName": "",
+      "updateDate": null,
+      "category": 0,
+      "name": "阿凡达"
+    },
+    {
+      "id": "37334989-9282-4670-8A1D-3D9080C79BD4",
+      "insertDate": "2019-08-28",
+      "isHead": null,
+      "completeness": null,
+      "createName": "",
+      "updateName": "",
+      "updateDate": null,
+      "category": 0,
+      "name": "北京海派奥特经贸有限公司"
+    },
+    {
+      "id": "F7D1D940-EA66-4E7C-B38D-992862118311",
+      "insertDate": "2013-03-14",
+      "isHead": null,
+      "completeness": null,
+      "createName": "",
+      "updateName": "",
+      "updateDate": null,
+      "category": 0,
+      "name": "元亨机械服务（郑州）有限公司"
+    }
+  ],
+  "pager": {
+    "total": 4,
+    "pageSize": 10,
+    "pageIndex": 1,
+    "selectCount": 0
+  },
+  "type": 0,
+  "listCategory": {
+    "value": "0",
+    "list": [
+      {
+        "showName": "本单位",
+        "num": "0",
+        "code": "#0000ff"
+      },
+      {
+        "showName": "外单位",
+        "num": "1",
+        "code": "#00a8a8"
+      }
+    ]
+  }
+}

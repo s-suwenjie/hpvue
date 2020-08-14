@@ -1,0 +1,98 @@
+@charset "UTF-8";
+.t_list
+{
+    width:1185px;
+    height:auto;
+    font-size: 13px;
+    color:#000;
+    margin:0 auto;
+    display:block;
+}
+
+.t_list_form{
+    width:auto;
+    margin: 0 20px 16px 20px;
+}
+
+.t_table{
+    border-collapse:collapse;
+    width:100%;
+    table-layout:fixed;
+    display: table;
+    background-color:#FFFFFF;
+}
+
+.t_table th
+{
+    font:bold 14px/0.75em Arial,'Times New Roman','Microsoft YaHei',SimHei;
+    color: #fff;
+    height: 34px;
+    padding:0 3px;
+    vertical-align:middle;
+    line-height: 32px;
+    background: linear-gradient(0deg, #49a9ea, #66c0ff );
+    white-space: nowrap;
+    cursor:pointer;
+    overflow:hidden;
+    position: relative;
+}
+
+.t_table th:before{
+    display: inline-block;
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 8px;
+    height: 18px;
+    border-right: 1px solid #fff;
+}
+.t_table th:last-child:before{
+    content: '';
+    border-right: none !important;
+}
+
+.t_table tbody{
+    background-color: #FFFFFF;
+}
+
+.t_table tbody tr{
+    height: 34px;
+    line-height: 34px;
+}
+
+/*列表页面内容td*/
+.t_table td{
+    /*border: 1px solid #bfbfbf;*/
+    overflow: hidden;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    box-shadow: -1px 0 0 0 #bfbfbf inset, 0 1px 0 0 #bfbfbf;
+}
+.t_table td:last-child{
+    box-shadow: 0 0 0 0 #bfbfbf inset, 0 1px 0 0 #bfbfbf;
+}
+
+.t_list_show td{
+    box-shadow: none;
+}
+.t_list_show td:last-child{
+    box-shadow: none;
+}
+
+.t_table tr{
+    cursor: pointer;
+}
+.t_table tr:hover{
+    background-color: #A7D6F7;
+}
+
+.t_tip{
+    position: absolute;
+    background-color: #49a9ea;
+    box-shadow: 0 0 6px #000000;
+    z-index: 99;
+}
+.delete{
+    float: none;
+}

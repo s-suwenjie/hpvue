@@ -1,0 +1,277 @@
+@charset "UTF-8";
+
+.m_main {
+    width: 1600px;
+    height: auto;
+    min-height: 650px;
+    float: right;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+.m_navigation{
+    width: 1570px;
+    height: 46px;
+    background: url('/StaticMHtml/Images/topmenu/placeico.png') #329ee7 no-repeat 10px 17px;
+    border-bottom: 4px solid #077ac8;
+    font-size: 14px;
+    line-height: 50px;
+    padding-left: 30px;
+    color: #fff;
+    position: relative;
+}
+
+.navLft{
+    float: right;
+    margin-right: 10px;
+}
+.navLft div{
+    display: inline-flex;
+    cursor: pointer;
+    margin: 0 4px;
+    line-height: 20px;
+    padding: 2px;
+    font-size: 19px;
+}
+.navLft div.active{
+    border: 2px solid #fff;
+}
+.navSwitchLft{
+    float: right;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+.m_operate{
+    width: 1590px;
+    padding: 10px 0 10px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.operaLft{
+    display: flex;
+    position: absolute;
+    right: 6px;
+    align-items: center;
+    line-height: 26px;
+    height: 32px;
+    color: #333;
+}
+.operaLft:hover{
+    color: #49a9ea;
+}
+.operateMore{
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.operateMore>div{
+    margin-bottom: 10px;
+}
+.buttonSwitch{
+    position: absolute;
+    top: 56px;
+    right: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 210px;
+    height: 36px;
+    border: 1px solid #ccc;
+    padding:0 4px;
+}
+.buttonSwitch>.profit{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 86px;
+    height: 28px;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #f00;
+    transition: all 0.2s;
+}
+.buttonSwitch>.loss{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 86px;
+    text-align: center;
+    color: #fff;
+    height: 28px;
+    border-radius: 5px;
+    background-color: #09b300;
+    transition: all 0.2s;
+}
+.m_list
+{
+    width:1580px;
+    height:auto;
+    font-size: 13px;
+    color:#333;
+    margin:0 auto;
+}
+.listTotalCrente{
+    display: flex;
+}
+.f_main_customize .m_list{
+    width: auto;
+    margin: 0 20px;
+}
+
+.isManagerTitle{
+    padding: 16px 0 0 16px;
+    font-size: 16px;
+}
+
+
+/*列表页面内容table*/
+.m_content_table{
+    border-collapse:collapse;
+    width:100%;
+    table-layout:fixed;
+    display: table;
+    background-color:#FFFFFF;
+}
+
+/*列表页面内容th*/
+.m_content_table th
+{
+    font:bold 14px/0.75em Arial,'Times New Roman','Microsoft YaHei',SimHei;
+    color: #fff;
+    height: 34px;
+    vertical-align:middle;
+    line-height: 32px;
+    background: linear-gradient(0deg, #49a9ea, #66c0ff );
+    white-space: nowrap;
+    cursor:pointer;
+    overflow:hidden;
+    position: relative;
+}
+.m_content_table th:before{
+    display: inline-block;
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 8px;
+    height: 18px;
+    border-right: 1px solid #fff;
+}
+.m_content_table th:last-child:before{
+    content: '';
+    border-right: none !important;
+}
+/*列表页面内容td*/
+.m_content_table td{
+    /*border: 1px solid #bfbfbf;*/
+    overflow: hidden;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    box-shadow: -1px 0 0 0 #bfbfbf inset, 0 1px 0 0 #bfbfbf;
+}
+.m_content_table td:last-child{
+    box-shadow: 0 0 0 0 #bfbfbf inset, 0 1px 0 0 #bfbfbf;
+}
+.m_content_table tr{
+    cursor: pointer;
+}
+.m_content_table tr:hover{
+    background-color: #A7D6F7;
+}
+/* 汇总小表格表格 */
+.m_content_total_table{
+    border: 1px solid #bfbfbf;
+}
+.m_content_total_table th{
+    background: linear-gradient(0deg, #C5DAEB, #C5DAEB );
+}
+.m_content_total_table td{
+    box-shadow: none;
+    border: 1px solid #bfbfbf;
+}
+.m_content_total_table td:last-child{
+    box-shadow: none;
+}
+.m_listNoData{
+    margin: 0;
+    border: 1px solid #d9d9d9;
+    border-top: none;
+    display: block;
+    width: auto;
+    text-align: center;
+    font-size: 14px;
+    line-height: 14px;
+    padding: 10px 0;
+    color: #bfbfbf;
+    background-color: #fff;
+}
+.listTotalLeft .test{
+    background: linear-gradient(0deg, #C5DAEB, #C5DAEB );
+    display: block;
+    width: 108px;
+    text-align: center;
+    height: 34px;
+    line-height: 34px;
+    border: 1px solid #bfbfbf;
+}
+.m_pager{
+    padding-left: 10px;
+}
+.textNormal{
+    font-weight: normal !important;
+}
+.mt_psd{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    line-height: 30px;
+}
+
+.mt_psd_left{
+    justify-content: flex-start;
+    padding-left: 5px;
+}
+
+.mt_psd>div{
+    height: 30px;
+    line-height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/*列表页面内容行中的按钮事件*/
+.mt_button{
+    margin: 0 3px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.mt_button>div{
+    height: 30px;
+    line-height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mt_psd>.font,.mt_button>.font{
+    font-size: 15px;
+    font-weight: normal;
+    line-height: 30px;
+}
+.mt_button_disabled{
+    color: #999999 !important;
+    cursor: not-allowed;
+}
+

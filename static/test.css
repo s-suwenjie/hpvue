@@ -1,0 +1,495 @@
+
+
+/*before伪类字体大小*/
+.fS16B:before{
+  font-size: 16px !important;
+}
+.fS18B:before{
+  font-size: 18px !important;
+}
+
+.fS20B:before{
+  font-size: 20px !important;
+}
+
+.fS22B:before{
+  font-size: 22px !important;
+}
+
+/*字体before  margin相关*/
+/*字体右边距3px*/
+.mr3b:before{
+  margin-right: 3px !important;
+}
+/*字体右边距5px*/
+.mr5b:before{
+  margin-right: 5px !important;
+}
+
+/*字体大小*/
+.fontSize18{
+  font-size: 18px !important;
+}
+
+.bold{
+  font-weight: bold !important;
+}
+
+.tableSortColor{
+  color:#D92EC8 !important;
+}
+
+.yes{
+  color: #49a9ea !important;
+}
+
+.no{
+  color: #F00 !important;
+}
+
+.boxLeft{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.boxCenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+/****************************************************************************************/
+/****************************************************************************************/
+/****************************************************************************************/
+/****************************************************************************************/
+
+
+/*周六周日字体显示颜色*/
+.weeklast{
+  color: #F47564 !important;
+}
+/*金额小数显示字体大小*/
+.moneyDecimal{
+  font-size: 12px !important;
+}
+/*金额亿级显示*/
+.moneyBillion{
+  font-size: 15px !important;
+}
+
+
+/*组件相关*/
+.formcontrol{
+  width: 499px;
+  background-color: #E9E9E9;
+  padding: 1px 0;
+  position: relative;
+}
+.formcontrolWidth{
+  width: 1000px;
+}
+.formcontrol .context{
+  min-height: 40px;
+  display:flex;
+  flex-direction: row;
+  justify-items: center;
+}
+.formcontrol .context .title{
+  width: 85px;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  font-size: 14px;
+  color: #666666;
+  padding-right: 10px;
+}
+.formcontrol .context .content{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.formcontrol .context .content .box{
+  min-height: 40px;
+  width: 380px;
+  background-color: #FFFFFF;
+  border: 1px solid #BFBFBF;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.formcontrol .context .content .boxWidth{
+  width: 880px;
+}
+
+.formcontrol .context .content .HorizontallyCentered{
+  align-items: center;
+}
+
+.formcontrol .context .content .box input{
+  flex: 1;
+  min-height: 38px;
+  line-height: 38px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.formcontrol .context .content .box>.icon{
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:#BFBFBF;
+}
+
+.formcontrol .context .content .box .showMore{
+  flex: 1;
+  display: flex;
+  padding: 8px 10px 0 0;
+  flex-wrap: wrap;
+}
+
+.formcontrol .context .content .box .showMore>.item{
+  height: 24px;
+  background-color: #76C8FF;
+  color: #FFFFFF;
+  border-radius: 5px;
+  margin: 0 0 8px 10px;
+  border: 1px solid #49a9ea;
+  display: flex;
+  flex-direction: row;
+}
+
+.formcontrol .context .content .box .showMore>.item>span{
+  font-size: 12px;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.formcontrol .context .content .box .showMore>.item>.icon{
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin: 5px 10px;
+  background-color: #FF0000;
+  border-radius: 50%;
+}
+
+.formcontrol .context .content .box .showMore>.item:hover {
+  background-color: #49a9ea;
+}
+.formcontrol .context .content .box .showMore>.item:hover>.icon{
+  color: #F00;
+  background-color: #FFF;
+  border-radius: 50%;
+
+}
+
+.formcontrol .context .content .hover{
+  border: 1px solid #A5D6F7;
+  cursor: pointer;
+}
+
+.formcontrol .context .content .hover>.icon{
+  color:#A5D6F7;
+}
+
+.formcontrol .context .content .focus{
+  border: 1px solid #49a9ea;
+  cursor: pointer;
+}
+
+.formcontrol .context .content .error{
+  border: 1px solid #FF0000;
+  cursor: pointer;
+}
+
+.formcontrol .context .content .error>.icon{
+  color: #FF0000;
+}
+
+.formcontrol .txtCenter{
+  text-align: center;
+}
+
+/*组合框中的字体样式显示*/
+.formcontrol .makeupIcon{
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  color: #333;
+  width:60px !important;
+}
+
+.formcontrol .makeupTxt{
+  width:60px !important;
+}
+
+.formcontrol .selectColor{
+  position: relative;
+}
+.formcontrol .selectColor>input{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.formcontrol .split{
+  border-left: 1px solid #BFBFBF;
+  width: 1px;
+}
+.formcontrol .context .content .hover>.split{
+  border-left: 1px solid #A5D6F7;
+}
+
+.formcontrol .context .content .focus>.split{
+  border-left: 1px solid #49a9ea;
+}
+
+.formcontrol .context .content .error>.split{
+  border-left: 1px solid #FF0000;
+}
+
+.formcontrol .txtPaddingLeft10{
+  padding-left: 10px !important;
+}
+
+.formcontrol .numBox{
+  width:70px;
+}
+
+/*鼠标形状*/
+.formcontrol .disabled{
+  cursor: not-allowed !important;
+}
+
+.formcontrol>.error{
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  color: #FF0000;
+  text-indent: 85px;
+  text-align: left;
+}
+
+
+
+/*******  字体相关 *****/
+.btnSave:before {
+  font-family: 'icomoon' !important;
+  content: "\e93a";
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+/*是*/
+.whether0:before{
+  font-family: 'icomoon' !important;
+  content: "\e943";
+}
+/*否*/
+.whether1:before{
+  font-family: 'icomoon' !important;
+  content: "\e942";
+}
+
+
+
+.tableSort:before {
+  font-family: 'icomoon' !important;
+  content: "\e941";
+}
+
+.applicationSm:before {
+  font-family: 'icomoon' !important;
+  content: "\e91f";
+}
+
+.rmb:before {
+  font-family: 'icomoon' !important;
+  content: "\e907";
+}
+
+
+
+.color:before {
+  font-family: 'icomoon' !important;
+  content: "\e920";
+}
+
+.selectBox:before {
+  font-family: 'icomoon' !important;
+  content: "\e90b";
+}
+
+.delete2:before {
+  font-family: 'icomoon' !important;
+  content: "\e910";
+}
+
+.delete:before {
+  font-family: 'icomoon' !important;
+  content: "\e904";
+}
+/*
+
+!*审批相关图标*!
+!*已提交*!
+.submitApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e93e";
+}
+
+!*已完成*!
+.finishApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e913";
+}
+
+!*部门审批*!
+.departmentApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e939";
+}
+!*部门审批通过*!
+.departmentApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e937";
+}
+!*部门驳回申请*!
+.departmentApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e938";
+}
+
+!*财务审批*!
+.financeApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e936";
+}
+!*财务审批通过*!
+.financeApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e934";
+}
+!*财务驳回申请*!
+.financeApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e935";
+}
+
+!*审计审批*!
+.auditApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e933";
+}
+!*审计审批通过*!
+.auditApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e931";
+}
+!*审计驳回申请*!
+.auditApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e932";
+}
+!*高层审批*!
+.highLevelApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e930";
+}
+!*高层审批通过*!
+.highLevelApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e92e";
+}
+!*高层驳回申请*!
+.highLevelApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e92f";
+}
+
+!*拨款操作*!
+.grantApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e92d";
+}
+!*拨款操作通过*!
+.grantApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e92b";
+}
+!*拨款操作驳回申请*!
+.sealApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e92c";
+}
+
+!*盖章操作*!
+.sealApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e92a";
+}
+!*盖章操作审批通过*!
+.sealApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e928";
+}
+!*盖章操作驳回申请*!
+.sealApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e929";
+}
+
+!*董事长审批*!
+.shareholderApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e927";
+}
+!*董事长审批通过*!
+.shareholderApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e925";
+}
+!*董事长驳回申请*!
+.shareholderApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e926";
+}
+
+!*股东审批*!
+.chairmanApproval:before{
+  font-family: 'icomoon' !important;
+  content: "\e924";
+}
+!*股东审批通过*!
+.chairmanApprovalOK:before{
+  font-family: 'icomoon' !important;
+  content: "\e922";
+}
+!*股东驳回申请*!
+.chairmanApprovalReject:before{
+  font-family: 'icomoon' !important;
+  content: "\e923";
+}
+*/
+
+
+
+
+
+

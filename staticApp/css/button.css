@@ -1,0 +1,88 @@
+@charset "UTF-8";
+.ab_main{
+    height: 0.9867rem;
+    line-height: 0.9867rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0.4267rem;
+    border-radius: 0.2133rem;
+    font-size: 0.3733rem;
+    margin: 0 0.1rem;
+}
+
+.ab_one{
+    border: 0;
+    /*border-top: 0.0267rem solid #49a9ea;*/
+    height: 100%;
+    width: 100%;
+    border-radius: 0.4267rem 0.4267rem 0 0;
+    background-color: #49a9ea;
+    color: #FFF;
+    margin: 0;
+}
+
+.ab_one_touch{
+    border-top: 0.0267rem solid #1479d7;
+    background-color: #1479d7;
+    box-shadow: 0 0 0.2133rem #1479d7;
+}
+
+
+.ab_two{
+    background-color: #49a9ea;
+    color: #FFF;
+}
+
+.ab_two_touch{
+    background-color: #1479d7;
+    box-shadow: 0 0 0.1067rem #1479d7;
+}
+
+.ab_three{
+    border: 0.0267rem solid #49a9ea;
+    color: #49a9ea;
+}
+
+.ab_three_touch{
+    background-color: #49a9ea;
+    color: #FFF;
+    box-shadow: 0 0 0.1067rem #49a9ea;
+}
+
+.ab_four{
+    border: 0.0267rem solid #BFBFBF;
+    color: #333;
+}
+
+.ab_four_touch{
+    border: 0.0267rem solid #49a9ea;
+    box-shadow: 0 0 0.1067rem #49a9ea;
+}
+
+.ab_ten{
+    border: 0.0267rem solid #FF0000;
+    color: #FF0000;
+}
+
+.ab_ten_touch{
+    border: 0.0267rem solid #FF0000;
+    box-shadow: 0 0 0.1067rem #FF0000;
+}
+
+.abasm_touch{
+    background-color: #F3F3F3;
+}
+.ab_five{
+    background-color: #ffffff;
+    border: 0.0267rem solid #49a9ea;
+}
+
+.ab_six{
+    background-color: #49a9ea;
+    color: #FFF;
+    width: 96%;
+    border-radius: 0.45rem;
+}
+

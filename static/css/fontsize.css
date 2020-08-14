@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+.fs12{
+    font-size: 12px !important;
+}
+
+.fs13{
+    font-size: 13px !important;
+}
+
+.fs14{
+    font-size: 14px !important;
+}
+
+.fs15{
+    font-size: 15px !important;
+}
+
+.fs18{
+    font-size: 18px !important;
+}
+.fs18bgffffff{
+    background-color: #FFF;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+}
+
+.fs22{
+    font-size: 22px !important;
+}
+
+
+.fs12b:before{
+    font-size: 12px !important;
+}
+
+.fs13b:before{
+    font-size: 13px !important;
+}
+
+.fs14b:before{
+    font-size: 14px !important;
+}
+
+.fs15b:before{
+    font-size: 15px !important;
+}
+
+.fs16b:before{
+    font-size: 16px !important;
+}
+
+
+.fs18b:before{
+    font-size: 18px !important;
+}
+
+.fs20b:before{
+    font-size: 20px !important;
+}
+
+.fs22b:before{
+    font-size: 22px !important;
+}
+
+.fs24b:before{
+    font-size: 24px !important;
+}
+.fs48b:before{
+    font-size: 48px !important;
+}
+.opacity3:before{
+    opacity: 0.3 !important;
+}
+.colorFFF:before{
+    color: #FFF !important;
+}
+
+

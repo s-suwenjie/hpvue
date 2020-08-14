@@ -1,0 +1,209 @@
+@charset "UTF-8";
+/*公共表格模板*/
+.table {
+  overflow: hidden;
+}
+.table table {
+  table-layout: fixed;
+}
+.table table thead tr {
+  height: 34px;
+  line-height: 34px;
+}
+.table table thead tr td {
+  padding-left: 10px;
+  font-size: 14px;
+  color: #333;
+  font-weight: normal;
+  background-color: #d4ecfc;
+  box-shadow: 0 1px 0 0 #d9d9d9;
+  position: relative;
+}
+.table table thead tr td:after {
+  content: '';
+  position: absolute;
+  top: 7px;
+  right: 0;
+  width: 1px;
+  height: 20px;
+  background-color: #7975a0;
+}
+.table table thead tr td:last-child:after {
+  display: none;
+}
+.table table thead .tdLineNone td:after {
+  display: none;
+}
+.table table tbody {
+  background-color: #fff;
+}
+.table table tbody tr {
+  height: 34px;
+  line-height: 34px;
+  cursor: pointer;
+}
+.table table tbody tr td {
+  padding-left: 10px;
+  font-size: 14px;
+  color: #666;
+  overflow: hidden;
+  white-space: nowrap;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+.table table tbody tr:hover {
+  background-color: #b1e0ff;
+}
+.absolutely {
+  position: relative;
+}
+.doubleClick {
+  position: absolute;
+  top: 260px;
+  left: 440px;
+  color: #333;
+  width: 60px;
+  font-size: 14px;
+  z-index: 99;
+}
+.tdState .tdStateIcon {
+  margin: 0 5px;
+}
+.tdState .tdStateIcon:before {
+  font-size: 14px;
+  border-radius: 50%;
+}
+.tdState p {
+  display: inline-block;
+}
+.operation span {
+  display: inline-block;
+  align-items: center;
+  color: #49a9ea;
+  cursor: pointer;
+  margin: 0 4px;
+}
+.operation span .optIcon {
+  margin-right: 2px;
+  font-size: 14px;
+  color: #49a9ea;
+}
+.operation span .optIcon:before {
+  color: #49a9ea;
+  margin-right: 3px;
+}
+.operation span .icon-urge:before {
+  color: #f00;
+}
+.InterlacBg {
+  background-color: #dcdbdb;
+}
+.tdPrompt {
+  position: relative;
+}
+.tdPrompt i {
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  font-style: normal;
+}
+.tdPromptRgt {
+  position: relative;
+}
+.tdPromptRgt i {
+  position: absolute;
+  right: 4px;
+  top: 10px;
+  font-style: normal;
+}
+.tdPrompt:before {
+  position: absolute;
+  left: 4px;
+  top: 10px;
+}
+.tdPrompt:before i {
+  font-style: normal;
+}
+.tbBtmInfo {
+  margin: 16px 0;
+}
+.tbTitSty {
+  background-color: #fff;
+  margin: 16px 20px 0;
+  border-radius: 8px 8px 0 0;
+}
+.autoCalc {
+  display: flex;
+  align-items: center;
+}
+.autoCalc span {
+  margin-right: 10px;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+}
+.autoCalc input {
+  width: 110px;
+  height: 34px;
+  text-align: right;
+  padding-right: 10px;
+}
+.reimBtm {
+  display: flex;
+  justify-content: space-between;
+}
+.reimBtm p {
+  font-size: 16px;
+}
+.reimBtm p span:first-child {
+  color: #333;
+}
+.tdPSty {
+  text-align: center !important;
+}
+.tdPSty p {
+  margin: 0 2px;
+  display: inline-flex;
+  cursor: pointer;
+}
+.tdImg {
+  height: 30px;
+}
+.tdImg img {
+  width: 100%;
+  height: 30px;
+  vertical-align: middle;
+}
+.noTableData {
+  margin: 0;
+  border: 1px solid #d9d9d9;
+  border-top: none;
+  display: block;
+  width: auto;
+  text-align: center;
+  font-size: 14px;
+  line-height: 14px;
+  padding: 14px 0;
+  color: #bfbfbf;
+  background-color: #fff;
+}
+.tdrPr10 {
+  text-align: right;
+  padding-right: 10px;
+}
+.tacPlZero {
+  text-align: center;
+  padding-left: 0 !important;
+}
+.tbPb20 {
+  padding-bottom: 20px;
+}
+.tdPl4 {
+  padding-left: 4px;
+}
+.tdPr6 {
+  padding-right: 6px;
+}
+.mg20 {
+  margin: 0 20px;
+}
