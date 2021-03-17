@@ -25,10 +25,12 @@
         <yhm-managerth  title="回款公司名称" value="incomeUnit"></yhm-managerth>
         <yhm-managerth  title="第三方回款公司名称" value="tripartiteUnit"></yhm-managerth>
         <yhm-managerth style="width: 220px;" title="发票类型" value="billingTypeVal"></yhm-managerth>
+        <!--<yhm-managerth style="width: 100px;" title="公司用途" value="categoryVal"></yhm-managerth>-->
 <!--        <yhm-managerth style="width: 130px;" title="新车费率" value="newRate"></yhm-managerth>-->
 <!--&lt;!&ndash;        <yhm-managerth style="width: 130px;" title="旧车费率" value="oldRate"></yhm-managerth>&ndash;&gt;-->
 <!--        <yhm-managerth style="width: 130px;" title="客户新车费率" value="clientRate"></yhm-managerth>-->
 <!--        <yhm-managerth style="width: 130px;" title="特殊车型费率" value="vipRate"></yhm-managerth>-->
+        <yhm-managerth style="width: 100px;" title="合同" value="contract"></yhm-managerth>
         <yhm-managerth  title="操作"></yhm-managerth>
       </template>
 
@@ -37,18 +39,25 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td :value="item.shortName"></yhm-manager-td>
+          <yhm-manager-td :value="item.shortName" :color="item.deputyColor" ></yhm-manager-td>
           <yhm-manager-td :value="item.unit"></yhm-manager-td>
           <yhm-manager-td :value="item.incomeUnit"></yhm-manager-td>
           <yhm-manager-td :value="item.tripartiteUnit"></yhm-manager-td>
           <yhm-manager-td :value="item.billingTypeVal"></yhm-manager-td>
+          <!--<yhm-manager-td :value="item.categoryVal"></yhm-manager-td>-->
 <!--          <yhm-manager-td-rgt  :value="item.newRate===''?'&#45;&#45;&#45;&#45;&#45;&#45;':item.newRate +'  %'"></yhm-manager-td-rgt>-->
 <!--&lt;!&ndash;          <yhm-manager-td-rgt :value="item.oldRate===''?'&#45;&#45;&#45;&#45;&#45;&#45;':item.oldRate+'  %'" ></yhm-manager-td-rgt>&ndash;&gt;-->
 <!--          <yhm-manager-td-rgt :value="item.clientRate===''?'&#45;&#45;&#45;&#45;&#45;&#45;':item.clientRate+'  %'" ></yhm-manager-td-rgt>-->
 <!--          <yhm-manager-td-rgt :value="item.vipRate===''?'&#45;&#45;&#45;&#45;&#45;&#45;':item.vipRate+'  %'" ></yhm-manager-td-rgt>-->
+          <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button   @click="addContract(item)" icon="i-export" value="上传合同"></yhm-manager-td-operate-button>
+          </yhm-manager-td-operate>
          <yhm-manager-td-operate>
 <!--            <yhm-manager-td-operate-button  @click="selectBtn(item)" value="查看对账单" icon="i-export"  color="#22AA3E"></yhm-manager-td-operate-button>-->
-            <yhm-manager-td-operate-button  @click="uploadBtn(item)" value="导入回款对账单" icon="i-export"  color="#22AA3E"></yhm-manager-td-operate-button>
+
+            <yhm-manager-td-operate-button :no-click="item.category!=0" @click="uploadBtn(item)" value="导入回款对账单" icon="i-export"  color="#22AA3E"></yhm-manager-td-operate-button>
+
+
             <yhm-manager-td-operate-button  @click="editBtn(item)" value="编辑" icon="i-edit"  color="#0033FF"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
@@ -74,7 +83,6 @@
     mixins: [managermixin],
     data(){
       return{
-
       }
     },
     methods:{
@@ -91,11 +99,24 @@
       //     }
       //   })
       // },
+      addContract(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          title: '上传合同',
+          url: '/contractForm?ownerID=' + item.id,
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       uploadBtn(item){
         this.$dialog.OpenWindow({
           width: '1050',
           height: '750',
-          title: '导入保险回款对应单',
+          title: '导入保险回款对账单',
           url: '/insuranceUnitUpload?ownerID=' + item.id+'&unitID='+item.unitID,
           closeCallBack: (data)=>{
             if(data){

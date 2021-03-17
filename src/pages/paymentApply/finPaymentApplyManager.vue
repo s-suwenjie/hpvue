@@ -8,6 +8,7 @@
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentPlanViewManager'}">付款计划</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/viewManager/paymentApplyViewManager'}">付款申请</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/reimbursementViewManager'}">报销申请</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finReimbursementDetailManager?type=1'}">特殊报销</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
@@ -28,16 +29,17 @@
         <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态"  :content="listState"></yhm-radiofilter>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('appropriation')" title="拨款状态" all="1" :content="appropriationPsd"></yhm-radiofilter>
       </template>
 
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('branchID')" title="部门"  :content="branchList"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
           <yhm-radiofilter :before="isRelevanceBefore" @initData="initChoose('isRelevance')" title="是否关联"   :content="listisRelevance"></yhm-radiofilter>
           <yhm-radiofilter :before="stateBefore" @initData="initChoose('isAllocation')" title="是否分批拨付" all="1" :content="listIsAllocation"></yhm-radiofilter>
           <yhm-radiofilter :before="stateBefore" @initData="initChoose('nature')" title="付款性质" all="1" :content="listNature"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('branchID')" title="部门"  :content="branchList"></yhm-radiofilter>
         </div>
       </template>
 
@@ -65,18 +67,18 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0},{listDelLine: item.isFinish === '1' && item.state !== '-1'}]" v-for="(item,index) in content"
             :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
-          <yhm-manager-td-look @click="add(item)"></yhm-manager-td-look>
+          <yhm-manager-td-look @click="add(item,'')"></yhm-manager-td-look>
           <yhm-manager-td-center @click="lookPerson(item)" :value="item.person"></yhm-manager-td-center>
           <yhm-manager-td :tip="true" @click="unitView(item)" :value="item.otherUnit" color="#7307dc" v-show="item.ownerID!==''"></yhm-manager-td>
           <yhm-manager-td :tip="true" @click="unitView(item)" :value="item.otherUnit"  v-show="item.ownerID==''"></yhm-manager-td>
-          <yhm-manager-td-psd :is-left="true" :value="item.nature" :list="natureList"></yhm-manager-td-psd>
+          <yhm-manager-td-psd :is-left="true" @click="add(item,'1')" :value="item.nature" :list="natureList"></yhm-manager-td-psd>
           <yhm-manager-td-psd :value="item.isChecks" :list="isChecksList"></yhm-manager-td-psd>
           <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.day+'天'" v-if="item.day<=7" style="color:#f00;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else-if="item.day>20" style="color:#2c920b;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #0511a5;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.subject" @click="skipEvent(item)" :color="item.ownerID!=''&&item.ownerType=='1'?'#49a9ea':''"></yhm-manager-td-center>
-          <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" :value-object="item" @mouseout="tableTipHideEvent" :value="item.money"></yhm-manager-td-money>
+          <yhm-manager-td-money style="color:#49a9ea" :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" :value-object="item" @mouseout="tableTipHideEvent" :value="item.money"></yhm-manager-td-money>
 
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
           <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
@@ -96,9 +98,9 @@
       </template>
       <template #listTotalHead>
         <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="进行中" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="驳回" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#2c920b" title="" before-title="已完成" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="已拨款" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="未拨款" ></yhm-managerth>
+        <!--<yhm-managerth style="width: 100px;" before-color="#2c920b" title="" before-title="已完成" ></yhm-managerth>-->
 
       </template>
       <template #listTotalLeft>
@@ -191,7 +193,11 @@
           value: '',
           list: []
         },
-
+        appropriation:'',
+        appropriationPsd:{
+          value:'',
+          list:[],
+        },
         dateType:'',
         dateTypeList: {
           value: '1',
@@ -323,43 +329,66 @@
       tableTipHideEvent(){
         this.tableTip = false
       },
-      add (item) {
+      add (item,num) {
         // 默认设置页面标记是查看
         var isAdd = false
         // 默认设置页面标题为查看信息
         var title = '查看付款申请信息'
-        var url = '/paymentApplyViewForm?id=' + item.id +'&ownerID='+item.ownerID
-        // if (!id) { // 当id不存在的时候
-        //   // 设置id为空
-        //   id = ''
-        //   // 设置页面标题为添加信息
-        //   title = '添加付款申请信息'
-        //   // 设置页面标记为添加
-        //   isAdd = true
-        //   url = '/paymentApplyViewForm?id='
-        // }
-        this.$dialog.OpenWindow({
-          width: 1050,
-          height: 750,
-          url: url,
-          title: title,
-          closeCallBack: (data) => {
-
-            if (data) {
-              if (isAdd) {
-                this.lastData = data
+        var url = '/paymentApplyViewForm?id=' + item.id +'&ownerID='+item.ownerID+'&num='+num
+        if(num==='1'){
+          if(item.nature==='1'){
+            this.$dialog.OpenWindow({
+              width: 1050,
+              height: 750,
+              url: url,
+              title: title,
+              closeCallBack: (data) => {
+                if (data) {
+                  if (isAdd) {
+                    this.lastData = data
+                  }
+                  this.initPageData(false)
+                }
               }
-              this.initPageData(false)
-              /*false->非初始化=>!import  true->初始化*/
-            }
+            })
+          }else if(item.nature==='0'&&item.isFinish==='1'&&item.state==='-1'){
+            this.$dialog.OpenWindow({
+              width: 1050,
+              height: 750,
+              url: url,
+              title: title,
+              closeCallBack: (data) => {
+                if (data) {
+                  if (isAdd) {
+                    this.lastData = data
+                  }
+                  this.initPageData(false)
+                }
+              }
+            })
           }
-        })
+        }else{
+          this.$dialog.OpenWindow({
+            width: 1050,
+            height: 750,
+            url: url,
+            title: title,
+            closeCallBack: (data) => {
+              if (data) {
+                if (isAdd) {
+                  this.lastData = data
+                }
+                this.initPageData(false)
+              }
+            }
+          })
+        }
       },
       lookPerson(item){
         this.$dialog.OpenWindow({
           width: '1050',
           height: '690',
-          url:'/personView?id=' + item.otherUnitID,
+          url:'/personView?id=' + item.personID,
           title:'查看联系人信息',
           closeCallBack:(data) =>{
             if(data){
@@ -414,6 +443,7 @@
             branchID: this.branchList.value,
             dateType: this.dateTypeList.value,
             nature: this.listNature.value,
+            appropriation:this.appropriationPsd.value
           }
         }
         this.init({
@@ -442,6 +472,7 @@
             this.listIsAllocation = data.isAllocationPsd
             this.natureList = data.naturePsd.list
             this.listNature = data.naturePsd
+            this.appropriationPsd = data.appropriationPsd
           }
         })
       },

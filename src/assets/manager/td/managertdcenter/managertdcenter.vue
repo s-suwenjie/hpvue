@@ -1,11 +1,11 @@
 <template>
-    <td @click="clickEvent" class="menuTd" :class="{'overflow':menuShow}" @contextmenu.prevent="contextMenuEvent($event)"  @dblclick="dblclickEvent">
+    <td v-show="show" @click="clickEvent" class="menuTd" :class="{'overflow':menuShow}" @contextmenu.prevent="contextMenuEvent($event)"  @dblclick="dblclickEvent">
       <div class="md_center md_relative" :style="{color: color}">
         <div v-if="afterIcon !== ''" class="md_afterIcon" :style="{color:afterIconColor}" :class="[afterIcon,afterIconFontSize]"></div>
         {{value|formats(format,emptyValue,isEmpty)}}
       </div>
       <div v-show="menuShow" v-if="menuList.length>0" ref="menuRight" class="menuRight" v-click-control-outside="outsideClick">
-        <p v-for="(item,index) in menuList" @click.stop="menuClick(item,index)">{{item}}</p>
+        <p v-for="(item,index) in menuList" :key="index" @click.stop="menuClick(item,index)">{{item}}</p>
       </div>
 
     </td>
@@ -19,8 +19,6 @@
     data(){
       return{
         menuShow:false,
-        mouseX:'',
-        mouseY:'',
         // menuList:['编辑','编辑']
       }
     },
@@ -36,7 +34,7 @@
         default:false
       },
       value: {
-        type: String,
+        type: [String,Number],
         required: true
       },
       format: {
@@ -63,6 +61,10 @@
         type:String,
         default:'fs14'
       },
+      show:{
+        type:Boolean,
+        default:true
+      }
     },
     methods: {
       clickEvent(){
@@ -88,12 +90,9 @@
         if(this.menuList.length>0){
           this.menuShow = false
           $(".menuRight").hide()
-          let rect = this.$el.getBoundingClientRect()
-          this.mouseX = event.pageX - rect.x
-          this.mouseY = event.pageY - rect.y
           let styles = this.$refs.menuRight.style
-          styles.left = this.mouseX+'px'
-          styles.top = this.mouseY+'px'
+          styles.left = event.x+'px'
+          styles.top = event.y+'px'
           styles.display = 'block'
           this.menuShow = true
         }
@@ -132,14 +131,14 @@
 
 <style lang="less" scoped>
 .menuRight{
-  position: absolute;
+  position: fixed;
   width: auto;
   min-width: 100px;
   max-width: 200px;
   height: auto;
   padding: 5px 0;
   background: #fff;
-  z-index: 999;
+  z-index: 99999;
   border: 1px solid #D3D3D3;
   border-radius: 5px;
   p{

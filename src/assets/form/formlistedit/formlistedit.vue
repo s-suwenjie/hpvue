@@ -24,6 +24,7 @@
       <div>
         <slot name="customize"></slot>
       </div>
+      <slot name="pager"></slot>
     </div>
   </div>
 </template>

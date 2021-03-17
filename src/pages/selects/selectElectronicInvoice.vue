@@ -67,6 +67,7 @@
         clickIndex: 0,
         list: [],
         selectMoney: 0,
+        counter:0,//记录上传电子发票页面打开的次数
       }
     },
     methods: {
@@ -176,6 +177,7 @@
               }
               this.allCheck = check
             }
+
           },
           init: (data) => {
             // 初始化时需要执行的代码
@@ -201,7 +203,8 @@
     },
     watch: {
       content(){
-        if(this.content.length === 0){
+        if(this.content.length === 0&&this.counter<1){//counter为计算打开次数 防止首次添加取消后无限循环
+          this.counter++
           this.$dialog.OpenWindow({
             width: '1050',
             height: '740',
@@ -209,7 +212,7 @@
             title: '添加电子发票信息',
             closeCallBack: (data)=>{
               // this.searchStr = data
-              // this.initPageData(false)
+              this.initPageData(false)
             }
           })
         }else{

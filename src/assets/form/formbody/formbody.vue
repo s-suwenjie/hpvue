@@ -1,6 +1,6 @@
 <template>
-  <div class="f_area">
-    <div class="f_title">
+  <div class="f_area" :style="{width:width+'px'}">
+    <div v-show="!noTitle" class="f_title">
       <p class="f_titleTxt">
         <slot name="title"></slot>
       </p>
@@ -18,7 +18,14 @@
   export default {
     name: 'yhm-formbody',
     props: {
-
+      noTitle:{
+        type:Boolean,
+        default:false
+      },
+      width:{
+        type:String,
+        default :'1000'
+      }
     }
   }
 </script>

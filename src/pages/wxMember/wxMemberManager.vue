@@ -15,7 +15,7 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="联系人"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="联系人"></yhm-managerth>
         <yhm-managerth style="" title="联系电话"></yhm-managerth>
         <yhm-managerth style="" title="微信名称"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="微信头像"></yhm-managerth>
@@ -34,7 +34,9 @@
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="look(item.id)"></yhm-manager-td-look>
 
-          <yhm-manager-td :value="item.person"></yhm-manager-td>
+          <yhm-manager-td :color="item.personID==''?'#FF0000':'#0909F7'" :value="item.person" @click="personClike(item)">
+            <span style="color: #FF0000;font-size: 18px;" class="i-longtap managerIcon"></span>
+          </yhm-manager-td>
           <yhm-manager-td-center :value="item.phone" format="phone*"></yhm-manager-td-center>
           <yhm-manager-td :value="item.wxName"></yhm-manager-td>
           <yhm-manager-td-img-self :tip="true" left="-540" width="200" height="200" :value="item.avatarUrl" tag="wxCoupon"></yhm-manager-td-img-self>
@@ -79,18 +81,50 @@
           {width:'100',title:'过期数量',category:'right',key:'expired'}
         ],
         tableTipInfo:[],
-        currentControl:null
+        currentControl:null,
+        personID:'',
       }
     },
     methods:{
-     /* test(){
-        this.ajaxJson({
-          url: '/wx/wxMember/test',
-          call: (data) => {
-            console.log(data)
+      personClike(item){
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 692,
+          url: '/selectPerson?category=1&commonClientUse=1',
+          title: '选择联系人',
+          closeCallBack: (data) => {
+            if (data) {
+              // this.personID=data.id
+              let params = {
+                id: item.id,
+                personID:data.id
+              }
+              this.ajaxJson({
+                url: '/wx/wxMember/relationID',
+                data: params,
+                call: (data) => {
+                  if (data.type == '0') {
+                    this.$dialog.alert({
+                      tipValue: data.message,
+                      closeCallBack: (data) => {
+                        this.initPageData(false)
+                      }
+                    })
+                  } else {
+                    this.$dialog.alert({
+                      alertImg: 'error',
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                      }
+                    })
+                  }
+                }
+              })
+            }
           }
         })
-      },*/
+      },
+
       //查看
       look(id){
         this.$dialog.OpenWindow({
@@ -209,6 +243,10 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+  .managerIcon{
+    position: absolute;
+    right: 4px;
+  }
 
 </style>

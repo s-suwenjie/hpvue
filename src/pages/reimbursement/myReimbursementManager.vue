@@ -17,15 +17,16 @@
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
 
         <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="状态" :content="listState"></yhm-radiofilter>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型" :content="dateTypeList"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initPageData(false)" title="状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initPageData(false)" title="时间类型" :content="dateTypeList"></yhm-radiofilter>
       </template>
 
       <!--筛选区-->
       <template #choose>
 
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter @initData="initChoose('isPrettyCashOff')" title="是否核销" :content="listIsPrettyCashOff"></yhm-radiofilter>
+          <yhm-radiofilter @initData="initPageData(false)" title="是否核销" :content="listIsPrettyCashOff"></yhm-radiofilter>
+          <yhm-radiofilter @initData="initChoose('viewLevels')" all="0" title="查看下属" :content="listViewLevels"></yhm-radiofilter>
         </div>
       </template>
 
@@ -39,9 +40,10 @@
         <yhm-managerth style="width: 120px" title="报销金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 110px" title="提交天数" value="day"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="编号" value="code"></yhm-managerth>
+        <yhm-managerth  v-if="listViewLevels.value==1" width="80" title="申请人" ></yhm-managerth>
         <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="状态" value="state"></yhm-managerth>
-        <yhm-managerth title="操作"></yhm-managerth>
+        <yhm-managerth  v-if="listViewLevels.value==0" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -57,10 +59,11 @@
           <yhm-manager-td-center :value="item.day+'天'" v-else-if="item.day>2&&item.day<=5" style="color:#0511a5;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else style="color: #f00;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
+          <yhm-manager-td  v-if="listViewLevels.value==1" :value="item.person"></yhm-manager-td>
           <yhm-manager-td-leaveword @iconClick="listView(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal"  @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
 
-          <yhm-manager-td-operate>
+          <yhm-manager-td-operate  v-if="listViewLevels.value==0">
             <yhm-manager-td-operate-button v-show="item.isPrint === '1'" @click="printFund(item)" value="打印单据" icon="i-btn-print" color="#7307dc"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.isPrint !== '1'" :no-click="item.state !== '0' || item.isFinish === '1'" @click="submit(item.id,item.state,item.isFinish,item.isRelevance)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
 
@@ -151,6 +154,10 @@
           value: '',
           list: []
         },
+        listViewLevels: {
+          value: '0',
+          list: []
+        },
         isPrettyCashOffList:[],
         menuTabOn: 2,
         details:[
@@ -161,6 +168,7 @@
           {id:'5', name: '备用金',path:'/home/prettyCashsManager'},
           {id:'6', name: '补签字',path:'/home/myManager/signatureManager'},
           {id:'7', name: '开票申请',path:'/home/openInvoiceManager'},
+          {id:'8', name: '我的快递',path:'/home/myExpressManager'},
         ],
 
         tableTip: false,
@@ -183,6 +191,17 @@
       }
     },
     methods: {
+      Test(item){
+        this.$dialog.OpenWindow({
+          width: '1300',
+          height: '750',
+          title: '统计图',
+          url: '/reimbursementCartogram?id='+item.id,
+          closeCallBack: (data) => {
+
+          }
+        })
+      },
       revocationClick(item) {//撤销申请
         this.$dialog.confirm({
           width: 300,
@@ -465,7 +484,8 @@
           params = {
             state: this.listState.value,
             isPrettyCashOff: this.listIsPrettyCashOff.value,
-            dateType:this.dateTypeList.value
+            dateType:this.dateTypeList.value,
+            viewLevels: this.listViewLevels.value
           }
         }
         this.init({
@@ -482,22 +502,29 @@
             this.listState = data.statePsd
             this.listIsPrettyCashOff = data.isPrettyCashOffPsd
             this.isPrettyCashOffList = data.isPrettyCashOffPsd.list
+            this.listViewLevels = data.viewLevelsPsd
           }
         })
       },
       submit (id, operaState, operaIsFinish) { //提交申请
         if (operaIsFinish === '0' && operaState === '0') {
           if (id) {
+            // this.$dialog.OpenWindow({
+            //   width: '1300',
+            //   height: '750',
+            //   title: '报销统计',
+            //   url: '/myreimbursementTwoCartogram?id='+id,
+            //   closeCallBack: (data) => {
+            //     this.initPageData(false)
+            //   }
+            // })
+
+
+
             let params = {
               id: id,
               tableName:40
             }
-            // this.$dialog.confirm({
-            //   width: 300,
-            //   tipValue: '确定提交申请?',
-            //   btnValueOk: '确定',
-            //   alertImg: 'warn',
-            //   okCallBack: () => {
                 this.ajaxJson({
                   url: '/PersonOffice/getSubmitCatrgoryVue',
                   data: params,
@@ -542,8 +569,6 @@
                   }
                 })
               }
-          //   })
-          // }
         }
       },
 

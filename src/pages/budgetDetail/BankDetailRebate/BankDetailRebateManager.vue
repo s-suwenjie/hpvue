@@ -7,6 +7,7 @@
           <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentPlanViewManager'}">付款计划</router-link>
           <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentApplyViewManager'}">付款申请</router-link>
           <router-link class="menuTabDiv" :to="{path:'/home/viewManager/reimbursementViewManager'}">报销申请</router-link>
+          <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finReimbursementDetailManager?type=1'}">特殊报销</router-link>
           <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
           <router-link class="menuTabDiv" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
           <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
@@ -43,8 +44,12 @@
           <yhm-managerth style="width: 80px;" title="事由" value="subject"></yhm-managerth>
           <yhm-managerth style="width: 100px" title="金额" value="money"></yhm-managerth>
           <yhm-managerth style="width: 330px" title="备注" value="remark"></yhm-managerth>
-          <yhm-managerth style="width: 140px" title="出单编号" value="issueCode"></yhm-managerth>
-          <yhm-managerth style="width: 180px" title="保单编号" value="policyCOde"></yhm-managerth>
+          <yhm-managerth style="width: 140px" title="交强险单号"></yhm-managerth>
+<!--          value="payHighNumber"-->
+          <yhm-managerth style="width: 180px" title="商业险单号"></yhm-managerth>
+          <yhm-managerth title="保单号" value="numbering"></yhm-managerth>
+
+          <!--          value="businessNumber"-->
         </template>
         <!--数据明细-->
         <template #listBody>
@@ -58,11 +63,17 @@
             <yhm-manager-td :value="item.subject" @click="subjectEvent(item)"></yhm-manager-td>
             <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
             <yhm-manager-td :value="item.remark" :tip="true"></yhm-manager-td>
-            <yhm-manager-td-input v-show="issueCodeIndex === index" @blur="blurIssueEvent" :id="item.id" :value="item.issueCode"></yhm-manager-td-input>
-            <yhm-manager-td-center v-show="issueCodeIndex !== index" @dblclick="dbIssueEvent(item,index)" @click="issueEvent(item)" :value="item.issueCode"></yhm-manager-td-center>
+<!--            <yhm-manager-td-input v-if="!item.payHighNumber" @blur="blurIssueEvent" :id="item.id" :value="item.payHighNumber"></yhm-manager-td-input>-->
+            <yhm-manager-td @click="issueEvent(item)" :value="item.payHighNumber"></yhm-manager-td>
 
-            <yhm-manager-td-input v-show="policyCOdeIndex === index" @blur="blurPolicyEvent" :id="item.id" :value="item.policyCOde"></yhm-manager-td-input>
-            <yhm-manager-td-center v-show="policyCOdeIndex !== index" @dblclick="dbPolicyEvent(item,index)" @click="policyEvent(item)" :value="item.policyCOde"></yhm-manager-td-center>
+<!--            <yhm-manager-td-input v-if="!item.businessNumber" @blur="blurPolicyEvent" :id="item.id" :value="item.businessNumber"></yhm-manager-td-input>-->
+            <yhm-manager-td @click="policyEvent(item)" :value="item.businessNumber"></yhm-manager-td>
+            <yhm-manager-td-operate>
+              <yhm-manager-td-operate-button v-show="false" @click="addPNumberings(item)" icon="i-export" value="上传保单"></yhm-manager-td-operate-button>
+              <yhm-manager-td-operate-button @click="addPNumbering(item)" :no-click="!item.businessNumber || !item.payHighNumber ? true : false " :icon="item.businessNumber && item.payHighNumber ? 'i-invoiceView' : ''" :value="!item.businessNumber || !item.payHighNumber ? '------' : '查看保单'" color="#fd6802"></yhm-manager-td-operate-button>
+            </yhm-manager-td-operate>
+
+
           </tr>
         </template>
         <!--数据空提示-->
@@ -129,6 +140,42 @@
       }
     },
     methods:{
+      //上传保单
+      addPNumberings(item){
+        console.log(item)
+        let title = '上传保单'
+        let url = '/poNumbering?id='+item.poNumber+'&ownerID='+item.id+'&project='+item.project+'&forceEndDate='+item.forceEndDate+'&businessEndDate='+item.businessEndDate
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '550',
+          url: url,
+          title: title,
+          closeCallBack: (data) => {
+            if (data) {
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+
+      //查看保单号
+      addPNumbering(item){
+        console.log(item.payNumberID)
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '550',
+          url: '/poNumberView?id='+item.payNumberID+'&ownerID='+item.billingID,
+          title: '查看保单信息',
+          closeCallBack: (data) => {
+            if (data) {
+              this.initPageData(false)
+            }
+          }
+        })
+
+
+      },
+
       statisticalClick(){//右上角统计图点击事件
         this.$dialog.OpenWindow({
           width: '1300',
@@ -283,12 +330,12 @@
           })
         }
       },
-      dbIssueEvent(item,index){
-        console.log('出单编号',this.issueCode,this.policyCOde )
-        this.issueCode = item.issueCode
-        this.policyCOde = item.policyCOde
-        this.issueCodeIndex = index
-      },
+      // dbIssueEvent(item,index){
+      //   console.log('出单编号',this.issueCode,this.policyCOde )
+      //   this.issueCode = item.issueCode
+      //   this.policyCOde = item.policyCOde
+      //   this.issueCodeIndex = index
+      // },
       blurIssueEvent(id, value){
         this.issueCodeIndex = -1
         if(this.issueCode !== value) {

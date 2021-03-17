@@ -2,17 +2,18 @@
     <div class="f_main f_main_customize mb16">
         <yhm-select-body :choose="false">
             <template #operate>
-                <div v-show="showTipDbSelect" class="s_db_select" :style="{left:getLeft,top:getTop}">双击选择</div>
-                <yhm-commonbutton value="添加" icon="btnAdd" @call="selectAddEvent()"></yhm-commonbutton>
-                <yhm-managersearch :value="searchStr" id="searchStr" @call="initData"></yhm-managersearch>
+              <div v-show="showTipDbSelect" class="s_db_select" :style="{left:getLeft,top:getTop}">双击选择</div>
+              <yhm-commonbutton value="添加" icon="btnAdd" @call="selectAddEvent()"></yhm-commonbutton>
+              <yhm-managersearch :value="searchStr" id="searchStr" @call="initData"></yhm-managersearch>
+<!--              <yhm-commonbutton value="初始化搜索" icon=" " @call="initialize()"></yhm-commonbutton>-->
             </template>
 
             <template #listHead>
                 <yhm-managerth width="40" title="选择"></yhm-managerth>
                 <yhm-managerth  title="项目名称"></yhm-managerth>
-                <yhm-managerth  title="项目编号"></yhm-managerth>
-                <yhm-managerth  title="项目工时"></yhm-managerth>
-                <yhm-managerth  title="考核工时"></yhm-managerth>
+                <yhm-managerth width="230" title="项目编号"></yhm-managerth>
+                <yhm-managerth width="120" title="项目工时"></yhm-managerth>
+                <yhm-managerth width="120" title="考核工时"></yhm-managerth>
             </template>
 
             <template #listBody>
@@ -22,7 +23,7 @@
                     @click="selectEvent(item)"
                     @dblclick="dblclickEvent(item)">
                     <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
-                    <yhm-manager-td-center :value="item.proName"></yhm-manager-td-center>
+                    <yhm-manager-td :value="item.proName"></yhm-manager-td>
                     <yhm-manager-td-center :value="item.proNum"></yhm-manager-td-center>
                     <yhm-manager-td-center :value="item.hours"></yhm-manager-td-center>
                     <yhm-manager-td-center :value="item.assessment"></yhm-manager-td-center>
@@ -53,13 +54,23 @@
       }
     },
     methods:{
+      initData(){
+        this.id = ''
+        this.initPageData()
+      },
+      initialize(){
+        this.id = ''
+        this.searchStr = ''
+        this.initPageData()
+      },
       selectAddEvent () {
         this.$dialog.OpenWindow({
           width: 1072,
           height: 650,
           url:'/processManagementForm?type=1',
-          title:'添加检修服务',
+          title:'添加工序服务',
           closeCallBack: (data)=>{
+            this.id = data
             this.initPageData(false)
           }
         })
@@ -73,7 +84,9 @@
           }
         } else {
           // 页面非初始化时需要的参数
-          params = {}
+          params = {
+            id:this.id
+          }
         }
         this.init({
           initValue: initValue,

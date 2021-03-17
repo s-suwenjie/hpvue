@@ -7,6 +7,7 @@
       </template>
       <template #choose>
         <yhm-radiofilter :before="categoryBefore" @initData="initChoose('category')" title="收支方向" all="0" :content="listCategory"></yhm-radiofilter>
+        <yhm-form-date title="时间:" width="200" getHeight="33" :error-show="false" @call="selectDate(cccurDate)" :value="cccurDate" id="cccurDate"></yhm-form-date>
       </template>
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
@@ -42,7 +43,7 @@
         </tr>
       </template>
       <template #empty>
-        <span class="m_listNoData" v-show="content.length === 0">暂时没有数据</span>
+        <span class="m_listNoData" v-show="content.length === 0">暂时没有数据 {{annotation}}</span>
       </template>
       <template #pager>
         <yhm-pagination is-not-right :pager="pager" isPageSize="false" @initData="initPageData(false)"></yhm-pagination>
@@ -67,13 +68,19 @@
         otherAccountID: '',
         direction: '',
         content: [],
-
+        annotation:'',//注释
         subjectID:'',//是由ID
         selfAccountID:'',//我方账户ID
-        type:'',//1是付款用到收支明细选择
+        type:'',//1是付款用到收支明细选择  3是预开发票回款勾选收支明细
+        cccurDate:'',
+        otherID:'',
+        money:'',
       }
     },
     methods: {
+      selectDate(cccurDate){
+        this.initPageData(false);
+      },
       initChoose (op) {
         this.pager.pageIndex = 1
         if (op === 'category') {
@@ -91,7 +98,8 @@
             direction: this.direction,
             subjectID:this.subjectID,
             selfAccountID:this.selfAccountID,
-            type:this.type
+            type:this.type,
+            money:this.money
           }
         } else {
           // 页面非初始化时需要的参数
@@ -101,7 +109,9 @@
             direction: this.listCategory.value,
             subjectID:this.subjectID,
             selfAccountID:this.selfAccountID,
-            type:this.type
+            type:this.type,
+            cccurDate:this.cccurDate,
+            money:this.money
           }
         }
         this.init({
@@ -126,8 +136,13 @@
       this.setQuery2Value('direction')
       this.setQuery2Value('subjectID')
       this.setQuery2Value('otherID')
+      this.setQuery2Value('annotation')//注释
       this.setQuery2Value('selfAccountID')
       this.setQuery2Value('type')
+      this.setQuery2Value('money')
+      if(this.annotation==null){
+        this.annotation = ''
+      }
 
     }
   }

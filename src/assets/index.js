@@ -4,12 +4,21 @@ import {accMul,accAdd,guid,formatDateHtml,tenThousandFormatHtml} from '@/assets/
 import formselectinsurance from '@/assets/form/control/formselectinsurance/formselectinsurance.js'
 Vue.use(formselectinsurance)
 
+import faceValue from '@/assets/faceValue/faceValue.js'
+Vue.use(faceValue)
+
 import datebox from '@/assets/control/datebox/datebox.js'
 Vue.use(datebox)
 import dateboxinterval from '@/assets/control/dateboxinterval/dateboxinterval.js'
 Vue.use(dateboxinterval)
 import datePanel from '@/assets/control/datePanel/datePanel.js'
 Vue.use(datePanel)
+
+import flows from '@/assets/form/flows/flows.js'
+Vue.use(flows)
+
+import schedule from '@/assets/form/schedule/schedule.js'
+Vue.use(schedule)
 
 import textbox from '@/assets/control/textbox/textbox.js'
 Vue.use(textbox)
@@ -62,11 +71,17 @@ Vue.use(formdatebox)
 import formshowtable from '@/assets/form/formshowtable/formshowtable.js'
 Vue.use(formshowtable)
 
+import previewSms from '@/assets/form/preview/previewSms.js'
+Vue.use(previewSms)
+
 import formdateboxinterval from '@/assets/form/control/formdateboxinterval/formdateboxinterval.js'
 Vue.use(formdateboxinterval)
 
 import formtextbox from '@/assets/form/control/formtextbox/formtextbox.js'
 Vue.use(formtextbox)
+
+import formtextsearch from '@/assets/form/control/formtextsearch/formtextsearch.js'
+Vue.use(formtextsearch)
 
 import formuploadimage from '@/assets/form/control/formuploadimage/formuploadimage.js'
 Vue.use(formuploadimage)
@@ -81,6 +96,11 @@ import formtextarea from '@/assets/form/control/formtextarea/formtextarea.js'
 Vue.use(formtextarea)
 import formzhtextboxtwo from '@/assets/form/control/zh/formzhtextboxtwo/formzhtextboxtwo.js'
 Vue.use(formzhtextboxtwo)
+import formzhtextboxthree from '@/assets/form/control/zh/formzhtextboxthree/formzhtextboxthree.js'
+Vue.use(formzhtextboxthree)
+
+import formimgbox from '@/assets/form/control/formimgbox/formimgbox.js'
+Vue.use(formimgbox)
 
 import formzhselecttextmore from '@/assets/form/control/zh/formzhselecttextmore/formzhselecttextmore.js'
 Vue.use(formzhselecttextmore)
@@ -113,6 +133,8 @@ import formtdradio from '@/assets/form/td/formtdradio/formtdradio.js'
 Vue.use(formtdradio)
 import formtdselect from '@/assets/form/td/formtdselect/formtdselect.js'
 Vue.use(formtdselect)
+import formtdcheckbox from '@/assets/form/td/formtdcheckbox/formtdcheckbox.js'
+Vue.use(formtdcheckbox)
 import formtdselectdialog from '@/assets/form/td/formtdselectdialog/formtdselectdialog.js'
 Vue.use(formtdselectdialog)
 
@@ -172,10 +194,13 @@ import managertdoperatecustomize from '@/assets/manager/td/managertdoperatecusto
 Vue.use(managertdoperatecustomize)
 import managertdtipimg from '@/assets/manager/td/managertdtipimg/managertdtipimg.js'
 Vue.use(managertdtipimg)
-
+import managertdcheckboxshow from '@/assets/manager/td/managertdcheckboxshow/managertdcheckboxshow.js'
+Vue.use(managertdcheckboxshow)
 import managertdimgself from '@/assets/manager/td/managertdimgself/managertdimgself.js'
 Vue.use(managertdimgself)
 
+import managertdimg from '@/assets/manager/td/managertdimg/managertdimg.js'
+Vue.use(managertdimg)
 
 
 import upload from '@/assets/control/upload/upload.js'
@@ -268,4 +293,5 @@ Vue.use(selecttree)
 
 
 import "@/assets/iconfont/style.css"
+import "@/assets/iconfontmore/iconfont.css"
 import "@/assets/customevent.js"

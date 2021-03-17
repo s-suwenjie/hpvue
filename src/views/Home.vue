@@ -10,7 +10,6 @@
 <!--            <img src="/HtmlStatic/images/logo.png">-->
 <!--          </div>-->
 <!--          <span>北京海派</span>-->
-
         </div>
         <div class="topmenu_nav">
           <ul id="menu">
@@ -22,6 +21,16 @@
             </li>
           </ul>
         </div>
+        <div style="width: 110px;height: 50px;padding: 28px 5px 0 0;" class="wordscolor">
+          <div @mouseover="imgmouse=true" @mouseout="imgmouse=false">
+            <div style="display: inline-block;color: #576B95;"><span >扫描二维码</span><div>关注公众号</div></div>
+            <img src="../../static/staticImage/twoMart.png" alt="" class="smarlimg">
+          </div>
+          <div class="bigimgs" v-if="imgmouse">
+              <img src="../../static/staticImage/338e83188887bee780e07f93a6157d3.jpg" alt="" style="width: 100%;">
+          </div>
+        </div>
+
         <div class="userstatus">
           <div class="userTop">
             <div class="avatar">
@@ -31,6 +40,7 @@
             <p @click="ConfirmLogout" class="userOff"></p>
           </div>
         </div>
+
       </div>
     </div>
     <div class="mainbox">
@@ -80,7 +90,8 @@
         headImg:'',
         loginName:'',
         detailID:'',
-        defaultImg: 'this.src="' + require('../../static/css/images/login/noimg.jpg') + '"'
+        defaultImg: 'this.src="' + require('../../static/css/images/login/noimg.jpg') + '"',
+        imgmouse:false,
       }
     },
     created () {
@@ -274,4 +285,6 @@
   .leftMenuClass{
     background-color: #8eccf5;
   }
+  .smarlimg{width: 30px;height: 30px;float: right;border-radius: 4px;}
+  .bigimgs{width:500px;height: 500px;position: absolute; top:200px;left:700px;overflow: hidden;z-index: 99;border-radius: 20px;box-shadow: 0px 0px 15px 15px #00000060}
 </style>

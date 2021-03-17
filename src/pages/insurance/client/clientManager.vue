@@ -9,9 +9,12 @@
       <template #operate>
         <yhm-table-tip :show="tableTip" :content="tableTipInfo" :column="tableTipColumnInfo" :mouse-control="tableTipControl"></yhm-table-tip>
         <yhm-commonbutton  value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
+        <!--<yhm-commonbutton  value="添加1" icon="btnAdd" :flicker="true" @call="add1()"></yhm-commonbutton>-->
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initChoose()"></yhm-managersearch>
         <yhm-commonbutton style="margin-left: 30px" value="批量更换负责人" icon="replace"  @call="replace()"></yhm-commonbutton>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="客户状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('insuredType')" title="客户投保状态" :content="ListInsuredType"></yhm-radiofilter>
+        <!--<yhm-preview-sms value="1232423" ref="preview" :shade-show="false"></yhm-preview-sms>-->
       </template>
       <!--筛选区-->
       <template #choose>
@@ -21,9 +24,12 @@
       </template>
       <!--数据表头-->
       <template #listHead>
-        <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
+        <yhm-managerth-check style="width: 40px;" :check="allCheck"></yhm-managerth-check>
+<!--        <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>-->
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth  title="车牌号" value="plate"></yhm-managerth>
+        <yhm-managerth  title="品牌" value="brand"></yhm-managerth>
+        <yhm-managerth  title="车型" ></yhm-managerth>
         <yhm-managerth  title="联系人" value="name"></yhm-managerth>
         <yhm-managerth  title="联系方式" value="phone"></yhm-managerth>
         <yhm-managerth  title="客户状态" value="state"></yhm-managerth>
@@ -32,7 +38,7 @@
         <yhm-managerth  title="商业险到期日" value="businessEndDate"></yhm-managerth>
 <!--        <yhm-managerth  title="行车证" value="drivingLicense"></yhm-managerth>-->
         <yhm-managerth  title="负责人" value="principal"></yhm-managerth>
-        <yhm-managerth  title="更换操作人"></yhm-managerth>
+        <yhm-managerth style="width: 200px" title="更换操作人"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -40,17 +46,28 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td :value="item.plate"></yhm-manager-td>
+          <yhm-manager-td vehicle-text-align="left" type="vehicle" :value="item.plate"></yhm-manager-td>
+          <yhm-manager-td :value="item.brandVal"></yhm-manager-td>
+          <yhm-manager-td :value="item.modelVal"></yhm-manager-td>
           <yhm-manager-td :value="item.name"></yhm-manager-td>
-          <yhm-manager-td :value="item.phone"></yhm-manager-td>
+          <yhm-manager-td-center :value="item.phone" format="phone*"></yhm-manager-td-center>
 
-          <yhm-manager-td :value="item.stateVal" :after-icon="item.listRemark.length >= 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
+          <yhm-manager-td :value="item.insuredTypeVal" :after-icon="item.listRemark.length >= 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
           <yhm-manager-td :value="item.lastYearUnitVal"></yhm-manager-td>
           <yhm-manager-td-date :value="item.forceEndDate"></yhm-manager-td-date>
           <yhm-manager-td-date :value="item.businessEndDate"></yhm-manager-td-date>
 <!--          <yhm-manager-td-image :tip="true" width="850" height="500" :value="item.drivingLicense" tag="drivingLicense"></yhm-manager-td-image>-->
-          <yhm-manager-td :value="item.principal"></yhm-manager-td>
+<!--          <yhm-manager-td :value="item.principal"></yhm-manager-td>-->
+
+
+          <yhm-manager-td :value="item.principal" v-if="item.principalID===''"></yhm-manager-td>
+          <yhm-manager-td-center :value="item.principal" v-else :menu-list="principalIDMenu" @click="vehicleBrandLeft(item)" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
           <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button @click="selectEndOut(item)" value="发送短信" icon="i-sendSMS"  color="#AA0022" ></yhm-manager-td-operate-button>
+            <!--<yhm-manager-td-operate-button-->
+              <!--@mouseout="$refs.preview.$emit('switch','1')"-->
+              <!--@mouseover="$refs.preview.$emit('switch','0')" icon="i-btn-applicationSm" value="操作"></yhm-manager-td-operate-button>-->
+
             <yhm-manager-td-operate-button  @click="replacePrincipal(item.id)" value="更换负责人" icon="i-replace"  color="#0033FF" ></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
@@ -76,6 +93,7 @@
     mixins: [managermixin],
     data(){
       return{
+        principalIDMenu:['筛选当前业务员'],
         tableTip:false,         //记录表格是否显示
         tableTipControl:{},
         tableTipColumnInfo:[
@@ -92,9 +110,74 @@
           value: '0', //默认为空
           list: []
         },
+        ListInsuredType:{
+          list:[
+            {
+              num: '0', //默认为空
+              showName: '首次'
+            },
+            {
+              num: '1', //默认为空
+              showName: '续转续'
+            },
+          ],
+          value:'',
+        },
       }
     },
     methods:{
+      selectEndOut(item){
+        if(item.phone=='' && item.carOwnerPhone==''){
+
+          this.$dialog.alert({
+            tipValue:'车主手机号和联系人手机号都为空,请先去维护!',
+            alertImg: 'warn',
+            width:'330'
+          })
+        }else {
+          this.$dialog.OpenWindow({
+            width: '630',
+            height: '520',
+            title: '选择短信模板',
+            url:'/selectsInvoiceSignatureForm?ownerID=' + item.id,
+            closeCallBack: (data)=>{
+              if(data){
+
+              }
+            }
+          })
+        }
+
+      },
+      add1(){
+        let params={
+          startDate:'2020-01-01',
+          endDate:'2022-01-01',
+          category:'0'
+        }
+        this.ajaxJson({
+          url: '/PersonOffice/getStatisticsAll  ',
+          data: params,
+          call: (data) => {
+
+          }
+        })
+      },
+
+      rightClick(item){//点击右键菜单时获取当前点击的数据
+        this.unitItme = item
+      },
+      menuClick(item,index) {//返回用户选中的菜单选项及索引值
+        if(item==='筛选当前业务员'){
+          this.principalIDMenu=['取消业务员筛选']
+          this.principalID = this.unitItme.principalID
+        }else if(item==='取消业务员筛选'){
+          this.principalIDMenu=['筛选当前业务员']
+          this.principalID = ''
+        }
+
+        this.initPageData(false)
+      },
       tableTipHideEvent(){
         this.tableTip = false
       },
@@ -143,18 +226,25 @@
         this.$dialog.OpenWindow({
           width: 950,
           height: 692,
-          url: '/selectPerson?category=0&categoryBefore=1',
+          url: '/selectPerson?category=0&categoryBefore=1&selectType=1',
           title: '更换负责人',
           closeCallBack: (data) => {
             if (data) {
-              this.principalID=data.id
+
+              let idd=[]
+              for (let i in data){
+                idd.push(data[i].id)
+              }
+              this.principalID=idd.join('☆')
               this.principal = data.name
+
               this.$dialog.refresh()
               let params = {
                 id:arr,
                 principalID:this.principalID, //负责人ID
 
               }
+
               //-->具体操作
               this.ajaxJson({
                 url: '/Insurance/replacePrincipalMany',
@@ -164,6 +254,7 @@
                     this.$dialog.alert({
                       tipValue: data.message,
                       closeCallBack: () => {
+                        this.principalID=''
                         this.initPageData(false)
                       }
                     })
@@ -183,7 +274,7 @@
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',
-          height: '650',
+          height: '700',
           url: '/clientView?id=' + item.id,
           title: '查看客户信息',
           closeCallBack: (data)=>{
@@ -236,6 +327,7 @@
                     this.$dialog.alert({
                       tipValue: data.message,
                       closeCallBack: () => {
+
                         this.initPageData(false)
                       }
                     })
@@ -255,6 +347,8 @@
       initChoose (op) {
         if (op === 'state') {
           this.selectValue = []
+        }  if (op === 'insuredType') {
+          this.selectValue = []
         }
         this.pager.pageIndex = 1
         this.initPageData(false)
@@ -265,11 +359,15 @@
 
         if (initValue) {
           params = {
-            state:this.listState.value
+            state:this.listState.value,
+            principalID:this.principalID,
+            insuredType:this.ListInsuredType.value,
           }
         } else {
           params = {
-            state:this.listState.value
+            state:this.listState.value,
+            principalID:this.principalID,
+            insuredType:this.ListInsuredType.value,
           }
         }
         this.init({

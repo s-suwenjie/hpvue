@@ -213,15 +213,16 @@ export default {
     float: right;
     display: flex;
     height: 40px;
-    width: 60px;
+    /*width: 60px;*/
     margin-right: 10px;
+    margin-top:5px;
     justify-content: flex-end;
     align-items: center;
   }
 
   .PagerRight>.left{
-    width: 30px;
-    height: 30px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -230,6 +231,7 @@ export default {
   }
 
   .PagerRight>.left:before{
+    font-size: 24px !important;
     color: #c700df;
   }
 
@@ -242,8 +244,8 @@ export default {
 
 
   .PagerRight>.right{
-    width: 30px;
-    height: 30px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -252,6 +254,7 @@ export default {
   }
 
   .PagerRight>.right:before{
+    font-size: 24px !important;
     color: #49a9ea;
   }
 

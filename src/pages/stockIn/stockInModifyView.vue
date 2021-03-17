@@ -6,7 +6,7 @@
 
       <template #control>
         <yhm-form-text title="销售单价" :value="salesprice+''" id="salesprice" @input="gerter()" @blur="gener()" rule="R0000"></yhm-form-text>
-        <yhm-form-text title="领料单价" :value="saletotal+''" id="saletotal" @blur="gener()" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="销售总价" :value="saletotal+''" id="saletotal" @blur="gener()" rule="R0000"></yhm-form-text>
 
       </template>
 
@@ -20,13 +20,13 @@
         <yhm-view-tab-list :customize="true" :pager="false" v-show="tabState[0].select">
           <template #listHead>
             <yhm-managerth title="商品名称"></yhm-managerth>
-            <yhm-managerth style="width: 80px" title="商品型号"></yhm-managerth>
-            <yhm-managerth title="参考售价"></yhm-managerth>
+            <yhm-managerth title="商品型号"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="参考售价"></yhm-managerth>
 <!--            <yhm-managerth title="销售总价"></yhm-managerth>-->
-            <yhm-managerth title="采购单价"></yhm-managerth>
-            <yhm-managerth title="采购总价"></yhm-managerth>
-            <yhm-managerth style="width: 60px" title="数量"></yhm-managerth>
-            <yhm-managerth style="width: 60px" title="能否拆分"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="采购单价"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="采购总价"></yhm-managerth>
+            <yhm-managerth style="width: 80px" title="数量"></yhm-managerth>
+            <yhm-managerth style="width: 80px" title="能否拆分"></yhm-managerth>
           </template>
           <template #listBody>
             <tr v-for="(item,index) in content" :key="index" :class="{InterlacBg:index%2!==0}">
@@ -142,6 +142,7 @@
             }
             this.salesprice = this.content[0].salesprice
             this.saletotal = this.content[0].price
+            this.gener()
           }
         })
       },

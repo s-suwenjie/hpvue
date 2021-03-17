@@ -24,6 +24,7 @@
     data(){
       return {
         id:'',
+        version:'',
         modelID:'',
         model:'',
         brandOwnerID: ''

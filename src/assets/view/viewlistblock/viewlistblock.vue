@@ -165,22 +165,22 @@
       },
       getbeforeCode(){
         let result = ''
-        if (this.code.length > 8) {
-          result = this.code.substring(0,this.code.length - 8)
+        if (this.code.length > 4) {
+          result = this.code.substring(0,this.code.length - 4)
         }
         return result
       },
       getAfterCode(){
         let result = ''
-        if (this.code.length > 8) {
-          result = this.code.substring(this.code.length - 8,this.code.length-4)
+        if (this.code.length > 4) {
+          result = this.code.substring(this.code.length - 4,this.code.length-2)
         }
         return result
       },
       getAfterBigCode(){
         let result = ''
-        if (this.code.length > 8) {
-          result = this.code.substring(this.code.length - 4,this.code.length)
+        if (this.code.length > 4) {
+          result = this.code.substring(this.code.length - 2,this.code.length)
         }
         return result
       }

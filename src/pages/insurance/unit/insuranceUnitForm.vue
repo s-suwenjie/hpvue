@@ -4,17 +4,18 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-text title="别名" :value="shortName" id="shortName" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="代表颜色" :value="deputyColor" id="deputyColor"></yhm-form-text>
         <yhm-form-select title="汇款公司" @clear="clearUnit" @click="selectUnit" :value="unit"  id="unit" rule="R0000"></yhm-form-select>
         <yhm-form-select title="回款公司" subtitle=""  @click="selectIncomeUnit" :value="incomeUnit"  id="incomeUnit" rule="R0000"></yhm-form-select>
         <yhm-form-select title="第三方" subtitle="回款公司"  @click="selectTripartiteUnit" :value="tripartiteUnit"  id="tripartiteUnit" rule="R0000"></yhm-form-select>
-
+        <yhm-form-radio  title="公司用途"   :select-list="categoryList" :value="category" id="category"></yhm-form-radio>
         <yhm-form-radio  title="开票状态"  width="1" :select-list="billingTypeList" :value="billingType" id="billingType"></yhm-form-radio>
         <yhm-form-select-insurance title="商业险种" :psd="commercialList" :value="commercial"  id="commercial" rule="#"></yhm-form-select-insurance>
       </template>
     </yhm-formbody>
     <div class="f_split"></div>
 
-    <yhm-form-list-edit>
+    <yhm-form-list-edit v-if="false">
       <template #title>保险信息</template>
       <template #operate>
         <yhm-commonbutton value="添加保险信息" icon="btnAdd" @call="addSafe()"></yhm-commonbutton>
@@ -66,6 +67,7 @@
         empty:true,
         isNum:'1',
         shortName:'',         //别名
+        deputyColor:'',       //代表颜色
         unitID:'',            //保险公司ID
         unit:'',              //保险公司
         safeID:'',
@@ -79,6 +81,8 @@
         commercialVal:'',
         billingTypeList:[], //开票类型
         billingType:'',
+        categoryList:[],
+        category:'',
         vipRate:'',
         incomeUnit:'',
         incomeUnitID:'',
@@ -182,7 +186,8 @@
       //添加
       save () {
         if (this.validator()) {
-          if (this.empty){
+          // if (this.empty){
+          if (false){
             this.$dialog.confirm({
               width: 300,
               tipValue: '请添加保险信息?',
@@ -197,8 +202,10 @@
               incomeUnitID:this.incomeUnitID,
               tripartiteUnitID:this.tripartiteUnitID,
               shortName:this.shortName,
+              deputyColor:this.deputyColor,
               commercial:this.commercial,
-              billingType:this.billingType
+              billingType:this.billingType,
+              category:this.category,
             }
             this.ajaxJson({
               url: '/Basic/saveUnitInsurance',
@@ -288,6 +295,8 @@
       }
     },
     created () {
+      this.setQuery2Value('workOrder')//从工单模块的管理保险公司跳转进来的
+
       this.init({
         url: '/Basic/getUnitInsurance',
         all: (data) => {
@@ -295,6 +304,11 @@
           this.commercial = data.commercialPsd.value
           this.billingTypeList=data.billingTypePsd.list
           this.billingType=data.billingTypePsd.value
+          this.categoryList=data.categoryPsd.list
+          this.category=data.categoryPsd.value
+          if(this.workOrder=='1'){//从工单模块的管理保险公司跳转进来的,将公司用途改为其它模块
+            this.category = '1'
+          }
         },
         add: (data) => {
           /* 需要添加的数据 */
@@ -302,6 +316,7 @@
         look: (data) => {
           /* 需要查看的数据 */
           this.shortName=data.shortName
+          this.deputyColor=data.deputyColor
           this.unitID=data.unitID
           this.unit=data.unit
           this.incomeUnitID=data.incomeUnitID

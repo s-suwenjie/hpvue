@@ -3,9 +3,9 @@
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
-        <yhm-form-radio title="付款性质" @call="showPayment" :select-list="natureList" :value="nature" id="nature" width="1"></yhm-form-radio>
+        <yhm-form-radio title="付款性质"  no-edit="1" @call="showPayment" :select-list="natureList" :value="nature" id="nature" width="1"></yhm-form-radio>
         <yhm-form-radio title="支付方式" v-show="isChecksHidden" :select-list="isChecksList" :value="isChecks" id="isChecks" @call="checkEvent"></yhm-form-radio>
-        <yhm-form-drop-down-select :no-before-click="isNoBeforeClick" title="收款方" width="1" @select="selectUnit" :select-list="personOrUnitList"  :selectValue="personOrUnit" selectid="personOrUnit" :value="otherUnit" id="otherUnit" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>
+        <yhm-form-drop-down-select :no-click="isCash"  :no-before-click="isNoBeforeClick" title="收款方" width="1" @select="selectUnit" :select-list="personOrUnitList"  :selectValue="personOrUnit" selectid="personOrUnit" :value="otherUnit" id="otherUnit" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>
         <!--        <yhm-form-drop-down-select title="付款事由" width="1" @select="selectCause" :select-list="ownerSysPsd" :selectValue="ownerSys" selectid="ownerSys" :value="subject" id="subject" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>-->
         <!--        <yhm-form-select title="收款单位" tip="value" rule="R0000" @click="selectUnit" :value="otherUnit" id="otherUnit"></yhm-form-select>-->
         <yhm-form-radio title="是否关联" :select-list="isRelevanceList" @call="SelectIsRelevance" :value="isRelevance" id="isRelevance" rule="R0000"></yhm-form-radio>
@@ -225,7 +225,8 @@
         isAllocation: '',
         moneyAllocationList: [],
         allocationMoney: '',
-        billingID:''
+        billingID:'',
+        isCash:false,   //收款方是否可选
       }
     },
     created () {
@@ -240,16 +241,13 @@
       this.setQuery2Value('cashNameID')
       this.setQuery2Value('publicPrivate')
       this.setQuery2Value('Billingnature')
+      this.setQuery2Value('cashObject')
 
-      // let branchParams = {
-      //   id: guid(),  //guid
-      //   insertDate: new Date(accAdd(new Date().getTime(), accMul(this.branchList.length, 1000))),
-      //   ownerID: this.id,  // this.id
-      //   selectID: "B055AB2C-EF53-4307-AAD7-FA6C940DA95A",
-      //   selectValue: "售后部",
-      //   value: this.discountMoney
-      // }
-      // this.branchList.push(branchParams)
+      //返利对象是车主和投保人的时候 收款人不可选
+      if (this.cashObject==0 || this.cashObject==3){
+        this.isCash=true
+      }
+
       this.init({
         url: '/PersonOffice/initPaymentForm',
         all: (data) => {
@@ -307,21 +305,21 @@
         },
         add: (data) => {
           /* 需要添加的数据 */
+          this.nature =this.Billingnature
+          if (this.nature==1){
+            this.showPayment()
+          }
           this.subjectID=this.cashierSubjectID
           this.subject=this.cashierSubject
           this.money=this.discountMoney
           this.useName=this.cashierSubject
           this.remark='出单号:'+this.numbering+'车牌号:'+this.plate
-
           this.otherUnit=this.cashName
           this.otherUnitID=this.cashNameID
           this.personOrUnit=this.publicPrivate
-          this.nature =this.Billingnature
-
-
         },
         look: (data) => {
-          return
+         /* return
           this.bankDetailList = data.bankDetailList
           this.allocationList = data.allocationList
           this.invoiceList = data.invoicePsd.list
@@ -397,7 +395,7 @@
             // this.isAllocationShow = true
             this.isBrand = true
             this.isUpFile = true
-          }
+          }*/
         }
       })
     },
@@ -1438,6 +1436,7 @@
       },
       btnSubSave(){
 
+
         let money = parseFloat(this.money)
         let bankList = true
         let aa = true
@@ -1477,154 +1476,163 @@
             tipValue: '收支明细总金额有误！！！'
           })
         }
+        if (parseFloat(this.money) !==parseFloat(this.discountMoney) ){
+          this.$dialog.alert({
+            width: '350',
+            alertImg: 'error',
+            tipValue: '发票金额必须等于返利金额！！！'
 
-        if (this.validator() && aa&&bankList&&bb) {
-          let params = {
-            id: this.id,
-            ownerID:this.billingID,
-            unitID: this.unitID,
-            otherUnitID: this.otherUnitID,
-            otherUnit: this.otherUnit,
-            isRelevance: this.isRelevance, // 是否关联
-            name: this.useName, // 计划事件
-            otherAccount: this.otherAccount, // 收款账号
-            otherAccountID: this.otherAccountID, // 收款账号
-            personID: this.personID, // 申请人姓名
-            person: this.person, // 申请人姓名
-            nature: this.nature, // 付款性质
-            invoice: this.invoice, // 发票类型
-            secondLevelInvoice: this.secondLevelInvoice, // 发票二级类型
-            files: this.fileList, // 单据
-            category: '3',
-            ownerSys: this.ownerSys,
-            subjectID: this.subjectID, // 事由ID
-            subject: this.subject, // 事由
-            useNum: this.useNum,
-            lastDate: this.lastDate, // 最晚付款日期
-            code: this.code, // 编号
-            money: this.money, // 金额
-            capitalMoney: this.capitalMoney, // 大写金额
-            remark: this.remark,// 备注
-            paymentInvoice: this.invoiceDetails,
-            personOrUnit: this.personOrUnit,
-            branchList: this.branchList,
-            bankDetailList: this.bankDetailList,
-            allocationList: this.allocationList,
-            isChecks:this.isChecks,
-            isAllocation: this.isAllocation
+          })
+        }else {
+          if (this.validator() && aa&&bankList&&bb) {
+            let params = {
+              id: this.id,
+              ownerID:this.billingID,
+              unitID: this.unitID,
+              otherUnitID: this.otherUnitID,
+              otherUnit: this.otherUnit,
+              isRelevance: this.isRelevance, // 是否关联
+              name: this.useName, // 计划事件
+              otherAccount: this.otherAccount, // 收款账号
+              otherAccountID: this.otherAccountID, // 收款账号
+              personID: this.personID, // 申请人姓名
+              person: this.person, // 申请人姓名
+              nature: this.nature, // 付款性质
+              invoice: this.invoice, // 发票类型
+              secondLevelInvoice: this.secondLevelInvoice, // 发票二级类型
+              files: this.fileList, // 单据
+              category: '3',
+              ownerSys: this.ownerSys,
+              subjectID: this.subjectID, // 事由ID
+              subject: this.subject, // 事由
+              useNum: this.useNum,
+              lastDate: this.lastDate, // 最晚付款日期
+              code: this.code, // 编号
+              money: this.money, // 金额
+              capitalMoney: this.capitalMoney, // 大写金额
+              remark: this.remark,// 备注
+              paymentInvoice: this.invoiceDetails,
+              personOrUnit: this.personOrUnit,
+              branchList: this.branchList,
+              bankDetailList: this.bankDetailList,
+              allocationList: this.allocationList,
+              isChecks:this.isChecks,
+              isAllocation: this.isAllocation
 
-          }
-          this.ajaxJson({
-            url: '/PersonOffice/paymentSave',
-            data: params,
-            loading: '0',
-            call: (data) => {
-              if (data.type === 0) {
-                if (this.id) {
-                  let params = {
-                    id: this.id,
-                    tableName: 45
-                  }
-                  this.$dialog.confirm({
-                    width: 300,
-                    tipValue: '确定提交申请?',
-                    btnValueOk: '确定',
-                    alertImg: 'warn',
-                    okCallBack: (data) => {
-                      this.ajaxJson({
-                        url: '/PersonOffice/getSubmitCatrgoryVue',
-                        data: params,
-                        call: (data) => {
-                          this.category = data.message
-                          if (this.category) {
-                            /* 判断是否拿到category */
-                            let params = {
-                              id: this.id,
-                              category: this.category,
-                              tableName: 45,
-                              isDetail: 0,
-                              tableDetailName: -1
-                            }
-                            this.ajaxJson({
-                              url: '/PersonOffice/approvalSubmitVue',
-                              data: params,
-                              call: (data) => {
-                                if (data.type === 0) {
-                                  let params = {
-                                    id: this.id,
-                                    category: this.category,
-                                  }
-                                  this.ajaxJson({
-                                    url: '/PersonOffice/planSubmitAfterOperat',
-                                    data: params,
-                                    call: (data) => {
-                                      this.$dialog.setReturnValue(this.id) //向父级页面传递参数
-                                      if (data.type === 0) {
-                                        /* 修改返利明细状态*/
-                                        let params = {
-                                          id:this.billingID,
-                                          ownerID:this.id
-                                        }
-                                        this.ajaxJson({
-                                          url: '/Insurance/modifyBillingApproval',
-                                          data: params,
-                                          closeCallBack: () => {
-
-                                          }
-                                        })
-                                        this.$dialog.alert({
-                                          error: data.message,
-                                          closeCallBack: () => {
-                                            this.$dialog.setReturnValue(1)
-                                            this.$dialog.close()
-                                            this.initPageData(true)
-                                          }
-                                        })
-                                      } else {
-                                        this.$dialog.alert({
-                                          width: 320,
-                                          tipValue: data.message,
-                                          closeCallBack: () => {
-                                            this.$dialog.setReturnValue(1)
-                                            this.$dialog.close()
-                                            this.initPageData(true)
-                                          }
-                                        })
-                                      }
-                                    }
-                                  })
-                                } else {
-                                  this.$dialog.alert({
-                                    alertImg: 'error',
-                                    tipValue: data.message,
-                                    closeCallBack: () => {
-                                    }
-                                  })
-                                }
+            }
+            this.ajaxJson({
+              url: '/PersonOffice/paymentSave',
+              data: params,
+              loading: '0',
+              call: (data) => {
+                if (data.type === 0) {
+                  if (this.id) {
+                    let params = {
+                      id: this.id,
+                      tableName: 45
+                    }
+                    this.$dialog.confirm({
+                      width: 300,
+                      tipValue: '确定提交申请?',
+                      btnValueOk: '确定',
+                      alertImg: 'warn',
+                      okCallBack: (data) => {
+                        this.ajaxJson({
+                          url: '/PersonOffice/getSubmitCatrgoryVue',
+                          data: params,
+                          call: (data) => {
+                            this.category = data.message
+                            if (this.category) {
+                              /* 判断是否拿到category */
+                              let params = {
+                                id: this.id,
+                                category: this.category,
+                                tableName: 45,
+                                isDetail: 0,
+                                tableDetailName: -1
                               }
-                            })
-                          } else {
-                            this.$dialog.alert({
-                              tipValue: '没有获取到提交数据!',
-                              alertImg: 'error'
-                            })
+                              this.ajaxJson({
+                                url: '/PersonOffice/approvalSubmitVue',
+                                data: params,
+                                call: (data) => {
+                                  if (data.type === 0) {
+                                    let params = {
+                                      id: this.id,
+                                      category: this.category,
+                                    }
+                                    this.ajaxJson({
+                                      url: '/PersonOffice/planSubmitAfterOperat',
+                                      data: params,
+                                      call: (data) => {
+                                        this.$dialog.setReturnValue(this.id) //向父级页面传递参数
+                                        if (data.type === 0) {
+                                          /* 修改返利明细状态*/
+                                          let params = {
+                                            id:this.billingID,
+                                            ownerID:this.id
+                                          }
+                                          this.ajaxJson({
+                                            url: '/Insurance/modifyBillingApproval',
+                                            data: params,
+                                            closeCallBack: () => {
+
+                                            }
+                                          })
+                                          this.$dialog.alert({
+                                            error: data.message,
+                                            closeCallBack: () => {
+                                              this.$dialog.setReturnValue(1)
+                                              this.$dialog.close()
+                                              this.initPageData(true)
+                                            }
+                                          })
+                                        } else {
+                                          this.$dialog.alert({
+                                            width: 320,
+                                            tipValue: data.message,
+                                            closeCallBack: () => {
+                                              this.$dialog.setReturnValue(1)
+                                              this.$dialog.close()
+                                              this.initPageData(true)
+                                            }
+                                          })
+                                        }
+                                      }
+                                    })
+                                  } else {
+                                    this.$dialog.alert({
+                                      alertImg: 'error',
+                                      tipValue: data.message,
+                                      closeCallBack: () => {
+                                      }
+                                    })
+                                  }
+                                }
+                              })
+                            } else {
+                              this.$dialog.alert({
+                                tipValue: '没有获取到提交数据!',
+                                alertImg: 'error'
+                              })
+                            }
                           }
-                        }
-                      })
+                        })
+                      }
+                    })
+                  }
+                } else {
+                  this.$dialog.alert({
+                    alertImg: 'error',
+                    tipValue: data.message,
+                    closeCallBack: () => {
                     }
                   })
                 }
-              } else {
-                this.$dialog.alert({
-                  alertImg: 'error',
-                  tipValue: data.message,
-                  closeCallBack: () => {
-                  }
-                })
               }
-            }
-          })
+            })
+          }
         }
+
       },
 
     },

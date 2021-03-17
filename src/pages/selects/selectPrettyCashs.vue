@@ -12,7 +12,7 @@
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
         <yhm-managerth width="110" title="申请日期"></yhm-managerth>
-        <yhm-managerth width="150" title="金额"></yhm-managerth>
+        <yhm-managerth width="150" title="剩余核销金额"></yhm-managerth>
         <yhm-managerth width="150" title="业务相关"></yhm-managerth>
         <yhm-managerth width="100" title="发票类型"></yhm-managerth>
         <yhm-managerth title="事由"></yhm-managerth>

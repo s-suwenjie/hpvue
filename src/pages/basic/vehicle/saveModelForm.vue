@@ -24,6 +24,7 @@
     data(){
       return {
         id:'',
+        model:'',
         brand:'',//车辆品牌
         brandID:'',
         displacement:'',
@@ -84,6 +85,7 @@
       async save() {
         let a = await this.isNameVerifyEvent()
         let b = this.validator()
+        // console.log(a,b)
         if (a && b) {
           let params = {
             id: this.id,
@@ -92,6 +94,8 @@
             value11:this.displacement,
             value12:this.brandID,
           }
+          // console.log('11111')
+          // return
           this.ajaxJson({
             url: '/com/dicVueSave',
             data: params,

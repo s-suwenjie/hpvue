@@ -7,6 +7,7 @@
       <template #operate>
         <yhm-commonbutton  value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initChoose()"></yhm-managersearch>
+        <!--<yhm-commonbutton  value="test" icon="btnAdd" :flicker="true" @call="add1()"></yhm-commonbutton>-->
        </template>
       <!--数据表头-->
       <template #listHead>
@@ -21,7 +22,6 @@
         <yhm-managerth  title="车型" value="model"></yhm-managerth>
         <yhm-managerth  title="车辆版本" value="version"></yhm-managerth>
         <yhm-managerth title="上牌日期" value="registerDate"></yhm-managerth>
-
         <yhm-managerth style="width: 100px;" title="删除"></yhm-managerth>
       </template>
 
@@ -33,7 +33,7 @@
           <yhm-manager-td :value="item.carOwner"></yhm-manager-td>
           <yhm-manager-td :value="item.categoryVal"></yhm-manager-td>
           <yhm-manager-td :value="item.assortVal"></yhm-manager-td>
-          <yhm-manager-td :value="item.plate"></yhm-manager-td>
+          <yhm-manager-td vehicle-text-align="left" type="vehicle" :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.color"></yhm-manager-td>
           <yhm-manager-td :value="item.brand"></yhm-manager-td>
           <yhm-manager-td :value="item.model"></yhm-manager-td>
@@ -42,7 +42,7 @@
           <yhm-manager-td-date :value="item.registerDate==='1900-01-01'?'-----':item.registerDate"></yhm-manager-td-date>
 
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button  @click="del(item.id)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="del(item.id)" value="删除" icon="delete" color="#ff0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -70,6 +70,21 @@
       }
     },
     methods:{
+      add1(){
+        let params = {
+          startDate:'2020-01-01 00:00:00',
+          endDate:'2021-01-31 23:59:59',
+          weekState:'3'
+        }
+        this.ajaxJson({
+          url: '/dailyoffice/myExpress/getChart',
+          data: params,
+          call: (data) => {
+              console.log(data)
+          }
+        })
+      },
+
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',

@@ -8,12 +8,16 @@
     </yhm-formbody>
     <div class="f_split"></div>
     <yhm-form-list-edit>
-      <template #title>保险公司给HP返利</template>
+      <template #title>
+        <span>保险公司给HP返利</span>
+        <span style="font-size: 18px;color: red;margin-left: 40px;">☠</span>
+        <span style="font-size: 12px;color: red;">(如有新的返利政策请点击右边添加按钮,请勿删除之前记录)</span>
+      </template>
       <template #operate>
         <yhm-commonbutton value="添加" icon="btnAdd" @call="add()"></yhm-commonbutton>
       </template>
       <template #listHead>
-        <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
+<!--        <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>-->
         <yhm-managerth style="width: 130px" title="启用时间"></yhm-managerth>
         <yhm-managerth style="width: 80px" title="保险公司返利"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="三方服务费返利"></yhm-managerth>
@@ -22,7 +26,7 @@
       </template>
       <template #listBody >
         <tr v-for="(item,index) in saveList" :key="index" :class="{InterlacBg:index%2!==0}" >
-          <yhm-manager-td-look class="solidYhm"   @click="listView(item)"></yhm-manager-td-look>
+<!--          <yhm-manager-td-look class="solidYhm"   @click="listView(item)"></yhm-manager-td-look>-->
           <yhm-manager-td-date class="solidYhm" :value="item.time" typeof="data"></yhm-manager-td-date>
           <yhm-manager-td-center class="solidYhm"  :value="item.commercialOne"></yhm-manager-td-center>
           <yhm-manager-td-center  class="solidYhm" :value="item.commercialTwo" ></yhm-manager-td-center>

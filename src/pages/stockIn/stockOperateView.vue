@@ -19,12 +19,12 @@
       <template #listHead>
         <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
         <yhm-managerth title="商品名称"></yhm-managerth>
-        <yhm-managerth style="width: 80px" title="规格型号"></yhm-managerth>
+        <yhm-managerth title="规格型号"></yhm-managerth>
         <yhm-managerth style="width: 80px" title="数量"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="拆分数量"></yhm-managerth>
-        <yhm-managerth style="width: 180px;" title="单价"></yhm-managerth>
+        <yhm-managerth style="width: 80px" title="拆分数量"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="单价"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="总价"></yhm-managerth>
-        <yhm-managerth style="width: 80px;" title="含税单价"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="含税单价"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="含税总价"></yhm-managerth>
       </template>
       <template #listBody>
@@ -33,12 +33,15 @@
           <yhm-manager-td :value="item.product"></yhm-manager-td>
           <yhm-manager-td-center :value="item.model"></yhm-manager-td-center>
           <yhm-manager-td-rgt :value="item.quantity+item.uuStr+''"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.mdo+item.uuStr+''"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.mdo+item.mdoStr+''"></yhm-manager-td-rgt>
           <yhm-manager-td-money :value="item.price+''"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.totalPrice+''"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.priceTax+''"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.totalPriceTax+''"></yhm-manager-td-money>
         </tr>
+      </template>
+      <template #pager>
+        <yhm-pagination :pager="pager" is-page-size="false" @initData="listPage"></yhm-pagination>
       </template>
       <template #empty :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
@@ -58,6 +61,7 @@
       return {
         show:'false',
         category: '',
+        content:[],
         categoryList: [],
         applicableModels:'',
         applicableModelsList:[],
@@ -76,6 +80,12 @@
         idm:'',
         showname:'',
         carname:'',
+        pager: { // 分页数据
+          total: '', // 数据总条数
+          pageSize: 5, // 单页数据条数
+          pageIndex: 1, // 当前页码
+          selectCount: 0 // 选中数据的条数
+        },
       }
     },
     methods:{
@@ -182,6 +192,15 @@
           }
         })
       },
+      listPage(){
+        let list = this.content.concat()
+        this.pager.total=this.content.length
+        this.pager.pageSize=5
+        let a=(this.pager.pageIndex-1)*this.pager.pageSize
+        let arr=[]
+        arr=list.splice(a,this.pager.pageSize)
+        this.detailList = arr
+      },
       initData(){
         let params = {}
         if(this.type=='1'){//为1时是从添加跳转进来的
@@ -199,6 +218,7 @@
           data:params,
           all: (data)=>{
             if(data){
+              this.content = data.detailList
               this.detailList = data.detailList
               this.categoryList = data.categoryPsd.list
               this.category = data.categoryPsd.value
@@ -209,6 +229,8 @@
               this.wareHouserId = data.wareHouserId
               this.wareHouser = data.wareHouser
               this.state = data.state
+
+              this.listPage()
               if(data.detailList!=null&&this.detailList.length!=0){
                 this.empty = false
                 this.modelsNoEdit = true

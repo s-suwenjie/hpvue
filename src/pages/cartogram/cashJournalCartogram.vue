@@ -40,7 +40,7 @@
       <div class="bottom">
         <yhm-commonbutton value="切换至账户总余额统计图"  v-show="title=='净值'" :flicker="true" @call="buttonClick" icon="" class="btn"></yhm-commonbutton>
         <yhm-commonbutton value="切换至净值统计图"   v-show="title=='账户总余额'" :flicker="true" @call="buttonClick" icon="" class="btn"></yhm-commonbutton>
-
+<!--        <yhm-commonbutton value="切换收支统计图" v-show="title!='收支对比'" :flicker="true" @call="buttonClicks" icon="" class="btn"></yhm-commonbutton>-->
       </div>
 
       <!--统计图渲染标签 避坑 id具有唯一性 不允许当id与其他页面ID相同 否则不显示     -->
@@ -127,7 +127,11 @@
           this.title = '账户总余额'
         }
         this.initPageData()
+      },
 
+      buttonClicks(){
+        this.drawChartss()
+        this.title = '收支对比'
       },
       selectYear(year){
         this.year = year
@@ -150,6 +154,7 @@
           this.year = data.slice(0,4)
           this.month = '13'
         }
+
         setTimeout(()=>{
           if(this.month<10){
             this.month = '0' + this.month
@@ -194,7 +199,7 @@
         }else{//整年时
           // that.title = that.year + '年'
           for (let i = 0; i < list.length; i++) {
-            that.day.push(that.year + '年' + list[i].day + '月')
+            that.day.push( list[i].day + '月')//that.year + '年' +
             that.money.push(list[i].balance)
             that.netWorth.push(list[i].netWorth)
           }
@@ -205,7 +210,10 @@
         // 基于准备好的dom，初始化echarts实例
         //避坑 id具有唯一性 不允许当id与其他页面ID相同
         let myChart = this.$echarts.init(document.getElementById('cashJournalCartogram'));
-
+        console.log(that.netWorth)
+        console.log(that.day)
+        console.log(that.type)
+        console.log(that.netWorth)
 
         // 指定图表的配置项和数据
         let option = {
@@ -258,6 +266,31 @@
               data: that.netWorth,
             },
           ],
+          visualMap: {
+            type: 'continuous',
+            dimension: 1,
+            text: ['High', 'Low'],
+            inverse: false,
+            itemHeight: 550,
+            calculable: true,
+            precision:0,
+            align:'left',
+            min: 0,
+            max: 9999999,
+            top: 0,
+            left: 0,
+            inRange: {
+              colorLightness: [0.4, 0.8]
+            },
+            outOfRange: {
+              color: '#ddd'
+            },
+            controller: {
+              inRange: {
+                color: '#2f4554'
+              }
+            }
+          },
           series: [
             {
               name:'净值',
@@ -317,7 +350,7 @@
           ]
         }
         // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+        myChart.setOption(option,true);
       },
       drawChart () {
         let that = this
@@ -687,7 +720,187 @@
         }
 
         // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
+        myChart.setOption(option,true);
+      },
+      drawChartss(){
+        let that = this
+        // 基于准备好的dom，初始化echarts实例
+        //避坑 id具有唯一性 不允许当id与其他页面ID相同
+        let myChart = this.$echarts.init(document.getElementById('cashJournalCartogram'));
+
+        let barWidth
+        if(that.month==13){
+          barWidth==20
+        }else{
+          barWidth==10
+        }
+
+        let money=that.money
+        let netWorth=this.netWorth
+
+        let moneyAverage=0
+        let netWorthAverage=0
+
+        let nums=0
+        let keys=0
+        console.log((nums/keys).toFixed(2) + '+' + netWorthAverage)
+        for(let i in that.money){
+          if(that.money[i]!=0){
+            nums+= Number(that.money[i])
+            keys++
+          }
+        }
+        moneyAverage=(nums/keys).toFixed(2)
+        nums=0
+        keys=0
+        for(let i in that.netWorth){
+          if(that.netWorth[i]!=0){
+            nums+= Number(that.netWorth[i])
+            keys++
+          }
+        }
+        console.log(that.money)
+        console.log(that.netWorth)
+
+        netWorthAverage=(nums/keys).toFixed(2)
+
+        console.log(moneyAverage + '+' + netWorthAverage)
+
+        // 指定图表的配置项和数据
+        let option = {
+          color: ['#74ebd5','#ACB6E5'],
+          legend: {
+            data: ['总余额', '净值'],
+            left: 130,
+            top: 20,
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+              type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            },
+            formatter(params){
+              let day
+              if(that.month==13){
+                day = that.year+'年'+params[0].axisValue
+
+              }else{
+                day = that.year+'年'+that.month+'月'+params[0].axisValue+'日'
+                  params[0].axisValue.indexOf('年')==-1?params[0].axisValue+'日':params[0].axisValue
+              }
+              // console.log(params)
+
+              let label = '日期 ' +  day +'</br>' + '总余额 : ' + tenThousandFormatHtml(params[0].data+'')
+              let labels= '</br>'+' 净 值 : '+tenThousandFormatHtml(params[1].data+'')
+              return label+labels
+            }
+          },
+          title: {
+            text: '总余额/净值',
+            x:560,
+            y:20,
+          },
+          toolbox: {
+            padding: 20,
+            show: true,
+            x: 888,
+            y: 0,
+          },
+          grid: {
+            left: '0%',
+            right: '0%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: 'category',
+              name: '日期',
+              data: that.day,
+              axisTick: {
+                alignWithLabel: true
+              },
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value',
+              name: '总余额/净值',
+              data: that.netWorth,
+            },
+          ],
+          series: [
+            {
+              name:'总余额',
+              type:that.type,
+              stack: '总余额',
+              data:money,
+              barWidth:barWidth,
+              markLine : {
+                left:'0',
+                data : [
+                  {type : 'moneyAverage', name: '总余额平均值',yAxis:moneyAverage }
+                ],
+                label: {
+                  normal: {
+                    position: 'middle',//'start''middle''end'
+                    formatter: '总余额平均值: ' + moneyAverage
+                  }
+                }
+              },
+              itemStyle: {
+                //通常情况下：
+                normal:{
+                  color:'#74ebd5'
+                },
+                //鼠标悬停时：
+                emphasis: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              },
+
+            },
+            {
+              name:'净值',
+              type:that.type,
+              stack: '净值',
+              data:netWorth,
+              barWidth:barWidth,
+              markLine : {
+                left:'0',
+                data : [
+                  {type : 'netWorthAverage', name: '净值平均值',yAxis:netWorthAverage }
+                ],
+                label: {
+                  normal: {
+                    position: 'middle',//'start''middle''end'
+                    formatter: '净值平均值: ' + netWorthAverage
+                  }
+                }
+              },
+              itemStyle: {
+                //通常情况下：
+                normal:{
+                  color:'#ACB6E5'
+                },
+                //鼠标悬停时：
+                emphasis: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              },
+
+            }
+
+          ]
+        }
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option,true)
+
+
       },
       elementCountInArray(arr) {//判断数组中某个值出现的次数
         let map = {};
@@ -846,8 +1059,9 @@
             let num = 0
             let key = 0
             for(let v in money){
-              console.log('money',money)
+              // console.log('money',money)
               if(money[v]!=0){
+
                 num+= Number(money[v])
                 key++
               }
@@ -859,11 +1073,16 @@
             }
             this.rank()
             //调用echarts实例
-            if(this.show==false){
-              this.drawCharts()//净值
+            if(this.title=='收支对比'){
+              this.drawChartss()
             }else{
-              this.drawChart()//账户总余额
+              if(this.show==false){
+                this.drawCharts()//净值
+              }else{
+                this.drawChart()//账户总余额
+              }
             }
+
 
           }
         })

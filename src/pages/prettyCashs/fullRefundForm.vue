@@ -17,7 +17,7 @@
 
 <!--        <yhm-formupload :ownerID="id" :value="list" id="list" title="支持单据" tag="bankDetail" subtitle="" multiple="multiple" rule="#"></yhm-formupload>-->
         <yhm-form-upload-image title="支持单据" tag="bankDetail" discription=" " :value="list" id="list" rule="#"></yhm-form-upload-image>
-        <yhm-form-text title="退备用金金额" no-edit="1" tip="money" before-icon="rmb" :value="money" id="money" rule="R3000" placeholder="请输入数字" error-message="纯数字输入"></yhm-form-text>
+        <yhm-form-text title="退备用金金额" tip="money" before-icon="rmb" :value="money" id="money" rule="R3000" placeholder="请输入数字" error-message="纯数字输入"></yhm-form-text>
 
       </template>
     </yhm-formbody>
@@ -128,7 +128,8 @@
             selfAccount: this.selfAccount,
             selfAccountID: this.selfAccountID,
             ownerID: this.ownerID,
-            list: this.fileList
+            list: this.fileList,
+            money:this.money,
           };
           let url='/PersonOffice/prettyCashsRefund'
           if(this.category === '1' ){

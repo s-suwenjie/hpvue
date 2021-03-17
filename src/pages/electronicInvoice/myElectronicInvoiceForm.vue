@@ -80,13 +80,20 @@
             </div>
           </yhm-form-text>
           <yhm-formimage :tip="true" width="1000" height="650" rule="#" title="发票照片" :big="1" discription=" " :value="'/UploadFile/electronicInvoice/' + imgUrl" id="url"></yhm-formimage>
-          <yhm-form-text title="开票单位" :value="otherName" id="otherName" rule="R0000" tip="value">
+          <!--<yhm-form-text title="开票单位" :value="otherName" id="otherName" rule="R0000" tip="value">-->
+            <!--<div class="vs">-->
+              <!--<div v-if="otherNameShow" class="invoice category0" :style="getVs(otherNamePosition,1)"></div>-->
+              <!--<p :class="getVerifyState(confirmArr[8])" @mouseover.self="showSource('otherNameShow')" @mouseout.self="hideSource('otherNameShow')" @click="confirm('8')"></p>-->
+              <!--<p class="confirmTip" v-show="otherNameShow">点击确认</p>-->
+            <!--</div>-->
+          <!--</yhm-form-text>-->
+          <yhm-form-text-search :search-main-width="400" title="开票单位" placeholder="直接录入或者点击后面图标选择" :value="otherName" @searchClick="searchClick" @keydown="searchKeyDown" after-icon="icon-search" :search-loading="searchLoading" id="otherName" :search-list="otherUnitList" search-list-key="name" rule="R0000">
             <div class="vs">
               <div v-if="otherNameShow" class="invoice category0" :style="getVs(otherNamePosition,1)"></div>
               <p :class="getVerifyState(confirmArr[8])" @mouseover.self="showSource('otherNameShow')" @mouseout.self="hideSource('otherNameShow')" @click="confirm('8')"></p>
               <p class="confirmTip" v-show="otherNameShow">点击确认</p>
             </div>
-          </yhm-form-text>
+          </yhm-form-text-search>
           <yhm-form-text title="纳税人" subtitle="识别号" :value="otherCode" id="otherCode" rule="R0000">
             <div class="vs">
               <div v-if="otherCodeShow" class="invoice category0" :style="getVs(otherCodePosition,1)"></div>
@@ -107,6 +114,7 @@
 
       <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
         <template #btn>
+          <yhm-commonbutton value="一键确认" icon="btnAddSave" color="#00bb6b" @mouseout="allConfirmedMouseout" @mouseover="allConfirmedMouseover" @call="allConfirmed"></yhm-commonbutton>
           <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save(0)"></yhm-commonbutton>
           <yhm-commonbutton value="保存并新增" icon="btnAddSave" @call="save(1)"></yhm-commonbutton>
         </template>
@@ -180,9 +188,115 @@
         uploadShow:true,//是否显示上传
         showTxt:'点击或者拖拽上传PDF格式发票',
 
+        otherUnitList:[],
+        searchLoading:false,
+        name:''
       }
     },
     methods:{
+      searchClick(index,item){//用户选中了搜索结果 返回索引值以及选中数据
+        this.$nextTick(()=>{
+          this.getTaxInformation(item.id)
+        })
+      },
+      searchKeyDown(e){// 用户点击了按键 当前事件只会300毫秒返回一次 防止请求过于频繁
+        this.searchLoading = true //请求前开启加载中的loading
+        this.searchLoading = [] //清空上次搜索的内容
+        this.ajaxJson({
+          url:"/Basic/getSearchFieldUnit",
+          data:{
+            name:this.otherName,
+          },
+          loading:"0",
+          call:(data) => {
+            this.searchLoading = false
+            this.otherUnitList = data //将搜索出的内容
+          }
+        })
+      },
+      getTaxInformation(id){
+        this.ajaxJson({
+          url: '/finance/tax/getUnitTax',
+          data: {
+            unitID:id
+          },
+          call: (data) => {
+            if (data) {
+              this.otherCode=data.taxNumber
+            }
+          }
+        })
+      },
+      // existOtherInformation(num){
+      //   let param={}
+      //   if(num == 0){
+      //     param={
+      //       unit:this.otherName,
+      //       taxNumber:this.otherCode
+      //     }
+      //   }else if(num == 1){
+      //     param={
+      //       unit:this.otherName,
+      //       taxNumber:''
+      //     }
+      //   }else if(num == 2){
+      //     param={
+      //       unit:'',
+      //       taxNumber:this.otherCode
+      //     }
+      //   }
+      //   this.ajaxJson({
+      //     url:'/finance/tax/getUnitAndTaxNumber',
+      //     data:param,
+      //     call:(data)=>{
+      //       if(data.type == 1){
+      //         this.$dialog.confirm({
+      //           width: 300,
+      //           tipValue: '是否替换',
+      //           btnValueOk: '确定',
+      //           alertImg: 'warn',
+      //           okCallBack : () => {
+      //
+      //           }
+      //         })
+      //       }else if(data.type==2){
+      //         this.$dialog.confirm({
+      //           width: 300,
+      //           tipValue: '确定提交申请?',
+      //           btnValueOk: '确定',
+      //           alertImg: 'warn',
+      //           okCallBack: () => {
+      //
+      //           }
+      //         })
+      //       }
+      //     }
+      //   })
+      // },
+      allConfirmedMouseover(){
+        console.log('11111')
+        //'remarkShow'
+        let arr = ['openDateShow','codeShow','numShow','selfNameShow','selfCodeShow','moneyShow','taxShow','totalMoneyShow','otherNameShow','otherCodeShow']
+        for(let i in arr){
+          let js = 'this.' + arr[i] + ' = true'
+          eval(js)
+        }
+      },
+      allConfirmedMouseout(){
+        console.log('222222')
+        //'remarkShow'
+        let arr = ['openDateShow','codeShow','numShow','selfNameShow','selfCodeShow','moneyShow','taxShow','totalMoneyShow','otherNameShow','otherCodeShow']
+        for(let i in arr){
+          let js = 'this.' + arr[i] + ' = false'
+          eval(js)
+        }
+      },
+      allConfirmed(){
+          for(let i=0; i<=10; i++){
+            console.log(i)
+            this.confirm(i)
+          }
+      },
       confirm(index){
         if(this.validator()){
           if(index == 3 && this.selfCategory == 1){
@@ -383,8 +497,6 @@
               this.otherCodePosition = result.otherCodePosition.split(',')
               this.remark = result.remark
               this.remarkPosition = result.remarkPosition.split(',')
-
-
             }
             else{
               this.$dialog.confirm({
@@ -524,20 +636,24 @@
                 data: params,
                 call: (data) => {
                   if (data.type === 0) {
-                    this.$dialog.setReturnValue(this.id)
+                    if(op == 1){
+                      this.$dialog.setReturnValue({id:this.id,type:'1'})
+                    }else{
+                      this.$dialog.setReturnValue({id:this.id,type:'0'})
+                    }
                     this.$dialog.alert({
                       tipValue: data.message,
                       closeCallBack: () => {
                         if(op === 1){
-                          this.$dialog.OpenWindow({
-                            width: '1050',
-                            height: '740',
-                            title: '添加电子发票',
-                            url: '/myElectronicInvoiceForm',
-                            closeCallBack: (data)=>{
-
-                            }
-                          })
+                          this.$dialog.close()
+                          // this.$dialog.OpenWindow({
+                          //   width: '1050',
+                          //   height: '740',
+                          //   title: '添加电子发票',
+                          //   url: '/myElectronicInvoiceForm',
+                          //   closeCallBack: (data)=>{
+                          //   }
+                          // })
                         }else{
                           this.$dialog.close()
                         }
@@ -655,7 +771,6 @@
           this.state = data.state
         }
       })
-
     }
   }
 </script>

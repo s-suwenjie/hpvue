@@ -150,9 +150,9 @@
         blurEvent(){
           this.focusStyle = false
           this.verification()
-          // this.$nextTick(() =>{
-          //   this.$emit("verify")
-          // })
+          this.$nextTick(() =>{
+            this.$emit("blur")
+          })
         },
         //主动显示控件错误
         errorEvent(errorMessage){

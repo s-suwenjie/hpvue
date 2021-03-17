@@ -49,7 +49,7 @@
           <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
           <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
           <yhm-manager-td :value="item.subject" @click="subjectEvent(item)"></yhm-manager-td>
-          <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+          <yhm-manager-td-money @click="selectMoeny(item)" :value="item.money"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.useMoney"></yhm-manager-td-money>
           <yhm-manager-td :value="item.remark" :tip="true"></yhm-manager-td>
           <yhm-manager-td-operate>
@@ -141,6 +141,19 @@
       }
     },
     methods:{
+      selectMoeny(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/statementDetails?id=' + item.id ,
+          title: '查看明细对账单',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       editBtn(item){  //分单操作
         let params={
           startDate:item.cccurDate,

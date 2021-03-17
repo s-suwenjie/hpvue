@@ -24,7 +24,7 @@
       </template>
       <template #control>
         <div class="check">
-          <div class="check_main" v-for="(item,index) in list" :key="index">{{item.code}}<span @click="delCheck(index)" :class="{'red':deleteTheSwitch}" class="icon delete"></span></div>
+          <div class="invoice_main" v-for="(item,index) in list" :key="index">{{item.code.substring(0,4)}}    {{item.code.substring(4,8)}}<span @click="delCheck(index)" :class="{'red':deleteTheSwitch}" class="icon delete"></span></div>
           <div class="noTableData" v-if="isEmpty">暂时没有数据</div>
         </div>
       </template>
@@ -235,42 +235,51 @@
               url: '/addInvoiceNumForm?numType=' + numType + '&quantity=' + this.quantity,
               closeCallBack: (data)=>{
                 if(data){
-                  this.invoiceNum = data.invoiceNum.substring(data.invoiceNum.length-8)
-                  this.invoiceFir = data.invoiceFir.substring(data.invoiceFir.length-8)
+                  this.invoiceNum = data.invoiceNum
+                  this.invoiceFir = data.invoiceFir
                   this.invoiceSheet = data.invoiceSheet
-                  this.invoiceLast = data.invoiceLast.substring(data.invoiceLast.length-8)
-
-                  this.beInvoiceNum = data.invoiceNum.substring(0,10)
-                  this.beInvoiceFir = data.invoiceFir.substring(0,10)
-                  this.beInvoiceLast = data.invoiceLast.substring(0,10)
+                  this.invoiceLast = data.invoiceLast
 
                   if(numType === 0){
-                    if(this.list.find((element) => (element.code == this.invoiceNum))===undefined) {
+                    if(this.list.find((element) => (element.code == data.invoiceNum))===undefined) {
                       this.list.push({
                         id: guid(),
                         ownerID: this.id,
-                        code: this.beInvoiceNum + this.invoiceNum,
+                        code: data.invoiceNum,
                       })
                     }
                   }else if(numType === 1){
                     if(this.quantity !== '1') {
-                      let aa = parseInt(this.invoiceFir) - 1
                       for (let i = 0; i < this.invoiceSheet; i++) {
-                        aa += 1
-                        let aaStr = aa.toString()
-                        if(aaStr.length < 8){
-                          let zeroLen = 8 - aaStr.length
-                          let zero = ''
-                          for(let i=0;i < zeroLen; i++){
-                            zero += '0'
-                          }
-                          aaStr = zero + aaStr
+                        let code=''
+                        if(i===0){
+                          code=data.invoiceFir
+                        }else{
+                          code=parseInt(data.invoiceFir)+i;
                         }
-                        if (this.list.find((element) => (element.code == aaStr)) === undefined) {
+                        if(this.list.find((element) => (element.code == code))===undefined) {
+                          if(code.toString().length!==8){
+                            let a=8-code.toString().length
+                            if(a===1){
+                              code='0'+code.toString()
+                            }else if(a===2){
+                              code='00'+code.toString()
+                            }else if(a===3){
+                              code='000'+code.toString()
+                            }else if(a===4){
+                              code='0000'+code.toString()
+                            }else if(a===5){
+                              code='00000'+code.toString()
+                            }else if(a===6){
+                              code='000000'+code.toString()
+                            }else if(a===7){
+                              code='0000000'+code.toString()
+                            }
+                          }
                           this.list.push({
                             id: guid(),
                             ownerID: this.id,
-                            code: this.beInvoiceFir + aaStr
+                            code: code.toString(),
                           })
                         }
                       }
@@ -279,7 +288,7 @@
                         this.list.push({
                           id: guid(),
                           ownerID: this.id,
-                          code: this.beInvoiceFir + this.invoiceFir,
+                          code: data.invoiceFir,
                         })
                       }
                     }
@@ -288,24 +297,38 @@
                       if (parseInt(this.invoiceLast) > parseInt(this.invoiceFir)) {
                         let aa = parseInt(this.invoiceLast) - parseInt(this.invoiceFir)
                         let bb = parseInt(this.invoiceFir) - 1
-                        for (let i = 0; i < aa + 1; i++) {
-                          bb += 1
-
-                          let bbStr = bb.toString()
-
-                          if(bbStr.length < 8){
-                            let zeroLen = 8 - bbStr.length
-                            let zero = ''
-                            for(let i=0;i < zeroLen; i++){
-                              zero += '0'
-                            }
-                            bbStr = zero + bbStr
+                        for (let i = 0; i < aa+1; i++) {
+                          let code=''
+                          if(i===0){
+                            code=data.invoiceFir
+                          }else if(i===aa){
+                            code=data.invoiceLast
+                          }else{
+                            code=parseInt(data.invoiceFir)+i;
                           }
-                          if (this.list.find((element) => (element.code == bb)) === undefined) {
+                          if(this.list.find((element) => (element.code == code))===undefined) {
+                            if(code.toString().length!==8){
+                              let a=8-code.toString().length
+                              if(a===1){
+                                code='0'+code.toString()
+                              }else if(a===2){
+                                code='00'+code.toString()
+                              }else if(a===3){
+                                code='000'+code.toString()
+                              }else if(a===4){
+                                code='0000'+code.toString()
+                              }else if(a===5){
+                                code='00000'+code.toString()
+                              }else if(a===6){
+                                code='000000'+code.toString()
+                              }else if(a===7){
+                                code='0000000'+code.toString()
+                              }
+                            }
                             this.list.push({
                               id: guid(),
                               ownerID: this.id,
-                              code: this.beInvoiceFir + bbStr
+                              code: code.toString(),
                             })
                           }
                         }
@@ -315,7 +338,7 @@
                         this.list.push({
                           id: guid(),
                           ownerID: this.id,
-                          code: this.beInvoiceFir + this.invoiceFir,
+                          code: data.invoiceFir,
                         })
                       }
                     }
@@ -417,5 +440,16 @@
 </script>
 
 <style scoped>
-
+  .invoice_main{
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    margin: 8px 5.5px 0 5.5px;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    float: left;
+    font-size: 15px;
+    padding: 0 5px 0 20px;
+  }
 </style>

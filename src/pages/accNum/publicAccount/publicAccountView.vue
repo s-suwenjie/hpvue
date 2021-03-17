@@ -17,7 +17,20 @@
         <yhm-view-control category="3" title="文件" type="files" :content="fileList" v-show="categoryUnitShow"></yhm-view-control>
       </template>
     </yhm-view-body>
-
+    <yhm-view-tab>
+      <template #tab>
+        <yhm-view-tab-button :list="tabState" v-if="isCancellation" :index="0">销户信息</yhm-view-tab-button>
+      </template>
+      <template #content>
+        <yhm-view-tab-content v-show="tabState[0].select">
+          <yhm-view-control title="销户时间" :content="cancellationWorkDate"></yhm-view-control>
+          <yhm-view-control title="操作人" :content="cancellationPerson"></yhm-view-control>
+          <yhm-view-control title="经办人" :content="cancellationaAgentPerson"></yhm-view-control>
+          <yhm-view-control title="销户原因" :content="cancellationRemark"></yhm-view-control>
+          <yhm-view-control category="3" title="文件" type="files" :content="cancellationFiles" tag="publicAccount"></yhm-view-control>
+        </yhm-view-tab-content>
+      </template>
+    </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="编辑" icon="i-edit"  @call="editBtn()"></yhm-commonbutton>
@@ -33,6 +46,8 @@
     mixins: [formmixin],
     data (){
       return {
+        tabState:[{select:false}],
+        isCancellation:false,
         id: '',
         name:'',
         categoryName:'',
@@ -54,6 +69,13 @@
         alias:'',
         accountName:'账号',
         posShow:false,
+        cancellationRemark:'',
+        cancellationPerson:'',
+        cancellationPersonID:'',
+        cancellationWorkDate:'',
+        cancellationaAgentPersonID:'',
+        cancellationaAgentPerson:'',
+        cancellationFiles:[],
       }
     },
     methods: {
@@ -98,6 +120,17 @@
             this.settlementAccountID = data.settlementAccountID
             this.rate = data.rate
             this.alias = data.alias
+            this.cancellationRemark=data.cancellationRemark
+            this.cancellationPerson=data.cancellationPerson
+            this.cancellationPersonID=data.cancellationPersonID
+            this.cancellationWorkDate=data.cancellationWorkDate
+            this.cancellationFiles=data.cancellationFiles
+            this.cancellationaAgentPerson=data.cancellationaAgentPerson
+            this.cancellationaAgentPersonID=data.cancellationaAgentPersonID
+            if(this.cancellationRemark&&this.cancellationPerson&&this.cancellationPersonID&&this.cancellationWorkDate){
+              this.tabState=[{select:true}]
+              this.isCancellation=true
+            }
             if(data.alias!==''){
               this.isAlias=true
             }

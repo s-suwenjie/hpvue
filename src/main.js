@@ -7,7 +7,6 @@ import Axios from 'axios'
 import '@/assets/index.js'
 import '@/assetsApp/index.js'
 import { Photoshop } from 'vue-color'
-import CircleMenu from 'vue-circle-menu'
 
 import echarts from "echarts"
 Vue.prototype.$echarts = echarts
@@ -15,7 +14,7 @@ Vue.prototype.$echarts = echarts
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 Vue.use(Photoshop)
-Vue.component('CircleMenu', CircleMenu)
+
 
 import "../staticApp/global.css";
 

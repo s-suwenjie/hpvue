@@ -1,11 +1,11 @@
 <template>
   <div v-if="show" class="fc_main"  :style="widthCalculate">
     <div class="fc_box"  :style="widthCalculate">
-      <div class="fc_title" :style="{color: color}">
-        <div>{{title}}</div>
-        <div v-if="subtitle !== ''">{{subtitle}}</div>
+      <div class="fc_title" :style="{color: color},{'line-height':getHeight+'px'},{height:getHeight+'px'}">
+        <div :style="{color:titleColor}">{{title}}</div>
+        <div :style="{color:titleColor}" v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
-      <yhm-datebox :placeholder="placeholder" :placeholder-color="placeholderColor" :min-year="minYear" :max-year="maxYear" :width="width" ref="control" @formVerification="verificationEvent" :no-edit="noEdit" @call="callEvent" :type="type" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :position="position" :max="max" :min="min" :value="value" :id="id" :rule="rule"></yhm-datebox>
+      <yhm-datebox :placeholder="placeholder" :placeholder-color="placeholderColor" :min-year="minYear" :max-year="maxYear" :width="width" :height="height" :getHeight="getHeight" ref="control" @formVerification="verificationEvent" :no-edit="noEdit" @call="callEvent" :type="type" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :position="position" :max="max" :min="min" :value="value" :id="id" :rule="rule"></yhm-datebox>
       <slot>
       </slot>
     </div>
@@ -25,6 +25,10 @@ export default {
     }
   },
   props: {
+    titleColor:{
+      type:String,
+      default :''
+    },
     type:{
       type:String,
       default:'date'
@@ -46,6 +50,14 @@ export default {
       default: 0
     },
     width: {
+      type: String,
+      default: ''
+    },
+    height:{
+      type: String,
+      default: ''
+    },
+    getHeight:{
       type: String,
       default: ''
     },
@@ -109,7 +121,7 @@ export default {
   },
   computed:{
     widthCalculate(){
-      if(this.width !== '') {
+      if(this.width !== ''){
         let width = parseInt(this.width) + 50
         return 'width:' + width + 'px !important;'
       }

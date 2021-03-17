@@ -31,11 +31,11 @@
   </div>
     <div>
       <yhm-formbody>
-        <template #title>添加发票号</template>
+        <template #title>发票号信息   (<span style="color:red">此发票号仅为演示用途，以实际开票号码为准</span>)</template>
 
-        <template #opera>
+        <!--<template #opera>
           <yhm-commonbutton value="添加发票" icon="btnAdd" @call="addCheckNumEvent()"></yhm-commonbutton>
-        </template>
+        </template>-->
         <template #control>
           <yhm-form-list-edit style="border: none;width: 998px">
             <template #listHead>
@@ -44,7 +44,7 @@
               <yhm-managerth style="width: 160px" title="税率(%)"></yhm-managerth>
               <yhm-managerth style="width: 160px" title="税额合计"></yhm-managerth>
               <yhm-managerth style="width: 90px" title="发票照片"></yhm-managerth>
-              <yhm-managerth style="" title="操作"></yhm-managerth>
+             <!-- <yhm-managerth style="" title="操作"></yhm-managerth>-->
             </template>
             <template #listBody>
               <tr v-for="(item,index) in invoiceList" :key="index" :class="{InterlacBg:index%2!==0}">
@@ -53,7 +53,7 @@
                 <yhm-form-td-textbox width="150" no-edit="1" :list="invoiceList" listid="invoiceList" :value="item" id="taxRate"></yhm-form-td-textbox>
                 <yhm-form-td-textbox width="150" no-edit="1" :list="invoiceList" listid="invoiceList" :value="item" id="taxAmount"></yhm-form-td-textbox>
                 <yhm-form-td-upload-image  width="90" :no-upload="isElectronicInvoice" tag="Invoice" @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="invoiceList" listid="invoiceList" :value="item" id="url" rule="#"></yhm-form-td-upload-image>
-                <yhm-form-td-delete width="" :list="invoiceList" :value="item" :del-click="true" @click="delApplyInvoice(index,item)"></yhm-form-td-delete>
+                <!--<yhm-form-td-delete width="" :list="invoiceList" :value="item" :del-click="true" @click="delApplyInvoice(index,item)"></yhm-form-td-delete>-->
               </tr>
             </template>
             <template #empty>
@@ -77,7 +77,7 @@
     <div class="f_split" style="height:70px"></div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton v-show="type==='0'" value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
+        <!--<yhm-commonbutton v-show="type==='0'" value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>-->
         <yhm-commonbutton v-show="type==='0'" value="确认开票" icon="btnSave" :flicker="false" bgColor="yellow" @call="post()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
@@ -125,6 +125,9 @@
         isElectronicInvoice:false,
         viewImg:'',         //需要显示的发票路径
         viewImgShow:false,  //显示发票图片
+
+        code:'',
+        codeID:''
       }
     },
     methods: {
@@ -183,79 +186,85 @@
           })
         }
       },
-      save(){
-        if(this.invoiceList){
-          this.ajaxJson({
-            url: '/Bill/invoiceTrialSave',
-            data: {
-              ownerID:this.ownerID,
-              invoiceList:this.invoiceList,
-            },
-            call: (data) => {
-              if (data.type === 0) {
-                this.$dialog.setReturnValue(this.id)
-                this.$dialog.alert({
-                  tipValue: data.message,
-                  closeCallBack: ()=>{
-                    this.$dialog.close()
-                  }
-                })
-              }else{
-                this.$dialog.alert({
-                  alertImg: 'error',
-                  tipValue: data.message,
-                  closeCallBack: ()=>{
-                    //this.$dialog.close()
-                  }
-                })
+      save() {
+        let a = this.validator()
+        if(a) {
+          if (this.invoiceList) {
+            this.ajaxJson({
+              url: '/Bill/invoiceTrialSave',
+              data: {
+                ownerID: this.ownerID,
+                invoiceList: this.invoiceList,
+              },
+              call: (data) => {
+                if (data.type === 0) {
+                  this.$dialog.setReturnValue(this.id)
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                      this.$dialog.close()
+                    }
+                  })
+                } else {
+                  this.$dialog.alert({
+                    alertImg: 'error',
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                      //this.$dialog.close()
+                    }
+                  })
+                }
               }
-            }
-          })
+            })
+          }
         }
       },
       post(){
-        if(this.invoiceList.length===0){
-          this.$dialog.alert({
-            alertImg: 'warn',
-            tipValue: '请选择发票号'
-          })
-          return
-        }
-        if(this.invoiceList&&this.validator()){
-          this.$dialog.confirm({
-            width: 300,
-            tipValue: '确认开票?',
-            btnValueOk: '确认',
-            alertImg: 'warn',
-            okCallBack: () => {
-              this.ajaxJson({
-                url: '/Bill/invoiceTrialSubmit',
-                data: {
-                  ownerID:this.ownerID,
-                  invoiceList:this.invoiceList,
-                },
-                call: (data) => {
-                  if (data.type === 0) {
-                    this.$dialog.setReturnValue(this.id)
-                    this.$dialog.alert({
-                      tipValue: data.message,
-                      closeCallBack: ()=>{
-                        this.$dialog.close()
-                      }
-                    })
-                  }else{
-                    this.$dialog.alert({
-                      alertImg: 'error',
-                      tipValue: data.message,
-                      closeCallBack: ()=>{
-                        //this.$dialog.close()
-                      }
-                    })
+        let a = this.validator()
+        if(a) {
+          if (this.invoiceList.length === 0) {
+            this.$dialog.alert({
+              alertImg: 'warn',
+              tipValue: '请选择发票号'
+            })
+            return
+          }
+          if (this.invoiceList && this.validator()) {
+            this.$dialog.confirm({
+              width: 300,
+              tipValue: '确认开票?',
+              btnValueOk: '确认',
+              alertImg: 'warn',
+              okCallBack: () => {
+                this.ajaxJson({
+                  url: '/Bill/invoiceTrialSubmit',
+                  data: {
+                    ownerID: this.ownerID,
+                    invoiceList: this.invoiceList,
+                  },
+                  call: (data) => {
+                    if (data.type === 0) {
+                      this.$dialog.setReturnValue(this.id)
+                      this.$dialog.alert({
+                        tipValue: data.message,
+                        closeCallBack: () => {
+                          this.$dialog.close()
+                        }
+                      })
+                    } else {
+                      this.$dialog.alert({
+                        alertImg: 'error',
+                        tipValue: data.message,
+                        closeCallBack: () => {
+                          //this.$dialog.close()
+                        }
+                      })
+                    }
                   }
-                }
-              })
-            }
-          })
+                })
+              }
+            })
+          }
         }
       },
       initData(){
@@ -288,7 +297,7 @@
             this.address=data.address
             this.vehicleRide=data.vehicleRide
             this.taxRate=data.taxRate
-            this.taxAmount=parseFloat(data.invoiceMoney)*parseFloat(this.taxRate)/100
+            this.taxAmount=((parseFloat(data.invoiceMoney)/((parseFloat(this.taxRate)+100)*0.01))*parseFloat(this.taxRate)/100).toFixed(2)
             this.balance=parseFloat(data.invoiceMoney)-parseFloat(this.taxAmount)
             if(data.purchaserType==='0'){
               this.registrationNumber1=data.registrationNumber
@@ -296,6 +305,39 @@
             this.invoiceList=data.invoiceList
             this.invoiceCategory=data.invoiceCategory
             this.id=data.id
+
+            if(this.code!==''&&this.codeID!==''){
+              let list={}
+              let date = new Date();
+              let strHours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(); //获取小时,如果小于10,前面补个0
+              let strMinutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(); //获取分,如果小于10,前面补个0
+              let strSeconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds(); //获取秒,如果小于10,前面补个0
+              list.insertDate=(new Date()).toLocaleDateString().replace(/\//g,'-')+' '+strHours+':'+strMinutes+':'+strSeconds
+              list.id=guid()
+              list.ownerID=this.id
+              list.invoiceID=this.codeID
+              list.code=this.code
+              list.invoiceMoney=this.invoiceMoney
+              list.taxRate=this.taxRate
+              list.taxAmount=this.taxAmount+''
+              list.url=''
+              this.invoiceList.push(list)
+            }
+            let params={
+              unitID:this.purchaserID
+            }
+            this.ajaxJson({
+              url: '/finance/tax/getUnitTax',
+              data: params,
+              call: (tax) => {
+                if(data){
+                  this.registrationNumber=tax.taxNumber
+                  if(this.invoiceCategory=='2'){
+
+                  }
+                }
+              }
+            })
           },
           add: (data)=>{
           },
@@ -307,6 +349,8 @@
     created () {
       this.setQuery2Value('ownerID')
       this.setQuery2Value('type')
+      this.setQuery2Value('code')
+      this.setQuery2Value('codeID')
       this.initData()
     }
   }

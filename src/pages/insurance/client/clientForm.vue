@@ -6,7 +6,7 @@
         <yhm-form-select  title="负责人" tip="value" @click="principalEvent" :value="principal" id="principal" rule="R0000"></yhm-form-select>
         <yhm-form-radio  title="客户状态"  @call="stateEvent" width="1" :select-list="stateList" :value="state" id="state"></yhm-form-radio>
         <yhm-form-zh-select-text tip-before="value" tip-after="phone" @call="contactEvent" :before="name" before-id="name" :after="phone" after-id="phone" before-rule="#" after-rule="R4000" title="联系人" after-title="手机号码" after-width="100"></yhm-form-zh-select-text>
-        <yhm-form-text placeholder="" :no-edit="'1'" tip="value"  title="联系人" subtitle="身份证号" :value="idNo" id="idNo" :rule="isRule"></yhm-form-text>
+        <yhm-form-text placeholder="" :no-edit="'1'" tip="value"  title="联系人" subtitle="身份证号" :value="idNo" id="idNo"></yhm-form-text>
         <yhm-form-select  title="车牌号" tip="value"   @click="plateEvent" :value="plate" id="plate" :rule="isRule"></yhm-form-select>
         <yhm-form-select  title="车主" tip="value" @click="carOwnerEvent" :value="carOwner" id="carOwner" :rule="isRule" :no-click="isEdit" ></yhm-form-select>
 <!--        <yhm-form-upload-image title="行车证信息"  discription="点击图标或拖拽图片上传(不支持PDF格式)" tag="drivingLicense" :value="drivingLicense" id="drivingLicense" rule="#"></yhm-form-upload-image>-->
@@ -41,7 +41,7 @@
 
 <script>
   import { formmixin } from '@/assets/form.js'
-  import { guid, formatTime} from '@/assets/common.js'
+  import { guid, formatTime, accAdd, formatDate} from '@/assets/common.js'
   export default {
     name: 'clientForm',
     mixins: [formmixin],
@@ -79,13 +79,51 @@
       stateEvent(){
         if (this.state==0){
           this.isRemark=false
+          this.isRule='R0000'
         }else {
           this.isRemark=true
-        }
-        if (this.state==4){
           this.isRule=''
-        }else{
-          this.isRule='R0000'
+        }
+
+        if(this.state==2){
+        let date;
+          if (this.forceEndDate!='1900-01-01'){
+            date=this.forceEndDate;
+            let forceStartDate = new Date(this.forceEndDate).getTime();
+            let y = new Date().getFullYear(),
+              isLeap = (0===y%4) && (0===y%100) || (0===y%400),
+              days = isLeap ? 366 : 365;
+            let yearTime =days*24*60*60*1000;
+            let newDateTime = formatDate( new Date(accAdd(forceStartDate,yearTime)));
+            this.forceEndDate = newDateTime
+          } else {
+            let forceStartDate = new Date(this.businessEndDate).getTime();
+            let y = new Date().getFullYear(),
+              isLeap = (0===y%4) && (0===y%100) || (0===y%400),
+              days = isLeap ? 366 : 365;
+            let yearTime =days*24*60*60*1000;
+            let newDateTime = formatDate( new Date(accAdd(forceStartDate,yearTime)));
+            this.forceEndDate = newDateTime
+          }
+
+          if (this.businessEndDate!='1900-01-01'){
+            let EndDate = new Date(this.businessEndDate).getTime();
+            let y = new Date().getFullYear(),
+              isLeap = (0===y%4) && (0===y%100) || (0===y%400),
+              days = isLeap ? 366 : 365;
+            let yearTime = days*24*60*60*1000 - 24*60*60*1000;
+            let newDateTime = formatDate( new Date(accAdd(EndDate,yearTime)));
+            this.businessEndDate = newDateTime;
+          }else {
+            let EndDate = new Date(date).getTime();
+            let y = new Date().getFullYear(),
+              isLeap = (0===y%4) && (0===y%100) || (0===y%400),
+              days = isLeap ? 366 : 365;
+            let yearTime = days*24*60*60*1000;
+            let newDateTime = formatDate( new Date(accAdd(EndDate,yearTime)));
+            this.businessEndDate = newDateTime;
+          }
+
         }
       },
       dateClick(){
@@ -96,7 +134,7 @@
           this.$dialog.OpenWindow({
             width: 950,
             height: 603,
-            url: '/selectPlate?carOwnerID=' + this.contactPersonID +'&isReule=1',
+            url: '/selectPlate?carOwnerID=' + this.contactPersonID +'&isReule=1&searchStr='+this.searchStr,
             title: '选择车牌号',
             closeCallBack: (data) => {
               if (data) {
@@ -327,6 +365,7 @@
       }
     },
     created () {
+      this.setQuery2Value('searchStr')
       this.init({
         url: '/Insurance/initClientForm',
         all: (data) => {
@@ -367,7 +406,7 @@
           if (data.carOwnerID != ''){
             this.isEdit=true
           }
-          if (this.state==4){
+          if (this.state==4||this.state==1){
             this.isRule=''
           }else{
             this.isRule='R0000'

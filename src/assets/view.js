@@ -41,7 +41,7 @@ const viewmixin = {
         })
         return
       }
-      var params = {
+      let params = {
         id:this.id
       }
       this.ajaxJson({

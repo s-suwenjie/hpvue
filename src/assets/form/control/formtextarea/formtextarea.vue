@@ -2,20 +2,20 @@
   <div v-if="show" class="fc_main fc_main_w"  :style="{width:textWidth==true?'auto':''}">
     <div class="fc_box">
       <div class="fc_title" :style="{width:textWidth==true?'155px':''}">
-        <div>{{title}}</div>
+        <div :style="{color:titleColor}">{{title}}</div>
         <div v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
-      <div class="c_main c_main_t c_textarea" v-validator="validatorEvent">
-        <div @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box c_textarea" :class="{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_width500:textWidth}">
-          <textarea :readonly="noEdit === '1'" v-model="txt" ref="control" :class="{c_disable:noEdit === '1'}" @focus="focusEvent" @blur="blurEvent" @input="autoTextarea"></textarea>
+      <div class="c_main c_main_t c_textarea" v-validator="validatorEvent" :style="{width:width}">
+        <div @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box c_textarea" :style="{width:width}" :class="{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_width500:textWidth}">
+          <textarea :readonly="noEdit === '1'" v-model="txt" :style="{width:width,height:height}" :placeholder="placeholder" ref="control" :class="{c_disable:noEdit === '1'}" @focus="focusEvent" @blur="blurEvent" @input="autoTextarea"></textarea>
         </div>
         <div class="c_box c_textarea c_copy">
-          <textarea v-model="txt" ref="controlHide"></textarea>
+          <textarea v-model="txt" ref="controlHide" :style="{width:width,height:height}" :placeholder="placeholder"></textarea>
         </div>
       </div>
       <slot></slot>
     </div>
-    <div class="fc_error"><span v-if="error">{{errorTipMessage}}</span></div>
+    <div class="fc_error" :style="{width:width}"><span v-if="error">{{errorTipMessage}}</span></div>
   </div>
 </template>
 
@@ -36,6 +36,22 @@
         }
       },
       props: {
+        width:{
+          type:String,
+          default :''
+        },
+        height:{
+          type:String,
+          default :'auto'
+        },
+        placeholder:{
+          type:String,
+        default :''
+        },
+        titleColor:{
+          type:String,
+          default :''
+        },
         //最大高度
         maxHeight:{
           type: Number,

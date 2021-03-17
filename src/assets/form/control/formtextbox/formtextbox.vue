@@ -2,12 +2,12 @@
   <div v-if="show" class="fc_main">
     <div class="fc_box" >
       <div class="fc_title" :style="{color: color}">
-        <div>{{title}}</div>
-        <div v-if="subtitle !== ''">{{subtitle}}</div>
+        <div :style="{color:titleColor}">{{title}}</div>
+        <div :style="{'color':subtitleColor}" v-if="subtitle !== ''" @click="subTitleClick" class="subTitleTest">{{subtitle}}</div>
       </div>
 
 <!--      <div v-show="!iconTextShow">-->
-        <yhm-text :is-upper-case="isUpperCase" :show="show" v-if="!iconShou" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>
+        <yhm-text :is-upper-case="isUpperCase" :show="show" @keydownEnter="$emit('keydown',e)" @noEditClick="$emit('noEditClick')" :input-red-show="inputRedShow" v-if="!iconShou" :max-number="maxNumber" :min-number="minNumber" :blank-show="blankShow" :decimal-places="decimalPlaces" @focus="focusEvent" @blur="blurEvent" :max-length="maxLength" :lessEqual="lessEqual" :lessEqualMessage="lessEqualMessage" @change="changeEvent" @input="inputEvent" :placeholder="placeholder" :type="type" ref="control" :compared="compared" @repeatverify="verifyEvent" @verify="verify" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :tip-rule="tipRule" :noEdit="noEdit" :value="value" :id="id" :rule="rule" :emptyMessage="emptyMessage" :errorMessage="errorMessage" :repeatMessage="repeatMessage"></yhm-text>
         <span class="list_look icon_look"  @click="iconClickEvent" v-show="iconShou"></span>
 <!--      </div>-->
 
@@ -34,6 +34,14 @@
         }
       },
       props: {
+        titleColor:{
+          type:String,
+          default :''
+        },
+        inputRedShow:{//这个是开启负数变红的
+          type:Boolean,
+          default: false
+        },
         isUpperCase:{
           type:Boolean,
           default: false
@@ -86,6 +94,10 @@
           type: String,
           default: ''
         },
+        subtitleColor: {
+          type: String,
+          default: '#333'
+        },
         id: {
           type: String,
           required: true
@@ -118,6 +130,10 @@
           type:String,
           default:""
         },
+        blankShow:{//是否去除框内值的空格
+          type:Boolean,
+          default:false
+        },
         tip:{
           type:String,
           default:""
@@ -142,8 +158,21 @@
           type:Boolean,
           default:false
         },
+        maxNumber:{
+          //type:Number,
+          default:''
+        },
+        minNumber:{
+          //type:Number,
+          default:''
+        }
       },
       methods: {
+        subTitleClick(){
+          this.$nextTick(() =>{
+            this.$emit("subClick")
+          })
+        },
         iconClickEvent(){
           this.$nextTick(() =>{
             this.$emit("call")
@@ -225,5 +254,8 @@
     align-items: center;
     cursor: pointer;
     margin-left: 10px;
+  }
+  .subTitleTest{
+    cursor: pointer;
   }
 </style>

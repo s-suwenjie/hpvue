@@ -83,6 +83,7 @@
             }
           }
         }
+        this.$emit('click',this.select)
       }
     },
     watch:{

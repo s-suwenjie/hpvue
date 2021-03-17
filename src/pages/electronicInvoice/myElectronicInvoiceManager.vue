@@ -146,10 +146,24 @@
           closeCallBack:(data) =>{
             if (data) {
               if (isAdd) {
-                this.lastData = data//接收子页面传的值
+                this.lastData = data.id//接收子页面传的值
               }
-              this.initPageData(false)
+              if(data.type=='1'){
+                this.$dialog.OpenWindow({
+                  width: '1050',
+                  height: '740',
+                  title: '添加电子发票',
+                  url: '/myElectronicInvoiceForm',
+                  closeCallBack: (data)=>{
+                    this.initPageData(false)
+                  }
+                })
+              }else{
+                this.initPageData(false)
+              }
               /*false->非初始化=>!import  true->初始化*/
+            }else{
+              this.initPageData(false)
             }
           }
         })

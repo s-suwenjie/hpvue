@@ -3,8 +3,8 @@
       <yhm-view-body>
         <template #title>基本信息</template>
         <template #body>
-          <yhm-view-control title="商品名称" :content="name"></yhm-view-control>
-          <yhm-view-control title="商品规格" :content="model"></yhm-view-control>
+          <yhm-view-control title="服务名称" :content="name"></yhm-view-control>
+<!--          <yhm-view-control title="商品规格" :content="model"></yhm-view-control>-->
           <yhm-view-control title="变化金额" :content="money" type="money"></yhm-view-control>
           <yhm-view-control title="发生日期" :content="workDate" type="date"></yhm-view-control>
           <yhm-view-control title="类型" :content="category" :psd="categoryList"></yhm-view-control>
@@ -95,7 +95,6 @@
       submenuClick(index){
         // this.key++
         // this.titleRight = ''
-        console.log( this.btnShow )
         // if(this.btnShow=='1'){
           if(index==0){//结束服务 添加检修节点
             this.$dialog.confirm({
@@ -162,7 +161,6 @@
               arr.push(guid())
             }
             let ids = arr.join(',')
-            console.log( ids )
             this.ajaxJson({
               url: '/fix/fixProcessDetail/saveBath',
               loading:'0',
@@ -284,7 +282,7 @@
       initData () {
         let params = {
           id:this.id,//流程子表dependid
-          ownerID:this.subProcessID,//流程子表id
+          // ownerID:this.subProcessID,//流程子表id
         }
         this.ajaxJson({
           url: '/fix/fixOrderRevenue/initForm',

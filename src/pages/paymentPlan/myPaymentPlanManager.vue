@@ -15,7 +15,8 @@
 <!--        <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>-->
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
         <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initPageData(false)" title="状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('viewLevels')" all="0" title="查看下属" :content="listViewLevels"></yhm-radiofilter>
 
       </template>
 
@@ -32,9 +33,10 @@
         <yhm-managerth style="width: 150px" title="最迟付款日期" value="lastDate"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="事由"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="付款计划金额" value="planMoney"></yhm-managerth>
+        <yhm-managerth  v-if="listViewLevels.value==1" width="80" title="申请人" ></yhm-managerth>
         <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="状态" value="state"></yhm-managerth>
-        <yhm-managerth style="width: 215px;" title="操作"></yhm-managerth>
+        <yhm-managerth  v-if="listViewLevels.value==0" style="width: 215px;" title="操作"></yhm-managerth>
       </template>
       <!--数据明细-->
       <template #listBody>
@@ -45,9 +47,10 @@
           <yhm-manager-td-date :before-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" :value="item.lastDate"></yhm-manager-td-date>
           <yhm-manager-td :after-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" :value="item.cause"></yhm-manager-td>
           <yhm-manager-td-money :before-icon="item.causeList.length > 1?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" :value="item.planMoney"></yhm-manager-td-money>
+          <yhm-manager-td  v-if="listViewLevels.value==1" :value="item.person"></yhm-manager-td>
           <yhm-manager-td-leaveword @iconClick="listView(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
-          <yhm-manager-td-operate>
+          <yhm-manager-td-operate  v-if="listViewLevels.value==0">
             <yhm-manager-td-operate-button :no-click="item.state !== '0' || item.isFinish === '1'" @click="submit(item)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.state === '0' || item.isFinish === '1'" @click="urge(item)" value="催促" icon="i-btn-urge" color="#2AA70B"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.state !== '0' || item.isFinish === '1'" @click="del(item)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
@@ -133,6 +136,10 @@ export default {
         value: '',
         list: []
       },
+      listViewLevels: {
+        value: '0',
+        list: []
+      },
       menuTabOn:'0',
       details:[
         {id:'1', name: '付款计划',path:'/home/myPaymentPlanManager'},
@@ -142,6 +149,8 @@ export default {
         {id:'5', name: '备用金',path:'/home/prettyCashsManager'},
         {id:'6', name: '补签字',path:'/home/myManager/signatureManager'},
         {id:'7', name: '开票申请',path:'/home/openInvoiceManager'},
+        {id:'8', name: '我的快递',path:'/home/myExpressManager'},
+        // {id:'9', name: '重要物品外出登记',path:'/home/myArticleRegistrationManager'},
       ],
       contentTotal: []
     }
@@ -338,7 +347,8 @@ export default {
       } else {
         // 页面非初始化时需要的参数
         params = {
-          state: this.listState.value
+          state: this.listState.value,
+          viewLevels: this.listViewLevels.value
         }
       }
       this.init({
@@ -353,6 +363,7 @@ export default {
           // 初始化时需要执行的代码
           // 这边初始化筛选信息
           this.listState = data.statePsd
+          this.listViewLevels = data.viewLevelsPsd
         }
       })
     },

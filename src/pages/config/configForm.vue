@@ -1,5 +1,6 @@
 <template>
   <div class="f_main">
+    <yhm-schedule ref="schedule" :config="scheduleConfig"></yhm-schedule>
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
@@ -23,6 +24,27 @@
     mixins: [formmixin],
     data () {
       return {
+        scheduleConfig:{
+          autoAddFinish: false,
+          current: 1,
+          event: false,
+          finish: false,
+          list: [{name: "0", show: true}, {name: "1", show: true}, {name: "18", show: true}],
+          reject: false,
+          select: -1,
+
+
+          // list:[
+          //   {name:'第一步',show:true},
+          //   {name:'第二步',show:true}
+          // ],
+          // current:1,          //当前步骤
+          // reject:false,       //是否驳回状态
+          // event:true,         //步骤条能不能点击
+          // isFinish:false,     //当前步骤是否完成
+          // select:-1,          //当流程结束后选择的节点（流程走完了，查看使用，isFinish = true）
+          // autoAddFinish:true  //自动添加完成步骤
+        },
         name:'',
         value:'',
         keyChange:'0'

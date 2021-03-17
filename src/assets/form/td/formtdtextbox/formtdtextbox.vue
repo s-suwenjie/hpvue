@@ -1,6 +1,6 @@
 <template>
     <td v-show="show" class="fd_in_txt" :style="getWidth">
-      <yhm-text :show="show" @change="changeEvent" @focus="focusEvent" @input="inputEvent" :tip-left="tipLeft" :tip-arrow-left="tipArrowLeft" :width="getTxtWidth" @blur="blurEvent" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :noEdit="noEdit" :value="txt" :id="txtKey" :rule="rule" category="m"></yhm-text>
+      <yhm-text :show="show" @change="changeEvent" :input-red-show="inputRedShow" @focus="focusEvent" @input="inputEvent" @copyIconClick="copyIconClick" :copy-show="copyShow" :tip-left="tipLeft" :tip-arrow-left="tipArrowLeft" :width="getTxtWidth" @blur="blurEvent" :beforeIcon="beforeIcon" :afterIcon="afterIcon" :tip="tip" :noEdit="noEdit" :value="txt" :id="txtKey" :rule="rule" category="m" :maxNumber="maxNumber" :minNumber="minNumber"></yhm-text>
     </td>
 </template>
 
@@ -15,6 +15,14 @@
       }
     },
     props: {
+      inputRedShow:{//这个是开启负数变红的
+        type:Boolean,
+        default: false
+      },
+      copyShow:{
+        type:Boolean,
+        default: false
+      },
       tipLeft:{
         type: String,
         default:""
@@ -66,9 +74,23 @@
       show: {
         type: Boolean,
         default: true
+      },
+      maxNumber:{
+        //type:Number,
+        default:''
+      },
+      minNumber:{
+        //type:Number,
+        default:''
       }
+
     },
     methods:{
+      copyIconClick(){
+        this.$nextTick(() =>{
+          this.$emit("copyIconClick")
+        })
+      },
       //文本框失去焦点
       blurEvent(){
         this.$nextTick(() =>{

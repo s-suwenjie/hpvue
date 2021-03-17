@@ -18,7 +18,6 @@
         <yhm-managerth title="商品名称"></yhm-managerth>
         <yhm-managerth title="商品名称(英文)"></yhm-managerth>
         <yhm-managerth title="类型"></yhm-managerth>
-        <yhm-managerth title="适用车型"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="计量单位"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="是否拆分出库"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="拆分出库单位"></yhm-managerth>
@@ -32,13 +31,12 @@
           <yhm-manager-td :value="item.name"></yhm-manager-td>
           <yhm-manager-td :value="item.englishName"></yhm-manager-td>
           <yhm-manager-td :value="item.storageTypeVal"></yhm-manager-td>
-          <yhm-manager-td :value="item.stockTypeVal"></yhm-manager-td>
           <yhm-manager-td :value="item.unit"></yhm-manager-td>
           <yhm-manager-td :value="item.splitVal"></yhm-manager-td>
           <yhm-manager-td :value="item.splitDeliveryUnit"></yhm-manager-td>
 
           <yhm-manager-td-operate>
-
+            <yhm-manager-td-operate-button  @click="del(item.id)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -65,6 +63,40 @@
       }
     },
     methods:{
+      del(id){
+        this.$dialog.confirm({
+          width: 300,
+          tipValue: '是否删除?',
+          btnValueOk: '确定',
+          alertImg: 'warn',
+          okCallBack: (data) => {
+            let params = {
+              id: id,
+            }
+            this.ajaxJson({
+              url: '/Basic/delProduct',
+              data: params,
+              call: (data) => {
+                if (data.type == '0') {
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: (data) => {
+                      this.initPageData(false)
+                    }
+                  })
+                } else {
+                  this.$dialog.alert({
+                    alertImg: 'error',
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                    }
+                  })
+                }
+              }
+            })
+          }
+        })
+      },
       selectProduct(){
         this.$dialog.OpenWindow({
           width: 1050,
@@ -81,7 +113,7 @@
         this.$dialog.OpenWindow({
           width: 1050,
           height: 603,
-          url: '/selectProductModel?ownerID=62DB5123-6D8E-4CBD-A9C4-06A1B232784F',
+          url: '/selectProductModel?ownerID=25178286-8CCF-4512-8B3B-035D8ADFC9DE',
           title: '选择商品信息',
           closeCallBack: (data) => {
             if (data) {

@@ -13,6 +13,7 @@
         <yhm-form-text title="交易金额" :value="money" ref="money" id="money" rule="R3000" @input="calcTrAfterMoney" :no-edit="isMoney"></yhm-form-text>
         <yhm-form-text title="交易" :value="balance" subtitle="后余额" id="balance" no-edit="1"></yhm-form-text>
         <yhm-form-radio :show="clickB && isCauseIn" title="事由类型" @call="subjectTypeEvent" :select-list="subjectTypeList" :value="subjectType" id="subjectType" :no-edit="isCause"></yhm-form-radio>
+        <!--<faceValue title="面值" v-show="cashMoney==='1'" @input="aaa" @call="cashMoneyChange" :money100="money100" :money50="money50" :money20="money20" :money10="money10" :money5="money5" :money1="money1" :money05="money05" :money01="money01"></faceValue>-->
         <div class="buttomA" v-show="contentTaA">
 
 <!--          -->
@@ -152,12 +153,36 @@
 
         saveHtml:'',//保存按钮文字
 
+        // cashMoney:'0',
+        // money100:'0',
+        // money50:'0',
+        // money20:'0',
+        // money10:'0',
+        // money5:'0',
+        // money1:'0',
+        // money05:'0',
+        // money01:'0',
+
         receivabledetailType:'',//1代表当前公司  或个人 存在欠款
         receivabledetailList:[],//所选欠款信息
         receivabledetailMoney:'',//所信息金额
       }
     },
     methods: {
+      // aaa(val){
+      //   //alert(val)
+      // },
+      // cashMoneyChange(){
+      //   let sum=accMul(100,this.money100)+accMul(50,this.money50)+accMul(20,this.money20)+accMul(10,this.money10)+accMul(5,this.money5);
+      //   alert(this.money100+'-----'+this.money50+'-----'+this.money20+'-----'+this.money10+'-----'+this.money5+'-----'+this.money1)
+      //   if(parseFloat(this.money)>0&&this.money.indexOf(".") !== -1){
+      //     let top=this.money.split(".");
+      //     this.money1=accAdd(top[0],-parseFloat(sum));
+      //     this.money01=accAdd(top[1].substring(0,1),-accMul(money05,0.5));
+      //   }else if(parseFloat(this.money)>0&&this.money.indexOf(".") === -1){
+      //     this.money1=accAdd(this.money,-parseFloat(sum))
+      //   }
+      // },
       lookImg(){
         if(this.img){
           this.tipShow=true;
@@ -174,15 +199,23 @@
         let oldMoney = parseFloat(this.oldMoney)
         let money = parseFloat(this.money)
         if(money > oldMoney){
+
+          let tip='交易金额必须小于等于原始金额！！！'
+          if(this.bankDetailType === '13'){
+            tip='交易金额大于剩余待退回金额！！！'
+          }
           this.$dialog.alert({
             width: '350',
             alertImg: 'error',
-            tipValue: '交易金额必须小于等于原始金额！！！',
+            tipValue: tip,
             closeCallBack: ()=>{
-              this.money = ''
+              this.money = this.oldMoney
             }
           })
         }
+        // if(this.cashMoney === '1'){
+        //   this.cashMoneyChange();
+        // }
 
         this.calcMoney()
       },
@@ -365,7 +398,16 @@
             if (data) {
               this.selfAccount = data.publicAccountExplain
               this.accountID = data.id
-
+              // if(data.id==="63E0977D-A26E-4FA7-838D-51BE7F8FF88C"){
+              //   if(this.money.indexOf('.')!=-1){
+              //     let top=this.money.split('.')
+              //     this.money1=top[0]
+              //     this.money01=top[1]
+              //   }else{
+              //     this.money1=this.money
+              //   }
+              //   this.cashMoney='1'
+              // }
               let params = {
                 accountID: this.accountID
               }
@@ -512,13 +554,14 @@
           this.$dialog.alert({
             width: '300',
             alertImg: 'error',
-            tipValue: '金额大于剩余可拨付余额'
+            tipValue: '金额大于剩余可拨付余额',
           })
         }
 
         if (this.validator() && aa) {
           let params = {
             id: this.id,
+            bankDetailType:this.bankDetailType,
             ownerID: this.ownerID,
             ownerSys: this.ownerSys, //收支分类
             brand: this.brand,//品牌
@@ -567,6 +610,19 @@
                       }
                       this.ajaxJson({
                         url: '/PersonOffice/prettyCashsReceivable',
+                        data: param,
+                        call: (data) => {
+
+                        }
+                      })
+                    }
+                    if(this.ownerID!==null&&this.ownerID!==''){
+                      let param = {
+                        id : this.ownerID,
+                        state:'2'
+                      }
+                      this.ajaxJson({
+                        url:'/dailyoffice/expressCompany/updateBillState',
                         data: param,
                         call: (data) => {
 
@@ -639,8 +695,10 @@
           }else{
             this.money = data.money
           }
-          this.oldMoney = data.money
-          this.calcTrMoney = data.money
+          if(data.money != 0){
+            this.oldMoney = data.money
+            this.calcTrMoney = data.money
+          }
           this.balance = data.balance//交易余额
 
           this.subject = data.subject
@@ -693,14 +751,67 @@
             this.isMoreCause = true
             this.isAddBtn = false
           }
-
-          this.detail = data.subjectList
-
-
-          if(this.bankDetailType === '10' || this.bankDetailType === '9'){
+          for (let i = 0; i < data.subjectList.length; i++) {
+            let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.detail.length, 1000)))
+            this.detail.push({
+              id: data.subjectList[i].id,
+              insertDate: formatTime(insertDate),
+              ownerID: this.id,
+              subjectID: data.subjectList[i].subjectID,
+              subject: data.subjectList[i].subject,
+              money:  data.subjectList[i].money,
+              remark:  data.subjectList[i].remark
+            })
+          }
+          if(this.bankDetailType === '10' || this.bankDetailType === '9'||this.bankDetailType === '14'){
+            this.ownerID = data.ownerID
             this.isMoney = ''
-            this.money = ''
+            this.money = data.money
             this.isOtherAcc = true
+          }else if(this.bankDetailType === '13'){
+            this.isMoney = ''
+            let params={
+              id:this.ownerID
+            }
+            this.ajaxJson({
+              url: '/dailyoffice/payDeposit/initForm',
+              data: params,
+              call: (payDeposit) => {
+                if(payDeposit){
+                  this.remark=payDeposit.remark
+                  this.subject=payDeposit.subject
+                  this.subjectID=payDeposit.subjectID
+                  this.money=accAdd(payDeposit.money,-data.money)
+                  this.oldMoney=accAdd(payDeposit.money,-data.money)
+                  this.calcTrMoney = payDeposit.money
+                  this.otherAccountType=payDeposit.category
+                  this.otherAccountID=payDeposit.otherAccountID
+                  this.otherAccount=payDeposit.otherAccount
+                  this.otherID=payDeposit.otherID
+                  if(payDeposit.subjectID){
+                    this.ajaxJson({
+                      url: '/dailyoffice/deposit/getRetreatDepositSubjectID',
+                      data: {
+                        subjectID:payDeposit.subjectID
+                      },
+                      call: (subjectID) => {
+                        if(subjectID){
+                          this.subjectID=subjectID.id
+                          this.subject=subjectID.value2 + ' ---- ' + subjectID.value1 + ' ---- ' + subjectID.showName
+                          if(subjectID.name === 64){
+                            this.ownerSys='0'
+                          }else if(subjectID.name === 62){
+                            this.ownerSys='1'
+                          }
+                        }
+                      }
+                    })
+                  }
+                }
+              }
+            })
+          }else if(this.bankDetailType === '15'){
+            this.isMoney=''
           }
 
           this.storeName = data.storeName
@@ -764,6 +875,9 @@
           this.saveHtml='确认收款'
           return '确认收款'
         }else if(this.bankDetailType === '3'){
+          this.saveHtml='确认收款'
+          return '确认收款'
+        }else if(this.bankDetailType === '13'){
           this.saveHtml='确认收款'
           return '确认收款'
         }else {

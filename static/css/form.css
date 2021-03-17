@@ -6,6 +6,25 @@
   <div>控件</div>
 </div>
 *******************************/
+.f_hide{
+  display: none !important;
+}
+
+.f_scanCode{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  padding: 20px;
+  background-color: #FFFFFF;
+}
+
+.f_scanCode>.txt{
+  margin: 0 20px;
+  font-size: 20px;
+}
+
 .form_format{
   display: flex;
   flex-direction: row;
@@ -25,6 +44,352 @@
     padding: 0 20px;
 }
 
+.f_flows{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px 0;
+}
+
+.f_flows>.content{
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.f_flows>.content>.step{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.f_flows>.content>.step>.stepName{
+  width: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 5px;
+}
+
+.f_flows>.content>.step>.lineArea{
+  width: 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.f_flows>.content>.step>.lineArea>.lineUp{
+  width: 3px;
+  flex: 1;
+  min-height: 46px;
+  background-color: #49A9EA;
+}
+
+
+
+.f_flows>.content>.step>.lineArea>.icon{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 34px;
+}
+.f_flows>.content>.step>.lineArea>.icon:before{
+  font-size: 26px;
+  color: #49A9EA;
+}
+
+.f_flows>.content>.step>.lineArea>.lineDown{
+  width: 3px;
+  flex: 1;
+  min-height: 46px;
+  background-color: #49A9EA;
+}
+
+.f_flows>.content>.step>.lineRight{
+  width: 62px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.f_flows>.content>.step>.lineRight>.line{
+  height: 3px;
+  width: 62px;
+  background-color: #49A9EA;
+}
+
+.f_flows>.content>.step>.person{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.f_flows>.content>.step>.person>.items{
+  border: 2px dashed  #49A9EA;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 20px 0;
+}
+
+.f_flows>.content>.step>.person>.noDashed{
+  border: 2px dashed  #FF0000;
+}
+
+.f_flows>.content>.step>.person>.itemsSolid{
+  border-style: solid;
+}
+
+.f_flows>.content>.step>.person>.items>.item{
+  padding: 0 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: 30px;
+  width: calc(100% - 10px);
+}
+
+.f_flows>.content>.step>.person>.items>.item:hover {
+  background-color: #C1E2F8;
+}
+
+
+.f_flows>.content>.step>.person>.items>.item>.txt{
+  margin-right: 10px;
+  font-size: 14px;
+  line-height: 30px;
+  color: #333333;
+  font-style: italic;
+}
+
+.f_flows>.content>.step>.person>.items>.item>.itemCheck:before{
+  color: #49a9ea;
+}
+
+.f_flows>.content>.step>.person>.items>.item>.itemCross:before{
+  color: #FF0000;
+}
+
+.f_flows>.content>.step>.info{
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.f_flows>.content>.step>.info .basic{
+  width: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.f_flows>.content>.step>.info .basic>.txt{
+  font-style: italic;
+  margin-right: 5px;
+}
+
+.f_flows>.content>.step>.info .basic>.icon{
+
+}
+.f_flows>.content>.step>.info .basic>.iconCheck:before{
+  color: #49a9ea;
+  font-size: 20px;
+}
+
+.f_flows>.content>.step>.info .basic>.iconCross:before{
+  color: #FF0000;
+  font-size: 20px;
+}
+
+.f_flows>.content>.step>.info .remark{
+  width: 200px;
+  text-align: left;
+  color: #666666;
+  font-style: italic;
+}
+
+.f_flows .no{
+  background-color: #DEDEDE !important;
+}
+
+.f_flows .noIcon:before{
+  color: #DEDEDE !important;
+}
+
+.f_flows .stop{
+  background-color: #FF0000 !important;
+}
+
+.f_flows .stopIcon:before{
+  color: #FF0000 !important;
+}
+
+
+.f_schedule{
+  height: 50px;
+}
+
+.f_schedulefinish{
+  width: 100%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.f_schedulefinish .icon{
+  color: #49A9EA;
+}
+
+.f_schedulefinish .icon:before{
+  font-size: 100px;
+}
+
+.f_schedulefinish .txt{
+  font-size: 50px;
+  color:#333333;
+}
+
+.f_scheduleFixed{
+  background-color: #E9E9E9;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 999999;
+  box-shadow: 0px -1px 2px 2px #00000060;
+}
+
+.f_schedule>.item{
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+.f_schedule>.item:first-child>.leftUp {
+  display: none;
+}
+
+.f_schedule>.item:first-child>.leftDown{
+  display: none;
+}
+
+.f_schedule>.item>.content{
+  flex: 1;
+  height: 30px;
+  color: #FFFFFF;
+  background-color: #C0C0C0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.f_schedule>.item>.after{
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 20px solid #C0C0C0;
+}
+
+.f_schedule>.item>.leftUp{
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-top: 15px solid #C0C0C0;
+  position: absolute;
+  left: -20px;
+  top: 0;
+}
+
+.f_schedule>.item>.leftDown{
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-bottom: 15px solid #C0C0C0;
+  position: absolute;
+  left: -20px;
+  bottom: 0;
+}
+
+.f_schedule>.itemHistory>.leftUp{
+  border-top: 15px solid #49A9EA;
+}
+
+.f_schedule>.itemHistory>.leftDown{
+  border-bottom: 15px solid #49A9EA;
+}
+
+.f_schedule>.itemHistory>.content{
+  background-color: #49A9EA;
+}
+
+.f_schedule>.itemHistory>.after{
+  border-left: 20px solid #49A9EA;
+}
+
+.f_schedule>.itemCurrent>.leftUp{
+  border-top: 15px solid #1AA034;
+}
+
+.f_schedule>.itemCurrent>.leftDown{
+  border-bottom: 15px solid #1AA034;
+}
+
+.f_schedule>.itemCurrent>.content{
+  background-color: #1AA034;
+}
+
+.f_schedule>.itemCurrent>.after{
+  border-left: 20px solid #1AA034;
+}
+
+.f_schedule>.itemReject>.leftUp{
+  border-top: 15px solid #FF0000;
+}
+
+.f_schedule>.itemReject>.leftDown{
+  border-bottom: 15px solid #FF0000;
+}
+
+.f_schedule>.itemReject>.content{
+  background-color: #FF0000;
+}
+
+.f_schedule>.itemReject>.after{
+  border-left: 20px solid #FF0000;
+}
+
+
 
 .f_area {
   width: 1000px;
@@ -37,6 +402,10 @@
 .f_area1200{
   width: 1200px;
 }
+.f_area1400{
+  width: 1400px;
+}
+
 .f_areaWidth1235{
   width: 1235px;
 }

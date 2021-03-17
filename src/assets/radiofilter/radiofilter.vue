@@ -3,8 +3,8 @@
     <p class="btnLine"></p>
     <p class="btnTit">{{title}}：</p>
     <div class="chooseContent">
-      <button v-for="(item,index) in content.list" :key="index" :style="{'color':item.code}" @click="clickEvent($event,item.num)" class="btn" type="button" :class="{choice:item.num === content.value}">{{item.showName}}</button>
-      <button v-if="all == '1'" @click="clickEvent($event,'')" class="btn" type="button" :class="{choice:content.value === ''}">全部</button>
+      <button v-for="(item,index) in content.list" :key="index" style="border: 1px solid #dedede;" :style="{'color':item.code}" @click="clickEvent($event,item.num)" class="btn" type="button" :class="{choice:item.num === content.value}">{{item.showName}}</button>
+      <button v-if="all == '1'" @click="clickEvent($event,'')" style="border: 1px solid #dedede;" class="btn" type="button" :class="{choice:content.value === ''}">全部</button>
     </div>
   </div>
 </template>
@@ -64,15 +64,16 @@
   }
 
   .chooseBtnBox .chooseContent {
-    border: 1px solid #dedede;
     border-radius: 5px;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
   }
   .chooseBtnBox .chooseContent .btn {
     height: 30px;
     border-right: 1px solid #dedede;
     padding: 0 15px;
+    margin: 0.5px 0;
     cursor: pointer;
     color: #333;
     font-size: 12px;

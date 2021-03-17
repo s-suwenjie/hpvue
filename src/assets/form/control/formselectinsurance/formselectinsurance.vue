@@ -7,7 +7,7 @@
       </div>
       <div class="c_main c_textarea">
         <div class="c_box c_box_wrap" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" :class="{c_hover:mouseStyle,c_error:error}">
-          <div @contextmenu.prevent @click="selectItem(item)" class="c_insurance_item" :class="{c_b_item_select:getSelect(item.num)}" v-for="(item,index) in psd" :key="index">
+          <div @contextmenu.prevent @click="selectItem(item)" :class="{c_b_item_select:getSelect(item.num),c_insurance_item:width=='1',c_insurance_item_auto:width=='0'}" v-for="(item,index) in psd" :key="index">
             <div class="icon check_button_icon fs16b" :class="{check_button_icon_select:getSelect(item.num)}"></div>
             <div class="txt">{{item.showName}}</div>
             <div class="box" v-show="getSelected(item)">
@@ -43,6 +43,16 @@
       }
     },
     props: {
+      requiredList:{
+        type:Array,
+        default : function() {
+          return []
+        }
+      },
+      width:{
+        type:String,
+        default:'1'
+      },
       isContent:{
         type:Boolean,
         default:false
@@ -216,12 +226,19 @@
         let index = this.value.indexOf(item.num)
         if(index === -1){
           this.value.push(item.num)
+          this.error = false
         }
         else{
-          this.value.splice(index,1)
+          if(this.requiredList.indexOf(item.num)==-1){//验证是否是必选项
+            this.value.splice(index,1)
+            this.error = false
+            this.verification()
+          }else{
+            this.error = true
+            this.errorTipMessage = item.showName+'为必选项'
+          }
         }
-        this.$emit("click")
-        this.verification()
+        this.$emit("click",item.num)
       },
       //验证
       verification(){
@@ -231,6 +248,22 @@
           this.error = !result
         }
         return result
+      }
+    },
+    watch:{
+      psd: {
+        deep: true,//深度监听
+        handler: function() {
+          for(let i in this.psd){
+            for(let j in this.requiredList){
+              if(this.psd[i].num==this.requiredList[j]){
+                if(this.value.indexOf(this.requiredList[j])==-1){
+                  this.value.push(this.requiredList[j])
+                }
+              }
+            }
+          }
+        }
       }
     },
     computed : {

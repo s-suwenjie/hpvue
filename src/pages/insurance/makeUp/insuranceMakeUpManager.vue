@@ -43,7 +43,7 @@
           <yhm-manager-td-checkbox :value="item"  ></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td-center  :value="item.salsesman"></yhm-manager-td-center>
-          <yhm-manager-td  :value="item.plate"></yhm-manager-td>
+          <yhm-manager-td vehicle-text-align="left" type="vehicle"  :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.contactName"></yhm-manager-td>
           <yhm-manager-td  :value="item.beinsuredName"></yhm-manager-td>
           <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
@@ -118,7 +118,7 @@
       },
       addPNumbering(item){
         let title = '上传保单'
-        let url = '/poNumbering?id='+item.poNumber+'&ownerID='+item.id+'&project='+item.project+'&forceEndDate='+item.forceEndDate+'&businessEndDate='+item.businessEndDate
+        let url = '/poNumbering?id='+item.poNumber+'&ownerID='+item.id+'&project='+item.project+'&forceEndDate='+item.forceEndDate+'&businessEndDate='+item.businessEndDate+'&display=1'
         this.$dialog.OpenWindow({
           width: '1050',
           height: '550',

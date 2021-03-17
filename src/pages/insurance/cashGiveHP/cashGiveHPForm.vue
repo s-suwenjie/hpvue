@@ -10,7 +10,6 @@
           <input type="text"  v-model="one">
           <span>X</span>
           <div class="cashGiveHPinput">
-<!--            <input type="text" @keyup="oninputEvent"  id="input" v-model="two">-->
             <input type="text" v-model="two">
             <div class="inputRight">%</div>
           </div>
@@ -72,50 +71,60 @@
     methods:{
 
       save(){
-        let params = {
-          id:this.id,
-          ownerID:this.ownerID,
-          time:this.time,
-          unitID:this.unitID,
-          one:this.one,
-          two:this.two,
-          three:this.three,
-          four:this.four,
-          fives:this.fives
-        }
-        this.ajaxJson({
-          url: '/Insurance/saveCashGiveHP',
-          data:params,
-          call:(data) =>{
-            if(data.type === 0){
-              let details={
-                id:this.id,
-                ownerID: this.ownerID,
-                time:this.time,
-                one:this.one,
-                two:this.two,
-                three:this.three,
-                four:this.four,
-                fives:this.fives
-              }
-              this.$dialog.setReturnValue(details) //向父级页面传递参数
-              this.$dialog.alert({
-                tipValue: data.message,
-                closeCallBack: () => {
-
-                  this.$dialog.close()
-                }
-              })
-            }else {
-              this.$dialog.alert({
-                tipValue: data.message,
-                alertImg: 'error',
-                closeCallBack: () => {
-                }
-              })
+        this.$dialog.confirm({
+          width: 350,
+          tipValue: '请仔细核对，保存后将不能修改！',
+          btnValueOk: '确定',
+          alertImg: 'warn',
+          okCallBack: (data) => {
+            let params = {
+              id:this.id,
+              ownerID:this.ownerID,
+              time:this.time,
+              unitID:this.unitID,
+              one:this.one,
+              two:this.two,
+              three:this.three,
+              four:this.four,
+              fives:this.fives
             }
+            this.ajaxJson({
+              url: '/Insurance/saveCashGiveHP',
+              data:params,
+              call:(data) =>{
+                if(data.type === 0){
+                  let details={
+                    id:this.id,
+                    ownerID: this.ownerID,
+                    time:this.time,
+                    one:this.one,
+                    two:this.two,
+                    three:this.three,
+                    four:this.four,
+                    fives:this.fives
+                  }
+                  this.$dialog.setReturnValue(details) //向父级页面传递参数
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: () => {
+
+                      this.$dialog.close()
+                    }
+                  })
+                }else {
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    alertImg: 'error',
+                    closeCallBack: () => {
+                    }
+                  })
+                }
+              }
+            })
           }
         })
+
+
       },
 
     },

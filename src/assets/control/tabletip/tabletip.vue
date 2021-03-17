@@ -9,10 +9,12 @@
         <tbody>
           <tr v-for="(detail,i) in content" :key="i">
             <template v-for="(item,index) in column" >
+              <yhm-manager-td-look  v-if="item.category === 'look'" :value="detail[item.key]" :key="index" @click="clickEvent(detail,item)"></yhm-manager-td-look>
               <yhm-manager-td v-if="item.category === ''" :value="detail[item.key]" :key="index" @click="clickEvent(detail,item)"></yhm-manager-td>
               <yhm-manager-td-date v-if="item.category === 'date'" :value="detail[item.key]" :key="index" @click="clickEvent(detail,item)"></yhm-manager-td-date>
               <yhm-manager-td-money v-if="item.category === 'money'" :value="detail[item.key]" :key="index" @click="clickEvent(detail,item)"></yhm-manager-td-money>
               <yhm-manager-td-rgt v-if="item.category === 'right'" :value="detail[item.key]" :key="index" @click="clickEvent(detail,item)"></yhm-manager-td-rgt>
+              <yhm-form-td-delete v-if="item.category === 'delete'" :tip-value="customDeleteTipValue" :icon-color="customDeleteIconColor" :icon-name="customDeleteIcon" width="40" :list="content" :value="detail" :key="index" :del-click="true" @click="delServe(detail,'删除')" ></yhm-form-td-delete>
             </template>
           </tr>
         </tbody>
@@ -64,6 +66,18 @@
         type:Boolean,
         default:false
       },
+      customDeleteIcon:{//自定义delete组件的icon图标
+        type: String,
+        default: "delete"
+      },
+      customDeleteIconColor:{//自定义delete组件的icon图标颜色
+        type: String,
+        default: "red"
+      },
+      customDeleteTipValue:{//自定义delete组件的弹出框提示标题
+        type: String,
+        default: "是否删除当前列?"
+      },
       // title: {
       //   type: String,
       //   required: true
@@ -73,6 +87,11 @@
       clickEvent(item,title){
         this.$nextTick(()=>{
           this.$emit('call',item,title.title)
+        })
+      },
+      delServe(item,title){
+        this.$nextTick(()=>{
+          this.$emit('call',item,title)
         })
       },
       getRelativeNode(control){

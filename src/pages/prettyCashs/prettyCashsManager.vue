@@ -17,25 +17,27 @@
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter  @initData="initChoose('isFinish')" title="完成状态" :content="isFinishPsd"></yhm-radiofilter>
-          <yhm-radiofilter  @initData="initChoose('isTravel')" title="业务相关" :content="isTravelPsd"></yhm-radiofilter>
-          <yhm-radiofilter  @initData="initChoose('isTravel')" title="发票类型" :content="invoiceCategoryPsd"></yhm-radiofilter>
+          <yhm-radiofilter  @initData="initPageData(false)" title="完成状态" :content="isFinishPsd"></yhm-radiofilter>
+          <yhm-radiofilter  @initData="initPageData(false)" title="业务相关" :content="isTravelPsd"></yhm-radiofilter>
+          <yhm-radiofilter  @initData="initPageData(false)" title="发票类型" :content="invoiceCategoryPsd"></yhm-radiofilter>
+          <yhm-radiofilter  @initData="initChoose('viewLevels')" title="查看下属" all="0" :content="listViewLevels"></yhm-radiofilter>
         </div>
       </template>
       <template #listHead>
         <yhm-managerth-check style="width: 50px" :check="allCheck"></yhm-managerth-check>
         <yhm-managerth style="width: 50px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 110px;" title="申请人" value="personID"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="申请人" value="personID"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="批次号" value="code"></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="申请时间" value="workDate"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="申请金额" value="money"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="发票类型"></yhm-managerth>
+        <yhm-managerth style="width: 95px;" title="申请金额" value="money"></yhm-managerth>
+        <yhm-managerth style="width: 95px;" title="退回金额" value="refundMoney"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="发票类型"></yhm-managerth>
         <yhm-managerth title="事由" value="subjectID"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="预计核销日期" value="estimateDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
         <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="状态" value=""></yhm-managerth>
-        <yhm-managerth style="width: 400px" title="操作" value=""></yhm-managerth>
+        <yhm-managerth v-if="listViewLevels.value==0" style="width: 400px" title="操作" value=""></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in content" :key="index" :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]">
@@ -45,6 +47,7 @@
           <yhm-manager-td :value="item.code"></yhm-manager-td>
           <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.refundMoney"></yhm-manager-td-money>
           <yhm-manager-td-psd :value="item.invoiceCategory" :list="invoiceCategoryList"></yhm-manager-td-psd>
           <yhm-manager-td :value="item.subject"></yhm-manager-td>
           <yhm-manager-td-date :value="item.estimateDate"></yhm-manager-td-date>
@@ -54,12 +57,12 @@
 
           <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
-          <yhm-manager-td-operate>
+          <yhm-manager-td-operate v-if="listViewLevels.value==0">
             <yhm-manager-td-operate-button v-show="item.state === '-1' && item.isDelay === '0'&&item.isFinish !== '1'" @click="delayEvent(item)" value="延期核销" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.state!=='0' || item.isFinish !== '1'" :no-click="item.state!=='0' || item.isFinish === '1'" @click="submit(item)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.isFinish !== '0' || item.state === '0'" @click="urge(item)" value="催促" icon="i-btn-urge" color="#2AA70B"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button  @click="chargeAgainst(item)" v-show="item.state === '15' && item.isChecks === '0'" value="报销冲抵" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button  @click="aFullReturn(item)" v-show="item.state === '15' && item.isChecks === '0'" value="全额退回" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button  @click="aFullReturn(item)" v-show="item.state === '15' && item.isChecks === '0'" value="退回备用金" icon="i-delay" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button  v-show="item.isChecks === '3'" @click="FullReturn(item)" value="退备用金" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
 
             <yhm-manager-td-operate-button :no-click="item.state !== '0' || item.isFinish === '1'" @click="del(item)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
@@ -142,10 +145,15 @@
           {id:'5', name: '备用金',path:'/home/prettyCashsManager'},
           {id:'6', name: '补签字',path:'/home/myManager/signatureManager'},
           {id:'7', name: '开票申请',path:'/home/openInvoiceManager'},
+          {id:'8', name: '我的快递',path:'/home/myExpressManager'},
         ],
         total:[],
         contentTotal:[],
-        invoiceCategoryList: []
+        invoiceCategoryList: [],
+        listViewLevels:{
+          value:"0",
+          list:[]
+        },
       }
     },
     methods:{
@@ -384,24 +392,12 @@
                 tableName: 47
               }
               this.ajaxJson({
-                url: '/PersonOffice/getPressIDVue',
+                url: '/PersonOffice/approvalPressVue',
                 data: params,
                 call: (data) => {
                   if (data.type === 0) {
-                    this.idMess = data.message
-                    let params = {
-                      id: this.idMess,
-                    }
-                    this.ajaxJson({
-                      url: '/PersonOffice/approvalPressVue',
-                      data: params,
-                      call: (data) => {
-                        if (data.type === 0) {
-                          this.$dialog.alert({
-                            tipValue: '催促成功！'
-                          })
-                        }
-                      }
+                    this.$dialog.alert({
+                      tipValue: '催促成功！'
                     })
                   }
                 }
@@ -517,7 +513,8 @@
           params = {
             isFinish: this.isFinishPsd.value,
             isTravel: this.isTravelPsd.value,
-            invoiceCategory: this.invoiceCategoryPsd.value
+            invoiceCategory: this.invoiceCategoryPsd.value,
+            viewLevels:this.listViewLevels.value
           }
         }
         this.init({
@@ -533,6 +530,7 @@
             this.invoiceCategoryPsd = data.invoiceCategoryPsd
             this.invoiceCategoryList = data.invoiceCategoryPsd.list
             this.contentTotal = data.total
+            this.listViewLevels=data.viewLevelsPsd
           }
         })
       },

@@ -10,7 +10,7 @@
       <template #choose>
         <yhm-radiofilter :before="categoryBefore" @initData="initChoose('category')" title="单位分类" all="0" :content="listCategoryUnit"></yhm-radiofilter>
         <yhm-radiofilter :before="categoryAccBefore" @initData="categoryAcc('category')" title="账户类型" all="0" :content="listCategory"></yhm-radiofilter>
-        <yhm-radiofilter @initData="initChoose('category')" :before="commonUse" title="常用" all="0" :content="commonUsePsd"></yhm-radiofilter>
+        <yhm-radiofilter @initData="initChoose('category')" title="常用" all="0" :content="commonUsePsd"></yhm-radiofilter>
       </template>
 
       <template #listHead>

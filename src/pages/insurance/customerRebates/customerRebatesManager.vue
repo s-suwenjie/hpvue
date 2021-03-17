@@ -8,6 +8,7 @@
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/customerRebates/customerRebatesManager'}">客户直接优惠/返利</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/paymentInsurance/payInsuranceFeeManager'}">付保险费</router-link>
         <router-link class="menuTabDiv "  :to="{path:'/home/receiveInsurance/receiveInsuranceManager'}">收保险费</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/insuranceInvoice/insuranceInvoiceManager'}">保险开票</router-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -35,11 +36,11 @@
         <yhm-managerth style="width: 120px;" title="保险公司" value="insuredUnit"></yhm-managerth>
         <yhm-managerth style="width: 250px;" v-if="isAct" title="收款账户" value="otherAccount"></yhm-managerth>
         <yhm-managerth style="width: 100px;" v-if="isAct" title="返利对象" value="cashObjectVal"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" v-if="isAct" title="个税扣除前金额" value="actualMoney"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" v-if="isAct" title="个税扣除金额" value="actualDifference"></yhm-managerth>
+        <yhm-managerth style="width: 100px; color: #088A08"  v-if="isAct" title="个税扣除前金额" value="actualMoney"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" v-if="isAct" title="-扣(个税)" value="actualDifference"></yhm-managerth>
         <yhm-managerth style="width: 120px;" v-if="isPre"  title="直接优惠金额" value="preferential"></yhm-managerth>
         <yhm-managerth style="width: 120px;" v-if="isAct" title="实际返利金额" value="actualProfitLoss"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="保险公司返利金额" value="realTimeProfitLoss"></yhm-managerth>
+        <yhm-managerth style="width: 120px; color: #FF0000" title="保险公司返利金额" value="realTimeProfitLoss"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="保单号" value="numbering"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="状态" ></yhm-managerth>
       </template>
@@ -49,17 +50,17 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
+          <yhm-manager-td-date @click="listView(item)" :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
           <yhm-manager-td  @click="contactView(item)"  :value="item.contactName"></yhm-manager-td>
           <yhm-manager-td-psd  @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td v-if="isAct" @click="unitDetail(item)" :tip="true" :value="item.otherAccount" ></yhm-manager-td>
           <yhm-manager-td v-if="isAct" :value="item.cash==='1'?'-------':item.cashObjectVal"></yhm-manager-td>
           <yhm-manager-td-money v-if="isAct" :value="item.actualMoney"></yhm-manager-td-money>
-          <yhm-manager-td-money v-if="isAct" :value="item.actualDifference"></yhm-manager-td-money>
-          <yhm-manager-td-money v-if="isPre" :value="item.preferential"></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isAct" :value="'-'+item.actualDifference"></yhm-manager-td-money>
+          <yhm-manager-td-money v-if="isPre" @click="preferentialView(item)" :value="item.preferential"></yhm-manager-td-money>
           <yhm-manager-td-money v-if="isAct" :value="item.actualProfitLoss" style="color: #113DEE"></yhm-manager-td-money>
-          <yhm-manager-td-money  :value="item.realTimeProfitLoss"></yhm-manager-td-money>
+          <yhm-manager-td-money  @click="listExpectedView(item)"  :value="item.realTimeProfitLoss"></yhm-manager-td-money>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button v-show="item.boNumbering === ''?true:false" color="#1A1AE6" icon="delete" value="待上传保单"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.boNumbering !=''?true:false"  @click="addPNumbering(item)" icon="i-invoiceView" value="查看保单" color="#fd6802"></yhm-manager-td-operate-button>
@@ -85,8 +86,10 @@
             <tr>
               <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="已返利总金额"></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="未返利总金额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="待返利总金额"></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="直接优惠总金额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#088A08" title="" before-title="个税扣除前金额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#FF0000" title="" before-title="保险返利金额"></yhm-managerth>
             </tr>
             </thead>
             <tbody>
@@ -106,10 +109,11 @@
             <span class="test">金额</span>
             <span class="test">条数</span>
           </div>
-          <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table" style="width: 250px">
+          <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
             <thead>
               <tr>
                 <yhm-managerth before-color="#49a9ea" title="" before-title="直接优惠总金额"></yhm-managerth>
+                <yhm-managerth before-color="#FF0000" title="" before-title="保险返利金额"></yhm-managerth>
               </tr>
             </thead>
             <tbody>
@@ -135,7 +139,9 @@
             <tr>
               <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="已返利总金额"></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="未返利总金额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="待返利总金额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#088A08" title="" before-title="个税扣除前金额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#FF0000" title="" before-title="保险返利金额"></yhm-managerth>
             </tr>
             </thead>
             <tbody>
@@ -202,6 +208,33 @@
       }
     },
     methods:{
+      preferentialView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '450',
+          url: '/customerRebates?id='+item.id + '&premiumsTotal='+item.premiumsTotal+'&receivedMoney='+item.receivedMoney+'&discountMoney='+item.discountMoney
+          +'&insuredDate='+item.insuredDate+'&plate='+item.plate,
+          title: '计算式金额',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      listExpectedView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '450',
+          url: '/accountExpectedView?id=' + item.id,
+          title: '查看应收账款',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       dateSelection(start,finish){//选择时间段
         if(start!=''&&finish!=''){
           this.initPageData()

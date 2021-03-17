@@ -112,7 +112,7 @@
           closeCallBack: (data) => {
             if(data){
               this.$dialog.setReturnValue(data)
-              location.reload()
+              this.initData()
             }
           }
         })

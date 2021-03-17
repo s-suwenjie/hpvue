@@ -226,7 +226,7 @@
         if(data.type === 0) {
           this.content = []
           if(this.isFinish == '1'){
-            this.url = '/Insurance/m_getInsuranceAppManage'
+            this.url = '/Insurance/m_getInsuranceAppManagerApp'
           }else{
             this.url = '/Insurance/m_getPoManager'
           }
@@ -246,7 +246,9 @@
       initPageData(initValue){
         let url = ''
         if(this.isFinish == '1'){
-          url = '/Insurance/m/getInsuranceAppManager'
+
+          url = '/Insurance/m_getInsuranceAppManagerApp'
+
         }else if(this.isFinish == '0'){
           url = '/Insurance/m_getPoManager'
         }

@@ -16,6 +16,7 @@
         <yhm-managerth style="width: 100px;" title="接收人" value="toUser"></yhm-managerth>
         <yhm-managerth style="width: 400px;" title="发送状态" value="remark"></yhm-managerth>
         <yhm-managerth title="备注" value="remark"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="操作"></yhm-managerth>
       </template>
 
       <template #listBody>
@@ -27,6 +28,9 @@
           <yhm-manager-td :value="item.toUser"></yhm-manager-td>
           <yhm-manager-td :value="item.remark"></yhm-manager-td>
           <yhm-manager-td :value="item.postContent"></yhm-manager-td>
+          <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button  @click="resend(item)" value="重新发送" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
+          </yhm-manager-td-operate>
         </tr>
       </template>
       <!--数据空提示-->
@@ -47,6 +51,43 @@
     name: 'wxMessageManager',
     mixins: [managermixin],
     methods:{
+      resend(item){
+        this.$dialog.confirm({
+          width: 300,
+          tipValue: '是否重新发送微信通知?',
+          btnValueOk: '确定',
+          alertImg: 'warn',
+          okCallBack: (data) => {
+            let params = {
+              id: item.id,
+              insertDate:item.insertDate,
+              ownerID:item.ownerID,
+              postContent:item.postContent
+            }
+            this.ajaxJson({
+              url: '/Insurance/wx',
+              data: params,
+              call: (data) => {
+                if (data.type == '0') {
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: (data) => {
+                      this.initPageData(false)
+                    }
+                  })
+                } else {
+                  this.$dialog.alert({
+                    alertImg: 'error',
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                    }
+                  })
+                }
+              }
+            })
+          }
+        })
+      },
       //搜索
       initPageData (initValue) {
         let params = {}

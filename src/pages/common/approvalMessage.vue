@@ -18,7 +18,7 @@
       </template>
 
 
-      <!--数据空提示-->
+      <!--数据空提示-->x
       <template #empty>
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>

@@ -5,6 +5,7 @@
       <template #navigationTab>
         <router-link class="menuTabDiv " :to="{path:'/home/track/trackManager'}">跟踪信息</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/trackDetails/trackDetailsManager'}">跟踪反馈</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/track/perfectedManager'}">待完善客户信息</router-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -14,7 +15,7 @@
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter :before="feedbackBefore" @initData="initChoose('feedback')" title="状态" :content="listFeedback"></yhm-radiofilter>
+
           <yhm-radiofilter :before="feedbackBefore" @initData="initChoose('intention')" title="购买意向" :content="listIntention"></yhm-radiofilter>
         </div>
       </template>
@@ -26,10 +27,10 @@
         <yhm-managerth style="width: 150px;" title="联系人" value="name"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="联系方式" value="phone"></yhm-managerth>
         <yhm-managerth style="width: 130px;" title="购买意向" value="intentionVal"></yhm-managerth>
-        <yhm-managerth style="width: 200px;" title="下次跟踪日期" value="nextDate"></yhm-managerth>
-        <yhm-managerth style="width: 200px;" title="预计到店日期" value="planDate"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="跟踪状态" value="businessDay"></yhm-managerth>
-        <yhm-managerth  title="备注" value="remark"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="下次跟踪日期" value="nextDate"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="预计到店日期" value="planDate"></yhm-managerth>
+
+        <yhm-managerth  title="过程记录" value="remark"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="操作"></yhm-managerth>
       </template>
 
@@ -44,10 +45,10 @@
           <yhm-manager-td-center :value="item.intentionVal"></yhm-manager-td-center>
           <yhm-manager-td-date :value="item.nextDate"></yhm-manager-td-date>
           <yhm-manager-td-date  :value="item.planDate"></yhm-manager-td-date>
-          <yhm-manager-td-center :value="item.feedbackVal"></yhm-manager-td-center>
-          <yhm-manager-td :value="item.remark"></yhm-manager-td>
+
+          <yhm-manager-td tip="value" :value="item.remark"></yhm-manager-td>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button :no-click="item.feedback === '2'" @click="track(item)"  value="跟踪" icon="i-btn-applicationSm" color="#FF0000"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :no-click="item.category === '1'" @click="track(item)"  value="跟踪" icon="i-btn-applicationSm" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -74,10 +75,7 @@
       return{
         id:'',
         feedbackBefore:'0',// 默认选择状态为可以选择，1为不可以选择
-        listFeedback:{
-          value: '', //默认为空
-          list: []
-        },
+
         listIntention:{
           value: '', //默认为空
           list: []
@@ -100,9 +98,7 @@
       },
       // 筛选事件
       initChoose (op) {
-        if (op === 'feedback') {
-          this.selectValue = []
-        }
+
         if (op === 'intention') {
           this.selectValue = []
         }
@@ -128,12 +124,12 @@
 
         if (initValue) {
           params = {
-            feedback:this.listFeedback.value,
+
             intention:this.listIntention.value
           }
         } else {
           params = {
-            feedback:this.listFeedback.value,
+
             intention:this.listIntention.value
           }
         }
@@ -147,7 +143,7 @@
           init:(data)=>{
             //初始化时需要执行的代码
             // 这边初始化筛选信息
-            this.listFeedback=data.feedbackPsd
+
             this.listIntention = data.intentionPsd
 
           }

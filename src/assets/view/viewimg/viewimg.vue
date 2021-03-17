@@ -1,8 +1,8 @@
 <template>
   <div class="v_control" :class="[getWidthClass]">
     <div class="v_title">{{title}}：</div>
-    <div>
-      <img :src="imgUrl" alt="">
+    <div style="display: flex; justify-content: flex-start;align-items: center;">
+      <img :style="getImageWidth + getImageHeight" :src="imgUrl" alt="">
     </div>
   </div>
 </template>
@@ -22,14 +22,43 @@
       tag: {
         type: String,
         default: ''
+      },
+      width:{
+        type: String,
+        default: 'auto'
+      },
+      height:{
+        type: String,
+        default: 'auto'
       }
     },
     computed: {
+      getImageWidth(){
+        if(this.width === 'auto'){
+          return ""
+        }
+        else{
+          return "width :" + this.width + "px;"
+        }
+      },
+      getImageHeight(){
+        if(this.height === 'auto'){
+          return ""
+        }
+        else{
+          return "height :" + this.height + "px;"
+        }
+      },
       imgUrl(){
-        if(this.url){
-          return '/UploadFile/' + this.tag + '/' + this.url
-        }else{
-          return ''
+        if(this.url.indexOf("http") === 0){
+          return this.url
+        }
+        else{
+          if(this.url){
+            return '/UploadFile/' + this.tag + '/' + this.url
+          }else{
+            return ''
+          }
         }
       },
       getWidthClass(){

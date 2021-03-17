@@ -11,6 +11,7 @@
         <router-link class="menuTabDiv " :to="{path:'/home/cashRegisterManager'}">收银审批制定</router-link>
         <router-link class="menuTabDiv " :to="{path:'/home/approPriationManager'}">批量拨款审批制定</router-link>
         <router-link class="menuTabDiv " :to="{path:'/home/unionCostsManager'}">工会审批制定</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/promotionsApproveManager'}">优惠活动审批制定</router-link>
 
       </template>
       <template #operate>

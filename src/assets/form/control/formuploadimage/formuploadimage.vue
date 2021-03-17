@@ -2,8 +2,8 @@
   <div v-if="show" class="fc_main" v-validator="validatorEvent">
     <div class="fc_box">
       <div class="fc_title">
-        <div>{{title}}</div>
-        <div v-if="subtitle !== ''">{{subtitle}}</div>
+        <div :style="{color:titleColor}">{{title}}</div>
+        <div v-if="subtitle !== ''" :style="{color:titleColor}">{{subtitle}}</div>
       </div>
       <div class="c_main">
         <div class="c_main_upload">
@@ -43,6 +43,10 @@
       }
     },
     props: {
+      titleColor:{
+        type:String,
+        default :''
+      },
       title: {
         type: String,
         default: '标题'
@@ -115,6 +119,9 @@
             this.error = false
             this.url = data.storeName
           }
+        })
+        this.$nextTick(()=>{
+          this.$emit("call",data)
         })
       },
       //验证

@@ -92,12 +92,15 @@
         // this.notAllClick = false;
 
         let lastAllMonth = parseInt(this.month) - 1;
-
+        if(lastAllMonth == '0'){
+          lastAllMonth = 12
+        }
         let startDate = '';
         let endDate = '';
         let daysAllNum = getDayNumByYearMonth(parseInt(this.year),lastAllMonth);
-        let thisDaysAllNum = getDayNumByYearMonth(parseInt(this.year),parseInt(this.month));
+        // console.log(daysAllNum,this.year,lastAllMonth)
 
+        let thisDaysAllNum = getDayNumByYearMonth(parseInt(this.year),parseInt(this.month));
         let nowDate = new Date();
         let newMonth = nowDate.getMonth() + 1;
         let newDate = nowDate.getDate();
@@ -105,25 +108,33 @@
         let newMin = nowDate.getMinutes();
         let newSec = nowDate.getSeconds();
         if(this.month !== '13'){
-          if(newMonth === parseInt(this.month)){
-            startDate = this.year +'-' + zero(lastAllMonth) + '-' + zero(daysAllNum) + ' ' + '23:59:59';
+          if(this.month=='1'){
+            startDate = (Number(this.year)-1) +'-' + zero(lastAllMonth) + '-' + zero(daysAllNum) + ' ' + '23:59:59';
             endDate = this.year + '-' + zero(newMonth) + '-' + zero(newDate) +  ' ' + zero(newHours) + ':' + zero(newMin) + ':' + zero(newSec);
+            // console.log(startDate,endDate,'month')
           }else{
-            let lastYear = '';
-            let lastMonth = '';
-            if(lastAllMonth === 0){
-              lastYear = parseInt(this.year) - 1;
-              lastMonth = '12';
-
-              let newLastMonthYearDay = getDayNumByYearMonth(lastYear,parseInt(lastMonth));
-              startDate = lastYear + '-' + lastMonth + '-' + newLastMonthYearDay + ' ' + '23:59:59';
-              endDate = this.year + '-' + this.month + '-' + thisDaysAllNum + ' ' + '23:59:59';
+            // console.log(newMonth,parseInt(this.month),'parseInt(this.month)')
+            if(newMonth === parseInt(this.month)){
+              startDate = this.year +'-' + zero(lastAllMonth) + '-' + zero(daysAllNum) + ' ' + '23:59:59';
+              endDate = this.year + '-' + zero(newMonth) + '-' + zero(newDate) +  ' ' + zero(newHours) + ':' + zero(newMin) + ':' + zero(newSec);
+              // console.log(startDate,endDate,'!=13')
             }else{
-              startDate = this.year + '-' +lastAllMonth + '-' + daysAllNum + ' ' + '23:59:59';
-              endDate = this.year + '-' + this.month + '-' + thisDaysAllNum + ' ' + '23:59:59';
+              let lastYear = '';
+              let lastMonth = '';
+              if(lastAllMonth === 0){
+                lastYear = parseInt(this.year) - 1;
+                lastMonth = '12';
+
+                let newLastMonthYearDay = getDayNumByYearMonth(lastYear,parseInt(lastMonth));
+                startDate = lastYear + '-' + lastMonth + '-' + newLastMonthYearDay + ' ' + '23:59:59';
+                endDate = this.year + '-' + this.month + '-' + thisDaysAllNum + ' ' + '23:59:59';
+              }else{
+                startDate = this.year + '-' +lastAllMonth + '-' + daysAllNum + ' ' + '23:59:59';
+                endDate = this.year + '-' + this.month + '-' + thisDaysAllNum + ' ' + '23:59:59';
+              }
+              // console.log(startDate,endDate)
             }
           }
-
           let timeParams = {
             startDate: startDate,
             endDate: endDate
@@ -189,7 +200,7 @@
         }
         for(let i in arr){
           if(arr[i].indexOf('sun') !== -1 ){
-            console.log(sunDay[arr[i].indexOf('sun')])
+            // console.log(sunDay[arr[i].indexOf('sun')])
           }
         }
       })

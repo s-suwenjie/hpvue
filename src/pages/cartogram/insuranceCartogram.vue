@@ -20,6 +20,14 @@
             </div>
             <span style="color: black;">  日期:  {{dateMin}}</span>
           </div>
+          <div class=" posit">
+            <div class=""  :style="{color:colors}">
+              <span style="font-weight: bold">合计: </span>
+              <span v-html="segmentationss"></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
         </div>
         <div class="total" v-show="!totalShow">
           <p style="color: #FF0000">暂无数据</p>
@@ -44,6 +52,7 @@
         month:'',//月份
         customTime:'',
         yearTxts:'',
+        colors:'#fd6802',
         day:[],
         money:[],
         average:'0',//平均值
@@ -81,10 +90,19 @@
         return tenThousandFormatHtml(this.moneyMax+'')
       },
       segmentations(){
-        if(!this.moneyMin){
+        /*if(!this.moneyMin){
           this.moneyMin = '0'
-        }
+        }*/
         return tenThousandFormatHtml(this.moneyMin+'')
+      },
+      segmentationss(){
+        // console.log(this.moneyList)
+        // console.log(this.allMoney)
+        this.allMoney=0
+        for(let i in this.moneyList){
+          this.allMoney=Number(this.allMoney)+Number(this.moneyList[i].money)
+        }
+        return "  ¥"+tenThousandFormatHtml(parseFloat(this.allMoney).toFixed(2)+'')
       }
     },
     methods: {
@@ -247,7 +265,13 @@
                   that.day = []
                   that.money = []
                   for (let i = 0; i < that.moneyList.length; i++) {
-                    that.day.push(that.title + that.moneyList[i].day + '月')
+
+                    if(that.month == 13){
+                      that.day.push(that.title + that.moneyList[i].day + '月')
+                    }else{
+                      that.day.push(that.moneyList[i].day)
+                    }
+
                     that.money.push(that.moneyList[i].money)
                   }
                   myChart.setOption({//重新渲染数据
@@ -585,5 +609,15 @@
     bottom: -4px;
     left: 50%;
     transform: translate(-50%,-50%);
+  }
+  .posit {
+    /*font-weight: bold;*/
+    position: absolute;
+    z-index: 999;
+    top: 112px;
+    left: 670px;
+  }
+  .posit span{
+    font-size: 16px;
   }
 </style>

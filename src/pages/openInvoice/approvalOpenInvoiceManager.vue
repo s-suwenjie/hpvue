@@ -22,6 +22,15 @@
           <i class="noticeNum" v-if="insuranceNum!=='0'">{{insuranceNum}}</i>
         </router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/approvalOpenInvoiceManager'}">开票审批</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/promotions/promotionsAppManager'}">活动审批
+          <i class="noticeNum" v-if="promotions!='0'">{{promotions}}</i>
+        </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/invoicelookUp/invoicelookUpManager'}">发票抬头
+                    <i class="noticeNum" v-if="invoiceRiseNum!='0'">{{invoiceRiseNum}}</i>
+        </router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/expressApprovalManager'}">快递审批
+          <!--<i class="noticeNum" v-if="paymentNum!=0">{{paymentNum}}</i>-->
+        </router-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -118,7 +127,8 @@
         prettyCashsNum:'',
         insuranceNum:'',
         openInvoice:'',
-
+        Promotions:'',
+        invoiceRiseNum:'',
         isReceivablesList:[],
         isReceivables:'',
         isReceivablesPsd: {
@@ -282,6 +292,13 @@
           this.prettyCashsNum = data.prettyCashs
           this.insuranceNum=data.insurance
           this.openInvoice=data.openInvoice
+          this.Promotions=data.Promotions
+        }
+      })
+      this.ajaxJson({
+        url: '/finance/invoiceRise/getApprovalPendingCount',
+        call: (data)=>{
+          this.invoiceRiseNum = data
         }
       })
     }

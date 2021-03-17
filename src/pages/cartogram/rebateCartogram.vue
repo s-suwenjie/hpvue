@@ -200,7 +200,15 @@
                   that.day = []
                   that.money = []
                   for (let i = 0; i < that.moneyList.length; i++) {
-                    that.day.push(that.moneyList[i].day)
+
+                    // if(that.month == 13){
+                      that.day.push(that.title + that.moneyList[i].day + '月')
+                    // }else{
+                    //   that.day.push(that.moneyList[i].day)
+                    // }
+                    // that.day.push(that.moneyList[i].day)
+
+
                     that.money.push(that.moneyList[i].money)
                   }
                   myChart.setOption({//重新渲染数据

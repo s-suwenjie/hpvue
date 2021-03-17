@@ -2,13 +2,19 @@
   <div v-if="show" class="fc_main" v-validator="validatorEvent" :class="{formradiobuttonWidth:getWidth}">
     <div v-if="getShowTip" class="c_tip left85 bottom70">
       <div>
-        {{txt|format(tip)}}
-        <img src="./images/arrow.png">
+        <template v-if="tips.length > 0" v-for="(item,index) in tips">
+          {{item}}
+          <br v-if="tips.length - 1 > index">
+        </template>
+        <template v-if="tips.length === 0">
+          {{txt|format(tip)}}
+        </template>
+        <img style="position: absolute;bottom: -19px;" src="./images/arrow.png">
       </div>
     </div>
     <div class="fc_box">
       <div class="fc_title">
-        <div>{{title}}</div>
+        <div :style="{color:titleColor}">{{title}}</div>
         <div v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
       <div class="c_main" :class="{boxWidth:getWidth}">
@@ -22,7 +28,7 @@
       <slot></slot>
 
     </div>
-    <div class="fc_error"><span v-if="error">{{errorTipMessage}}</span></div>
+    <div class="fc_error"><span v-if="error">{{bottomMessage}}</span><span v-if="error && (bottomMessage=='')">{{errorTipMessage}}</span></div>
   </div>
 </template>
 
@@ -43,6 +49,10 @@ export default {
     }
   },
   props: {
+    titleColor:{
+      type:String,
+      default :''
+    },
     title: {
       type: String,
       default: '标题'
@@ -75,6 +85,12 @@ export default {
       type: String,
       default: ''
     },
+    tips:{
+      type:Array,
+      default:function () {
+        return []
+      }
+    },
     emptyMessage: {
       type: String,
       default: ''
@@ -95,6 +111,10 @@ export default {
       type:String,
       default:"0"
     },
+    bottomMessage:{
+      type:String,
+      default:"",
+    }
   },
 
   methods: {
@@ -222,7 +242,7 @@ export default {
   },
   computed: {
     getShowTip () {
-      return this.tip != '' && this.txt != '' && this.mouseOver
+      return (this.tip != '' || this.tips.length > 0) && this.txt != '' && this.mouseOver
     },
     getWidth(){
       return this.width === "1"

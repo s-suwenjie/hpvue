@@ -2,7 +2,7 @@
   <div v-if="show" class="formradiobutton" :class="{formradiobuttonWidth:getWidth}">
     <div class="context">
       <div class="title">
-        <div>{{title}}</div>
+        <div :style="{color:titleColor}">{{title}}</div>
         <div v-if="subtitle !== ''">{{subtitle}}</div>
       </div>
       <div class="content">
@@ -10,7 +10,8 @@
           <div v-show="getItemShow(item.num)" @contextmenu.prevent @click="selectItem(item)" v-for="(item,index) in selectList" :key="index" class="item" :class="{select:getSelect(item.num)}">
             <div class="radiocheck" v-show="!stateShow" :class="{radiochecked:getSelect(item.num)}"></div>
             <div v-show="stateShow" :class="item.img" :style="{color:item.code}" style="font-size: 18px;"> </div>
-            <div class="txt">{{item.showName}}</div>
+            <div class="txt" :style="{color:item.img}" v-if="numType=='0'">{{item.showName}} {{item.img=='1'?'忙碌 ':'空闲 '}} {{'( '+item.code+' )'}}</div>
+            <div class="txt" :style="{color:item.img}" v-else>{{item.showName}}</div>
           </div>
         </div>
       </div>
@@ -20,7 +21,7 @@
 </template>
 
 <script>
-    export default {
+  export default {
       name: "yhm-form-radio",
       inject: ["p____page"],
       data(){
@@ -34,6 +35,14 @@
         }
       },
       props:{
+        numType:{
+          type:String,
+          default :''
+        },
+        titleColor:{
+          type:String,
+          default :''
+        },
         noShowItem:{
           type:Array,
           default:function () {
@@ -109,6 +118,16 @@
           }
         }
       },
+      mounted: function () {
+        this.$nextTick(function () {
+          this.$on('verify', function () {
+            if(this.txt==''&&this.rule=='#'){
+              this.error = true
+              this.errorTipMessage = '不能为空'
+            }
+          })
+        })
+      },
       computed:{
         getItemShow(){
           return function(val){
@@ -145,6 +164,10 @@
         },
         value(newVal,oldVal){
           this.txt = newVal
+          if(newVal!=''){
+            this.error = false
+            this.errorTipMessage = ''
+          }
         }
       }
     }

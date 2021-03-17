@@ -19,17 +19,19 @@
 <!--        <yhm-commonbutton value="上传发票" icon="btnAdd" :flicker="true" @call="addInvoice()" category="one"></yhm-commonbutton>-->
 <!--        <yhm-commonbutton value="弹框" icon="btnAdd" :flicker="true" @call="uploadInvoice()" category="one"></yhm-commonbutton>-->
         <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" :content="listState"></yhm-radiofilter>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型" :content="dateTypeList"></yhm-radiofilter>
-        <yhm-radiofilter :before="stateBefore" @initData="initChoose('isChecks')" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initPageData(false)" title="状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initPageData(false)" title="时间类型" :content="dateTypeList"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initPageData(false)" title="支付方式" all="1" :content="listIsChecks"></yhm-radiofilter>
+
 
       </template>
 
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('nature')" title="付款性质" all="1" :content="listNature"></yhm-radiofilter>
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('isAllocation')" title="是否分批拨付" all="1" :content="listIsAllocation"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initPageData(false)" title="付款性质" all="1" :content="listNature"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initPageData(false)" title="是否分批拨付" all="1" :content="listIsAllocation"></yhm-radiofilter>
+          <yhm-radiofilter :before="stateBefore" @initData="initChoose('viewLevels')" all="0" title="查看下属" :content="listViewLevels"></yhm-radiofilter>
         </div>
       </template>
 
@@ -37,17 +39,18 @@
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-        <yhm-managerth title="收款方" value="id"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="付款性质" value="nature"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="支付方式" value="isChecks"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="最迟付款日期" value="lastDate"></yhm-managerth>
-        <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="事由"></yhm-managerth>
-        <yhm-managerth style="width: 110px" title="计划申请金额" value="money"></yhm-managerth>
-        <yhm-managerth style="width: 220px;" title="编号" value="code"></yhm-managerth>
-        <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="状态" value="state"></yhm-managerth>
-        <yhm-managerth style="width: 300px;" title="操作"></yhm-managerth>
+        <yhm-managerth width="179" title="收款方" value="id"></yhm-managerth>
+        <yhm-managerth width="100" title="付款性质" value="nature"></yhm-managerth>
+        <yhm-managerth width="100" title="支付方式" value="isChecks"></yhm-managerth>
+        <yhm-managerth width="120" title="最迟付款日期" value="lastDate"></yhm-managerth>
+        <yhm-managerth width="75" title="倒计时" value="day"></yhm-managerth>
+        <yhm-managerth width="120" title="事由"></yhm-managerth>
+        <yhm-managerth width="115" title="计划申请金额" value="money"></yhm-managerth>
+        <yhm-managerth width="220" title="编号" value="code"></yhm-managerth>
+        <yhm-managerth  v-if="listViewLevels.value==1" width="80" title="申请人" ></yhm-managerth>
+        <yhm-managerth width="60" title="审批留言"></yhm-managerth>
+        <yhm-managerth width="115" title="状态" value="state"></yhm-managerth>
+        <yhm-managerth  v-if="listViewLevels.value==0"  width="300" title="操作"></yhm-managerth>
 
       </template>
 
@@ -72,10 +75,12 @@
           <yhm-manager-td-center :value="item.subject" @click="skipEvent(item)" :color="item.ownerID!=''&&item.ownerType=='1'?'#49a9ea':''"></yhm-manager-td-center>
           <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" :value-object="item" @mouseout="tableTipHideEvent" :value="item.money"></yhm-manager-td-money>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
+
+          <yhm-manager-td  v-if="listViewLevels.value==1" :value="item.person"></yhm-manager-td>
           <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-state :value="item.stateVal" @click="storeName(item.list)" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
 
-          <yhm-manager-td-operate>
+          <yhm-manager-td-operate  v-if="listViewLevels.value==0" >
             <yhm-manager-td-operate-button v-show="item.isPrint !== '1' && item.track !== '-1' && item.track !== '0' && item.track !== '1'" :no-click="item.state!=='0' || item.isFinish === '1'" @click="submit(item)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
 
             <yhm-manager-td-operate-button v-show="item.track === '-1'" @click="addInvoice(item)" icon="i-export" value="上传发票"></yhm-manager-td-operate-button>
@@ -150,7 +155,6 @@
 </template>
 <script>
   import { selectItem, managermixin } from '@/assets/manager.js'
-
   export default {
     name: 'paymentApplyManager',
     mixins: [managermixin],
@@ -193,6 +197,10 @@
           value: '',
           list: []
         },
+        listViewLevels: {
+          value: '0',
+          list: []
+        },
         menuTabOn: 1,
         details:[
           {id:'1', name: '付款计划',path:'/home/myPaymentPlanManager'},
@@ -202,6 +210,7 @@
           {id:'5', name: '备用金',path:'/home/prettyCashsManager'},
           {id:'6', name: '补签字',path:'/home/myManager/signatureManager'},
           {id:'7', name: '开票申请',path:'/home/openInvoiceManager'},
+          {id:'8', name: '我的快递',path:'/home/myExpressManager'},
         ],
         dateType:'',
         dateTypeList: {
@@ -245,6 +254,19 @@
                 data: params,
                 call: (data) => {
                   if(data.type === 0){
+                    if(item.ownerID!==null&&item.ownerID!==''){
+                      let param = {
+                        id : this.ownerID,
+                        state:'0'
+                      }
+                      this.ajaxJson({
+                        url: '/dailyoffice/expressCompany/updateBillState',
+                        data: param,
+                        call: (data) => {
+
+                        }
+                      })
+                    }
                     this.$dialog.alert({
                       tipValue: data.message,
                       closeCallBack: ()=>{
@@ -598,6 +620,7 @@
             isAllocation: this.listIsAllocation.value,
             dateType: this.dateTypeList.value,
             nature: this.listNature.value,
+            viewLevels: this.listViewLevels.value
           }
         }
         this.init({
@@ -617,6 +640,7 @@
             this.listIsAllocation = data.isAllocationPsd
             this.natureList = data.naturePsd.list
             this.listNature = data.naturePsd
+            this.listViewLevels = data.viewLevelsPsd
           }
         })
       },
@@ -678,6 +702,19 @@
                                 }
                               }
                             })
+                            if(item.ownerID!==null&&item.ownerID!==''){
+                              let param = {
+                                id : item.ownerID,
+                                state:'1'
+                              }
+                              this.ajaxJson({
+                                url: '/dailyoffice/expressCompany/updateBillState',
+                                data: param,
+                                call: (data) => {
+
+                                }
+                              })
+                            }
                           } else {
                             this.$dialog.alert({
                               alertImg: 'error',

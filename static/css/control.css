@@ -44,7 +44,20 @@
   flex-wrap: wrap;
   padding: 4px 0 0 4px;
 }
-
+.c_insurance_item_auto{
+  width: auto;
+  height: 30px;
+  line-height: 30px;
+  display: flex;
+  flex-direction: row;
+  margin:  0 4px 4px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding:0px 8px;
+  box-sizing: border-box;
+}
 .c_insurance_item{
   height: 30px;
   line-height: 30px;
@@ -55,11 +68,15 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 5px;
-
+  padding:0px 8px;
+  box-sizing: border-box;
   width: 287px;
 }
-
+.c_insurance_item_auto>.txt{
+  margin-left: 5px;
+  font-size: 14px;
+  color: #333333;
+}
 .c_insurance_item>.txt{
   margin-left: 5px;
   font-size: 14px;
@@ -323,7 +340,16 @@
   flex-direction: column;
   z-index: 99;
 }
-
+.c_select_options{
+  position: absolute;
+  left: 0px;
+  top: 55px;
+  background-color: #FFFFFF;
+  border: 1px solid #999999;
+  width: 100%;
+  border-radius: 5px;
+  z-index: 99;
+}
 .c_select_items_m{
   top: 34px;
 }
@@ -364,7 +390,15 @@
   cursor: pointer;
   border-radius: 5px;
 }
-
+.c_select_items .options:hover{
+  background-color: #49a9ea;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.c_select_items .options p span:hover{
+  color: red;
+}
 .c_select_items_m>div>img{
   top: -1px;
 }

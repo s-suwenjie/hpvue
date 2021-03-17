@@ -1,6 +1,6 @@
 <template>
   <div ref="control" @click="clickEvent" @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" class="mt_button" :style="getColor" :class="{mt_button_disabled:noClick}">
-    <div class="font" :class="[icon,getFs]"></div>
+    <div class="font" :style="{color: iconColor}" :class="[icon,getFs]"></div>
     <div :class="{ml3:getMl}">{{value}}</div>
   </div>
 </template>
@@ -49,6 +49,10 @@
         type:Object
       },
       beforeIcon:{
+        type:String,
+        default:''
+      },
+      iconColor:{
         type:String,
         default:''
       },

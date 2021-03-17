@@ -27,6 +27,7 @@
         <yhm-managerth style="width:300px" title="单位代码" value="code" ></yhm-managerth>
         <yhm-managerth style="width:200px" title="统一社会信用代码" value="registrationNumber"></yhm-managerth>
         <yhm-managerth style="width: 170px;" title="公司电话" value="tel"></yhm-managerth>
+        <!--<yhm-managerth style="width: 170px;" title="操作" ></yhm-managerth>-->
       </template>
 
       <!--数据明细-->
@@ -39,6 +40,10 @@
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.registrationNumber"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.tel" format="phone*"></yhm-manager-td-center>
+          <!--<yhm-manager-td-operate>-->
+            <!--&lt;!&ndash;<yhm-manager-td-operate-button @click="addInvoice(item)" icon="i-export" value="添加发票抬头"></yhm-manager-td-operate-button>&ndash;&gt;-->
+            <!--<yhm-manager-td-operate-button @click="setUpBlacklist(item)" color="#be08e3" icon="i-export" value="设置黑名单"></yhm-manager-td-operate-button>-->
+          <!--</yhm-manager-td-operate>-->
         </tr>
       </template>
 
@@ -76,6 +81,46 @@
       }
     },
     methods:{
+      // addInvoice(item){
+      //   this.$dialog.OpenWindow({
+      //     width: '1050',
+      //     height: '690',
+      //     url:'/unitInvoiceFrom?ownerID='+item.id,
+      //     title:'添加发票抬头',
+      //     closeCallBack:(data) =>{
+      //       if (data) {
+      //         this.getUnitInformation(data)
+      //       }
+      //     }
+      //   })
+      // },
+      // setUpBlacklist(item){
+      //   this.$dialog.confirm({
+      //     width: 300,
+      //     tipValue:'确定设置黑名单',
+      //     btnValueOk: '确定',
+      //     btnValueCancel:'取消',
+      //     alertImg: 'warn',
+      //     okCallBack: () => {
+      //       this.ajaxJson({
+      //         url: '/Basic/setUpBlacklist',
+      //         data: {id:item.id},
+      //         call: (data) => {
+      //           if (data) {
+      //             this.$dialog.alert({
+      //               tipValue: data.message,
+      //               closeCallBack: ()=>{
+      //                 if(data.type==0){
+      //                   this.initPageData(false)
+      //                 }
+      //               }
+      //             })
+      //           }
+      //         }
+      //       })
+      //     },
+      //   })
+      // },
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',

@@ -33,7 +33,7 @@
     background: linear-gradient(0deg, #49a9ea, #66c0ff );
     white-space: nowrap;
     cursor:pointer;
-    overflow:hidden;
+    /*overflow:hidden;*/
     position: relative;
 }
 

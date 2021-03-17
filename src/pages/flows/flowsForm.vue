@@ -131,6 +131,7 @@ export default {
               sortInfo += this.flowDetails[i].id
             }
           }
+         
           let params = {
             id: item.id,
             sortInfo: sortInfo

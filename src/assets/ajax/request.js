@@ -30,6 +30,7 @@ const AjaxAsync = async function (options) {
   if(ajaxRequest.init(options)){
     res = await ajaxRequest.requestAsync()
   }
+  console.log(res)
   return res;
 }
 
@@ -132,8 +133,14 @@ AjaxRequest.prototype.request = function () {
       that.$dialog.alert({
         tipValue: data.message,
         alertImg: "error",
-        width: width
+        width: width,
+        closeCallBack:() => {
+          if(ajaxRequest.errorCall){
+            ajaxRequest.errorCall()
+          }
+        }
       })
+
     }
     else if(data.type === 7){
       //重复异常
@@ -144,6 +151,9 @@ AjaxRequest.prototype.request = function () {
         width: width,
         closeCallBack:()=>{
           that.autoVerify(data.controlID,data.message)
+          if(ajaxRequest.errorCall){
+            ajaxRequest.errorCall()
+          }
         }
       })
     }
@@ -153,7 +163,12 @@ AjaxRequest.prototype.request = function () {
       that.$dialog.alert({
         tipValue: data.message,
         alertImg: "error",
-        width: width
+        width: width,
+        closeCallBack:() => {
+          if(ajaxRequest.errorCall){
+            ajaxRequest.errorCall()
+          }
+        }
       })
     }
     else if(data.type === 5){
@@ -162,7 +177,12 @@ AjaxRequest.prototype.request = function () {
       that.$dialog.alert({
         tipValue: data.message,
         alertImg: "error",
-        width: width
+        width: width,
+        closeCallBack:() => {
+          if(ajaxRequest.errorCall){
+            ajaxRequest.errorCall()
+          }
+        }
       })
     }
     else {

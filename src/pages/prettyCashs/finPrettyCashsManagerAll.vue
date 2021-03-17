@@ -7,6 +7,7 @@
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentPlanViewManager'}">付款计划</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentApplyViewManager'}">付款申请</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/reimbursementViewManager'}">报销申请</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finReimbursementDetailManager?type=1'}">特殊报销</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
@@ -61,8 +62,8 @@
 
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td :value="item.person"></yhm-manager-td>
-
+          <!--<yhm-manager-td :value="item.person"></yhm-manager-td>-->
+          <yhm-manager-td-center :value="item.person" :menu-list="personMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
           <yhm-manager-td :value="item.code"></yhm-manager-td>
           <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.workDateDay+'天'" style="color:#2c920b;font-weight: bold"></yhm-manager-td-center>
@@ -75,7 +76,7 @@
           <yhm-manager-td-money :value="item.balance" style="color: #f00"></yhm-manager-td-money>
 
           <yhm-manager-td v-show="item.useType==='0'" value=""></yhm-manager-td>
-          <yhm-manager-td @click="useType(item)" v-show="item.useType==='1'" value="全额退回"></yhm-manager-td>
+          <yhm-manager-td @click="useType(item)" v-show="item.useType==='1'" value="退回"></yhm-manager-td>
           <yhm-manager-td @click="useType(item)" v-show="item.useType==='2'" value="报销"></yhm-manager-td>
           <yhm-manager-td-psd :value="item.invoiceCategory" :list="invoiceCategoryList"></yhm-manager-td-psd>
 
@@ -173,16 +174,36 @@
           {id: 'EDAF3303-B5C6-4BD6-890D-A7ADE9233E3A'},
           {id: '6BCB1E61-61F5-410C-B2CB-AE19EF24B6CA'},
           {id: 'D47518BB-359B-4ABC-BBF0-C51590957B29'},
-
           {id: '59638AF2-5D13-4003-B908-ABA9B22C04F2'},
           {id: 'D5C8486B-0060-4C47-8996-B88AF443EC9C'},
-
-
-
-        ]
+        ],
+        personMenu:['筛选当前申请人','排除当前人筛选'],
+        personType:'',
+        personID:'',
       }
     },
     methods:{
+      rightClick(item){//点击右键菜单时获取当前点击的数据
+        this.personID=item.personID
+      },
+      menuClick(item){//返回用户选中的菜单选项及索引值
+        if(item==='筛选当前申请人'){
+          this.personMenu=['取消当前申请人','排除当前人筛选']
+          this.personType='0'
+        }else if(item==='取消当前申请人'){
+          this.personMenu=['筛选当前申请人','排除当前人筛选']
+          this.personID = ''
+          this.personType=''
+        }else if(item==='排除当前人筛选'){
+          this.personMenu=['筛选当前申请人','取消排除']
+          this.personType='1'
+        }else if(item==='取消排除'){
+          this.personMenu=['筛选当前申请人','排除当前人筛选']
+          this.personID = ''
+          this.personType=''
+        }
+        this.initPageData(false)
+      },
       SelectApprovalMessage(item){
         this.$dialog.OpenWindow({
           width: '650',
@@ -379,6 +400,8 @@
             isTravel: this.isTravelPsd.value,
             invoiceCategory: this.invoiceCategoryPsd.value,
             dateType : this.dateTypeList.value,
+            personID : this.personID,
+            personType : this.personType,
           }
         }
         this.init({

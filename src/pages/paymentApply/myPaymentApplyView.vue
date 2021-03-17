@@ -33,6 +33,9 @@
         <yhm-view-tab-button :list="tabState" :index="2" v-if="isBankList">收支信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="3" v-if="isAppropriationMoney">拨付信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="4" v-if="isRelatedInformation">应收账款核销</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="5" v-if="nature === '7'">退押金信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="6" v-if="nature === '8'">付押金信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="7" v-if="nature === '9'">快递对账单</yhm-view-tab-button>
       </template>
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
@@ -139,6 +142,76 @@
             <span class="m_listNoData"  v-show="relatedInformation.length>=1?false:true">暂时没有数据</span>
           </template>
         </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[5].select" v-if="nature === '7'">
+          <template #listHead>
+            <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
+            <yhm-managerth style="width: 200px" title="付款方"></yhm-managerth>
+            <yhm-managerth style="width: 160px" title="付款账号"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="交易日期"></yhm-managerth>
+            <yhm-managerth style="width: 90px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="退款金额"></yhm-managerth>
+            <yhm-managerth style="width: 220px" title="备注"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in depositList" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td-look @click="selectDeposit(item)"></yhm-manager-td-look>
+              <yhm-manager-td :value="item.other"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
+              <yhm-manager-td :value="item.subject"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td :value="item.remark"></yhm-manager-td>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData"  v-show="depositList.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[6].select" v-if="nature === '8'">
+          <template #listHead>
+            <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
+            <yhm-managerth style="width: 160px" title="付款方"></yhm-managerth>
+            <yhm-managerth style="width: 180px" title="付款账号"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="交易日期"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 90px" title="付款金额"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="预计退款日期"></yhm-managerth>
+            <yhm-managerth style="width: 180px" title="备注"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in payDepositList" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td-look @click="selectPayDeposit(item)"></yhm-manager-td-look>
+              <yhm-manager-td :value="item.other"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
+              <yhm-manager-td :value="item.subject"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td-date :value="item.refundDate"></yhm-manager-td-date>
+              <yhm-manager-td :value="item.remark"></yhm-manager-td>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData"  v-show="payDepositList.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[7].select" v-if="nature === '9'">
+          <template #listHead>
+            <yhm-managerth style="width: 120px"  title="文件（点击图标下载）" ></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="对账单开始日期"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="对账单结束日期"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="账单总金额"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in expressList" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-manager-td  value=" " @click="downloadEvent(item)">
+                <img  style="margin: auto;" width="30" height="30" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1594275457602&di=5ebf487929ced264a201d33766b21f42&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180920%2F2397b5b7b5024319bf98035b72c2ca47.png" alt="">
+              </yhm-manager-td>
+              <yhm-manager-td-date  :value="item.startDate"></yhm-manager-td-date>
+              <yhm-manager-td-date  :value="item.endDate"></yhm-manager-td-date>
+              <yhm-manager-td-money  :value="item.money"></yhm-manager-td-money>
+            </tr>
+          </template>
+        </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
     <div v-if="isApproval" v-html="approvalHtml"></div>
@@ -147,13 +220,14 @@
   </div>
 </template>
 <script>
+  import { accMul, accAdd, guid, formatDate, number2chinese,formatTime} from '@/assets/common.js'
   import { formmixin } from '@/assets/form.js'
   export default {
     name: 'paymentApplyFormView',
     mixins: [formmixin],
     data (){
       return {
-        tabState:[{select:true},{select:false},{select:false},{select:false},{select:false}],
+        tabState:[{select:true},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false}],
         branchShow:true,
         id: '',
         otherUnit: '',
@@ -213,6 +287,9 @@
 
         isAllocationList: [],
         isAllocation: '',
+        depositList:[],
+        payDepositList:[],
+        expressList:[],
 
         isLeftID:false,//延长按钮
         leftID:'',//上一条ID
@@ -221,6 +298,9 @@
       }
     },
     methods: {
+      downloadEvent(item){
+        window.open('/UploadFile/' + item.storeName)
+      },
       leftStrip(){
         window.location='/paymentApplyFormView?id='+this.leftID
       },
@@ -312,7 +392,7 @@
               this.PrepaidHidden = true // 判断发票类型是否隐藏
               this.isInvoice = true  // 判断发票明细表格是否隐藏
               this.isElInvoice = true
-            }else if(this.nature === '4' || this.nature === '5'){
+            }else if(this.nature === '4'||this.nature === '5'){
               this.branchShow = false//部门分配
               this.isBankList = true    //判断是否隐藏收支明细
             }else {
@@ -341,6 +421,126 @@
             }
             this.elInvoice = data.paymentInvoice.length !== 0;
             this.empty = this.paymentInvoice.length === 0
+            if(this.nature === '7'){
+              this.tabState=[{select:true},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false}]
+              let id=''
+              for (let i = 0; i < this.bankDetailList.length; i++) {
+                if(this.bankDetailList.length===1){
+                  id='\"'+this.bankDetailList[i].bankDetailID+'\"'
+                }else{
+                  if(i === this.bankDetailList.length-1){
+                    id=id+'\"'+this.bankDetailList[i].bankDetailID+'\"'
+                  }else if(i === 0){
+                    id='\"'+this.bankDetailList[i].bankDetailID+'\",'
+                  }else{
+                    id=id+'\"'+this.bankDetailList[i].bankDetailID+'\",'
+                  }
+                }
+              }
+              let params={
+                id:id
+              }
+              this.ajaxJson({
+                url: '/dailyoffice/deposit/getDepositList',
+                data: params,
+                call: (data) => {
+                  let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.bankDetailList.length, 1000)))
+                  for (let j = 0; j < this.bankDetailList.length; j++) {
+                    for (let i = 0; i < data.length; i++) {
+                      if(this.bankDetailList[j].bankDetailID===data[i].id){
+                        this.bankDetailList[j].remark= data[i].remark
+                        this.bankDetailList[j].subject= data[i].subject
+                        this.bankDetailList[j].subjectID= data[i].subjectID
+                        this.bankDetailList[j].cccurDate=data[i].workDate
+                        this.bankDetailList[j].other=data[i].other
+                        this.bankDetailList[j].otherAccount=data[i].otherAccount
+                        this.bankDetailList[j].useMoney=this.bankDetailList[j].money
+                        this.bankDetailList[j].maxMoney=accAdd(this.bankDetailList[j].money,data[i].useMoney)+''
+                      }
+                    }
+                  }
+                  this.depositList=this.bankDetailList
+                  this.bankDetailList=[]
+                }
+              })
+            }else if(this.nature === '8'){
+              let params={
+                id:this.bankDetailList[0].bankDetailID
+              }
+              this.ajaxJson({
+                url: '/dailyoffice/payDeposit/initForm',
+                data: params,
+                call: (data) => {
+                  let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.payDepositList.length, 1000)))
+                  this.payDepositList.push({
+                    id: guid(),
+                    bankDetailID: data.id,
+                    insertDate: formatTime(insertDate),
+                    ownerID: this.id,
+                    remark: data.remark,
+                    subject: data.subject,
+                    subjectID: data.subjectID,
+                    cccurDate: data.workDate,
+                    other: data.other,
+                    otherAccount: data.otherAccount,
+                    refundDate:data.refundDate,
+                    money: data.money,
+                    useMoney: '0',
+                    maxMoney: data.money,
+                  })
+                  this.bankDetailList=[]
+                }
+              })
+            }else if(this.nature === '9'){
+              let params={
+                id:this.bankDetailList[0].bankDetailID
+              }
+              this.ajaxJson({
+                url: '/dailyoffice/expressCompany/getExpressForm',
+                data: params,
+                call: (data) => {
+                  let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.payDepositList.length, 1000)))
+                  this.expressList.push({
+                    id: guid(),
+                    bankDetailID: data.id,
+                    insertDate: formatTime(insertDate),
+                    ownerID: this.id,
+                    startDate:data.startDate,
+                    endDate:data.endDate,
+                    money:data.countMoney,
+                    storeName:data.storeName,
+                  })
+                  console.log(this.expressList)
+                  this.bankDetailList=[]
+                }
+              })
+            }
+          }
+        })
+      },
+      selectPayDeposit(item){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 720,
+          url:'/payDepositView?id='+item.bankDetailID,
+          title:'查看付押金信息',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      selectDeposit(item){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 720,
+          url:'/depositView?id='+item.bankDetailID,
+          title:'查看收押金信息',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
           }
         })
       },
@@ -413,7 +613,7 @@
     created () {
       this.initData()
       this.selectedList()
-      this.selectedRelated()
+      //this.selectedRelated()
     }
   }
 </script>

@@ -1,14 +1,21 @@
 <template>
   <div>
-    <yhm-managerpage :total-table="true">
+    <!--<yhm-managerpage :total-table="true">-->
+    <yhm-managerpage category="1" :total-table="true">
       <!--导航条-->
-      <template #navigation>财务管理&nbsp;&gt;&nbsp;票据&nbsp;&gt;&nbsp;发票管理</template>
+      <!--<template #navigation>财务管理&nbsp;&gt;&nbsp;票据&nbsp;&gt;&nbsp;发票管理</template>-->
+        <!--导航条-->
 
+      <template #navigationTab>
+        <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/invoiceTilingManager'}">库存发票</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/openInvoiceFinManager'}">开票通知</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/openInvoiceManagerAll'}">开票审批中</router-link>
+      </template>
       <template #navigationLft>
         <div @mouseover="tipChange(index)" @mouseout="tipOut" style="margin: 0;position: relative;"  v-for="(item,index) in routerList" :key="index">
           <router-link tag="div" :class="item.class" style="margin: 0;" class="tip" :to="item.path">
             <div  class="cbl_main_prompt2 tipShow">
-              <div class="cbl_main_prompt_content" style="font-size:13px;padding: 0 12px;">
+              <div class="cbl_main_prompt_content" style="font-size:18px;padding: 0 12px;">
                 {{tipValue}}
                 <img src="/UploadFile/m_image/arrow.png">
               </div>
@@ -72,8 +79,8 @@
         <yhm-managerth style="width: 100px;" before-color="#a40b81" before-title="总 " title="张数"></yhm-managerth>
         <yhm-managerth style="width: 100px;" before-color="#d38702" before-title="未入库 " title="张数"></yhm-managerth>
         <yhm-managerth style="width: 100px;" before-color="#009788" before-title="可用 " title="张数"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#999" before-title="作废 " title="张数"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#d45702" before-title="已开具 " title="张数"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#999" before-title="已开具 " title="张数"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#d45702" before-title="作废 " title="张数"></yhm-managerth>
       </template>
       <template #listTotalBody>
         <tr v-for="(item,index) in contentTotal" :key="index">
@@ -254,4 +261,10 @@
 
 <style scoped>
   .tipShow{display: none;width: 100px;}
+  .tip::before{
+    font-size: 24px;
+  }
+  .tip{
+    padding: 0 5px;
+  }
 </style>

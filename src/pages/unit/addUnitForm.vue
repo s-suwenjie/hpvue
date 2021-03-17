@@ -22,8 +22,8 @@
             </div>
           </div>
         </yhm-form-zh-text-two>
-        <yhm-form-text title="单位代码" :value="code" id="code" ref="code" rule="R0000" @blur="codeBlur"></yhm-form-text>
-        <yhm-form-text title="单位简称" :value="abbreviation" id="abbreviation" rule="R0000" ref="abbreviation" @blur="abbreviationBlur"></yhm-form-text>
+        <yhm-form-text title="单位代码"  :value="code" id="code" ref="code" rule="R0000" @blur="codeBlur"></yhm-form-text>
+        <yhm-form-text title="单位简称"  placeholder="单位简称不超过六位"   :value="abbreviation" id="abbreviation" rule="R0000" ref="abbreviation" @blur="abbreviationBlur"></yhm-form-text>
         <yhm-form-text title="公司电话" :value="tel" id="tel" rule="R0000"></yhm-form-text>
         <yhm-form-radio title="是否黑名单" :select-list="blacklistList" :value="blacklist" id="blacklist"></yhm-form-radio>
         <yhm-form-textarea title="地址" :value="addressCN" id="addressCN" rule="R0000" width="1"></yhm-form-textarea>
@@ -37,10 +37,12 @@
         <yhm-form-text title="邮箱" :value="email" id="email"></yhm-form-text>
 
         <yhm-form-check :show="isTag" title="标签" :select-list="tagList" :value="tag" submit-value="tagSubmit" :ownerID="id" :tableName="'1030'" :tag="tag" id="tag" rule="#" width="1"></yhm-form-check>
+        <yhm-form-radio title="登记状态" :select-list="registerStateList" :value="registerState" id="registerState" width="1"></yhm-form-radio>
         <yhm-form-upload-image title="公司Logo" tag="LeftMenu" discription="建议上传.svg格式" :value="logo" id="logo"></yhm-form-upload-image>
 
       </template>
     </yhm-formbody>
+
     <div class="f_split"></div>
     <yhm-formbody>
       <template #title>更多信息（可选/可填）</template>
@@ -59,7 +61,6 @@
         <yhm-form-date title="营业期限至" :value="noDoBusinessDate" id="noDoBusinessDate"></yhm-form-date>
 
         <yhm-form-text title="登记机关" :value="registerOffice" id="registerOffice"></yhm-form-text>
-        <yhm-form-radio title="登记状态" :select-list="registerStateList" :value="registerState" id="registerState"></yhm-form-radio>
         <yhm-form-textarea title="经营范围" :value="management" id="management"></yhm-form-textarea>
       </template>
     </yhm-formbody>
@@ -113,6 +114,7 @@
     data() {
       return {
         id: '',
+
         categoryList: [] ,
         blacklistList:[],
         blacklist:'',
@@ -156,12 +158,13 @@
         isCopyTip: false,
         videoUrl: '',
         isUrl:'',
-        logo:{},
+        logo:'',
         codeVerify:true,//单位代码验证
         abbreviationVerify:true//单位简称验证
       }
     },
     methods: {
+
       abbreviationBlur(){//单位简称验证
         if(this.abbreviation){
           this.ajaxJson({
@@ -378,7 +381,7 @@
       },
       /* 单位注册号查询 */
       unitRegNum(){
-        window.open('http://www.gsxt.gov.cn/index.html')
+        window.open('https://aiqicha.baidu.com/')
       },
       selectCategoryEvent(){
         if(this.category === "0"){
@@ -524,6 +527,7 @@
       }
     },
     created () {
+      this.setQuery2Value('skip')//为0时表示从联系人页面跳转进来的
       this.setQuery2Value('isUrl')
       this.init({
         url: '/Basic/unitVueForm',
@@ -543,6 +547,14 @@
           this.capitalCompany = '1'
           if(this.category === '1'){
             this.isTag = true
+          }
+          if(this.skip=='0'){//表示从添加联系人页面进入 将会携带姓名联系人
+            this.setQuery2Value('tel')
+            this.setQuery2Value('name')
+            this.$nextTick(()=>{//当页面渲染完成后 自动调起公司名称输入框的聚焦失焦事件 来触发公司简称代码和首字母的事件
+              this.$refs.name.focusEvent()
+              this.$refs.name.blurEvent()
+            })
           }
         },
         add: (data)=>{

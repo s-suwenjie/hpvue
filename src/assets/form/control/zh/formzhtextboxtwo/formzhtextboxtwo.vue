@@ -18,12 +18,16 @@
           </div>
         </div>
         <div class="c_box" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" :class="{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_disable:noEdit}">
-          <span v-if="beforeIcon !== ''" class="c_icon" :class="[beforeIcon,{c_icon_m:category === 'm'}]"></span>
-          <input v-if="!noEdit" @focus="focusEvent" @blur="blurBeforeEvent" class="c_before fs14" :placeholder="beforePlaceholder" :class="{pl10:beforeIcon === ''}" v-model="beforeVal" @input="inputEvent"/>
-          <div v-if="noEdit" class="c_before fs14 c_disable_div" :class="{pl10:beforeIcon === ''}">{{beforeVal}}</div>
+
+            <span v-if="beforeIcon !== ''" class="c_icon" :class="[beforeIcon,{c_icon_m:category === 'm'}]"></span>
+            <input v-if="!noEdit" @focus="focusEvent" @blur="blurBeforeEvent" class="c_before fs14" :placeholder="beforePlaceholder" :class="{pl10:beforeIcon === ''}" v-model="beforeVal" @input="inputEvent"/>
+            <div v-if="noEdit" class="c_before fs14 c_disable_div" :class="{pl10:beforeIcon === ''}">{{beforeVal}}</div>
+
+
           <span class="c_icon c_afterTitle fs14 ml10 mr3">{{afterTitle}}：</span>
           <input v-if="!noEdit" @focus="focusEvent" @blur="blurEvent" class="c_after fs14 mr10" :style="getAfterWidth" :placeholder="afterPlaceholder" v-model="afterVal" />
           <div v-if="noEdit" class="c_after fs14 mr10 c_disable_div" :style="getAfterWidth">{{afterVal}}</div>
+
         </div>
       </div>
       <slot></slot>
@@ -132,7 +136,7 @@
       color: {
         type: String,
         default: '#333'
-      }
+      },
     },
     methods:{
       //初始化验证事件
@@ -326,5 +330,8 @@
 <style scoped>
   *{
     box-sizing: border-box;
+  }
+  .bordertop{
+    border-left: 1px solid #BFBFBF;
   }
 </style>

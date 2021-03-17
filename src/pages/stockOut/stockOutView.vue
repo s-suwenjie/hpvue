@@ -22,12 +22,12 @@
           <!--     表格头部     -->
           <template #listHead>
             <yhm-managerth style="width: 50px" title="序号"></yhm-managerth>
-            <yhm-managerth style="width: 180px" title="商品名称"></yhm-managerth>
-            <yhm-managerth style="width: 200px" title="型号"></yhm-managerth>
+            <yhm-managerth title="商品名称"></yhm-managerth>
+            <yhm-managerth title="型号"></yhm-managerth>
             <yhm-managerth style="width: 80px" title="数量"></yhm-managerth>
-            <yhm-managerth style="width: 60px" title="单位"></yhm-managerth>
-            <yhm-managerth style="width: 90px" title="单价"></yhm-managerth>
-            <yhm-managerth style="width: 90px" title="总额"></yhm-managerth>
+            <yhm-managerth style="width: 80px" title="单位"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="单价"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="总额"></yhm-managerth>
           </template>
           <!--     表格内容     -->
           <template #listBody v-show="show">
@@ -36,7 +36,7 @@
               <yhm-manager-td :value="item.product+''"></yhm-manager-td>
               <yhm-manager-td :value="item.model+''"></yhm-manager-td>
               <yhm-manager-td-rgt :value="item.quantity+''"></yhm-manager-td-rgt>
-              <yhm-manager-td :value="item.spiltStr+''"></yhm-manager-td>
+              <yhm-manager-td :value="item.split=='1'?item.uuStr+'':item.splitStr"></yhm-manager-td>
               <yhm-manager-td-money :value="item.price+''"></yhm-manager-td-money>
               <yhm-manager-td-money :value="item.totalPrice+''"></yhm-manager-td-money>
             </tr>
@@ -92,11 +92,11 @@
             let num =0
             for ( let i in this.list) {
               num= accAdd(parseFloat(this.list[i].totalPrice),num)
-              if( this.list[i].spilt==null ){
-                this.list[i].spiltStr='无'
+              if( this.list[i].split==null ){
+                this.list[i].splitStr='无'
               }
-            if(this.list[i].spilt=='0'){
-              this.list[i].spiltStr=this.list[i].uuStr
+            if(this.list[i].split=='0'){
+              this.list[i].splitStr=this.list[i].uuStr
             }
             }
             this.money= parseFloat(num).toFixed(2) +''

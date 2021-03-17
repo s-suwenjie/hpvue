@@ -7,6 +7,14 @@ input[type="number"]{
     -moz-appearance: textfield;
 }
 
+/*彩色图片加样式变灰色*/
+.Graystyle
+{
+    filter: grayscale(100%);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+    -webkit-filter: grayscale(1);
+}
+
 .left75{
     left: 75px !important;
 }

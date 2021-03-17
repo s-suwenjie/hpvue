@@ -149,8 +149,8 @@
         subject: '',
         subjectID: '',
         invoiceCategoryList: [],
-        chargeID: ''
-
+        chargeID: '',
+        prettyCashsID:''
       }
     },
     methods: {
@@ -264,6 +264,7 @@
           title: '选择备用金',
           closeCallBack: (data) => {
             if (data) {
+              this.prettyCashsID=data.id
               this.isSelectPrettyCash = data.invoiceCategory
               this.subject = data.subject
               this.subjectID = data.subjectID
@@ -291,7 +292,7 @@
         this.$dialog.OpenWindow({
           width: 1050,
           height: 840,
-          url: '/reimbursementDetailForm?ownerID='+this.id + '&relevanceID=' +this.relevanceID +'&relevanceType=' +this.relevanceType +'&parentCode=' +this.code + '&parentWorkDate=' +this.workDate+'&isPrettyCashOff='+this.isPrettyCashOff + '&isSelectPrettyCash='+this.isSelectPrettyCash + '&subjectID='+this.subjectID,
+          url: '/reimbursementDetailForm?ownerID='+this.id + '&relevanceID=' +this.relevanceID +'&relevanceType=' +this.relevanceType +'&parentCode=' +this.code + '&parentWorkDate=' +this.workDate+'&isPrettyCashOff='+this.isPrettyCashOff + '&isSelectPrettyCash='+this.isSelectPrettyCash + '&subjectID='+this.subjectID+'&prettyCashsID='+this.prettyCashsID,
           title: '添加报销明细',
           closeCallBack: (data) => {
             this.$dialog.setReturnValue(this.id)
@@ -382,6 +383,17 @@
           btnValueCancel:'提交申请',
           alert: 'warn',
           cancelCallBack: (data) => {
+
+            // this.$dialog.OpenWindow({
+            //   width: '1300',
+            //   height: '750',
+            //   title: '报销统计',
+            //   url: '/myreimbursementTwoCartogram?id='+this.id,
+            //   closeCallBack: (data) => {
+            //     this.$dialog.close()
+            //   }
+            // })
+
             this.ajaxJson({
               url: '/PersonOffice/getSubmitCatrgoryVue',
               data: params,
@@ -452,7 +464,7 @@
             if(data.type === 0){
               this.$dialog.OpenWindow({
                 width: 1050,
-                height: 690,
+                height: 800,
                 url: '/reimbursementDetailForm?ownerID=' + id + '&relevanceID=' + data.id + '&relevanceType=' + relevanceType+'&parentWorkDate='+workDate+'&parentCode='+code+'&personID='+personID+'&unitID='+unitID,
                 title: '查看报销明细',
                 closeCallBack : (data)=>{

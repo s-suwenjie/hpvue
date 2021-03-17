@@ -1,5 +1,7 @@
 <template>
-  <div @click="clickEvent" class="i_tableSort fs18" :style="getColor" :class="[icon,{no_click:noClick}]"></div>
+  <div @click="clickEvent" class="i_tableSort fs18" :style="getColor" :class="[icon,{no_click:noClick}]">
+    <slot></slot>
+  </div>
 </template>
 
 <script>

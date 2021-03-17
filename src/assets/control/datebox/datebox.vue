@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-    <div @click="clickEvent" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box" :class="[{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_disable:noEdit},{c_smbox: isSm}]">
+    <div @click="clickEvent" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box" :class="[{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_disable:noEdit},{c_smbox: isSm}]" :style="{height:getHeight+'px'}">
       <span class="c_icon" :class="[iconStyle,{c_icon_m:category === 'm'},{c_smicon: isSm}]"></span>
       <div class="dp_content" :style="{getTxtWidth,height:height==''?'auto':height}" :class="[{dp_content_m:category === 'm'},{dt_smcontent: isSm}]">
         {{txt}}
@@ -159,6 +159,10 @@
       position:{
         type:String,
         default:"down"
+      },
+      getHeight:{
+        type:String,
+        default:'',
       }
     },
     methods:{

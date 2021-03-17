@@ -83,9 +83,8 @@
             <yhm-managerth style="width: 120px;" title="申请金额" value="money"></yhm-managerth>
 
             <yhm-managerth style="width: 120px;" title="核销金额" value="reimbursementsMoney"></yhm-managerth>
-            <yhm-managerth style="width: 120px;" title="待退回金额" value="balance"></yhm-managerth>
-
             <yhm-managerth style="width: 120px;" title="已退回金额" value="balance"></yhm-managerth>
+            <yhm-managerth style="width: 120px;" title="待退回金额" value="balance"></yhm-managerth>
             <yhm-managerth style="width: 120px;" title="状态" value=""></yhm-managerth>
           </template>
           <template #listBody>
@@ -94,9 +93,9 @@
               <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
               <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
 
-              <yhm-manager-td-money :value="item.reimbursementsMoney"></yhm-manager-td-money>
-              <yhm-manager-td-money :value="item.balance"></yhm-manager-td-money>
-              <yhm-manager-td-money :value="item.balance"></yhm-manager-td-money>
+              <yhm-manager-td-money style="color:blue" :value="item.reimbursementsMoney"></yhm-manager-td-money>
+              <yhm-manager-td-money style="color:blueviolet" :value="item.refundBalance"></yhm-manager-td-money>
+              <yhm-manager-td-money style="color:red" :value="item.balance"></yhm-manager-td-money>
               <yhm-manager-td-center :value="item.stateVal"></yhm-manager-td-center>
 
             </tr>

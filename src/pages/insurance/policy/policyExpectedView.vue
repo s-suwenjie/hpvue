@@ -140,13 +140,22 @@
         }
         if(this.listReal){
           if(this.arrIndex.length==2){
-            this.listPolicy.splice(this.listPolicy.length-2,2)
+            // for(let j in this.arrIndex){
+              // alert(this.arrIndex[j])
+              this.listPolicy.splice(this.arrIndex[0].index,this.arrIndex.length)
+            // }
+            // this.listPolicy.splice(this.listPolicy.length-2,2)
             this.arrIndex = []
             this.listReal = false
             this.isExpect=false
             this.isRate=true
           }else if(this.arrIndex.length==1){
-            this.listPolicy.splice(this.listPolicy.length-1,1)
+            // for(let j in this.arrIndex){
+            //   this.listPolicy.splice(this.arrIndex[j].index,1)
+            // }
+            this.listPolicy.splice(this.arrIndex[0].index,this.arrIndex.length)
+
+            // this.listPolicy.splice(this.listPolicy.length-1,1)
             this.arrIndex = []
             this.listReal = false
             this.isExpect=false

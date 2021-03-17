@@ -1,8 +1,13 @@
 <template>
   <div>
-    <yhm-managerpage >
+    <yhm-managerpage category="1">
       <!--导航条-->
-      <template #navigation>个人办公&nbsp;&gt;&nbsp;个人办公&nbsp;&gt;&nbsp;收银</template>
+
+      <template #navigationTab>
+        <router-link class="menuTabDiv" v-for="(item,index) in details" :key="index" :class="{menuTabActive:menuTabOn == index}" :to="{path:item.path}" @click="menuTab(index)">
+          {{item.name}}
+        </router-link>
+      </template>
       <!--操作区-->
       <template #operate>
 <!--        <yhm-commonbutton  value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>-->
@@ -16,27 +21,22 @@
 
       </template>
       <!--筛选区-->
-<!--      <template #choose>-->
-<!--        <div  class="buttonBody mptZero">-->
-<!--        <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('category')" title="收银类型" :content="listCategory"></yhm-radiofilter>-->
-<!--        <yhm-radiofilter :before="insuredUnitBefore" @initData="initChoose('state')" title="状态"  all="0" :content="listState"></yhm-radiofilter>-->
-<!--      </div>-->
-<!--      </template>-->
+
       <!--数据表头-->
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="所属类型" value="category"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="所属类型" value="category"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="车牌号" value="plate"></yhm-managerth>
-        <yhm-managerth title="被保险人" value="beinsuredName"></yhm-managerth>
-        <yhm-managerth title="联系人" value="contactName"></yhm-managerth>
+        <yhm-managerth style="width: 120px;"  title="被保险人" value="beinsuredName"></yhm-managerth>
+        <yhm-managerth style="width: 120px;"  title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth style="width: 300px;" title="投保公司" value="insuredUnitShowName"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="收支方向" value="direction"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="金额"  value="money"></yhm-managerth>
         <yhm-managerth v-if="isBankManey" style="width: 150px;" title="此条交易剩余金额"  value="bankMoney"></yhm-managerth>
         <yhm-managerth title="编号" value="money"></yhm-managerth>
-        <yhm-managerth v-if="isBankManey" style="width: 200px;" title="操作"></yhm-managerth>
-        <yhm-managerth v-if="!isBankManey" style="width: 400px;" title="操作"></yhm-managerth>
+        <yhm-managerth v-if="isBankManey" style="width: 250px;" title="操作"></yhm-managerth>
+        <yhm-managerth v-if="!isBankManey" style="width: 450px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -44,7 +44,7 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td :value="item.categoryVal"></yhm-manager-td>
+          <yhm-manager-td-center :value="item.categoryVal"></yhm-manager-td-center>
           <yhm-manager-td :value="item.plate"></yhm-manager-td>
           <yhm-manager-td :value="item.beinsuredName" ></yhm-manager-td>
           <yhm-manager-td :value="item.contactName"></yhm-manager-td>
@@ -61,9 +61,9 @@
             <yhm-manager-td-operate-button v-if="item.cashierOperation==='1'?true:false"  @click="approFund(item)" :value="'返利(客户)'" icon="i-btn-grant" color="#be08e3"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
           <yhm-manager-td-operate  v-if="!isBankManey">
-            <yhm-manager-td-operate-button :tip-category="0"   :value-object="item"   @click="printFund(item)" value="打印保险通知单" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button :tip-category="1"   :value-object="item"  @click="printPayFund(item)" value="打印付款申请单" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button :tip-category="1"   :value-object="item"  @click="printAllFund(item)" value="全部打印" icon="i-btn-print" color="#C700DF"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :tip-category="0" :no-click="item.aisle==1"  :value-object="item"   @click="printFund(item)" value="打印保险通知单" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :tip-category="1" :no-click="item.aisle==1" :value-object="item"  @click="printPayFund(item)" value="打印付款申请单" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button :tip-category="1" :no-click="item.aisle==1" :value-object="item"  @click="printAllFund(item)" value="全部打印" icon="i-btn-print" color="#C700DF"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -106,10 +106,17 @@
         tableTipControl:{},
         tableTipColumnInfo:[
           {width:'150',title:'审批时间',category:'date',key:'insertDate'},
-          {width:'150',title:'申请人员',category:'',key:'messageName'},
+          {width:'150',title:'审批人员',category:'',key:'messageName'},
           {width:'150',title:'审批备注',category:'',key:'message'},
         ],
         tableTipInfo:[],
+        menuTabOn:1,
+        details:[
+          {id:'1', name: '工单收银',path:'/home/workOrderCashierDeskManager'},
+          {id:'2', name: '保险收银',path:'/home/cashierManager'},
+          {id:'3', name: '核销优惠券',path:'/home/workOrderCancellationCouponManager'},
+          {id:'4', name: '退保收银',path:'/home/surrenderCashierManager'},
+        ],
       }
     },
     methods:{
@@ -238,7 +245,7 @@
           url: '/cashierView?id=' + item.ownerID+'&cashierOperation='+item.cashierOperation+'&cashierMoney='+item.money+'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney
             +'&insuredUnitID='+item.insuredUnit+'&insuredUnitAccount='+item.insuredUnitAccount+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
             +'&cashierRemake='+ item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank+'&insuredUnitAccountID='+item.insuredUnitAccountID,
-          title: '查看客户信息',
+          title: '查看保单信息',
           closeCallBack: (data)=>{
             if(data){
               this.initPageData(false)
@@ -266,54 +273,57 @@
       // },
       /* 拨付资金 */
       approFund(item){
-        if (item.cashierOperation=== '3'){
-          this.$dialog.OpenWindow({
-            width: '1050',
-            height: '690',
-            title: '收款(客户)',
-            url: '/cashierBankDetailPrivateForm?cashierMoney='+item.money +'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney
-              +'&insuredUnitID='+item.insuredUnit+'&insuredUnitAccount='+item.insuredUnitAccount+'&cashierSubject=代收保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=F0887A4D-DA14-4FCB-B48B-221B42C8F17A'
-              +'&cashierRemake='+item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank,
-            closeCallBack: (data)=>{
-              this.initPageData(false)
-            }
-          })
-        } else  if (item.cashierOperation=== '2'){
-          this.$dialog.OpenWindow({
-            width: '1050',
-            height: '690',
-            title: '拨付资金',
-            url: '/cashierBankDetailForm?cashierMoney='+item.money +'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney
-            +'&insuredUnitID='+item.insuredUnit+'&insuredUnitAccount='+item.insuredUnitAccount+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
-              +'&cashierRemake='+ item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank+'&insuredUnitAccountID='+item.insuredUnitAccountID,
-            closeCallBack: (data)=>{
-              this.initPageData(false)
-            }
-
-          })
+        let params = {
+          id: item.ownerID,
         }
-        // else  if (item.cashierOperation=== '1'){
-        //   this.$dialog.OpenWindow({
-        //     width: '1050',
-        //     height: '690',
-        //     title: '保险返利',
-        //     url: '/cashierBankDetailForm?cashierMoney='+item.money +'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney
-        //       +'&insuredUnitAccountID='+item.insuredUnitAccountID+'&insuredUnitAccount='+item.insuredUnitAccount+'&cashierSubject=支付客户返利 ------ 售后业务 ------ 其他业务&cashierSubjectID=D65A9EF9-DCB2-47B8-918B-F8DD9342B2CB'
-        //       +'&cashierRemake='+ item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank,
-        //     closeCallBack: (data)=>{
-        //       this.initPageData(false)
-        //     }
-        //   })
-        // }
-        // 筛选事件
+        this.ajaxJson({
+          url: '/Fin/getScanningState',
+          data: params,
+          call: (data) => {
+           if (data.val==1) {
+             this.$dialog.OpenWindow({
+               width: 400,
+               height: 440,
+               url: '/scanCode?id='+item.ownerID+'&content=请客户打开小程序进行扫码核销',
+               title: "客户扫码核销",
+               closeCallBack: (data) => {
 
+               }
+             })
+           }else{
+             if (item.cashierOperation=== '3'){
+               this.$dialog.OpenWindow({
+                 width: '1050',
+                 height: '690',
+                 title: '收款(客户)',
+                 url: '/cashierBankDetailPrivateForm?cashierMoney='+item.money +'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney
+                   +'&insuredUnitID='+item.insuredUnit+'&insuredUnitAccount='+item.insuredUnitAccount+'&cashierSubject=代收保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=F0887A4D-DA14-4FCB-B48B-221B42C8F17A'
+                   +'&cashierRemake='+item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank,
+                 closeCallBack: (data)=>{
+                   this.initPageData(false)
+                 }
+               })
+             } else  if (item.cashierOperation=== '2'){
+               this.$dialog.OpenWindow({
+                 width: '1050',
+                 height: '690',
+                 title: '拨付资金',
+                 url: '/cashierBankDetailForm?cashierMoney='+item.money +'&cashierDirection='+item.direction+'&bankID='+item.id +'&bankOwnerID='+item.ownerID+'&bankMoney='+item.bankMoney
+                   +'&insuredUnitID='+item.insuredUnit+'&insuredUnitAccount='+item.insuredUnitAccount+'&cashierSubject=代付保险费 ------ 代理业务 ------ 其他业务&cashierSubjectID=DA771D46-0813-40C3-973B-9F57A492F3A0'
+                   +'&cashierRemake='+ item.remake+'&publicandPrivateAccount='+item.publicandPrivateAccount+'&cashierBankTag='+item.bank+'&insuredUnitAccountID='+item.insuredUnitAccountID,
+                 closeCallBack: (data)=>{
+                   this.initPageData(false)
+                 }
+               })
+             }
+           }
+          }
+        })
       },
       initChoose (op) {
         if (op === 'state') {
           this.selectValue = []
         }
-
-
         if (this.listState.value==0){
           this.isBankManey=false
         }else if (this.listState.value==1){
@@ -321,8 +331,8 @@
         }
          this.startDate=''
          this.endDate=''
-        this.yearMonth=''
-        this.initPageData(false)
+         this.yearMonth=''
+         this.initPageData(false)
       },
       initPageData (initValue) {
         let params = {}
@@ -347,18 +357,12 @@
           data:params,
           all:(data) =>{
             //不管是不是初始化都需要执行的代码
-
-
-
           },
           init:(data)=>{
             //初始化时需要执行的代码
             this.listState=data.statePsd
             this.listState.value=data.statePsd.value
-
             this.listCategory=data.categoryPsd
-
-
           }
         })
       },

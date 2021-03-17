@@ -1,7 +1,7 @@
 <template>
     <div>
-      <div class="yAxisName">出单量</div>
-      <div class="xAxisName">利润</div>
+      <div class="yAxisName" :style="{'color':category=='0'?'#49a9ea':'#EA5506'}">{{category=='0'?'出单量':'推送量'}}</div>
+      <div class="xAxisName" :style="{'color':category=='0'?'#49a9ea':'#EA5506'}">利润</div>
       <div v-show="starGraphShow" class="starGraphShow" :style="{'opacity':starGraphActionShow?'1':'0'}" @click="starGraphEvent">
         <div id="starGraphSalesman" v-if="state==0" style="z-index: 1005;height: 100%;"></div>
         <div id="starGraphUnit" v-if="state==1"  style="z-index: 1005;height: 100%;"></div>
@@ -16,8 +16,10 @@
         <div class="cartogramTop">
           <div style="display: flex;justify-content:center;">
             <yhm-radiofilter @initData="initChoose('time')" title="时间" :content="timeList"></yhm-radiofilter>
-            <yhm-radiofilter @initData="typeChange('type')" title="查看" :content="typeList" all="0"></yhm-radiofilter>
+            <yhm-radiofilter style="margin-right: 10px;" @initData="typeChange('type')" title="查看" :content="typeList" all="0"></yhm-radiofilter>
             <yhm-commonbutton value="查看列表" @call="lookOverBtn" :flicker="true" icon=""></yhm-commonbutton>
+            <yhm-commonbutton style="margin-left: 6px;" :value="category=='0'?'切换至推送量':'切换至出单量'" @call="switchover(category)" :flicker="true" icon=""></yhm-commonbutton>
+
           </div>
           <div :class="{customTimeShow:timeShow,customTimeHide:!timeShow}" >
             <yhm-form-date v-show="dateShow" title="开始时间" @call="dateSelection(startDate,endDate)" style="width: 350px;" :value="startDate" id="startDate" position="t"></yhm-form-date>
@@ -37,11 +39,11 @@
               <yhm-view-tab-list :customize="true" :pager="true" customize-bg-color="#e2f1f0">
               <template #listHead>
                 <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-                <yhm-managerth title="业务员名称"></yhm-managerth>
-                <yhm-managerth title="预计盈亏(可点击)"></yhm-managerth>
-                <yhm-managerth title="实时盈亏(可点击)"></yhm-managerth>
-                <yhm-managerth title="条数"></yhm-managerth>
-                <yhm-managerth title="星状图"></yhm-managerth>
+                <yhm-managerth :title="state=='0'?'业务员名称':'保险公司名称'"></yhm-managerth>
+                <yhm-managerth width="200" title="预计盈亏"></yhm-managerth>
+                <yhm-managerth width="200" title="实时盈亏"></yhm-managerth>
+                <yhm-managerth width="80" title="条数"></yhm-managerth>
+                <yhm-managerth width="80" title="星状图"></yhm-managerth>
               </template>
               <template #listBody>
                 <tr v-for="(item,index) in content" :key="index" :class="{InterlacBg:index%2!==0}">
@@ -59,12 +61,14 @@
              <span class="m_listNoData" v-show="content.length=='0'?true:false">暂时没有数据</span>
               </template>
               <template #pager>
-                <yhm-pagination :pager="pager" is-page-size="false" @initData="tabBtnClick(quadrant,'page')"></yhm-pagination>
+                <yhm-pagination :pager="pager" is-page-size="false" @initData="paging"></yhm-pagination>
               </template>
             </yhm-view-tab-list>
             </template>
           </yhm-view-tab>
         </div>
+<!--      <div class="bottomBtn">-->
+<!--      </div>-->
       <div class="bottomBtn" :class="{bottomBtnShow:!tabShow}">
         <yhm-commonbutton value="返回" @call="actionClickEvent" icon=" " :flicker="true"></yhm-commonbutton>
       </div>
@@ -97,11 +101,14 @@
         averageY:'',//Y轴中心值
         averageX:'',//X轴中心值
         titleText:'',//星形图标题
+        state:'0',//0是业务员1是保险公司
+        category:'0',//0是出单量1是推送量
         // xAxis:[],
         // yAxis:[],
         rangeY:[],//Y轴所有数值
         rangeX:[],//x轴所有数值
         content:[],//列表数据
+        details:[],//列表备份数据
         marksData:[],//转化数据类型后的数组
         indicator:[],//左边星型图数据
         rectangleList:[],//矩阵图的所有数据
@@ -197,8 +204,17 @@
       }
     },
     methods:{
+      paging(){//分页
+        let list = this.details.concat()
+        this.pager.total=this.details.length
+        this.pager.pageSize=15
+        let a=(this.pager.pageIndex-1)*this.pager.pageSize
+        let arr=[]
+        arr=list.splice(a,this.pager.pageSize)
+        this.content=arr
+      },
       radarMapClick(item){//点击列表数据后的星形图时
-        console.log( item )
+        // console.log( item )
         setTimeout(()=>{
           this.starGraphShow = true
         },700)
@@ -409,7 +425,44 @@
         return day;
       },
 
-
+      switchover(val){//切换出单量推送量 val是category
+        if(val == '0'){
+          this.category = '1'
+          // this.state = '1'
+          // this.typeList = {//查看类型
+          //   list:[
+          //     {
+          //       img:'',
+          //       num:'1',
+          //       code:'',
+          //       showName:'保险公司',
+          //     }
+          //   ],
+          //     value:'1'
+          // }
+        }else{
+          this.category = '0'
+          // this.state = '0'
+          // this.typeList = {//查看类型
+          //   list:[
+          //     {
+          //       img:'',
+          //       num:'0',
+          //       code:'',
+          //       showName:'业务员',
+          //     },
+          //     {
+          //       img:'',
+          //       num:'1',
+          //       code:'',
+          //       showName:'保险公司',
+          //     }
+          //   ],
+          //   value:'0'
+          // }
+        }
+        this.initPage()
+      },
       lookOverBtn(){//点看列表
         this.tabShow = true
       },
@@ -421,7 +474,7 @@
           title: '查看保单信息',
           closeCallBack: (data)=>{
             if(data){
-              this.initPageData(false)
+              this.initPage()
             }
           }
         })
@@ -451,30 +504,30 @@
         }else if(value=='2'){//上周时间
           this.startDate = this.getMonday('s',-1)
           this.endDate = this.getMonday("e",-1)
-          console.log( '上周',this.getMonday('s',-1),'上周',this.getMonday("e",-1))
+          // console.log( '上周',this.getMonday('s',-1),'上周',this.getMonday("e",-1))
         }else if(value=='3'){//本月时间
           this.startDate = this.getMonth('s',0)
           this.endDate = this.getMonth("e",0)
-          console.log( '本月',this.getMonth('s',0),'本月',this.getMonth("e",0))
+          // console.log( '本月',this.getMonth('s',0),'本月',this.getMonth("e",0))
         }else if(value=='4'){//上月时间
           this.startDate = this.getMonth('s',-1)
           this.endDate = this.getMonth("e",-1)
-          console.log( '上月',this.getMonth('s',-1),'上月',this.getMonth("e",-1))
+          // console.log( '上月',this.getMonth('s',-1),'上月',this.getMonth("e",-1))
         }else if(value=='5'){//本季度
           this.startDate = this.time(this.computTimeHorizon(1)[0]).slice(0,10)
           this.endDate = this.time(this.computTimeHorizon(1)[1]).slice(0,10)
         }else if(value=='6'){//上季度
           this.startDate = this.currentSeason().slice(0,10)
           this.endDate = this.currentSeason().slice(11,21)
-          console.log(this.currentSeason().slice(0,10),this.currentSeason().slice(11,21),'------------' )
+          // console.log(this.currentSeason().slice(0,10),this.currentSeason().slice(11,21),'------------' )
         }else if(value=='7'){//本年
           this.startDate = this.getYear('s',0)
           this.endDate = this.getYear("e",0)
-          console.log( '本年',this.getYear('s',0),'本年',this.getYear("e",0))
+          // console.log( '本年',this.getYear('s',0),'本年',this.getYear("e",0))
         }else if(value=='8'){//上一年
           this.startDate = this.getYear('s',-1)
           this.endDate = this.getYear("e",-1)
-          console.log( '上一年',this.getYear('s',-1),'上一年',this.getYear("e",-1))
+          // console.log( '上一年',this.getYear('s',-1),'上一年',this.getYear("e",-1))
         }
         if(value==''){//全部
           this.startDate = ''
@@ -482,8 +535,8 @@
           this.start = ''
           this.finish = ''
         }else{
-          this.start = ' 23:59:59'
-          this.finish = ' 00:00:00'
+          this.start = ' 00:00:00'
+          this.finish = ' 23:59:59'
         }
         if(value=='9'){
           this.timeShow = true
@@ -534,6 +587,7 @@
           data:{
             state:this.state,//0是公司1是业务员
             salesmanID:this.salesmanID,//业务员id
+            category:this.category,//0是出单量1是推送量
             insuredUnit:'',//保险公司ID 283B6A69-C180-433F-9E03-1BBB4867C3E7
             startDate:this.startDate + this.start,//开始时间
             endDate:this.endDate + this.finish,//结束时间
@@ -544,6 +598,8 @@
           },
           call: (data) => {
             this.content = data.content
+            this.details = data.content.concat()
+            this.content = this.content.splice(0,this.pager.pageSize)
             this.pager.total = data.count
           }
         })
@@ -584,13 +640,13 @@
         let unitLists1 = []//计算左边维度星形图中最大的值 保单利润
         let unitLists2 = []//计算左边维度星形图中最大的值 保单总应收账款
         try {
-          console.log(1)
+          // console.log(1)
           if(this.state=='0'){//业务员
             let num = 0
             if(data.unitList.length<=2){
               num = data.unitList.length=='2'?1:2
             }
-            console.log(2)
+            // console.log(2)
             // radarCenter = ['17%', '40%']
             legendTitle = ['出单量','保单利润','保单应收账款','出单总量','保单总利润','保单总应收账款']
             for(let t in data.unitList){
@@ -598,7 +654,7 @@
               unitLists1.push(data.unitList[t].money)
               unitLists2.push(data.unitList[t].quotaMoney)
             }
-            console.log(3)
+            // console.log(3)
             setTimeout(()=>{
               for(let r in data.unitList){
                 indicator1.push({'text':data.unitList[r].unit,max:this.arrange(unitLists,0)[0],min:this.arrange(unitLists,1)[0]})
@@ -609,18 +665,22 @@
                 unitList1.push(data.unitList[r].money)
                 unitList2.push(data.unitList[r].quotaMoney)
               }
-              console.log(4)
+              // console.log(4)
               for(let c=0; c<num; c++){
-                indicator1.push({'text':'暂无',max:this.arrange(unitLists,0)[0],min:this.arrange(unitLists,0)[1]})
-                indicator2.push({'text':'暂无',max:this.arrange(unitLists1,0)[0],min:this.arrange(unitLists1,0)[1]})
-                indicator3.push({'text':'暂无',max:this.arrange(unitLists2,0)[0],min:this.arrange(unitLists2,0)[1]})
+                // indicator1.push({'text':'暂无',max:this.arrange(unitLists,0)[0],min:this.arrange(unitLists,0)[1]})
+                // indicator2.push({'text':'暂无',max:this.arrange(unitLists1,0)[0],min:this.arrange(unitLists1,0)[1]})
+                // indicator3.push({'text':'暂无',max:this.arrange(unitLists2,0)[0],min:this.arrange(unitLists2,0)[1]})
+                indicator1.push({'text':'暂无'})
+                indicator2.push({'text':'暂无'})
+                indicator3.push({'text':'暂无'})
+
 
                 unitList.push('0')
                 unitList1.push('0')
                 unitList2.push('0')
               }
             },300)
-            console.log(5)
+            // console.log(5)
             // list = [{'name':'出单总量','value':data.yearList[0].value}]
             for(let i in data.yearList){
               salesmanList.push({
@@ -633,18 +693,21 @@
             max2 = this.arrange(rankList[2].value,0)[0]/* 从大到小 */
 
             min = this.arrange(rankList[0].value,1)[0];/* 从小到大 */
-            console.log( '%c max','color:#49a9ea;',max,min )
-            console.log(6)
+            // console.log( '%c max','color:#49a9ea;',max,min )
+            // console.log(6)
           }else{//保险公司
             // radarCenter = ['50%', '35%']
             legendTitle = [data.unitList[0].unit,'出单量','保单利润', '保单总应收账款']
             let arrs = [this.arrange(rankList[0].value,0)[0],this.arrange(rankList[1].value,0)[0],this.arrange(rankList[2].value,0)[0]]
 
-            console.log( '%c 最大值','color:red;',this.arrange(arrs,0)[0],this.arrange(arrs,0)[0],this.arrange(rankList[0].value,0)[0],this.arrange(rankList[1].value,0)[0],this.arrange(rankList[2].value,0)[0] )
+            // console.log( '%c 最大值','color:red;',this.arrange(arrs,0)[0],this.arrange(arrs,0)[0],this.arrange(rankList[0].value,0)[0],this.arrange(rankList[1].value,0)[0],this.arrange(rankList[2].value,0)[0] )
             indicator = [
-              {text: '出单量',max:this.arrange(arrs,0)[0],min:this.arrange(arrs,1)[0]},
-              {text: '保单利润',max:this.arrange(arrs,0)[0],min:this.arrange(arrs,1)[0]},
-              {text: '保单总应收账款',max:this.arrange(arrs,0)[0],min:this.arrange(arrs,1)[0]},
+              // {text: '出单量',max:this.arrange(arrs,0)[0],min:this.arrange(arrs,1)[0]},
+              // {text: '保单利润',max:this.arrange(arrs,0)[0],min:this.arrange(arrs,1)[0]},
+              // {text: '保单总应收账款',max:this.arrange(arrs,0)[0],min:this.arrange(arrs,1)[0]},
+              {text: '出单量'},
+              {text: '保单利润'},
+              {text: '保单总应收账款'},
             ]
             unitList.push(data.unitList[0].mete)
             unitList.push(data.unitList[0].money)
@@ -664,8 +727,8 @@
 
         }
 
-        console.log( legendTitle )
-        console.log(7)
+        // console.log( legendTitle )
+        // console.log(7)
         setTimeout(()=>{
           let myChartSalesman = {}
           let myChartUnit = {}
@@ -705,7 +768,7 @@
                     }
                   },
                   formatter: (a,b)=>{
-                    console.log( a,b,'===============' )
+                    // console.log( a,b,'===============' )
                     let value = ''
                     for(let t=0; t<indicator1.length; t++){
                       if(indicator1[t].text==a){
@@ -1006,20 +1069,20 @@
               }
             ]
           };
-          console.log( 8 )
+          // console.log( 8 )
           if(this.state=='0'){
             myChartSalesman.setOption(optionSalesman,true);
-            console.log( 9 )
+            // console.log( 9 )
           }else{
             myChartUnit.setOption(optionUnit,true);
-            console.log( 9 )
+            // console.log( 9 )
           }
         },750)
       },
       statisticalGraph(){//渲染象限图
         let that = this
         let myChart = this.$echarts.init(document.getElementById('exerciseCartogram'));
-        myChart.off('click') // 这里很重要！！！
+        myChart.off('click')
         myChart.on('click',params => {//圆心点击事件
           this.tabShow = false
           this.titleText = params.data.name
@@ -1099,7 +1162,7 @@
             },
             formatter(params){
               let custom = params.name + '</br>' + '业务推送量: ' + params.value[1] + '</br>' + '保险单利润额: ' + params.value[0]
-              console.log( params )
+              // console.log( params )
               return custom
             }
           },
@@ -1185,7 +1248,7 @@
             symbol:function(value,params){
               let imgUrl = 'image://' + window.location.origin + '/UploadFile/' + 'LeftMenu/'
               let tacitlyApproveImg = 'image://data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAADuUlEQVRoQ+3ZWah1YxgH8N8XLiiSORQyzySRMhNlVvpMyZzhioxRKJlvXEiGUChDZkIUIdOVIWQmuTBeoFBC/3qXVufbe6+1h7X3PvmeOp199nrf5/n/3+ddz3SWWOSyZJHjt5zArD34v/XAJthogqf/Nb4cRd8wHjgV+2MPbDyKsYY9X+F1vIQ72+pvS+AJHF5T+hG+a2ukxbp1sXVt3cvF3q9Ne9sQ+Kco+RwX4hX81KR4hOdrYi/ciE3L/g3x7SBdTQSuxBW4Cvk8LYnN2HsHO49K4ATch7ew+7SQ1+y8id1wAy7uZ3+QBx7CMTgMT8+AwKF4Ch9jq1EIfIPcwXXwwwwIrI3vi91V8HsvDP08sBk+LT9bzAB8ZfITbI4d8d4wBPYp8TjhbN8GArtie6yIL/DiBAknJwRLMATLMtLPA20JVFGqrvh5HDwhEp0S2AHvlpO5vwBO5Ar5E1F9Nw6XTgmcg1twHS4tKK/FJbgXJ42DvOztlMCZuA1n1GqX03EHHsdR807gALxQrlCSTiQJL1doUpm7Uw8E8HM4aIjgMKxTOicQQHlxj8AKeH/CNdNUCAx7qsOsnysCq5eXPeXJUqQLa5K5IZByIF1W6v3IazgEvzQwmAsCaUFvx7ZItFoLqbXS5R05DwRSThyIC/DGAkABeCvWwyM4rxBI9EqVexdOG0Cicw/Uw2jazLPxcAEUYAG/Em7G+fi7PNsbz2Jl3FRa1V48OiOwGl5F6qG38Sf2LAgCNKCvL3+nm0pXtVDSKD1ZvrwM1/RY0wmB/Uqtsz6ewbn4A6mDTqmB+A1nNRR1KfpSN0VSW8VjdZk4gWTdtHk54XvKlQn4SvIeZKqQRiTgA6BJqqIw647DA7UNEydwMu4uIC/qgyxDr4THn5uQ156ngo0HFzZQEyewKnbp1x0NAbjX0p1KR1fPDSMTyOwz7WEmcNuMCWyc7R+WiV1ySD4vI4PGKhm25jok8XQxiWsilkndj2VRwm39Xftv7yACaQmPx9F4rMlaB8/TED2KD7BdP/2DCFTdVWaiSf3Tls/KjDShNZGqpzTNRquXKOVCuqxpSTXtyAudkiOJciQCiTpVVMiM9OoyK+1iUpdJXGahl5ffAXwsHhx0ak0eyN4Nymw0Ya6STO0Gjr2HdFVspOSuJP97SJeXQxsobQhUClLbROmWTUrHeJ5BbgbJSWx/tdEzDIFKX0JaTmuNNgZarknWjld7DnDHvUItMcxm2SgemA3SEaPQXIHtBWa5B2btokXvgX8B/fjlMVOLXqgAAAAASUVORK5CYII='
-              console.log( that.state )
+              // console.log( that.state )
               if(that.rectangleList.length!=0&&that.state==1){//不为空并且是保险公司时
                 for(let i in that.rectangleList){
                   if(params.name==that.rectangleList[i].unit){//渲染的数据跟数组中的一样时  拿去数组中的图片路径 拼接作为头像
@@ -1200,7 +1263,7 @@
                 return tacitlyApproveImg
               }
 
-              console.log( imgUrl )
+              // console.log( imgUrl )
               return imgUrl
             },
             itemStyle: {
@@ -1227,7 +1290,7 @@
                   xAxis: this.averageX, // x 轴开始位置
                   yAxis: this.rangeY[1], // y 轴结束位置(直接取最大值)
                   itemStyle: {
-                    color: 'rgba(56, 180, 139, .1)'
+                    color: this.category=='0'?'rgba(56, 180, 139, .1)':'rgba(251, 212, 133 , .1)'
                   },
                   label: {
                     position: 'inside',
@@ -1242,7 +1305,7 @@
                   name: '问题类',
                   yAxis: this.rangeY[1], // y 轴结束位置(直接取最大值)
                   itemStyle: {
-                    color: 'rgba(68, 97, 123, .1)'
+                    color: this.category=='0'?'rgba(68, 97, 123, .1)':'rgba(121, 255, 211 , .1)'
                   },
                   label: {
                     position: 'inside',
@@ -1258,7 +1321,7 @@
                   name: '瘦狗类',
                   yAxis: this.averageY, // y 轴结束位置
                   itemStyle: {
-                    color: 'rgba(191, 120, 58, .1)'
+                    color: this.category=='0'?'rgba(191, 120, 58, .1)' :'rgba(228, 171, 199 , .1)'
                   },
                   label: {
                     position: 'inside',
@@ -1275,7 +1338,7 @@
                   xAxis:this.averageX, // x 轴开始位置
                   yAxis:this.averageY, // y 轴结束位置
                   itemStyle: {
-                    color: 'rgba(116, 83, 153, .1)'
+                    color: this.category=='0'?'rgba(116, 83, 153, .1)' :'rgba(105, 81, 164 , .1)'
                   },
                   label: {
                     position: 'inside',
@@ -1334,6 +1397,7 @@
           url: '/Insurance/initGraphicsRadaForm',
           data: {
             state:this.state,//0是业务员1是公司
+            category:this.category,//0是出单量1是推送量
             salesmanID:this.salesmanID,//业务员id
             insuredUnit:this.insuredUnit,//保险公司ID
             startDate:this.startDate + this.start,//开始时间
@@ -1367,8 +1431,14 @@
       },
     },
     watch:{
-      quadrant(newValue){
-        this.tabBtnClick(this.quadrant)
+      // quadrant(newValue,value){
+      //   this.tabBtnClick(this.quadrant)
+      // },
+      tabShow(newValue){
+        if(newValue){
+          this.tabBtnClick(this.quadrant)
+        }
+
       }
     },
     created () {
@@ -1408,7 +1478,7 @@
     right: 0;
   }
   .cartogramTop{
-    width:1080px;
+    width:1190px;
     margin: auto;
     padding: 40px 0;
     margin-bottom: 42px;

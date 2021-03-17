@@ -13,7 +13,7 @@
         <yhm-view-control title="投保人" :content="insuredName+'-'+insuredPhone"></yhm-view-control>
         <yhm-view-control title="与车主关系" :content="relationshipVal"></yhm-view-control>
         <yhm-view-control title="投保类型"  :content="insuredTypeVal"></yhm-view-control>
-        <yhm-view-control title="投保渠道" :content="insuredChannelVal"></yhm-view-control>
+        <!--<yhm-view-control title="投保渠道" :content="insuredChannelVal"></yhm-view-control>-->
         <yhm-view-control title="投保项目" :content="insuredProjectVal"></yhm-view-control>
       </template>
     </yhm-view-body>
@@ -21,30 +21,29 @@
     <div class="f_split"></div>
     <yhm-view-tab>
       <template #tab>
-        <yhm-view-tab-button :list="tabState" :index="0">跟踪信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="0">保险信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1">赠送信息</yhm-view-tab-button>
-
+        <yhm-view-tab-button :list="tabState" :index="2" @click="couponClick()">使用的优惠卷</yhm-view-tab-button>
       </template>
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
-          <yhm-view-control title="交强险开始日"  v-shou="isforceStart" :content="forceStartDate" type="date"></yhm-view-control>
-          <yhm-view-control title="交强险到期日"  v-if="isforceStart"  :content="forceEndDate" type="date"></yhm-view-control>
-          <yhm-view-control title="交强险金额"  v-shou="isforceStart" :content="forceMoney" type="money"></yhm-view-control>
-          <yhm-view-control title="车船税金额"  v-shou="isvehicle"   :content="vehicleMoney" type="money"></yhm-view-control>
-          <yhm-view-control title="商业险到期日" v-shou="isbusinessStart" :content="businessStartDate" type="date"></yhm-view-control>
-          <yhm-view-control title="商业险结束日" v-shou="isbusinessStart"  :content="businessEndDate" type="date"></yhm-view-control>
-          <yhm-view-control title="商业险种" category="3" v-if="isbusinessStart" :content="commercialVal"></yhm-view-control>
-          <yhm-view-control title="投保公司" :content="insuredUnit" :psd="insuredUnitList"></yhm-view-control>
-
-          <yhm-view-control title="商业险实际金额"  v-shou="isbusinessStart" :content="businessMoney" type="money"></yhm-view-control>
-          <yhm-view-control title="开票金额" :content="invoicingMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="交强险开始日" title-color="#0909F7"  v-show="isforceStart" :content="forceStartDate" type="date"></yhm-view-control>
+          <yhm-view-control title="交强险到期日" title-color="#FF0000"  v-show="isforceStart"  :content="forceEndDate" type="date"></yhm-view-control>
+          <yhm-view-control title="交强险金额"  v-show="isforceStart" :content="forceMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="商业险开始日" title-color="#0909F7" v-show="isbusinessStart" :content="businessStartDate" type="date"></yhm-view-control>
+          <yhm-view-control title="商业险到期日" title-color="#FF0000" v-show="isbusinessStart"  :content="businessEndDate" type="date"></yhm-view-control>
+          <yhm-view-control title="商业险实际金额"  v-show="isbusinessStart" :content="businessMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="商业险种(金额)" category="3" v-show="isbusinessStart" :content="commercialVal"></yhm-view-control>
+          <yhm-view-control title="车船税金额"  v-show="isvehicle"   :content="vehicleMoney" type="money"></yhm-view-control>
           <yhm-view-control title="保费合计" :content="premiumsTotal" type="money"></yhm-view-control>
-          <yhm-view-control title="优惠金额/点数" v-shou="isbusinessStart" :content="discountMoney+'／'+discountCount+'%'" color="red"></yhm-view-control>
-          <yhm-view-control title="个税承担" :content="tariffCheckVal"></yhm-view-control>
-          <yhm-view-control title="实收金额" :content="receivedMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="开票金额" :content="invoicingMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="投保公司" :content="insuredUnit" :psd="insuredUnitList"></yhm-view-control>
+          <yhm-view-control title="优惠金额/点数" v-show="isbusinessStart" :content="discountMoney+'／'+discountCount +'%'" color="red"></yhm-view-control>
+          <yhm-view-control title="个税承担" color="#4000FF" :content="tariffCheckVal"></yhm-view-control>
           <yhm-view-control title="是否返利" :content="cashVal"></yhm-view-control>
-          <yhm-view-control title="返利对象" v-shou="isCash" :content="cashObjectVal" ></yhm-view-control>
-          <yhm-view-control v-if="isPromotions" title="活动方案" :content="promotionsName"></yhm-view-control>
+          <yhm-view-control title="实收金额" :content="receivedMoney" type="money"></yhm-view-control>
+          <yhm-view-control title="返利对象" v-show="isCash" :content="cashObjectVal" ></yhm-view-control>
+          <yhm-view-control  v-show="isPromotions" title="活动方案" :content="promotionsName"></yhm-view-control>
 
         </yhm-view-tab-content>
         <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[1].select">
@@ -60,6 +59,29 @@
           </template>
           <template #empty>
             <span class="m_listNoData" v-show="empty">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[2].select">
+          <template #listHead>
+            <yhm-managerth title="名称"></yhm-managerth>
+            <yhm-managerth title="类型"></yhm-managerth>
+            <yhm-managerth title="优惠券开始日期"></yhm-managerth>
+            <yhm-managerth title="优惠券结束日期"></yhm-managerth>
+            <yhm-managerth title="面值"></yhm-managerth>
+            <yhm-managerth width="100" title="logo"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in conponList" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-manager-td-center :value="item.name"></yhm-manager-td-center>
+              <yhm-manager-td-psd :value="item.category" :list="listCouponCategory.list"></yhm-manager-td-psd>
+              <yhm-manager-td-center :value="item.start"></yhm-manager-td-center>
+              <yhm-manager-td-center :value="item.end"></yhm-manager-td-center>
+              <yhm-manager-td-center :value="item.money"></yhm-manager-td-center>
+              <yhm-manager-td-image :tip="true" left="-440" width="450" height="250" :value="item.url" tag="wxCoupon"></yhm-manager-td-image>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="conponList.length>0?false:true">暂时没有数据</span>
           </template>
         </yhm-view-tab-list>
       </template>
@@ -83,7 +105,7 @@
     data(){
       return{
         id:'',
-        tabState:[{select:true},{select:false}],
+        tabState:[{select:true},{select:false},{select:false}],
         salsesman:'', //业务员
         plate:'',//车主
         insuredDate:'',//投保日期
@@ -166,10 +188,28 @@
         insuredUnitAccountID:'',
         insuredUnitAccount:'',
         isPromotions:false,
-
+        conponList:[],
+        listCouponCategory: {
+          value: '',
+          list: []
+        },
       }
     },
     methods:{
+      couponClick(){
+        let params = {
+          id: this.id,
+        }
+        this.ajaxJson({
+          url: '/wx/wxCouponDetail/getWriteOffDetail',
+          data: params,
+          call: (data) => {
+            this.listCouponCategory = data.content.categoryPsd
+            this.conponList=data.content.list
+
+          }
+        })
+      },
       /* 拨付资金 */
       approFund(){
 

@@ -1,14 +1,20 @@
 <template>
   <div>
-    <yhm-managerpage :total-table="true" :total-rgt="true">
+    <yhm-managerpage category="1" :total-table="true">
       <!--导航条-->
-      <template #navigation>财务管理&nbsp;&gt;&nbsp;票据&nbsp;&gt;&nbsp;发票管理</template>
+      <!--<template #navigation>财务管理&nbsp;&gt;&nbsp;票据&nbsp;&gt;&nbsp;发票管理</template>-->
+      <!--导航条-->
 
+      <template #navigationTab>
+        <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/invoiceTilingManager'}">库存发票</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/openInvoiceFinManager'}">开票通知</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/openInvoiceManagerAll'}">开票审批中</router-link>
+      </template>
       <template #navigationLft>
         <div @mouseover="tipChange(index)" @mouseout="tipOut" style="margin: 0;position: relative;"  v-for="(item,index) in routerList" :key="index">
           <router-link tag="div" :class="item.class" style="margin: 0;" class="tip" :to="item.path">
-            <div  class="cbl_main_prompt2 tipShow">
-              <div class="cbl_main_prompt_content" style="font-size:13px;padding: 0 12px;">
+            <div  class="cbl_main_prompt2 tipShow ">
+              <div class="cbl_main_prompt_content " style="font-size:13px;padding: 0 12px;">
                 {{tipValue}}
                 <img src="/UploadFile/m_image/arrow.png">
               </div>
@@ -56,17 +62,17 @@
       </template>
 
       <template #listTotalHead v-if="isTilingEmpty">
-        <yhm-managerth style="width: 100px;" before-color="#a40b81" before-title="总 " title="张数"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#009788" before-title="在库 " title="张数" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#a40b81" before-title="入库" title="总张数"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#009788" before-title="可用 " title="张数" ></yhm-managerth>
         <yhm-managerth style="width: 100px;" before-color="#28979c" before-title="已使用 " title="张数"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#d45702" before-title="已开具 " title="张数"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#d45702" before-title="已作废" title="张数"></yhm-managerth>
       </template>
       <template #listTotalBody v-if="isTilingEmpty">
         <tr v-for="(item,index) in total" :key="index">
           <yhm-manager-td-rgt :value="item.sumCount"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.countState0"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.countState1"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.countState2"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.countState0" @click="stateClick('0')"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.countState1" @click="stateClick('1')"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.countState2" @click="stateClick('2')"></yhm-manager-td-rgt>
         </tr>
       </template>
     </yhm-managerpage>
@@ -125,6 +131,8 @@
           list: []
         },
         psd:[{
+          num:'1',showName:'万元版',img:'aaa',code:'#FF0000'
+        },{
           num:'3',showName:'百万元',img:'aaa',code:'#FF0000'
         },{
           num:'4',showName:'千万元',img:'aaa',code:'#00FF00'
@@ -132,7 +140,7 @@
         invoiceCategoryList: [],
         stateList:[],
         maxValueList:[],
-        menu:[['作废发票'],['查看发票']],
+        menu:[['作废发票'],['查看开票申请','作废发票','开红字发票'],['查看作废原因']],
         pager: {
           total: 0, // 总条数
           pageSize: 18, // 每页条数
@@ -142,6 +150,10 @@
       }
     },
     methods:{
+      stateClick(state){
+        this.listState.value=state
+        this.initPageData (false)
+      },
       add(id,state){
         let isAdd = false
         let title = '查看发票入库登记信息'
@@ -166,16 +178,78 @@
         })
       },
       viewClickEvent(item){
-        this.$dialog.OpenWindow({
-          width: '1050',
-          height: '450',
-          title: '查看发票基本信息',
-          url: '/invoiceView?id=' + item.id,
-          closeCallBack: (data)=>{
-            if(data){
-            }
+
+        if (item.state === '0') {
+          let params = {
+            id: item.id,
+            invoiceCategory: item.invoiceCategory
           }
-        })
+          this.ajaxJson({
+            url: '/Bill/firstInvoice',
+            data: params,
+            call: (data) => {
+              if (data.type === 0) {
+                this.$dialog.OpenWindow({
+                  width: '1050',
+                  height: '740',
+                  title: '选择开票申请',
+                  url: '/selectOpenInvoice?invoiceCategoryBefore=1&invoiceCategory=' + item.invoiceCategory,
+                  closeCallBack: (data) => {
+                    if (data) {
+                      let url = ''
+                      if (item.invoiceCategory === '2' && data.openInvoiceVehicleID !== '') {
+                        url = '/openInvoiceTrialVehicle?ownerID=' + data.id + '&type=1&code=' + item.code + '&codeID=' + item.id
+                      } else if (item.invoiceCategory === '3') {
+                        url = '/openInvoiceTrial?ownerID=' + data.id + '&type=1&code=' + item.code + '&codeID=' + item.id
+                      } else {
+                        url = '/openInvoiceTrialOther?ownerID=' + data.id + '&type=1&code=' + item.code + '&codeID=' + item.id
+                      }
+                      this.$dialog.OpenWindow({
+                        width: '1025',
+                        height: '768',
+                        title: '发票试算',
+                        url: url,
+                        closeCallBack: (data) => {
+                          if (data) {
+                            this.initPageData(false)
+                          }
+                        }
+                      })
+                    }
+                  }
+                })
+              } else if (item.state === '1') {
+                this.$dialog.OpenWindow({
+                  width: '1025',
+                  height: '768',
+                  title: '查看开票信息',
+                  url: '/openInvoiceTrial?ownerID=' + item.id + '&type=1',
+                  closeCallBack: (data) => {
+                    if (data) {
+                      this.initPageData(false)
+                    }
+                  }
+                })
+              } else {
+                this.$dialog.alert({
+                  width: '300',
+                  alertImg: 'warn',
+                  tipValue: '请选用本类型最小号发票'
+                })
+              }
+            }
+          })
+        }else{
+          if(item.url !== ''){
+            window.open('/UploadFile/'+item.url)
+          }else{
+            this.$dialog.alert({
+              width: '300',
+              alertImg: 'warn',
+              tipValue: '请选择在库发票'
+            })
+          }
+        }
       },
       tipChange(index){
         this.tipValue=this.tipList[index][0]
@@ -186,30 +260,59 @@
       },
       rightMenuEvent(category,item){
         if(category === '作废发票'){
+          if(item.otherID === ''){
+            this.$dialog.OpenWindow({
+              width: '1050',
+              height: '550',
+              title: '作废发票',
+              url: '/toVoidInvoice?id=' + item.id +'&op=0',
+              closeCallBack: (data)=>{
+                if(data){
+                  this.initPageData(false)
+                }
+              }
+            })
+          }else if(item.otherID !== ''&&item.otherType === '1'){
+            this.$dialog.OpenWindow({
+              width: '1025',
+              height: '480',
+              title: '作废发票',
+              url:'/openInvoiceToVoid?ownerID='+item.otherID+'&type=0',
+              closeCallBack: (data)=>{
+                if(data){
+                  this.initPageData(false)
+                }
+              }
+            })
+          }
+        }else if(category === '查看开票申请'){
+          if(item.otherID!==''&&item.otherType==='1'){
+            this.$dialog.OpenWindow({
+              width: '1050',
+              height: '790',
+              title: '查看开票信息',
+              url:'/openInvoiceView?id='+item.otherID +'&type=0',
+              closeCallBack: (data)=>{
+                if(data){
+                  this.initPageData(false)
+                }
+              }
+            })
+          }
+        }else if(category === '查看作废原因'){
           this.$dialog.OpenWindow({
             width: '1050',
-            height: '550',
-            title: '作废发票',
-            url: '/toVoidInvoice?id=' + item.id +'&op=0',
+            height: '690',
+            title: '查看作废原因',
+            url: '/toVoidInvoice?id=' + item.id + '&op=1',
             closeCallBack: (data)=>{
               if(data){
                 this.initPageData(false)
               }
             }
           })
-        }else if(category === '查看发票'){
-          alert(item.id)
-          this.$dialog.OpenWindow({
-            width: '1025',
-            height: '768',
-            title: '查看开票信息',
-            url:'/openInvoiceTrial?ownerID='+item.id +'&type=1',
-            closeCallBack: (data)=>{
-              if(data){
-                this.initPageData(false)
-              }
-            }
-          })
+        }else if(category === '开红字发票'){
+          alert('暂时未开放')
         }
       },
 
@@ -217,13 +320,18 @@
         let params = {}
 
         if (initValue) {
-          params = {}
+          params = {
+            orderColumn:'code',
+            order:'asc',
+            state: '0'
+          }
         } else {
           params = {
             state: this.listState.value,
             invoiceCategory:this.listInvoiceCategory.value,
-            maxValue:this.listMaxValue.value
-
+            maxValue:this.listMaxValue.value,
+            orderColumn:'code',
+            order:'asc'
           }
         }
         this.init({
@@ -266,4 +374,10 @@
 
 <style scoped lang="less">
   .tipShow{display: none;width: 100px}
+.tip::before{
+  font-size: 24px;
+}
+  .tip{
+    padding: 0 5px;
+  }
 </style>

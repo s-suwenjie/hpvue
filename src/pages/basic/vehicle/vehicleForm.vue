@@ -16,7 +16,7 @@
 
         <yhm-form-select title="车辆颜色"   tip="value" :value="color" id="color"  @click="selectColour"></yhm-form-select>
 
-        <yhm-form-text placeholder=""  title="车架号" subtitle="" :value="frameNumber" id="frameNumber"></yhm-form-text>
+        <yhm-form-text placeholder=""  :no-edit="isFrameNumber" title="车架号" subtitle="" :value="frameNumber" id="frameNumber"></yhm-form-text>
         <yhm-form-text placeholder="" title="发动机号" subtitle="" :value="engineNumber" id="engineNumber" ></yhm-form-text>
         <yhm-form-select title="品牌" tip="value" :value="brand" id="brand"  @click="selectBrand"></yhm-form-select>
         <yhm-form-select title="车型" @clear="clearModelEvent" tip="value" :value="model" id="model"  @click="selectModel"></yhm-form-select>
@@ -25,9 +25,8 @@
 
         <yhm-form-select  title="车主信息" tip="value" @click="carOwnerIDEvent" :show="isHides"  :value="carOwner" id="carOwner" :rule="isYhmSelect"></yhm-form-select>
         <yhm-formupload :ownerID="id" :value="fileList"  id="fileList" title="行车证(支持单据)" tag="vehicle" multiple="multiple" category="3" ></yhm-formupload>
-        <appLicencePlate class="guessSelector" v-show="PShow" :key="index" :plate-show="plateShow" v-model="carNum" @btnClick="btnClick"  @input="selectArr" >
-        </appLicencePlate>
-<!--        <yhm-form-upload-image title="上传行车证" tag="drivingLicense" discription="点击图标或拖拽图片上传(不支持PDF格式)" :show="isHide" :value="drivingLicense" id="drivingLicense" ></yhm-form-upload-image>-->
+        <appLicencePlate class="guessSelector" v-show="PShow" :key="index" :plate-show="plateShow" v-model="carNum" @btnClick="btnClick"  @input="selectArr"></appLicencePlate>
+<!--    <yhm-form-upload-image title="上传行车证" tag="drivingLicense" discription="点击图标或拖拽图片上传(不支持PDF格式)" :show="isHide" :value="drivingLicense" id="drivingLicense" ></yhm-form-upload-image>-->
       </template>
     </yhm-formbody>
 
@@ -93,7 +92,7 @@
         isPlate:'R8000',
         isYhmSelect:'R0000', // 客户过来
         urlType:'',//1保险理赔  自费维修 过来
-
+        isFrameNumber:'',
       }
     },
     methods: {
@@ -181,7 +180,7 @@
           this.$dialog.OpenWindow({
             width: 950,
             height: 692,
-            url: '/selectUnit?category=1&simplify=1',
+            url: '/selectUnit?category=1',
             title: '选择车辆所有人',
             closeCallBack: (data) => {
               if(data) {
@@ -370,7 +369,7 @@
             carOwner:this.carOwner,
             carOwnerID:this.carOwnerID,
             drivingLicense:this.drivingLicense,
-            files:this.fileList
+            files:this.fileList,
 
 
           }
@@ -416,8 +415,12 @@
     },
     created () {
       this.setQuery2Value('id')
+      this.setQuery2Value('searchStr')//用户选择车辆页面 搜索的内容
       this.setQuery2Value('urlType')
       this.setQuery2Value('isReule')
+      if(this.searchStr!=''){
+        this.plate = this.searchStr
+      }
       if (this.isReule==1){
         this.isYhmSelect=''
       }else {
@@ -456,6 +459,11 @@
           this.carOwnerID=data.carOwnerID
           this.drivingLicense=data.drivingLicense
           this.fileList = data.files
+          if(data.frameNumber==''){
+            this.isFrameNumber=''
+          }else{
+            this.isFrameNumber='1'
+          }
 
           if(this.category === '0'){
             this.isAssort = false

@@ -134,7 +134,6 @@
         isMove:'0',
         state:'0',
 
-
         uploadShow:true,//是否显示上传
       }
     },

@@ -6,7 +6,7 @@
         <template #choose>
           <div style="padding-bottom: 20px;width: 1014px;margin: 0 auto;display: flex;">
             <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="addDetail()" category="three"></yhm-commonbutton>
-            <yhm-commonbutton value="准备出库" icon=" " @call="prepare()" category="three"></yhm-commonbutton>
+<!--            <yhm-commonbutton value="准备出库" icon=" " @call="prepare()" category="three"></yhm-commonbutton>-->
           </div>
         </template>
 
@@ -17,6 +17,10 @@
           <yhm-managerth title="规格型号"></yhm-managerth>
           <yhm-managerth style="width: 120px" title="拆分数量"></yhm-managerth>
           <yhm-managerth style="width: 120px" title="整件数量"></yhm-managerth>
+          <yhm-managerth title="单价"></yhm-managerth>
+          <yhm-managerth title="总价"></yhm-managerth>
+<!--          <yhm-managerth title="折扣价"></yhm-managerth>-->
+          <yhm-managerth title="状态"></yhm-managerth>
         </template>
 
         <!--数据明细-->
@@ -27,6 +31,10 @@
             <yhm-manager-td-center :value="item.model"></yhm-manager-td-center>
             <yhm-manager-td-center :value="item.mdo"></yhm-manager-td-center>
             <yhm-manager-td-center :value="item.quantity+''"></yhm-manager-td-center>
+            <yhm-manager-td-money :value="item.price"></yhm-manager-td-money>
+            <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+<!--            <yhm-manager-td-money :value="item.discount"></yhm-manager-td-money>-->
+            <yhm-manager-td-center :value="item.state=='0'?'未出库':'已出库'" :color="item.state=='0'?'#49a9ea':'#00bb6b'"></yhm-manager-td-center>
           </tr>
         </template>
         <!--数据空提示-->
@@ -159,6 +167,19 @@
       //     })
       //   }
       // },
+      // skip(){
+      //   this.ajaxJson({
+      //     url: '/fix/fixProcess/update',
+      //     // loading:'0',
+      //     data: {
+      //       stage:'3',
+      //       id:this.flowPathID,//主流程表ID
+      //       ownerID:this.ownerID,//工单ID
+      //     },
+      //     call: (data)=>{
+      //     }
+      //   })
+      // },
       initData () {
         let params = {
           ownerID:this.ownerID,
@@ -193,21 +214,22 @@
       this.setQuery2Value('upDateStateID')
       this.setQuery2Value('flowPathID')
       this.setQuery2Value('ownerID')
-      if(this.index!=0&&this.index!=2&&this.index!=undefined){
-        let params = {
-          id:this.upDateStateID,
-          ownerID:this.flowPathID,
-          state:'1'
-        }
-        this.ajaxJson({
-          url: '/fix/fixProcessDetail/confirm',
-          data: params,
-          call: (datas) => {
-
-          }
-        })
-      }
+      // if(this.index!=0&&this.index!=2&&this.index!=undefined){
+      //   let params = {
+      //     id:this.upDateStateID,
+      //     ownerID:this.flowPathID,
+      //     state:'1'
+      //   }
+      //   this.ajaxJson({
+      //     url: '/fix/fixProcessDetail/confirm',
+      //     data: params,
+      //     call: (datas) => {
+      //
+      //     }
+      //   })
+      // }
       this.initData()
+      // this.skip()
     }
   }
 </script>

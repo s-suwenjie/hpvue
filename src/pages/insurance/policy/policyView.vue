@@ -14,6 +14,7 @@
         <yhm-view-control title="投保类型"  :content="insuredTypeVal"></yhm-view-control>
         <yhm-view-control title="投保渠道" :content="insuredChannelVal"></yhm-view-control>
         <yhm-view-control title="投保项目" :content="insuredProjectVal"></yhm-view-control>
+        <yhm-view-control title="出单流程" :content="aisleVal"></yhm-view-control>
       </template>
     </yhm-view-body>
 
@@ -25,18 +26,19 @@
     <div class="f_split"></div>
     <yhm-view-tab>
       <template #tab>
-        <yhm-view-tab-button :list="tabState" :index="0">跟踪信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="0">保险信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1">赠送信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="2">收支明细</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="3">应收账款</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="4" @click="couponClick()">使用的优惠卷</yhm-view-tab-button>
       </template>
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
-          <yhm-view-control title="交强险开始日"  v-show="isforceStart" :content="forceStartDate" type="date"></yhm-view-control>
-          <yhm-view-control title="交强险到期日"  v-show="isforceStart"  :content="forceEndDate" type="date"></yhm-view-control>
+          <yhm-view-control title="交强险开始日" title-color="#0909F7"  v-show="isforceStart" :content="forceStartDate" type="date"></yhm-view-control>
+          <yhm-view-control title="交强险到期日" title-color="#FF0000"  v-show="isforceStart"  :content="forceEndDate" type="date"></yhm-view-control>
           <yhm-view-control title="交强险金额"  v-show="isforceStart" :content="forceMoney" type="money"></yhm-view-control>
-          <yhm-view-control title="商业险开始日" v-show="isbusinessStart" :content="businessStartDate" type="date"></yhm-view-control>
-          <yhm-view-control title="商业险到期日" v-show="isbusinessStart"  :content="businessEndDate" type="date"></yhm-view-control>
+          <yhm-view-control title="商业险开始日" title-color="#0909F7" v-show="isbusinessStart" :content="businessStartDate" type="date"></yhm-view-control>
+          <yhm-view-control title="商业险到期日" title-color="#FF0000" v-show="isbusinessStart"  :content="businessEndDate" type="date"></yhm-view-control>
           <yhm-view-control title="商业险实际金额"  v-show="isbusinessStart" :content="businessMoney" type="money"></yhm-view-control>
           <yhm-view-control title="商业险种(金额)" category="3" v-show="isbusinessStart" :content="commercialVal"></yhm-view-control>
           <yhm-view-control title="车船税金额"  v-show="isvehicle"   :content="vehicleMoney" type="money"></yhm-view-control>
@@ -128,6 +130,29 @@
             <span class="m_listNoData" v-show="empty">暂时没有数据</span>
           </template>
       </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[4].select">
+          <template #listHead>
+            <yhm-managerth title="名称"></yhm-managerth>
+            <yhm-managerth title="类型"></yhm-managerth>
+            <yhm-managerth title="优惠券开始日期"></yhm-managerth>
+            <yhm-managerth title="优惠券结束日期"></yhm-managerth>
+            <yhm-managerth title="面值"></yhm-managerth>
+            <yhm-managerth width="100" title="logo"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in conponList" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-manager-td-center :value="item.name"></yhm-manager-td-center>
+              <yhm-manager-td-psd :value="item.category" :list="listCouponCategory.list"></yhm-manager-td-psd>
+              <yhm-manager-td-center :value="item.start"></yhm-manager-td-center>
+              <yhm-manager-td-center :value="item.end"></yhm-manager-td-center>
+              <yhm-manager-td-center :value="item.money"></yhm-manager-td-center>
+              <yhm-manager-td-image :tip="true" left="-440" width="450" height="250" :value="item.url" tag="wxCoupon"></yhm-manager-td-image>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="conponList.length>0?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -144,7 +169,7 @@
       return{
         id:'',
         content:[],
-        tabState:[{select:true},{select:false},{select:false},{select:false}],
+        tabState:[{select:true},{select:false},{select:false},{select:false},{select:false}],
         plate:'',//车主
         brand:'',//品牌
         model:'',//车型
@@ -218,18 +243,37 @@
         isPromotions:true,
         promotionsID:'',
         tariffCheckVal:'',
+        conponList:[],
+        listCouponCategory: {
+          value: '',
+          list: []
+        },
       }
     },
     methods:{
+      couponClick(){
+        let params = {
+          id: this.id,
+        }
+        this.ajaxJson({
+          url: '/wx/wxCouponDetail/getWriteOffDetail',
+          data: params,
+          call: (data) => {
+            this.listCouponCategory = data.content.categoryPsd
+            this.conponList=data.content.list
+
+          }
+        })
+      },
       promotionsEvent(){
         this.$dialog.OpenWindow({
           width: 1050,
           height: 692,
-          url: '/promotionsForm?id=' + this.promotionsID +'&isDel=0',
+          url: '/promotionsView?id=' + this.promotionsID ,
           title: '查看优惠政策',
           closeCallBack: (data) => {
             if (data) {
-
+              this.initData()
             }
           }
         })
@@ -290,7 +334,7 @@
             this.listProfit=data.listProfit
             this.promotionsName=data.promotionsName
             this.promotionsID=data.promotionsID
-
+            this.aisleVal=data.aisleVal
 
             for(let i in this.listPolicy){
               sum = accAdd(parseFloat(this.listPolicy[i].bankMoney),sum)

@@ -26,14 +26,14 @@
       <template #listBody >
         <tr v-for="(item,index) in content" :key="index" :class="{InterlacBg:index%2!==0}" >
           <yhm-manager-td-center  class="admin" :value="index+1+''"></yhm-manager-td-center>
-          <yhm-manager-td-center  class="admin" :value="item.number"></yhm-manager-td-center>
+          <yhm-manager-td-center   class="admin" :value="item.number"></yhm-manager-td-center>
           <yhm-manager-td-rgt class="admin" :value="item.money+''"></yhm-manager-td-rgt>
           <yhm-manager-td-rgt class="admin" :value="item.businessMoney==0.00?item.forceMoney+'':item.businessMoney+''"></yhm-manager-td-rgt>
           <yhm-manager-td-center  class="admin" :value="item.plate"></yhm-manager-td-center>
           <yhm-manager-td-center  class="admin" :value="item.beinsuredName"></yhm-manager-td-center>
           <yhm-manager-td-center  class="admin" :value="item.contactName"></yhm-manager-td-center>
-          <yhm-manager-td-state class="admin"  v-if="Math.abs( item.money-(item.businessMoney==0.00?item.forceMoney:item.businessMoney))<=1" :value="item.stateVal" @click="stateClick(item)" :state-color="item.stateColor" :state-img="item.stateImg"></yhm-manager-td-state>
-          <yhm-manager-td-state class="admin"  v-else :value="item.stateVal" @click="elseClick(item)" :state-color="item.stateColor" :state-img="item.stateImg"></yhm-manager-td-state>
+<!--          <yhm-manager-td-state class="admin"  v-if="Math.abs( item.money-(item.businessMoney==0.00?item.forceMoney:item.businessMoney))<=1" :value="item.stateVal" @click="stateClick(item)" :state-color="item.stateColor" :state-img="item.stateImg"></yhm-manager-td-state>-->
+          <yhm-manager-td-state class="admin"  :value="item.stateVal" @click="elseClick(item)" :state-color="item.stateColor" :state-img="item.stateImg"></yhm-manager-td-state>
 
 
         </tr>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-  import { formatDate} from '@/assets/common.js'
+  import { formatDate,accAdd} from '@/assets/common.js'
 
   import { formmixin } from '@/assets/form.js'
   export default {
@@ -83,6 +83,7 @@
       }
     },
     methods:{
+
       getLastDay(time){    //获取月底的日期
         let current=new Date(time);
         let currentMonth=current.getMonth();
@@ -96,19 +97,49 @@
         this.endDate=lastDay
       },
       elseClick(item){
-        if (item.businessMoney==0.00 || item.forceMoney==0.00){
-          this.$dialog.alert({
-            alertImg:'warn',
-            tipValue:'导入数据未找到,请检查是否已经出单',
-            width:370
-          })
-        }else{
-          this.$dialog.alert({
-            alertImg:'warn',
-            tipValue:'导入数据金额相差过大,请联系管理员',
-            width:370
-          })
-        }
+
+        this.$dialog.OpenWindow({
+          width: 650,
+          height: 230,
+          title: '通过留言',
+          url: '/approvalPassMessage?id=' + item.id+'&page=6',
+          closeCallBack: (data)=>{
+            if (data){
+              // this.initPageData(false)
+              if(item.forceMoney=='0.00' && item.businessMoney=='0.00'){
+                let params={
+                  id:item.number
+                }
+                this.ajaxJson({
+                  url: '/Basic/recordNumber',
+                  data: params,
+                  call: (data) => {
+                    if (data.type === 0) {
+                      this.stateClick(item)
+                    }else{
+                      this.$dialog.alert({
+                        alertImg:'warn',
+                        tipValue: data.message
+                      })
+                    }
+                  }
+                })
+              }
+              let money=item.businessMoney==0.00?item.forceMoney:item.businessMoney
+              if ( accAdd(item.money,money*-1)<-10){
+                this.$dialog.alert({
+                  alertImg:'warn',
+                  tipValue:'请仔细核对此条数据是否异常',
+                  width:350
+                })
+              } else{
+                this.stateClick(item)
+              }
+            }
+          }
+        })
+
+
 
 
       },
@@ -193,7 +224,6 @@
               //     this.$dialog.close()
               //   }
               // })
-
               //this.monthsDate=this.monthsDate.slice(0,8)+'01'
               let params={
                 id:this.ownerID,

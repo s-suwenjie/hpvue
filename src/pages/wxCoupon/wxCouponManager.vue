@@ -5,6 +5,7 @@
       <template #navigation>系统&nbsp;&gt;&nbsp;优惠券管理&nbsp;&gt;&nbsp;优惠券类型管理</template>
       <template #operate>
         <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
+        <yhm-commonbutton value="测试选择" icon="btnAdd" :flicker="true" @call="test"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
       </template>
@@ -78,6 +79,17 @@
       }
     },
     methods:{
+      test(){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 660,
+          url:'/selectWxCoupon?showCategory=1,2',
+          title:"选择优惠券",
+          closeCallBack:(data) =>{
+            console.log(data)
+          }
+        })
+      },
       add(id){
         // 默认设置页面标记是查看
         var isAdd = false

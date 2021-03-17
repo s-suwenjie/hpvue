@@ -1,10 +1,10 @@
 <template>
-    <div class="aaa">
-      moneyCheck:{{moneyCheck}}
+    <div class="aaa" @click="down($event)">
+<!--      moneyCheck:{{moneyCheck}}-->
       <!--name:{{name}}<br>
       phone:{{phone}}-->
 
-      <yhm-form-zh-text-more-checkbox @clickCheckBox="clickCheckBoxEvent" title="金额" :value="money" id="money" :check-value="moneyCheck" check-value-id="moneyCheck" :check-list="moneyCheckList"></yhm-form-zh-text-more-checkbox>
+<!--      <yhm-form-zh-text-more-checkbox @clickCheckBox="clickCheckBoxEvent" title="金额" :value="money" id="money" :check-value="moneyCheck" check-value-id="moneyCheck" :check-list="moneyCheckList"></yhm-form-zh-text-more-checkbox>-->
 <!--
 
       <div style="margin-top: 20px;" @click="payApplyReconDetailForm">批量拨付 - 付款申请</div>
@@ -15,11 +15,14 @@
       <div style="margin-top: 20px;" @click="boardDire">董事费</div>
       <div style="margin-top: 20px;" @click="ticket">有票</div>
 -->
-      <div  @click="selectssss">1111111111111322222222222222222222</div>
+<!--      <div  @click="selectssss">1111111111111322222222222222222222</div>-->
+<!--      <yhm-form-td-textbox :width="260" :maxNumber="8888" :minNumber="10"></yhm-form-td-textbox>-->
+      <br>
+      <br>
+      <br>
+      <div @contextmenu.prevent="show">1111111111</div>
+      <div @click="opennewwindows">222222222222222222222222</div>
 
-      <br>
-      <br>
-      <br>
       <!--<div style="width: 1205px;  background: #FFFFFF; ">
         <div style="margin: 10px;display: flex;flex-direction: row; flex-wrap: wrap;">
           <yhm-view-list-block @call="rightMenuEvent" :item="item" :menu="menu" :psd="psd" category-value="0" category="0" code="123456789123456789" color="#FF0000">
@@ -208,6 +211,29 @@
       }
     },
     methods : {
+      show(){
+        alert('右键被点击')
+        console.log('右键被点击')
+      },
+
+      down(event){
+
+        console.log(event)
+
+      },
+      opennewwindows(){
+        this.$dialog.OpenWindow({
+          width: '1100',
+          height: '750',
+          url:'selectPayDeposit?id=3BE80826-B1FB-42B7-BA3A-24D71E29E958',
+          title:'支付押金',
+          closeCallBack:(data) =>{
+
+
+          }
+        })
+      },
+
       selectssss(){
         // this.$dialog.OpenWindow({
         //   width: '1100',

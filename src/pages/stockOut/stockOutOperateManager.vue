@@ -7,6 +7,7 @@
       <template #operate>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData"></yhm-managersearch>
+        <yhm-radiofilter style="margin-top: 6px;" @initData="initChoose('dateType')" title="时间" :content="dateTypeList"></yhm-radiofilter>
       </template>
       <!--   筛选区   -->
       <template #choose>
@@ -16,8 +17,14 @@
           <yhm-radiofilter all="0" @initData="initChoose('state')" title="状态" :content="state"></yhm-radiofilter>
         </div>
       </template>
+      <template #operateMore>
+        <div :class="{customTimeShow:timeShow,customTimeHide:!timeShow}" >
+          <yhm-form-date v-show="dateShow" title="开始时间" @call="dateSelection(startDateStr,endDateStr)" style="width: 350px;" :value="startDateStr" id="startDateStr" position="t"></yhm-form-date>
+          <yhm-form-date v-show="dateShow" title="结束时间" @call="dateSelection(startDateStr,endDateStr)" style="width: 350px;margin-left: 30px;" :value="endDateStr" id="endDateStr" position="t"></yhm-form-date>
+        </div>
+      </template>
       <!--数据表头-->
-      <template #listHead v-show="!empty">
+      <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择" ></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看" ></yhm-managerth>
         <yhm-managerth title="经办人" style="width: 150px;"></yhm-managerth>
@@ -30,13 +37,14 @@
       </template>
       <!--      数据表单       -->
       <template #listBody >
-        <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
+        <tr :class="[{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item" :persons="cont"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.createNameStr"></yhm-manager-td>
-          <yhm-manager-td-date :value="item.insertDate.slice(0,10)  "></yhm-manager-td-date>
-          <yhm-manager-td :value="item.category"></yhm-manager-td>
-          <yhm-manager-td :value="item.applicableModels"></yhm-manager-td>
+          <yhm-manager-td-center title="右键可筛选" :value="item.insertDate.slice(0,10)" :menu-list="insertDateMenu.indexOf('取消当前筛选')!='-1'?['取消当前筛选']:['筛选当前日期']" @rightClick="workOrderItem = item" @menuClick="insertDateMenuClick"></yhm-manager-td-center>
+          <!--          <yhm-manager-td-date :value="item.insertDate.slice(0,10)  "></yhm-manager-td-date>-->
+          <yhm-manager-td-psd :value="item.category+''" :list="listCategory.list"></yhm-manager-td-psd>
+          <yhm-manager-td-psd :value="item.applicableModels+''" :list="applicableModelsPsd.list"></yhm-manager-td-psd>
           <yhm-manager-td :value="item.code"></yhm-manager-td>
           <yhm-manager-td-money :value="item.totalStr+''"></yhm-manager-td-money>
 <!--          <yhm-manager-td :value="'出库'" @click="ku(item)" :color="item.state == 2 ? 'rgba(0,0,0,0.4)' : '#333333'"></yhm-manager-td>-->
@@ -69,6 +77,28 @@
     mixins: [managermixin],
     data(){
       return{
+        workOrderItem:[],
+        insertDateMenu:[],
+        startDateStr:'',//开始时间
+        endDateStr:'',//结束时间
+        timeShow:false,//自定义时间选择 显示隐藏
+        dateShow:false,//时间组件 显示隐藏
+        dateTypeList:{
+          value: '', //默认为空
+          list: [
+            {showName:"本日", num: "0", code: "", img: ""},
+            {showName:"昨日", num: "1", code: "", img: ""},
+            {showName:"本周", num: "2", code: "", img: ""},
+            {showName:"上周", num: "3", code: "", img: ""},
+            {showName:"本月", num: "4", code: "", img: ""},
+            {showName:"上月", num: "5", code: "", img: ""},
+            {showName:"本季度", num: "6", code: "", img: ""},
+            {showName:"上季度", num: "7", code: "", img: ""},
+            {showName:"本年", num: "8", code: "", img: ""},
+            // {showName:"上年", num: "9", code: "", img: ""},
+            {showName:"选择时间", num: "9", code: "", img: ""},
+          ]
+        },
         lastData:'1',
         people:'',
         one:'',
@@ -112,6 +142,55 @@
 
     },
     methods:{
+      insertDateMenuClick(title,index){
+        if(title=='筛选当前日期'){
+          this.startDateStr = this.workOrderItem.insertDate.slice(0,10)
+          this.endDateStr = this.workOrderItem.insertDate.slice(0,10)
+          this.dateTypeList.value = '9'
+          this.insertDateMenu = ['取消当前筛选']
+          this.initChoose('dateType')
+        }else if(title=='取消当前筛选'){
+          this.startDateStr = ''
+          this.endDateStr = ''
+          this.dateTypeList.value = ''
+          this.insertDateMenu = ['筛选当前日期']
+          this.initChoose('dateType')
+          return
+        }
+        setTimeout(()=>{
+          this.initPageData(false)
+        },0)
+      },
+      // 筛选事件
+      initChoose (op) {
+        this.pager.pageIndex = 1
+        if(op === 'dateType'&&this.dateTypeList.value!=9){
+          this.startDateStr=''//开始时间
+          this.endDateStr=''//结束时间
+        }
+        if (this.dateTypeList.value==9&&op=='dateType'){
+          this.timeShow = true
+          setTimeout(()=>{
+            this.dateShow = true
+          },300)
+          return
+        }else{
+          if (op === 'dateType') {
+            this.insertDateMenu = ['筛选当前日期']
+            this.timeShow = false
+            setTimeout(()=>{
+              this.dateShow = false
+            },300)
+            this.selectValue = []
+          }
+        }
+        this.initPageData(false)
+      },
+      dateSelection(start,finish){//选择时间段
+        if(start!=''&&finish!=''){
+          this.initPageData(false)
+        }
+      },
       delFromList(item){
         let params = {
           id:item.id
@@ -193,17 +272,28 @@
         if (initValue) {
           // 页面初始化是需要的参数
           params = {
-            stateStr:'2'
+            // stateStr:'2'
           }
         } else {
+          let startDateStr = ''
+          let endDateStr = ''
+          if(this.dateTypeList.value=='9'){
+            startDateStr = this.startDateStr +' 00:00:00'
+            endDateStr = this.endDateStr + ' 23:59:59'
+          }else{
+            startDateStr = this.startDateStr
+            endDateStr = this.endDateStr
+          }
           // 页面非初始化时需要的参数
           params = {
-            stateStr:'2',
+            // stateStr:'2',
             category: this.listCategory.value,
             applicableModels:this.applicableModelsPsd.value,
+            startDateStr:startDateStr,//开始时间
+            endDateStr:endDateStr,//结束时间
+            dateType:this.dateTypeList.value=='9'?'':this.dateTypeList.value,
             init: false,
             searchStr:this.searchStr,
-            stateStr: this.state.value,
             pageDetail: this.pager.pageIndex,
           }
         }
@@ -215,10 +305,6 @@
             // 不管是不是初始化都需要执行的代码
             this.content=data.content
 
-            for(let i in data.content){
-              this.content[i].category=data.categoryPsd.list[this.content[i].category].showName
-              this.content[i].applicableModels=data.applicableModels.list[this.content[i].applicableModels].showName
-            }
           },
           init: (data) => {
             // 初始化时需要执行的代码
@@ -249,7 +335,7 @@
       listView(item){
           this.$dialog.OpenWindow({
             width: 1050,
-            height: 520,
+            height: 720,
             url:'/stockOutView?id=' + item.id ,
             title:'查看出库信息'
           })
@@ -272,5 +358,18 @@
 </script>
 
 <style scoped>
-
+  .customTimeShow{
+    width: 100%;
+    height: 50px;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    transition: all 0.5s;
+  }
+  .customTimeHide{
+    width: 100%;
+    height: 0px;
+    display: flex;
+    transition: all 0.5s;
+  }
 </style>

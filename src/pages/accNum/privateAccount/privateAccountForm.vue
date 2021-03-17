@@ -8,10 +8,10 @@
         <yhm-form-select title="户名" :noClick="isPerson" tip="person" rule="R0000" @click="selectUnit" :value="person" id="person" :no-edit="isEdit"></yhm-form-select>
         <yhm-form-radio :show="isIntBank && isNtwork" title="银行卡类型" :select-list="bankCartCategoryList" :value="bankCartCategor" id="bankCartCategor" rule="R0000" :no-edit="isEditBl"></yhm-form-radio>
         <yhm-form-select :show="isIntBank && isNtwork" title="开户行" @click="selectEvent" :value="bank" id="bank" rule="R0000" :no-edit='1' tip="value"></yhm-form-select>
-        <yhm-form-text title="账户别名" :value="alias" id="alias" ref="alias" @blur="isAliasVerifyEvent()" tip="value"></yhm-form-text>
-        <yhm-form-text :show="isCash" @repeatverify="repeatverifyAccountEvent" ref="account" title="账号" :value="account" id="account"  rule="R0000" tip="account"></yhm-form-text>
+        <yhm-form-text :blank-show="true" title="账户别名" :value="alias" id="alias" ref="alias" @blur="isAliasVerifyEvent()" tip="value"></yhm-form-text>
+        <yhm-form-text :blank-show="true" :show="isCash" @repeatverify="repeatverifyAccountEvent" ref="account" title="账号" :value="account" id="account"  rule="R0000" tip="account"></yhm-form-text>
         <yhm-form-radio :show="isCash" @call="isThirdPartEvent" title="户名类型" :select-list="isThirdPartPsd"  :value="isThirdPart" id="isThirdPart" rule="R0000" :no-edit="isEditBl"></yhm-form-radio>
-        <yhm-form-text :show="isCash" tip="value" ref="thirdPartName" title="其他" subtitle="账户户名" :value="thirdPartName" id="thirdPartName" :no-edit="isEdit" :rule="isRule"></yhm-form-text>
+        <yhm-form-text :blank-show="true" :show="isCash" tip="value" ref="thirdPartName" title="其他" subtitle="账户户名" :value="thirdPartName" id="thirdPartName" :no-edit="isEdit" :rule="isRule"></yhm-form-text>
         <yhm-form-radio :show="isNetwork" title="网络" subtitle="账户类型" :select-list="webAccountTypelist"  :value="webAccountType" id="webAccountType" rule="R0000" :no-edit="isEditBl"></yhm-form-radio>
         <yhm-formupload :show="isNetwork" :ownerID="id" :value="fileList" id="fileList" title="收款二维码上传" tag="privateAccount" subtitle="" multiple="multiple" :no-edit="isEditBl" ></yhm-formupload>
       </template>

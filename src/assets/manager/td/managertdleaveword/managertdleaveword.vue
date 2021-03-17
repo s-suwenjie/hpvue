@@ -41,6 +41,7 @@
 
 <style lang="less" scoped>
 .leaveword{
+  width: 100%;
   height: 34px;
   display: flex;
   justify-content: center;

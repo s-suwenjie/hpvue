@@ -2,11 +2,12 @@
     <div>
       <yhm-managerpage>
         <!--导航条-->
-        <template #navigation>业务管理&nbsp;&gt;&nbsp;工单&nbsp;&gt;&nbsp;工序管理</template>
+        <template #navigation>业务管理&nbsp;&gt;&nbsp;工单&nbsp;&gt;&nbsp;服务管理</template>
         <!--操作区-->
         <template #operate>
           <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
-<!--          <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>-->
+          <!--          <yhm-commonbutton value="测试" icon="btnAdd" :flicker="true" @call="ceshi()"></yhm-commonbutton>-->
+          <!--          <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>-->
           <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
         </template>
 
@@ -25,10 +26,10 @@
           <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
             <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-            <yhm-manager-td-center :value="item.proName"></yhm-manager-td-center>
+            <yhm-manager-td :tip="true" :value="item.proName"></yhm-manager-td>
             <yhm-manager-td-center :value="item.proNum"></yhm-manager-td-center>
             <yhm-manager-td-center :value="item.hours"></yhm-manager-td-center>
-            <yhm-manager-td-center :value="item.assessment"></yhm-manager-td-center>
+            <yhm-manager-td-center :value="item.assessment==null?'':item.assessment"></yhm-manager-td-center>
           </tr>
         </template>
 
@@ -56,6 +57,15 @@
       }
     },
     methods:{
+      ceshi(){
+        this.ajaxJson({
+          url: '/fix/fixOrder/print',
+          data: {},
+          call: (data) => {
+            window.open('/UploadFile/' + data.message)
+          }
+        })
+      },
       listView(item){
         this.$dialog.OpenWindow({
           width: '1050',

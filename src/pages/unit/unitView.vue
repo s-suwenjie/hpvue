@@ -17,12 +17,16 @@
       </template>
     </yhm-view-body>
     <div class="f_split"></div>
+    <div class="v_relative">
+    <yhm-table-tip node-class-name="v_relative" :show="tableTip" :content="tableTipInfo" :column="tableTipColumnInfo" :mouse-control="tableTipControl"></yhm-table-tip>
+
     <yhm-view-tab>
       <template #tab>
         <yhm-view-tab-button :list="tabState" :index="0">更多信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1" @click="listDetail">往来明细</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="2" @click="maintain">保险理赔</yhm-view-tab-button>
-
+        <yhm-view-tab-button :list="tabState" :index="3" @click="unitInvoice">发票抬头</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="4" @click="kuaidiPage">快递明细</yhm-view-tab-button>
       </template>
       <template #tab_total>
         <div v-show="tabState[1].select" style="background: #c5daeb;margin-right: 2px;">
@@ -59,6 +63,15 @@
               </tr>
               </tbody>
             </table>
+          </div>
+          <div>
+            <div  v-show="tabState[3].select" style="margin-right: 30px">
+<!--              <yhm-datebox type="year" width="200px" :maxYear="maxYear" :isSm="true" @call="selectYear" style="width: 120px" :value="yearTxt" id="yearTxt" position="r"></yhm-datebox>-->
+              <yhm-commonbutton value="查看开票历史" width="260px" icon="icon-view" @call="selectInvoiceView" style="width: 100px" ></yhm-commonbutton>
+              <yhm-commonbutton value="查看列表" width="260px" icon="btnAdd" @call="selectInvoice" style="width: 100px" ></yhm-commonbutton>
+              <yhm-commonbutton value="添加发票抬头" width="260px" icon="btnAdd" @call="addInvoice" style="width: 100px" ></yhm-commonbutton>
+            </div>
+
           </div>
         </div>
       </template>
@@ -153,8 +166,83 @@
             <yhm-pagination :pager="pager" is-page-size="false" @initData="initPageData(false)"></yhm-pagination>
           </template>
         </yhm-view-tab-list>
+
+        <yhm-view-tab-list :customize="true"  v-show="tabState[3].select">
+          <template #operate>
+            <yhm-radiofilter @initData="unitInvoice('invoiceCategory')" title="查看" :content="invoiceCategory" style="margin: 5px 0;"></yhm-radiofilter>
+          </template>
+          <template #listHead>
+            <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
+            <yhm-managerth title="公司名称"></yhm-managerth>
+            <yhm-managerth title="开户行"></yhm-managerth>
+            <yhm-managerth title="税号"></yhm-managerth>
+            <yhm-managerth v-if="isSchedule" title="保险审批进度"></yhm-managerth>
+            <yhm-managerth v-if="isSchedule" title="财务审批进度"></yhm-managerth>
+            <yhm-managerth v-if="isSchedule" title="高层审批进度"></yhm-managerth>
+            <yhm-managerth title="可信度"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="操作"></yhm-managerth>
+
+
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in content" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-manager-td-look @click="invoiceList(item)"></yhm-manager-td-look>
+              <yhm-manager-td :value="item.unit" ></yhm-manager-td>
+              <yhm-manager-td :value="item.bank" :after-icon="item.listMessage.length>0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td>
+              <yhm-manager-td :value="item.taxNumber"></yhm-manager-td>
+              <yhm-manager-td v-if="isSchedule" :value="item.insCategoryVal"></yhm-manager-td>
+              <yhm-manager-td v-if="isSchedule" :value="item.finCategoryVal"></yhm-manager-td>
+              <yhm-manager-td v-if="isSchedule" :value="item.highCategoryVal"></yhm-manager-td>
+              <yhm-manager-td :value="item.credibility==0?'未使用过':'可信'"></yhm-manager-td>
+              <yhm-manager-td-operate>
+                <yhm-manager-td-operate-button @click="del(item)" :no-click="item.insCategory==2 &&item.finCategory==2 &&item.highCategory ==2 ?true:false" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
+              </yhm-manager-td-operate>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="content.length=='0'?true:false">暂时没有数据</span>
+          </template>
+          <template #pager>
+            <yhm-pagination :pager="pager" is-page-size="false" @initData="unitInvoice"></yhm-pagination>
+          </template>
+        </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[4].select">
+          <template #listHead>
+            <yhm-managerth style="width:40px" title="查看" ></yhm-managerth>
+            <yhm-managerth title="收寄类型"></yhm-managerth>
+            <yhm-managerth title="业务类型" ></yhm-managerth>
+            <yhm-managerth title="经办人" ></yhm-managerth>
+            <yhm-managerth title="收寄人" ></yhm-managerth>
+            <yhm-managerth title="收寄物类型"></yhm-managerth>
+            <yhm-managerth title="收寄时间"></yhm-managerth>
+            <yhm-managerth title="快递单号"></yhm-managerth>
+            <yhm-managerth title="费用"></yhm-managerth>
+
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in myExpressList" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-manager-td-look @click="listKuaiDiView(item)"></yhm-manager-td-look>
+              <yhm-manager-td-psd :value="item.letterClassification" :list="listLetterClassification" ></yhm-manager-td-psd>
+              <yhm-manager-td-psd :value="item.businessType" :list="listBusinessType"></yhm-manager-td-psd>
+              <yhm-manager-td :value="item.wePersonName" ></yhm-manager-td>
+              <yhm-manager-td :value="item.otherPartyPersonName" ></yhm-manager-td>
+              <yhm-manager-td-psd :value="item.itemType" :list="listItemType"></yhm-manager-td-psd>
+              <yhm-manager-td :value="item.workDate" ></yhm-manager-td>
+              <yhm-manager-td :value="item.code" ></yhm-manager-td>
+              <yhm-manager-td :value="item.amount" ></yhm-manager-td>
+
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData"  v-show="myExpressList.length>0?false:true">暂时没有数据</span>
+          </template>
+          <template #pager>
+            <yhm-pagination :pager="pagerKuaiDi" is-page-size="false" @initData="kuaidiPage(false)"></yhm-pagination>
+          </template>
+        </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
+    </div>
     <div class="f_split"></div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
@@ -180,6 +268,12 @@
             {showName:"支出", num: "1", code: "", img: ""},
           ]
         },
+        pagerKuaiDi:{ // 分页数据
+          total: '', // 数据总条数
+          pageSize: 5, // 单页数据条数
+          pageIndex: 1, // 当前页码
+          selectCount: 0 // 选中数据的条数
+        },
         category: '',//单位分类
         totalTotal:[],
         name:'',//单位名称
@@ -196,7 +290,7 @@
         capital: '',//注册资本
         currency:'',//币种类型
         content:[],
-        tabState:[{select:true},{select:false},{select:false}],
+        tabState:[{select:true},{select:false},{select:false},{select:false},{select:false}],
         empty:false,
         isTagShow: false,
 
@@ -238,9 +332,186 @@
           ],
           value:'0',
         },
+        invoiceCategory:{
+          list:[
+            {
+              code:"",
+              img:'',
+              num:'0',
+              showName:'已完成'
+            },
+            {
+              code:"",
+              img:'',
+              num:'1',
+              showName:'未完成'
+            },
+          ],
+          value:'0',
+        },
+        isSchedule:false,
+        tableTip:false,         //记录表格是否显示
+        tableTipControl:{},
+        tableTipColumnInfo:[
+          {width:'150',title:'审批时间',category:'date',key:'insertDate'},
+          {width:'150',title:'审批人员',category:'',key:'messageName'},
+          {width:'150',title:'审批备注',category:'',key:'message'},
+        ],
+        tableTipInfo:[],
+        listBusinessType:{
+          value:"",
+          list:[]
+        },
+        listLetterClassification:{
+          value:"",
+          list:[]
+        },
+        listItemType:{
+          value:"",
+          list:[]
+        },
+        myExpressList:[],
+
       }
     },
     methods: {
+      listKuaiDiView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/myExpressView?id='+item.id,
+          title: '查看快递信息',
+          closeCallBack: (data) => {
+          }
+        })
+      },
+      kuaidiPage(){
+        let params = {
+          unitName:this.name,
+          pageIndex:this.pagerKuaiDi.pageIndex,
+          pageSize:this.pagerKuaiDi.pageSize,
+          init:'true',
+        }
+        this.ajaxJson({
+          url: '/dailyoffice/myExpress/getViewManager',
+          data: params,
+          call: (data) => {
+            this.listBusinessType=data.businessTypePsd.list
+            this.listItemType=data.itemTypePsd.list
+            this.listLetterClassification=data.letterClassificationPsd.list
+            this.myExpressList=data.content
+          }
+        })
+      },
+      selectInvoiceView(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '650',
+          url:'/selectInvoiceView?id='+this.id+'&name='+this.name,
+          title:'查看开票历史',
+          closeCallBack:(data) =>{
+            if (data) {
+              this.getUnitInformation(data)
+            }
+          }
+        })
+      },
+      del(item){
+        let params = {
+          id: item.id,
+        }
+        this.ajaxJson({
+          url: '/Basic/unitInvoiceDel',
+          data: params,
+          call: (data) => {
+            if (data.type == '0') {
+              this.$dialog.alert({
+                tipValue: data.message,
+                closeCallBack: (data) => {
+                  this.unitInvoice()
+                }
+              })
+            } else {
+              this.$dialog.alert({
+                alertImg: 'error',
+                tipValue: data.message,
+                closeCallBack: () => {
+                }
+              })
+            }
+          }
+        })
+      },
+      selectInvoice(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/selectUnitInvoice?id='+this.id,
+          title:'选择发票抬头',
+          closeCallBack:(data) =>{
+            if (data) {
+              this.getUnitInformation(data)
+            }
+          }
+        })
+      },
+      invoiceList(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/unitInvoiceView?id='+item.id,
+          title:'查看发票抬头',
+          closeCallBack:(data) =>{
+            if (data) {
+              this.getUnitInformation(data)
+            }
+          }
+        })
+      },
+      tableTipShowEvent(item,control){
+        if(item.listMessage.length > 0) {
+          this.tableTipInfo = item.listMessage
+          this.tableTipControl = control
+          this.tableTip = true
+        }
+      },
+      tableTipHideEvent(){
+        this.tableTip = false
+      },
+
+      unitInvoice(){
+        if (this.invoiceCategory.value==1){
+            this.isSchedule=true
+        }else{
+          this.isSchedule=false
+        }
+        let params = {
+          id:this.id,
+          category: this.invoiceCategory.value
+        }
+        this.ajaxJson({
+          url: '/Basic/getInvoiceAll',
+          data: params,
+          call: (data) => {
+            this.content = data.content
+            this.pager.total = data.count
+
+          }
+        })
+      },
+      addInvoice(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '690',
+          url:'/unitInvoiceFrom?ownerID='+this.id,
+          title:'添加发票抬头',
+          closeCallBack:(data) =>{
+            if (data) {
+              this.getUnitInformation(data)
+            }
+          }
+        })
+      },
       selectYear(val){
         this.yearTxt = val+''
         this.maintain()

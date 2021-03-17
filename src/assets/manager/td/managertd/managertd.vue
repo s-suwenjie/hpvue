@@ -1,19 +1,24 @@
 <template>
-  <td :rowspan="rowspan" ref="control" @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent" @dblclick="dblclickEvent">
-    <div v-if="getEmpty" class="md_center">
+  <td v-show="show" :rowspan="rowspan" ref="control" @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent" @dblclick="dblclickEvent">
+    <div v-show="getEmpty" class="md_center">
       -----
     </div>
-    <div v-if="!getEmpty" class="md_left md_relative" :style="{color: color}">
+    <div v-if="type=='vehicle'&&value!=''" :style="{textAlign:vehicleTextAlign}" style="padding: 0 6px;">
+      <span style="font-size: 14px;font-weight: 700;" v-if="value!=''">{{(value+'').trim().slice(0,2)}}</span>
+      <span v-if="value!=''" style="font-size: 14px;font-weight: 700;">-</span>
+      <span v-if="value!=''">{{(value+'').trim().slice(2,value.length)}}</span>
+      <span style="text-align: center;" v-if="value==''">------</span>
+    </div>
+    <div v-show="!getEmpty" v-else class="md_left md_relative" :style="{overflow:overflow,color: color,textAlign:textAlign}">
       <span v-if="!isHtml">{{value}}</span>
       <span v-if="isHtml" v-html="value"></span>
-      <div v-if="afterIcon !== ''" class="md_afterIcon" :style="{color:afterIconColor}" :class="[afterIcon,afterIconFontSize]"></div>
+      <div @click.stop="afterClick" v-if="afterIcon !== ''" class="md_afterIcon" :style="{color:afterIconColor}" :class="[afterIcon,afterIconFontSize]"></div>
       <slot></slot>
-
     </div>
     <div ref="tip" v-if="tip&&tipType!='r'" v-show="showTip" class="c_tip" :style="getPosition">
       <div class="c_tip_img">
         {{tipShow?tipValue:value}}
-        <img src="./images/arrow.png">
+        <img style="position: absolute; bottom: -19px;" src="./images/arrow.png">
       </div>
     </div>
     <div ref="tip" v-if="tipType=='r'?true:false&&tip" v-show="showTip" class="c_tip c_tipRight"  :style="getPositionRight">
@@ -40,13 +45,29 @@
       }
     },
     props: {
+      type:{
+        type:String,
+        default:''
+      },
+      vehicleTextAlign:{
+        type:String,
+        default:'left'
+      },
       isHtml:{
         type:Boolean,
         default:false
       },
+      overflow:{
+        type:String,
+        default:'hidden'
+      },
       rowspan:{
         type:Number,
         default:1
+      },
+      textAlign:{
+        type:String,
+        default:''
       },
       nodeClassName:{
         type:String,
@@ -57,6 +78,10 @@
         default: false
       },
       tipType:{//等于 r 时 是做当回显在列表最后一个显示不全的处理
+        type: String,
+        default: ''
+      },
+      tipTypeLeft:{//等于 r 时 是做当回显在列表最后一个显示不全的处理 用来调整距离 不需要加单位
         type: String,
         default: ''
       },
@@ -90,6 +115,10 @@
       color: {
         type: String,
         default: '#333'
+      },
+      show:{
+        type:Boolean,
+        default:true
       }
     },
     methods:{
@@ -131,6 +160,11 @@
           this.$emit('click')
         })
       },
+      afterClick(){
+        this.$nextTick(() => {
+          this.$emit('afterClick')
+        })
+      },
       mouseoutEvent() {
         this.showTip = false
         if (!this.getEmpty) {
@@ -147,7 +181,7 @@
       getPositionRight(){
         let result = ''
         if(this.left !== ''){
-          result += 'left:' + (this.left-100) + 'px;'
+          result += 'left:' + (this.left-100-Number(this.tipTypeLeft)) + 'px;'
         }
         if(this.top !== ''){
           result += 'top:' + this.top + 'px;'

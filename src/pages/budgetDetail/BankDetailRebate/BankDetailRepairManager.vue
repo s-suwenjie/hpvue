@@ -19,6 +19,7 @@
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
         <yhm-commonbutton value="打开选中信息" icon="i-selectAll" @call="selectedList" :show="isSelected" category="three"></yhm-commonbutton>
         <yhm-radiofilterdate title="时间" @initData="selectMonthEvent"></yhm-radiofilterdate>
+        <yhm-commonbutton  style="margin-bottom: 6px;margin-left:-17px;" value="开票申请" :show="isSelected&&signStateList.value==='0'" icon="btnAdd" @call="addOpenInvoice" :flicker="true"></yhm-commonbutton>
         <yhm-radiofilterday title="日" :yearMonth="yearMonth" @initData="initChooseTime"></yhm-radiofilterday>
 
       </template>
@@ -37,6 +38,8 @@
         <div v-show="choose" class="buttonBody mptZero">
           <yhm-radiofilter v-show="!isPersonalClaims" @initData="initChoose('type')" title="回款方式" :content="typeList"></yhm-radiofilter>
           <yhm-radiofilter  @initData="initChoose('signState')" title="数据状态" :content="signStateList"></yhm-radiofilter>
+          <yhm-radiofilter  @initData="initChoose('subjectID')" title="事由类型" :content="subjectIDList"></yhm-radiofilter>
+          <yhm-radiofilter  @initData="initChoose('openInvoiceType')" title="开票金额类型" :content="openInvoiceTypeList"></yhm-radiofilter>
           <yhm-radiofilter :before="bank" @initData="initChoose('bank')" title="银行"  :content="bankList"></yhm-radiofilter>
           <yhm-radiofilter :before="operatorID" @initData="initChoose('operatorID')" title="业务员"  :content="operatorIDList"></yhm-radiofilter>
           <!--<yhm-radiofilter v-show="true" :before="insuranceUnit" @initData="initChoose('insuranceUnit')" title="保险公司"  :content="insuranceUnitList"></yhm-radiofilter>-->
@@ -50,42 +53,47 @@
       <template #listHead>
         <yhm-managerth-check style="width: 40px;" :check="allCheck"></yhm-managerth-check>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 200px" title="客户姓名" value="customerName"></yhm-managerth>
+        <yhm-managerth style="width: 100px" title="客户姓名" value="customerName"></yhm-managerth>
         <yhm-managerth title="收入来源" value="otherName"></yhm-managerth>
-        <yhm-managerth style="width: 140px;" title="工单号" value="workOrderID"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="业务员" value="operator"></yhm-managerth>
+        <yhm-managerth style="width: 170px;" title="工单号" value="workOrderID"></yhm-managerth>
+        <yhm-managerth style="width: 80px" title="业务员" value="operator"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="车型品牌" value="vehicleBrandID"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="车牌号" value="licensePlateNumber"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="车牌号" value="licensePlateNumber"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="回款日期" value="moneyBackDate"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="发生额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 140px" title="收款银行" value="bankName"></yhm-managerth>
         <!--          <yhm-managerth style="width: 140px" title="发票号"></yhm-managerth>-->
         <yhm-managerth style="width: 180px" title="银行摘要" ></yhm-managerth>
-        <yhm-managerth style="width: 100px" title="数据状态" ></yhm-managerth>
+        <yhm-managerth style="width: 80px" title="数据状态" ></yhm-managerth>
+        <yhm-managerth style="width: 180px" title="开票操作" ></yhm-managerth>
       </template>
       <!--数据明细-->
       <template #listBody>
-        <tr  v-for="(item,index) in content" :key="index">
+        <tr  v-for="(item,index) in content" :key="index" :class="[{InterlacBg:index%2!=0}]">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.customer" v-if="item.customer===''" ></yhm-manager-td>
           <yhm-manager-td-center :value="item.customer" v-else @click="customerClick(item)" :menu-list="customerMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
           <yhm-manager-td :tip="true" :value="item.otherName" :color='item.subjectID=="008F808E-C79C-4F8B-9D16-986093FAB86A"&&incomeType==="1"?"#0b26e8":""' v-if="item.otherName===''" @click="unitClickLeft(item)" ></yhm-manager-td>
           <yhm-manager-td-center :tip="true" :value="item.otherName" :color='item.subjectID=="008F808E-C79C-4F8B-9D16-986093FAB86A"&&incomeType==="1"?"#0b26e8":""' v-else @click="unitClickLeft(item)" :menu-list="unitMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
-          <yhm-manager-td :value="item.workOrderID" v-if="item.workOrderID===''" ></yhm-manager-td>
-          <yhm-manager-td-center :value="item.workOrderID" :after-icon="item.detailNum > 1?'i-btn-prompt':''"  v-else :menu-list="jobNumberMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
+          <yhm-manager-td :value="item.workOrder" v-if="item.workOrder===''" ></yhm-manager-td>
+          <yhm-manager-td-center :value="item.workOrder" :after-icon="item.detailNum > 1?'i-btn-prompt':''"  v-else :menu-list="jobNumberMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
 
           <yhm-manager-td :value="item.operator" v-if="item.operatorID===''" @click="operatorClickLeft(item)"></yhm-manager-td>
           <yhm-manager-td-center :value="item.operator" v-else :menu-list="operatorMenu" @click="operatorClickLeft(item)" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
           <yhm-manager-td :value="item.vehicleBrand" v-if="item.vehicleBrand===''"></yhm-manager-td>
           <yhm-manager-td-center :value="item.vehicleBrand" v-else :menu-list="vehicleBrandMenu" @click="vehicleBrandLeft(item)" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
-          <yhm-manager-td :value="item.licensePlateNumber" :menu-list="licensePlateMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td>
+          <yhm-manager-td-center :value="item.licensePlateNumber" @click="vehicleEvent(item)" :menu-list="licensePlateMenu" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
           <yhm-manager-td-date :value="item.moneyBackDate"></yhm-manager-td-date>
           <yhm-manager-td-money :value="item.money === null ? ' ':item.money" :before-icon="item.detailBalance > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" before-icon-color="red"></yhm-manager-td-money>
           <yhm-manager-td :value="item.bankName" v-if="item.bankName===''"></yhm-manager-td>
           <yhm-manager-td-center :value="item.bankName" v-else :menu-list="bankIDMenu" @click="vehicleBrandLeft(item)" @rightClick="rightClick(item)" @menuClick="menuClick"></yhm-manager-td-center>
           <yhm-manager-td :value="item.bankSummary === null ? ' ': item.bankSummary" title="点击复制" @click="clickCopy(item.bankSummary)"></yhm-manager-td>
           <yhm-manager-td-psd  :value="item.signState" :list="isSignStateList"></yhm-manager-td-psd>
+          <yhm-manager-td-operate>
+            <yhm-manager-td-operate-button v-show="item.balanceInvoice != 0&& (item.signState==='0'||item.signState==='3') " @click="addOpenInvoiceOne(item)" value="开票申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.balanceInvoice !== item.money " @click="viewOpenInvoice(item)" value="查看开票" color="#7112da"></yhm-manager-td-operate-button>
+          </yhm-manager-td-operate>
         </tr>
       </template>
       <!--数据空提示-->
@@ -111,7 +119,6 @@
           <yhm-manager-td-money v-show="isYearMoneyShow && !isSelected" v-if="!yearMoneyShow" :before-symbol="yearMoneySymbol" @click="totalClick('0')" before-color="#ff000c" :style="{color:oldTotalColor1}"  value="NaN"></yhm-manager-td-money>
 
         </tr>
-
       </template>
     </yhm-managerpage>
     <div class="copyTip" v-if="isCopyTip">复制成功： {{text}}</div>
@@ -121,6 +128,7 @@
 
 <script>
   import { managermixin } from '@/assets/manager.js'
+  import { guid } from '../../../assets/common'
   export default {
     name: 'claimsManager',
     mixins: [managermixin],
@@ -167,6 +175,11 @@
         bankList: {
           value: '',
           list: []
+        },
+        subjectID:'',
+        subjectIDList: {
+          value: '',
+          list: [],
         },
         insuranceUnit:'0',
         insuranceUnitList: {
@@ -321,9 +334,209 @@
         ],
         tableTipInfo:[],
         contentTotal:[],
+
+        openInvoiceMainID:'',
+        selectList:[],
+        openInvoiceType:'',
+        openInvoiceTypeList:{
+          value: '',
+          list: []
+        },
       }
     },
     methods:{
+      vehicleEvent(item){
+        if(item.vehicleID){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '810',
+            title: '车辆信息',
+            url: '/vehicleView?id='+item.vehicleID,
+            closeCallBack: (data)=>{
+              if(data){
+                this.initPageData(false)
+              }
+            }
+          })
+        }
+      },
+      viewOpenInvoice(item){
+        this.$dialog.OpenWindow({
+          width: '750',
+          height: '390',
+          title: '查看开票申请信息',
+          url: '/claimsOpenInvoice?ownerID=' + item.id,
+          closeCallBack: (data) => {
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      addOpenInvoiceOne(item){
+        this.openInvoiceMainID=guid()
+        let detailList=[item.id]
+        let params = {
+          ownerID:this.openInvoiceMainID,
+          detailList: detailList
+        }
+        this.ajaxJson({
+          url: '/Fin/openInvoiceListSave',
+          data: params,
+          call: (data) => {
+            if (data.type === 0) {
+              this.$dialog.OpenWindow({
+                width: '1050',
+                height: '790',
+                title: '添加开票申请信息',
+                url: '/openInvoiceForm?isAdd=true&ownerID=' + this.openInvoiceMainID + '&ownerCategory=1',
+                closeCallBack: (data) => {
+                  if (data) {
+                    this.initPageData(false)
+                  }else{
+                    let params = {
+                      ownerID:this.openInvoiceMainID
+                    }
+                    this.ajaxJson({
+                      url: '/Fin/openInvoiceListDel',
+                      data: params,
+                      call: (data) => {
+
+                      }
+                    })
+                  }
+                }
+              })
+            }
+          }
+        })
+      },
+      addOpenInvoice(){
+        this.openInvoiceMainID=guid()
+        let a=true
+        let list=[]
+        for (let i = 0; i < this.selectList.length; i++) {
+          if(parseFloat(this.selectList[i].balanceInvoice)!==0){
+            list.push(this.selectList[i].id)
+          }
+        }
+        if(list.length>0){
+          let params = {
+            ownerID:this.openInvoiceMainID,
+            detailList: list
+          }
+          this.ajaxJson({
+            url: '/Fin/openInvoiceListSave',
+            data: params,
+            call: (data) => {
+              if(data.type===0){
+                if(data.val === ''){
+                  this.$dialog.OpenWindow({
+                    width: '1050',
+                    height: '790',
+                    title: '添加开票申请信息',
+                    url: '/openInvoiceForm?isAdd=true&ownerID='+this.openInvoiceMainID+'&ownerCategory=1',
+                    closeCallBack: (data) => {
+                      if (data) {
+                        this.selectValue=[]
+                        this.initPageData(false)
+                      }else{
+                        let params = {
+                          ownerID:this.openInvoiceMainID
+                        }
+                        this.ajaxJson({
+                          url: '/Fin/openInvoiceListDel',
+                          data: params,
+                          call: (data) => {
+
+                          }
+                        })
+                      }
+                    }
+                  })
+                }else if(data.val === '2'){
+                  this.$dialog.confirm({
+                    width: 300,
+                    tipValue: '开票抬头不同，确认同时开票?',
+                    btnValueOk: '确认',
+                    alertImg: 'warn',
+                    okCallBack: () => {
+                      this.forOpenInvoice(this.openInvoiceMainID)
+                    },
+                    cancelCallBack: () => {
+                      this.delOpenInvoiceMoreUnit(this.openInvoiceMainID)
+                    }
+                  })
+                }
+              }else{
+                this.$dialog.alert({
+                  alertImg: 'error',
+                  tipValue: data.message,
+                  closeCallBack: ()=>{
+
+                  }
+                })
+              }
+            }
+          })
+        }else{
+          this.$dialog.alert({
+            alertImg: 'error',
+            tipValue: '所选数据已全部开票',
+            closeCallBack: ()=>{
+
+            }
+          })
+        }
+      },
+      delOpenInvoiceMoreUnit(ownerID){
+        let params = {
+          ownerID:ownerID
+        }
+        this.ajaxJson({
+          url: '/Fin/openInvoiceMoreUnitDel',
+          data: params,
+          call: (data) => {
+            this.selectValue=[]
+            this.initPageData(false)
+          }
+        })
+      },
+      forOpenInvoice(ownerID){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '790',
+          title: '添加开票申请信息',
+          url: '/openInvoiceForm?isAdd=true&ownerID=' + ownerID + '&ownerCategory=1&forOpenInvoice=1',
+          closeCallBack: (num) => {
+            if(num){
+              let a=0
+              if(num==='1'){
+                this.delOpenInvoiceMoreUnit(ownerID)
+                return
+              }else{
+                let params={
+                  ownerID:this.openInvoiceMainID
+                }
+                this.ajaxJson({
+                  url: '/Fin/openInvoiceListFor',
+                  data: params,
+                  call: (data) => {
+                    if(data.length>0){
+                      this.forOpenInvoice(data[0].invoiceID)
+                    }else{
+                      this.selectValue=[]
+                      this.initPageData(false)
+                    }
+                  }
+                })
+              }
+            }else{
+              this.forOpenInvoice(ownerID)
+            }
+          }
+        })
+      },
       /* 小标格显示 */
       tableTipShowEvent(item,control){
         if(parseFloat(item.detailBalance) > 0) {
@@ -410,6 +623,7 @@
           this.typeList.value = this.oldType
           $('#incomeContent').html('全部维修收入')
         }
+        this.pager.pageIndex = 1
         this.initPageData(false)
       },
       oldTotalClick(){
@@ -448,11 +662,22 @@
           'unitOrPerson':this.unitOrPersonList.value
         })
         sessionStorage.cartogramScreen = JSON.stringify(screen)
+
+        let url = ''
+
+        let title = ''
+        if(this.incomeType=='1'){//点击了全部维修
+          url = '/allMaintenanceCartogram'
+          title = '全部维修费用统计图'
+        }else{
+          url = '/insuranceCartogram?type='+this.type
+          title = '保险理赔统计图'
+        }
         this.$dialog.OpenWindow({
           width: '1300',
           height: '810',
-          title: '自费维修统计图',
-          url: '/insuranceCartogram?type='+this.type,
+          title: title,
+          url: url,//'/insuranceCartogram?type='+this.type,
           closeCallBack: (data)=>{
             sessionStorage.removeItem('cartogramScreen')
           }
@@ -762,7 +987,7 @@
         this.radioTime = item;
         this.startDate = this.radioTime.startDate ? this.radioTime.startDate : newRadioTime.startDate;
         this.endDate = this.radioTime.endDate ? this.radioTime.endDate : newRadioTime.endDate;
-        if(item.startDate.split("-")[1]<item.endDate.split("-")[1]){
+        if((item.startDate.split("-")[1]<item.endDate.split("-")[1])||(item.startDate.split("-")[1]==12&&item.endDate.split("-")[1]==1)){
           this.oldTotal='比前一月(环比)'
           this.nowTotal='本月'
           this.isYearMoneyShow=true
@@ -808,6 +1033,14 @@
         let params={
           selectValue:this.selectValue
         };
+        this.selectList=[];
+        for (let i = 0; i < this.content.length; i++) {
+          for (let k = 0; k < this.selectValue.length; k++) {
+            if(this.content[i].id===this.selectValue[k]){
+              this.selectList.push(this.content[i]);
+            }
+          }
+        }
         this.ajaxJson({
           url: '/Fin/commonSelectedsave',
           data:params,
@@ -865,7 +1098,7 @@
         // if(item.workOrderID){//原需求如工单号为空 跳到form维护页 不为空跳view
         //   url = '/claimsView?id=' + item.id
         // }else{
-        url = '/claimsForm?id=' + item.ownerID
+        url = '/claimsForm?id=' + item.id
         // }
         this.$dialog.OpenWindow({
           width: '1050',
@@ -934,7 +1167,9 @@
               type:this.type,
               unitOrPersonList:this.unitOrPersonList.value,
               customerName:this.customerName,
-              licensePlateNumber:this.licensePlateNumber
+              licensePlateNumber:this.licensePlateNumber,
+              openInvoiceType:this.openInvoiceTypeList.value,
+              subjectID:this.subjectIDList.value
             }
           }else if(this.dayCategory==='3'){
             params = {
@@ -952,7 +1187,9 @@
               type:this.type,
               unitOrPersonList:this.unitOrPersonList.value,
               customerName:this.customerName,
-              licensePlateNumber:this.licensePlateNumber
+              licensePlateNumber:this.licensePlateNumber,
+              openInvoiceType:this.openInvoiceTypeList.value,
+              subjectID:this.subjectIDList.value
             }
           }else if(this.dayCategory === '1'){
             params = {
@@ -961,7 +1198,9 @@
               type:this.type,
               unitOrPersonList:this.unitOrPersonList.value,
               customerName:this.customerName,
-              licensePlateNumber:this.licensePlateNumber
+              licensePlateNumber:this.licensePlateNumber,
+              openInvoiceType:this.openInvoiceTypeList.value,
+              subjectID:this.subjectIDList.value
             }
           }
         }
@@ -977,6 +1216,7 @@
             this.bankList = data.bankList
             this.operatorIDList = data.operatorList
             this.vehicleBrandList = data.vehicleBrandList
+            this.subjectIDList = data.subjectIDList
 
             if(data.total[0].oldMoney>=0){
               this.oldTotalColor= '#ff000c'
@@ -1002,6 +1242,7 @@
             this.bankList = data.bankList
             this.operatorIDList = data.operatorList
             this.contentTotal = data.total
+            this.openInvoiceTypeList = data.openInvoiceMoneyList
             //初始化时需要执行的代码
           }
         })

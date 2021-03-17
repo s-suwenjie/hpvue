@@ -21,6 +21,20 @@ const formmixin = {
     autoVerify(controlID,message){
       eval('this.$refs.' + controlID + '.errorEvent("' + message + '")')
     },
+    //替换指定传入参数的值,paramName为参数,replaceWith为新值
+    replaceParamVal(paramName,replaceWith,title) {
+      if(paramName==''){//需要改变的参数值不能为空
+        return
+      }
+      let oUrl = location.search.toString();
+      let re=eval('/('+ paramName+'=)([^&]*)/gi');
+      let newUrl = oUrl.replace(re,paramName+'='+replaceWith);
+      let stateObject = 0;
+      history.replaceState(stateObject,title,newUrl);
+      console.log(oUrl)
+      console.log(newUrl)
+      console.log(window.location)
+    },
     //格式化日期带周几
     formatDateShow (data) {
       return formatDateHtml(data)
@@ -69,6 +83,18 @@ const formmixin = {
           }
         }
       })
+    }
+  },
+  computed:{
+    showSchedule(){
+      return function (scheduleConfig,index) {
+        if (!scheduleConfig.reject && !scheduleConfig.isFinish) {
+          return index === scheduleConfig.current
+        }
+        else{
+          return index === scheduleConfig.select
+        }
+      }
     }
   },
   created(){

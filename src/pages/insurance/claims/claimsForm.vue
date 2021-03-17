@@ -19,34 +19,34 @@
           <yhm-formbody>
             <template #title>分单信息</template>
             <template #opera>
-              <yhm-commonbutton value="添加分单信息" icon="btnAdd" @call="addCheckNumEvent"></yhm-commonbutton>
+              <yhm-commonbutton value="添加分单信息" icon="btnAdd" v-if="ownerID===''" @call="addCheckNumEvent"></yhm-commonbutton>
             </template>
             <template #control>
               <div>
                 <yhm-form-list-edit style="border: none;width: 998px">
                   <template #listHead>
-                    <yhm-managerth style="width: 90px" title="业务员"></yhm-managerth>
                     <yhm-managerth style="width: 110px" title="工单号"></yhm-managerth>
+                    <yhm-managerth style="width: 90px" title="业务员"></yhm-managerth>
                     <yhm-managerth style="width: 120px" title="金额"></yhm-managerth>
                     <yhm-managerth style="width: 130px" title="客户类型"></yhm-managerth>
                     <yhm-managerth style="width: 110px" title="客户"></yhm-managerth>
                     <yhm-managerth style="width: 90px" title="车牌号"></yhm-managerth>
                     <yhm-managerth style="width: 90px" title="车辆品牌"></yhm-managerth>
                     <yhm-managerth style="width: 90px" title="车型"></yhm-managerth>
-                    <yhm-managerth style="width: 90px" title="发票"></yhm-managerth>
+                    <yhm-managerth style="width: 90px" title="事由"></yhm-managerth>
                     <yhm-managerth style="" title="操作"></yhm-managerth>
                   </template>
                   <template #listBody>
                     <tr v-for="(item,index) in detailList" :key="index" :class="{InterlacBg:index%2!==0}">
-                      <yhm-form-td-select-dialog width="90" tip="operator" @call="operatorEvent(index)" :list="detailList" listid="detailList" :value="item" id="operator" rule="R0000"></yhm-form-td-select-dialog>
-                      <yhm-form-td-textbox width="110" tip="workOrderID" @change="VerifyworkOrder(index)"  :list="detailList" listid="detailList" :value="item" id="workOrderID" rule="R0000"></yhm-form-td-textbox>
+                      <yhm-form-td-select-dialog width="110" tip="workOrder" @call="VerifyworkOrder(index)"  :list="detailList" listid="detailList" :value="item" id="workOrder" rule="R0000"></yhm-form-td-select-dialog>
+                      <yhm-form-td-select-dialog width="90" :no-edit="'1'" tip="operator" @call="operatorEvent(index)" :list="detailList" listid="detailList" :value="item" id="operator" rule="R0000"></yhm-form-td-select-dialog>
                       <yhm-form-td-textbox width="120" tip="money" :list="detailList" listid="detailList" :value="item" id="money" rule="R0000"></yhm-form-td-textbox>
-                      <yhm-form-td-radio width="130" @call="selectUnitOrPerson(index)" :list="detailList" listid="detailList" :value="item" :select-list="unitOrPersonList" id="unitOrPerson" rule="R0000"></yhm-form-td-radio>
+                      <yhm-form-td-radio width="130" :no-edit="'1'" @call="selectUnitOrPerson(index)" :list="detailList" listid="detailList" :value="item" :select-list="unitOrPersonList" id="unitOrPerson" rule="R0000"></yhm-form-td-radio>
                       <yhm-form-td-select-dialog width="110" tip="customer" @call="plateEvent(item,index)"  :list="detailList" listid="detailList" :value="item" id="customer" rule="R0000"></yhm-form-td-select-dialog>
-                      <yhm-form-td-textbox width="90" tip="licensePlateNumber" no-edit="1" :list="detailList" listid="detailList" :value="item" id="licensePlateNumber" rule="R0000"></yhm-form-td-textbox>
-                      <yhm-form-td-textbox width="90" tip="vehicleBrand" no-edit="1" :list="detailList" listid="detailList" :value="item" id="vehicleBrand" rule="R0000"></yhm-form-td-textbox>
-                      <yhm-form-td-textbox width="90" tip="vehicleType" no-edit="1" :list="detailList" listid="detailList" :value="item" id="vehicleType" rule="R0000"></yhm-form-td-textbox>
-                      <yhm-form-td-textbox width="90" tip="invoiceID" :list="detailList" listid="detailList" :value="item" id="invoiceID"></yhm-form-td-textbox>
+                      <yhm-form-td-textbox width="90" :no-edit="'1'" tip="licensePlateNumber" no-edit="1" :list="detailList" listid="detailList" :value="item" id="licensePlateNumber"></yhm-form-td-textbox>
+                      <yhm-form-td-textbox width="90" :no-edit="'1'" tip="vehicleBrand" no-edit="1" :list="detailList" listid="detailList" :value="item" id="vehicleBrand" rule="R0000"></yhm-form-td-textbox>
+                      <yhm-form-td-textbox width="90" :no-edit="'1'" tip="vehicleType" no-edit="1" :list="detailList" listid="detailList" :value="item" id="vehicleType" rule="R0000"></yhm-form-td-textbox>
+                      <yhm-form-td-select width="90" tip="subjectID" :list="detailList" listid="detailList" :value="item" id="subjectID" :selectList="subjectList" rule="R0000"></yhm-form-td-select>
                       <yhm-form-td-delete width="" :list="detailList" :value="item" :del-click="true" @click="delCheck(item,index)"></yhm-form-td-delete>
                     </tr>
                   </template>
@@ -89,7 +89,7 @@
         <tr v-for="(item,index) in list" :key="index" :class="{InterlacBg:index%2!==0}">
           <yhm-manager-td-look @click="viewDetails(item)"></yhm-manager-td-look>
           <yhm-manager-td :value="item.otherName"></yhm-manager-td>
-          <yhm-manager-td :value="item.workOrderID"></yhm-manager-td>
+          <yhm-manager-td :value="item.workOrder"></yhm-manager-td>
           <yhm-manager-td :value="item.operator"></yhm-manager-td>
           <yhm-manager-td :value="item.moneyBackDate" @click="lookPublic(item)"></yhm-manager-td>
           <yhm-manager-td :value="item.money"></yhm-manager-td>
@@ -168,6 +168,8 @@
             showName:'单位',
           },
         ],
+        subjectList:[],
+        noSubjectList:[],
         unitOrPerson:'0',
         ownerID: '',
         moneyBackDate: '',
@@ -221,7 +223,7 @@
         tipShow:false,
         getUrl:'',
         licensePlateNumberID:'',
-        modelNoEdit:false,
+        //modelNoEdit:false,
         detailList:[],
       }
     },
@@ -259,8 +261,7 @@
           vehicleBrand: '',
           vehicleTypeID: '',
           vehicleType: '',
-          invoiceID:'',
-          invoiceCode: '',
+          subjectID:'',
         })
         let sumMoney=0.00
         for (let i = 0; i < this.detailList.length; i++) {
@@ -293,14 +294,6 @@
           title: '选择车辆信息',
           closeCallBack: (data) => {
             if (data) {
-              // this.customer = data.carOwner
-              // this.customerName = data.carOwnerID
-              // this.vehicleType = data.model//型号
-              // this.licensePlateNumber = data.plate//车牌号
-              // this.vehicleBrand = data.brand//车辆品牌
-              // this.vehicleBrandID = data.brandID
-              // this.vehicleTypeID = data.modelID
-
               this.detailList[index].customer = data.carOwner
               this.detailList[index].customerName = data.carOwnerID
               this.detailList[index].vehicleType = data.model//型号
@@ -308,7 +301,7 @@
               this.detailList[index].vehicleBrand = data.brand//车辆品牌
               this.detailList[index].vehicleBrandID = data.brandID
               this.detailList[index].vehicleTypeID = data.modelID
-              this.detailList[index].modelNoEdit = true
+              //this.detailList[index].modelNoEdit = true
               if(data.brand === '' || data.model === '' || data.carOwner == ''){
                 this.$dialog.OpenWindow({
                   width: '1050',
@@ -318,13 +311,6 @@
                   closeCallBack: (acc) => {
                     if (acc) {
                       acc=acc.split('◇');
-                      // this.vehicleType = acc[0]//型号
-                      // this.vehicleTypeID = acc[1]
-                      // this.vehicleBrand = acc[2]//车辆品牌
-                      // this.vehicleBrandID = acc[3]
-                      // this.customerName = acc[4]
-                      // this.customer = acc[5]//型号
-
                       this.detailList[index].vehicleType = acc[0]//型号
                       this.detailList[index].vehicleTypeID = acc[1]
                       this.detailList[index].vehicleBrand = acc[2]//车辆品牌
@@ -418,26 +404,6 @@
           }
         })
       },
-
-      /* 选择发票 */
-      invoiceEvent(){
-
-      },
-      /* 选择部门 */
-      // branchEvent(){
-      //   this.$dialog.OpenWindow({
-      //     url:"/selectDepartment?level=2&open=1",
-      //     width:"850",
-      //     height:"600",
-      //     title: "选择部门",
-      //     closeCallBack: (data) => {
-      //       if (data) {
-      //         this.branch = data.name
-      //         this.branchID = data.id
-      //       }
-      //     }
-      //   })
-      // },
       /* 选择业务员 */
       operatorEvent(index){
 
@@ -490,27 +456,52 @@
       },
       //验证工单号唯一性
       VerifyworkOrder(index){
-        let params = {
-          id:this.id,
-          workOrderID:this.detailList[index].workOrderID
-        }
-        this.ajaxJson({
-          url: '/Fin/verifyworkOrder',
-          data: params,
-          loading: '0',
-          call: (data) => {
-            if(data.type===1){
-              this.workOrderNumber='1'
-              this.getInformation(data.id)
-              this.$dialog.confirm({
-                width: 300,
-                tipValue: '工单号（ '+this.workOrderID+' ）重复，是否继续操作？',
-                btnValueOk: '继续操作',
-                alertImg: 'warn',
-                okCallBack: (data) => {
-                  this.workOrderNumber='2'
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 692,
+          title: '选择工单号',
+          url: '/selectOfficialWorkOrder?category=1',
+          closeCallBack: (data)=>{
+            if(data){
+              this.detailList[index].workOrderID = data.id
+              this.detailList[index].workOrder = data.code
+
+              this.detailList[index].operator=data.client
+              this.detailList[index].operatorID=data.clientID
+              this.detailList[index].customerName=data.carOwnerID
+              this.detailList[index].customer=data.carOwner
+              this.detailList[index].licensePlateNumber=data.vehicle
+              this.detailList[index].vehicleBrandID=data.brand
+              this.detailList[index].vehicleBrand=data.brandVal
+              this.detailList[index].vehicleTypeID=data.modelID
+              this.detailList[index].vehicleType=data.modelVal
+
+              if(this.detailList[index].workOrderID!==''){
+                let params = {
+                  id:this.detailList[index].id,
+                  workOrderID:this.detailList[index].workOrderID
                 }
-              })
+                this.ajaxJson({
+                  url: '/Fin/verifyworkOrder',
+                  data: params,
+                  loading: '0',
+                  call: (data) => {
+                    if(data.type===1){
+                      this.workOrderNumber='1'
+                      this.getInformation(data.id)
+                      this.$dialog.confirm({
+                        width: 300,
+                        tipValue: '工单号（ '+this.detailList[index].workOrder+' ）重复，是否继续操作？',
+                        btnValueOk: '继续操作',
+                        alertImg: 'warn',
+                        okCallBack: (data) => {
+                          this.workOrderNumber='2'
+                        }
+                      })
+                    }
+                  }
+                })
+              }
             }
           }
         })
@@ -563,7 +554,7 @@
             remark: this.remark,
 
             signState:this.signState,//标记
-            detailList:this.detailList
+            detailSave:this.detailList
           }
           this.ajaxJson({
             url: '/Fin/bankDetailInsuranceSave',
@@ -650,6 +641,7 @@
               this.noSignStateList='3,4'
             }
             this.detailList=data.detailList
+            this.subjectList=data.subjectPsd.list
             // this.createName = data.createName
             // this.insertDate = data.insertDate
             // this.updateName = data.updateName

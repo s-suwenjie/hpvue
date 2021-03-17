@@ -6,19 +6,30 @@
         <yhm-form-select title="商品名称" @click="selectProduct" @clear="clearProduct" :value="product" id="product" rule="R0000" ref="pros"></yhm-form-select>
         <yhm-form-select title="规格型号" @click="selectModel" @clear="clearWareHouser" :value="model" id="model" rule="R0000"></yhm-form-select>
         <yhm-form-select title="供货商" @click="selectSupplierId" @clear="clearWareHouser" :value="supplier" id="supplier" rule="R0000"></yhm-form-select>
-        <yhm-form-zh-text-two ref="name" @input="calculationTotalPrice" @repeatverify="calculationTotalPrice" before-placeholder="" after-placeholder="" :before="quantity+''" before-id="quantity" :after="unit" after-id="unit" after-width="60" title="数量" after-title="单位" before-rule="R0000" >
+        <yhm-form-zh-text-two ref="name" @input="toprice" @repeatverify="toprice" before-placeholder="" after-placeholder="" :before="quantity+''" before-id="quantity" :after="unit" after-id="unit" after-width="60" title="数量" after-title="单位" before-rule="R0000" >
         </yhm-form-zh-text-two>
         <yhm-form-radio title="是否" subtitle="拆分入库" @call="splitClick" :select-list="splitList" :value="split+''" id="split" v-show="show == 0" :no-edit="true"></yhm-form-radio>
-        <yhm-form-zh-text-two @blur="calculationTotalPrice" @repeatverify="calculationTotalPrice" before-placeholder="" after-placeholder="" :before="splitQuantity" before-id="splitQuantity" :after="splitunit" after-id="splitunit" after-width="60" title="拆分数量" after-title="单位" before-rule="R0000" v-if="shows == 0" >
+        <yhm-form-zh-text-two @blur="toprice" @repeatverify="toprice" before-placeholder="" after-placeholder="" :before="splitQuantity" before-id="splitQuantity" :after="splitunit" after-id="splitunit" after-width="60" title="拆分数量" after-title="单位" before-rule="R0000" v-if="shows == 0" >
         </yhm-form-zh-text-two>
-        <yhm-form-text title="不含税单价" :value="price+''" id="price"  @input="calculationTotalPrice" rule="R0000" @blur="toprice"></yhm-form-text>
-        <yhm-form-text title="不含税总价" tip="money" before-icon="rmb" id="totalPrice"  :value="totalPrice+''" no-edit="1"></yhm-form-text>
-        <yhm-form-text title="含税单价"  id="priceTax" :value="priceTax+'' " @blur="toprice" no-edit="1"></yhm-form-text>
+        <yhm-form-text title="税率" after-icon="icon-percentage" id="taxPrice" :value="taxPrice+''" max-number="30" @input="toprice"></yhm-form-text>
+        <yhm-form-text title="含税单价"  id="priceTax"  before-icon="rmb" :value="priceTax+'' " @input="toprice"></yhm-form-text>
+
+        <yhm-form-text title="不含税单价" :value="price+''"  before-icon="rmb" id="price"  @input="toprice" no-edit="1" rule="R0000"></yhm-form-text>
         <yhm-form-text title="含税总价" id="totalPriceTax"  before-icon="rmb" :value="totalPriceTax+''"  no-edit="1"></yhm-form-text>
-<!--        <yhm-form-zh-select-more  @click="selectDeparment" :total="quantity+''" input-before-icon=" " title="库位" :value="list" id="list" rule="#" rule-item="R3000"></yhm-form-zh-select-more>-->
+        <yhm-form-text title="不含税总价" tip="money" before-icon="rmb" id="totalPrice"  :value="totalPrice+''" no-edit="1"></yhm-form-text>
+
+        <!--        <yhm-form-zh-select-more  @click="selectDeparment" :total="quantity+''" input-before-icon=" " title="库位" :value="list" id="list" rule="#" rule-item="R3000"></yhm-form-zh-select-more>-->
 
       </template>
     </yhm-formbody>
+<!--    <yhm-formbody>-->
+<!--      <template #control>-->
+<!--        <div>-->
+<!--          <yhm-form-text title="含税单价"  id="priceTax" :value="priceTax+'' "></yhm-form-text>-->
+
+<!--        </div>-->
+<!--      </template>-->
+<!--    </yhm-formbody>-->
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
@@ -36,6 +47,7 @@
     mixins: [formmixin],
     data(){
       return{
+        taxPrice:'13',//税点
         unit:'',
         applicableModels:'',
         prices:'',//
@@ -82,18 +94,19 @@
           }
         })
       },
-      //确定商品总价
-      calculationTotalPrice(){
-        //不含税总价
-        this.totalPrice = this.price * this.quantity
-        //含税总价
-        this.totalPriceTax = (Number(this.price)*1.13*Number(this.quantity)).toFixed(2)
-        this.priceTax = (Number(this.price)*1.13).toFixed(2)
-      },
+      // //确定商品总价
+      // calculationTotalPrice(type){
+      //   //不含税总价
+      //   this.totalPrice = this.price * this.quantity
+      //   //含税总价
+      //   // this.totalPriceTax = (Number(this.price)*Number(1+this.taxPrice/100)*Number(this.quantity)).toFixed(2)
+      //   // this.priceTax = (Number(this.price)*Number(1+this.taxPrice/100)).toFixed(2)
+      // },
       //确定单价明细
       toprice(){
+        this.price = (Number(this.priceTax)-Number(this.priceTax*(this.taxPrice/100))).toFixed(2)
+        this.totalPrice = Number(this.price) * Number(this.quantity).toFixed(2)
         this.totalPriceTax = (Number(this.priceTax)*Number(this.quantity)).toFixed(2)
-
       },
       selectProduct(){
         this.$dialog.OpenWindow({
@@ -138,9 +151,10 @@
                 this.model = data.name
                 this.supplier = data.modelSupplier//供货商名称
                 this.supplierId = data.modelSupplierID//供货商ID
-                this.price = (Number(data.price)).toFixed(2)
-                this.priceTax = (Number(this.price)*1.13).toFixed(2)
-                this.calculationTotalPrice()
+                // this.price = (Number(data.price)).toFixed(2)
+                // this.price = (Number(this.priceTax)-Number(this.priceTax*(this.taxPrice/100))).toFixed(2)
+                this.priceTax = data.price
+                this.toprice()
               }
             }
           })

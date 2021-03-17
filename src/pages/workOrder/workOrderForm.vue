@@ -3,21 +3,28 @@
       <yhm-formbody>
         <template #title>基本信息</template>
         <template #control>
-          <yhm-form-select title="负责人" @click="selectUnit" :value="principal" id="principal" tip="value" rule="R0000"></yhm-form-select>
-          <yhm-form-select title="客服" @click="selectClient" :value="client" id="client" tip="value" rule="R0000"></yhm-form-select>
-          <yhm-form-select title="车辆" @click="plateEvent" :value="vehicle" id="vehicle" tip="value" rule="R0000"></yhm-form-select>
-<!--          <yhm-form-select title="保险公司" @click="selectSupplierId" :value="subid" id="subid" rule="R0000"></yhm-form-select>-->
+          <yhm-form-select title="接待人" @click="selectClient" :value="client" id="client" tip="value"></yhm-form-select>
+
+          <!--<yhm-form-select title="负责人" @click="selectUnit" :value="principal" id="principal" tip="value" rule="R0000"></yhm-form-select>-->
+          <!--<yhm-form-select title="客服" @click="selectClient" :value="client" id="client" tip="value" rule="R0000"></yhm-form-select>-->
+          <yhm-form-select title="车辆" @click="plateEvent" :value="vehicle" id="vehicle" tip="value"></yhm-form-select>
+          <yhm-form-text title="联系人" :value="contactPerson" id="contactPerson" no-edit="1"></yhm-form-text>
+          <yhm-form-text title="车主" :value="carOwner" id="carOwner" no-edit="1"></yhm-form-text>
+
+          <!--<yhm-form-select title="保险公司" @click="selectSupplierId" :value="subid" id="subid" rule="R0000"></yhm-form-select>-->
 
           <yhm-form-date title="发生日期" :max="currentDate" :max-year="Number(currentDate.slice(0,4))" :value="workDate" id="workDate" rule="R0000"></yhm-form-date>
           <yhm-form-date title="预计" subtitle="交车时间" :min="currentDate" :min-year="Number(currentDate.slice(0,4))" :value="endDate" id="endDate" rule="R0000"></yhm-form-date>
           <yhm-form-text title="编号" :value="code" id="code" no-edit="1"></yhm-form-text>
           <yhm-form-text title="其它" subtitle="系统编号" :value="otherCode" id="otherCode"></yhm-form-text>
-          <yhm-form-radio title="适用车型" width="1" :select-list="applicableModelsList.list" @call="accessNumber" :value="applicableModels" id="applicableModels"></yhm-form-radio>
-          <yhm-form-radio title="保险公司" width="1" :select-list="subList" :value="sub" @call="subCall" id="sub"></yhm-form-radio>
-          <yhm-form-radio title="维修类型" :select-list="categoryList.list" :value="category" @call="accessNumber" id="category"></yhm-form-radio>
           <yhm-form-radio title="工单来源"  :select-list="orderSourceList.list" :value="orderSource" id="orderSource"></yhm-form-radio>
-          <yhm-form-radio title="业务来源" :select-list="sourceList.list" :value="source" id="source"></yhm-form-radio>
           <yhm-form-radio title="状态" :select-list="stateList.list" :value="state" id="state"></yhm-form-radio>
+          <yhm-form-radio title="业务来源" :select-list="sourceList.list" :value="source" id="source"></yhm-form-radio>
+          <!--<yhm-form-radio title="保险公司" width="1" :select-list="subList" :value="sub" @call="subCall" id="sub"></yhm-form-radio>-->
+          <!--<yhm-form-radio title="维修类型" :select-list="categoryList.list" :value="category" @call="accessNumber" id="category"></yhm-form-radio>-->
+          <yhm-form-radio title="维修类型" :select-list="categoryList.list" @call="callCategory(category)" :value="category+''" id="category"></yhm-form-radio>
+          <yhm-form-radio title="保险公司" width="1" :select-list="subList" :value="sub" v-show="subShow" @call="subCall" id="sub"></yhm-form-radio>
+          <yhm-form-radio title="适用车型" width="1" :no-edit="true" :select-list="applicableModelsList.list" @call="accessNumber" :value="applicableModels" id="applicableModels"></yhm-form-radio>
           <yhm-form-textarea title="备注" before-icon=" " :value="remark" id="remark"></yhm-form-textarea>
         </template>
       </yhm-formbody>
@@ -44,9 +51,11 @@
         client:'',//客服
         vehicleID:'',//车辆ID
         vehicle:'',//车辆
+        contactPerson:'',//联系人
+        carOwner:'',//车主
         code:'',//编号
         otherCode:'',//其它系统编号
-        workDate: '',//发生日期
+        workDate: formatDate(new Date()),//发生日期
         state:'0',//状态
         category:'0',//维修类型
         applicableModels:'0',//适用车型
@@ -55,10 +64,12 @@
         subid:'',//保险公司ID
         subCode:'',//保险公司编号
         source:'0',//业务来源
+        insurance:'',//备份保险公司选中的值
+        subShow:true,//保险公司显示隐藏
         orderSource:'0',//工单来源
         contactPersonID:'',//联系人ID
         carOwnerID:'',//车主ID
-        endDate: '',//预计交车时间
+        endDate: formatDate(new Date()),//预计交车时间
         remark:'',//备注
 
         noInvoice:false,
@@ -90,11 +101,36 @@
       }
     },
     methods:{
+      callCategory(category){//定损单类型
+        if(category=='1'||category=='2'){
+          this.subShow = false
+          if(this.sub!=''){
+            this.insurance = this.sub.concat()
+          }
+          this.sub = ''//保险公司
+          this.subName = ''//保险公司名称
+          this.subid = ''//保险公司ID
+          this.subCode = ''//保险公司编号
+        }else if(category=='0'){
+          this.subShow = true
+          this.sub = this.insurance.concat()
+          this.subid = this.subList[this.sub].id//保险公司id
+          this.subCode = this.subList[this.sub].code//保险公司缩写
+          this.subName = this.subList[this.sub].showName//保险公司名称
+        }
+        // if(this.category == '2'){
+        //   this.noInvoice = true
+        // }else{
+        //   this.noInvoice = false
+        // }
+      
+        this.accessNumber()
+      },
       subCall(){
         this.subid = this.subList[this.sub].id
         this.subCode = this.subList[this.sub].code
         this.subName = this.subList[this.sub].showName
-        console.log(  this.subid ,this.subCode ,this.subName)
+        this.accessNumber()
       },
       save(){
         let a = this.validator()
@@ -122,7 +158,6 @@
             carOwnerID:this.carOwnerID,//车主ID
             remark:this.remark,//备注
           }
-          console.log( params )
           this.ajaxJson({
             url: '/fix/fixOrder/save',
             data: params,
@@ -198,11 +233,19 @@
           title: '选择车辆号',
           closeCallBack: (data) => {
             if (data) {
-              console.log( data )
               this.vehicle = data.plate
               this.vehicleID = data.id
               this.contactPersonID = data.contactPersonID//联系人ID
               this.carOwnerID = data.carOwnerID//车主ID
+              this.contactPerson = data.name//联系人姓名
+              this.carOwner = data.carOwner//车主姓名
+              let list = this.applicableModelsList.list
+              for(let i in list){
+                if(list[i].showName==data.brandVal){
+                  this.applicableModels = list[i].num
+                }
+              }
+              this.accessNumber()
             }
           }
         })
@@ -237,9 +280,13 @@
             this.sourceList = data.sourcePsd
             this.orderSourceList = data.orderSourcePsd
             this.subList = data.mapList
+            this.insurance = this.sub.concat()
             for(let i in this.subList){
               this.subList[i].num = i
             }
+
+            this.client = sessionStorage.getItem('____currentUser')
+            this.clientID = sessionStorage.getItem('____currentUserID')
           },
           add: (data) => {
             /* 需要添加的数据 */
@@ -261,7 +308,7 @@
             this.endDate = data.endDate//预计交车时间
 
 
-            // this.categoryList = data.categoryPsd
+            this.categoryList = data.categoryPsd
             this.remark = data.remark//备注
           }
         })
@@ -269,7 +316,6 @@
     },
     watch:{
       invoiceDetails(val){
-        console.log( val,'22222222' )
       }
     },
     created () {

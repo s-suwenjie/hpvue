@@ -1,13 +1,14 @@
 <template>
-  <div class="f_main f_main_customize">
+  <div class="f_main">
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
+        <yhm-form-radio title="类型" width="1" ref="storageTypeRadio" rule="#" @call="storageTypeClick" :select-list="storageTypeList" :value="storageType" id="storageType" ></yhm-form-radio>
         <yhm-form-text title="商品名称" @repeatverify="nameVerifyEvent" ref="name" :value="name" id="name"></yhm-form-text>
 <!--        <yhm-form-text title="商品名称" subtitle="(英文)" :value="englishName" id="englishName"></yhm-form-text>-->
         <yhm-form-select title="计量单位" :value="unit" id="unit" @clear="clearUnit" @click="selectUnit" rule="R0000"></yhm-form-select>
-        <yhm-form-radio title="类型" @call="storageTypeClick" :select-list="storageTypeList" :value="storageType" id="storageType" ></yhm-form-radio>
-        <yhm-form-radio v-if="isSorck" title="适用车型" :select-list="stockTypeList" :value="stockType" id="stockType" ></yhm-form-radio>
+
+        <!--<yhm-form-radio v-if="isSorck" title="适用车型" :select-list="stockTypeList" :value="stockType" id="stockType" ></yhm-form-radio>-->
         <yhm-form-radio title="是否" subtitle="拆分出库" @call="splitClick" :select-list="splitList" :value="split" id="split"></yhm-form-radio>
         <yhm-form-select title="拆分" v-if="isSplit" subtitle="出库单位" :value="splitDeliveryUnit" id="splitDeliveryUnit" @clear="clearUnit" @click="splitUnit" rule="R0000"></yhm-form-select>
       </template>
@@ -25,6 +26,8 @@
         <yhm-managerth title="规格型号"></yhm-managerth>
         <yhm-managerth title="规格型号(英文)"></yhm-managerth>
         <yhm-managerth title="物品编号"></yhm-managerth>
+        <yhm-managerth title="适用品牌"></yhm-managerth>
+        <yhm-managerth title="适用车型"></yhm-managerth>
         <yhm-managerth style="width: 130px" title="参考单价"></yhm-managerth>
         <yhm-managerth style="width: 38px" title="删除"></yhm-managerth>
       </template>
@@ -34,6 +37,9 @@
           <yhm-manager-td :value="item.name"></yhm-manager-td>
           <yhm-manager-td :value="item.englishName"></yhm-manager-td>
           <yhm-manager-td :value="item.productNumber"></yhm-manager-td>
+
+          <yhm-manager-td-psd :value="item.stockType" :list="stockTypeList"></yhm-manager-td-psd>
+          <yhm-manager-td :value="item.stockModel"></yhm-manager-td>
           <yhm-manager-td-money :value="item.price"></yhm-manager-td-money>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-delete  @click="delModel(item)"></yhm-manager-td-operate-delete>
@@ -67,7 +73,7 @@
 
         storageType:'',   //入库类型
         storageTypeList:[],
-        stockType:'',    //库存类型
+        // stockType:'',    //库存类型
         stockTypeList:[],
 
         split:'',    //是否拆分出库
@@ -80,7 +86,7 @@
 
         showModel:false,  //是否显示规格型号信息
         empty: true,       //规格型号为空
-        isSorck:false,     //库存类型默认不显示
+        // isSorck:false,     //库存类型默认不显示
         isSplit:false      //拆分出库单位 默认不显示
 
 
@@ -96,11 +102,11 @@
 
       },
       storageTypeClick(){
-        if (this.storageType==='0' ||this.storageType==='1'){
-          this.isSorck=true
-        }else {
-          this.isSorck=false
-        }
+        // if (this.storageType==='0' ||this.storageType==='1'){
+        //   this.isSorck=true
+        // }else {
+        //   this.isSorck=false
+        // }
       },
       //重复验证,基于控件操作的验证
       nameVerifyEvent(){
@@ -109,7 +115,7 @@
           data:{
             id:this.id,
             name:this.name,
-
+            storageType:this.storageType,
           },
           loading:"0",
           call:(data) =>{
@@ -125,7 +131,7 @@
           data:{
             id:this.id,
             name:this.name,
-
+            storageType:this.storageType,
           },
           loading:"0"
         })
@@ -220,7 +226,8 @@
       async save(){
         let a = await this.isNameVerifyEvent()
         let b = this.validator()
-        if(a && b){
+        this.$refs.storageTypeRadio.$emit('verify')
+        if(a && b && this.storageType!=''){
           var params = {
             id: this.id,
             name:this.name,
@@ -261,7 +268,7 @@
           this.storageTypeList = data.storageTypePsd.list
           this.storageType = data.storageTypePsd.value
           this.stockTypeList = data.stockTypePsd.list
-          this.stockType = data.stockTypePsd.value
+
 
           this.splitList=data.splitPsd.list
           this.split=data.splitPsd.value

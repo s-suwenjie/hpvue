@@ -10,11 +10,12 @@
         <!--操作区-->
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="状态" :content="listState"></yhm-radiofilter>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('unitID')" title="单位" :content="listUnitID"></yhm-radiofilter>
       </template>
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="状态" :content="listState"></yhm-radiofilter>
         </div>
       </template>
       <!--数据表头-->
@@ -79,6 +80,10 @@
           value: '',
           list: []
         },
+        listUnitID: {
+          value: '',
+          list: []
+        },
       }
     },
     methods:{
@@ -105,7 +110,8 @@
           params = {}
         } else {
           params = {
-            state: this.listState.value
+            state: this.listState.value,
+            unitID:this.listUnitID.value
           }
         }
         this.init({
@@ -119,6 +125,7 @@
             //初始化时需要执行的代码
             this.stateItems = data.stateItems
             this.listState = data.statePsd
+            this.listUnitID = data.unitPsd
           }
         })
       },

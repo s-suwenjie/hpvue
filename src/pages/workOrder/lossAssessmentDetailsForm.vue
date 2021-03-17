@@ -37,24 +37,62 @@
         price:'0',//价格
         money:'0',//金额
         productid:'',
-        formTypeList:[],//
-        categoryList:{
-          list:[
-            {
-              showName:'管理清单',
-              code:'',
-              img:'',
-              num:'0',
-            },
-            {
-              showName:'辅料清单',
-              code:'',
-              img:'',
-              num:'1',
-            },
-          ],
-          value:'0'
-        }
+        fileList:[],//文件上传数组
+        formTypeList:[
+          {
+            showName:'零部件清单',
+            code:'',
+            img:'',
+            num:'0',
+          },
+          {
+            showName:'修理项目清单',
+            code:'',
+            img:'',
+            num:'1',
+          },
+          {
+            showName:'辅料项目清单',
+            code:'',
+            img:'',
+            num:'2',
+          },
+          {
+            showName:'管理费清单',
+            code:'',
+            img:'',
+            num:'3',
+          }
+        ],//
+        // categoryList:{
+        //   list:[
+        //     {
+        //       showName:'零部件清单',
+        //       code:'',
+        //       img:'',
+        //       num:'0',
+        //     },
+        //     {
+        //       showName:'修理项目清单',
+        //       code:'',
+        //       img:'',
+        //       num:'1',
+        //     },
+        //     {
+        //       showName:'辅料项目清单',
+        //       code:'',
+        //       img:'',
+        //       num:'2',
+        //     },
+        //     {
+        //       showName:'管理费清单',
+        //       code:'',
+        //       img:'',
+        //       num:'3',
+        //     }
+        //   ],
+        //   value:'0'
+        // }
       }
     },
     methods:{
@@ -74,6 +112,24 @@
         })
       },
       save(){
+        // this.ajaxJson({
+        //   url: '/fix/fixed/upload',
+        //   data: {
+        //     id:this.id,
+        //     list:this.fileList
+        //   },
+        //   call: (data)=>{
+        //   }
+        // })
+        // this.ajaxJson({
+        //   url: '/fix/fixed/getUpload',
+        //   data: {
+        //     id:"B13C043A-56AB-4958-B931-7BA61C30E333",
+        //   },
+        //   call: (data)=>{
+        //   }
+        // })
+        // return
         let a = this.validator()
         let b = this.quantity>0
         if(b==false){
@@ -83,7 +139,7 @@
           let params = {
             ownerID:this.ownerID,
             processid:this.flowPathID,
-            id: guid(),
+            id: this.id,
             productid:'122',
             nameStr:this.nameStr,//项目名称
             category:this.category,//类型
@@ -92,7 +148,9 @@
             money:this.money,//金额
             insertDate: formatDate(new Date())
           }
-          console.log( params )
+          this.$dialog.setReturnValue({params}) //向父级页面id值
+          this.$dialog.close()
+          return
           if(a){
             this.ajaxJson({
               url: '/fix/fixedDetail/save',
@@ -129,7 +187,7 @@
 
       // console.log( this.globalVariable.mainProcessID ,'--------')
       let data = JSON.parse(sessionStorage.lossAssessmentDetailsData||0)
-      console.log( data ,data.formTypeList)
+      // console.log( data ,data.formTypeList)
       if(this.lookOverShow=='true'){
         this.nameStr = data.nameStr
         this.id = data.id
@@ -137,9 +195,9 @@
         this.quantity = data.quantity
         this.price = data.price
         this.money = data.money
-        this.formTypeList = data.formTypeList
+        // this.formTypeList = data.formTypeList
       }else{
-        this.formTypeList = data.formTypeList
+        // this.formTypeList = data.formTypeList
       }
 
 

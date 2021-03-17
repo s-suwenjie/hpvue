@@ -21,6 +21,7 @@
       </table>
       <slot name="empty"></slot>
       <slot name="customize"></slot>
+      <slot name="pager"></slot>
     </div>
   </div>
 </template>

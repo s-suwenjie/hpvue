@@ -3,6 +3,9 @@
     <div v-for="(item,index) in data" :key="index" style="border-bottom: 3px solid #9f9f9f">
       <div style="position: relative;width: 100%;height: 650px;" :style="{'background':'url('+'http://hp.yhm.hk/UploadFile/OpenInvoice/emptyInvoice'+item.invoiceCategory+'.png)'}">
         <div class="topname">{{item.purchaser}}</div>
+        <div class="registrationNumber">{{item.registrationNumber}}</div>
+        <div class="addressTel">{{item.purchaserAddress}}  {{item.purchaserTel}}</div>
+        <div class="bankAccount">{{item.purchaserBank}}  {{item.purchaserAccount}}</div>
         <div class="number" v-if="item.number > 1">×{{item.number}}</div>
         <div class="mores" v-if="item.openInvoiceTrialDetail.length>8">详情见清单</div>
         <div class="moneymores" v-if="item.openInvoiceTrialDetail.length>8">¥{{item.totalmoney}}</div>
@@ -24,6 +27,8 @@
         <div class="alltaxmoney">¥{{item.totaltax}}</div>
         <div class="bigmoney icon-delete2">{{item.chinainvoiceMoney}}</div>
         <div class="littlemoney">¥{{item.invoiceMoney}}</div>
+        <div class="remark">{{item.remark}}</div>
+
       </div>
       <div class="f_split"></div>
       <div v-if="item.openInvoiceTrialDetail.length>8">
@@ -57,38 +62,32 @@
       </div>
       <div>
         <yhm-formbody>
-          <template #title>添加发票号</template>
+          <template #title>发票号信息   (<span style="color:red">此发票号仅为演示用途，以实际开票号码为准</span>)</template>
 
-          <template #opera>
+          <!--<template #opera>
             <yhm-commonbutton value="添加发票" icon="btnAdd" @call="addCheckNumEvent(item,index)"></yhm-commonbutton>
-          </template>
-
-<!--          <template #control>-->
-<!--            <div class="check" :key="key">-->
-<!--              <div class="check_main" v-for="(it,i) in item.list" :key="i">{{it.code}}<span @click="delCheck(item,i)" :class="{'red':deleteTheSwitch}" class="icon delete"></span></div>-->
-<!--              <div class="noTableData" v-if="item.list.length==0">暂时没有数据</div>-->
-<!--            </div>-->
-<!--          </template>-->
-
+          </template>-->
           <template #control>
             <div :key="key">
               <yhm-form-list-edit style="border: none;width: 998px">
                 <template #listHead>
                   <yhm-managerth style="width: 230px" title="发票号码"></yhm-managerth>
-                  <yhm-managerth style="width: 160px" title="票面金额"></yhm-managerth>
-                  <yhm-managerth style="width: 160px" title="税率(%)"></yhm-managerth>
                   <yhm-managerth style="width: 160px" title="税额合计"></yhm-managerth>
+                  <yhm-managerth style="width: 160px" title="金额"></yhm-managerth>
+                  <yhm-managerth style="width: 160px" title="税率(%)"></yhm-managerth>
+                  <yhm-managerth style="width: 160px" title="税额"></yhm-managerth>
                   <yhm-managerth style="width: 90px" title="发票照片"></yhm-managerth>
-                  <yhm-managerth style="" title="操作"></yhm-managerth>
+                  <!--<yhm-managerth style="" title="操作"></yhm-managerth>-->
                 </template>
                 <template #listBody>
                   <tr v-for="(it,i) in item.list" :key="i" :class="{InterlacBg:index%2!==0}">
                     <yhm-form-td-textbox width="220" no-edit="1" :list="item.list" listid="item.list" :value="it" id="code"></yhm-form-td-textbox>
+                    <yhm-form-td-textbox width="150" no-edit="1" :list="item.list" listid="item.list" :value="it" id="invoiceMoney"></yhm-form-td-textbox>
                     <yhm-form-td-textbox width="150" no-edit="1" :list="item.list" listid="item.list" :value="it" id="totalmoney"></yhm-form-td-textbox>
                     <yhm-form-td-textbox width="150" no-edit="1" :list="item.list" listid="item.list" :value="it" id="taxRate"></yhm-form-td-textbox>
                     <yhm-form-td-textbox width="150" no-edit="1" :list="item.list" listid="item.list" :value="it" id="totaltax"></yhm-form-td-textbox>
                     <yhm-form-td-upload-image  width="90" :no-upload="imageblooen" tag="Invoice" @mouseover="invoiceImg(it)" @mouseout="invoiceImgHide(it)"  :list="item.list" :listid="'data['+index+'].list'" :value="it" id="url" rule="#"></yhm-form-td-upload-image>
-                    <yhm-form-td-delete width="" :list="item.list" :value="item" :del-click="true" @click="delCheck(item,i)"></yhm-form-td-delete>
+                    <!--<yhm-form-td-delete width="" :list="item.list" :value="item" :del-click="true" @click="delCheck(item,i)"></yhm-form-td-delete>-->
                   </tr>
                   <!--                <div class="noTableData" v-if="item.list.length==0">暂时没有数据</div>-->
                 </template>
@@ -112,7 +111,7 @@
     <div style="width: 80%; height: 100px"></div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-        <yhm-commonbutton v-show="isShow" value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
+        <!--<yhm-commonbutton v-show="isShow" value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>-->
         <yhm-commonbutton v-show="isShow" value="确认开票" icon="btnSave" :flicker="false" bgColor="yellow" @call="post()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
@@ -121,7 +120,7 @@
 
 <script>
   import { formmixin } from '@/assets/form.js'
-  import {number2chinese,guid} from '@/assets/common.js'
+  import {number2chinese,guid,accMul} from '@/assets/common.js'
   export default {
     name: 'openInvoiceTrialOther',
     mixins: [formmixin],
@@ -129,7 +128,6 @@
       return{
         imageblooen:false,
         key:1,
-        ownerID: '',
         purchaser:'',
         purchaserID:'',//如果是单位的话，当前是税号
         product:'',//商品名称
@@ -155,6 +153,9 @@
         invoiceList:[],
         viewImg:'',
         viewImgShow:false,
+
+        code:'',
+        codeID:''
       }
     },
     methods: {
@@ -183,34 +184,65 @@
           data: params,
           all: (data)=>{
             this.data=data
-
             if(data.state=='2'){
               this.deleteTheSwitch=false
             }
-
             for( let i in data){
               let totalmoney=0
               let totaltax=0
               this.data[i].list=data[i].invoiceList
-
-
               for( let n in data[i].openInvoiceTrialDetail){
                 totalmoney=Number(data[i].openInvoiceTrialDetail[n].totalMoney)+Number(totalmoney)
                 totaltax=Number(data[i].openInvoiceTrialDetail[n].taxAmount)+Number(totaltax)
               }
-              console.log(totalmoney)
-              console.log(totaltax)
               this.data[i].totalmoney=Math.round(totalmoney * 100) / 100;
               this.data[i].totaltax=Math.round(totaltax * 100) / 100;
               this.data[i].chinainvoiceMoney=number2chinese(parseFloat(data[i].invoiceMoney))
-              // this.data[i].list=[]
               for(let n in data[i].invoiceList){
                 this.data[i].list[n].id=data[i].invoiceList[n].invoiceID
                 this.data[i].list[n].totalmoney=this.data[i].totalmoney.toString()
                 this.data[i].list[n].totaltax=this.data[i].totaltax.toString()
                 this.data[i].list[n].taxRate=this.data[i].openInvoiceTrialDetail[0].taxRate.toString()
               }
-
+              if(this.code!==''&&this.codeID!==''&&data[i].invoiceList.length===0){
+                let list={}
+                let date = new Date();
+                let strHours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(); //获取小时,如果小于10,前面补个0
+                let strMinutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(); //获取分,如果小于10,前面补个0
+                let strSeconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds(); //获取秒,如果小于10,前面补个0
+                list.insertDate=(new Date()).toLocaleDateString().replace(/\//g,'-')+' '+strHours+':'+strMinutes+':'+strSeconds
+                list.id=guid()
+                list.ownerID=this.id
+                list.invoiceID=this.codeID
+                list.code=this.code
+                list.totalmoney=data[i].invoiceMoney
+                list.taxRate=data[i].taxRate.toString()
+                list.totaltax=totaltax.toString()
+                list.url=''
+                this.data[i].list.push(list)
+              }
+            }
+            for (let i = 0; i < this.data.length; i++) {
+              if(this.data[i].purchaserType=='0') {
+                let params = {
+                  unitID: this.data[i].purchaserID
+                }
+                this.ajaxJson({
+                  url: '/finance/tax/getUnitTax',
+                  data: params,
+                  call: (tax) => {
+                    if (tax) {
+                      this.data[i].registrationNumber = tax.taxNumber
+                      if (tax.category == '0') {
+                        this.data[i].purchaserAddress = tax.registerAddress.replace('-', '') + '' + tax.registerAddressDetailed
+                        this.data[i].purchaserTel = tax.registerNumberTitle + '-' + tax.registerNumber
+                        this.data[i].purchaserBank = tax.bank
+                        this.data[i].purchaserAccount = tax.bankID
+                      }
+                    }
+                  }
+                })
+              }
             }
           },
           add: (data)=>{
@@ -229,7 +261,6 @@
             title: title,
             url: '/selectInvoiceDetail?invoiceCategoryBefore=1&invoiceCategory='+item.invoiceCategory+'&state=0&selectType=1',
             closeCallBack: (data) => {
-
               if(data){
                 let nums=0
                 for(let i in data){
@@ -244,10 +275,7 @@
                   if(add){
                     if(item.list.length<item.number){
                       item.list.push(data[i])
-
                       this.key++
-                      // console.log(this.data)
-                      // for(let )
                     }else{
                       this.$dialog.alert({
                         tipValue: '发票号已满,多余发票号已自动去除',
@@ -295,124 +323,127 @@
         this.key++
       },
     //  保存按钮
-      save(){
-        this.savelist.list=[]
-        for(let i in this.data){
-          if(this.data[i].list){
+      save() {
+        let a = this.validator()
+        if(a) {
+          this.savelist.list = []
+          for (let i in this.data) {
+            if (this.data[i].list) {
 
-            for(let m in this.data[i].list){
-              let n={}
-              let date = new Date();
-              let strHours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(); //获取小时,如果小于10,前面补个0
-              let strMinutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(); //获取分,如果小于10,前面补个0
-              let strSeconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds(); //获取秒,如果小于10,前面补个0
-              n.id=guid()
-              n.insertDate=(new Date()).toLocaleDateString().replace(/\//g,'-')+' '+strHours+':'+strMinutes+':'+strSeconds
-              n.ownerID=this.data[i].id
-              n.invoiceID=this.data[i].list[m].id
-              n.url=this.data[i].list[m].url
-              this.savelist.list.push(n)
-            }
-          }
-        }
-        this.savelist.ownerID=this.ownerID
-        if(this.savelist.list){
-          this.ajaxJson({
-            url: '/Bill/invoiceTrialSave',
-            data: {
-              ownerID:this.ownerID,
-              invoiceList:this.savelist.list,
-
-            },
-            call: (data) => {
-              if (data.type == 0) {
-                this.$dialog.setReturnValue(this.id)
-                this.$dialog.alert({
-                  tipValue: data.message,
-                  closeCallBack: ()=>{
-                    this.$dialog.close()
-                  }
-                })
-              }else{
-                this.$dialog.alert({
-                  alertImg: 'error',
-                  tipValue: data.message,
-                  closeCallBack: ()=>{
-                    this.$dialog.close()
-                  }
-                })
+              for (let m in this.data[i].list) {
+                let n = {}
+                let date = new Date();
+                let strHours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(); //获取小时,如果小于10,前面补个0
+                let strMinutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(); //获取分,如果小于10,前面补个0
+                let strSeconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds(); //获取秒,如果小于10,前面补个0
+                n.id = guid()
+                n.insertDate = (new Date()).toLocaleDateString().replace(/\//g, '-') + ' ' + strHours + ':' + strMinutes + ':' + strSeconds
+                n.ownerID = this.data[i].id
+                n.invoiceID = this.data[i].list[m].id
+                n.url = this.data[i].list[m].url
+                this.savelist.list.push(n)
               }
             }
-          })
+          }
+          this.savelist.ownerID = this.ownerID
+          if (this.savelist.list) {
+            this.ajaxJson({
+              url: '/Bill/invoiceTrialSave',
+              data: {
+                ownerID: this.ownerID,
+                invoiceList: this.savelist.list,
+              },
+              call: (data) => {
+                if (data.type == 0) {
+                  this.$dialog.setReturnValue(this.id)
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                      this.$dialog.close()
+                    }
+                  })
+                } else {
+                  this.$dialog.alert({
+                    alertImg: 'error',
+                    tipValue: data.message,
+                    closeCallBack: () => {
+                      this.$dialog.close()
+                    }
+                  })
+                }
+              }
+            })
+          }
         }
-
-
       },
 
       //保存并提交
       post(){
-        this.savelist.list=[]
-        for(let i in this.data){
-          if(this.data[i].list){
+        let a = this.validator()
+        if(a) {
+          this.savelist.list = []
+          for (let i in this.data) {
+            if (this.data[i].list) {
 
-            for(let m in this.data[i].list){
-              let n={}
-              let date = new Date();
-              let strHours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(); //获取小时,如果小于10,前面补个0
-              let strMinutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(); //获取分,如果小于10,前面补个0
-              let strSeconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds(); //获取秒,如果小于10,前面补个0
-              n.id=guid()
-              n.insertDate=(new Date()).toLocaleDateString().replace(/\//g,'-')+' '+strHours+':'+strMinutes+':'+strSeconds
-              n.ownerID=this.data[i].id
-              n.invoiceID=this.data[i].list[m].id
-              n.url=this.data[i].list[m].url
-              this.savelist.list.push(n)
+              for (let m in this.data[i].list) {
+                let n = {}
+                let date = new Date();
+                let strHours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(); //获取小时,如果小于10,前面补个0
+                let strMinutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(); //获取分,如果小于10,前面补个0
+                let strSeconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds(); //获取秒,如果小于10,前面补个0
+                n.id = guid()
+                n.insertDate = (new Date()).toLocaleDateString().replace(/\//g, '-') + ' ' + strHours + ':' + strMinutes + ':' + strSeconds
+                n.ownerID = this.data[i].id
+                n.invoiceID = this.data[i].list[m].id
+                n.url = this.data[i].list[m].url
+                this.savelist.list.push(n)
+              }
             }
           }
-        }
-        if(this.savelist.list.length==0){
-          this.$dialog.alert({
-            alertImg: 'warn',
-            tipValue: '请选择发票号'
-          })
-          return
-        }
-        this.savelist.ownerID=this.ownerID
-        if(this.savelist.list){
-          this.$dialog.confirm({
-            width: 300,
-            tipValue: '确认开票?',
-            btnValueOk: '确认',
-            alertImg: 'warn',
-            okCallBack: () => {
-              this.ajaxJson({
-                url: '/Bill/invoiceTrialSubmit',
-                data: {
-                  ownerID:this.ownerID,
-                  invoiceList:this.savelist.list,
-                },
-                call: (data) => {
-                  if (data.type == 0) {
-                    this.$dialog.setReturnValue(this.id)
-                    this.$dialog.alert({
-                      tipValue: data.message,
-                      closeCallBack: ()=>{
-                        this.$dialog.close()
-                      }
-                    })
-                  }else{
-                    this.$dialog.alert({
-                      alertImg: 'error',
-                      tipValue: data.message,
-                      closeCallBack: ()=>{
-                        this.$dialog.close()
-                      }
-                    })
+          if (this.savelist.list.length == 0) {
+            this.$dialog.alert({
+              alertImg: 'warn',
+              tipValue: '请选择发票号'
+            })
+            return
+          }
+          this.savelist.ownerID = this.ownerID
+          if (this.savelist.list) {
+            this.$dialog.confirm({
+              width: 300,
+              tipValue: '确认开票?',
+              btnValueOk: '确认',
+              alertImg: 'warn',
+              okCallBack: () => {
+                this.ajaxJson({
+                  url: '/Bill/invoiceTrialSubmit',
+                  data: {
+                    ownerID: this.ownerID,
+                    invoiceList: this.savelist.list,
+                  },
+                  call: (data) => {
+                    if (data.type == 0) {
+                      this.$dialog.setReturnValue(this.id)
+                      this.$dialog.alert({
+                        tipValue: data.message,
+                        closeCallBack: () => {
+                          this.$dialog.close()
+                        }
+                      })
+                    } else {
+                      this.$dialog.alert({
+                        alertImg: 'error',
+                        tipValue: data.message,
+                        closeCallBack: () => {
+
+                        }
+                      })
+                    }
                   }
-                }
-              })
-            }
-          })
+                })
+              }
+            })
+          }
         }
       },
       //-------------------------------------
@@ -426,10 +457,13 @@
     created () {
       this.setQuery2Value('ownerID')
       this.setQuery2Value('type')
+      this.setQuery2Value('code')
+      this.setQuery2Value('codeID')
       if(this.type === '1' ){
         this.isShow=false
       }
       this.initData()
+
     },
     // watch:{
     //   data:{
@@ -444,6 +478,14 @@
 </script>
 
 <style scoped lang="less">
+  .remark{
+    position: absolute;
+    left: 600px;
+    top: 510px;
+    width: 380px;
+    height: 80px;
+    text-align:left;
+  }
   .invoiceImgView{
     /*position: absolute;*/
     /*width: 500px;*/
@@ -453,14 +495,40 @@
     bottom: 165px;
   }
   .topname{
-    width: 450px;
+    width: 392px;
     height: 16px;
     line-height: 16px;
     font-size: 16px;
     position: absolute;
     top: 158px;
     left: 180px;
-
+  }
+  .registrationNumber{
+    width: 392px;
+    height: 16px;
+    line-height: 16px;
+    font-size: 16px;
+    position: absolute;
+    top: 185px;
+    left: 180px;
+  }
+  .addressTel{
+    width: 392px;
+    height: 16px;
+    line-height: 16px;
+    font-size: 16px;
+    position: absolute;
+    top: 202px;
+    left: 180px;
+  }
+  .bankAccount{
+    width: 392px;
+    height: 16px;
+    line-height: 16px;
+    font-size: 16px;
+    position: absolute;
+    top: 230px;
+    left: 180px;
   }
   .mores{
     position: absolute;

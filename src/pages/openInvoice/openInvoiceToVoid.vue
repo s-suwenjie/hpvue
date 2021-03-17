@@ -25,7 +25,7 @@
     data(){
       return{
         ownerID:'',
-        workDate:'',
+        workDate:formatDate(new Date()),
         nowDate: formatDate(new Date()),
         remark:'',
         personID:'',
@@ -60,6 +60,7 @@
             ownerID: this.ownerID,
             personID:this.personID,
             person:this.person,
+            category:this.category
           }
           this.ajaxJson({
             url: '/Bill/openInvoiceToVoid',

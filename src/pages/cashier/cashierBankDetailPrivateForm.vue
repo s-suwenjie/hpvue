@@ -57,7 +57,7 @@
         <!--        <yhm-form-drop-down-select title="事件类型" width="1" @select="selectCause" :select-list="categoryList" :selectValue="category" selectid="category" :value="cause" id="cause" rule="R0000"></yhm-form-drop-down-select>-->
 
         <yhm-form-radio title="有无" subtitle="手续费" :select-list="feeTypepsd" :value="feeType" id="feeType" rule="R0000" @call="feeTypeA"></yhm-form-radio>
-        <yhm-form-text title="手续费" subtitle="金额" :value="fee" id="fee" :no-edit="HandlingFee"></yhm-form-text>
+        <yhm-form-text title="手续费" subtitle="金额" :value="fee" id="fee" :no-edit="feeType=='0'?'1':''"></yhm-form-text>
         <yhm-form-text title="凭证号" :value="voucherNo" id="voucherNo" width="1"  ></yhm-form-text>
         <yhm-form-radio title="支付方式" subtitle=""  width="1"  :select-list="paymentMethodList" :value="paymentMethod" id="paymentMethod" @call="paymentMethodState"  ></yhm-form-radio>
 
@@ -79,7 +79,7 @@
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton value="收款" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
-        <yhm-commonbutton value="收款并打印收据" icon="btnSave" @call="btnSave()"></yhm-commonbutton>
+        <yhm-commonbutton v-if="isurrender" value="收款并打印收据" icon="btnSave" @call="btnSave()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
 
@@ -96,6 +96,7 @@
     mixins: [formmixin],
     data () {
       return {
+        feeKey:0,//
         moneyCheck:"",
         moneyCheckList:[{showName:"向上取整",num:"0"},{showName:"向下取整",num:"1"}],
         ownerID: '',
@@ -168,6 +169,8 @@
         getUrl:'',
         bankDetailImg:[],
         storeName: '',
+        surrenderCashier:'',
+        isurrender:true,
       }
     },
     methods: {
@@ -510,8 +513,10 @@
       },
       feeTypeA () {
         if (this.feeType === '1' && this.direction === '1') {
-          this.HandlingFee = '0'
+          this.fee = '0'
+          this.HandlingFee = ''
         } else {
+          this.fee = '0'
           this.HandlingFee = '1'
         }
       },
@@ -558,7 +563,8 @@
             useMoney: this.autoCalcIpt,//多事由计算金额
             subjectList: this.detail,//多事由
             bankDetailImg:this.bankDetailImg,//上传凭证集合
-            bankOwnerID:this.bankOwnerID
+            bankOwnerID:this.bankOwnerID,
+            surrenderCashier:this.surrenderCashier,
           }
           this.$dialog.confirm({
             alertImg: 'warn',
@@ -650,14 +656,14 @@
             useMoney: this.autoCalcIpt,//多事由计算金额
             subjectList: this.detail,//多事由
             bankDetailImg:this.bankDetailImg,//上传凭证集合
+            bankOwnerID:this.bankOwnerID,
+            surrenderCashier:this.surrenderCashier,
           }
           this.$dialog.confirm({
             alertImg: 'warn',
             btnValueOk: '确定',
             tipValue: '确定收款(客户)?',
             okCallBack: ()=>{
-
-              /////////////////////////////////////////////
 
               this.ajaxJson({
                 url: '/Fin/vueBankDetailSave',
@@ -678,8 +684,8 @@
                       }
                     })
                     let paramsData={
-                       id:this.bankID
-                     }
+                      id:this.bankID
+                    }
                     this.ajaxJson({
                       url: '/Fin/bankDetailPrintingReceiptVue',
                       data: paramsData,
@@ -713,9 +719,6 @@
                   }
                 }
               })
-
-              ///////////////////////////////////////////////////
-
             }
           })
         }
@@ -737,7 +740,10 @@
       this.setQuery2Value('cashierRemake')
       this.setQuery2Value('publicandPrivateAccount')
       this.setQuery2Value('cashierBankTag')
-
+      this.setQuery2Value('surrenderCashier')
+      if(this.surrenderCashier==1){
+        this.isurrender=false
+      }
 
       let params = {
         ownerID: this.ownerID,

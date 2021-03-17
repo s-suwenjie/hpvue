@@ -1,9 +1,9 @@
 <template>
     <div class="v_control" :class="[getWidthClass]">
-      <div class="v_title" @click="clickEvent">{{title}}：</div>
+      <div class="v_title" @click="clickEvent" :style="{color:titleColor}">{{title}}：</div>
 
-      <div v-if="getDefault" @click="clickEvent" class="v_content" :class="{rmb:getMoney,fs12b:getMoney}" :style="{color:colorValue,fontSize: fontSize + 'px'}" v-html="ShowValue(content) ? ShowValue(content):'-----'"></div>
-      <span :class="fontIcon" @click="iconClick" v-if="fontIcon!==''" :style="{fontSize:iconFontSize+'px',color:iconColor}" style="display: flex;align-items: center;"></span>
+      <div v-if="getDefault" @click="clickEvent" class="v_content" :class="{rmb:getMoney,fs12b:getMoney}" :style="{color:colorValue,fontSize: fontSize + 'px',margin:margin}" v-html="ShowValue(content) ? ShowValue(content):'-----'"></div>
+      <span :class="fontIcon" @click="iconClick" v-if="fontIcon!==''" :style="{fontSize:iconFontSize+'px',color:iconColor,margin:iconMargin}" style="display: flex;align-items: center;"></span>
 
       <div v-if="getFiles" class="v_content">
         <yhm-view-show-files v-for="(item,index) in content" :key="index" :content="content" :item="item"></yhm-view-show-files>
@@ -59,6 +59,10 @@
         type:String,
         default:'#333'
       },
+      titleColor:{
+        type:String,
+        default:''
+      },
       tag: {
         type: String,
         default: ''
@@ -78,7 +82,20 @@
       fontIcon: {
         type: String,
         default: ''
+      },
+      iconMargin:{
+        type: String,
+        default: ''
+      },
+      margin:{
+        type: String,
+        default: ''
       }
+    },
+    created(){
+      this.$nextTick(()=>{
+        this.colorValue = this.color
+      })
     },
     methods : {
       iconClick(){

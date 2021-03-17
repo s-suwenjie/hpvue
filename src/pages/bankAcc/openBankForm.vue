@@ -28,7 +28,7 @@
         <yhm-form-text title="所属银行" :value="value2" id="value2" rule="R0000" no-edit="1"></yhm-form-text>
         <yhm-form-text title="银行简码" :value="value3" id="value3" rule="R0000" no-edit="1"></yhm-form-text>
         <yhm-form-text title="回显规则" :value="value4" id="value4" rule="R0000" no-edit="1"></yhm-form-text>
-        <yhm-form-text title="联行号" :value="value6" id="value6" rule="R0000" placeholder="查询联行号，请点帮助">
+        <yhm-form-text title="联行号" :blank-show="true" :value="value6" id="value6" rule="R1200" placeholder="(联行号只允许输入数字) 查询联行号，请点帮助">
           <div class="formBoxIcon" @click="jointNum">
             <span class="i-help"></span>
           </div>

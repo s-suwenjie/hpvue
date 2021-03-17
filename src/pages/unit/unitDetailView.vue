@@ -19,11 +19,11 @@
             <div class="main_top left">
               <div class="text flex">
                 <span >当前余额:</span>
-                <span >{{currentBalance}}</span>
+                <span v-html="currentBalances"></span>
               </div>
               <div class="text flex"   >
                 <span >交易后余额:</span>
-                <span class="text_right col">{{balance}}</span>
+                <span class="text_right col" v-html="balances"></span>
               </div>
             </div>
           </div>
@@ -113,6 +113,7 @@
 
 <script>
   import { formmixin } from '@/assets/form.js'
+  import { tenThousandFormatHtml } from '@/assets/common.js'
 
   export default {
     name: 'unitDetailView',
@@ -139,6 +140,14 @@
         isRightID:false,//延长按钮
         rightID:'',//下一条ID
       }
+    },
+    computed:{
+      currentBalances(){
+        return tenThousandFormatHtml(this.currentBalance+'')
+      },
+      balances(){
+        return tenThousandFormatHtml(this.balance+'')
+      },
     },
     methods:{
       leftStrip(){

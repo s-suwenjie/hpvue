@@ -3,7 +3,8 @@
     <yhm-select-body :choose="false">
       <template #operate>
         <div v-show="showTipDbSelect" class="s_db_select" :style="{left:getLeft,top:getTop}">双击选择</div>
-        <yhm-commonbutton  value="添加" icon="btnAdd" @call="selectAddEvent"></yhm-commonbutton>
+        <yhm-commonbutton  value="添加" icon="btnAdd" v-if="addType!='1'" @call="selectAddEvent"></yhm-commonbutton>
+        <yhm-commonbutton  value="添加" icon="btnAdd" v-else @call="selectAddPlate"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" id="searchStr" @call="initData"></yhm-managersearch>
       </template>
 
@@ -32,7 +33,8 @@
         </tr>
       </template>
       <template #empty>
-        <span class="m_listNoData" v-show="content.length === 0">暂时没有数据</span>
+        <span class="m_listNoData" style="color: red" v-show="content.length === 0"
+              @click="selectAdd">如果没有找到,请去 保险管理-->客户管理 下添加客户信息,就能在此页面搜索出(请点击我跳转)</span>
       </template>
       <template #pager>
         <yhm-pagination :pager="pager" isPageSize="false" @initData="initPageData(false)"></yhm-pagination>
@@ -50,10 +52,40 @@
     data(){
       return{
         plate:'',
+        addType:'',//等于 1 时是工单所用的车辆添加页 不传为默认添加
         carOwnerID:'',
       }
     },
     methods: {
+      selectAddPlate(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/vehicleForm?searchStr='+this.searchStr,
+          title: '添加车辆信息',
+          closeCallBack: (data) => {
+            if (data) {
+              this.searchStr = data
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      selectAdd(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/clientForm',
+          title: '添加客户信息',
+          closeCallBack: (data) => {
+            if (data) {
+              this.lastData = data
+              this.initPageData(false)
+              /*false->非初始化=>!import  true->初始化*/
+            }
+          }
+        })
+      },
       selectAddEvent(){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -90,6 +122,7 @@
       }
     },
     created () {
+      this.setQuery2Value('addType')//addType = 1 时是工单所用的车辆添加页 不传为默认添加
       this.setQuery2Value('carOwnerID')
     }
 

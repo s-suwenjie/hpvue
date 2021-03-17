@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" :style="{backgroundColor: getBgColor,color: getColor}" class="b_main" :class="[icon,category,getClass,getHoverClass,getFlickerClass,getErrorClass,getIconClass]" @click="clickEvent()">{{value}}</div>
+  <div v-if="show" @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" :style="{'border':getBorder,backgroundColor: getBgColor,color: getColor}" class="b_main" :class="[icon,category,getClass,getHoverClass,getFlickerClass,getErrorClass,getIconClass]" @click="clickEvent()">{{value}}</div>
 </template>
 
 <script>
@@ -25,6 +25,10 @@
       value:{
         type:String,
         default:"添加"
+      },
+      borderStyle:{
+        type:String,
+        default:"1px solid #49a9ea"
       },
       icon:{
         type:String,
@@ -94,6 +98,9 @@
       }
     },
     computed:{
+      getBorder(){
+        return this.borderStyle
+      },
       getBgColor(){
         return this.bgColor
       },

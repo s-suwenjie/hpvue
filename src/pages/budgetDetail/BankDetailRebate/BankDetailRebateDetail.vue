@@ -19,11 +19,11 @@
           <div class="main_top left">
             <div class="text flex">
               <span >当前余额:</span>
-              <span >{{currentBalance}}</span>
+              <span v-html="currentBalances"></span>
             </div>
             <div class="text flex"   >
               <span >交易后余额:</span>
-              <span class="text_right col">{{balance}}</span>
+              <span class="text_right col" v-html="balances"></span>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@
                  </span>
             </p>
 
-            <p style="font-size: 14px;margin-top: 2px;height: 35;" v-if="content.remark==='' ">-----</p>
+            <p style="font-size: 14px;margin-top: 2px;height: 35px;" v-if="content.remark==='' ">-----</p>
             <p style="font-size: 14px;margin-top: 2px;height: 35px;" v-else>{{content.remark}}</p>
             <p style="font-size: 14px;margin-top: 10px;" ref="top">
               <span v-for="(item,index) in content.files" :key="index" class="imgName" @click="imgSkip(item)" v-show="content.storeName!==''">查看凭证</span>
@@ -104,13 +104,39 @@
     </div>
     <div class="i-right fs48b colorFFF rgtSwitchArrow" title="下一条" v-show="isRightID" @click="rightStrip">
     </div>
-    <yhm-formbody v-show="informationShow">
-      <template #title>基本信息</template>
-      <template #control>
-        <yhm-form-text title="出单号" :value="issueCode" id="issueCode" rule="R0000" ref="issueCode" @repeatverify="isRepeatIssueCode"></yhm-form-text>
-        <yhm-form-text title="保单号" :value=" policyCOde" id=" policyCOde" rule="R0000"></yhm-form-text>
-      </template>
-    </yhm-formbody>
+
+
+<!--    <yhm-formbody >-->
+<!--      v-show="informationShow"-->
+<!--      <template #title>基本信息</template>-->
+<!--      <template #control>-->
+<!--        <yhm-form-text title="出单号" :value="issueCode" id="issueCode" rule="R0000" ref="issueCode" @repeatverify="isRepeatIssueCode"></yhm-form-text>-->
+<!--        <yhm-form-text title="保单号" :value=" policyCOde" id=" policyCOde" rule="R0000"></yhm-form-text>-->
+<!--      </template>-->
+<!--      <yhm-form-list-show>-->
+
+<!--        <template #listHead>-->
+<!--          <yhm-managerth title="交强险单号"></yhm-managerth>-->
+<!--          <yhm-managerth title="商业险单号"></yhm-managerth>-->
+<!--        </template>-->
+
+<!--        <template #listBody>-->
+<!--          <tr :class="[{InterlacBg:index%2!=0}]">-->
+
+<!--            <yhm-manager-td v-if="content.businessNumber" :value="content.businessNumber"></yhm-manager-td>-->
+<!--            <yhm-manager-td-input v-if="!content.businessNumber" @blur="blurIssueEvent" :value="content.businessNumber"></yhm-manager-td-input>-->
+
+<!--            <yhm-manager-td v-if="content.payHighNumber" :value="content.payHighNumber"></yhm-manager-td>-->
+<!--            <yhm-manager-td-input v-if="!content.payHighNumber" @blur="blurIssueEvent" :value="content.payHighNumber"></yhm-manager-td-input>-->
+
+<!--          </tr>-->
+<!--        </template>-->
+
+<!--      </yhm-form-list-show>-->
+
+<!--    </yhm-formbody>-->
+
+
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
         <yhm-commonbutton  v-show="informationShow" value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
@@ -121,7 +147,7 @@
 
 <script>
   import { formmixin } from '@/assets/form.js'
-
+  import { tenThousandFormatHtml } from '@/assets/common.js'
   export default {
     name: 'BankDetailRebateDetail',
     mixins: [formmixin],
@@ -151,6 +177,14 @@
         isRightID:false,//延长按钮
         rightID:'',//下一条ID
       }
+    },
+    computed:{
+      currentBalances(){
+        return tenThousandFormatHtml(this.currentBalance+'')
+      },
+      balances(){
+        return tenThousandFormatHtml(this.balance+'')
+      },
     },
     methods:{
       leftStrip(){

@@ -98,12 +98,12 @@
               url:'/homeApp/m_approvalPrettyCashsManager?isFinish=1',
               id:'A3A1963C-27BF-4F7D-88CE-1750B238A71F',
             },
-            // {
-            //   name:'保险审批',
-            //   imgUrl:'/UploadFile/m_image/menu/insurance.svg',
-            //   url:'/homeApp/m_interestRateManager?isFinish=1',
-            //   id:'BBD4FB7A-3442-48BF-91CA-70208FBCC78C',
-            // },
+            {
+              name:'保险审批',
+              imgUrl:'/UploadFile/m_image/menu/insurance.svg',
+              url:'/homeApp/m_interestRateManager?isFinish=1',
+              id:'BBD4FB7A-3442-48BF-91CA-70208FBCC78C',
+            },
           ]
         },{
           title: '财务管理',

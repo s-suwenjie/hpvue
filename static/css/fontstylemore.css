@@ -1,0 +1,134 @@
+@charset "UTF-8";
+/*
+    此处字体来至于阿里巴巴矢量图标库
+    https://www.iconfont.cn
+ */
+
+/*对号*/
+.im_check:before{
+    font-family: 'iconfont' !important;
+    content: "\e615";
+}
+
+/*叉号*/
+.im_cross:before{
+    font-family: 'iconfont' !important;
+    content: "\e644";
+}
+
+/*手机*/
+.im_phone:before{
+    font-family: 'iconfont' !important;
+    content: "\e61c";
+}
+
+/*电脑*/
+.im_computer:before{
+    font-family: 'iconfont' !important;
+    content: "\e621";
+}
+
+/*实心圆*/
+.im_filledCircle:before{
+    font-family: 'iconfont' !important;
+    content: "\ed8e";
+}
+
+/*实心圆-对号*/
+.im_filledCircleCheck:before{
+    font-family: 'iconfont' !important;
+    content: "\e7ca";
+}
+
+/*实心圆-叉号*/
+.im_filledCircleCross:before{
+    font-family: 'iconfont' !important;
+    content: "\e7cb";
+}
+
+/*实心圆-叹号*/
+.im_filledCircleExclamationMark:before{
+    font-family: 'iconfont' !important;
+    content: "\ed47";
+}
+
+/*实心圆-等待*/
+.im_filledCircleWait:before{
+    font-family: 'iconfont' !important;
+    content: "\e6ff";
+}
+/*去报销*/
+.im_goReimburse:before{
+    font-family: 'iconfont' !important;
+    content: "\e65b";
+}
+/*复制*/
+.im_copy:before{
+    font-family: 'iconfont' !important;
+    content: "\e62f";
+}
+/*去*/
+.im_go:before{
+    font-family: 'iconfont' !important;
+    content: "\e6e7";
+}/*充值*/
+.im_recharge:before{
+    font-family: 'iconfont' !important;
+    content: "\e62e";
+}
+/*分离*/
+.im_separate:before{
+    font-family: 'iconfont' !important;
+    content: "\e622";
+}
+/*统一审批*/
+.i-unifiedApproval:before{
+    font-family: 'iconfont' !important;
+    content: "\e60c";
+}
+/*统一驳回*/
+.i-unifiedRejected:before{
+    font-family: 'iconfont' !important;
+    content: "\e721";
+}
+/**超链接*/
+.i-hyperchain:before {
+    font-family: 'iconfont' !important;
+    content: "\e712";
+}
+.i-kuaidi:before {
+    font-family: 'iconfont' !important;
+    font-size: 40px;
+    content: "\e6cf";
+}
+.i-invoice:before {
+    font-family: 'iconfont' !important;
+    font-size: 20px;
+    content: "\e616";
+}
+.i-previewSMS:before {
+    font-family: 'iconfont' !important;
+    font-size: 20px;
+    content: "\e603";
+}
+.i-sendSMS:before {
+    font-family: 'iconfont' !important;
+    font-size: 20px;
+    content: "\e623";
+}
+.i-waitfor:before {
+    font-family: 'iconfont' !important;
+    font-size: 20px;
+    content: "\e6ac";
+}
+.i-wave:before {
+    font-family: 'iconfont' !important;
+    font-size: 20px;
+    content: "\e64a";
+}
+/**退保*/
+.i-surrender:before {
+    font-family: 'iconfont' !important;
+    font-size: 20px;
+    content: "\e60f";
+}

@@ -4,7 +4,7 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-radio title="类型" :show="getType" :select-list="typeList" :value="type" id="type"></yhm-form-radio>
-        <yhm-form-select title="事由" @click="selectSubject" tip="subject" :value="subject" id="subject" rule="R0000"></yhm-form-select>
+        <yhm-form-select title="事由" @click="selectSubject" class="subject" tip="subject" :value="subject" id="subject" rule="R0000"></yhm-form-select>
         <yhm-form-radio width="1" title="发票类型" @call="invoiceTypeEvent" :select-list="invoiceCategoryList" :value="invoiceCategory" id="invoiceCategory"></yhm-form-radio>
 
       </template>
@@ -18,9 +18,9 @@
         <yhm-commonbutton :show="addInvoiceShow" value="添加发票" icon="btnAdd" @call="addInvoice"></yhm-commonbutton>
       </template>
       <template #listHead>
-        <yhm-managerth style="width: 40px" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 130px" title="发票号码"></yhm-managerth>
-        <yhm-managerth style="width: 140px" title="开票日期"></yhm-managerth>
+        <yhm-managerth style="width: 36px" title="查看"></yhm-managerth>
+        <yhm-managerth style="width: 125px" title="发票号码"></yhm-managerth>
+        <yhm-managerth style="width: 135px" title="开票日期"></yhm-managerth>
         <yhm-managerth style="width: 160px" title="类型"></yhm-managerth>
 
         <yhm-managerth style="width: 50px" title="张数"></yhm-managerth>
@@ -28,13 +28,13 @@
         <yhm-managerth style="width: 90px" title="票面总金额"></yhm-managerth>
 
         <yhm-managerth style="width: 130px" title="备注"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="发票照片"></yhm-managerth>
-        <yhm-managerth style="width: 40px" title="操作"></yhm-managerth>
+        <yhm-managerth style="width: 80px" title="发票照片"></yhm-managerth>
+        <yhm-managerth style="width: 65px" title="操作"></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in invoiceDetails" :key="index" :class="{InterlacBg:index%2!==0}">
           <yhm-manager-td-look :no-click="isElLook" @click="listView(item)"></yhm-manager-td-look>
-          <yhm-form-td-textbox width="130" @change="verificationRepeatInvoice(item)" :no-edit="getIsElectronicInvoice" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="code" rule="R0000"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="130" @change="verificationRepeatInvoice(item)" tip-arrow-left="" :copy-show="true" @copyIconClick="copyIconClick(item,invoiceDetails[index+1],index)" :no-edit="getIsElectronicInvoice" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="code" rule="R0000"></yhm-form-td-textbox>
 
           <yhm-form-td-date width="140" :no-edit="getIsElectronicInvoice" :min="minWorkDate" :max="maxWorkDate" position="u" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="workDate" rule="R0000"></yhm-form-td-date>
 
@@ -44,9 +44,14 @@
           <yhm-form-td-textbox width="90" :no-edit="getIsElectronicInvoice" @input="invoicesMoneyInputEvent()" @blur="calcMoney(item)" before-icon="rmb" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="money" rule="R3000" tip="value"></yhm-form-td-textbox>
           <yhm-form-td-textbox width="90" no-edit="1" @input="actualMoneyEvent()" @blur="calcActualMoney(item)" before-icon="rmb" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="actualMoney" rule="R3000" tip="value"></yhm-form-td-textbox>
 
-          <yhm-form-td-textbox width="130" :no-edit="getIsElectronicInvoice" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="remark" tip="value"></yhm-form-td-textbox>
-          <yhm-form-td-upload-image width="90" :no-upload="isElectronicInvoice" tag="Invoice" @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="url" rule="#"></yhm-form-td-upload-image>
-          <yhm-form-td-delete :no-click="getDeleteInvoiceBtnShow" width="40" :list="invoiceDetails" :value="item" :del-click="true" @click="delInvoice(index,item)"></yhm-form-td-delete>
+          <yhm-form-td-textbox width="130" :no-edit="getIsElectronicInvoice"  :copy-show="true" @copyIconClick="copyremarkClick(item,invoiceDetails[index+1],index)" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="remark" tip="value"></yhm-form-td-textbox>
+          <yhm-form-td-upload-image width="80" :no-upload="isElectronicInvoice" tag="Invoice" @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="url" rule="#"></yhm-form-td-upload-image>
+          <yhm-form-td-delete style="position: relative" float="right" padding="0 5px 0 0" :no-click="getDeleteInvoiceBtnShow" width="40" :list="invoiceDetails" :value="item" :del-click="true" @click="delInvoice(index,item)"></yhm-form-td-delete>
+<!--          <yhm-form-td-delete :no-click="getDeleteInvoiceBtnShow" width="40" :list="invoiceDetails" :value="item" :del-click="true" @click="delInvoice(index,item)"></yhm-form-td-delete>-->
+
+          <!--          <yhm-form-td-delete :no-click="getDeleteInvoiceBtnShow" width="40" :list="invoiceDetails" :value="item" :del-click="true" @click="delInvoice(index,item)"></yhm-form-td-delete>-->
+          <span class="icon-add-to" @click="addInvoice" style="position: absolute;right: 73px;font-size: 18px;margin-top: 8px;"></span>
+
         </tr>
       </template>
     </yhm-form-list-edit>
@@ -111,6 +116,7 @@
         parentWorkDate:'',    //报销申请日期
         unitID:'',            //所属单位ID
         ownerID:'',       //报销批次ID
+        prettyCashsID:'',//备用金ID
         workDate:'',      //事件发生日期
         minDate:'',
         maxWorkDate:formatDate(new Date()), //当前日期
@@ -151,9 +157,10 @@
         isNoInvoiceReasonList: false,
         isSelectViewPrettyCash: '',
         isViewPrettyCash: true,
+        backupsInvoice0:[],//发票明细备份
+        backupsInvoice1:[],//发票明细备份
       }
     },
-
     methods: {
       /* 无票原因 */
       noInvoiceReasonEvent(){
@@ -321,8 +328,17 @@
         })
       },
       //发票类型切换事件
+      copyIconClick(item,items,index){//复制发票明细中上一个数据
+        if(items!=undefined){
+          items.code = item.code
+        }
+      },
+      copyremarkClick(item,items,index){//复制备注中上一个数据
+        if(items!=undefined){
+          items.remark = item.remark
+        }
+      },
       invoiceTypeEvent(old){
-
         if(this.isPrettyCashOff === '1'){
           if(this.isSelectPrettyCash === '0'){
             if(this.invoiceCategory === '2'){
@@ -338,12 +354,12 @@
           }
         }
 
-
+        console.log(this.invoiceDetails.length,'this.invoiceCategory',this.invoiceCategory)
         if(this.invoiceCategory === '0' || this.invoiceCategory === '1'){
           this.addInvoiceShow = true
           this.electronicInvoiceBtn = false
-          this.invoiceDetails = []
-          this.addInvoice()
+          // this.invoiceDetails = []
+          // this.addInvoice()
           this.isElectronicInvoice = '0'
           this.isElectronicInvoice = false
         }
@@ -739,6 +755,9 @@
       //保存
       save(op){
         let a = this.validator()
+        if(this.subject == ''){
+          $('body,html').animate({scrollTop:0},500);
+        }
         let b = true
         if((this.startDate && !this.endDate) || (!this.startDate && this.endDate)){
           b = false
@@ -775,7 +794,9 @@
             branchList: this.branchList,
             invoiceList: this.invoiceDetails,
             prettyCashMoney: this.prettyCashMoney,
-            files: this.fileList
+            files: this.fileList,
+            prettyCashID:this.prettyCashID,
+            isPrettyCashOff:this.isPrettyCashOff
           }
 
           this.ajaxJson({
@@ -886,6 +907,7 @@
       this.setQuery2Value('relevanceType')
       this.setQuery2Value('parentCode')
       this.setQuery2Value('parentWorkDate')
+      this.setQuery2Value('prettyCashsID')
       this.setQuery2Value('ID')
       this.setQuery2Value('edit')
       this.setQuery2Value('isSelectViewPrettyCash')
@@ -927,6 +949,9 @@
         }
         else {
           this.addInvoice()         //初始化一条待添加的发票
+          params = {
+            ownerID: this.ownerID
+          }
         }
       }
       this.init({
@@ -944,9 +969,12 @@
           // if(this.isPrettyCashOff === '1'){
           //   this.isPrettyMoneyCash = true
           // }
-
         },
         add: (data) => {
+          if(data.subjectID){
+            this.subjectID=data.subjectID
+            this.subject=data.subject
+          }
           if(this.relevanceID) { //说明是从外部过来的数据
             let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.invoiceDetails.length, 1000)))
             if(this.relevanceType === '3') {//3说明是电子发票过来的数据
@@ -1037,6 +1065,54 @@
           this.isElectronicInvoice = false
           this.isElLook = true
         }
+      },
+      invoiceCategory(newVal,val){
+        // if(this.invoiceDetails.length!='0'){
+        //   this.backupsInvoice0 = this.invoiceDetails.concat()
+        // }
+        console.log(this.backupsInvoice0,'11111',this.invoiceDetails)
+        if(newVal=='0'&&val=='1'){//定额转机打发票
+          if(this.invoiceDetails.length>=1&&this.invoiceDetails[0].code!=''){
+            this.backupsInvoice0 = this.invoiceDetails.concat()
+            this.$dialog.confirm({
+              tipValue: '您已切换发票类型,是否需要清空已添加的发票明细?',
+              width:'400',
+              btnValueOk:'清空数据',
+              btnValueCancel:'保留数据',
+              flickerIndex:'1',
+              okCallBack: (data) => {
+                this.invoiceDetails = []
+                this.addInvoice()
+              }
+            })
+          }
+          console.log('定额转机打发票',this.backupsInvoice0)
+        }else if(newVal=='1'&&val=='0'){//机打发票转定额发票
+          this.backupsInvoice1 = this.invoiceDetails.concat()
+          if(this.invoiceDetails.length>=1&&this.invoiceDetails[0].code!=''){
+            this.$dialog.confirm({
+              tipValue: '您已切换发票类型,是否需要清空已添加的发票明细?',
+              width:'400',
+              btnValueOk:'清空数据',
+              btnValueCancel:'保留数据',
+              flickerIndex:'1',
+              okCallBack: (data) => {
+                this.invoiceDetails = []
+                this.addInvoice()
+              }
+            })
+          }
+          console.log('机打发票转定额发票',this.backupsInvoice1)
+        }
+        // else if(newVal=='2'||newVal=='3'&&val=='0'){//从机打发票到电子发票或者没有发票
+        //   this.backupsInvoice0 = this.invoiceDetails.concat()
+        //   console.log(this.backupsInvoice0,'从机打发票到电子发票或者定额发票时',this.invoiceDetails)
+        // }else if(val=='2'||val=='3'&&newVal=='0'){//从电子发票或者没有发票到机打发票时
+        //   setTimeout(()=>{
+        //     this.invoiceDetails =  this.backupsInvoice0.concat()
+        //   },0)
+        //   console.log(this.backupsInvoice0,'从电子发票或者定额发票到机打发票时',this.invoiceDetails)
+        // }
       }
     }
   }

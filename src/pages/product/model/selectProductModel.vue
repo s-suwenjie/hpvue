@@ -10,6 +10,8 @@
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
         <yhm-managerth title="商品规格型号"></yhm-managerth>
+        <yhm-managerth title="适用品牌"></yhm-managerth>
+        <yhm-managerth title="适用车型"></yhm-managerth>
 <!--        <yhm-managerth title="商品规格型号(英文)"></yhm-managerth>-->
         <yhm-managerth title="编号"></yhm-managerth>
         <yhm-managerth width="100" title="参考价格"></yhm-managerth>
@@ -24,8 +26,11 @@
 
           <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td :value="item.name"></yhm-manager-td>
+          <yhm-manager-td-psd :value="item.stockType" :list="stockTypeList"></yhm-manager-td-psd>
+          <yhm-manager-td :value="item.stockModel"></yhm-manager-td>
 <!--          <yhm-manager-td :value="item.englishName"></yhm-manager-td>-->
           <yhm-manager-td :value="item.productNumber"></yhm-manager-td>
+
           <yhm-manager-td-money :value="item.price"></yhm-manager-td-money>
         </tr>
       </template>
@@ -48,7 +53,8 @@
     mixins: [selectmixin],
     data(){
       return{
-        ownerID:''
+        ownerID:'',
+        stockTypeList:[],
       }
     },
     methods:{
@@ -85,6 +91,7 @@
           data: params,
           all: (data) => {
             // 不管是不是初始化都需要执行的代码
+            this.stockTypeList = data.stockTypePsd.list
           },
           init: (data) => {
             // 初始化时需要执行的代码

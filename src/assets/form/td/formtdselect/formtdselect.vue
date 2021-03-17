@@ -1,6 +1,6 @@
 <template>
   <td v-if="show" ref="td_control" class="fd_in_txt" :style="getWidth">
-    <div :style="getWidth" class="c_main c_main_m" v-validator="validatorEvent">
+    <div :style="getWidth" class="c_main c_main_m" style="margin: 0 auto;" v-validator="validatorEvent">
       <div v-if="getShowTip" class="c_tip c_tip_m">
         <div>
           {{getShowValue}}
@@ -12,7 +12,11 @@
         <span class="c_icon c_icon_m i-input-down-arrow" :class="{rotate180:focusStyle}"></span>
         <div v-show="focusStyle" class="c_select_items c_select_items_m">
           <span><img class="rotate180" src="../../../../../static/css/images/arrowwhite.png"></span>
-          <div v-for="(item,index) in selectList" :key="index" @click.stop="selectItemEvent(item.num)" :class="{c_select_items_selected:txt === item.num}">{{item.showName}}</div>
+          <div v-for="(item,index) in selectList" :key="index" @click.stop="selectItemEvent(item.num)" :class="{c_select_items_selected:txt === item.num}">
+            {{item.showName}}
+            <span v-show="workOrder" style="margin-left: 10px;">{{item.img=='0'?'空闲':'忙碌'}}</span>
+            <span v-show="workOrder">{{'('+item.code+')'}}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -46,6 +50,10 @@
       width:{
         type: String,
         required: true
+      },
+      workOrder:{
+        type: Boolean,
+        required: false
       },
       list: {
         type: Array,
@@ -120,6 +128,7 @@
           this.focusStyle = true
           this.error = false
         }
+        this.$emit('click')
       },
       //失去焦点事件
       loseFocusEvent(){

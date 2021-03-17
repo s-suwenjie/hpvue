@@ -20,13 +20,16 @@
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
           <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" all="0" :content="listState"></yhm-radiofilter>
+          <yhm-radiofilter :before="expressCompanyBefore" @initData="initChoose('viewLevels')" title="查看下属" all="0" :content="listViewLevels"></yhm-radiofilter>
         </div>
       </template>
 
       <!--数据表头-->
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
+
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
+        <yhm-managerth v-if="listViewLevels.value==1"  style="width: 80px" title="申请人" ></yhm-managerth>
         <yhm-managerth title="收款单位" value="otherUnitID"></yhm-managerth>
 
         <yhm-managerth style="width: 120px" title="最迟付款日期" value="lastDate"></yhm-managerth>
@@ -34,7 +37,7 @@
 
         <yhm-managerth style="width: 110px" title="计划申请金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 220px;" title="编号" value="code"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="操作"></yhm-managerth>
+        <yhm-managerth v-if="listViewLevels.value==0"  style="width: 150px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -43,12 +46,13 @@
             :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item.id)"></yhm-manager-td-look>
+          <yhm-manager-td v-if="listViewLevels.value==1" :value="item.person"></yhm-manager-td>
           <yhm-manager-td :value="item.otherUnit"></yhm-manager-td>
           <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.subject"></yhm-manager-td-center>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
           <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
-          <yhm-manager-td-operate >
+          <yhm-manager-td-operate v-if="listViewLevels.value==0">
             <yhm-manager-td-operate-button :no-click="item.state==0 || item.isAffirm == 0" @click="determineEvent(item.id)" value="确定" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
@@ -100,6 +104,10 @@
           value: '',
           list: []
         },
+        listViewLevels:{
+          value:"0",
+          list:[]
+        },
         menuTabOn: 5,
         details:[
           {id:'1', name: '付款计划',path:'/home/myPaymentPlanManager'},
@@ -109,6 +117,7 @@
           {id:'5', name: '备用金',path:'/home/prettyCashsManager'},
           {id:'6', name: '补签字',path:'/home/myManager/signatureManager'},
           {id:'7', name: '开票申请',path:'/home/openInvoiceManager'},
+          {id:'8', name: '我的快递',path:'/home/myExpressManager'},
         ],
       }
     },
@@ -156,7 +165,8 @@
           params = {}
         } else {
           params = {
-            isFinish: this.listState.value
+            isFinish: this.listState.value,
+            viewLevels:this.listViewLevels.value
           }
         }
         this.init({
@@ -171,6 +181,7 @@
             //初始化时需要执行的代码
             // 这边初始化筛选信息
             this.listState = data.statePsd
+            this.listViewLevels=data.viewLevelsPsd
           }
         })
       },

@@ -11,7 +11,7 @@
         <yhm-form-radio title="是否关联" :select-list="isRelevanceList" @call="SelectIsRelevance" :value="isRelevance" id="isRelevance" rule="R0000"></yhm-form-radio>
         <yhm-form-select title="计划事件" :show="eventShowA" @click="selectPage" :value="name" id="name" tip="value" rule="R0000"></yhm-form-select>
         <yhm-form-textarea :show="eventShowB" title="款项用途" :value="useName" id="useName" rule="R0000"></yhm-form-textarea>
-        <yhm-form-select title="收款账号" tip="value" :value="otherAccount" id="otherAccount" rule="R0000" @click="selectaccount" :no-click="isOtherAccount"></yhm-form-select>
+        <yhm-form-select title="收款账号" :tips="accountString" :value="otherAccount" id="otherAccount" rule="R0000" @click="selectaccount" :no-click="isOtherAccount"></yhm-form-select>
         <yhm-form-text title="申请人" :value="person" id="person" rule="R0000" no-edit="1"></yhm-form-text>
         <yhm-form-radio width="1" title="发票类型" v-show="PrepaidHidden" @call="invoiceClick" :select-list="invoiceList" :value="invoice" id="invoice"></yhm-form-radio>
         <yhm-form-radio title="发票" v-show="PrepaidHidden" subtitle="二级类型" :select-list="secondLevelInvoiceList" :value="secondLevelInvoice" id="secondLevelInvoice"></yhm-form-radio>
@@ -45,14 +45,36 @@
             </tr>
           </template>
         </yhm-form-list-edit>
-
-        <yhm-form-list-edit :show="isBankList" style="border: none;width: 998px">
+        <yhm-form-list-edit v-if="nature === '9'" style="border: none;width: 998px">
+          <template #title>快递对账单信息</template>
+          <template #operate>
+            <yhm-commonbutton value="添加账单" v-if="expressList.length===0" icon="btnAdd" @call="addExpress"></yhm-commonbutton>
+          </template>
+          <template #listHead>
+            <yhm-managerth style="width: 130px" title="开始日期"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="结束日期"></yhm-managerth>
+            <yhm-managerth style="width: 160px" title="金额"></yhm-managerth>
+            <yhm-managerth style="width: 40px" title="操作"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in expressList" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-form-td-date width="260" :no-edit="'1'"  position="u" :max="maxWorkDate" :list="expressList" listid="expressList" :value="item" id="startDate" rule="R0000"></yhm-form-td-date>
+              <yhm-form-td-date width="280" :no-edit="'1'"  position="u" :max="maxWorkDate" :list="expressList" listid="expressList" :value="item" id="endDate" rule="R0000"></yhm-form-td-date>
+              <yhm-form-td-textbox width="320" :no-edit="'1'" before-icon="rmb" :list="expressList" listid="expressList" :value="item" id="money" rule="R1200"></yhm-form-td-textbox>
+              <yhm-form-td-delete width="40" :list="expressList" :value="item" :del-click="true" @click="delExpressList(index,item)"></yhm-form-td-delete>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="expressList.length === 0">暂时没有数据</span>
+          </template>
+        </yhm-form-list-edit>
+        <yhm-form-list-edit :show="nature === '4'||nature === '5'" style="border: none;width: 998px">
           <template #title>收支明细</template>
           <template #operate>
             <yhm-commonbutton :show="isAddBankDetail" value="选择收支明细" icon="btnAdd" @call="selectBankDetail"></yhm-commonbutton>
           </template>
           <template #listHead>
-            <yhm-managerth style="width: 230px" title="账号"></yhm-managerth>
+            <yhm-managerth style="width: 230px" title="收款方"></yhm-managerth>
             <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
             <yhm-managerth style="width: 130px" title="收支方向"></yhm-managerth>
             <yhm-managerth style="width: 90px" title="事由"></yhm-managerth>
@@ -66,13 +88,74 @@
               <yhm-form-td-date width="140" :no-edit="isBankDetail"  position="u" :list="bankDetailList" listid="bankDetailList" :value="item" id="cccurDate" rule="R0000"></yhm-form-td-date>
               <yhm-form-td-radio width="130" :no-edit="isBankDetail?true:false" :list="bankDetailList" listid="bankDetailList" :select-list="directionList" :value="item" id="direction"></yhm-form-td-radio>
               <yhm-form-td-textbox width="90" :no-edit="isBankDetail" :list="bankDetailList" listid="bankDetailList" :value="item" id="subject" rule="R0000"></yhm-form-td-textbox>
-              <yhm-form-td-textbox width="110" :no-edit="isBankDetail" before-icon="rmb" :list="bankDetailList" listid="bankDetailList" :value="item" id="money" rule="R0000"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="110" :no-edit="nature==='4'?'1':''" before-icon="rmb" :list="bankDetailList" @change="bankDetailListMoney" listid="bankDetailList" :value="item" id="money" rule="R0000"></yhm-form-td-textbox>
               <yhm-form-td-textbox width="220" :no-edit="isBankDetail" :list="bankDetailList" listid="bankDetailList" :value="item" id="remark"></yhm-form-td-textbox>
               <yhm-form-td-delete width="40" :list="bankDetailList" :value="item" :del-click="true" @click="delbankDetailList(index,item)"></yhm-form-td-delete>
             </tr>
           </template>
+        <template #empty>
+        <span class="m_listNoData" v-show="bankDetailList.length === 0">暂时没有数据</span>
+        </template>
+      </yhm-form-list-edit>
+        <yhm-form-list-edit :show="nature === '7'" style="border: none;width: 998px">
+          <template #title>退押金信息</template>
+          <template #operate>
+            <yhm-commonbutton value="选择收押金" icon="btnAdd" @call="selectDepositList"></yhm-commonbutton>
+          </template>
+          <template #listHead>
+            <yhm-managerth style="width: 200px" title="付款方"></yhm-managerth>
+            <yhm-managerth style="width: 160px" title="付款账号"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="交易日期"></yhm-managerth>
+            <yhm-managerth style="width: 90px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="交易金额"></yhm-managerth>
+            <yhm-managerth style="width: 220px" title="备注"></yhm-managerth>
+            <yhm-managerth style="width: 40px" title="操作"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in depositList" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-form-td-textbox width="200" no-edit="1" :list="depositList" listid="depositList" :value="item" id="other" rule="R0000"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="160" tip="value" no-edit="1" :list="depositList" listid="depositList" :value="item" id="otherAccount"></yhm-form-td-textbox>
+              <yhm-form-td-date width="120" no-edit="1"  position="u" :list="depositList" listid="depositList" :value="item" id="cccurDate" rule="R0000"></yhm-form-td-date>
+              <yhm-form-td-textbox width="90" no-edit="1" :list="depositList" listid="depositList" :value="item" id="subject" rule="R0000"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="110" :maxNumber="item.maxMoney" before-icon="rmb" :list="depositList" listid="depositList" @change="depositListMoney" :value="item" id="money" rule="R0000"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="220" no-edit="1" :list="depositList" listid="depositList" :value="item" id="remark"></yhm-form-td-textbox>
+              <yhm-form-td-delete width="40" :list="depositList" :value="item" :del-click="true" @click="delDepositList(index,item)"></yhm-form-td-delete>
+            </tr>
+          </template>
           <template #empty>
-            <span class="m_listNoData" v-show="isBankDetailEmpty">暂时没有数据</span>
+            <span class="m_listNoData" v-show="depositList.length ===0">暂时没有数据</span>
+          </template>
+        </yhm-form-list-edit>
+        <yhm-form-list-edit :show="nature === '8'" style="border: none;width: 998px">
+          <template #title>付押金信息</template>
+          <template #operate>
+            <yhm-commonbutton value="添加付押金" v-if="payDepositList.length===0" icon="btnAdd" @call="addPayDeposit"></yhm-commonbutton>
+            <yhm-commonbutton value="选择付押金" v-if="payDepositList.length===0" icon="btnAdd" @call="selectPayDepositList"></yhm-commonbutton>
+          </template>
+          <template #listHead>
+            <yhm-managerth style="width: 120px" title="收款方"></yhm-managerth>
+            <yhm-managerth style="width: 180px" title="收款账号"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="添加日期"></yhm-managerth>
+            <yhm-managerth style="width: 90px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="交易金额"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="预计退回日期"></yhm-managerth>
+            <yhm-managerth style="width: 180px" title="备注"></yhm-managerth>
+            <yhm-managerth style="width: 40px" title="操作"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in payDepositList" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-form-td-textbox width="120" no-edit="1" :list="payDepositList" listid="payDepositList" :value="item" id="other" rule="R0000"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="180" tip="value" no-edit="1" :list="payDepositList" listid="payDepositList" :value="item" id="otherAccount"></yhm-form-td-textbox>
+              <yhm-form-td-date width="120" no-edit="1"  position="u" :list="payDepositList" listid="payDepositList" :value="item" id="cccurDate" rule="R0000"></yhm-form-td-date>
+              <yhm-form-td-textbox width="90" no-edit="1" :list="payDepositList" listid="payDepositList" :value="item" id="subject" rule="R0000"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="110" no-edit="1" :maxNumber="item.maxMoney" before-icon="rmb" :list="payDepositList" listid="payDepositList" @change="depositListMoney" :value="item" id="money" rule="R0000"></yhm-form-td-textbox>
+              <yhm-form-td-date width="120" no-edit="1"  position="u" :list="payDepositList" listid="payDepositList" :value="item" id="refundDate" rule="R0000"></yhm-form-td-date>
+              <yhm-form-td-textbox width="180" no-edit="1" :list="payDepositList" listid="payDepositList" :value="item" id="remark"></yhm-form-td-textbox>
+              <yhm-form-td-delete width="40" :list="payDepositList" :value="item" :del-click="true" @click="delPayDepositList(index,item)"></yhm-form-td-delete>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="payDepositList.length ===0">暂时没有数据</span>
           </template>
         </yhm-form-list-edit>
         <div class="invoiceImgView" v-show="viewImgShow">
@@ -183,7 +266,7 @@ export default {
       isCause: true,
       actualMoney: '',
       branchList:[],
-
+      accountString:[],
       /////////////////////
       invoiceDetails: [],
       listCategoryList: [],
@@ -199,7 +282,6 @@ export default {
       isInvoice: '',
       isUpFile: true,
       bankDetailList: [],
-      isBankList:true,
       isBankDetail: '1',
       isBankDetailEmpty: true,
       isAddBankDetail: true,
@@ -220,10 +302,18 @@ export default {
       isAllocationList: [],
       isAllocation: '',
       moneyAllocationList: [],
-      allocationMoney: ''
+      allocationMoney: '',
+      depositList:[],
+      payDepositList:[],
+      expressList:[],//快递信息对账单信息
     }
   },
   created () {
+    this.setQuery2Value('ownerID')
+    this.setQuery2Value('nature')
+    if(this.nature!=''){
+      this.showPayment()
+    }
 
     this.init({
       url: '/PersonOffice/initPaymentForm',
@@ -231,8 +321,6 @@ export default {
         /* 公共 无论查看和添加返回数据 */
         this.ownerSysPsd = data.ownerSysPsd.list
         this.ownerSys = data.ownerSysPsd.value
-        this.natureList = data.naturePsd.list
-        this.nature = data.naturePsd.value
         this.invoiceList = data.invoicePsd.list
         this.invoice = data.invoicePsd.value
         this.useNumList = data.useNumPsd.list
@@ -253,12 +341,15 @@ export default {
         this.isChecks = data.isChecksPsd.value
         this.isChecksList = data.isChecksPsd.list
 
+        if(this.nature === ''){
+          this.nature = data.naturePsd.value
+        }
+        this.natureList = data.naturePsd.list
         this.listCategoryList = data.listCategoryPsd.list
-        this.isBankList = this.nature === '4' || this.nature === '5';
         this.isAllocationList = data.isAllocationPsd.list
         this.isAllocation = data.isAllocationPsd.value
 
-        if(this.nature === '4'||this.nature === '5'){
+        if(this.nature === '4'){
           //this.isInvoice='1'
           let sumMoney = 0;
           for(let i in this.bankDetailList){
@@ -287,6 +378,123 @@ export default {
       },
       add: (data) => {
         /* 需要添加的数据 */
+        if(this.ownerID){
+          if(this.nature === '7'){
+            let params={
+              id:this.ownerID
+            }
+            this.ajaxJson({
+              url: '/dailyoffice/deposit/initForm',
+              data: params,
+              call: (data) => {
+                this.disable=true
+                this.isNoBeforeClick=true
+                this.personOrUnit=data.category
+                this.ownerID=''
+                this.otherUnitID=data.otherID
+                this.otherUnit=data.other
+                this.otherUnitID=data.otherID
+                this.otherUnit=data.other
+                this.otherAccount=data.otherAccount
+                this.otherAccountID=data.otherAccountID
+                this.money=data.useMoney
+                this.isInvoice='1'
+                if(data.subjectID){
+                  this.ajaxJson({
+                    url: '/dailyoffice/deposit/getRetreatDepositSubjectID',
+                    data: {
+                      subjectID:data.subjectID
+                    },
+                    call: (data) => {
+                      if(data){
+                        this.subjectID=data.id
+                        this.subject=data.value2 + ' ---- ' + data.value1 + ' ---- ' + data.showName
+                        this.useName=data.value2
+                      }
+                    }
+                  })
+                }
+                let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.depositList.length, 1000)))
+                this.depositList.push({
+                  id: guid(),
+                  bankDetailID: data.id,
+                  insertDate: formatTime(insertDate),
+                  ownerID: this.id,
+                  remark: data.remark,
+                  subject: data.subject,
+                  subjectID: data.subjectID,
+                  cccurDate: data.workDate,
+                  other: data.other,
+                  otherAccount: data.otherAccount,
+                  money: data.useMoney,
+                  useMoney: '0',
+                  maxMoney:data.useMoney,
+                })
+              }
+            })
+          }else if(this.nature === '8'){
+            let params={
+              id:this.ownerID
+            }
+            this.ajaxJson({
+              url: '/dailyoffice/payDeposit/initForm',
+              data: params,
+              call: (data) => {
+                this.disable = true
+                this.isNoBeforeClick = true
+                this.isOtherAccount = true
+                this.personOrUnit = data.category
+                this.ownerID = ''
+                this.otherUnitID = data.otherID
+                this.otherUnit = data.other
+                this.otherUnitID = data.otherID
+                this.otherUnit = data.other
+                this.otherAccount = data.otherAccount
+                this.otherAccountID = data.otherAccountID
+                this.money = data.money
+                this.fileList = data.fileList
+                this.isInvoice = '1'
+                if (data.subjectID) {
+                  this.ajaxJson({
+                    url: '/dailyoffice/payDeposit/getSubjectID',
+                    data: {
+                      id: data.subjectID
+                    },
+                    call: (data) => {
+                      if (data) {
+                        this.subjectID = data.id
+                        this.subject = data.value2 + ' ---- ' + data.value1 + ' ---- ' + data.showName
+                        this.useName = data.value2
+                        if(data.name === 63){
+                          this.ownerSys='1'
+                        }else if(data.name === 65){
+                          this.ownerSys='0'
+                        }
+                      }
+                    }
+                  })
+                }
+                let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.payDepositList.length, 1000)))
+                this.payDepositList.push({
+                  id: guid(),
+                  bankDetailID: data.id,
+                  insertDate: formatTime(insertDate),
+                  ownerID: this.id,
+                  remark: data.remark,
+                  subject: data.subject,
+                  subjectID: data.subjectID,
+                  cccurDate: data.workDate,
+                  other: data.other,
+                  otherAccount: data.otherAccount,
+                  refundDate:data.refundDate,
+                  money: data.money,
+                  useMoney: '0',
+                  maxMoney: data.money,
+                })
+              }
+            })
+          }
+        }
       },
       look: (data) => {
         this.bankDetailList = data.bankDetailList
@@ -315,6 +523,7 @@ export default {
         this.approvalHtml = data.approvalHtml
         this.invoiceDetails = data.paymentInvoice
         this.branchList = data.branchList
+        this.accountString = data.accountString.split('☆')
 
         for(let i in this.allocationList){
           this.allocationMoney = this.allocationList[i].value
@@ -365,10 +574,380 @@ export default {
           this.isBrand = true
           this.isUpFile = true
         }
+        if(this.nature === '7'){
+          let id=''
+          for (let i = 0; i < this.bankDetailList.length; i++) {
+            if(this.bankDetailList.length===1){
+              id='\"'+this.bankDetailList[i].bankDetailID+'\"'
+            }else{
+              if(i === this.bankDetailList.length-1){
+                id=id+'\"'+this.bankDetailList[i].bankDetailID+'\"'
+              }else if(i === 0){
+                id='\"'+this.bankDetailList[i].bankDetailID+'\",'
+              }else{
+                id=id+'\"'+this.bankDetailList[i].bankDetailID+'\",'
+              }
+            }
+          }
+          let params={
+            id:id
+          }
+          this.ajaxJson({
+            url: '/dailyoffice/deposit/getDepositList',
+            data: params,
+            call: (data) => {
+              let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.bankDetailList.length, 1000)))
+              for (let j = 0; j < this.bankDetailList.length; j++) {
+                for (let i = 0; i < data.length; i++) {
+                  if(this.bankDetailList[j].bankDetailID===data[i].id){
+                    this.bankDetailList[j].remark= data[i].remark
+                    this.bankDetailList[j].subjectID= data[i].subjectID
+                    this.bankDetailList[j].subject= data[i].subject
+                    this.bankDetailList[j].cccurDate=data[i].workDate
+                    this.bankDetailList[j].other=data[i].other
+                    this.bankDetailList[j].otherAccount=data[i].otherAccount
+                    this.bankDetailList[j].useMoney=this.bankDetailList[j].money
+                    this.bankDetailList[j].maxMoney=accAdd(this.bankDetailList[j].money,data[i].useMoney)+''
+                  }
+                }
+              }
+              this.depositList=this.bankDetailList
+              this.bankDetailList=[]
+              this.isInvoice='1'
+            }
+          })
+        }else if(this.nature === '8'){
+          let params={
+            id:this.bankDetailList[0].bankDetailID
+          }
+          this.ajaxJson({
+            url: '/dailyoffice/payDeposit/initForm',
+            data: params,
+            call: (data) => {
+              let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.payDepositList.length, 1000)))
+              this.payDepositList.push({
+                id: guid(),
+                bankDetailID: data.id,
+                insertDate: formatTime(insertDate),
+                ownerID: this.id,
+                remark: data.remark,
+                subject: data.subject,
+                subjectID: data.subjectID,
+                cccurDate: data.workDate,
+                other: data.other,
+                otherAccount: data.otherAccount,
+                refundDate:data.refundDate,
+                money: data.money,
+                useMoney: '0',
+                maxMoney: data.money,
+              })
+              this.bankDetailList=[]
+            }
+          })
+        }else if(this.nature === '9'){
+          this.PrepaidHidden = true
+          let params={
+            id:this.bankDetailList[0].bankDetailID
+          }
+          this.ajaxJson({
+            url: '/dailyoffice/expressCompany/getExpressForm',
+            data: params,
+            call: (data) => {
+              let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.payDepositList.length, 1000)))
+              this.expressList.push({
+                id: guid(),
+                bankDetailID: data.id,
+                insertDate: formatTime(insertDate),
+                ownerID: this.id,
+                startDate:data.startDate,
+                endDate:data.endDate,
+                money:data.countMoney,
+                storeName:data.storeName,
+              })
+              this.bankDetailList=[]
+            }
+          })
+        }
       }
     })
   },
   methods: {
+    addExpress(){
+      if(this.otherUnitID!=''){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          title: '选择快递对账单',
+          url: '/selectExpressNot?paymentUnitID='+this.otherUnitID,
+          closeCallBack: (data)=>{
+            if(data){
+              this.ownerID=data.id
+              let num =0
+              for (let i = 0; i <this.expressList.length ; i++) {
+                if(data.id === this.expressList[i].bankDetailID){
+                  num=1
+                }
+              }
+              if(num===0){
+                let subject=''
+                let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.depositList.length, 1000)))
+                this.expressList.push({
+                  id: guid(),
+                  bankDetailID: data.id,
+                  insertDate: formatTime(insertDate),
+                  ownerID: this.id,
+                  startDate:data.startDate,
+                  endDate:data.endDate,
+                  money:data.countMoney,
+                  storeName:data.storeName,
+                })
+                let sumMoney = 0;
+                for(let i in this.expressList){
+                  let money = this.expressList[i].money;
+                  sumMoney = accAdd( money,sumMoney)
+                }
+                this.money = sumMoney + ''
+              }
+            }
+          }
+        })
+      }else{
+        this.selectUnit()
+      }
+    },
+    delExpressList(index,item){
+      this.$dialog.alert({
+        tipValue: '删除成功！！！',
+        closeCallBack: ()=>{
+          this.expressList.splice(index,1)
+          if(this.expressList.length === 0){
+
+          }
+          this.money = parseFloat(this.money) - parseFloat(item.money)
+        }
+      })
+    },
+    addPayDeposit(){
+      if(this.otherUnitID!=''){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 820,
+          url:'/payDepositForm?otherID='+this.otherUnitID+"&otherAccountID="+this.otherAccountID+"&category="+this.personOrUnit,
+          title:'添加收押金',
+          closeCallBack:(data) =>{
+            if(data){
+              if(this.nature === '8'){
+                let params={
+                  id:data
+                }
+                this.ajaxJson({
+                  url: '/dailyoffice/payDeposit/initForm',
+                  data: params,
+                  call: (data) => {
+                    this.disable = true
+                    this.isNoBeforeClick = true
+                    this.isOtherAccount = true
+                    this.personOrUnit = data.category
+                    this.ownerID = ''
+                    this.otherUnitID = data.otherID
+                    this.otherUnit = data.other
+                    this.otherUnitID = data.otherID
+                    this.otherUnit = data.other
+                    this.otherAccount = data.otherAccount
+                    this.otherAccountID = data.otherAccountID
+                    this.money = data.money
+                    this.fileList = data.fileList
+                    this.isInvoice = '1'
+                    if (data.subjectID) {
+                      this.ajaxJson({
+                        url: '/dailyoffice/payDeposit/getSubjectID',
+                        data: {
+                          id: data.subjectID
+                        },
+                        call: (data) => {
+                          if (data) {
+                            this.subjectID = data.id
+                            this.subject = data.value2 + ' ---- ' + data.value1 + ' ---- ' + data.showName
+                            this.useName = data.value2
+                            if(data.name === 63){
+                              this.ownerSys='1'
+                            }else if(data.name === 65){
+                              this.ownerSys='0'
+                            }
+                          }
+                        }
+                      })
+                    }
+                    let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.payDepositList.length, 1000)))
+                    this.payDepositList.push({
+                      id: guid(),
+                      bankDetailID: data.id,
+                      insertDate: formatTime(insertDate),
+                      ownerID: this.id,
+                      remark: data.remark,
+                      subject: data.subject,
+                      subjectID: data.subjectID,
+                      cccurDate: data.workDate,
+                      other: data.other,
+                      otherAccount: data.otherAccount,
+                      refundDate:data.refundDate,
+                      money: data.money,
+                      useMoney: '0',
+                      maxMoney: data.money,
+                    })
+                  }
+                })
+              }
+            }
+          }
+        })
+      }else{
+        this.selectUnit()
+      }
+    },
+    delPayDepositList(index,item){
+      this.$dialog.alert({
+        tipValue: '删除成功！！！',
+        closeCallBack: ()=>{
+          this.payDepositList.splice(index,1)
+          if(this.payDepositList.length === 0){
+          }
+          this.money = parseFloat(this.money) - parseFloat(item.money)
+        }
+      })
+    },
+    selectPayDepositList(){
+      if(this.payDepositList.length === 0){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '692',
+          title: '选择付押金信息',
+          url: '/selectPayDeposit?state=0&otherID=' + this.otherUnitID,
+          closeCallBack: (data) => {
+            if(data){
+              let subject=''
+              let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.payDepositList.length, 1000)))
+              this.payDepositList.push({
+                id: guid(),
+                bankDetailID: data.id,
+                insertDate: formatTime(insertDate),
+                ownerID: this.id,
+                remark: data.remark,
+                subject: data.subject,
+                subjectID: data.subjectID,
+                cccurDate: data.workDate,
+                other: data.other,
+                otherAccount: data.otherAccount,
+                refundDate:data.refundDate,
+                money: data.money,
+                useMoney: '0',
+                maxMoney: data.money,
+              })
+              let sumMoney = 0;
+              for(let i in this.payDepositList){
+                let money = this.payDepositList[i].money;
+                sumMoney = accAdd( money,sumMoney)
+              }
+              this.money = sumMoney + ''
+              if(data.subjectID){
+                this.ajaxJson({
+                  url: '/dailyoffice/payDeposit/getSubjectID',
+                  data: {
+                    id: data.subjectID
+                  },
+                  loading: '0',
+                  call: (data) => {
+                    if (data) {
+                      this.subjectID = data.id
+                      this.subject = data.value2 + ' ---- ' + data.value1 + ' ---- ' + data.showName
+                      this.useName = data.value2
+                      if(data.name === '63'){
+                        this.ownerSys='1'
+                      }else if(data.name === '65'){
+                        this.ownerSys='0'
+                      }
+                    }
+                  }
+                })
+              }
+            }
+          }
+        })
+      }else{
+        alert('付押金')
+      }
+    },
+    delDepositList(index,item){
+      this.$dialog.alert({
+        tipValue: '删除成功！！！',
+        closeCallBack: ()=>{
+          this.depositList.splice(index,1)
+          this.money = parseFloat(this.money) - parseFloat(item.money)
+        }
+      })
+    },
+    bankDetailListMoney(){
+      let sumMoney = 0;
+      for(let i in this.bankDetailList){
+        let money = this.bankDetailList[i].money;
+        sumMoney = accAdd( money,sumMoney)
+      }
+      this.money = sumMoney + ''
+    },
+    depositListMoney(){
+      let sumMoney = 0;
+      for(let i in this.depositList){
+        let money = this.depositList[i].money;
+        sumMoney = accAdd( money,sumMoney)
+      }
+      this.money = sumMoney + ''
+    },
+    selectDepositList() {
+      if(this.otherUnitID){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '692',
+          title: '选择押金信息',
+          url: '/selectDeposit?otherID='+this.otherUnitID,
+          closeCallBack: (data) => {
+            if(data){
+              let num =0
+              for (let i = 0; i <this.depositList.length ; i++) {
+                if(data.id === this.depositList[i].bankDetailID){
+                  num=1
+                }
+              }
+              if(num===0){
+                let subject=''
+                let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.depositList.length, 1000)))
+                this.depositList.push({
+                  id: guid(),
+                  bankDetailID: data.id,
+                  insertDate: formatTime(insertDate),
+                  ownerID: this.id,
+                  remark: data.remark,
+                  subject: data.subject,
+                  cccurDate: data.workDate,
+                  other: data.other,
+                  otherAccount: data.otherAccount,
+                  money: data.useMoney,
+                  useMoney: '0',
+                  maxMoney: data.useMoney,
+                })
+                let sumMoney = 0;
+                for(let i in this.depositList){
+                  let money = this.depositList[i].money;
+                  sumMoney = accAdd( money,sumMoney)
+                }
+                this.money = sumMoney + ''
+              }
+            }
+          }
+        })
+      }else{
+        this.selectUnit()
+      }
+    },
     isAllocationBlur(){
       if(this.money && this.isAllocation === '1'){
         let money = parseFloat(this.money)
@@ -806,22 +1385,32 @@ export default {
             url: '/selectBankDetail?direction=0&categoryBefore=1&selectType=1&type=1',
             closeCallBack: (data)=>{
               if(data){
-                this.isBankList = true
                 this.isInvoice='1'
-                this.money=data.money
-                let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.bankDetailList.length, 1000)))
-                this.bankDetailList.push({
-                  id: guid(),
-                  bankDetailID: data.id,
-                  insertDate: formatTime(insertDate),
-                  ownerID: this.id,
-                  remark: data.remark,
-                  subject: data.subject,
-                  cccurDate: data.cccurDate,
-                  direction: data.direction,
-                  otherAccount: data.bankName + data.account + data.nature,
-                  money: data.money
-                })
+                for(let i=0;i<data.length;i++){
+                  let a=0
+                  for (let j = 0; j <this.bankDetailList.length ; j++) {
+                    if(data[i].id===this.bankDetailList[j].bankDetailID){
+                      a=1
+                    }
+                  }
+                  if(a===0){
+                    this.money=(Number(this.money) + Number(data[i].money)).toFixed(2)
+                    let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.bankDetailList.length, 1000)))
+                    this.bankDetailList.push({
+                      id: guid(),
+                      bankDetailID: data[i].id,
+                      insertDate: formatTime(insertDate),
+                      ownerID: this.id,
+                      remark: data[i].remark,
+                      subject: data[i].subject,
+                      cccurDate: data[i].cccurDate,
+                      direction: data[i].direction,
+                      otherAccount: data[i].bankName + data[i].account + data[i].nature,
+                      money: data[i].useMoney,
+                      useMoney:'0',
+                    })
+                  }
+                }
                 if(this.bankDetailList.length>0){
                   this.isBankDetailEmpty=false
                 }
@@ -834,41 +1423,49 @@ export default {
             tipValue: '请选择收款账号'
           })
         }
-      }else if(this.nature === '5'){
-        if(this.otherAccountID){
+      }else if(this.nature === '5') {
+        if (this.otherAccountID) {
           this.$dialog.OpenWindow({
             width: '1050',
             height: '692',
             title: '选择收支明细',
-            url: '/selectBankDetail?direction=0&categoryBefore=1'+'&otherID=' + this.otherUnitID +'&selectType=1&type=1',
-            closeCallBack: (data)=>{
-              if(data){
-                for(let i=0;i<data.length;i++){
-                  this.isBankList = true
-                  this.isInvoice = ''
-                  this.money=data[i].money
-                  this.beforeMoney=data[i].money
-                  let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.bankDetailList.length, 1000)))
-                  this.bankDetailList.push({
-                    id: guid(),
-                    bankDetailID: data[i].id,
-                    insertDate: formatTime(insertDate),
-                    ownerID: this.id,
-                    remark: data[i].remark,
-                    subject: data[i].subject,
-                    cccurDate: data[i].cccurDate,
-                    direction: data[i].direction,
-                    otherAccount: data[i].bankName + data[i].account + data[i].nature,
-                    money: data[i].money
-                  })
+            url: '/selectBankDetail?direction=0&categoryBefore=1' + '&otherID=' + this.otherUnitID + '&selectType=1&type=1',
+            closeCallBack: (data) => {
+              if (data) {
+                for (let i = 0; i < data.length; i++) {
+                  let a=0
+                  for (let j = 0; j <this.bankDetailList.length ; j++) {
+                    if(data[i].id===this.bankDetailList[j].bankDetailID){
+                      a=1
+                    }
+                  }
+                  if(a===0){
+                    this.isInvoice = ''
+                    this.money = (Number(this.money) + Number(data[i].money)).toFixed(2)
+                    this.beforeMoney = data[i].money
+                    let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.bankDetailList.length, 1000)))
+                    this.bankDetailList.push({
+                      id: guid(),
+                      bankDetailID: data[i].id,
+                      insertDate: formatTime(insertDate),
+                      ownerID: this.id,
+                      remark: data[i].remark,
+                      subject: data[i].subject,
+                      cccurDate: data[i].cccurDate,
+                      direction: data[i].direction,
+                      otherAccount: data[i].bankName + data[i].account + data[i].nature,
+                      money: data[i].useMoney,
+                      useMoney:'0'
+                    })
+                  }
                 }
-                if(this.bankDetailList.length>0){
-                  this.isBankDetailEmpty=false
+                if (this.bankDetailList.length > 0) {
+                  this.isBankDetailEmpty = false
                 }
               }
             }
           })
-        }else{
+        } else {
           this.$dialog.alert({
             alertImg: 'warn',
             tipValue: '请选择收款账号'
@@ -881,7 +1478,6 @@ export default {
         this.PrepaidHidden = false
         this.invoiceDetails.length = 1    //清空发票列表并保留一行
         this.invoiceDetails = []
-        this.isBankList = false   //清空收支明细
         this.isAddBankDetail = false
         this.isNoBeforeClick = true
         this.personOrUnit = '0'
@@ -899,13 +1495,15 @@ export default {
         this.isCode = false
         // this.isAllocationShow = false
         this.isBrand = false
+        this.depositList = []
+        this.payDepositList = []
       }else{
         this.isCause = true
         this.isLastDate = true
         this.isCode = true
         // this.isAllocationShow = true
         this.isBrand = true
-
+        this.invoiceDetails = []
         this.isNoBeforeClick = false
         this.isUpFile = true
         if(oldVal==='2'){
@@ -917,7 +1515,6 @@ export default {
         if(this.nature==='1'){
           this.isChecksHidden = true
           this.isAddBankDetail = false
-          this.isBankList = false   //清空收支明细
           this.bankDetailList = []
 
           this.invoiceDetails.length = 1    //清空发票列表并保留一行
@@ -933,10 +1530,11 @@ export default {
           this.message=''
           this.money=''
           this.isInvoice = '1'   //选择电子发票的时候,支付金额禁止输入
+          this.depositList = []
+          this.payDepositList = []
         }else if(this.nature==='0'||this.nature==='6'){
           this.isChecksHidden = true
           this.isAddBankDetail = false
-          this.isBankList = false //清空收支明细
           this.bankDetailList = []
 
           this.PrepaidHidden = false
@@ -953,18 +1551,40 @@ export default {
           this.message=''
           this.money=''
           this.isInvoice = ''  //选择电子发票的时候,支付金额禁止输入
-        }else if(this.nature==='4'){
+          this.depositList = []
+          this.payDepositList = []
+        }else if(this.nature==='4'||this.nature==='5'){
           this.isChecksHidden = false
           this.PrepaidHidden = false //清空发票明细列表
           this.isAddBankDetail = true
-          this.invoiceDetails = []
-          this.isBankList = true
-        }else if(this.nature === '5'){
+          // this.invoiceDetails = []
+          this.depositList = []
+          this.isInvoice = '1'
+          this.payDepositList = []
+        }else if(this.nature === '7'){
           this.isChecksHidden = false
           this.isAddBankDetail = true
           this.PrepaidHidden = false    //清空发票明细列表
+          this.bankDetailList = []
+          this.payDepositList = []
+        }else if(this.nature === '8'){
+          this.isChecksHidden = false
+          this.isAddBankDetail = true
+          this.PrepaidHidden = false    //清空发票明细列表
+          this.depositList = []
+          this.bankDetailList = []
+          this.isInvoice='1'
+        }else if(this.nature == '9'){
+          this.isChecksHidden = false
+          this.isAddBankDetail = true
+          this.depositList = []
+          this.bankDetailList = []
+          this.isInvoice='1'
+          this.payDepositList = []
+          this.PrepaidHidden = true
+          this.invoiceDetails.length = 1    //清空发票列表并保留一行
           this.invoiceDetails = []
-          this.isBankList = true
+          this.addApplyInvoice()
         }
       }
     },
@@ -1025,6 +1645,10 @@ export default {
                 }else{
                   this.otherAccount = data.publicAccountExplain
                   this.otherAccountID = data.id
+                  this.accountString=[]
+                  this.accountString.push(data.name)
+                  this.accountString.push(data.bank)
+                  this.accountString.push(data.accountStr)
                   this.selectBankDetail()
                 }
               }
@@ -1043,6 +1667,9 @@ export default {
                 }else{
                   this.otherAccount = data.publicAccountExplain
                   this.otherAccountID = data.id
+                  this.accountString.push(data.person)
+                  this.accountString.push(data.bank)
+                  this.accountString.push(data.accountStr)
                   this.selectBankDetail()
                 }
               }
@@ -1405,9 +2032,16 @@ export default {
     //核对金额
     bankDetailMoney(){
       let sumMoney=0
-      for(let i=0;i<this.bankDetailList.length;i++){
-        let money=this.bankDetailList[i].money
-        sumMoney=parseFloat(sumMoney)+parseFloat(money)
+      if(this.nature==='7'){
+        for(let i=0;i<this.depositList.length;i++){
+          let money=this.depositList[i].money
+          sumMoney=parseFloat(sumMoney)+parseFloat(money)
+        }
+      }else{
+        for(let i=0;i<this.bankDetailList.length;i++){
+          let money=this.bankDetailList[i].money
+          sumMoney=parseFloat(sumMoney)+parseFloat(money)
+        }
       }
       this.sumBankDetailMoney=sumMoney+''
     },
@@ -1416,7 +2050,8 @@ export default {
       let money = parseFloat(this.money)
       let bankList = true
       let aa = true
-      if(parseFloat(this.beforeMoney) < money){
+      let depositList = true
+      if(parseFloat(this.beforeMoney) < parseFloat(this.money)){
         aa = false
       }
       if(!aa){
@@ -1430,6 +2065,17 @@ export default {
         bankList = false
       }else if(this.bankDetailList.length===0&&this.nature==='5'){
         bankList = false
+      }else if(this.depositList.length===0&&this.nature==='7'){
+        depositList = false
+      }else if(this.payDepositList.length===0&&this.nature==='7'){
+        depositList = false
+      }
+      if(!depositList){
+        this.$dialog.alert({
+          width: '300',
+          alertImg: 'error',
+          tipValue: '请选择押金信息！！！！'
+        })
       }
       if(!bankList){
         this.$dialog.alert({
@@ -1446,7 +2092,7 @@ export default {
             bb=false
           }
         }else{
-          if(this.sumBankDetailMoney !== this.money){
+          if(parseInt(this.sumBankDetailMoney)!==parseInt(this.money)){
             bb=false
           }
         }
@@ -1458,7 +2104,7 @@ export default {
           tipValue: '收支明细总金额有误！！！'
         })
       }
-      if (this.validator() && aa&&bankList&&bb) {
+      if (this.validator() && aa&&bankList&&bb&&depositList) {
         let params = {
           id: this.id,
           unitID: this.unitID,
@@ -1491,8 +2137,9 @@ export default {
           bankDetailList: this.bankDetailList,
           allocationList: this.allocationList,
           isChecks:this.isChecks,
-          isAllocation: this.isAllocation
-
+          isAllocation: this.isAllocation,
+          depositList:this.depositList,
+          payDepositList:this.payDepositList
         }
         this.ajaxJson({
           url: '/PersonOffice/paymentSave',
@@ -1501,6 +2148,42 @@ export default {
           call: (data) => {
             if (data.type === 0) {
               if (this.id) {
+                if(this.nature === '7'&&this.depositList.length>0){
+                  for (let i = 0; i < this.depositList.length; i++) {
+                    this.ajaxJson({
+                      url: '/dailyoffice/deposit/updateUseMoney',
+                      data: {
+                        id:this.depositList[i].bankDetailID,
+                        money:accAdd(this.depositList[i].money,-this.depositList[i].useMoney)+''
+                      },
+                      call: (data) => {
+
+                      }
+                    })
+                  }
+                }else if(this.nature === '8'&&this.payDepositList.length>0){
+                  this.ajaxJson({
+                    url: '/dailyoffice/payDeposit/updateState',
+                    data: {
+                      id:this.payDepositList[0].bankDetailID,
+                      state:'1'
+                    },
+                    call: (data) => {
+
+                    }
+                  })
+                }else if(this.nature === '9'&&this.expressList.length>0){
+                  this.ajaxJson({
+                    url: '/dailyoffice/expressCompany/updateBillState',
+                    data: {
+                      id:this.expressList[0].bankDetailID,
+                      state:'1'
+                    },
+                    call: (data) => {
+
+                    }
+                  })
+                }
                 let params = {
                   id: this.id,
                   tableName: 45
@@ -1596,13 +2279,25 @@ export default {
       let money = parseFloat(this.money)
       let aa = true
       let bankList = true
-      if(parseFloat(this.beforeMoney) < money){
+      let depositList= true
+      if(parseFloat(this.beforeMoney) < parseFloat(this.money)){
         aa = false
       }
       if(this.bankDetailList.length===0&&this.nature==='4'){
         bankList = false
       }else if(this.bankDetailList.length===0&&this.nature==='5'){
         bankList = false
+      }else if(this.depositList.length===0&&this.nature==='7'){
+        depositList = false
+      }else if(this.payDepositList.length===0&&this.nature==='8'){
+        depositList = false
+      }
+      if(!depositList){
+        this.$dialog.alert({
+          width: '300',
+          alertImg: 'error',
+          tipValue: '请选择押金信息！！！！'
+        })
       }
       if(!bankList){
         this.$dialog.alert({
@@ -1621,12 +2316,12 @@ export default {
       let bb=true
       if(this.bankDetailList.length>0){
         this.bankDetailMoney()
-        if (this.nature === '5'){
+        if (this.nature === '4'){
           if(parseInt(this.sumBankDetailMoney)<parseInt(this.money)){
             bb=false
           }
         }else{
-          if(this.sumBankDetailMoney !== this.money){
+          if(parseInt(this.sumBankDetailMoney)!==parseInt(this.money)){
             bb=false
           }
         }
@@ -1638,7 +2333,7 @@ export default {
           tipValue: '收支明细总金额有误！！！'
         })
       }
-      if (this.validator() && aa&&bankList&&bb) {
+      if (this.validator() && aa&&bankList&&bb&&depositList) {
         let params = {
           id: this.id,
           unitID: this.unitID,
@@ -1672,7 +2367,10 @@ export default {
           bankDetailList: this.bankDetailList,
           allocationList: this.allocationList,
           isChecks:this.isChecks,
-          isAllocation: this.isAllocation
+          isAllocation: this.isAllocation,
+          depositList:this.depositList,
+          payDepositList:this.payDepositList,
+          expressList:this.expressList,
           // state:0,
         }
         this.ajaxJson({
@@ -1681,6 +2379,40 @@ export default {
           loading: '0',
           call: (data) => {
             if (data.type === 0) {
+              if(this.nature === '7'&&this.depositList.length>0){
+                for (let i = 0; i < this.depositList.length; i++) {
+                  this.ajaxJson({
+                    url: '/dailyoffice/deposit/updateUseMoney',
+                    data: {
+                      id:this.depositList[i].bankDetailID,
+                      money:accAdd(this.depositList[i].money,-this.depositList[i].useMoney)+''
+                    },
+                    call: (data) => {
+                    }
+                  })
+                }
+              }else if(this.nature === '8'&&this.payDepositList.length>0){
+                this.ajaxJson({
+                  url: '/dailyoffice/payDeposit/updateState',
+                  data: {
+                    id:this.payDepositList[0].bankDetailID,
+                    state:'1'
+                  },
+                  call: (data) => {
+                  }
+                })
+              }else if(this.nature === '9'&&this.expressList.length>0){
+                this.ajaxJson({
+                  url: '/dailyoffice/expressCompany/updateBillState',
+                  data: {
+                    id:this.expressList[0].bankDetailID,
+                    state:'1'
+                  },
+                  call: (data) => {
+
+                  }
+                })
+              }
               this.$dialog.setReturnValue(this.id) //向父级页面id值
               this.$dialog.alert({
                 tipValue: data.message,

@@ -3,7 +3,7 @@
     <yhm-select-body :choose="false">
       <template #operate>
         <div v-show="showTipDbSelect" class="s_db_select" :style="{left:getLeft,top:getTop}">双击选择</div>
-        <yhm-commonbutton  value="添加" icon="btnAdd" @call="selectAddEvent"></yhm-commonbutton>
+<!--        <yhm-commonbutton  value="添加" icon="btnAdd" @call="selectAddEvent"></yhm-commonbutton>-->
         <yhm-managersearch :value="searchStr" id="searchStr" @call="initPageData"></yhm-managersearch>
 
       </template>
@@ -36,7 +36,7 @@
         </tr>
       </template>
       <template #empty>
-        <span class="m_listNoData" v-show="content.length === 0">暂时没有数据</span>
+        <span class="m_listNoData" v-show="content.length === 0" style="color: red">没有查到想的活动?请在优惠活动中查看活动是否已经结束</span>
       </template>
       <template #pager>
         <yhm-pagination is-not-right :pager="pager" isPageSize="false" @initData="initPageData(false)"></yhm-pagination>
@@ -62,17 +62,17 @@
       //   this.$dialog.setReturnValue({item,a})
       //   this.$dialog.close()
       // },
-      selectAddEvent(){
-        this.$dialog.OpenWindow({
-          width: '1050',
-          height: '700',
-          title: '添加优惠政策',
-          url: '/promotionsForm',
-          closeCallBack: (data)=>{
-            this.initPageData(false)
-          }
-        })
-      },
+      // selectAddEvent(){
+      //   this.$dialog.OpenWindow({
+      //     width: '1050',
+      //     height: '700',
+      //     title: '添加优惠政策',
+      //     url: '/promotionsForm',
+      //     closeCallBack: (data)=>{
+      //       this.initPageData(false)
+      //     }
+      //   })
+      // },
       initPageData(initValue){
         let params = {}
         if (initValue) {
@@ -105,10 +105,12 @@
       }
     },
     created () {
+
       this.setQuery2Value('brand')
       this.setQuery2Value('insuredUnit')
       this.setQuery2Value('insuredDate')
       this.initPageData()
+
     }
   }
 </script>

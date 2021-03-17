@@ -35,21 +35,44 @@
       </tr>
     </template>
 
-    <template #listTotalHead >
-      <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="应收账款总数" ></yhm-managerth>
-      <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="应收账款金额" ></yhm-managerth>
-      <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="保险手续费总金额" ></yhm-managerth>
-    </template>
-    <template #listTotalBody>
-      <tr>
-        <yhm-manager-td-rgt  style="text-align: center;" :value="contentTotal[0].count"></yhm-manager-td-rgt>
-        <yhm-manager-td-money  style="text-align: center;" :value="contentTotal[0].money"></yhm-manager-td-money>
-        <yhm-manager-td-money style="text-align: center;" :value="useMoney"></yhm-manager-td-money>
-      </tr>
-    </template>
-    <template #listTotalRight>
-      <yhm-commonbutton  style="margin-top: 40px; margin-left: 40px;"  value="核销" icon="btnSave" @call="save" :flicker="true"></yhm-commonbutton>
-    </template>
+
+
+      <template #total>
+        <div class="listTotalCrente m_list" style="width: 600px">
+          <div>
+            <div class="listTotalLeft">
+              <span class="test"></span>
+              <span class="test">金额</span>
+            </div>
+          </div>
+          <div style="width: 400px">
+            <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table" >
+              <thead>
+              <tr>
+                <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="应收账款总数" ></yhm-managerth>
+                <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="应收账款金额" ></yhm-managerth>
+                <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="保险手续费总金额" ></yhm-managerth>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr>
+                <yhm-manager-td-rgt  style="text-align: center;" :value="contentTotal[0].count"></yhm-manager-td-rgt>
+                <yhm-manager-td-money  style="text-align: center;" :value="contentTotal[0].money"></yhm-manager-td-money>
+                <yhm-manager-td-money style="text-align: center;" :value="useMoney"></yhm-manager-td-money>
+              </tr>
+
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <yhm-commonbutton  style="margin-top: 40px; margin-left: 40px;"  value="核销" icon="btnSave" @call="save" :flicker="true"></yhm-commonbutton>
+          </div>
+        </div>
+
+      </template>
+
+
     <!--数据空提示-->
     <template #empty>
       <span class="m_listNoData" v-show="content.length!='0'?false:true">暂时没有数据</span>
@@ -153,7 +176,9 @@
                         this.$dialog.alert({
                           tipValue: data.message,
                           closeCallBack: () => {
-                            this.$dialog.close()
+                            this.selectValue=[]
+                            this.initPageData(false)
+                            // this.$dialog.close()
                           }
                         })
                       }else{
@@ -210,8 +235,6 @@
               }
               // console.log( idd.join(',') )
 
-
-
               params = {
                 iidList: this.iidList.join(','),
                 ownerIDList: JSON.parse(sessionStorage.idlist).join(','),
@@ -228,7 +251,8 @@
                   this.$dialog.alert({
                     tipValue: data.message,
                     closeCallBack: () => {
-                      this.$dialog.close()
+                      this.initPageData(false)
+                      // this.$dialog.close()
                     }
                   })
                 }else{
@@ -274,6 +298,7 @@
           for (let q=arr.length-1; q>=0; q--) {
             s =accAdd(arr[q], s) ;
           }
+          console.log(this.selectValue)
           this.contentTotal = [{count:selectValue.length+'', money:s+'',}]
         }else{
           this.contentTotal = this.backupsTotal

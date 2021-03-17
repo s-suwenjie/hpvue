@@ -17,7 +17,10 @@
     </yhm-view-body>
 
     <div class="f_split"></div>
-    <yhm-view-tab>
+    <div class="v_relative">
+      <yhm-table-tip node-class-name="v_relative" :show="tableTip" :content="tableTipInfo" :column="tableTipColumnInfo" :mouse-control="tableTipControl"></yhm-table-tip>
+
+      <yhm-view-tab>
       <template #tab>
         <yhm-view-tab-button :list="tabState" :index="1" @click="listDetail(true)">跟踪信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="0">保险信息</yhm-view-tab-button>
@@ -33,7 +36,9 @@
         </yhm-view-tab-content>
         <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[1].select">
           <template #listHead>
+
             <yhm-managerth style="width:40px" title="查看" ></yhm-managerth>
+            <yhm-managerth  title="跟踪时间"></yhm-managerth>
             <yhm-managerth  title="跟踪状态" ></yhm-managerth>
             <yhm-managerth  title="购买意向"></yhm-managerth>
 
@@ -41,18 +46,19 @@
             <yhm-managerth  title="跟踪人员"></yhm-managerth>
             <yhm-managerth  title="下次跟踪日期"></yhm-managerth>
             <yhm-managerth  title="预计到店日期"></yhm-managerth>
-            <yhm-managerth  title="跟踪反馈"></yhm-managerth>
+
           </template>
           <template #listBody>
             <tr v-for="(item,index) in details" :key="index" :class="{InterlacBg:index%2!==0}">
               <yhm-manager-td-look @click="listView(item.id)"></yhm-manager-td-look>
+              <yhm-manager-td :value="item.currentDate" ></yhm-manager-td>
               <yhm-manager-td  :value="item.categoryVal"></yhm-manager-td>
               <yhm-manager-td  :value="item.intentionVal"></yhm-manager-td>
               <yhm-manager-td :value="item.remark" ></yhm-manager-td>
-              <yhm-manager-td :value="item.trackPerson" ></yhm-manager-td>
+              <yhm-manager-td :value="item.trackPerson" :after-icon="item.listMessage.length>0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" ></yhm-manager-td>
               <yhm-manager-td-date :value="item.nextDate" typeof="data"></yhm-manager-td-date>
               <yhm-manager-td-date :value="item.planDate==='1900-01-01'?'-----':item.planDate" typeof="data"></yhm-manager-td-date>
-              <yhm-manager-td :value="item.feedbackVal" ></yhm-manager-td>
+
             </tr>
           </template>
           <template #empty>
@@ -64,6 +70,7 @@
         </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
+    </div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
 <!--        <yhm-commonbutton value="编辑" style="margin-right: 20px" icon="i-edit" :flicker="false" @call="editBtn()"></yhm-commonbutton>-->
@@ -122,9 +129,27 @@
         remark:'',
         details:[],
         tabState:[{select:false},{select:true}],
+        tableTip:false,         //记录表格是否显示
+        tableTipControl:{},
+        tableTipColumnInfo:[
+          {width:'150',title:'审批时间',category:'date',key:'insertDate'},
+          {width:'150',title:'审批人员',category:'',key:'messageName'},
+          {width:'150',title:'审批备注',category:'',key:'message'},
+        ],
+        tableTipInfo:[],
       }
     },
     methods:{
+      tableTipShowEvent(item,control){
+        if(item.listMessage.length > 0) {
+          this.tableTipInfo = item.listMessage
+          this.tableTipControl = control
+          this.tableTip = true
+        }
+      },
+      tableTipHideEvent(){
+        this.tableTip = false
+      },
       trackBtn(){
         this.$dialog.OpenWindow({
           width: '1050',

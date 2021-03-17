@@ -16,6 +16,7 @@
         <yhm-view-control title="护照号" v-if="expatriate=='1'" :content="idNo"></yhm-view-control>
         <yhm-view-control title="籍贯" :content="nativePlace"></yhm-view-control>
         <yhm-view-control title="生日历法" :content="calendar" :psd="calendarList"></yhm-view-control>
+        <yhm-view-control title="详情地址" :content="address" category="3"></yhm-view-control>
         <yhm-view-control title="公历生日" :content="birthday" type="date"></yhm-view-control>
         <yhm-view-control title="农历生日" :content="birthdayLunar"></yhm-view-control>
         <yhm-view-control title="属相" :content="zodiac"></yhm-view-control>
@@ -29,8 +30,9 @@
     <div class="f_split"></div>
     <yhm-view-tab>
       <template #tab>
-        <yhm-view-tab-button :list="tabState" :index="0">交易明细</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="0" @click="initPageData">交易明细</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="1" @click="maintain">保险理赔</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="2" @click="kuaidiPage">快递明细</yhm-view-tab-button>
       </template>
       <template #tab_total>
         <div style="display:flex;align-items: center;">
@@ -69,12 +71,12 @@
           <template #listBody>
             <tr v-for="(item,index) in list" :key="index" :class="{InterlacBg:index%2!==0}">
               <yhm-manager-td-look @click="listView(item.id)"></yhm-manager-td-look>
-              <yhm-manager-td width="130"  :value="item.bankName+item.account+item.nature"></yhm-manager-td>
+              <yhm-manager-td :tip="true" node-class-name="f_main" width="130"  :value="item.bankName+item.account+item.nature"></yhm-manager-td>
               <yhm-manager-td-center width="130" v-if="item.otherName.indexOf('style')===-1?true:false" :value="item.otherName"></yhm-manager-td-center>
               <yhm-manager-td v-if="item.otherName.indexOf('style')!==-1?true:false" v-html="item.otherName"></yhm-manager-td>
               <yhm-manager-td-date :value="item.insertDate" typeof="data"></yhm-manager-td-date>
               <yhm-manager-td-direction :direction="item.direction" :value="item.direction" class="dfJcc" :dir-val="false"></yhm-manager-td-direction>
-              <yhm-manager-td :value="item.subject" ></yhm-manager-td>
+              <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.subject" ></yhm-manager-td>
               <yhm-manager-td-money :value="money" v-if="item.direction==='0'?money=item.money:money='0'" style="color:#001CCE;"></yhm-manager-td-money>
               <yhm-manager-td-money :value="money" v-if="item.direction==='1'?money=item.money:money='0'" style="color:#f00;"></yhm-manager-td-money>
             </tr>
@@ -124,7 +126,39 @@
             <span class="m_listNoData" v-show="content.length=='0'?true:false">暂时没有数据</span>
           </template>
           <template #pager>
-            <yhm-pagination :pager="pager" is-page-size="false" @initData="initPageData(false)"></yhm-pagination>
+            <yhm-pagination :pager="pagers" is-page-size="false" @initData="maintain(false)"></yhm-pagination>
+          </template>
+        </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[2].select">
+          <template #listHead>
+            <yhm-managerth style="width:40px" title="查看" ></yhm-managerth>
+            <yhm-managerth title="收寄类型"></yhm-managerth>
+            <yhm-managerth title="业务类型" ></yhm-managerth>
+            <yhm-managerth title="经办人" ></yhm-managerth>
+            <yhm-managerth title="收寄物类型"></yhm-managerth>
+            <yhm-managerth title="收寄时间"></yhm-managerth>
+            <yhm-managerth title="快递单号"></yhm-managerth>
+            <yhm-managerth title="费用"></yhm-managerth>
+
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in myExpressList" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-manager-td-look @click="listKuaiDiView(item)"></yhm-manager-td-look>
+              <yhm-manager-td-psd :value="item.letterClassification" :list="listLetterClassification" ></yhm-manager-td-psd>
+              <yhm-manager-td-psd :value="item.businessType" :list="listBusinessType"></yhm-manager-td-psd>
+              <yhm-manager-td :value="item.wePersonName" ></yhm-manager-td>
+              <yhm-manager-td-psd :value="item.itemType" :list="listItemType"></yhm-manager-td-psd>
+              <yhm-manager-td :value="item.workDate" ></yhm-manager-td>
+              <yhm-manager-td :value="item.code" ></yhm-manager-td>
+              <yhm-manager-td :value="item.amount" ></yhm-manager-td>
+
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData"  v-show="myExpressList.length>0?false:true">暂时没有数据</span>
+          </template>
+          <template #pager>
+            <yhm-pagination :pager="pagerKuaiDi" is-page-size="false" @initData="kuaidiPage(false)"></yhm-pagination>
           </template>
         </yhm-view-tab-list>
       </template>
@@ -157,8 +191,20 @@
           pageIndex: 1, // 当前页码
           selectCount: 0 // 选中数据的条数
         },
+        pagers: { // 分页数据
+          total: '', // 数据总条数
+          pageSize: 5, // 单页数据条数
+          pageIndex: 1, // 当前页码
+          selectCount: 0 // 选中数据的条数
+        },
+        pagerKuaiDi:{ // 分页数据
+          total: '', // 数据总条数
+          pageSize: 5, // 单页数据条数
+          pageIndex: 1, // 当前页码
+          selectCount: 0 // 选中数据的条数
+        },
         list:[],
-        tabState:[{select:true},{select:false}],
+        tabState:[{select:true},{select:false},{select:false}],
         category: '',
         categoryList: [],
         sex: '',
@@ -191,6 +237,7 @@
         isdisplay:true,
         customerName:'',
         expatriate:'',
+        address:'',
         screening:{
           list:[
             {
@@ -206,7 +253,7 @@
               showName:'自费维修'
             },
           ],
-          value:'0',
+          value:'',
         },
         contentTotal:[],
         totalNumber:'',
@@ -216,9 +263,50 @@
         createName:'',
         updateName:'',
         updateDate:'',
+        listBusinessType:{
+          value:"",
+          list:[]
+        },
+        listLetterClassification:{
+          value:"",
+          list:[]
+        },
+        listItemType:{
+          value:"",
+          list:[]
+        },
+        myExpressList:[],
       }
     },
     methods: {
+      listKuaiDiView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/myExpressView?id='+item.id,
+          title: '查看快递信息',
+          closeCallBack: (data) => {
+          }
+        })
+      },
+      kuaidiPage(){
+        let params = {
+          contactsID:this.id,
+          pageIndex:this.pagerKuaiDi.pageIndex,
+          pageSize:this.pagerKuaiDi.pageSize,
+          init:'true',
+        }
+        this.ajaxJson({
+          url: '/dailyoffice/myExpress/getViewManager',
+          data: params,
+          call: (data) => {
+            this.listBusinessType=data.businessTypePsd.list
+            this.listItemType=data.itemTypePsd.list
+            this.listLetterClassification=data.letterClassificationPsd.list
+            this.myExpressList=data.content
+          }
+        })
+      },
       selectYear(val){
         this.yearTxt = val+''
         this.maintain()
@@ -228,13 +316,15 @@
           year:this.yearTxt,
           type:this.screening.value,
           customerName:this.id,
+          pageIndex:this.pagers.pageIndex,
+          pageSize:this.pagers.pageSize,
         }
         this.ajaxJson({
           url: '/Fin/getPersonBankDetailInsurance',
           data: params,
           call: (data) => {
             this.content = data.content
-            this.pager.total = data.count
+            this.pagers.total = data.count
             this.contentTotal = data.total
             this.totalNumber = data.total[0].count
             this.aggregateAmount = data.total[0].money
@@ -276,30 +366,17 @@
         })
       },
       initPageData (initValue) {
-        let params = {}
-        if (initValue) {
-          // 页面初始化是需要的参数
-          params = {
-            unitID:this.id,
-
-          }
-        } else {
-          // 页面非初始化时需要的参数
-          params = {
-
-          }
+        let params = {
+          personID:this.id,
+          pageIndex:this.pager.pageIndex,
+          pageSize:this.pager.pageSize,
         }
-        this.init({
+        this.ajaxJson({
           url: '/Fin/getUnitOrPersonBankDetail',
           data: params,
-          all: (data) => {
-            // 不管是不是初始化都需要执行的代码
-          },
-          init: (data) => {
+          call: (data) => {
             this.pager.total = data.count
-
-            // 初始化时需要执行的代码
-            // 这边初始化筛选信息
+            this.list = data.content
           }
         })
       },
@@ -320,7 +397,7 @@
       },
       initData(){
         let params = {
-          id: this.id
+          id: this.id,
         }
         this.ajaxJson({
           url: '/Basic/personVueForm',
@@ -356,7 +433,7 @@
             this.tagList = data.tagPsd.list
             this.tag = data.tagPsd.value
             this.isThisUnit = this.category !== '1';
-
+            this.address=data.address
             this.updateName = data.updateName
             this.updateDate = data.updateDate
             this.insertDate = data.insertDate

@@ -2,9 +2,12 @@
   <td>
     <div class="md_center" @click="pdfOpenView">
       <div @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" v-show="tipShow" class="preview_showImg" :style="getStyle" :class="getImgStyle">
-        <img :src="getUrl">
+        <img :class="{Graystyle:isGraystyle}" :src="getUrl">
+
       </div>
-      <img @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent" class="md_img" :src="getUrl">
+      <img @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent" class="md_img" :class="{Graystyle:isGraystyle}" :src="getUrl" v-if="!ICONS">
+<!--      {{geticon}}-->
+      <div @mouseover="mouseoverEvent" @mouseout="mouseoutEvent" @click="clickEvent" class="md_img" :class="[geticon,{Graystyle:isGraystyle}]" v-if="ICONS" ></div>
     </div>
   </td>
 </template>
@@ -18,6 +21,10 @@
       }
     },
     props: {
+      isGraystyle:{
+        type: Boolean,
+        default: false
+      },
       tip:{
         type: Boolean,
         default: false
@@ -49,6 +56,10 @@
       pdfUrl: {
         type: String,
         default: ''
+      },
+      geticon:{
+        type: String,
+        default: ''
       }
     },
     methods:{
@@ -78,6 +89,9 @@
         if(this.tag === 'ElectronicInvoice' && this.pdfUrl){
           window.open("/UploadFile/" + this.tag + "/" + this.pdfUrl)
         }
+        this.$nextTick(() => {
+          this.$emit("call")
+        })
       }
     },
     computed:{
@@ -89,10 +103,21 @@
         }
       },
       getUrl(){
-        return '/UploadFile/' + this.tag + '/' + this.value
+        if(this.tag==''){
+          return  this.value
+        }else{
+          return '/UploadFile/' + this.tag + '/' + this.value
+        }
       },
       getStyle(){
         return 'top:' + this.top + 'px;left:' + this.left + 'px;width:' + this.width + 'px;height:' + this.height + 'px'
+      },
+      ICONS(){
+        if(this.geticon){
+          return true
+        }else{
+          return false
+        }
       }
     },
     created() {

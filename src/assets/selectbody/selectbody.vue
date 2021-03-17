@@ -32,6 +32,9 @@
         <div class="f_between">
           <slot name="pager"></slot>
         </div>
+        <div>
+          <slot name="customize"></slot>
+        </div>
       </div>
     </div>
   </div>

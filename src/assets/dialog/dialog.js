@@ -56,6 +56,7 @@ Dialog.confirm = function (options) {
   dialog.isAutoClose = false;
   dialog.isRefresh = false;
   dialog.category = 2;
+  dialog.flickerIndex = options && options.flickerIndex
   dialog.showWindow();
 }
 
@@ -81,6 +82,7 @@ Dialog.prototype.showWindow = function(){
   instance.cancelCallBack = this.cancelCallBack;
   instance.alertImg = this.alertImg;
   instance.isShow = true;
+  instance.flickerIndex = this.flickerIndex;
   instance.previewArr = this.previewArr;
   instance.previewIndex = this.previewIndex;
   if(window.top.dialogKeyValue.size() == 0){

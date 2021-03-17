@@ -3,22 +3,41 @@
     <yhm-view-body>
       <template #title>基本信息</template>
       <template #body>
-        <yhm-view-control title="收款方" :content="otherUnit" @iconClick="iconClick" iconColor="#49a9ea" font-icon="uniE99E" @click="unitView()" color="#49a9ea" style="cursor: pointer;"></yhm-view-control>
-        <yhm-view-control title="支付方式" :content="isChecks" :psd="isChecksList"></yhm-view-control>
-        <yhm-view-control title="是否关联" :content="isRelevance" @click="planView()" :psd="isRelevanceList" v-show="isRelevance==='0'" color="#49a9ea"></yhm-view-control>
-        <yhm-view-control title="是否关联" content="计划外" color="#8000FF" v-show="isRelevance==='1'"></yhm-view-control>
-        <yhm-view-control title="计划事件" :content="name" v-show="planIn"></yhm-view-control>
-        <yhm-view-control title="款项用途" :content="useMoney" v-show="planOut"></yhm-view-control>
-        <yhm-view-control title="收款账号" :content="otherAccount" category="2" ></yhm-view-control>
-        <yhm-view-control title="申请人" :content="person"></yhm-view-control>
-        <yhm-view-control title="付款性质" :content="nature" :psd="natureList"></yhm-view-control>
-        <yhm-view-control title="发票类型" :content="invoice" :psd="invoiceList" v-if="isInvoice"></yhm-view-control>
-        <yhm-view-control title="发票二级类型" :content="secondLevelInvoice" :psd="secondLevelInvoiceList" v-if="isInvoice"></yhm-view-control>
-        <yhm-view-control title="金额大写" :content="capitalMoney"></yhm-view-control>
-        <yhm-view-control title="支付金额" :content="money" type="money" color="#f00"></yhm-view-control>
-        <yhm-view-control title="核销金额" v-show="isRelatedInformation" :content="writeOffMoney.toString()" type="money"></yhm-view-control>
+        <yhm-view-control title="编号" :content="message"></yhm-view-control>
+        <yhm-view-control title="收款方" margin="12px 0 0 0" :content="otherUnit" @iconClick="iconClick" iconColor="#49a9ea" font-icon="uniE99E" @click="unitView()" color="#49a9ea" style="cursor: pointer;"></yhm-view-control>
         <yhm-view-control title="拨款金额" v-show="isAppropriationMoney" :content="bankDetailMoney.toString()" type="money" color="#f00"></yhm-view-control>
+
+        <yhm-view-control title="付款计划" content="计划外" color="#8000FF" v-if="isRelevance==='1'"></yhm-view-control>
+        <yhm-view-control title="付款计划" :content="isRelevance" @click="planView()" :psd="isRelevanceList" v-else-if="isRelevance==='0'" color="#49a9ea"></yhm-view-control>
+
+        <yhm-view-control title="收款账号" margin="12px 0 0 0" :content="otherAccount"></yhm-view-control>
+        <yhm-view-control title="部门分配" margin="12px 0 0 0" type="text-money" v-show="branchShow" v-if="branchList.length>='1'" :content="branchList"></yhm-view-control>
+
+        <yhm-view-control title="计划事件" :content="name" v-show="planIn"></yhm-view-control>
+        <yhm-view-control title="付款性质" :content="nature" :psd="natureList"></yhm-view-control>
+
+        <yhm-view-control title="支付方式" :content="isChecks" :psd="isChecksList"></yhm-view-control>
+        <yhm-view-control title="是否分批拨付" :content="isAllocation" :psd="isAllocationList"></yhm-view-control>
+
+<!--        <yhm-view-control title="拨款金额" v-show="isAppropriationMoney" :content="bankDetailMoney.toString()" type="money" color="#f00"></yhm-view-control>-->
+        <yhm-view-control title="款项用途" margin="12px 0 0 0" :content="useMoney" v-show="planOut"></yhm-view-control>
+        <yhm-view-control title="发票类型" :content="invoice" :psd="invoiceList" v-show="isInvoice"></yhm-view-control>
+        <yhm-view-control title="发票二级类型" :content="secondLevelInvoice" :psd="secondLevelInvoiceList" v-show="isInvoice"></yhm-view-control>
+        <yhm-view-control title="支付金额" :content="money" type="money" :key="key" color="#f00"></yhm-view-control>
+        <yhm-view-control title="申请人" :content="person"></yhm-view-control>
+
+<!--        <yhm-view-control title="部门分配" type="text-money" v-show="branchShow" v-if="branchList.length>='1'" :content="branchList"></yhm-view-control>-->
+        <yhm-view-control title="核销金额" v-show="isRelatedInformation" :content="writeOffMoney.toString()" type="money"></yhm-view-control>
+        <yhm-view-control title="付款事由" margin="12px 0 0 0" :content="subject"></yhm-view-control>
+        <yhm-view-control title="金额大写" :content="capitalMoney"></yhm-view-control>
+
+        <yhm-view-control title="分批拨付" type="date-money" :content="allocationList" v-if="allocationList.length !== 0"></yhm-view-control>
+
+        <yhm-view-control title="最迟付款日期" :content="lastDate" type="date"></yhm-view-control>
+
         <yhm-view-control category="3" title="文件" type="files" :content="fileList"></yhm-view-control>
+        <yhm-view-control category="3" title="备注" :content="remark" v-if="remark!==''"></yhm-view-control>
+
       </template>
     </yhm-view-body>
 
@@ -28,24 +47,22 @@
 
     <yhm-view-tab>
       <template #tab>
-        <yhm-view-tab-button :list="tabState" :index="0">更多信息</yhm-view-tab-button>
-        <yhm-view-tab-button :list="tabState" :index="1"  v-if="isElInvoice">发票明细</yhm-view-tab-button>
-        <yhm-view-tab-button :list="tabState" :index="2"  v-if="isBankList">收款信息</yhm-view-tab-button>
-        <yhm-view-tab-button :list="tabState" :index="3"  v-if="isAppropriationMoney">拨付信息</yhm-view-tab-button>
-        <yhm-view-tab-button :list="tabState" :index="4" @click="payment" >付款申请记录</yhm-view-tab-button>
-        <yhm-view-tab-button :list="tabState" :index="5" v-if="isRelatedInformation">应收账款核销</yhm-view-tab-button>
+<!--        <yhm-view-tab-button :list="tabState" :index="0">更多信息</yhm-view-tab-button>-->
+        <yhm-view-tab-button :list="tabState" :index="0"  v-if="isElInvoice">发票明细</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="1"  v-if="isBankList">收款信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="2"  v-if="isAppropriationMoney">拨付信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="3" @click="payment" >付款申请记录</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="4" v-if="isRelatedInformation">应收账款核销</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="5" v-if="nature === '7'">押金信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="6" v-if="nature === '8'">付押金信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="7" v-if="nature === '9'">快递对账单</yhm-view-tab-button>
       </template>
       <template #content>
-        <yhm-view-tab-content v-show="tabState[0].select">
-          <yhm-view-control title="付款事由" category="2" :content="subject" style="white-space: nowrap;"></yhm-view-control>
-          <yhm-view-control title="最迟付款日期" :content="lastDate" type="date"></yhm-view-control>
-          <yhm-view-control title="编号" :content="message"></yhm-view-control>
-          <yhm-view-control category="3" title="部门分配" type="text-money" v-show="branchShow" v-if="branchList.length>='1'" :content="branchList"></yhm-view-control>
-          <yhm-view-control title="是否分批拨付" :content="isAllocation" :psd="isAllocationList"></yhm-view-control>
-          <yhm-view-control category="3" title="分批拨付" type="date-money" :content="allocationList" v-if="allocationList.length !== 0"></yhm-view-control>
-          <yhm-view-control title="备注" :content="remark" v-if="remark!==''"></yhm-view-control>
-        </yhm-view-tab-content>
-        <yhm-view-tab-list :customize="true"  v-show="tabState[1].select"  v-if="isElInvoice">
+<!--        <yhm-view-tab-content v-show="tabState[0].select">-->
+<!--          -->
+<!--          -->
+<!--        </yhm-view-tab-content>-->
+        <yhm-view-tab-list :customize="true"  v-show="tabState[0].select"  v-if="isElInvoice">
           <template #listHead>
             <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
             <yhm-managerth style="width: 120px" title="发票号码"></yhm-managerth>
@@ -72,7 +89,7 @@
             <span class="m_listNoData" v-show="empty">暂时没有数据</span>
           </template>
         </yhm-view-tab-list>
-        <yhm-view-tab-list :customize="true"  v-show="tabState[2].select"  v-if="isBankList">
+        <yhm-view-tab-list :customize="true"  v-show="tabState[1].select"  v-if="isBankList">
           <template #listHead>
             <yhm-managerth style="width: 320px" title="对方账号"></yhm-managerth>
             <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
@@ -95,7 +112,7 @@
             <span class="m_listNoData" v-show="bankDetailList.length===0?true:false">暂时没有数据</span>
           </template>
         </yhm-view-tab-list>
-        <yhm-view-tab-list :customize="true"  v-show="tabState[3].select"  v-if="isAppropriationMoney">
+        <yhm-view-tab-list :customize="true"  v-show="tabState[2].select"  v-if="isAppropriationMoney">
           <template #listHead>
             <yhm-managerth style="width: 150px" title="账号"></yhm-managerth>
             <yhm-managerth style="width: 150px" title="对方账号"></yhm-managerth>
@@ -119,26 +136,26 @@
             </tr>
           </template>
         </yhm-view-tab-list>
-        <yhm-view-tab-list :customize="true"  v-show="tabState[4].select"  >
+        <yhm-view-tab-list :customize="true"  v-show="tabState[3].select"  >
           <template #listHead>
             <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
             <yhm-managerth style="width: 50px" title="申请人"></yhm-managerth>
-            <yhm-managerth style="width: 200px" title="收款方" ></yhm-managerth>
-            <yhm-managerth style="width: 110px" title="最迟付款日期" ></yhm-managerth>
+            <yhm-managerth style="width: 220px" title="收款方" ></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="最迟付款日期" ></yhm-managerth>
             <yhm-managerth style="width: 80px" title="事由"></yhm-managerth>
             <yhm-managerth style="width: 70px" title="申请金额"></yhm-managerth>
-            <yhm-managerth style="width: 180px" title="编号"></yhm-managerth>
-            <yhm-managerth style="width: 130px" title="状态"></yhm-managerth>
+            <yhm-managerth style="width: 160px" title="编号"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="状态"></yhm-managerth>
           </template>
           <template #listBody>
             <tr v-for="(item,index) in paymentRequestRecord" :class="{InterlacBg:index%2!=0}" :key="index">
               <yhm-manager-td-look @click="examineView(item.id)"></yhm-manager-td-look>
               <yhm-manager-td-center :value="item.person"></yhm-manager-td-center>
-              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount" :tip="true" node-class-name="f_main mb35"></yhm-manager-td>
               <yhm-manager-td-date :value="item.lastDate"></yhm-manager-td-date>
-              <yhm-manager-td-center :value="item.subject"></yhm-manager-td-center>
+              <yhm-manager-td :value="item.subject" :tip="true" node-class-name="f_main mb35"></yhm-manager-td>
               <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
-              <yhm-manager-td :value="item.code"></yhm-manager-td>
+              <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
               <yhm-manager-td-state :value="item.stateVal" :state-color="item.stateColor" :state-img="item.stateImg"></yhm-manager-td-state>
             </tr>
           </template>
@@ -146,7 +163,7 @@
             <yhm-pagination :pager="pager"  is-page-size="false" @initData="payment(false)"></yhm-pagination>
           </template>
         </yhm-view-tab-list>
-        <yhm-view-tab-list :customize="true"  v-show="tabState[5].select" v-if="isRelatedInformation">
+        <yhm-view-tab-list :customize="true"  v-show="tabState[4].select" v-if="isRelatedInformation">
           <template #listHead>
             <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
             <yhm-managerth title="应收账款来源"></yhm-managerth>
@@ -163,6 +180,76 @@
             <span class="m_listNoData"  v-show="relatedInformation.length>=1?false:true">暂时没有数据</span>
           </template>
         </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[5].select" v-if="nature === '7'">
+          <template #listHead>
+            <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
+            <yhm-managerth style="width: 200px" title="付款方"></yhm-managerth>
+            <yhm-managerth style="width: 160px" title="付款账号"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="交易日期"></yhm-managerth>
+            <yhm-managerth style="width: 90px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="退款金额"></yhm-managerth>
+            <yhm-managerth style="width: 220px" title="备注"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in depositList" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td-look @click="selectDeposit(item)"></yhm-manager-td-look>
+              <yhm-manager-td :value="item.other"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
+              <yhm-manager-td :value="item.subject"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td :value="item.remark"></yhm-manager-td>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData"  v-show="depositList.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[6].select" v-if="nature === '8'">
+          <template #listHead>
+            <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
+            <yhm-managerth style="width: 160px" title="付款方"></yhm-managerth>
+            <yhm-managerth style="width: 180px" title="付款账号"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="交易日期"></yhm-managerth>
+            <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
+            <yhm-managerth style="width: 90px" title="付款金额"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="预计退款日期"></yhm-managerth>
+            <yhm-managerth style="width: 180px" title="备注"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in payDepositList" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td-look @click="selectPayDeposit(item)"></yhm-manager-td-look>
+              <yhm-manager-td :value="item.other"></yhm-manager-td>
+              <yhm-manager-td :value="item.otherAccount"></yhm-manager-td>
+              <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
+              <yhm-manager-td :value="item.subject"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td-date :value="item.refundDate"></yhm-manager-td-date>
+              <yhm-manager-td :value="item.remark"></yhm-manager-td>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData"  v-show="payDepositList.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[7].select" v-if="nature === '9'">
+          <template #listHead>
+            <yhm-managerth style="width: 120px"  title="文件（点击图标下载）" ></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="对账单开始日期"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="对账单结束日期"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="账单总金额"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in expressList" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-manager-td  value=" " @click="downloadEvent(item)">
+                <img  style="margin: auto;" width="30" height="30" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1594275457602&di=5ebf487929ced264a201d33766b21f42&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180920%2F2397b5b7b5024319bf98035b72c2ca47.png" alt="">
+              </yhm-manager-td>
+              <yhm-manager-td-date  :value="item.startDate"></yhm-manager-td-date>
+              <yhm-manager-td-date  :value="item.endDate"></yhm-manager-td-date>
+              <yhm-manager-td-money  :value="item.money"></yhm-manager-td-money>
+            </tr>
+          </template>
+        </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
 
@@ -176,6 +263,7 @@
 </template>
 
 <script>
+import { accMul, accAdd, guid, formatDate, number2chinese,formatTime} from '@/assets/common.js'
 import { viewmixin } from '@/assets/view.js'
 export default {
   name: 'paymentApplyViewForm',
@@ -188,11 +276,12 @@ export default {
         pageIndex: 1, // 当前页码
         selectCount: 0 // 选中数据的条数
       },
+      key:0,
       content:[],
       branchShow:true,
       paymentRequestRecord:[],
       stateList:[],
-      tabState:[{select:true},{select:false},{select:false},{select:false},{select:false},{select:false}],
+      tabState:[{select:false},{select:false},{select:false},{select:true},{select:false},{select:false},{select:false},{select:false}],
       id: '',
       otherUnit: '',
       isRelevanceList: [],
@@ -253,6 +342,10 @@ export default {
       relatedInformation:[],
       writeOffMoney:'',
       bankDetailMoney:'',
+      depositList:[],
+      payDepositList:[],
+      num:'',
+      expressList:[],
 
       isLeftID:false,//延长按钮
       leftID:'',//上一条ID
@@ -261,6 +354,32 @@ export default {
     }
   },
   methods: {
+    selectPayDeposit(item){
+      this.$dialog.OpenWindow({
+        width: 1050,
+        height: 720,
+        url:'/payDepositView?id='+item.bankDetailID,
+        title:'查看付押金信息',
+        closeCallBack:(data) =>{
+          if(data){
+            this.initPageData(false)
+          }
+        }
+      })
+    },
+    selectDeposit(item){
+      this.$dialog.OpenWindow({
+        width: 1050,
+        height: 720,
+        url:'/depositView?id='+item.bankDetailID,
+        title:'查看收押金信息',
+        closeCallBack:(data) =>{
+          if(data){
+            this.initPageData(false)
+          }
+        }
+      })
+    },
     iconClick(){
       let url = '';
       if(this.personOrUnit === '1'){
@@ -454,10 +573,12 @@ export default {
     }
   },
   created () {
-
     this.selectedList()
-
-    this.setQuery2Value('ownerID')
+    this.setQuery2Value('isClaims');
+    this.setQuery2Value('num')
+    if(this.num==='1'){
+      this.tabState=[{select:true},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false}]
+    }
     let params = {
       id:this.id
     }
@@ -518,7 +639,7 @@ export default {
           this.isBankList = false //收支明细
           this.isElInvoice = true // 发票明细
         }
-        if(this.nature === '4' || this.nature === '5'){
+        if(this.nature === '4'||this.nature === '5'){
           this.branchShow = false//部门分配
           this.isBankList = true    //判断是否隐藏收支明细
           this.isElInvoice = false // 发票明细
@@ -545,10 +666,106 @@ export default {
         }
         this.elInvoice = data.paymentInvoice.length !== 0;
         this.empty = this.paymentInvoice.length === 0
+        if(this.nature === '7'){
+          this.tabState=[{select:false},{select:false},{select:false},{select:true},{select:false},{select:false},{select:false}]
+          let id=''
+          for (let i = 0; i < this.bankDetailList.length; i++) {
+            if(this.bankDetailList.length===1){
+              id='\"'+this.bankDetailList[i].bankDetailID+'\"'
+            }else{
+              if(i === this.bankDetailList.length-1){
+                id=id+'\"'+this.bankDetailList[i].bankDetailID+'\"'
+              }else if(i === 0){
+                id='\"'+this.bankDetailList[i].bankDetailID+'\",'
+              }else{
+                id=id+'\"'+this.bankDetailList[i].bankDetailID+'\",'
+              }
+            }
+          }
+          let params={
+            id:id
+          }
+          this.ajaxJson({
+            url: '/dailyoffice/deposit/getDepositList',
+            data: params,
+            call: (data) => {
+              let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.bankDetailList.length, 1000)))
+              for (let j = 0; j < this.bankDetailList.length; j++) {
+                for (let i = 0; i < data.length; i++) {
+                  if(this.bankDetailList[j].bankDetailID===data[i].id){
+                    this.bankDetailList[j].remark= data[i].remark
+                    this.bankDetailList[j].subject= data[i].subject
+                    this.bankDetailList[j].subjectID= data[i].subjectID
+                    this.bankDetailList[j].cccurDate=data[i].workDate
+                    this.bankDetailList[j].other=data[i].other
+                    this.bankDetailList[j].otherAccount=data[i].otherAccount
+                    this.bankDetailList[j].useMoney=this.bankDetailList[j].money
+                    this.bankDetailList[j].maxMoney=accAdd(this.bankDetailList[j].money,data[i].useMoney)+''
+                  }
+                }
+              }
+              this.depositList=this.bankDetailList
+              this.bankDetailList=[]
+            }
+          })
+        }else if(this.nature === '8'){
+          let params={
+            id:this.bankDetailList[0].bankDetailID
+          }
+          this.ajaxJson({
+            url: '/dailyoffice/payDeposit/initForm',
+            data: params,
+            call: (data) => {
+              let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.payDepositList.length, 1000)))
+              this.payDepositList.push({
+                id: guid(),
+                bankDetailID: data.id,
+                insertDate: formatTime(insertDate),
+                ownerID: this.id,
+                remark: data.remark,
+                subject: data.subject,
+                subjectID: data.subjectID,
+                cccurDate: data.workDate,
+                other: data.other,
+                otherAccount: data.otherAccount,
+                refundDate:data.refundDate,
+                money: data.money,
+                useMoney: '0',
+                maxMoney: data.money,
+              })
+              this.bankDetailList=[]
+            }
+          })
+        }else if(this.nature === '9'){
+          let params={
+            id:this.bankDetailList[0].bankDetailID
+          }
+          this.ajaxJson({
+            url: '/dailyoffice/expressCompany/getExpressForm',
+            data: params,
+            call: (data) => {
+              let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.payDepositList.length, 1000)))
+              this.expressList.push({
+                id: guid(),
+                bankDetailID: data.id,
+                insertDate: formatTime(insertDate),
+                ownerID: this.id,
+                startDate:data.startDate,
+                endDate:data.endDate,
+                money:data.countMoney,
+                storeName:data.storeName,
+              })
+              console.log(this.expressList)
+              this.bankDetailList=[]
+            }
+          })
+        }
+        this.payment(false)
       }
     })
 
     this.selectedRelated()
+
   },
 
   watch: {

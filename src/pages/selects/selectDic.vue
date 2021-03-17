@@ -3,11 +3,14 @@
     <yhm-select-body :choose="false">
       <template #operate>
         <div v-show="showTipDbSelect" class="s_db_select" :style="{left:getLeft,top:getTop}">双击选择</div>
+        <yhm-commonbutton v-if="getName(['20'])"  ></yhm-commonbutton>
+        <!--<yhm-commonbutton v-if="getName(['25'])"  ></yhm-commonbutton>-->
         <yhm-commonbutton v-if="getName(['49'])" value="添加" icon="btnAdd" @call="selectAddOpenBank"></yhm-commonbutton>
         <yhm-commonbutton v-if="getName(['89'])" value="添加" icon="btnAdd" @call="selectAddOpenColour"></yhm-commonbutton>
-        <yhm-commonbutton v-if="getName(['90'])" value="添加" icon="btnAdd" @call="selectAddOpenBrand"></yhm-commonbutton>
+        <!--<yhm-commonbutton v-if="getName(['90'])" value="添加" icon="btnAdd" @call="selectAddOpenBrand"></yhm-commonbutton>-->
         <yhm-commonbutton v-if="getName(['91'])" value="添加" icon="btnAdd" @call="selectAddOpenModel"></yhm-commonbutton>
         <yhm-commonbutton v-if="getName(['92'])" value="添加" icon="btnAdd" @call="selectAddOpenVersion"></yhm-commonbutton>
+        <yhm-commonbutton v-if="getName(['16'])" value="添加" icon="btnAdd" @call="selectName16"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" id="searchStr" @call="initData"></yhm-managersearch>
       </template>
 
@@ -61,7 +64,22 @@
           <yhm-managerth title="一级分类"></yhm-managerth>
           <yhm-managerth title="二级分类"></yhm-managerth>
         </template>
-
+        <template v-if="getName(['25'])">
+          <yhm-managerth title="省份地市区县"></yhm-managerth>
+          <yhm-managerth title="邮编"></yhm-managerth>
+          <yhm-managerth title="区号"></yhm-managerth>
+        </template>
+        <template v-if="getName(['20'])">
+          <yhm-managerth title="地区名称"></yhm-managerth>
+          <yhm-managerth title="地区代码"></yhm-managerth>
+        </template>
+        <template v-if="getName(['15'])">
+          <yhm-managerth title="省份名称"></yhm-managerth>
+        </template>
+        <template v-if="getName(['16'])">
+          <yhm-managerth title="市/区名称"></yhm-managerth>
+        </template>
+        <yhm-managerth title="设置常用项"></yhm-managerth>
       </template>
 
       <template #listBody>
@@ -105,7 +123,16 @@
           <template v-if="getName(['91'])">
             <yhm-manager-td :value="item.value11"></yhm-manager-td>
           </template>
-
+          <template v-if="getName(['25'])">
+            <yhm-manager-td :value="item.value4"></yhm-manager-td>
+            <yhm-manager-td :value="item.value5"></yhm-manager-td>
+          </template>
+          <template v-if="getName(['20'])">
+            <yhm-manager-td :value="item.value1"></yhm-manager-td>
+          </template>
+          <yhm-manager-td-center-html>
+            <span @mouseover.stop="mouseoutEvent" @mouseout.stop="mouseoverEvent" :class="[item.commonUse==='0'?'i-pentagram':'i-pentagramed']" @dblclick.stop @click.stop="setCommonUse(item)" style="color: #fb5f24; font-size: 20px;"></span>
+          </yhm-manager-td-center-html>
         </tr>
       </template>
 
@@ -135,6 +162,42 @@
       }
     },
     methods: {
+      selectName16(){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 620,
+          url:'/dic16?value12='+this.value12,
+          title:'添加新市/区',
+          closeCallBack:(data) =>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
+      setCommonUse(item){
+        let params = {
+          ownerID: item.id,
+          tableName: '42'
+        }
+        this.ajaxJson({
+          url: '/Basic/setCommonUse',
+          data: params,
+          call: (data)=>{
+            if(data.type === 0) {
+              item.commonUse=data.val
+              this.$dialog.alert({
+                tipValue: data.message
+              })
+            }else{
+              this.$dialog.alert({
+                alertImg: 'warn',
+                tipValue: data.message
+              })
+            }
+          }
+        })
+      },
       selectAddOpenBank(){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -157,17 +220,17 @@
           }
         })
       },
-      selectAddOpenBrand(){
-        this.$dialog.OpenWindow({
-          width: '1050',
-          height: '400',
-          title: '添加车辆品牌',
-          url: '/dicForm090',
-          closeCallBack: (data)=>{
-            this.initPageData(false)
-          }
-        })
-      },
+      // selectAddOpenBrand(){
+      //   this.$dialog.OpenWindow({
+      //     width: '1050',
+      //     height: '400',
+      //     title: '添加车辆品牌',
+      //     url: '/dicForm090',
+      //     closeCallBack: (data)=>{
+      //       this.initPageData(false)
+      //     }
+      //   })
+      // },
       selectAddOpenModel(){
         this.$dialog.OpenWindow({
           width: '1050',

@@ -29,10 +29,10 @@
 </template>
 
 <script>
-  import { formmixin } from '@/assets/form.js'
+  import { viewmixin } from '@/assets/view.js'
   export default {
     name: 'vehicleView',
-    mixins: [formmixin],
+    mixins: [viewmixin],
     data(){
       return {
         id:'',
@@ -77,53 +77,58 @@
         })
       },
       initData(){
-        let params = {
-          id: this.id
+        let url = ''
+        let params = {}
+        if(this.type=='1'){//type等于1时表示 是从离线工单进入的并且根据车牌查询数据
+          url = '/Basic/getPlateForm'
+          params = {
+            plate: this.plate
+          }
+        }else{
+          url = '/Basic/initVehicleForm'
+          params = {
+            id: this.id
+          }
         }
         this.init({
-          url: '/Basic/initVehicleForm',
+          url: url,
           data: params,
-          all: (data)=>{
-
-          },
-          add: (data)=>{
-
-          },
-          look: (data)=>{
-            this.categoryList = data.categoryPsd.list
-            this.category = data.categoryPsd.value
-            this.assortList = data.assortPsd.list
-            this.assort = data.assortPsd.value
-            this.vehicleTypeList=data.vehicleTypePsd.list
-            this.vehicleType=data.vehicleTypePsd.value
-            this.displacement=data.displacement
-            this.plate=data.plate
-            this.color=data.color
-            this.colorID=data.colorID
-            this.frameNumber=data.frameNumber
-            this.engineNumber=data.engineNumber
-            this.brand=data.brand
-            this.brandID=data.brandID
-            this.model=data.model
-            this.modelID=data.modelID
-            this.version=data.version
-            this.versionID=data.versionID
-            this.registerDate=data.registerDate
-            this.carOwner=data.carOwner
-            this.carOwnerID=data.carOwnerID
-            this.drivingLicense=data.drivingLicense
-            this.fileList = data.files
+          call: (data) => {
+              this.categoryList = data.categoryPsd.list
+              this.category = data.categoryPsd.value
+              this.assortList = data.assortPsd.list
+              this.assort = data.assortPsd.value
+              this.vehicleTypeList=data.vehicleTypePsd.list
+              this.vehicleType=data.vehicleTypePsd.value
+              this.displacement=data.displacement
+              this.plate=data.plate
+              this.color=data.color
+              this.colorID=data.colorID
+              this.frameNumber=data.frameNumber
+              this.engineNumber=data.engineNumber
+              this.brand=data.brand
+              this.brandID=data.brandID
+              this.model=data.model
+              this.modelID=data.modelID
+              this.version=data.version
+              this.versionID=data.versionID
+              this.registerDate=data.registerDate
+              this.carOwner=data.carOwner
+              this.carOwnerID=data.carOwnerID
+              this.drivingLicense=data.drivingLicense
+              this.fileList = data.files
           }
         })
       }
     },
     created () {
+      this.setQuery2Value('type')
+      this.setQuery2Value('plate')
       this.setQuery2Value('isCustomer')
 
       if(this.isCustomer === '0'){
         this.isBlCustomer = false
       }
-
       this.initData()
     }
   }

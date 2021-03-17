@@ -149,7 +149,7 @@
               id: this.id,
             }
             this.ajaxJson({
-              url: '/Insurance/m/modifyStateInsuranceApp',
+              url: '/Insurance/m_modifyStateInsuranceApp',
               data: params,
               loading:"0",
               call: (data)=>{
@@ -211,7 +211,7 @@
       this.setQuery2Value('isApproval')
       this.setQuery2Value('down')
       this.init({
-        url: '/Insurance/m/initBillingForm',
+        url: '/Insurance/m_initBillingForm',
         call:(data)=> {
           this.appToastShow = true
           this.content = data.content

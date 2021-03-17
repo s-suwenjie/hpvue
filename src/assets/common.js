@@ -9,7 +9,7 @@ var rules = {
   "RS00006": "/^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$/", //验证身份证号
   "RS00007": "/^-?(0\\.\\d*[1-9]+\\d*)$/", //验证大于0小于1
   "RS00008": "/^[\u4e00-\u9fa5 ]{2,5}$/", //验证中文姓名
-  "RS00009":"/^(([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z](([0-9]{5}[DF])|([DF]([A-HJ-NP-Z0-9])[0-9]{4})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳使领]))$/", //验证车牌号
+  "RS00009":"/^(([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z](([0-9]{5}[ADF])|([ADF]([A-HJ-NP-Z0-9])[0-9]{4})))|([京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳使领]))$/", //验证车牌号
   "RS00010": "/^\\d{16}$/", //验证16位纯数字
   "RS00011": "/^\\d{18}$/", //验证18位纯数字
   "RS00012": "/^(?:0|\\-?(?:0\\.\\d*[0-9]|[0-9]\\d*(?:\\.\\d*[0-9])?))$/",  //验证数字格式   正负都可以是纯数字
@@ -20,6 +20,9 @@ var rules = {
   "RS00016": "/^[a-zA-Z0-9]{7,8}$/", //发动机号
   "RS00017": "/^\\d{8}$/", //验证18位纯数字
   "RS00018": '/^\\d+(?:\\.\\d{1,2})?$/',//必须大于0并且最多保留两位小数
+  "RS00019": '/^(-[1-9][0-9]*)(\\.\\d{1,4})?$/',//小于零的所有数
+  "RS00020": '/^([a-zA-Z]|[0-9])(\\w|\\-)+@[a-zA-Z0-9]+\\.([a-zA-Z]{2,4})$/',//验证邮箱
+  "RS00021": "/^\\d+(\\.\\d{0,2})?$/"//验证必须为数字并且最多保留两位小数
 }
 //验证规则
 var rule = {
@@ -39,17 +42,22 @@ var rule = {
     R1300:{empty:"*",emptyMessage:"不能为空",rules:"RS00013",errormessage:"格式错误"} ,  //验证最多3位纯数字
     R1400:{empty:"*",emptyMessage:"不能为空",rules:"RS00014",errormessage:"格式错误"} ,  //大于0，小于等于100，并且最多保留两位小数。
     R1500:{empty:"*",emptyMessage:"不能为空",rules:"RS00004",errormessage:"格式错误"} ,  //大于等于0的所有数字
+    R1501:{empty:"*",emptyMessage:"",rules:"RS00004",errormessage:"格式错误"} ,  //大于等于0的所有数字
     R1600:{empty:"*",emptyMessage:"不能为空",rules:"RS00015",errormessage:"车架号为17位,请仔细核查"} ,
     R1700:{empty:"*",emptyMessage:"不能为空",rules:"RS00016",errormessage:"发动机号为7-8位,请仔细核查"} ,
     R1800:{empty:"*",emptyMessage:"不能为空",rules:"RS00004",errormessage:"不能为负数"} ,  //不能为空并且不能为负数
     R1900:{empty:"*",emptyMessage:"不能为空",rules:"RS00017",errormessage:"格式错误"} ,  //不能为空并且不能为负数
     R2100:{empty:"*",emptyMessage:"不能为空",rules:"RS00018",errormessage:"不能为负数并且最多保留两位小数"} ,  //不能为空,必须大于0并且最多保留两位小数
+    R2200:{empty:"*",emptyMessage:"不能为空",rules:"RS00019",errormessage:"格式错误"} ,  //不能为空并且小于0的所有负数
+    R2300:{empty:"*",emptyMessage:"不能为空",rules:"RS00020",errormessage:"格式错误"} ,  //验证邮箱
+    R2400:{empty:"*",emptyMessage:"不能为空",rules:"RS00018",errormessage:"只能输入数字并且最多保留两位小数"} ,  //不能为空,必须大于0并且最多保留两位小数
 
 }
 
 function verify(value,ruleKey) {
   var result = {key:true,value:'',category:-1}
   var r = rule[ruleKey]
+  value = value+''
   value = value.replace(/\s/g,"")
   if(r){
     if(r.empty === '*'){
@@ -69,7 +77,7 @@ function verify(value,ruleKey) {
       }
     }
     else{
-      if(r.rules !== ""){
+      if(r.rules !== "" && value !== ""){
         if(!eval(rules[r.rules]).test(value)){
           result.key = false
           result.value = r.errormessage
@@ -140,7 +148,7 @@ function formatTime (date) {
   }
 }
 
-//加法
+//乘法
 function accMul (arg1, arg2) {
   var m = 0, s1 = arg1 + "", s2 = arg2 + "";
   try { m += s1.split(".")[1].length } catch (e) { }
@@ -148,7 +156,7 @@ function accMul (arg1, arg2) {
   return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
 }
 
-//乘法
+//加法
 function accAdd(arg1, arg2) {
   var r1, r2, m;
   try { r1 = arg1.toString().split(".")[1].length } catch (e) { r1 = 0 }
@@ -284,6 +292,12 @@ function selectComputedSelected(selectValue,id){
 
 /************ 金额转中文大写 Start **************/
 function number2chinese(str) {
+  let negative = ''
+  if((str+'').indexOf('-')!=-1){
+    negative = '(负数)'
+  }else{
+    negative = ''
+  }
   if(isNaN(str)){
     return ''
   }
@@ -299,7 +313,7 @@ function number2chinese(str) {
   for (var i=0; i < num.length; i++){
     strOutput += '零壹贰叁肆伍陆柒捌玖'.substr(num.substr(i,1),1) + strUnit.substr(i,1)
   }
-  return strOutput.replace(/零角零分$/, '整').replace(/零[仟佰拾]/g, '零').replace(/零{2,}/g, '零').replace(/零([亿|万])/g, '$1').replace(/零+元/, '元').replace(/亿零{0,3}万/, '亿').replace(/^元/, "零元")
+  return negative + strOutput.replace(/零角零分$/, '整').replace(/零[仟佰拾]/g, '零').replace(/零{2,}/g, '零').replace(/零([亿|万])/g, '$1').replace(/零+元/, '元').replace(/亿零{0,3}万/, '亿').replace(/^元/, "零元")
 }
 /************ 金额转中文大写 End **************/
 
@@ -417,7 +431,73 @@ function formatCustomizeTip (val,rule) {
   }
   return result
 }
-
+/********************* 获取本周和上周时间 **************************/
+//type为字符串类型，有两种选择，"s"代表开始,"e"代表结束，dates为数字类型，不传或0代表本周，-1代表上周，1代表下周
+function getMonday(type, dates) {
+  let dd = ''
+  let now = new Date();
+  let nowTime = now.getTime();
+  let day = now.getDay();
+  let longTime = 24 * 60 * 60 * 1000;
+  let n = longTime * 7 * (dates || 0);
+  if (type == "s") {
+    dd = nowTime - (day - 1) * longTime + n;
+  }
+  if (type == "e") {
+    dd = nowTime + (7 - day) * longTime + n;
+  }
+  dd = new Date(dd);
+  let y = dd.getFullYear();
+  let m = dd.getMonth() + 1;
+  let d = dd.getDate();
+  m = m < 10 ? "0" + m: m;
+  d = d < 10 ? "0" + d: d;
+  day = y + "-" + m + "-" + d;
+  return day;
+}
+/********************* 获取本月和上月时间 ***************************/
+//type为字符串类型，有两种选择，"s"代表开始,"e"代表结束，months为数字类型，不传或0代表本月，-1代表上月，1代表下月
+function getMonth(type, months) {
+  let d = new Date()
+  let year = d.getFullYear()
+  let month = d.getMonth() + 1
+  if (Math.abs(months) > 12) {
+    months = months % 12
+  }
+  if (months != 0) {
+    if (month + months > 12) {
+      year++
+      month = (month + months) % 12
+    } else if (month + months < 1) {
+      year--
+      month = 12 + month + months
+    } else {
+      month = month + months
+    }
+  }
+  month = month < 10 ? "0" + month: month
+  let date = d.getDate()
+  let firstday = year + "-" + month + "-" + "01"
+  let lastday = ""
+  if (month == "01" || month == "03" || month == "05" || month == "07" || month == "08" || month == "10" || month == "12") {
+    lastday = year + "-" + month + "-" + 31
+  } else if (month == "02") {
+    if ((year % 4 == 0 && year % 100 != 0) || (year % 100 == 0 && year % 400 == 0)) {
+      lastday = year + "-" + month + "-" + 29
+    } else {
+      lastday = year + "-" + month + "-" + 28
+    }
+  } else {
+    lastday = year + "-" + month + "-" + 30
+  }
+  let day = ""
+  if (type == "s") {
+    day = firstday
+  } else {
+    day = lastday
+  }
+  return day
+}
 
 function getDayNumByYearMonth(year,month){
   switch (month) {
@@ -462,5 +542,5 @@ function zero(num) {
 }
 
 export{
-  zero,getDayNumByYearMonth,accMul,accAdd,guid,selectClick,selectdbClick,selectConfirm,selectComputedSelected,verify,formatDate,number2chinese,formatCnDate,tenThousandFormat,formatDateHtml,tenThousandFormatHtml,formatTime,formatPhone,formatIdNo,formatCustomizeTip
+  zero,getDayNumByYearMonth,getMonday,getMonth,accMul,accAdd,guid,selectClick,selectdbClick,selectConfirm,selectComputedSelected,verify,formatDate,number2chinese,formatCnDate,tenThousandFormat,formatDateHtml,tenThousandFormatHtml,formatTime,formatPhone,formatIdNo,formatCustomizeTip
 }

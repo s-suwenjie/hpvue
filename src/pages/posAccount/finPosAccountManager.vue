@@ -15,10 +15,10 @@
 <!--        <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()" category="one"></yhm-commonbutton>-->
 
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData"></yhm-managersearch>
-        <yhm-radiofilter :before="posAccountBefore" @initData="initChoose('posAccount')" title="Pos账户" all="0"  :content="listposAccount"></yhm-radiofilter>
+        <yhm-radiofilter :before="posAccountBefore" @initData="initScreen('posAccount')" title="Pos账户" all="0"  :content="listposAccount"></yhm-radiofilter>
         <!--        <yhm-form-td-date  position="b" style="height: 30px" :value="yearMonth" id="yearMonth" ></yhm-form-td-date>-->
         <yhm-form-date :error-show="false" :max="yearDateMonth" title="交易日期" :value="yearMonth" id="yearMonth" @call="callDate" ></yhm-form-date>
-        <yhm-radiofilter :before="posAccountBefore" @initData="initChoose('posDetailsState')" title="状态" :content="listposDetailsState"></yhm-radiofilter>
+        <yhm-radiofilter :before="posAccountBefore" @initData="initScreen('posDetailsState')" title="状态" :content="listposDetailsState"></yhm-radiofilter>
         <!--        :max="yearDateMonth"-->
       </template>
       <!--筛选区-->
@@ -64,11 +64,14 @@
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>
       <template #total>
-        <div class="listTotalCrente m_list w620">
-          <div class="listTotalLeft">
-            <span class="test"></span>
-            <span class="test">金额</span>
+        <div class="listTotalCrente m_list" style="width: 600px">
+          <div>
+            <div class="listTotalLeft">
+              <span class="test"></span>
+              <span class="test">金额</span>
+            </div>
           </div>
+          <div style="width: 400px">
           <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table" >
             <thead>
             <tr>
@@ -89,8 +92,11 @@
 
             </tbody>
           </table>
-          <yhm-commonbutton  style="margin-top: 40px; margin-left: 40px;" v-if="isInState" value="入账" icon="btnSave" @call="saveCredit" :flicker="true"></yhm-commonbutton>
-          <yhm-commonbutton  style="margin-top: 40px; margin-left: 40px;" v-if="isVerState" value="验证" icon="btnSave" @call="save" :flicker="true"></yhm-commonbutton>
+          </div>
+          <div>
+            <yhm-commonbutton  style="margin-top: 40px; margin-left: 40px;" v-if="isInState" value="入账" icon="btnSave" @call="saveCredit" :flicker="true"></yhm-commonbutton>
+            <yhm-commonbutton  style="margin-top: 40px; margin-left: 40px;" v-if="isVerState" value="验证" icon="btnSave" @call="save" :flicker="true"></yhm-commonbutton>
+          </div>
         </div>
 
       </template>
@@ -414,14 +420,13 @@
         this.initPageData()
       },
       // 筛选事件
-      initChoose (op) {
+      initScreen (op) {
         if (op === 'posAccount') {
           this.selectValue = []
         }
         if (op === 'posDetailsState') {
           this.selectValue = []
         }
-
         if (this.listposDetailsState.value=='0'){
           this.isSxf=false
           this.isInState=true

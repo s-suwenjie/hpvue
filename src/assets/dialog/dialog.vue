@@ -23,9 +23,13 @@
             </div>
             <div v-html="tipValue" class="tipValue"></div>
           </div>
-          <div class="operate">
+          <div class="operate" v-if="flickerIndex==''||flickerIndex==' '||flickerIndex==undefined">
             <yhm-dialog-button @call="okEvent" :flicker="true" :value="btnOk"></yhm-dialog-button>
             <yhm-dialog-button v-if="alertImg == 'ask'" @call="cancelEvent" :value="btnCancel"></yhm-dialog-button>
+          </div>
+          <div class="operate" v-else>
+            <yhm-dialog-button @call="okEvent" :flicker="flickerIndex=='0'?true:false" :value="btnOk"></yhm-dialog-button>
+            <yhm-dialog-button v-if="alertImg == 'ask'" :flicker="flickerIndex=='1'?true:false" @call="cancelEvent" :value="btnCancel"></yhm-dialog-button>
           </div>
         </div>
         <!-- preview -->
@@ -97,6 +101,7 @@
           zIndex:Number,
           btnOk:String,
           btnCancel:String,
+          flickerIndex:String,
           closeCallBack:Function,
           alertImg:String,
           previewArr:Array,

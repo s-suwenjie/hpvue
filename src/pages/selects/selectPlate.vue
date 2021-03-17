@@ -73,9 +73,12 @@
           width: '1050',
           height: '700',
           title: '添加车辆信息',
-          url: '/vehicleForm?isReule='+this.isReule,
+          url: '/vehicleForm?isReule='+this.isReule+'&searchStr='+this.searchStr,
           closeCallBack: (data)=>{
-            this.initPageData(false)
+            if(data){
+              this.searchStr = data
+              this.initPageData(false)
+            }
           }
         })
       },
@@ -93,6 +96,7 @@
         if (initValue) {
           // 页面初始化是需要的参数
           params = {
+            searchStr:this.searchStr,
             carOwnerID:this.carOwnerID,
             assort:this.listassort.value,
             plate:this.plate
@@ -100,6 +104,7 @@
         } else {
           // 页面非初始化时需要的参数
           params = {
+            searchStr:this.searchStr,
             carOwnerID:this.carOwnerID,
             assort:this.listassort.value,
           }
@@ -120,6 +125,8 @@
       }
     },
     created () {
+      this.setQuery2Value('searchStr')
+
       this.setQuery2Value('carOwnerID')
       this.setQuery2Value('assort')
       this.listassort.value=this.assort

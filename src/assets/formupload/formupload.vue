@@ -59,6 +59,10 @@
         type:String,
         default:""
       },
+      astrict:{//限制上传文件的个数
+        type:String,
+        default:""
+      },
       multiple:{
         type:String,
         default:""
@@ -152,8 +156,21 @@
       updateProgressRates(key,val){
         this.uploadingFileProgressRates[key] = val
         this.uploadingFileKeys.splice(0,0)
+        this.$nextTick(()=>{
+          this.$emit('change')
+        })
       },
       uploadBefore(files){
+        if(this.astrict!=''){
+          if(Number(this.value.length)==this.astrict){
+            this.$dialog.alert({
+              tipValue:'最多只能上传'+this.astrict+'个文件',
+              alertImg:'warn',
+              width:'330'
+            })
+            return
+          }
+        }
         if(files.length > 0){
           this.spin = false
           for (var i = 0; i < files.length; i++){
@@ -180,6 +197,7 @@
                 this.uploadingFileFinishKeys.push(k)
                 let message = data.message.split("☆");
                 this.initResult(message,img)
+                this.$emit('call')
               }
             });
           }

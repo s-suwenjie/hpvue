@@ -8,9 +8,9 @@
       <div class="c_main" v-validator="validatorEvent">
         <div @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="c_box" :class="{c_error:error,c_hover:mouseStyle,c_focus:focusStyle,c_disable:noEdit}">
           <span v-if="beforeIcon !== ''" @click="getFocus" class="c_icon" :class="beforeIcon"></span>
-          <input v-if="!noEdit" ref="txt" class="c_content" v-model="txt" :class="{pl10:beforeIcon === '',pr10:1===1}" :type="type" @focus="focusEvent" @blur="blurEvent"/>
+          <input v-if="!noEdit" ref="txt" class="c_content" v-model="txt" :class="{pl10:beforeIcon === '',pr10:1===1}" :type="type" @input="inputEvent" @focus="focusEvent" @blur="blurEvent"/>
 
-          <div v-if="noEdit" class="c_content_show" :style="getTxtWidth" :class="{pl10:beforeIcon === '',pr10:1===1}">{{txt}}</div>
+          <div v-if="noEdit" class="c_content_show" :class="{pl10:beforeIcon === '',pr10:1===1}">{{txt}}</div>
 
           <div v-for="(item,index) in checkList" :key="index" class="text_checkbox disable_menu" @click="clickCheckBoxEvent(item)" :class="{text_checkbox_select:getCheckSelected(item,checkValue),c_disable:checkDisabled}">
             <div class="check_button_icon" :class="{check_button_icon_select:getCheckSelected(item,checkValue)}"></div>
@@ -99,6 +99,10 @@
         type:String,
         default:""
       },
+      maxNumber:{
+        type:String,
+        default:""
+      },
       rule:{
         type:String,
         default:""
@@ -109,6 +113,13 @@
       }
     },
     methods: {
+      inputEvent(){
+        if(this.maxNumber){
+          if(Number(this.txt)>Number(this.maxNumber)){
+            this.txt=this.maxNumber
+          }
+        }
+      },
       //初始化验证事件
       validatorEvent(category){
         if(this.rule !== "") {

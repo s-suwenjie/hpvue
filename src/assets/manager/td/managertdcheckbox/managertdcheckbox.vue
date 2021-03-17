@@ -1,5 +1,5 @@
 <template>
-  <td>
+  <td v-show="show">
     <div class="md_center">
       <span @click="selectEvent" class="md_select check_button_icon" :class="{md_selected:getChecked, check_button_icon_select:getChecked}"></span>
     </div>
@@ -18,6 +18,10 @@
       noClick:{
         type:Boolean,
         default:true
+      },
+      show:{
+        type:Boolean,
+        default:true
       }
     },
     methods:{
@@ -25,7 +29,7 @@
         if(this.noClick) {
           this.p____page.selectValue = this.selectItem(this.p____page.selectValue, this.value)
           this.$nextTick(()=>{
-            this.$emit("call",this.p____page.selectValue)
+            this.$emit("call",this.p____page.selectValue,this.value)
           })
         }
       },

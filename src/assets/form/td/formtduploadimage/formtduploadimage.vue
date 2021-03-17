@@ -1,10 +1,10 @@
 <template>
   <td class="fd_in_txt fd_center" :style="getTxtWidth" v-validator="validatorEvent">
     <div @mouseoutEvent="mouseoutEvent" @mouseoverEvent="mouseoverEvent">
-    <yhm-upload @mouseoutEvent="mouseoutEvent" @mouseoverEvent="mouseoverEvent" :no-upload="noUpload" @call="callEvent" @progressCall="progressCallEvent" :width="getWidth" height="24" accept="image/*" :tag="tag">
+    <yhm-upload @mouseoutEvent="mouseoutEvent" @mouseoverEvent="mouseoverEvent" :no-upload="noUpload" @call="callEvent" @progressCall="progressCallEvent" :width="getWidth" height="24" :accept="accept" :tag="tag">
       <template>
         <div v-show="getUploadShow" :style="getTxtWidth" class="fd_center c_content_m c_box icon-btn-upload" :class="{c_focus:mouseOver,c_error:error}">
-          上传发票
+          {{accept==' '?'上传图片或文件':'上传图片'}}
         </div>
         <div v-show="showSchedule" :style="getTxtWidth" class="fd_center c_content_m c_box">
           {{schedule}}%
@@ -37,6 +37,10 @@
       tag: {
         type: String,
         default: 'temp'
+      },
+      accept:{
+        type: String,
+        default: 'image/*'
       },
       width:{
         type: String,
@@ -110,10 +114,18 @@
 
         }
         else{
-          this.$dialog.alert({
-            tipValue:'请上传图片',
-            alertImg:'error'
-          })
+          if(this.accept!= ' '){
+            this.$dialog.alert({
+              tipValue:'请上传图片',
+              alertImg:'error'
+            })
+          }else{
+            let storeName = data.storeName
+            this.txt = storeName
+            let js = "this.p____page." + this.listid + "[" + this.list.indexOf(this.value) + '].' + this.id + " = \"" + storeName +"\""
+            eval(js);
+          }
+
         }
         //this.$emit("call",data)
       },

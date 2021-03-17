@@ -11,7 +11,7 @@
           <yhm-view-control title="回款日期" :content="moneyBackDate" type="date"></yhm-view-control>
           <yhm-view-control title="金额" :content="money" type="money" color="#f00"></yhm-view-control>
 
-          <yhm-view-control title="工单号" :content="workOrderID"></yhm-view-control>
+          <yhm-view-control title="工单号" :content="workOrder"></yhm-view-control>
 
 <!--          <yhm-view-control category="3" title="客户" type="files" :content="customerName"></yhm-view-control>-->
           <yhm-view-control title="车辆品牌" :content="vehicleBrand"></yhm-view-control>
@@ -64,6 +64,7 @@
         otherAccount:'',//对方账户
         operator:'',//业务员
         workOrderID:'',//工单号
+        workOrder:'',//工单号
         customerName:'',//客户
         vehicleBrand:'',//车辆品牌
         vehicleType:'',//车型
@@ -237,6 +238,7 @@
             this.otherAccount=data.otherAccount,//对方账户
             this.operator=data.operator,//业务员
             this.workOrderID=data.workOrderID,//工单号
+            this.workOrder=data.workOrder,//工单号
             this.customerName=data.customerName,//客户
             this.vehicleBrand=data.vehicleBrand,//车辆品牌
             this.vehicleType=data.vehicleType,//车型

@@ -11,12 +11,12 @@
         <yhm-form-radio :show="isNetType"  title="网络" subtitle="账户类型" :select-list="webAccountTypelist" :value="webAccountType" id="webAccountType" rule="R0000"></yhm-form-radio>
 
         <yhm-form-select :show="isSetAcc" @click="selectSettlementAccount" title="结算账户" tip="value"  :value="settlementAccount" id="settlementAccount" rule="R0000"></yhm-form-select>
-        <yhm-form-text @repeatverify="repeatverifyAccountEvent"  ref="account"  :title="accountTitle" :value="account" id="account"  rule="R0000" :tip="tip" :tip-rule="tipRule"></yhm-form-text>
-        <yhm-form-text title="账户别名" :value="alias" id="alias" ref="alias" @blur="isAliasVerifyEvent()" tip="value"></yhm-form-text>
+        <yhm-form-text @repeatverify="repeatverifyAccountEvent"  ref="account"  :blank-show="true" :title="accountTitle" :value="account" id="account"  rule="R0000" :tip="tip" :tip-rule="tipRule"></yhm-form-text>
+        <yhm-form-text title="账户别名" :blank-show="true" :value="alias" id="alias" ref="alias" @blur="isAliasVerifyEvent()" tip="value"></yhm-form-text>
         <yhm-form-radio :show="isAccNature" title="账户性质" :select-list="natureList"  :value="nature" id="nature" rule="R0000" width="1"></yhm-form-radio>
-        <yhm-form-text :show="isAccMan" title="客户经理" tip="value" :value="customerManager" id="customerManager" rule="R0000"></yhm-form-text>
+        <yhm-form-text :show="isAccMan" title="客户经理" :blank-show="true" tip="value" :value="customerManager" id="customerManager" rule="R0000"></yhm-form-text>
 <!--        <yhm-form-select :show="isAccMan" title="客户经理" tip="value" @click="managerEvent" :value="customerManagerName" id="customerManagerName" rule="R0000"></yhm-form-select>-->
-        <yhm-form-text :show="isPhone" tip="phone" title="联系电话"  :value="managerTel" id="managerTel" width="1"></yhm-form-text>
+        <yhm-form-text :show="isPhone" tip="phone" :blank-show="true" title="联系电话"  :value="managerTel" id="managerTel" width="1"></yhm-form-text>
 
         <!--<yhm-form-text :show="isPosAcc" @repeatverify="repeatverifyAccountEvent"  ref="account" tip="account" title="账号" subtitle="POS机别名" :value="account" id="account" rule="R0000"></yhm-form-text>-->
 <!--        <yhm-form-text :show="posNameShow" tip="remark" title="POS机费率" subtitle="万分之多少" :value="probability" id="probability"  rule="R0000"></yhm-form-text>-->

@@ -7,6 +7,50 @@ import login from './pages/login'
 
 Vue.use(Router)
 
+/*员工档案*/
+import employeeFilesManager from './pages/staff/employeeFiles/employeeFilesManager.vue'
+import employeeFilesView from './pages/staff/employeeFiles/employeeFilesView.vue'
+import employeeFilesForm from './pages/staff/employeeFiles/employeeFilesForm.vue'
+
+/*短信模板*/
+import smsTemplateForm from './pages/sms/template/smsTemplateForm.vue'
+import smsTemplateManager from './pages/sms/template/smsTemplateManager.vue'
+/*短信消息*/
+import smsMessageForm from './pages/sms/message/smsMessageForm.vue'
+import smsMessageManager from './pages/sms/message/smsMessageManager.vue'
+
+/*财务分析*/
+import bankDetailAnalysis from './pages/bankDetail/bankDetailAnalysis.vue'
+import bankDetailAnalysisExecl from './pages/bankDetail/bankDetailAnalysisExecl.vue'
+
+/*字典*/
+import dic25 from './pages/common/dic25'
+import dic16 from './pages/common/dic16'
+import dicManager from './pages/common/dicManager'
+import dictionariesManager from './pages/common/dictionariesManager'
+import dicView from './pages/common/dicView'
+
+/*销项税*/
+import outPutTaxView from './pages/tax/outPutTax/outPutTaxView.vue'
+import outPutTaxManager from './pages/tax/outPutTax/outPutTaxManager.vue'
+
+/*进项税*/
+import inputTaxForm from './pages/tax/inputTax/inputTaxForm.vue'
+import inputTaxView from './pages/tax/inputTax/inputTaxView.vue'
+import inputTaxManager from './pages/tax/inputTax/inputTaxManager.vue'
+import authenticationDate from './pages/tax/inputTax/authenticationDate.vue'
+import deduction from './pages/tax/inputTax/deduction.vue'
+import deductionDateAndMoney from './pages/tax/inputTax/deductionDateAndMoney.vue'
+
+/*发票抬头*/
+import invoiceRiseForm from './pages/tax/invoiceRise/invoiceRiseForm.vue'
+import invoiceRiseManager from './pages/tax/invoiceRise/invoiceRiseManager.vue'
+import invoiceRiseView from './pages/tax/invoiceRise/invoiceRiseView.vue'
+import approvalInvoiceRiseManager from './pages/tax/invoiceRise/approvalInvoiceRiseManager.vue'
+
+/*扫码页面*/
+import scanCode from './pages/scanCode/scanCode'
+
 /* 审批通过 留言 */
 import approvalMessage from './pages/common/approvalMessage'
 /* 设置支票预警值 */
@@ -25,11 +69,19 @@ import selectPrettyCashs from './pages/selects/selectPrettyCashs.vue'
 import fullRefundForm from './pages/prettyCashs/fullRefundForm.vue'
 
 
+/*销户*/
+import accountCancellation from './pages/accNum/publicAccount/accountCancellation.vue'
+
+
 /* 处理图片 */
 import handleImageForm from './pages/common/handleImageForm.vue'
 
 /* 驳回理由 */
 import rejectReason from './pages/common/rejectReason'
+
+/*新的审批理由页面*/
+import springBootApprovalMessage from './pages/common/springBootApprovalMessage'
+import springBootRejectReason from './pages/common/springBootRejectReason'
 
 import passMessage from './pages/common/passMessage'
 import gainsayMessage from './pages/common/gainsayMessage'
@@ -70,6 +122,22 @@ import projectManager from './pages/project/projectManager.vue'
 import projectForm from './pages/project/projectForm.vue'
 import projectDetailForm from './pages/project/projectDetailForm.vue'
 
+/*审批流程管理*/
+import approveFlowsManager from './pages/approveFlows/approveFlowsManager.vue'
+import approveFlowsForm from './pages/approveFlows/approveFlowsForm.vue'
+import approveFlowsDetailForm from './pages/approveFlows/approveFlowsDetailForm.vue'
+
+/*人员标签*/
+import personTagManager from './pages/personTag/personTagManager.vue'
+import personTagForm from './pages/personTag/personTagForm.vue'
+import selectPersonTag from './pages/personTag/selectPersonTag.vue'
+/*开票公司白名单*/
+import invoicUnitWhitelistManager from './pages/invoicUnitWhitelist/invoicUnitWhitelistManager.vue'
+import invoicUnitWhitelistForm from './pages/invoicUnitWhitelist/invoicUnitWhitelistForm.vue'
+
+/*审批代理*/
+import approveProxyManager from './pages/approveProxy/approveProxyManager.vue'
+// import approveProxyForm from './pages/approveProxy/approveProxyForm.vue'
 
 /* 支票功能 */
 import checkManager from './pages/check/checkManager'
@@ -107,9 +175,14 @@ import invoiceWarehouManager from './pages/invoice/invoiceWarehouManager'
 import addInvoiceNumForm from './pages/invoice/addInvoiceNumForm'
 import invoiceWarehouFrom from './pages/invoice/invoiceWarehouFrom'
 import selectInvoiceDetail from './pages/selects/selectInvoiceDetail'
+
+import SelectInvoiceRise from './pages/selects/selectInvoiceRise'
+
 import toVoidInvoice from './pages/invoice/invoiceOpera/toVoidInvoice'
 import toVoidInvoiceMore from './pages/invoice/invoiceOpera/toVoidInvoiceMore'
 import invoiceView from './pages/invoice/invoiceView'
+// import unitInvoiceinitForm from './pages/invoice/unitInvoiceinitForm'
+
 
 /*开发票*/
 import openInvoiceManager from './pages/openInvoice/openInvoiceManager'
@@ -118,11 +191,20 @@ import openInvoiceView from './pages/openInvoice/openInvoiceView'
 import openInvoiceTrial from './pages/openInvoice/openInvoiceTrial'
 import approvalOpenInvoiceManager from './pages/openInvoice/approvalOpenInvoiceManager'
 import openInvoiceFinManager from './pages/openInvoice/openInvoiceFinManager'
+import openInvoiceFinForm from './pages/openInvoice/openInvoiceFinForm'
 import openInvoiceToVoid from './pages/openInvoice/openInvoiceToVoid'
 import openInvoiceVehicleForm from './pages/openInvoice/openInvoiceVehicleForm'
 import openInvoiceTrialVehicle from './pages/openInvoice/openInvoiceTrialVehicle'
 import openInvoiceTrialOther from './pages/openInvoice/openInvoiceTrialOther'
+import openInvoiceToVoidInvoice from './pages/openInvoice/openInvoiceToVoidInvoice'
+import openInvoiceManagerAll from './pages/openInvoice/openInvoiceManagerAll'
+import selectOpenInvoice from './pages/selects/selectOpenInvoice'
+import selectsInvoiceSignatureForm from './pages/selects/selectsInvoiceSignatureForm'
 
+import printingOpenInvoice from './pages/openInvoice/printingOpenInvoice'
+
+
+import invoiceManager from './pages/invoicelookUp/invoiceManager'
 
 /* 付款申请 */
 import paymentApplyManager from './pages/paymentApply/myPaymentApplyManager'
@@ -160,6 +242,7 @@ import approvalReimbursementPrintBYJ from './pages/reimbursement/approvalReimbur
 import approvalReimbursementSingleSplitForm from './pages/reimbursement/approvalReimbursementSingleSplitForm'
 
 import reimbursementViewManager from './pages/reimbursement/finReimbursementViewManager'
+import finReimbursementDetailManager from './pages/reimbursement/finReimbursementDetailManager'
 import reimbursementViewForm from './pages/reimbursement/finReimbursementViewForm'
 import reimbursementViewDetailForm from './pages/reimbursement/finReimbursementViewDetailForm'
 import reimbursementFormView from './pages/reimbursement/myReimbursementFormView'
@@ -175,6 +258,7 @@ import BankDetailRebateDetail from './pages/budgetDetail/BankDetailRebate/BankDe
 
 /* 散户维修费 */
 import BankDetailRepairManager from './pages/budgetDetail/BankDetailRebate/BankDetailRepairManager'
+import BankDetailInsuranceAll from './pages/budgetDetail/BankDetailRebate/BankDetailInsuranceAll'
 
 /* 续保 */
 import bankDetailRenewalManager from './pages/budgetDetail/BankDetailRebate/bankDetailRenewalManager'
@@ -209,6 +293,14 @@ import electronicInvoiceView from './pages/electronicInvoice/electronicInvoiceVi
 import selectElectronicInvoice from './pages/selects/selectElectronicInvoice'
 import selectUsersWxInfo from './pages/selects/selectUsersWxInfo'
 
+//税号管理
+import taxManager from './pages/tax/tax/taxManager'
+import taxFrom from './pages/tax/tax/taxFrom'
+import taxView from './pages/tax/tax/taxView'
+import openInvoiceNum from './pages/tax/tax/openInvoiceNum'
+import selectTax from './pages/selects/selectTax'
+
+
 /*用户管理*/
 import usersManager from './pages/users/usersManager'
 import usersForm from './pages/users/usersForm'
@@ -216,6 +308,7 @@ import usersUpdatePwdManager from './pages/users/usersUpdatePwdManager'
 
 /* 选择页面 */
 import selectDic from './pages/selects/selectDic'
+import selectCoupon from './pages/selects/selectCoupon'
 import dicForm089 from './pages/selects/dic/dicForm089'
 import dicForm090 from './pages/selects/dic/dicForm090'
 import dicForm091 from './pages/selects/dic/dicForm091'
@@ -224,8 +317,10 @@ import selectPrivateAccount from './pages/selects/selectPrivateAccount'
 import selectUnit from './pages/selects/selectUnit'
 import selectPaymentApplyDetail from './pages/selects/selectPaymentApplyDetail'
 import selectBankDetail from './pages/selects/selectBankDetail'
+import selectNumber from './pages/selects/selectNumber'
 import selectPlate from './pages/selects/selectPlate'
 import selectPerson from './pages/selects/selectPerson'
+import selectStock from './pages/selects/selectStock'
 import selectPlanDate from './pages/selects/selectPlanDate'
 import selectDepartment from './pages/selects/selectDepartment'
 import selectVersion from './pages/selects/selectVersion'
@@ -236,13 +331,23 @@ import selectFormPlate from './pages/insurance/billing/selectFormPlate'
 import selectPrint from './pages/selects/selectPrint'
 import selectLocation from './pages/selects/selectLocation'
 import selectAccount from './pages/selects/selectAccount'
+import selectPart from './pages/selects/selectPart'
 import selectProcessServices from './pages/selects/selectProcessServices'
 import selectService from './pages/selects/selectService'
 import selectMaterials from './pages/selects/selectMaterials'
-
+import selectPeopleManagement from './pages/selects/selectPeopleManagement'
+import selectUnitInvoice from './pages/selects/selectUnitInvoice'
+import selectStoredCard from './pages/selects/selectStoredCard'
+import selectMonthlyAccount from './pages/selects/selectMonthlyAccount'
+import selectDeposit from './pages/selects/selectDeposit'
+import selectPayDeposit from './pages/selects/selectPayDeposit'
+import selectOfficialWorkOrder from './pages/selects/selectOfficialWorkOrder'
+import selectContract from './pages/selects/selectContract'
 /* 单位 - 联系人 */
 import unitManager from './pages/unit/unitManager'
 import addUnitForm from './pages/unit/addUnitForm'
+import unitInvoiceFrom from './pages/unit/unitInvoiceFrom'
+import unitInvoiceView from './pages/unit/unitInvoiceView'
 import unitView from './pages/unit/unitView'
 import unitDetailView from './pages/unit/unitDetailView'
 import addUnitSimplifyForm from './pages/unit/addUnitSimplifyForm'
@@ -259,7 +364,7 @@ import visitPersonForm from './pages/visitPerson/visitPersonForm'
 
 /* 测试demo */
 import demo from './pages/selects/demo'
-import exercise from './test/exercise'
+import exercise from './pages/cartogram/exercise'
 import selectPage from './test/selectPage'
 import testApp from './pagesApp/testApp.vue'
 
@@ -295,6 +400,11 @@ import bankDetailForm from './pages/bankDetail/bankDetailForm'
 import bankDetailCashierForm from './pages/bankDetailCashier/bankDetailCashierForm'
 import bankDetailCashierManager from './pages/bankDetailCashier/bankDetailCashierManager'
 
+/*财务分析*/
+
+import bankDetailAnalyView from './pages/bankDetail/bankDetailAnalyView'
+
+
 /*应收账款添加收支明细*/
 import receivableBankDetailForm from './pages/bankDetail/receivableBankDetailForm'
 
@@ -305,6 +415,9 @@ import approvalPersonaliseForm from './pages/approvalPriority/approvalPersonalis
 /* 公司优先级 */
 import approvalPriorityManager from './pages/approvalPriority/approvalPriorityManager'
 import approvalPriorityForm from './pages/approvalPriority/approvalPriorityForm'
+/*优惠活动审批制定*/
+import promotionsApproveManager from './pages/approvalPriority/promotionsApproveManager'
+import promotionsApproveForm from './pages/approvalPriority/promotionsApproveForm'
 
 /* 定制审批 */
 import approPriationManager from './pages/approvalPriority/approPriationManager.vue'
@@ -334,9 +447,10 @@ import conductFinManager from './pages/conductFin/conductFinManager'
 import conductFinForm from './pages/conductFin/conductFinForm'
 import conductFinView from './pages/conductFin/conductFinView'
 import conductFinRedeemForm from './pages/conductFin/conductFinRedeemForm'
+import conductFinEntry from './pages/conductFin/conductFinEntry'
+import bankProductInterest from './pages/conductFin/bankProductInterest'
 
-
-/*移动端绑定账号 - 正确 - 错误 - 已确定登陆 - 取消登录 - 用户不存在 - 扫码登录页面 - 微信提示页面(暂不支持此功能)*/
+/*移动端绑定账号 - 正确 - 错误 - 已确定登陆 - 取消登录 - 用户不存在 - 扫码登录页面*/
 import bindingManager from './appPages/appLogin/bindingManager'
 import correct from './appPages/promptmessage/correct'
 import failure from './appPages/promptmessage/failure'
@@ -344,8 +458,6 @@ import loginScSuccess from './appPages/appLogin/landing/loginScSuccess'
 import loginScCancel from './appPages/appLogin/landing/loginScCancel'
 import loginInexistence from './appPages/appLogin/landing/loginInexistence'
 import loginSc from './appPages/appLogin/loginSc.vue'
-import error from './appPages/appLogin/landing/error.vue'
-
 
 
 /* 移动端我的操作 菜单 采购审批列表*/
@@ -374,6 +486,8 @@ import claimsManager from './pages/insurance/claims/claimsManager'
 import claimsForm from './pages/insurance/claims/claimsForm'
 import claimsView from './pages/insurance/claims/claimsView'
 import claimsListView from './pages/insurance/claims/claimsListView'
+import claimsOpenInvoice from './pages/insurance/claims/claimsOpenInvoice'
+import selectBankDetailInsurance from './pages/selects/selectBankDetailInsurance'
 
 
 /*办理人员*/
@@ -394,7 +508,16 @@ import insuranceUnitForm from './pages/insurance/unit/insuranceUnitForm'
 import insuranceUnitUpload from './pages/insurance/unit/insuranceUnitUpload'
 import insuranceUnitUploadView from './pages/insurance/unit/insuranceUnitUploadView'
 import insuranceBankDetailForm from './pages/insurance/unit/insuranceBankDetailForm'
+import contractForm from './pages/insurance/unit/contractForm'
 
+/*管理层跟踪信息*/
+import bossTrackManager from './pages/insurance/bossTrack/bossTrackManager'
+import bossTrackDetailsManager from './pages/insurance/bossTrack/bossTrackDetailsManager'
+import followApprovalManager from './pages/insurance/bossTrack/followApprovalManager'
+import bossPerfectedManager from './pages/insurance/bossTrack/bossPerfectedManager'
+import bossPerfectedView from './pages/insurance/bossTrack/bossPerfectedView'
+import bossPerfectedForm from './pages/insurance/bossTrack/bossPerfectedForm'
+import importFrom from './pages/insurance/bossTrack/importFrom'
 
 /* 保险给HP返利*/
 import cashGiveHPManager from './pages/insurance/cashGiveHP/cashGiveHPManager'
@@ -403,8 +526,18 @@ import cashGiveForm from './pages/insurance/cashGiveHP/cashGiveForm'
 /*保险优惠政策*/
 import promotionsManager from './pages/insurance/promotions/promotionsManager'
 import promotionsForm from './pages/insurance/promotions/promotionsForm'
+import promotionsView from './pages/insurance/promotions/promotionsView'
 import selectPromotions from './pages/selects/selectPromotions'
+import promotionsAppManager from './pages/insurance/promotions/promotionsAppManager'
 
+/*审批发票抬头*/
+
+import invoicelookUpManager from './pages/invoicelookUp/invoicelookUpManager'
+/*增开保险发票*/
+import insuranceInvoiceManager from './pages/insurance/insuranceInvoice/insuranceInvoiceManager'
+import selectInsuranceInvoice from './pages/insurance/insuranceInvoice/selectInsuranceInvoice'
+import insuranceInvoiceDetails from './pages/insurance/insuranceInvoice/insuranceInvoiceDetails'
+import selectInvoiceView from './pages/insurance/insuranceInvoice/selectInvoiceView'
 
 /*财务信息*/
 import financialInformationManager from './pages/basic/insurancePolicy/lnsurance/financialInformation/financialInformationManager'
@@ -414,6 +547,15 @@ import financialInformationForm from './pages/basic/insurancePolicy/lnsurance/fi
 import clientManager from './pages/insurance/client/clientManager'
 import clientForm from './pages/insurance/client/clientForm'
 import clientView from './pages/insurance/client/clientView'
+import quotationFrom from './pages/insurance/client/quotationFrom'
+import templateCheForm from './pages/insurance/client/templateCheForm'
+import templateShangYeFrom from './pages/insurance/client/templateShangYeFrom'
+import templateFourForm from './pages/insurance/client/templateFourForm'
+import templateFiveForm from './pages/insurance/client/templateFiveForm'
+
+//客户管理_售后业务
+import clientTwoManager from './pages/insurance/client/clientTwo/clientTwoManager'
+
 
 /* 增加开户行Form - 增加银行Form */
 import openBankForm from './pages/bankAcc/openBankForm'
@@ -423,6 +565,7 @@ import openBankDetailForm from './pages/bankAcc/openBankDetailForm'
 import productManager from './pages/product/product/productManager'
 import productForm from './pages/product/product/productForm'
 import modelForm from './pages/product/model/modelForm'
+
 
 /*库位管理*/
 import stockPositionManager from './pages/stockPosition/stockPositionManager.vue'
@@ -437,6 +580,10 @@ import stockInOperateManager from './pages/stockIn/stockInOperateManager.vue'
 import stockinInfoManager from './pages/stockIn/stockinInfoManager.vue'
 import stockinInfoView from './pages/stockIn/stockinInfoView.vue'
 
+/*库存盘点*/
+import stockInventoryManager from './pages/stockIn/stockInventory/stockInventoryManager.vue'
+import stockInventoryFrom from './pages/stockIn/stockInventory/stockInventoryFrom.vue'
+import stockInventoryView from './pages/stockIn/stockInventory/stockInventoryView.vue'
 
 
 /* 库存管理 */
@@ -449,6 +596,67 @@ import inStockManager from './pages/Inventory/inStockManager'
 import warehouseExitManager from './pages/Inventory/warehouseExitManager'
 import warehouseExitForm from './pages/Inventory/warehouseExitForm'
 import warehouseExitView from './pages/Inventory/warehouseExitView'
+/*日常办公*/
+import courierCompanyManager from './pages/dailyOffice/courierCompany/courierCompanyManager'
+import courierCompanyForm from './pages/dailyOffice/courierCompany/courierCompanyForm'
+import selectExpressNot from './pages/dailyOffice/courierCompany/selectExpressNot'
+import expressReconciliationForm from './pages/dailyOffice/courierCompany/expressReconciliationForm'
+import courierCompanyDetailsView from './pages/dailyOffice/courierCompany/courierCompanyDetailsView'
+import courierCompanyView from './pages/dailyOffice/courierCompany/courierCompanyView'
+import storedCardForm from './pages/dailyOffice/courierCompany/storedCardForm'
+import rechargeRecordView from './pages/dailyOffice/courierCompany/rechargeRecordView'
+import warnManager from './pages/dailyOffice/warn/warnManager'
+import myWarnManager from './pages/dailyOffice/myWarn/myWarnManager'
+import depositManager from './pages/dailyOffice/deposit/depositManager'
+import payDepositManager from './pages/dailyOffice/payDeposit/payDepositManager'
+
+/*合同管理*/
+import contractManager from './pages/dailyOffice/contract/contractManager'
+import contractsignForm from './pages/dailyOffice/contract/contractsignForm'
+import contractsignView from './pages/dailyOffice/contract/contractsignView'
+
+
+
+import warnForm from './pages/dailyOffice/warn/warnForm'
+import warnDetailform from './pages/dailyOffice/warn/warnDetailform'
+import warnTimeoutSelect from './pages/dailyOffice/warn/warnTimeoutSelect'
+import warnFormView from './pages/dailyOffice/warn/warnFormView'
+import myWarnForm from './pages/dailyOffice/myWarn/myWarnForm'
+import depositForm from './pages/dailyOffice/deposit/depositForm'
+import depositView from './pages/dailyOffice/deposit/depositView'
+import payDepositForm from './pages/dailyOffice/payDeposit/payDepositForm'
+import payDepositView from './pages/dailyOffice/payDeposit/payDepositView'
+import receipt from './pages/dailyOffice/payDeposit/receipt'
+
+import expressDeliveryManager from './pages/dailyOffice/expressDelivery/expressDeliveryManager'
+import expressDeliveryForm from './pages/dailyOffice/expressDelivery/expressDeliveryForm'
+import expressDeliveryView from './pages/dailyOffice/expressDelivery/expressDeliveryView'
+import expressDeliveryBasic from './pages/dailyOffice/expressDelivery/expressDeliveryBasic'
+import expressDeliverySend from './pages/dailyOffice/expressDelivery/expressDeliverySend'
+import expressDeliveryRecipient from './pages/dailyOffice/expressDelivery/expressDeliveryRecipient'
+import expressDeliveryItems from './pages/dailyOffice/expressDelivery/expressDeliveryItems'
+import expressDeliveryCost from './pages/dailyOffice/expressDelivery/expressDeliveryCost'
+import expressDeliveryConfirm from './pages/dailyOffice/expressDelivery/expressDeliveryConfirm'
+import selectDoes from './pages/dailyOffice/expressDelivery/selectDoes'
+import cancelAppointment from './pages/dailyOffice/expressDelivery/cancelAppointment'
+import myAdminExpressView from './pages/dailyOffice/expressDelivery/myAdminExpressView'
+
+import myExpressManager from './pages/dailyOffice/myExpress/myExpressManager'
+import expressApprovalManager from './pages/dailyOffice/myExpress/expressApprovalManager'
+import expressApprovalView from './pages/dailyOffice/myExpress/expressApprovalView'
+import myExpressForm from './pages/dailyOffice/myExpress/myExpressForm'
+import myExpressView from './pages/dailyOffice/myExpress/myExpressView'
+/*重要物品外出登记*/
+import myArticleRegistrationManager from './pages/dailyOffice/myArticleRegistration/myArticleRegistrationManager'
+import reimbursementLlimitManager from './pages/dailyOffice/myArticleRegistration/reimbursementLlimitManager'
+import myArticleRegistrationForm from './pages/dailyOffice/myArticleRegistration/myArticleRegistrationForm'
+import reimbursementLlimitForm from './pages/dailyOffice/myArticleRegistration/reimbursementLlimitForm'
+import reimbursementLlimitView from './pages/dailyOffice/myArticleRegistration/reimbursementLlimitView'
+
+import insurancePolicyView from './pages/dailyOffice/myExpress/insurancePolicyView'
+import addressbookView from './pages/dailyOffice/myExpress/addressbookView'
+
+
 
 
 /* 手机页面 */
@@ -463,13 +671,30 @@ import mineManager from './pagesApp/myApproval/mineManager.vue'
 import m_approvalPurchaseManager from './pagesApp/purchase/m_approvalPurchaseManager.vue'
 import m_approvalPurchaseView from './pagesApp/purchase/m_approvalPurchaseView.vue'
 
-/* 统计图->保险理赔->支付续保费->支付客户返利->散户维修费->保险手续费->资金日报 */
+
+
+/* 统计图->保险理赔->支付续保费->支付客户返利->散户维修费->保险手续费->资金日报->业务回款全部维修费用->代付保险费->代收保险费  */
 import insuranceCartogram from './pages/cartogram/insuranceCartogram'
 import renewPremiumCartogram from './pages/cartogram/renewPremiumCartogram'
 import rebateCartogram from './pages/cartogram/rebateCartogram'
 import maintenanceCostCartogram from './pages/cartogram/maintenanceCostCartogram'
 import BankDetailCommissionCartogram from './pages/cartogram/BankDetailCommissionCartogram'
 import cashJournalCartogram from './pages/cartogram/cashJournalCartogram'
+import allMaintenanceCartogram from './pages/cartogram/allMaintenanceCartogram'
+import payInsuranceCartogram from './pages/insurance/paymentInsurance/payInsuranceCartogram'
+import receiveInsuranceCartogram from './pages/insurance/receiveInsurance/receiveInsuranceCartogram'
+
+import expressCartogram from './pages/cartogram/expressCartogram'
+
+
+import reimbursementCartogram from './pages/cartogram/reimbursementCartogram'
+import myreimbursementTwoCartogram from './pages/cartogram/myreimbursementTwoCartogram'
+
+import reimbursementViewCartogram from './pages/cartogram/reimbursementViewCartogram'
+
+import invoiceCartogram from './pages/cartogram/invoiceCartogram'//开票通知统计图
+
+import capitalTrendsTodayCartogram from './pages/cartogram/capitalTrendsTodayCartogram'
 
 
 /* 驳回 */
@@ -543,12 +768,13 @@ import cashierManager from './pages/cashier/cashierManager'
 import cashierView from './pages/cashier/cashierView'
 import cashierBankDetailForm from './pages/cashier/cashierBankDetailForm'
 import cashierBankDetailPrivateForm from './pages/cashier/cashierBankDetailPrivateForm'
-
-
+/*退保收银*/
+import surrenderCashierManager from './pages/cashier/surrenderCashierManager'
 /* 保险审批 */
 import approvalInsuranceManager from './pages/InsuranceApproval/approvalInsuranceManager'
 import approvalInsuranceView from './pages/InsuranceApproval/approvalInsuranceView'
 import approvalPassMessage from './pages/InsuranceApproval/approvalPassMessage'
+
 
 /* 保险驳回 */
 import insuranceRejectReason from './pages/InsuranceApproval/insuranceRejectReason'
@@ -557,6 +783,10 @@ import insuranceRejectReason from './pages/InsuranceApproval/insuranceRejectReas
 import vehicleManager from './pages/basic/vehicle/vehicleManager'
 import vehicleForm from './pages/basic/vehicle/vehicleForm'
 import vehicleView from './pages/basic/vehicle/vehicleView'
+import addTestForm from './pages/basic/vehicle/addTestForm'
+
+//车辆管理_售后业务
+import vehicleTwoManager from './pages/basic/vehicleTwo/vehicleTwoManager'
 
 import saveModelForm from './pages/basic/vehicle/saveModelForm'
 import saveVersionForm from './pages/basic/vehicle/saveVersionForm'
@@ -568,11 +798,14 @@ import trackView from './pages/basic/track/trackView'
 import trackFormView from './pages/basic/track/trackFormView'
 import trackDetailsView from './pages/basic/trackDetails/trackDetailsView'
 import trackDetailsManager from './pages/basic/trackDetails/trackDetailsManager'
+import perfectedManager from './pages/basic/track/perfectedManager'
+import perfectedForm from './pages/basic/track/perfectedForm'
 
 
 /* 出单管理 */
 import billingManager from './pages/insurance/billing/billingManager'
 import billingForm from './pages/insurance/billing/billingForm'
+import billingFile from './pages/insurance/billing/billingFile'
 import billingView from './pages/insurance/billing/billingView'
 import billingApprovalApplyForm from './pages/insurance/billing/billingApprovalApplyForm'
 
@@ -581,6 +814,7 @@ import finBillingManager from './pages/insurance/finBilling/finBillingManager'
 /* 保单管理 */
 import policyManager from './pages/insurance/policy/policyManager'
 import policyView from './pages/insurance/policy/policyView'
+import surrenderView from './pages/insurance/policy/surrenderView'
 import poNumbering from './pages/insurance/policy/poNumbering'
 import poNumberView from './pages/insurance/policy/poNumberView'
 import policyExpectedView from './pages/insurance/policy/policyExpectedView'
@@ -606,7 +840,6 @@ import selectReceivableForceWriteOff from './pages/selects/selectReceivableForce
 import ReceivableForceWriteOffManager from './pages/insurance/accountsReceivable/ReceivableForceWriteOffManager'
 
 
-
 /* 工单 */
 import  workOrderManager from  './pages/workOrder/workOrderManager'
 import  workOrderForm from  './pages/workOrder/workOrderForm'
@@ -623,12 +856,78 @@ import  workOrderServiceView from './pages/workOrder/workOrderServiceView'
 import  workOrderCheckoutManagerView from './pages/workOrder/workOrderCheckoutManagerView'
 import  workOrderProcessForm from './pages/workOrder/workOrderProcessForm'
 import  workOrderSettleAccountsForm from './pages/workOrder/workOrderSettleAccountsForm'
-
+import  workOrderStatementForm from './pages/workOrder/workOrderStatementForm'
 import  workOrderSummarizingForm  from './pages/workOrder/workOrderSummarizingForm'
+import  workOrderCheckoutAffirmManager  from './pages/workOrder/workOrderCheckoutAffirmManager'
+import  receptionForm  from './pages/workOrder/reception/receptionForm'
+import  receptionView  from './pages/workOrder/reception/receptionView'
+import  receptionMaterialsForm from './pages/workOrder/reception/receptionMaterialsForm'
+import  payAreturnVisitForm from './pages/workOrder/reception/payAreturnVisitForm'
+import  receptionManager  from './pages/workOrder/reception/receptionManager'
+import  collectionOfDataForm  from './pages/workOrder/reception/collectionOfDataForm'
+import  collectionOfDataView  from './pages/workOrder/reception/collectionOfDataView'
+import  teamOrGroupForm from  './pages/workOrder/teamOrGroup/teamOrGroupForm'
+import  teamOrGroupManager  from './pages/workOrder/teamOrGroup/teamOrGroupManager'
+import  teamOrGroupManager1  from './pages/workOrder/teamOrGroup/teamOrGroupManager1'
+import  teamOrGroupManager2  from './pages/workOrder/teamOrGroup/teamOrGroupManager2'
+import  teamOrGroupManager3  from './pages/workOrder/teamOrGroup/teamOrGroupManager3'
+import  teamOrGroupManager4  from './pages/workOrder/teamOrGroup/teamOrGroupManager4'
+import  sheetMetalRepairForm  from './pages/workOrder/sheetMetalRepairForm'
+import  workOrderToBeConfirmedView  from './pages/workOrder/workOrderToBeConfirmedView'
+import  workOrderReasonsForFefusal from './pages/workOrder/reception/workOrderReasonsForFefusal'
+import  selectWorkOrder from './pages/workOrder/selectWorkOrder'
+import  workOrderUploadFile from './pages/workOrder/workOrderUploadFile'
+import  workOrderAllocationForm from './pages/workOrder/workOrderAllocationForm'
+import  workOrderInvoiceManager from './pages/workOrder/workOrderInvoiceManager'
+import  workOrderCashierDeskManager from './pages/workOrder/cashierDesk/workOrderCashierDeskManager'
+import  workOrderCashierDeskForm from './pages/workOrder/cashierDesk/workOrderCashierDeskForm'
+import  workOrderCartogram from './pages/cartogram/workOrderCartogram'
+import  selectWorkOrderPlate from './pages/workOrder/selectWorkOrderPlate'
+import  selectWorkOrderClient from './pages/workOrder/select/selectWorkOrderClient'
+import  selectWorkOrderMaterials from './pages/workOrder/select/selectWorkOrderMaterials'
+
+import  selectWorkOrderInsurance from './pages/workOrder/select/selectWorkOrderInsurance'
+
+import  workOrderClaimDataForm from './pages/workOrder/workOrderClaimDataForm'
+
+
+/*工单推修管理*/
+import  pushRepairManager from './pages/workOrder/pushRepair/pushRepairManager'
+import  pushRepairRecordManager from './pages/workOrder/pushRepair/pushRepairRecordManager'
+import  pushRepairForm from './pages/workOrder/pushRepair/pushRepairForm'
+import  pushRepairDetailForm from './pages/workOrder/pushRepair/pushRepairDetailForm'
+import  pushRepairAddPersonForm from './pages/workOrder/pushRepair/pushRepairAddPersonForm'
+import  pushRepairSelect from './pages/workOrder/pushRepair/pushRepairSelect'
+import  pushPersonSelect from './pages/workOrder/pushRepair/pushPersonSelect'
+import  pushCorporationSelect from './pages/workOrder/pushRepair/pushCorporationSelect'
+import  addPushCorporationForm from './pages/workOrder/pushRepair/addPushCorporationForm'
+import  settleAccountsForm from './pages/workOrder/pushRepair/settleAccountsForm'
+
+/*工单保险公司管理*/
+import workOrderInsuranceUnitManager from './pages/workOrder/workOrderInsuranceUnit/workOrderInsuranceUnitManager'
+import workOrderInsuranceUnitForm from './pages/workOrder/workOrderInsuranceUnit/workOrderInsuranceUnitForm'
+
+
+/* 工单开票申请 */
+import  workOrderInvoiceForm  from './pages/workOrder/workOrderInvoice/workOrderInvoiceForm'
+
+/* 工单离线数据 */
+import  offlineWorkOrderManager  from './pages/workOrder/offlineWorkOrder/offlineWorkOrderManager'
+import  offlineWorkOrderForm  from './pages/workOrder/offlineWorkOrder/offlineWorkOrderForm'
+import  offlineWorkOrderView  from './pages/workOrder/offlineWorkOrder/offlineWorkOrderView'
+import  offlineWorkOrderDetailForm  from './pages/workOrder/offlineWorkOrder/offlineWorkOrderDetailForm'
+import  offlineWorlOrderTicketForm  from './pages/workOrder/offlineWorkOrder/offlineWorkOrderTicketForm'
+import  offlineOpenInvoiceView  from './pages/workOrder/offlineWorkOrder/offlineOpenInvoiceView'
+
+
+/* 工单模块 --> 派工管理*/
+import  peopleManagementManager from './pages/workOrder/peopleManagement/peopleManagementManager'
+import  peopleManagementForm from './pages/workOrder/peopleManagement/peopleManagementForm'
 
 /* 工单模块 --> 工序管理*/
-import  processManagementForm from './pages/workOrder/processManagementForm'
-import  processManagementManager from './pages/workOrder/processManagementManager'
+import  processManagementForm from './pages/workOrder/process/processManagementForm'
+import  processManagementManager from './pages/workOrder/process/processManagementManager'
+
 
 /* 应收账款 */
 import receivableManagerView from './pages/insurance/accountsReceivable/receivableManagerView'
@@ -643,12 +942,13 @@ import receivableBadDebtView from './pages/insurance/accountsReceivable/receivab
 /*客户返利*/
 import customerRebatesManager from './pages/insurance/customerRebates/customerRebatesManager'
 import customerRebatesView from './pages/insurance/customerRebates/customerRebatesView'
+import customerRebates from './pages/insurance/customerRebates/customerRebates'
 /*付保险费*/
 import payInsuranceFeeManager from './pages/insurance/paymentInsurance/payInsuranceFeeManager'
-import payInsuranceCartogram from './pages/insurance/paymentInsurance/payInsuranceCartogram'
 /*收保险费*/
 import receiveInsuranceManager from './pages/insurance/receiveInsurance/receiveInsuranceManager'
-import receiveInsuranceCartogram from './pages/insurance/receiveInsurance/receiveInsuranceCartogram'
+import receiveInsuranceFiles from './pages/insurance/receiveInsurance/receiveInsuranceFiles'
+import receivePaymentDetails from './pages/insurance/receiveInsurance/receivePaymentDetails'
 
 /* 保险返利费管理*/
 import commissionFeeManager from './pages/insurance/commissionFee/commissionFeeManager'
@@ -666,6 +966,9 @@ import vipRateForm from './pages/insurance/vipRate/vipRateForm'
 /* 维护保险公司 */
 import insuranceUnitDetailsForm from './pages/insurance/unit/insuranceUnitDetailsForm'
 import insuranceUnitView from './pages/insurance/unit/insuranceUnitView'
+import statementDetails from './pages/insurance/unit/statementDetails'
+import selectBankView from './pages/insurance/unit/selectBankView'
+import waveForm from './pages/insurance/unit/waveForm'
 
 /* 微信服务号消息模板管理 */
 import wxMessageTemplateManager from './pages/wxMessageTemplate/wxMessageTemplateManager.vue'
@@ -677,13 +980,19 @@ import wxMessageManager from './pages/wxMessage/wxMessageManager.vue'
 /*微信优惠券*/
 import wxCouponManager from './pages/wxCoupon/wxCouponManager.vue'
 import wxCouponForm from './pages/wxCoupon/wxCouponForm.vue'
+import selectWxCoupon from './pages/wxCoupon/selectWxCoupon.vue'
 
 /*微信优惠券明细*/
 import wxCouponDetailManager from './pages/wxCouponDetail/wxCouponDetailManager.vue'
+import extendedCouponManager from './pages/wxCouponDetail/extendedCouponManager.vue'
 import wxCouponDetailForm from './pages/wxCouponDetail/wxCouponDetailForm.vue'
+import selectDateTime from './pages/wxCouponDetail/selectDateTime.vue'
 
 /*微信优惠券核销管理*/
 import wxCouponWriteOffManager from './pages/wxCouponWriteOff/wxCouponWriteOffManager.vue'
+import wxCouponWriteOffView from './pages/wxCouponWriteOff/wxCouponWriteOffView.vue'
+/*微信优惠券核销管理 用来在个人办公 工单收银中使用*/
+import workOrderCancellationCouponManager from './pages/wxCouponWriteOff/workOrderCancellationCouponManager.vue'
 
 /*会员管理*/
 import wxMemberManager from './pages/wxMember/wxMemberManager.vue'
@@ -722,19 +1031,26 @@ export default new Router({
         { path: '/home/desktop', name: 'home.desktop', component:desktop, meta: {title: '北京海派奥特经贸有限公司办公系统'}},
         { path: '/home/configManager', name: 'configManager.vue', component: configManager , meta: {title: '配置中心'}},
         { path: '/home/projectManager', name: 'projectManager.vue', component: projectManager , meta: {title: '项目管理'}},
+        { path: '/home/approveProxyManager', name: 'approveProxyManager.vue', component: approveProxyManager , meta: {title: '审批代理管理'}},
+        { path: '/home/smsMessageManager', name: 'smsMessageManager.vue', component: smsMessageManager , meta: {title: '短信消息管理'}},
+        { path: '/home/smsTemplateManager', name: 'smsTemplateManager.vue', component: smsTemplateManager , meta: {title: '短信模板管理'}},
 
         { path: '/home/stockInManager', name: 'stockInManager.vue', component: stockInManager , meta: {title: '入库管理'}},
         { path: '/home/stockInOperateManager', name: 'stockInOperateManager.vue', component: stockInOperateManager , meta: {title: '入库操作'}},
-        { path: '/home/stockinInfoManager', name: 'stockinInfoManager.vue', component: stockinInfoManager , meta: {title: '入库操作'}},
+        { path: '/home/stockinInfoManager', name: 'stockinInfoManager.vue', component: stockinInfoManager , meta: {title: '库存信息'}},
+        { path: '/home/stockInventoryManager', name: 'stockInventoryManager.vue', component: stockInventoryManager , meta: {title: '库存盘点'}},
         { path: '/home/stockPositionManager', name: 'stockPositionManager.vue', component: stockPositionManager , meta: {title: '库位管理'}},
         { path: '/home/wxMessageTemplateManager', name: 'wxMessageTemplateManager.vue', component: wxMessageTemplateManager , meta: {title: '微信服务号消息模板管理'}},
         { path: '/home/wxMessageManager', name: 'wxMessageManager.vue', component: wxMessageManager , meta: {title: '微信服务号消息管理'}},
         { path: '/home/wxCouponManager', name: 'wxCouponManager.vue', component: wxCouponManager , meta: {title: '微信优惠券管理'}},
         { path: '/home/wxCouponWriteOffManager', name: 'wxCouponWriteOffManager.vue', component: wxCouponWriteOffManager , meta: {title: '微信优惠券核销管理'}},
+        { path: '/home/workOrderCancellationCouponManager', name: 'workOrderCancellationCouponManager.vue', component: workOrderCancellationCouponManager , meta: {title: '微信优惠券核销管理'}},
         { path: '/home/wxCouponDetailManager', name: 'wxCouponDetailManager.vue', component: wxCouponDetailManager , meta: {title: '微信优惠券明细管理'}},
+        { path: '/home/extendedCouponManager', name: 'extendedCouponManager.vue', component: extendedCouponManager , meta: {title: '延期微信优惠券'}},
         { path: '/home/wxMemberManager', name: 'wxMemberManager.vue', component: wxMemberManager , meta: {title: '微信会员管理'}},
         { path: '/home/approvalPersonaliseManager', name: 'approvalPersonaliseManager.vue', component: approvalPersonaliseManager , meta: {title: '审批定制管理'}},
         { path: '/home/approvalPriorityManager', name: 'approvalPriorityManager.vue', component: approvalPriorityManager , meta: {title: '审批管理'}},
+        { path: '/home/promotionsApproveManager', name: 'promotionsApproveManager.vue', component: promotionsApproveManager , meta: {title: '优惠活动审批制定'}},
         { path: '/home/reversalAccountManager', name: 'reversalAccountManager.vue', component: reversalAccountManager , meta: {title: '冲账管理'}},
         { path: '/home/boardFeesManager', name: 'boardFeEsManager.vue', component: boardFeEsManager ,meta: {title: '董事会费管理'}},
         { path: '/home/rversalManager', name: 'rversalManager.vue', component: rversalManager  ,meta: {title: '冲账管理'}},
@@ -760,8 +1076,10 @@ export default new Router({
         { path: '/home/viewManager/paymentApplyViewManager', name: 'paymentApplyViewManager.vue', component: paymentApplyViewManager  , meta: {title: '付款申请管理'}},
 
         { path: '/home/viewManager/claimsManager', name: 'claimsManager.vue', component: claimsManager  , meta: {title: '保险理赔'}},
-        { path: '/home/viewManager/reimbursementViewManager', name: 'reimburseme  ntViewManager.vue', component: reimbursementViewManager  , meta: {title: '报销管理'}},
+        { path: '/home/viewManager/reimbursementViewManager', name: 'reimbursementViewManager.vue', component: reimbursementViewManager  , meta: {title: '报销管理'}},
         { path: '/home/viewManager/paymentPlanViewManager', name: 'paymentPlanViewManager.vue', component: paymentPlanViewManager  , meta: {title: '付款计划管理'}},
+
+        { path: '/home/viewManager/finReimbursementDetailManager', name: 'finReimbursementDetailManager.vue', component: finReimbursementDetailManager  , meta: {title: '特殊报销'}},
 
         { path: '/home/unitManager', name: 'unitManager.vue', component: unitManager  , meta: {title: '单位管理'}},
         { path: '/home/personManager', name: 'personManager.vue', component: personManager  , meta: {title: '联系人管理'}},
@@ -779,6 +1097,12 @@ export default new Router({
         { path: '/home/openInvoiceManager', name: 'openInvoiceManager.vue', component: openInvoiceManager},
         { path: '/home/approvalOpenInvoiceManager', name: 'approvalOpenInvoiceManager.vue', component: approvalOpenInvoiceManager},
         { path: '/home/openInvoiceFinManager', name: 'openInvoiceFinManager.vue', component: openInvoiceFinManager},
+        { path: '/home/openInvoiceManagerAll', name: 'openInvoiceManagerAll.vue', component: openInvoiceManagerAll},
+        { path: '/home/taxManager', name: 'taxManager.vue', component: taxManager , meta: {title: '税号'}},
+        { path: '/home/invoiceRiseManager', name: 'invoiceRiseManager.vue', component: invoiceRiseManager , meta: {title: '发票抬头'}},
+        { path: '/home/approvalInvoiceRiseManager', name: 'approvalInvoiceRiseManager.vue', component: approvalInvoiceRiseManager , meta: {title: '发票抬头审批'}},
+        { path: '/home/inputTaxManager', name: 'inputTaxManager.vue', component: inputTaxManager , meta: {title: '进项税'}},
+        { path: '/home/outPutTaxManager', name: 'outPutTaxManager.vue', component: outPutTaxManager , meta: {title: '销项税'}},
 
         { path: '/home/publicAccountManager', name: 'publicAccountManager.vue', component: publicAccountManager , meta: {title: '对公账号'}},
         { path: '/home/privateAccountManager', name: 'privateAccountManager.vue', component: privateAccountManager , meta: {title: '对私账号'}},
@@ -800,19 +1124,41 @@ export default new Router({
         { path: '/home/unit/insuranceUnitManager', name: 'insuranceUnitManager.vue', component: insuranceUnitManager, meta: {title: '管理保险公司'}},
         { path: '/home/cashGiveHP/cashGiveHPManager', name: 'cashGiveHPManager.vue', component: cashGiveHPManager, meta: {title: '保险公司给HP返利'}},
         { path: '/home/promotions/promotionsManager', name: 'promotionsManager.vue', component: promotionsManager, meta: {title: '保险优惠活动'}},
+        { path: '/home/promotions/promotionsAppManager', name: 'promotionsAppManager.vue', component: promotionsAppManager, meta: {title: '优惠活动审批'}},
         { path: '/home/commissionFee/commissionFeeManager', name: 'commissionFeeManager.vue', component: commissionFeeManager, meta: {title: '保险手续费'}},
 
         { path: '/home/workOrderManager', name: 'workOrderManager.vue', component: workOrderManager, meta: {title: '工单管理'}},
+        { path: '/home/workOrderInvoiceManager', name: 'workOrderInvoiceManager.vue', component: workOrderInvoiceManager, meta: {title: '工单开票'}},
+        { path: '/home/workOrderCashierDeskManager', name: 'workOrderCashierDeskManager.vue', component: workOrderCashierDeskManager, meta: {title: '工单收银'}},
+        { path: '/home/receptionManager', name: 'receptionManager.vue', component: receptionManager, meta: {title: '接待管理'}},
+        { path: '/home/teamOrGroupManager', name: 'teamOrGroupManager.vue', component: teamOrGroupManager, meta: {title: '待作业'}},
+        { path: '/home/teamOrGroupManager1', name: 'teamOrGroupManager1.vue', component: teamOrGroupManager1, meta: {title: '做底'}},
+        { path: '/home/teamOrGroupManager2', name: 'teamOrGroupManager2.vue', component: teamOrGroupManager2, meta: {title: '喷漆'}},
+        { path: '/home/teamOrGroupManager3', name: 'teamOrGroupManager3.vue', component: teamOrGroupManager3, meta: {title: '钣金'}},
+        { path: '/home/teamOrGroupManager4', name: 'teamOrGroupManager4.vue', component: teamOrGroupManager4, meta: {title: '抛光'}},
 
+        { path: '/home/pushRepairManager', name: 'pushRepairManager.vue', component: pushRepairManager, meta: {title: '推修管理'}},
+        { path: '/home/pushRepairRecordManager', name: 'pushRepairRecordManager.vue', component: pushRepairRecordManager, meta: {title: '推修记录'}},
+        { path: '/home/workOrderInsuranceUnitManager', name: 'workOrderInsuranceUnitManager.vue', component: workOrderInsuranceUnitManager, meta: {title: '保险公司管理'}},
+
+        { path: '/home/offlineWorkOrderManager', name: 'offlineWorkOrderManager.vue', component: offlineWorkOrderManager, meta: {title: '工单离线数据'}},
         { path: '/home/insurance/clientManager', name: 'clientManager.vue', component: clientManager, meta: {title: '客户管理'}},
+
+        { path: '/home/insurance/clientTwoManager', name: 'clientTwoManager.vue', component: clientTwoManager, meta: {title: '客户管理'}},
 
         { path: '/home/approPriationManager', name: 'approPriationManager.vue', component: approPriationManager, meta: {title: '审批定制'}},
         { path: '/home/unionCostsManager', name: 'unionCostsManager.vue', component: unionCostsManager, meta: {title: '审批定制'}},
 
         { path: '/home/cashierManager', name: 'cashierManager.vue', component: cashierManager ,meta: {title: '收银管理'}},
+        { path: '/home/surrenderCashierManager', name: 'surrenderCashierManager.vue', component: surrenderCashierManager ,meta: {title: '退保收银'}},
         { path: '/home/approvalInsuranceManager', name: 'approvalInsuranceManager.vue', component: approvalInsuranceManager ,meta: {title: '保险审批'}},
         { path: '/home/vehicleManager', name: 'vehicleManager.vue', component: vehicleManager ,meta: {title: '车辆管理'}},
+
+        { path: '/home/vehicleTwoManager', name: 'vehicleTwoManager.vue', component: vehicleTwoManager ,meta: {title: '车辆管理'}},
+
+
         { path: '/home/track/trackManager', name: 'trackManager.vue', component: trackManager ,meta: {title: '跟踪信息'}},
+        { path: '/home/track/perfectedManager', name: 'perfectedManager.vue', component: perfectedManager ,meta: {title: '待完善信息'}},
         { path: '/home/billing/billingManager', name: 'billingManager.vue', component: billingManager ,meta: {title: '出单管理'}},
         { path: '/home/policy/policyManager', name: 'policyManager.vue', component: policyManager ,meta: {title: '保单管理'}},
         { path: '/home/accountsReceivable/accountsReceivableManager', name: 'accountsReceivableManager.vue', component: accountsReceivableManager ,meta: {title: '应收账款'}},
@@ -831,16 +1177,46 @@ export default new Router({
         { path: '/home/vipRate/vipRateManager', name: 'vipRateManager.vue', component: vipRateManager ,meta: {title: '管理特殊车型'}},
         { path: '/home/conductFinManager', name: 'conductFinManager.vue', component: conductFinManager ,meta: {title: '理财管理'}},
         { path: '/home/prewarningValueManager', name: 'prewarningValueManager.vue', component: prewarningValueManager},
+        { path: '/home/bankDetailAnalysis', name: 'bankDetailAnalysis.vue', component: bankDetailAnalysis, meta: {title: '财务分析'}},
+        { path: '/home/employeeFilesManager', name: 'employeeFilesManager.vue', component: employeeFilesManager, meta: {title: '员工档案'}},
 
         { path: '/home/BankDetailRebateManager', name: 'BankDetailRebateManager.vue', component: BankDetailRebateManager ,meta: {title: '支付客户返利'}},
         { path: '/home/bankDetailRenewalManager', name: 'bankDetailRenewalManager.vue', component: bankDetailRenewalManager ,meta: {title: '续保管理'}},
-        { path: '/home/BankDetailRepairManager', name: 'BankDetailRepairManager.vue',component: BankDetailRepairManager },
+        { path: '/home/BankDetailRepairManager', name: 'BankDetailRepairManager.vue',component: BankDetailRepairManager, meta: {title: '自费维修'}},
+        { path: '/home/BankDetailInsuranceAll', name: 'BankDetailInsuranceAll.vue',component: BankDetailInsuranceAll,  meta: {title: '售后回款'} },
+
         { path: '/home/BankDetailCommissionManager', name: 'BankDetailCommissionManager.vue',component: BankDetailCommissionManager },
         { path: '/home/stockOutManager', name: 'stockOutManager.vue',component: stockOutManager ,meta: {title: '出库管理'}},
         { path: '/home/stockOutOperateManager', name:'stockOutOperateManager.vue', component:stockOutOperateManager,meta: {title: '出库操作'} },
         { path: '/home/makeUp/insuranceMakeUpManager', name:'insuranceMakeUpManager.vue', component:insuranceMakeUpManager,meta: {title: '保险出单补录'} },
-        { path: '/home/processManagementManager', name: 'processManagementManager', component: processManagementManager,meta: {title: '付保险费'}},
+        { path: '/home/processManagementManager', name: 'processManagementManager', component: processManagementManager,meta: {title: '服务管理'}},
         { path: '/home/finBillingManager', name: 'finBillingManager', component: finBillingManager,meta: {title: '保单页面'}},
+        { path: '/home/peopleManagementManager', name: 'peopleManagementManager', component: peopleManagementManager,meta: {title: '派工管理'}},
+        { path: '/home/bossTrack/bossTrackDetailsManager', name: 'bossTrackDetailsManager', component: bossTrackDetailsManager,meta: {title: '跟踪页面'}},
+        { path: '/home/bossTrack/bossTrackManager', name: 'bossTrackManager', component: bossTrackManager,meta: {title: '跟踪页面'}},
+        { path: '/home/bossTrack/followApprovalManager', name: 'followApprovalManager', component: followApprovalManager,meta: {title: '跟踪审批'}},
+        { path: '/home/bossTrack/bossPerfectedManager', name: 'bossPerfectedManager', component: bossPerfectedManager,meta: {title: '待分配客户'}},
+        { path: '/home/invoicelookUp/invoicelookUpManager', name: 'invoicelookUpManager', component: invoicelookUpManager,meta: {title: '发票抬头'}},
+        { path: '/home/invoiceManager', name: 'invoiceManager', component: invoiceManager,meta: {title: '发票抬头列表'}},
+        { path: '/home/approveFlowsManager', name: 'approveFlowsManager.vue', component: approveFlowsManager ,meta: {title: '审批流程管理'}},
+        { path: '/home/personTagManager', name: 'personTagManager.vue', component: personTagManager ,meta: {title: '人员标签管理'}},
+        { path: '/home/insuranceInvoice/insuranceInvoiceManager', name: 'insuranceInvoiceManager', component: insuranceInvoiceManager,meta: {title: '保险开票'}},
+        { path: '/home/courierCompanyManager', name: 'courierCompanyManager', component: courierCompanyManager,meta: {title: '管理快递公司'}},
+        { path: '/home/contractManager', name: 'contractManager', component: contractManager,meta: {title: '合同管理'}},
+        { path: '/home/expressDeliveryManager', name: 'expressDeliveryManager', component: expressDeliveryManager,meta: {title: '管理往来信函'}},
+        { path: '/home/myExpressManager', name: 'myExpressManager', component: myExpressManager,meta: {title: '我的快递'}},
+        { path: '/home/myArticleRegistrationManager', name: 'myArticleRegistrationManager', component: myArticleRegistrationManager,meta: {title: '重要物品外出登记'}},
+        { path: '/home/reimbursementLlimitManager', name: 'reimbursementLlimitManager', component: reimbursementLlimitManager,meta: {title: '花费额度'}},
+        { path: '/home/expressApprovalManager', name: 'expressApprovalManager', component: expressApprovalManager,meta: {title: '快递审批'}},
+        { path: '/home/warnManager', name: 'warnManager', component: warnManager,meta: {title: '提醒中心'}},
+        { path: '/home/myWarnManager', name: 'myWarnManager', component: myWarnManager,meta: {title: '个人提醒中心'}},
+        { path: '/home/dicManager', name: 'dicManager', component: dicManager,meta: {title: '字典'}},
+        { path: '/home/dictionariesManager', name: 'dictionariesManager', component: dictionariesManager,meta: {title: '字典'}},
+
+        { path: '/home/depositManager', name: 'depositManager', component: depositManager,meta: {title: '押金管理'}},//-----------------title待修改
+        { path:'/home/payDepositManager', name:'payDepositManager.vue',component: payDepositManager,meta: {title: '押金管理'}},
+
+        { path: '/home/invoicUnitWhitelistManager', name: 'invoicUnitWhitelistManager', component: invoicUnitWhitelistManager,meta: {title: '开票白名单'}},
 
       ]
     },
@@ -848,6 +1224,11 @@ export default new Router({
     { path: '/login', name: 'login', component: login , meta: {title: '北京海派奥特经贸有限公司办公系统'}},
     { path: '/configForm', name: 'configForm', component: configForm},
     { path: '/projectForm', name: 'projectForm', component: projectForm},
+    // { path: '/approveProxyForm', name: 'approveProxyForm', component: approveProxyForm},
+    { path: '/wxCouponWriteOffView', name: 'wxCouponWriteOffView', component: wxCouponWriteOffView},
+
+    { path: '/smsMessageForm', name: 'smsMessageForm', component: smsMessageForm},
+    { path: '/smsTemplateForm', name: 'smsTemplateForm', component: smsTemplateForm},
     { path: '/workOrderForm', name: 'workOrderForm', component: workOrderForm},
     { path: '/workOrderView', name: 'workOrderView', component: workOrderView},
     { path: '/workOrderFlowChartForm', name: 'workOrderFlowChartForm', component: workOrderFlowChartForm},
@@ -859,15 +1240,78 @@ export default new Router({
     { path: '/workOrderMateriaListForm', name: 'workOrderMateriaListForm', component: workOrderMateriaListForm},
     { path: '/workOrderStockOutManagerView', name: 'workOrderStockOutManagerView', component: workOrderStockOutManagerView},
     { path: '/workOrderServiceView', name: 'workOrderServiceView', component: workOrderServiceView},
-    { path: '/workOrderProcessForm', name: 'workOrderProcessForm', component: workOrderProcessForm},
     { path: '/workOrderCheckoutManagerView', name: 'workOrderCheckoutManagerView', component: workOrderCheckoutManagerView},
-    { path: '/workOrderSettleAccountsForm', name: 'workOrderSettleAccountsForm', component: workOrderSettleAccountsForm},
-    { path: '/workOrderSummarizingForm', name: 'workOrderSummarizingForm', component: workOrderSummarizingForm},
+    { path: '/contractForm', name: 'contractForm', component: contractForm},
+    { path: '/contractsignForm', name: 'contractsignForm', component: contractsignForm},
+    { path: '/contractsignView', name: 'contractsignView', component: contractsignView},
 
     { path: '/processManagementForm', name: 'processManagementForm', component: processManagementForm},
 
-    { path: '/projectDetailForm', name: 'projectDetailForm', component: projectDetailForm},
+    { path: '/workOrderProcessForm', name: 'workOrderProcessForm', component: workOrderProcessForm},
+    { path: '/receptionForm', name: 'receptionForm', component: receptionForm},
+    { path: '/receptionView', name: 'receptionView', component: receptionView},
+    { path: '/payAreturnVisitForm', name: 'payAreturnVisitForm', component: payAreturnVisitForm},
 
+    { path: '/receptionMaterialsForm', name: 'receptionMaterialsForm', component: receptionMaterialsForm},
+    { path: '/stockInventoryFrom', name: 'stockInventoryFrom', component: stockInventoryFrom},
+    { path: '/stockInventoryView', name: 'stockInventoryView', component: stockInventoryView},
+
+    { path: '/collectionOfDataForm', name: 'collectionOfDataForm', component: collectionOfDataForm},
+    { path: '/collectionOfDataView', name: 'collectionOfDataView', component: collectionOfDataView},
+    { path: '/teamOrGroupForm', name: 'teamOrGroupForm', component: teamOrGroupForm},
+    { path: '/sheetMetalRepairForm', name: 'sheetMetalRepairForm', component: sheetMetalRepairForm},
+    { path: '/selectWorkOrder', name: 'selectWorkOrder', component: selectWorkOrder},
+    { path: '/selectWorkOrderPlate', name: 'selectWorkOrderPlate', component: selectWorkOrderPlate},
+    { path: '/selectWorkOrderClient', name: 'selectWorkOrderClient', component: selectWorkOrderClient},
+    { path: '/selectWorkOrderMaterials', name: 'selectWorkOrderMaterials', component: selectWorkOrderMaterials},
+    { path: '/selectWorkOrderInsurance', name: 'selectWorkOrderInsurance', component: selectWorkOrderInsurance},
+
+    { path: '/workOrderToBeConfirmedView', name: 'workOrderToBeConfirmedView', component: workOrderToBeConfirmedView},
+    { path: '/workOrderReasonsForFefusal', name: 'workOrderReasonsForFefusal', component: workOrderReasonsForFefusal},
+    { path: '/workOrderInvoiceForm', name: 'workOrderInvoiceForm', component: workOrderInvoiceForm},
+    { path: '/workOrderUploadFile', name: 'workOrderUploadFile', component: workOrderUploadFile},
+    { path: '/workOrderAllocationForm', name: 'workOrderAllocationForm', component: workOrderAllocationForm},
+    { path: '/workOrderCashierDeskForm', name: 'workOrderCashierDeskForm', component: workOrderCashierDeskForm},
+    { path: '/workOrderClaimDataForm', name: 'workOrderClaimDataForm', component: workOrderClaimDataForm},
+    { path: '/workOrderCartogram', name: 'workOrderCartogram', component: workOrderCartogram},
+
+    { path: '/pushRepairForm', name: 'pushRepairForm', component: pushRepairForm},
+    { path: '/pushRepairDetailForm', name: 'pushRepairDetailForm', component: pushRepairDetailForm},
+    { path: '/pushRepairAddPersonForm', name: 'pushRepairAddPersonForm', component: pushRepairAddPersonForm},
+    { path: '/addPushCorporationForm', name: 'addPushCorporationForm', component: addPushCorporationForm},
+    { path: '/pushRepairSelect', name: 'pushRepairSelect', component: pushRepairSelect},
+    { path: '/pushPersonSelect', name: 'pushPersonSelect', component: pushPersonSelect},
+    { path: '/pushCorporationSelect', name: 'pushCorporationSelect', component: pushCorporationSelect},
+
+
+    { path: '/settleAccountsForm', name: 'settleAccountsForm', component: settleAccountsForm},
+    { path: '/workOrderInsuranceUnitForm', name: 'workOrderInsuranceUnitForm', component: workOrderInsuranceUnitForm},
+
+    { path: '/workOrderSettleAccountsForm', name: 'workOrderSettleAccountsForm', component: workOrderSettleAccountsForm},
+    { path: '/workOrderStatementForm', name: 'workOrderStatementForm', component: workOrderStatementForm},
+    { path: '/workOrderSummarizingForm', name: 'workOrderSummarizingForm', component: workOrderSummarizingForm},
+    { path: '/workOrderCheckoutAffirmManager', name: 'workOrderCheckoutAffirmManager', component: workOrderCheckoutAffirmManager},
+    { path: '/offlineWorkOrderForm', name: 'offlineWorkOrderForm', component: offlineWorkOrderForm},
+    { path: '/offlineWorkOrderDetailForm', name: 'offlineWorkOrderDetailForm', component: offlineWorkOrderDetailForm},
+    { path: '/offlineWorlOrderTicketForm', name: 'offlineWorlOrderTicketForm', component: offlineWorlOrderTicketForm},
+    { path: '/offlineOpenInvoiceView', name: 'offlineOpenInvoiceView', component: offlineOpenInvoiceView},
+
+    { path: '/offlineWorkOrderView', name: 'offlineWorkOrderView', component: offlineWorkOrderView},
+
+    { path: '/peopleManagementForm', name: 'peopleManagementForm', component: peopleManagementForm},
+    { path: '/projectDetailForm', name: 'projectDetailForm', component: projectDetailForm},
+    { path: '/taxFrom', name: 'taxFrom', component: taxFrom},
+    { path: '/taxView', name: 'taxView', component: taxView},
+    { path: '/openInvoiceNum', name: 'openInvoiceNum', component: openInvoiceNum},
+    { path: '/selectTax', name: 'selectTax', component: selectTax},
+    { path: '/invoiceRiseForm', name: 'invoiceRiseForm', component: invoiceRiseForm},
+    { path: '/invoiceRiseView', name: 'invoiceRiseView', component: invoiceRiseView},
+    { path: '/inputTaxView', name: 'inputTaxView', component: inputTaxView},
+    { path: '/inputTaxForm', name: 'inputTaxForm', component: inputTaxForm},
+    { path: '/authenticationDate', name: 'authenticationDate', component: authenticationDate},
+    { path: '/deduction', name: 'deduction', component: deduction},
+    { path: '/deductionDateAndMoney', name: 'deductionDateAndMoney', component: deductionDateAndMoney},
+    { path: '/outPutTaxView', name: 'outPutTaxView', component: outPutTaxView},
     { path: '/paymentPlanDate', name: 'paymentPlanDate.vue', component: paymentPlanDate , meta: {title: '付款计划'}},
 
     { path: '/stockInForm', name: 'stockInForm', component: stockInForm},
@@ -879,7 +1323,9 @@ export default new Router({
 
     { path: '/wxMessageTemplateForm', name: 'wxMessageTemplateForm', component: wxMessageTemplateForm},
     { path: '/wxCouponForm', name: 'wxCouponForm', component: wxCouponForm},
+    { path: '/selectWxCoupon', name: 'selectWxCoupon', component: selectWxCoupon},
     { path: '/wxCouponDetailForm', name: 'wxCouponDetailForm', component: wxCouponDetailForm},
+    { path: '/selectDateTime', name: 'selectDateTime', component: selectDateTime},
     { path: '/wxMemberForm', name: 'wxMemberForm', component: wxMemberForm},
     { path: '/wxMemberview', name: 'wxMemberview', component: wxMemberview},
     { path: '/wxMemberSelect', name: 'wxMemberSelect', component: wxMemberSelect},
@@ -893,8 +1339,12 @@ export default new Router({
     { path: '/myPaymentPlanDetailForm', name: 'PaymentPlanDetailForm', component: PaymentPlanDetailForm},
     { path: '/PaymentPlanFormView', name: 'PaymentPlanFormView', component: PaymentPlanFormView},
     { path: '/PaymentPlanDetailFormView', name: 'PaymentPlanDetailFormView', component: PaymentPlanDetailFormView},
+    { path: '/bankDetailAnalysisExecl', name: 'bankDetailAnalysisExecl', component: bankDetailAnalysisExecl},
+    { path: '/employeeFilesForm', name: 'employeeFilesForm', component: employeeFilesForm},
+    { path: '/employeeFilesView', name: 'employeeFilesView', component: employeeFilesView},
 
     { path: '/selectDic', name: 'selectDic', component: selectDic},
+    { path: '/selectCoupon', name: 'selectCoupon', component: selectCoupon},
 
     { path: '/dicForm089', name: 'dicForm089', component: dicForm089},
     { path: '/dicForm090', name: 'dicForm090', component: dicForm090},
@@ -906,6 +1356,17 @@ export default new Router({
     { path: '/maintenanceCostCartogram', name: 'maintenanceCostCartogram.vue', component: maintenanceCostCartogram},
     { path: '/BankDetailCommissionCartogram', name: 'BankDetailCommissionCartogram.vue', component: BankDetailCommissionCartogram},
     { path: '/cashJournalCartogram', name: 'cashJournalCartogram.vue', component: cashJournalCartogram},
+    { path: '/allMaintenanceCartogram', name: 'allMaintenanceCartogram.vue', component: allMaintenanceCartogram},
+    { path: '/expressCartogram', name: 'expressCartogram.vue', component: expressCartogram},
+    { path: '/reimbursementCartogram', name: 'reimbursementCartogram.vue', component: reimbursementCartogram},
+    { path: '/reimbursementViewCartogram', name: 'reimbursementViewCartogram.vue', component: reimbursementViewCartogram},
+    { path: '/myreimbursementTwoCartogram', name: 'myreimbursementTwoCartogram.vue', component: myreimbursementTwoCartogram},
+
+    { path: '/approveFlowsForm', name: 'approveFlowsForm.vue', component: approveFlowsForm},
+    { path: '/approveFlowsDetailForm', name: 'approveFlowsDetailForm.vue', component: approveFlowsDetailForm},
+    { path: '/personTagForm', name: 'personTagForm.vue', component: personTagForm},
+    { path: '/selectPersonTag', name: 'selectPersonTag.vue', component: selectPersonTag},
+
 
     { path: '/selectPublicAccount', name: 'selectPublicAccount', component: selectPublicAccount},
     { path: '/selectPrivateAccount', name: 'selectPrivateAccount', component: selectPrivateAccount},
@@ -916,24 +1377,42 @@ export default new Router({
     { path: '/selectChecksDetail', name: 'selectChecksDetail', component: selectChecksDetail},
     { path: '/selectPrettyCashs', name: 'selectPrettyCashs', component: selectPrettyCashs},
     { path: '/selectPlate', name: 'selectPlate.vue',component: selectPlate },
+    { path: '/selectUnitInvoice', name: 'selectUnitInvoice.vue',component: selectUnitInvoice },
+    { path: '/selectNumber', name: 'selectNumber.vue',component: selectNumber },
+    { path: '/selectContract', name: 'selectContract.vue',component: selectContract },
     { path: '/selectPromotions', name: 'selectPromotions.vue',component: selectPromotions },
     { path: '/selectPerson', name: 'selectPerson', component: selectPerson},
+    { path: '/selectStock', name: 'selectStock', component: selectStock},
     { path: '/selectPlanDate', name: 'selectPlanDate', component: selectPlanDate},
     { path: '/selectDepartment', name: 'selectDepartment', component: selectDepartment},
     { path: '/selectElectronicInvoice', name: 'selectElectronicInvoice', component: selectElectronicInvoice},
     { path: '/selectInvoiceDetail', name: 'selectInvoiceDetail.vue',component: selectInvoiceDetail },
+    { path: '/SelectInvoiceRise', name: 'SelectInvoiceRise.vue',component: SelectInvoiceRise },
     { path: '/selectVersion', name: 'selectVersion.vue',component: selectVersion },
     { path: '/selectPage', name: 'selectPage.vue',component: selectPage ,meta: {title: '页面测试'}},
     { path: '/selectProduct', name: 'selectProduct.vue',component: selectProduct },
     { path: '/selectModel', name: 'selectModel.vue',component: selectModel },
+    { path: '/selectStoredCard', name: 'selectStoredCard.vue',component: selectStoredCard },
+    { path: '/selectMonthlyAccount', name: 'selectMonthlyAccount.vue',component: selectMonthlyAccount },
+    { path: '/selectOpenInvoice', name: 'selectOpenInvoice.vue',component: selectOpenInvoice },
+    { path: '/selectsInvoiceSignatureForm', name: 'selectsInvoiceSignatureForm.vue',component: selectsInvoiceSignatureForm },
+
     { path: '/selectProductModel', name: 'selectProductModel.vue',component: selectProductModel },
-    { path: '/selectService', name: 'selectService.vue',component: selectService },
-    { path: '/selectMaterials', name: 'selectMaterials.vue',component: selectMaterials },
     { path: '/selectFormPlate', name: 'selectFormPlate.vue',component: selectFormPlate },
     { path: '/selectPrint', name: 'selectPrint.vue',component: selectPrint },
     { path: '/selectLocation', name: 'selectLocation.vue',component: selectLocation },
     { path: '/selectAccount', name: 'selectAccount.vue',component: selectAccount },
+    { path: '/selectPart', name: 'selectPart.vue',component: selectPart },
     { path: '/selectProcessServices', name: 'selectProcessServices.vue',component: selectProcessServices },
+    { path: '/selectPeopleManagement', name: 'selectPeopleManagement.vue',component: selectPeopleManagement },
+    { path: '/selectService', name: 'selectService.vue',component: selectService },
+    { path: '/selectMaterials', name: 'selectMaterials.vue',component: selectMaterials },
+    { path: '/selectInsuranceInvoice', name: 'selectInsuranceInvoice.vue',component: selectInsuranceInvoice },
+    { path: '/selectDeposit', name: 'selectDeposit.vue',component: selectDeposit },
+    { path: '/perfectedForm', name: 'perfectedForm.vue',component: perfectedForm },
+    { path: '/selectPayDeposit', name: 'selectPayDeposit.vue',component: selectPayDeposit },
+    { path: '/selectOfficialWorkOrder', name: 'selectOfficialWorkOrder.vue',component: selectOfficialWorkOrder },
+
     { path: '/commissionFeeForm', name: 'commissionFeeForm.vue',component: commissionFeeForm },
 
     { path: '/exercise', name: 'exercise.vue', component: exercise ,meta: {title: '测试页面'}},
@@ -956,6 +1435,8 @@ export default new Router({
     { path: '/addInvoiceNumForm', name: 'addInvoiceNumForm.vue', component: addInvoiceNumForm},
 
     { path: '/addUnitForm', name: 'addUnitForm', component: addUnitForm},
+    { path: '/unitInvoiceFrom', name: 'unitInvoiceFrom', component: unitInvoiceFrom},
+    { path: '/unitInvoiceView', name: 'unitInvoiceView', component: unitInvoiceView},
     { path: '/addUnitSimplifyForm', name: 'addUnitSimplifyForm', component: addUnitSimplifyForm},
     { path: '/unitBankDetailForm', name: 'unitBankDetailForm', component: unitBankDetailForm},
 
@@ -983,12 +1464,17 @@ export default new Router({
 
     { path: '/conductFinForm', name: 'conductFinForm', component: conductFinForm},
     { path: '/conductFinView', name: 'conductFinView', component: conductFinView},
+    { path: '/bankProductInterest', name: 'bankProductInterest', component: bankProductInterest},
+
     { path: '/conductFinRedeemForm', name: 'conductFinRedeemForm', component: conductFinRedeemForm},
+    { path: '/conductFinEntry', name: 'conductFinEntry', component: conductFinEntry},
 
     { path: '/psdForm', name: 'psdForm', component: psdForm},
     { path: '/bankDetailForm', name: 'bankDetailForm', component: bankDetailForm},
     { path: '/bankDetailCashierForm', name: 'bankDetailCashierForm', component: bankDetailCashierForm},
     { path: '/receivableBankDetailForm', name: 'receivableBankDetailForm', component: receivableBankDetailForm},
+
+    { path: '/bankDetailAnalyView', name: 'bankDetailAnalyView', component: bankDetailAnalyView},
 
     { path: '/payApplyReconDetailForm', name: 'payApplyReconDetailForm.vue', component: payApplyReconDetailForm},
 
@@ -1002,6 +1488,8 @@ export default new Router({
     { path: '/myElectronicInvoiceForm', name: 'myElectronicInvoiceForm', component: myElectronicInvoiceForm},
     { path: '/myElectronicInvoiceReimburseManager', name: 'myElectronicInvoiceReimburseManager', component: myElectronicInvoiceReimburseManager},
     { path: '/rejectReason', name: 'rejectReason', component: rejectReason},
+    { path: '/springBootApprovalMessage', name: 'springBootApprovalMessage', component: springBootApprovalMessage},
+    { path: '/springBootRejectReason', name: 'springBootRejectReason', component: springBootRejectReason},
     { path: '/passMessage', name: 'passMessage', component: passMessage},
     { path: '/gainsayMessage', name: 'gainsayMessage', component: gainsayMessage},
     { path: '/electronicInvoiceForm', name: 'electronicInvoiceForm', component: electronicInvoiceForm},
@@ -1022,7 +1510,6 @@ export default new Router({
     { path: '/loginScSuccess', name: 'loginScSuccess', component: loginScSuccess},
     { path: '/loginScCancel', name: 'loginScCancel', component: loginScCancel},
     { path: '/loginInexistence', name: 'loginInexistence', component: loginInexistence},
-    { path: '/error', name: 'error', component: error},
 
 
     { path: '/approvalPayForm', name: 'approvalPayForm.vue',component: approvalPayForm },
@@ -1047,8 +1534,14 @@ export default new Router({
     { path: '/openInvoiceTrial', name: 'openInvoiceTrial.vue',component: openInvoiceTrial },
     { path: '/openInvoiceToVoid', name: 'openInvoiceToVoid.vue',component: openInvoiceToVoid },
     { path: '/openInvoiceVehicleForm', name: 'openInvoiceVehicleForm.vue',component: openInvoiceVehicleForm },
+    { path: '/openInvoiceFinForm', name: 'openInvoiceFinForm.vue',component: openInvoiceFinForm },
+
     { path: '/openInvoiceTrialVehicle', name: 'openInvoiceTrialVehicle.vue',component: openInvoiceTrialVehicle },
     { path: '/openInvoiceTrialOther', name: 'openInvoiceTrialOther.vue',component: openInvoiceTrialOther },
+    { path: '/openInvoiceToVoidInvoice', name: 'openInvoiceToVoidInvoice.vue',component: openInvoiceToVoidInvoice },
+    { path: '/printingOpenInvoice', name: 'printingOpenInvoice.vue',component: printingOpenInvoice },
+
+    // { path: '/unitInvoiceinitForm', name: 'unitInvoiceinitForm.vue',component: unitInvoiceinitForm },
 
     { path: '/paymentApplyViewForm', name: 'paymentApplyViewForm.vue',component: paymentApplyViewForm },
     { path: '/reimbursementViewForm', name: 'reimbursementViewForm.vue',component: reimbursementViewForm },
@@ -1071,6 +1564,7 @@ export default new Router({
 
     { path: '/approPriationForm', name: 'approPriationForm.vue',component: approPriationForm },
     { path: '/unionCostsForm', name: 'unionCostsForm.vue',component: unionCostsForm },
+    { path: '/promotionsApproveForm', name: 'promotionsApproveForm.vue',component: promotionsApproveForm },
 
     { path: '/handlePersonForm', name: 'handlePersonForm.vue',component: handlePersonForm },
     { path: '/policyInformationForm', name: 'policyInformationForm.vue',component: policyInformationForm },
@@ -1082,16 +1576,29 @@ export default new Router({
     { path: '/insuranceBankDetailForm', name: 'insuranceBankDetailForm.vue',component: insuranceBankDetailForm },
     { path: '/insuranceUnitDetailsForm', name: 'insuranceUnitDetailsForm.vue',component: insuranceUnitDetailsForm },
     { path: '/insuranceUnitView', name: 'insuranceUnitView.vue',component: insuranceUnitView },
+    { path: '/waveForm', name: 'waveForm.vue',component: waveForm },
+    { path: '/selectBankView', name: 'selectBankView.vue',component: selectBankView },
+    { path: '/statementDetails', name: 'statementDetails.vue',component: statementDetails },
     { path: '/cashGiveHPForm', name: 'cashGiveHPForm.vue',component: cashGiveHPForm },
     { path: '/promotionsForm', name: 'promotionsForm.vue',component: promotionsForm },
+    { path: '/promotionsView', name: 'promotionsView.vue',component: promotionsView },
+
     { path: '/cashGiveForm', name: 'cashGiveForm.vue',component: cashGiveForm },
     { path: '/clientForm', name: 'clientForm.vue',component: clientForm },
+    { path: '/bossPerfectedView', name: 'bossPerfectedView.vue',component: bossPerfectedView },
+    { path: '/bossPerfectedForm', name: 'bossPerfectedForm.vue',component: bossPerfectedForm },
 
     { path: '/clientView', name: 'clientView.vue',component: clientView },
+    { path: '/quotationFrom', name: 'quotationFrom.vue',component: quotationFrom },
+    { path: '/templateCheForm', name: 'templateCheForm.vue',component: templateCheForm },
+    { path: '/templateShangYeFrom', name: 'templateShangYeFrom.vue',component: templateShangYeFrom },
+    { path: '/templateFiveForm', name: 'templateFiveForm.vue',component: templateFiveForm },
+    { path: '/templateFourForm', name: 'templateFourForm.vue',component: templateFourForm },
     { path: '/claimsForm', name: 'claimsForm.vue',component: claimsForm },
     { path: '/claimsView', name: 'claimsView.vue',component: claimsView },
     { path: '/claimsListView', name: 'claimsListView.vue',component: claimsListView },
-
+    { path: '/claimsOpenInvoice', name: 'claimsOpenInvoice.vue',component: claimsOpenInvoice },
+    { path: '/selectBankDetailInsurance', name: 'selectBankDetailInsurance.vue',component: selectBankDetailInsurance },
 
     { path: '/finPosAccountDetailsForm', name: 'finPosAccountDetailsForm.vue',component: finPosAccountDetailsForm },
     { path: '/finPosAccountDetailForm', name: 'finPosAccountDetailForm.vue',component: finPosAccountDetailForm },
@@ -1123,8 +1630,10 @@ export default new Router({
     { path: '/modelForm', name: 'modelForm.vue',component: modelForm },
 
     { path: '/vehicleForm', name: 'vehicleForm.vue',component: vehicleForm },
+    { path: '/addTestForm', name: 'addTestForm.vue',component: addTestForm },
     { path: '/vehicleView', name: 'vehicleView.vue',component: vehicleView },
     { path: '/saveModelForm', name: 'saveModelForm.vue',component: saveModelForm },
+    { path: '/saveVersionForm', name: 'saveVersionForm.vue',component: saveVersionForm },
     { path: '/saveVersionForm', name: 'saveVersionForm.vue',component: saveVersionForm },
 
     { path: '/approvalInsuranceView', name: 'approvalInsuranceView.vue',component: approvalInsuranceView },
@@ -1142,10 +1651,12 @@ export default new Router({
     { path: '/trackDetailsView', name: 'trackDetailsView.vue',component: trackDetailsView },
 
     { path: '/billingForm', name: 'billingForm.vue',component: billingForm },
+    { path: '/billingFile', name: 'billingFile.vue',component: billingFile },
     { path: '/billingView', name: 'billingView.vue',component: billingView },
     { path: '/billingApprovalApplyForm', name: 'billingApprovalApplyForm.vue',component: billingApprovalApplyForm },
 
     { path: '/policyView', name: 'policyView.vue',component: policyView },
+    { path: '/surrenderView', name: 'surrenderView.vue',component: surrenderView },
     { path: '/policyExpectedView', name: 'policyExpectedView.vue',component: policyExpectedView },
     { path: '/poNumbering', name: 'poNumbering.vue',component: poNumbering },
     { path: '/poNumberView', name: 'poNumberView.vue',component: poNumberView },
@@ -1153,9 +1664,7 @@ export default new Router({
     { path: '/receivableForceWriteOffFrom', name: 'receivableForceWriteOffFrom.vue',component: receivableForceWriteOffFrom },
     { path: '/selectReceivableForceWriteOff', name: 'selectReceivableForceWriteOff.vue',component: selectReceivableForceWriteOff },
 
-
-
-
+    { path: '/accountCancellation', name: 'accountCancellation.vue',component: accountCancellation },
 
     { path: '/receivableView', name: 'receivableView.vue',component: receivableView },
 
@@ -1163,6 +1672,7 @@ export default new Router({
     { path: '/accountExpectedView', name: 'accountExpectedView.vue',component: accountExpectedView },
     { path: '/unitDatailsView', name: 'unitDatailsView.vue',component: unitDatailsView },
     { path: '/customerRebatesView', name: 'customerRebatesView.vue',component: customerRebatesView },
+    { path: '/customerRebates', name: 'customerRebates.vue',component: customerRebates },
 
     { path: '/insuranceProcessForm', name: 'insuranceProcessForm.vue',component: insuranceProcessForm },
     { path: '/cashRegisterForm', name: 'cashRegisterForm.vue',component: cashRegisterForm },
@@ -1186,20 +1696,72 @@ export default new Router({
     { path:'/receivableBadDebtForm', name:'receivableBadDebtForm.vue',component: receivableBadDebtForm},
     { path:'/insuranceMakeUpForm', name:'insuranceMakeUpForm.vue',component: insuranceMakeUpForm},
     { path:'/insuranceMakeUpAccountForm', name:'insuranceMakeUpAccountForm.vue',component: insuranceMakeUpAccountForm},
+    { path:'/importFrom', name:'importFrom.vue',component: importFrom},
+    { path:'/courierCompanyForm', name:'courierCompanyForm.vue',component: courierCompanyForm},
+    { path:'/selectExpressNot', name:'selectExpressNot.vue',component: selectExpressNot},
+    { path:'/expressReconciliationForm', name:'expressReconciliationForm.vue',component: expressReconciliationForm},
+    { path:'/courierCompanyDetailsView', name:'courierCompanyDetailsView.vue',component: courierCompanyDetailsView},
+    { path:'/storedCardForm', name:'storedCardForm.vue',component: storedCardForm},
+    { path:'/rechargeRecordView', name:'rechargeRecordView.vue',component: rechargeRecordView},
+    { path:'/courierCompanyView', name:'courierCompanyView.vue',component: courierCompanyView},
+    { path:'/expressDeliveryForm', name:'expressDeliveryForm.vue',component: expressDeliveryForm},
+    { path:'/expressDeliveryView', name:'expressDeliveryView.vue',component: expressDeliveryView},
+    { path:'/myAdminExpressView', name:'myAdminExpressView.vue',component: myAdminExpressView},
+    { path:'/expressDeliveryBasic', name:'expressDeliveryBasic.vue',component: expressDeliveryBasic},
+    { path:'/expressDeliverySend', name:'expressDeliverySend.vue',component: expressDeliverySend},
+    { path:'/expressDeliveryRecipient', name:'expressDeliveryRecipient.vue',component: expressDeliveryRecipient},
+    { path:'/expressDeliveryItems', name:'expressDeliveryItems.vue',component: expressDeliveryItems},
+    { path:'/expressDeliveryCost', name:'expressDeliveryCost.vue',component: expressDeliveryCost},
+    { path:'/expressDeliveryConfirm', name:'expressDeliveryConfirm.vue',component: expressDeliveryConfirm},
+    { path:'/selectDoes', name:'selectDoes.vue',component: selectDoes},
+    { path:'/cancelAppointment', name:'cancelAppointment.vue',component: cancelAppointment},
+
+
+    { path:'/warnForm', name:'warnForm.vue',component: warnForm},
+    { path:'/depositForm', name:'depositForm.vue',component: depositForm},
+    { path:'/depositView', name:'depositView.vue',component: depositView},
+    { path:'/payDepositForm', name:'payDepositForm.vue',component: payDepositForm},
+    { path:'/payDepositView', name:'payDepositView.vue',component: payDepositView},
+    { path:'/receipt', name:'receipt.vue',component: receipt},
+
+
+    { path:'/warnFormView', name:'warnFormView.vue',component: warnFormView},
+
+    { path:'/warnDetailform', name:'warnDetailform.vue',component: warnDetailform},
+    { path:'/warnTimeoutSelect', name:'warnTimeoutSelect.vue',component: warnTimeoutSelect},
+    { path:'/myWarnForm', name:'myWarnForm.vue',component: myWarnForm},
+    { path:'/myExpressForm', name:'myExpressForm.vue',component: myExpressForm},
+    { path:'/myArticleRegistrationForm', name:'myArticleRegistrationForm.vue',component: myArticleRegistrationForm},
+    { path:'/reimbursementLlimitForm', name:'reimbursementLlimitForm.vue',component: reimbursementLlimitForm},
+    { path:'/reimbursementLlimitView', name:'reimbursementLlimitView.vue',component: reimbursementLlimitView},
+    { path:'/expressApprovalView', name:'expressApprovalView.vue',component: expressApprovalView},
+    { path:'/myExpressView', name:'myExpressView.vue',component: myExpressView},
+    { path:'/insurancePolicyView', name:'insurancePolicyView.vue',component: insurancePolicyView},
+    { path:'/addressbookView', name:'addressbookView.vue',component: addressbookView},
 
 
     { path:'/selectReceivableDetail', name:'selectReceivableDetail.vue',component: selectReceivableDetail},
+    { path:'/insuranceInvoiceDetails', name:'insuranceInvoiceDetails.vue',component: insuranceInvoiceDetails},
+    { path:'/selectInvoiceView', name:'selectInvoiceView.vue',component: selectInvoiceView},
 
 
     { path:'/receivableSourceForm', name:'receivableSourceForm.vue',component: receivableSourceForm},
+    { path:'/invoicUnitWhitelistForm', name:'invoicUnitWhitelistForm.vue',component: invoicUnitWhitelistForm},
 
     { path:'/receivableSourceManagerView', name:'receivableSourceManagerView.vue',component: receivableSourceManagerView},
     { path:'/receivableBadDebtView', name:'receivableBadDebtView.vue',component: receivableBadDebtView},
     { path:'/receiveInsuranceCartogram', name:'receiveInsuranceCartogram.vue',component: receiveInsuranceCartogram},
+    { path:'/invoiceCartogram', name:'invoiceCartogram.vue',component: invoiceCartogram},
+    { path:'/receiveInsuranceFiles', name:'receiveInsuranceFiles.vue',component: receiveInsuranceFiles},
+    { path:'/receivePaymentDetails', name:'receivePaymentDetails.vue',component: receivePaymentDetails},
     { path:'/payInsuranceCartogram', name:'payInsuranceCartogram.vue',component: payInsuranceCartogram},
+    { path:'/capitalTrendsTodayCartogram', name:'capitalTrendsTodayCartogram.vue',component: capitalTrendsTodayCartogram},
+    { path:'/scanCode', name:'scanCode.vue',component: scanCode},
+    { path:'/dic25', name:'dic25.vue',component: dic25},
+    { path:'/dic16', name:'dic16.vue',component: dic16},
+    { path:'/dicView', name:'dicView.vue',component: dicView},
 
-
-/* APP端路由 */
+    /* APP端路由 */
     {
       path:'/homeApp',name:'homeApp', component: homeApp,
       children:[

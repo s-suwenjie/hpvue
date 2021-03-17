@@ -1,6 +1,6 @@
 <template>
   <div>
-    <yhm-managerpage category="1" :total-table="true">
+    <yhm-managerpage category="1" total-width-center="900" @statisticalClick="statisticalClick" :statisticalShow="true">
       <!--导航条-->
 
       <template #navigationTab>
@@ -8,6 +8,7 @@
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentPlanViewManager'}">付款计划</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/paymentApplyViewManager'}">付款申请</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/viewManager/reimbursementViewManager'}">报销申请</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finReimbursementDetailManager?type=1'}">特殊报销</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/finPrettyCashsManagerAll'}">备用金</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/bankDetailRenewalManager'}">支付续保费</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRebateManager'}">支付客户返利</router-link>
@@ -24,6 +25,7 @@
         <div @click="selectedList" v-show="isSelected" class="b_main one b_one mr5b">打开选中信息</div>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('categoryUnit')" title="状态" :content="listState"></yhm-radiofilter>
         <yhm-radiofilter :before="stateBefore" @initData="initChoose('dateType')" title="时间类型"  :content="dateTypeList"></yhm-radiofilter>
+        <div @click="lookDetail" class="b_main" style="background-color: #acaef3">查看详情列表</div>
       </template>
 
       <!--筛选区-->
@@ -81,26 +83,29 @@
         <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
       </template>
       <template #listTotalHead>
-        <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="进行中" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="驳回" ></yhm-managerth>
-        <yhm-managerth style="width: 100px;" before-color="#2c920b" title="" before-title="已完成" ></yhm-managerth>
-
+        <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="未拨款+已拨款" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="已拨款" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="备用金核销" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#620fd0" title="" before-title="待拨款" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#bd0617" title="" before-title="待退款" ></yhm-managerth>
+        <yhm-managerth style="width: 110px;" before-color="#130b92" title="" before-title="普通报销已退款" ></yhm-managerth>
+        <yhm-managerth style="width: 130px;" before-color="#af0644" title="" before-title="备用金核销已退款" ></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#08960c" title="" before-title="退款总金额" ></yhm-managerth>
       </template>
       <template #listTotalLeft>
         <div class=" listTotalLeft">
           <span class="test"></span>
           <span class="test">金额</span>
-          <span class="test">条数</span>
+          <!--<span class="test">条数</span>-->
         </div>
       </template>
       <template #listTotalBody>
           <tr>
             <yhm-manager-td-money @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
           </tr>
-          <tr>
+          <!--<tr>
             <yhm-manager-td-rgt @click="totalClick(item)" v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
-          </tr>
+          </tr>-->
       </template>
     </yhm-managerpage>
   </div>
@@ -161,6 +166,9 @@
       }
     },
     methods: {
+      lookDetail(){
+        window.open('/home/viewManager/finReimbursementDetailManager?type=0')
+      },
       //查看拨付资金  往来明细 凭证
       storeName(item){
         if(item.length>0){
@@ -318,6 +326,17 @@
           }
         })
       },
+      statisticalClick(){
+        this.$dialog.OpenWindow({
+          width: '1300',
+          height: '810',
+          url: '/reimbursementViewCartogram',
+          title: '查看统计信息',
+          closeCallBack: (data) => {
+
+          }
+        })
+      },
     },
     computed: {
       // 检查是否选中
@@ -327,9 +346,6 @@
         }
       }
     },
-
-    created () {
-    }
   }
 </script>
 <style scoped lang="less">

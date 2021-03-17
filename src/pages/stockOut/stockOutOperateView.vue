@@ -19,7 +19,7 @@
       <template #listHead>
         <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
         <yhm-managerth title="商品名称"></yhm-managerth>
-        <yhm-managerth style="width: 120px" title="规格型号"></yhm-managerth>
+        <yhm-managerth title="规格型号"></yhm-managerth>
         <yhm-managerth style="width: 120px" title="数量"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="单价"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="总价"></yhm-managerth>
@@ -151,7 +151,7 @@
               }
               let list = this.list[index]
               list.id = data.params.id,
-              list.ownerid = data.params.ownerid,//入库单ID
+              list.ownerid = this.id,//入库单ID
               list.product = data.params.product,//商品名称
               list.productid = data.params.productid,//商品ID
               list.model = data.params.model,//型号

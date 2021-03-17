@@ -6,6 +6,13 @@
   content: "\e908";
 }
 
+.i-wait:before{
+  font-family: 'icomoon' !important;
+  content: "\e955";
+}
+
+
+
 .i-more2:before{
   font-family: 'icomoon' !important;
   content: "\e98c";

@@ -5,7 +5,7 @@
       <template #navigationTab v-if="isPersonalClaims">
         <a class="menuTabDiv" href="/Fin/bankDetailManager?menuType=0">收支明细</a>
         <router-link class="menuTabDiv" :to="{path:'/home/viewManager/claimsManager'}">保险理赔</router-link>
-        <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRepairManager'}">散户维修</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/BankDetailRepairManager'}">自费维修</router-link>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/BankDetailCommissionManager'}">保险手续费</router-link>
         <router-link class="menuTabDiv " :to="{path:'/home/finPosAccountManager'}">Pos账户</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/finPosAccountDetailManager'}">Pos离线数据</router-link>
@@ -44,7 +44,7 @@
           <yhm-manager-td-date :value="item.cccurDate"></yhm-manager-td-date>
           <yhm-manager-td-direction :direction="item.direction" class="dfJcc" :value="item.direction" :dir-val="false"></yhm-manager-td-direction>
           <yhm-manager-td :value="item.subject" @click="subjectEvent(item)"></yhm-manager-td>
-          <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+          <yhm-manager-td-money  @click="selectMoeny(item)" :value="item.money" :before-icon="item.step==2?'i-finishApprovalOK':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item"></yhm-manager-td-money>
           <yhm-manager-td :value="item.remark" :tip="true"></yhm-manager-td>
         </tr>
       </template>
@@ -108,6 +108,21 @@
       }
     },
     methods:{
+      selectMoeny(item){
+        if (item.step==2){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/statementDetails?id=' + item.id ,
+          title: '查看明细对账单',
+          closeCallBack: (data)=>{
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+        }
+      },
       statisticalClick(){
         this.$dialog.OpenWindow({
           width: '1300',

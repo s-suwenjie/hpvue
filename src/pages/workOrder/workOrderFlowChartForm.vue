@@ -1,9 +1,55 @@
 <template>
     <div>
-      <div style="background-color: #fff;min-height: 800px;" :style="{height:list3?(list3.length/5)*400+'px':'800px'}">
+<!--      @mouseout="mouseoutEvent" @mouseover="mouseoverEvent"-->
+      <div class="leftMenu" :class="{'leftMenu':!leftMenuShow,'leftMenuShow':leftMenuShow}">
+        <span class="i-input-right-arrow leftMenuArrows" v-if="!leftMenuShow" @click="leftMenuShow=!leftMenuShow"></span>
+        <span class="i-input-left-arrow leftMenuArrows" v-else @click="leftMenuShow=!leftMenuShow"></span>
+        <div class="leftMenuTitle">
+          <span>总览</span>
+          <span style="font-size: 12px;cursor: pointer;" @click="beginClick" :style="{'color':list2[list2.length-1].color}">当前:{{list2[list2.length-1].title=='质检确认'?'返工确认':list2[list2.length-1].title}}</span>
+        </div>
+        <div class="leftMenuBtn" @mouseout="menuBtnMouseout" @mouseover="menuBtnMouseover('0')" @click="leftMenuBtnClick('0')">
+          <div style="display:flex;align-items: center;width: 110px;">
+            <svg t="1601281508724" class="icon" viewBox="0 0 1024 1024" version="1.1" width="28" height="28"><path d="M574.1 835.6H222l-0.2-672.5h383.3v0.8l0.1 139.9c0 28.6 23.3 52 52 52h140l1-0.1v223.6c0 17.7 14.3 32 32 32s32-14.3 32-32V331.4c0-13.9-5.4-26.9-15.2-36.8L666.6 114.3c-9.8-9.8-22.9-15.2-36.8-15.2h-420c-13.9 0-26.9 5.4-36.8 15.2-9.8 9.8-15.2 22.9-15.2 36.8l0.2 696.5c0 28.7 23.3 52 52 52h364.1c17.7 0 32-14.3 32-32s-14.3-32-32-32z m179.5-543.8h-84.4l-0.1-84.4 84.5 84.4z" p-id="2182" :fill="menuBtn=='0'?'#fff':'#707070'"></path><path d="M445.2 323.8c17.7 0 32-14.4 31.9-32.1 0-17.6-14.4-31.9-32-31.9h-0.1l-128.8 0.4c-17.7 0-32 14.4-31.9 32.1 0.1 17.7 14.4 31.9 32.1 31.9l128.8-0.4zM317.1 452.2h191.3c17.7 0 32-14.3 32-32s-14.3-32-32-32H317.1c-17.7 0-32 14.3-32 32s14.3 32 32 32zM887.8 725.5c-2.5-10.8-13.2-17.5-23.9-15.1-10.8 2.5-17.5 13.2-15.1 23.9 1.6 6.9 2.4 14.1 2.4 21.3 0 52.7-42.8 95.5-95.5 95.5s-95.5-42.8-95.5-95.5 42.8-95.5 95.5-95.5c27 0 52.9 11.5 71 31.7 7.4 8.2 20 8.9 28.2 1.5s8.9-20 1.5-28.2c-25.7-28.5-62.4-44.9-100.8-44.9-74.7 0-135.5 60.8-135.5 135.5s60.8 135.5 135.5 135.5 135.5-60.8 135.5-135.5c0-10.2-1.1-20.4-3.3-30.2z" p-id="2183" :fill="menuBtn=='0'?'#fff':'#707070'"></path><path d="M787.1 717.5l-42.3 45.1c-11.7-8.7-21.8-16.3-23.8-17.9-7.9-6.7-19.7-6.3-27.1 1.1-7.8 7.8-7.8 20.5 0 28.3 1.3 1.3 1.9 1.9 41.3 31.3 3.6 2.7 7.8 4 12 4 5.4 0 10.7-2.1 14.6-6.3l54.5-58.1c7.6-8.1 7.2-20.7-0.9-28.3-8.1-7.6-20.7-7.2-28.3 0.8z" p-id="2184" :fill="menuBtn=='0'?'#fff':'#707070'"></path></svg>
+            <span style="margin-left: 8px;">添加定损单</span>
+          </div>
+          <span>
+            {{fixdetailCount}}
+          </span>
+        </div>
+        <div class="leftMenuBtn" @mouseout="menuBtnMouseout" @mouseover="menuBtnMouseover('1')" @click="leftMenuBtnClick('1')">
+          <div style="display:flex;align-items: center;width: 110px;">
+            <svg t="1601281508724" class="icon" viewBox="0 0 1024 1024" version="1.1" width="28" height="28"><path d="M574.1 835.6H222l-0.2-672.5h383.3v0.8l0.1 139.9c0 28.6 23.3 52 52 52h140l1-0.1v223.6c0 17.7 14.3 32 32 32s32-14.3 32-32V331.4c0-13.9-5.4-26.9-15.2-36.8L666.6 114.3c-9.8-9.8-22.9-15.2-36.8-15.2h-420c-13.9 0-26.9 5.4-36.8 15.2-9.8 9.8-15.2 22.9-15.2 36.8l0.2 696.5c0 28.7 23.3 52 52 52h364.1c17.7 0 32-14.3 32-32s-14.3-32-32-32z m179.5-543.8h-84.4l-0.1-84.4 84.5 84.4z" p-id="2182" :fill="menuBtn=='1'?'#fff':'#707070'"></path><path d="M445.2 323.8c17.7 0 32-14.4 31.9-32.1 0-17.6-14.4-31.9-32-31.9h-0.1l-128.8 0.4c-17.7 0-32 14.4-31.9 32.1 0.1 17.7 14.4 31.9 32.1 31.9l128.8-0.4zM317.1 452.2h191.3c17.7 0 32-14.3 32-32s-14.3-32-32-32H317.1c-17.7 0-32 14.3-32 32s14.3 32 32 32zM887.8 725.5c-2.5-10.8-13.2-17.5-23.9-15.1-10.8 2.5-17.5 13.2-15.1 23.9 1.6 6.9 2.4 14.1 2.4 21.3 0 52.7-42.8 95.5-95.5 95.5s-95.5-42.8-95.5-95.5 42.8-95.5 95.5-95.5c27 0 52.9 11.5 71 31.7 7.4 8.2 20 8.9 28.2 1.5s8.9-20 1.5-28.2c-25.7-28.5-62.4-44.9-100.8-44.9-74.7 0-135.5 60.8-135.5 135.5s60.8 135.5 135.5 135.5 135.5-60.8 135.5-135.5c0-10.2-1.1-20.4-3.3-30.2z" p-id="2183" :fill="menuBtn=='1'?'#fff':'#707070'"></path><path d="M787.1 717.5l-42.3 45.1c-11.7-8.7-21.8-16.3-23.8-17.9-7.9-6.7-19.7-6.3-27.1 1.1-7.8 7.8-7.8 20.5 0 28.3 1.3 1.3 1.9 1.9 41.3 31.3 3.6 2.7 7.8 4 12 4 5.4 0 10.7-2.1 14.6-6.3l54.5-58.1c7.6-8.1 7.2-20.7-0.9-28.3-8.1-7.6-20.7-7.2-28.3 0.8z" p-id="2184" :fill="menuBtn=='1'?'#fff':'#707070'"></path></svg>
+            <span style="margin-left: 8px;">添加工单</span>
+          </div>
+          <span>{{fixreveCount}}</span>
+        </div>
+<!--        <div class="leftMenuBtn" @mouseout="menuBtnMouseout" @mouseover="menuBtnMouseover('2')" @click="leftMenuBtnClick('2')">-->
+<!--          <div style="display:flex;align-items: center;width: 110px;">-->
+<!--            <svg t="1601281508724" class="icon" viewBox="0 0 1024 1024" version="1.1" width="28" height="28"><path d="M574.1 835.6H222l-0.2-672.5h383.3v0.8l0.1 139.9c0 28.6 23.3 52 52 52h140l1-0.1v223.6c0 17.7 14.3 32 32 32s32-14.3 32-32V331.4c0-13.9-5.4-26.9-15.2-36.8L666.6 114.3c-9.8-9.8-22.9-15.2-36.8-15.2h-420c-13.9 0-26.9 5.4-36.8 15.2-9.8 9.8-15.2 22.9-15.2 36.8l0.2 696.5c0 28.7 23.3 52 52 52h364.1c17.7 0 32-14.3 32-32s-14.3-32-32-32z m179.5-543.8h-84.4l-0.1-84.4 84.5 84.4z" p-id="2182" :fill="menuBtn=='2'?'#fff':'#707070'"></path><path d="M445.2 323.8c17.7 0 32-14.4 31.9-32.1 0-17.6-14.4-31.9-32-31.9h-0.1l-128.8 0.4c-17.7 0-32 14.4-31.9 32.1 0.1 17.7 14.4 31.9 32.1 31.9l128.8-0.4zM317.1 452.2h191.3c17.7 0 32-14.3 32-32s-14.3-32-32-32H317.1c-17.7 0-32 14.3-32 32s14.3 32 32 32zM887.8 725.5c-2.5-10.8-13.2-17.5-23.9-15.1-10.8 2.5-17.5 13.2-15.1 23.9 1.6 6.9 2.4 14.1 2.4 21.3 0 52.7-42.8 95.5-95.5 95.5s-95.5-42.8-95.5-95.5 42.8-95.5 95.5-95.5c27 0 52.9 11.5 71 31.7 7.4 8.2 20 8.9 28.2 1.5s8.9-20 1.5-28.2c-25.7-28.5-62.4-44.9-100.8-44.9-74.7 0-135.5 60.8-135.5 135.5s60.8 135.5 135.5 135.5 135.5-60.8 135.5-135.5c0-10.2-1.1-20.4-3.3-30.2z" p-id="2183" :fill="menuBtn=='2'?'#fff':'#707070'"></path><path d="M787.1 717.5l-42.3 45.1c-11.7-8.7-21.8-16.3-23.8-17.9-7.9-6.7-19.7-6.3-27.1 1.1-7.8 7.8-7.8 20.5 0 28.3 1.3 1.3 1.9 1.9 41.3 31.3 3.6 2.7 7.8 4 12 4 5.4 0 10.7-2.1 14.6-6.3l54.5-58.1c7.6-8.1 7.2-20.7-0.9-28.3-8.1-7.6-20.7-7.2-28.3 0.8z" p-id="2184" :fill="menuBtn=='2'?'#fff':'#707070'"></path></svg>-->
+<!--            <span style="margin-left: 8px;">添加材料</span>-->
+<!--          </div>-->
+<!--          <span>{{materCount}}</span>-->
+<!--        </div>-->
+        <div class="leftMenuBtn" @mouseout="menuBtnMouseout" @mouseover="menuBtnMouseover('3')" @click="leftMenuBtnClick('3')">
+          <div style="display:flex;align-items: center;width: 110px;">
+            <svg t="1601281508724" class="icon" viewBox="0 0 1024 1024" version="1.1" width="28" height="28"><path d="M574.1 835.6H222l-0.2-672.5h383.3v0.8l0.1 139.9c0 28.6 23.3 52 52 52h140l1-0.1v223.6c0 17.7 14.3 32 32 32s32-14.3 32-32V331.4c0-13.9-5.4-26.9-15.2-36.8L666.6 114.3c-9.8-9.8-22.9-15.2-36.8-15.2h-420c-13.9 0-26.9 5.4-36.8 15.2-9.8 9.8-15.2 22.9-15.2 36.8l0.2 696.5c0 28.7 23.3 52 52 52h364.1c17.7 0 32-14.3 32-32s-14.3-32-32-32z m179.5-543.8h-84.4l-0.1-84.4 84.5 84.4z" p-id="2182" :fill="menuBtn=='3'?'#fff':'#707070'"></path><path d="M445.2 323.8c17.7 0 32-14.4 31.9-32.1 0-17.6-14.4-31.9-32-31.9h-0.1l-128.8 0.4c-17.7 0-32 14.4-31.9 32.1 0.1 17.7 14.4 31.9 32.1 31.9l128.8-0.4zM317.1 452.2h191.3c17.7 0 32-14.3 32-32s-14.3-32-32-32H317.1c-17.7 0-32 14.3-32 32s14.3 32 32 32zM887.8 725.5c-2.5-10.8-13.2-17.5-23.9-15.1-10.8 2.5-17.5 13.2-15.1 23.9 1.6 6.9 2.4 14.1 2.4 21.3 0 52.7-42.8 95.5-95.5 95.5s-95.5-42.8-95.5-95.5 42.8-95.5 95.5-95.5c27 0 52.9 11.5 71 31.7 7.4 8.2 20 8.9 28.2 1.5s8.9-20 1.5-28.2c-25.7-28.5-62.4-44.9-100.8-44.9-74.7 0-135.5 60.8-135.5 135.5s60.8 135.5 135.5 135.5 135.5-60.8 135.5-135.5c0-10.2-1.1-20.4-3.3-30.2z" p-id="2183" :fill="menuBtn=='3'?'#fff':'#707070'"></path><path d="M787.1 717.5l-42.3 45.1c-11.7-8.7-21.8-16.3-23.8-17.9-7.9-6.7-19.7-6.3-27.1 1.1-7.8 7.8-7.8 20.5 0 28.3 1.3 1.3 1.9 1.9 41.3 31.3 3.6 2.7 7.8 4 12 4 5.4 0 10.7-2.1 14.6-6.3l54.5-58.1c7.6-8.1 7.2-20.7-0.9-28.3-8.1-7.6-20.7-7.2-28.3 0.8z" p-id="2184" :fill="menuBtn=='3'?'#fff':'#707070'"></path></svg>
+            <span style="margin-left: 8px;">材料出库</span>
+          </div>
+          <span></span>
+        </div>
+        <div class="leftMenuBtn" @mouseout="menuBtnMouseout" @mouseover="menuBtnMouseover('4')" @click="leftMenuBtnClick('4')">
+          <div style="display:flex;align-items: center;width: 110px;">
+            <svg t="1601281508724" class="icon" viewBox="0 0 1024 1024" version="1.1" width="28" height="28"><path d="M574.1 835.6H222l-0.2-672.5h383.3v0.8l0.1 139.9c0 28.6 23.3 52 52 52h140l1-0.1v223.6c0 17.7 14.3 32 32 32s32-14.3 32-32V331.4c0-13.9-5.4-26.9-15.2-36.8L666.6 114.3c-9.8-9.8-22.9-15.2-36.8-15.2h-420c-13.9 0-26.9 5.4-36.8 15.2-9.8 9.8-15.2 22.9-15.2 36.8l0.2 696.5c0 28.7 23.3 52 52 52h364.1c17.7 0 32-14.3 32-32s-14.3-32-32-32z m179.5-543.8h-84.4l-0.1-84.4 84.5 84.4z" p-id="2182" :fill="menuBtn=='4'?'#fff':'#707070'"></path><path d="M445.2 323.8c17.7 0 32-14.4 31.9-32.1 0-17.6-14.4-31.9-32-31.9h-0.1l-128.8 0.4c-17.7 0-32 14.4-31.9 32.1 0.1 17.7 14.4 31.9 32.1 31.9l128.8-0.4zM317.1 452.2h191.3c17.7 0 32-14.3 32-32s-14.3-32-32-32H317.1c-17.7 0-32 14.3-32 32s14.3 32 32 32zM887.8 725.5c-2.5-10.8-13.2-17.5-23.9-15.1-10.8 2.5-17.5 13.2-15.1 23.9 1.6 6.9 2.4 14.1 2.4 21.3 0 52.7-42.8 95.5-95.5 95.5s-95.5-42.8-95.5-95.5 42.8-95.5 95.5-95.5c27 0 52.9 11.5 71 31.7 7.4 8.2 20 8.9 28.2 1.5s8.9-20 1.5-28.2c-25.7-28.5-62.4-44.9-100.8-44.9-74.7 0-135.5 60.8-135.5 135.5s60.8 135.5 135.5 135.5 135.5-60.8 135.5-135.5c0-10.2-1.1-20.4-3.3-30.2z" p-id="2183" :fill="menuBtn=='4'?'#fff':'#707070'"></path><path d="M787.1 717.5l-42.3 45.1c-11.7-8.7-21.8-16.3-23.8-17.9-7.9-6.7-19.7-6.3-27.1 1.1-7.8 7.8-7.8 20.5 0 28.3 1.3 1.3 1.9 1.9 41.3 31.3 3.6 2.7 7.8 4 12 4 5.4 0 10.7-2.1 14.6-6.3l54.5-58.1c7.6-8.1 7.2-20.7-0.9-28.3-8.1-7.6-20.7-7.2-28.3 0.8z" p-id="2184" :fill="menuBtn=='4'?'#fff':'#707070'"></path></svg>
+            <span style="margin-left: 8px;">流水账单</span>
+          </div>
+          <span></span>
+        </div>
+      </div>
+      <div style="background-color: #fff;min-height: 800px;" :style="{height:list3?(list3.length/5)*320+320+'px':'800px'}">
         <div class="top_center" style="padding-top: 20px;">
           <yhm-commonbutton :value="indexs==0?'开始':'继续'" v-if="state==0" icon="i" class="workOrderBtn" @call="beginClick()" :flicker="true" ></yhm-commonbutton>
-          <yhm-commonbutton value="已交车" v-else icon="i" class="workOrderBtn" ></yhm-commonbutton>
+          <yhm-commonbutton value="已竣工" v-else icon="i" class="workOrderBtn"></yhm-commonbutton>
 
           <!--    固定的准备阶段      v-show="prepareShow"-->
           <div style="width: 86.5%;height: 263px" v-for="(items,key) in immobilizationList[0]" :key=key>
@@ -15,13 +61,27 @@
                    }"
               >
                 <div class="circleTitle2">
-                  <span class="circle" ref="circleClick" @click="circleClick(item)" :class="{'atPresent':item.index==indexs}"></span>
-                  <p class="circleTitle_center" :class="{'circleTitle_center_right':index==4}" :style="{'color':item.stageColor,}">{{item.title}}</p>
-                  <p style="text-align: center;" :class="{'circleTetRight':index==4}">{{item.state==0?'未完成':'已完成'}}</p>
+                  <span class="circle" ref="circleClick" @click="circleClick(item)" :class="{'atPresent':item.index==indexs}">{{item.index>indexs?'待办':item.index==indexs?'操作':'查看'}}</span>
+                  <p class="circleTitle_center" :class="{'circleTitle_center_right':index==4}" :style="{'color':item.color}">{{item.title=='质检确认'?'返工确认':item.title}}</p>
+                  <p style="text-align: center;" :class="{'circleTetRight':index==4}">
+                    <span style="color: #7f7fd5;" v-if="item.teamName!=''&&item.teamName!=null">( {{item.teamName}} )</span>
+                    <br v-if="item.teamName!=''&&item.teamName!=null">
+                    <span v-if="item.state==0">未完成</span>
+                    <span v-else-if="item.state=='1'" style="color: #49a9ea;">进行中</span>
+                    <span v-else-if="item.state=='2'" style="color: #00B86B;">已完成</span>
+
+                    <br v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">
+                    <span v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">开始时间</span>
+                    <br v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">
+                    <span v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">{{item.startDateStr}}</span>
+                    <br v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">
+                    <span v-if="item.state=='2'" v-show="item.type=='0'||item.type=='2'">结束时间</span><br>
+                    <span v-if="item.state=='2'" v-show="item.type=='0'||item.type=='2'">{{item.endDateStr}}</span>
+                  </p>
                 </div>
                 <span  class="i-input-left-arrow" v-show="index==4&&content[0].list.length==0"
-                       style="font-size: 30px;float: left;position: relative;top: 45px;left: -119px;z-index: 1;"></span>
-
+                       style="font-size: 30px;float: left;position: relative;top: 45px;left: -119px;z-index: 1;"
+                ></span>
                 <div class="bor" v-if="index==4">
                   <span class="semicircleRight"></span>
                   <span class="semicircleCentre"></span>
@@ -32,12 +92,13 @@
                      style="width: 150px;margin-top: 0;position: absolute;top: 0;"
                 >
                   <span  class="i-input-right-arrow" style="font-size: 30px;float: left;position: absolute;top: -13px;right: -12px;"></span>
-
                 </div>
               </div>
 
             </div>
           </div>
+
+
 <!--          &lt;!&ndash;     主流程服务阶段未生成时的假模型节点     &ndash;&gt;-->
 <!--          <div style="width: 86.5%;height: 263px" v-show="modelShow" v-for="(items,key) in modelList" :key=key>-->
 <!--            <div class="straightLine semicircleLeft" v-show="key%2==0?true:false">-->
@@ -72,37 +133,45 @@
             <div class="straightLine semicircleLeft" v-show="key%2==0?true:false" v-if="items.list.length!=0">
               <div class="circleTitle" v-for="(item,index) in items.list" :key="index"
                    :style="{
-                    'right':index==0?'-520px':(-520+(index*260))+ 'px',
+                    'right':index==0?'-520px':(-520+(index*250))+ 'px',
                     'top':item.direction=='2'?'130px':'',
                  }"
               >
                 <div class="circleTitle2">
-                  <span class="circle" ref="circleClick" @click="circleClick(item)"  :class="{'circleTitle_circle':index==4,'atPresent':item.index==indexs}"></span>
-                  <p class="circleTitle_center" :class="{'circleTitle_center_left':index==4}" :style="{'color':item.stageColor}">{{item.title}}</p>
-                  <p style="text-align: center;" :class="{'circleTetLeft':index==4}">{{item.state==0?'未完成':'已完成'}}</p>
+                  <span class="circle" ref="circleClick" @click="circleClick(item)"  :class="{'circleTitle_circle':index==4,'atPresent':item.index==indexs}">{{item.index>indexs?'待办':item.index==indexs?'操作':'查看'}}</span>
+                  <p class="circleTitle_center" :class="{'circleTitle_center_left':index==4}" :style="{'color':item.color}">{{item.title=='质检确认'?'返工确认':item.title}}</p>
+                  <p style="text-align: center;" :class="{'circleTetLeft':index==4}">
+                    <span style="color: #7f7fd5;" v-if="item.teamName!=''&&item.teamName!=null">( {{item.teamName}} )</span>
+                    <br v-if="item.teamName!=''&&item.teamName!=null">
+                    <span v-if="item.state==0">未完成</span>
+                    <span v-else-if="item.state=='1'" style="color: #49a9ea;">进行中</span>
+                    <span v-else-if="item.state=='2'" style="color: #00B86B;">已完成</span>
+                    <br v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">
+                    <span v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">开始时间</span>
+                    <br v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">
+                    <span v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">{{item.startDateStr}}</span>
+                    <br v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">
+                    <span v-if="item.state=='2'" v-show="item.type=='0'||item.type=='2'">结束时间</span><br>
+                    <span v-if="item.state=='2'" v-show="item.type=='0'||item.type=='2'">{{item.endDateStr}}</span>
+                  </p>
                 </div>
                 <div class="bor borLeft" :class="{'borLeft':item.direction=='2'?true:false}" v-if="index==4">
                   <span class="semicircleRight"></span>
                   <span class="semicircleCentre"></span>
-
                 </div>
                 <span  class="i-input-right-arrow" v-show="index==4&&content[key+1].list.length==0"
-                       style="font-size: 30px;float: right;position: relative;top: 45px;right: -137px;"></span>
-
+                       style="font-size: 30px;float: right;position: relative;top: 45px;right: -100px;"
+                ></span>
                 <div class="straightLine"
                      v-show="index==items.list.length-1&&items.list.length<5"
                      :style="{'right':index==3?'30px':(4-index)*105+30+'px'}"
                      style="width: 150px;margin-top: 0;position: absolute;top: 0;"
                 >
                   <span  class="i-input-left-arrow" style="font-size: 30px;float: left;position: absolute;top: -12px;left: -12px;"></span>
-
                 </div>
-
               </div>
               <span  class="i-input-left-arrow" v-show="items.list.length==0" style="font-size: 30px;float: left;position: absolute;top: -12px;left: -12px;"></span>
-
             </div>
-
             <div class="straightLine towardsTheRight" v-show="key%2==0?false:true"  v-if="items.list.length!=0">
               <div class="circleTitle" v-for="(item,index) in items.list" :key="index"
                    :style="{
@@ -111,35 +180,55 @@
                    }"
               >
                 <div class="circleTitle2">
-                  <span class="circle" ref="circleClick" @click="circleClick(item)" :class="{'circleRight':index==4,'atPresent':item.index==indexs}"></span>
-                  <p class="circleTitle_center" :class="{'circleTitle_center_right':index==4}" :style="{'color':item.stageColor,}">{{item.title}}</p>
-                  <p style="text-align: center;" :class="{'circleTetRight':index==4}">{{item.state==0?'未完成':'已完成'}}</p>
+                  <span class="circle" ref="circleClick" @click="circleClick(item)" :class="{'circleRight':index==4,'atPresent':item.index==indexs}">{{item.index>indexs?'待办':item.index==indexs?'操作':'查看'}}</span>
+                  <p class="circleTitle_center" :class="{'circleTitle_center_right':index==4}" :style="{'color':item.color,}">{{item.title=='质检确认'?'返工确认':item.title}}</p>
+                  <p style="text-align: center;" :class="{'circleTetRight':index==4}">
+                    <span style="color: #7f7fd5;" v-if="item.teamName!=''&&item.teamName!=null">( {{item.teamName}} )</span>
+                    <br v-if="item.teamName!=''&&item.teamName!=null">
+                    <span v-if="item.state==0">未完成</span>
+                    <span v-else-if="item.state=='1'" style="color: #49a9ea;">进行中</span>
+                    <span v-else-if="item.state=='2'" style="color: #00B86B;">已完成</span>
+                    <br v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">
+                    <span v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">开始时间</span>
+                    <br v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">
+                    <span v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">{{item.startDateStr}}</span>
+                    <br v-if="item.state=='1'||item.state=='2'" v-show="item.type=='0'||item.type=='2'">
+                    <span v-if="item.state=='2'" v-show="item.type=='0'||item.type=='2'">结束时间</span><br>
+                    <span v-if="item.state=='2'" v-show="item.type=='0'||item.type=='2'">{{item.endDateStr}}</span>
+                  </p>
                 </div>
                 <div class="bor borRight" v-if="index==4">
                   <span class="semicircleRight semicircleBorRight"></span>
                   <span class="semicircleCentre"></span>
                 </div>
                 <span  class="i-input-left-arrow" v-show="index==4&&content[key+1].list.length==0"
-                       style="font-size: 30px;float: left;position: relative;top: 45px;left: -119px;"></span>
-
+                       style="font-size: 30px;float: left;position: relative;top: 45px;left: -119px;"
+                ></span>
                 <div class="straightLine"
                      v-show="index==items.list.length-1&&items.list.length<5"
                      :style="{'left':index==3?'30px':(4-index)*110+30+'px'}"
                      style="width: 150px;margin-top: 0;position: absolute;top: 0;"
                 >
                   <span  class="i-input-right-arrow" style="font-size: 30px;float: left;position: absolute;top: -13px;right: -12px;"></span>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div style="width: 100%;height: 50px;z-index: 99;position: fixed;bottom: 0;display: flex;align-items: center;justify-content: center;">
+<!--        indexs==0?'开始流程':'继续流程'-->
+        <yhm-commonbutton value="当前工序" icon="i" @call="beginClick()" :flicker="true" ></yhm-commonbutton>
+<!--        <yhm-commonbutton value="添加工单详情" icon=" " :flicker="true" @call="affirmProcess('0')"></yhm-commonbutton>-->
+<!--        <yhm-commonbutton value="添加出库" icon=" " :flicker="true" @call="affirmProcess('1')"></yhm-commonbutton>-->
+      </div>
+      <div class="shade" v-show="leftMenuShow" @click="leftMenuShow = false"></div>
     </div>
 </template>
 
 <script>
   import { formmixin } from '@/assets/form.js'
+  import { guid } from '@/assets/common.js'
   export default {
     name: 'workOrderFlowChartForm',
     mixins: [formmixin],
@@ -147,68 +236,77 @@
       return{
         colorList:['fd6802','2f54eb','a60cde','d618ab','2c920b'],
         // direction:'',//通过数组长度/5的结果 算出当前在左边还是在右边
+        menuBtn:-1,//选中按钮的索引值
         indexs:0,//总索引值
         key:0,
         state:'',//当前主流程表是否已完成
         stage:'',//阶段
-        modelShow:true,//假阶段
+        materCount:'',//材料详情
+        fixreveCount:'',//定损单条数
+        fixdetailCount:'',//工单详情条数
+        initiative:'',//是否自动打开当前流程
+        closeInitiative:'',
         // prepareShow:false,//准备阶段是否展示出来
+        list1:[],//前五个节点的数据
+        list2:[],//全部的子流程节点
         list3:[],//返修节点的数据
+        stateStrList:[],//工序状态
         flowPathID:'',//主流程图id
+        leftMenuShow:false,//左边菜单显示隐藏
         immobilizationList:[
           {
             list:[
-              {
-                title:'定损单',//标题
-                stage:'1',//阶段
-                type:'',//流程阶段
-                state:'',//状态:已完成未完成
-                stageColor:'#fd6802',//当前阶段的颜色
-                circleIcon:'',//节点图标
-                direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
-                index:'0',//全部节点的索引值
-              },
-              {
-
-                title:'工单详情',//标题
-                stage:'1',//阶段
-                type:'',//流程阶段
-                state:'',//状态:已完成未完成
-                stageColor:'#fd6802',//当前阶段的颜色
-                circleIcon:'',//节点图标
-                direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
-                index:'1',//全部节点的索引值
-              },
-              {
-                title:'工单材料',//标题
-                stage:'1',//阶段
-                type:'',//流程阶段
-                state:'',//状态:已完成未完成
-                stageColor:'#fd6802',//当前阶段的颜色
-                circleIcon:'',//节点图标
-                direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
-                index:'2',//全部节点的索引值
-              },
-              {
-                title:'出库',//标题
-                stage:'1',//阶段
-                type:'',//流程阶段
-                state:'',//状态:已完成未完成
-                stageColor:'#2f54eb',//当前阶段的颜色
-                circleIcon:'',//节点图标
-                direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
-                index:'3',//全部节点的索引值
-              },
-              {
-                title:'选择工序',//标题
-                stage:'1',//阶段
-                type:'',//流程阶段
-                state:'',//状态:已完成未完成
-                stageColor:'#2f54eb',//当前阶段的颜色
-                circleIcon:'',//节点图标
-                direction:'1',//border的类型 0直线 1右边曲线 2左边曲线
-                index:'4',//全部节点的索引值
-              },
+              // {
+              //   title:'定损单',//标题
+              //   stage:'1',//阶段
+              //   type:'',//流程阶段
+              //   state:'',//状态:已完成未完成
+              //   stageColor:'#fd6802',//当前阶段的颜色
+              //   circleIcon:'',//节点图标
+              //   direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
+              //   index:'0',//全部节点的索引值
+              // },
+              // {
+              //
+              //   title:'工单详情',//标题
+              //   stage:'1',//阶段
+              //   type:'',//流程阶段
+              //   state:'',//状态:已完成未完成
+              //   stageColor:'#fd6802',//当前阶段的颜色
+              //   circleIcon:'',//节点图标
+              //   direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
+              //   index:'1',//全部节点的索引值
+              // },
+              // {
+              //   title:'工单材料',//标题
+              //   stage:'1',//阶段
+              //   type:'',//流程阶段
+              //   state:'',//状态:已完成未完成
+              //   stageColor:'#fd6802',//当前阶段的颜色
+              //   circleIcon:'',//节点图标
+              //   direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
+              //   index:'2',//全部节点的索引值
+              // },
+              // {
+              //   title:'钣金拆装或修复',//标题
+              //   stage:'1',//阶段
+              //   type:'',//流程阶段
+              //   state:'',//状态:已完成未完成
+              //   stageColor:'#2f54eb',//当前阶段的颜色
+              //   circleIcon:'',//节点图标
+              //   direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
+              //   index:'3',//全部节点的索引值
+              // },
+              // {
+              //   title:'选择工序',//标题
+              //   stage:'1',//阶段
+              //   type:'',//流程阶段
+              //   state:'',//状态:已完成未完成
+              //   stageColor:'#2f54eb',//当前阶段的颜色
+              //   circleIcon:'',//节点图标
+              //   direction:'1',//border的类型 0直线 1右边曲线 2左边曲线
+              //   index:'4',//全部节点的索引值
+              // },
             ]
           },
         ],
@@ -274,51 +372,6 @@
             direction:'2',
             list:[]
           }
-          // {
-          //   direction:'3',
-          //   list:[
-          //     {
-          //       title:'服务1',//标题
-          //       stage:'1',//阶段
-          //       stageColor:'#a60cde',//当前阶段的颜色
-          //       circleIcon:'',//节点图标
-          //       direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
-          //       index:'10',//全部节点的索引值
-          //     },
-          //     {
-          //       title:'服务2',//标题
-          //       stage:'1',//阶段
-          //       stageColor:'#a60cde',//当前阶段的颜色
-          //       circleIcon:'',//节点图标
-          //       direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
-          //       index:'11',//全部节点的索引值
-          //     },
-          //     {
-          //       title:'服务3',//标题
-          //       stage:'1',//阶段
-          //       stageColor:'#a60cde',//当前阶段的颜色
-          //       circleIcon:'',//节点图标
-          //       direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
-          //       index:'12',//全部节点的索引值
-          //     },
-          //     {
-          //       title:'检验',//标题
-          //       stage:'1',//阶段
-          //       stageColor:'#d618ab',//当前阶段的颜色
-          //       circleIcon:'',//节点图标
-          //       direction:'0',//border的类型 0直线 1右边曲线 2左边曲线
-          //       index:'13',//全部节点的索引值
-          //     },
-          //     {
-          //       title:'交车',//标题
-          //       stage:'2',//阶段
-          //       stageColor:'#2c920b',//当前阶段的颜色
-          //       circleIcon:'',//节点图标
-          //       direction:'1',//border的类型 0直线 1右边曲线 2左边曲线
-          //       index:'14',//全部节点的索引值
-          //     },
-          //   ]
-          // }
         ],
         backupsList:[
           {
@@ -370,16 +423,51 @@
 
       }
     },
-    //进入该页面时
-    beforeRouteEnter (to, from, next) {
-      next(vm => {
-        let  a =  JSON.parse(sessionStorage.processState||0)
-        if(a.id==vm.ownerID){
-          vm.proState = a.proState
-        }
-      })
-    },
+    // beforeRouteEnter (to, from, next) {
+    //   next(vm => {
+    //     let  a =  JSON.parse(sessionStorage.processState||0)
+    //     if(a.id==vm.ownerID){
+    //       vm.proState = a.proState
+    //     }
+    //   })
+    // },
     methods:{
+      mouseoutEvent(){
+        this.leftMenuShow = false
+      },
+      mouseoverEvent(){
+        this.leftMenuShow = true
+      },
+      affirmProcess(type){
+        if(type=='0'){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '700',
+            url:'/workOrderDetailsManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&worktype='+this.worktype,
+            title:'工单详情列表',
+            closeCallBack:(data) =>{
+              // if (data) {
+              // this.$dialog.close()
+              this.initData(false)
+              // }
+            }
+          })
+        }else if(type=='1'){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '700',
+            url:'/workOrderStockOutManagerView?flowPathID='+this.flowPathID+'&ownerID='+this.ownerID,
+            title:'出库详情列表',
+            closeCallBack:(data) =>{
+              // if (data) {
+              // this.$dialog.close()
+              this.initData(false)
+              // }
+            }
+          })
+        }
+
+      },
       skipEvent(url,title,height){
         if(!height||height==undefined){
           height='700'
@@ -394,238 +482,399 @@
           }
         })
       },
-      // nodeDiagram(){
-      //   for(let j in this.backupsList[0].list){
-      //     if(this.indexs<=3&&j<=this.indexs){
-      //       this.immobilizationList[0].list.push(this.backupsList[0].list[j])
-      //       alert(j)
-      //     }
-      //
-      //   }
-      // },
-      nodeDiagramState(){//改变准备节点的完成状态
-        for(let j in this.immobilizationList[0].list){
-          if(j<this.indexs){
-            this.immobilizationList[0].list[j].state = 1
+      menuBtnMouseout(){
+        this.menuBtn = -1
+      },
+      menuBtnMouseover(index){
+        this.menuBtn = index
+      },
+      selectionProcess(type){
+        let selectionProcessObject = {//展示向的 选择工序的数据
+            id:'AAAAA',
+            ownerID:'',
+            dependid:'',
+            title:'选择工序',
+            nameStr:'选择工序',
+            stage:this.list2.length,
+            state:'1',
+            type:'1',
+            index:this.list2.length,
+            orderStr:this.list2.length,
+            color:'#49a9ea',
+            startDateStr:''
+          }
+        let selectionProcessObject2 = {
+          id:'AAAAA',
+          ownerID:'',
+          dependid:'',
+          title:'选择工序',
+          nameStr:'选择工序',
+          stage:this.list.length+1,
+          state:'1',
+          type:'1',
+          index:this.list.length,
+          orderStr:this.list.length,
+          direction:this.list.length=='4'?'1':'0',
+          color:'#49a9ea',
+          startDateStr:''
+        }
+        if(type=='0'){
+          // if(this.worktype=='1'&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].type=='2'){
+          //   this.list2.push(selectionProcessObject2)
+          //   this.immobilizationList[0].list.push(selectionProcessObject2)
+          // }
+          if(this.worktype=='1'){
+            if(this.list.length<=4&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].type=='2'){
+              this.list2.push(selectionProcessObject2)
+              this.immobilizationList[0].list.push(selectionProcessObject2)
+            }else if(this.list.length<=4&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].type=='4'){
+              this.immobilizationList[0].list.push(selectionProcessObject2)
+              this.list2.push(selectionProcessObject2)
+            }else if(this.list.length>=5&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].type=='2'){
+              this.list3.push(selectionProcessObject)
+              this.list2.push(selectionProcessObject)
+            }else if(this.list.length>=5&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].title=='质检确认'){
+              this.list3.push(selectionProcessObject)
+              this.list2.push(selectionProcessObject)
+            }else if(this.list.length<=4&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].type=='0'){
+              this.immobilizationList[0].list.push(selectionProcessObject2)
+              this.list2.push(selectionProcessObject2)
+            }
+          }else{
+            if(this.list.length<=4&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].type=='2'){
+              this.immobilizationList[0].list.push(selectionProcessObject2)
+              this.list2.push(selectionProcessObject2)
+            }else if(this.list.length<=4&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].type=='4'){
+              this.immobilizationList[0].list.push(selectionProcessObject2)
+              this.list2.push(selectionProcessObject2)
+            }else if(this.list.length>=5&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].type=='2'){
+              this.list3.push(selectionProcessObject)
+              this.list2.push(selectionProcessObject)
+            }else if(this.list.length>=5&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].title=='质检确认'){
+              this.list3.push(selectionProcessObject)
+              this.list2.push(selectionProcessObject)
+            }else if(this.list.length<=4&&this.list2[this.list2.length-1].state=='2'&&this.list2[this.list2.length-1].type=='0'){
+              this.immobilizationList[0].list.push(selectionProcessObject2)
+              this.list2.push(selectionProcessObject2)
+            }
+          }
+        }else if(type=='1'){
+          if(this.list.length<='4'){
+            for(let i in this.immobilizationList[0].list){
+              if(this.immobilizationList[0].list[i].id=='AAAAA'){
+                this.immobilizationList[0].list.splice(i,1)
+              }
+            }
+            for(let j in this.list2){
+              if(this.list2[j].id=='AAAAA'){
+                this.list2.splice(j,1)
+              }
+            }
+          }else if(this.list.length=='5'){
+            for(let t in this.list2){
+              if(this.list2[t].id=='AAAAA'){
+                this.list2.splice(t,1)
+              }
+            }
+            for(let t in this.list3){
+              if(this.list3[t].id=='AAAAA'){
+                this.list3.splice(t,1)
+              }
+            }
           }
         }
       },
-      beginClick(){
+      generatingProcess(){
+        this.content = [] //每次渲染时清空之前的数组
+        let quantity = this.list3.length/5 //需要生成几组数据（每组五个）
+        let num = 0 //添加检验节点后需要生成几组
+        //先向固定准备阶段补一个服务节点 凑满一组5个
 
+        if(Number(quantity)%1==0){//计算总数除以5是否可以整除
+          num = quantity + 1
+          // console.log( quantity,'整数' )
+        }else{//无法整除时截取小数点前的数据 并加一
+          num = parseInt(quantity.toString().substring(0,quantity.toString().indexOf('.')))+1
+          if(num==0){//如果不满足5条时 改变为1 下边生成一组数据
+            num==1
+          }
+        }
+        for(let i=0; i<num; i++){//先根据数据条数生成每个组
+          // console.log( 'i',i )
+          this.content.push({
+            direction:i%2==0?2:1,
+            list:[]
+          })
+        }
+        let a = 0
+        this.list3.unshift('11')
+        try {
+          for(let j=1; j<this.list3.length; j++){
+            if(j!=0&&j%5==0){//判断除以4==0时 表示是当前数组的最后一条
+              this.content[a].list.push({
+                'title':this.list3[j].nameStr,
+                'id':this.list3[j].id,
+                'dependid':this.list3[j].dependid,
+                'type':this.list3[j].type,
+                'stage':'2',
+                'state':this.list3[j].state,
+                'color':this.list3[j].color,
+                'circleIcon':'',
+                'ownerID':this.list3[j].ownerID,
+                'direction':a%2==0?2:1,//判断方向来添加相应的样式
+                'index':Number(this.list3[j].orderStr),
+                'orderStr':Number(this.list3[j].orderStr),
+                'endDateStr':this.list3[j].endDateStr==null?'':this.list3[j].endDateStr,
+                'startDateStr':this.list3[j].startDateStr,
+              })
+              a++
+            }else{
+              this.content[a].list.push({
+                'title':this.list3[j].nameStr,
+                'id':this.list3[j].id,
+                'dependid':this.list3[j].dependid,
+                'type':this.list3[j].type,
+                'stage':'2',
+                'state':this.list3[j].state,
+                'color':this.list3[j].color,
+                'circleIcon':'',
+                'direction':'',
+                'ownerID':this.list3[j].ownerID,
+                'index':Number(this.list3[j].orderStr),
+                'orderStr':Number(this.list3[j].orderStr),
+                'endDateStr':this.list3[j].endDateStr==null?'':this.list3[j].endDateStr,
+                'startDateStr':this.list3[j].startDateStr,
+              })
+            }
+          }
+        }catch (e) {
+        }
+
+        setTimeout(()=>{
+          if(this.initiative == '0'&&this.closeInitiative == '0'){
+            this.closeInitiative = ''
+            // sessionStorage.setItem('initiative',this.ownerID)
+            this.beginClick()
+          }
+        },0)
+      },
+      leftMenuBtnClick(type){
+        let url = ''
+        let title = ''
+        let height = ''
+        if(type=='0'){
+          url = '/lossAssessmentForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&indexs='+this.indexs//定损单录制
+          title = '添加定损单'
+          this.skipEvent(url,title)
+        }else if(type=='1'){
+          url = '/workOrderDetailsManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&worktype='+this.worktype//工单详情列表
+          title = '添加工单详情'
+          this.skipEvent(url,title)
+        }else if(type=='2'){
+          url = '/workOrderMaterialListManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID//工单材料列表
+          title = '工单材料列表'
+          this.skipEvent(url,title)
+        }else if(type=='3'){
+          url = '/workOrderStockOutManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID
+          title = '出库'
+          this.skipEvent(url,title)
+        }else if(type=='4'){
+          url = '/workOrderSettleAccountsForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID
+          title = '流水账单'
+          height = '800'
+          this.skipEvent(url,title,height)
+        }
+      },
+      beginClick(){
+        setTimeout(()=>{
+          this.leftMenuShow = false
+        },0)
         let url = ''
         let title = ''
         let height = '700'
-        this.nodeDiagramState()
         let inTheEnd = ''
         let index = ''
         let item = ''
-        console.log( item,this.indexs,'item' )
-        if(this.list3){
-          item = this.list3[this.indexs-4]
-          inTheEnd = item.orderStr==this.list3.length+3//判断是否是最后一个服务节点
-          console.log(inTheEnd,item.orderStr,this.list3.length+3,'是不是最后一个节点'  )
-          index = this.list3.length+4//检修节点的索引值
-        }else{
-          let items = this.immobilizationList[0].list[this.indexs]
-          // console.log( this.immobilizationList[this.indexs],this.indexs,items,'items' )
-          inTheEnd = false
-          this.nodeDiagramState()
-          if(this.indexs=='0'){
-            url = '/lossAssessmentForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID//定损单录制
-            title = '添加定损单'
-            this.skipEvent(url,title)
-          }else if(this.indexs=='1'){
-            url = '/workOrderDetailsManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID//工单详情列表
-            title = '工单详情列表'
-            this.skipEvent(url,title)
-          }else if(this.indexs=='2'){
-            url = '/workOrderMaterialListManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID//工单材料列表
-            title = '工单材料列表'
-            this.skipEvent(url,title)
-          }else if(this.indexs=='3'){//准备阶段的出库
-            url = '/workOrderStockOutManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID
-            title = '出库'
-            this.skipEvent(url,title)
-          }
-          if(items.title=='选择工序'&&this.indexs==items.index){
-            // url = '/workOrderDetailsManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&operationShow=1'+'&index='+item.index+'&upDateStateID='+item.id
-            // title = '选择服务流程'
-            url = '/workOrderProcessForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&index='+items.index
-            title = '选择工序'
-            this.skipEvent(url,title)
-            return
-          }else if(items.title=='选择工序'&&this.indexs!=items.index){
-            this.$dialog.alert({
-              tipValue:'当前选择工序节点无法操作,请重新创建节点。',
-              alertImg:'warn',
-              width:'330'
-            })
-          }
-          return
-        }
-        console.log( Number(item.orderStr), Number(this.indexs))
+        item = this.list2[this.indexs]
+        inTheEnd = item.orderStr==this.list2.length-1//判断是否是最后一个服务节点
+        index = this.list2.length//检修节点的索引值
         if(Number(item.orderStr)<=Number(this.indexs)){
-          if(item.nameStr=='交车'){//已完成
-            return
-          }
-          console.log( '1' ,this.indexs,item.orderStr,item.nameStr)
-          if(item.orderStr=='0'||item.nameStr=='定损单'){//定损单
-            url = '/lossAssessmentForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&inTheEnd='+inTheEnd+'&index='+item.orderStr+'&upDateStateID='+item.id//定损单录制
-            title = '定损单'
-            console.log( '2' )
+          if(item.type=='0'){
+            let flowType = 7
+            if(Number(this.indexs)>3){
+              flowType = 6
+            }
+            url = '/sheetMetalRepairForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&flowType='+flowType
+              +'&index='+item.index+'&upDateStateID='+item.id
+            title = '钣金拆装或修复'
             this.skipEvent(url,title)
             return
-          }else if(item.orderStr=='1'||item.nameStr=='工单详情'){//工单详情
-            url = '/workOrderDetailsManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&inTheEnd='+inTheEnd+'&index='+item.orderStr+'&upDateStateID='+item.id//工单详情列表
-            title = '工单详情'
-            console.log( '3' )
-            this.skipEvent(url,title)
-            return
-          }else if(item.orderStr=='2'||item.nameStr=='工单材料'){//工单材料
-            url = '/workOrderMaterialListManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&inTheEnd='+inTheEnd+'&index='+item.orderStr+'&upDateStateID='+item.id//工单材料列表
-            title = '工单材料'
-            console.log( '4' )
-            this.skipEvent(url,title)
-            return
-          }else if(item.nameStr=='检修'){//检修
+          }else if(item.type=='3'&&item.nameStr=='检修'){
             url = '/workOrderCheckoutManagerView?ownerID='+this.ownerID+'&subProcessID='+item.id
               +'&flowPathID='+this.flowPathID+'&state='+this.state+'&index='+item.orderStr
               +'&upDateStateID='+item.id+'&inTheEnd='+inTheEnd
             title = '检修'
-            console.log( '5' )
+            this.skipEvent(url,title,'700')
+            return
+          }else if(item.type=='4'&&item.nameStr=='质检确认'){
+            url = '/workOrderCheckoutAffirmManager?ownerID='+this.ownerID+
+              '&inTheEnd='+inTheEnd+'&flowPathID='+this.flowPathID+
+              '&index='+item.orderStr+'&state='+item.state,
+            title = '确认返修工序'
             this.skipEvent(url,title,'700')
             return
           }
-          if(item.nameStr=='出库'&&item.orderStr!='3'){//不是准备阶段的出库时
-            url = '/workOrderStockOutManagerView?ownerID='+this.ownerID+'&stateID='+item.id+'&flowPathID='+this.flowPathID+'&index='+item.orderStr+'&upDateStateID='+item.id
-            title = '出库'
-            console.log( '6' )
-            this.skipEvent(url,title,'700')
-            return
-          }else if(item.orderStr==3){//准备阶段的出库
-            url = '/workOrderStockOutManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&upDateStateID='+item.id
-            title = '出库'
-            console.log( '7' )
-            this.skipEvent(url,title)
-            return
-          }
-          if(item.nameStr=='选择工序'&&this.indexs==item.orderStr){
-            // url = '/workOrderDetailsManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&operationShow=1'+'&index='+item.index+'&upDateStateID='+item.id
-            // title = '选择服务流程'
-            url = '/workOrderProcessForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&index='+item.orderStr
-            title = '选择工序'
-            console.log( '8' )
-            this.skipEvent(url,title)
-            return
-          }else if(item.nameStr=='选择工序'&&this.indexs!=item.orderStr){
-            this.$dialog.alert({
-              tipValue:'当前选择工序节点无法操作,请重新创建节点。',
-              alertImg:'warn',
-              width:'330'
-            })
-          }
-          if(item.type=='5'&&this.indexs>=item.orderStr){//查看工序
-            console.log( '1' )
+          if(item.type=='2'){//查看工序
+            let type = 5
+            let state = 0
+            for(let i in this.list3){
+              if(this.list3[i].nameStr=='质检确认'){
+                type = 6
+              }
+            }
+            if(item.type=='2'){
+              state = 2
+            }
             url = '/workOrderProcessForm?ownerID='+this.ownerID
-              +'&flowPathID='+this.flowPathID+'&index='+item.orderStr
-              +'&flowType='+item.type+'&dependid='+item.dependid
-              +'&upDateStateID='+item.id+'&inTheEnd='+inTheEnd
-            title = '查看'+item.nameStr
+              +'&flowPathID='+this.flowPathID+'&index='+item.index
+              +'&flowType=6'+'&dependid='+item.dependid
+              +'&upDateStateID='+item.id+'&inTheEnd='+inTheEnd+'&nodeType='+type
+              +'&state='+state
+            title = '查看'+item.title
             this.skipEvent(url,title)
-            return
           }
+          if(item.nameStr=='选择工序'){
+            this.ajaxJson({
+              url: '/fix/fixrepair/initForm',
+              loading:'0',
+              data: {
+                orderid:this.ownerID,
+                state:'0',
+              },
+              call: (data) => {
+                if(data){
+                  if(data.repairNamePsd.list.length>=1){
+                    url = '/workOrderProcessForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&index='+item.orderStr+'&inTheEnd='+inTheEnd
+                    title = '选择工序'
+                    this.skipEvent(url,title)
+                    return
+                  }else{
+                    this.$dialog.confirm({
+                      width: 350,
+                      tipValue: '所有工序已完成,是否进入检修阶段？',
+                      btnValueOk: '确认',
+                      btnValueCancel: '取消',
+                      alertImg: 'warn',
+                      okCallBack: (datas) => {
+                        if(item.orderStr!=0&&item.orderStr!=undefined){
+                          this.ajaxJson({
+                            url: '/fix/fixProcessDetail/update',//整合接口
+                            data: {
+                              saveEntity:{
+                                'nameStr':'检修',
+                                'id':guid(),
+                                'ownerID':this.flowPathID,
+                                'dependid':'',
+                                'stage':'2',
+                                'state':'0',
+                                'type':'3',
+                                'orderStr':item.orderStr
+                              },
+                              confirmEntity:{
+                                // id:this.subProcessID,
+                                ownerID:this.flowPathID,
+                                state:'1'
+                              }
+                            },
+                            call: (data) => {
+                              if(data.type==0){
+                                this.initData(true)
+                                // this.$dialog.alert({
+                                //   tipValue: '',
+                                //   closeCallBack: () => {
+                                //     // this.$dialog.close()
+                                //   }
+                                // })
+                              }else{
+                                this.$dialog.alert({
+                                  alertImg: 'error',
+                                  tipValue: data.message,
+                                  closeCallBack: () => {
+                                  }
+                                })
+                              }
+                            }
+                          })
 
-          if(item.stage==2&&item.nameStr!='检修'&&item.type<'5'){//服务节点
-            // alert(item.ownerID)
-            console.log( item,item.ownerID )
-            console.log( '2' )
-            url = '/workOrderServiceView?id='+item.dependid+'&ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&subProcessID='+item.id+'&inTheEnd='+inTheEnd+'&index='+index
-            title = item.title
-            height = '450'
-            this.skipEvent(url,title,height)
+                        }
+                      }
+                    })
+                  }
+                }
+              }
+            })
+            return
+
+
           }
-          if(item.type=='7'){
-            url = '/workOrderServiceView?ownerID='+this.ownerID
-            title = item.title
-            height = '800'
-            this.skipEvent(url,title,height)
+          if(item.type=='6'&&item.title=='交车待确认'){//交车待确认
+            url = '/workOrderToBeConfirmedView?id='+this.ownerID+'&subProcessID='+item.id
+              +'&flowPathID='+this.flowPathID+'&index='+item.index+'&inTheEnd='+inTheEnd
+            title = '交车待确认'
+            this.skipEvent(url,title)
+            // url = '/workOrderSettleAccountsForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&inTheEnd='+inTheEnd+'&index='+item.index+'&upDateStateID='+item.id
+            // title = item.title
+            // height = '800'
+            // this.skipEvent(url,title,height)
           }
         }
-
-
-        // let url = ''
-        // let title = ''
-        // this.prepareShow = true
-        // // if(this.indexs){
-        //
-        // // }
-        // this.nodeDiagramState()
-        // if(this.indexs=='0'){
-        //   url = '/lossAssessmentForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID//定损单录制
-        //   title = '添加定损单'
-        //   this.skipEvent(url,title)
-        // }else if(this.indexs=='1'){
-        //   url = '/workOrderDetailsManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID//工单详情列表
-        //   title = '工单详情列表'
-        //   this.skipEvent(url,title)
-        // }else if(this.indexs=='2'){
-        //   url = '/workOrderMaterialListManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID//工单材料列表
-        //   title = '工单材料列表'
-        //   this.skipEvent(url,title)
-        // }
-        // // console.log( item,'---' )
-        //
-        // if(this.indexs == '3'){
-        //   this.$dialog.confirm({
-        //     width: 300,
-        //     tipValue: '请在工单材料表中选择出库',
-        //     btnValueOk:'去出库',
-        //     btnValueCancel:'取消',
-        //     alertImg: 'warn',
-        //     okCallBack: (data) => {
-        //       url = '/workOrderMaterialListManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID//工单材料列表
-        //       title = '工单材料列表'
-        //       this.skipEvent(url,title)
-        //     },
-        //     closeCallBack:(data) =>{
-        //     }
-        //   })
-        // }
       },
       circleClick(item){
+        setTimeout(()=>{
+          this.leftMenuShow = false
+        },0)
         let url = ''
         let title = ''
         let height = '700'
-        this.nodeDiagramState()
-        let inTheEnd = ''
+        // this.nodeDiagramState()
+        let inTheEnd = false
         let index = ''
-        if(this.list3){
-          inTheEnd = item.index==this.list3.length+3//判断是否是最后一个服务节点
-          console.log(inTheEnd,item.index,this.list3.length+3,'是不是最后一个节点'  )
-          index = this.list3.length+4//检修节点的索引值
-        }else{
-          inTheEnd = false
-        }
+        inTheEnd = item.index==this.list2.length-1//判断是否是最后一个服务节点
+        index = this.list2.length//检修节点的索引值
         if(Number(item.index)<=Number(this.indexs)){
           if(item.title=='交车'){//已完成
             return
           }
-          if(item.index=='0'||item.title=='定损单'){//定损单
-            url = '/lossAssessmentForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&inTheEnd='+inTheEnd+'&index='+item.index+'&upDateStateID='+item.id//定损单录制
-            title = '定损单'
+          if(item.type==0&&item.title=='钣金拆装或修复'){//钣金拆装或修复
+            let flowType = 7
+            if(Number(this.indexs)>3){
+              flowType = 6
+            }
+            url = '/sheetMetalRepairForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&flowType='+flowType
+              +'&index='+item.index+'&upDateStateID='+item.id
+            title = '钣金拆装或修复'
             this.skipEvent(url,title)
             return
-          }else if(item.index=='1'||item.title=='工单详情'){//工单详情
-            url = '/workOrderDetailsManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&inTheEnd='+inTheEnd+'&index='+item.index+'&upDateStateID='+item.id//工单详情列表
-            title = '工单详情'
-            this.skipEvent(url,title)
-            return
-          }else if(item.index=='2'||item.title=='工单材料'){//工单材料
-            url = '/workOrderMaterialListManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&inTheEnd='+inTheEnd+'&index='+item.index+'&upDateStateID='+item.id//工单材料列表
-            title = '工单材料'
-            this.skipEvent(url,title)
-            return
-          }else if(item.title=='检修'){//检修
+          }else if(item.type=='2'){//查看工序
+              let type = 5
+              let state = 0
+              for(let i in this.list3){
+                if(this.list3[i].nameStr=='质检确认'){
+                  type = 6
+                }
+              }
+              if(item.type=='2'){
+                state = 2
+              }
+              url = '/workOrderProcessForm?ownerID='+this.ownerID
+                +'&flowPathID='+this.flowPathID+'&index='+item.index
+                +'&flowType=6'+'&dependid='+item.dependid
+                +'&upDateStateID='+item.id+'&inTheEnd='+inTheEnd+'&nodeType='+type
+                +'&state='+state
+              title = '查看'+item.title
+              this.skipEvent(url,title)
+              return
+          }else if(item.type=='3'){
             url = '/workOrderCheckoutManagerView?ownerID='+this.ownerID+'&subProcessID='+item.id
               +'&flowPathID='+this.flowPathID+'&state='+this.state+'&index='+item.index
               +'&upDateStateID='+item.id+'&inTheEnd='+inTheEnd
@@ -633,58 +882,96 @@
             this.skipEvent(url,title,'700')
             return
           }
-          if(item.title=='出库'&&item.index!='3'){//不是准备阶段的出库时
-            url = '/workOrderStockOutManagerView?ownerID='+this.ownerID+'&stateID='+item.id+'&flowPathID='+this.flowPathID+'&index='+item.index+'&upDateStateID='+item.id
-            title = '出库'
-            this.skipEvent(url,title,'700')
-            return
-          }else if(item.index==3){//准备阶段的出库
-            url = '/workOrderStockOutManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&upDateStateID='+item.id
-            title = '出库'
-            this.skipEvent(url,title)
-            return
-          }
           if(item.title=='选择工序'&&this.indexs==item.index){
-            // url = '/workOrderDetailsManagerView?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&operationShow=1'+'&index='+item.index+'&upDateStateID='+item.id
-            // title = '选择服务流程'
-            url = '/workOrderProcessForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&index='+item.index
-            title = '选择工序'
-            this.skipEvent(url,title)
-            return
-          }else if(item.title=='选择工序'&&this.indexs!=item.index){
-            this.$dialog.alert({
-              tipValue:'当前选择工序节点无法操作,请重新创建节点。',
-              alertImg:'warn',
-              width:'330'
-            })
-          }
-          if(item.type=='5'&&this.indexs>=item.index){//查看工序
-            url = '/workOrderProcessForm?ownerID='+this.ownerID
-              +'&flowPathID='+this.flowPathID+'&index='+item.index
-              +'&flowType='+item.type+'&dependid='+item.dependid
-              +'&upDateStateID='+item.id+'&inTheEnd='+inTheEnd
-            title = '查看'+item.title
-            this.skipEvent(url,title)
-            return
-          }
+            this.ajaxJson({
+              url: '/fix/fixrepair/initForm',
+              loading:'0',
+              data: {
+                orderid:this.ownerID,
+                state:'0',
+              },
+              call: (data) => {
+                if(data){
+                  if(data.repairNamePsd.list.length>=1){
+                    url = '/workOrderProcessForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+
+                      '&index='+item.index+'&inTheEnd='+inTheEnd
+                    title = '选择工序'
+                    this.skipEvent(url,title)
+                    return
+                  }else{
+                    this.$dialog.confirm({
+                      width: 350,
+                      tipValue: '所有工序已完成,是否进入检修阶段？',
+                      btnValueOk: '确认',
+                      btnValueCancel: '取消',
+                      alertImg: 'warn',
+                      okCallBack: (datas) => {
+                        if(item.index!=0&&item.index!=undefined){
+                          this.ajaxJson({
+                            url: '/fix/fixProcessDetail/update',//整合接口
+                            data: {
+                              saveEntity:{
+                                'nameStr':'检修',
+                                'id':guid(),
+                                'ownerID':this.flowPathID,
+                                'dependid':'',
+                                'stage':'2',
+                                'state':'0',
+                                'type':'3',
+                                'orderStr':item.index
+                              },
+                              confirmEntity:{
+                                // id:this.subProcessID,
+                                ownerID:this.flowPathID,
+                                state:'1'
+                              }
+                            },
+                            call: (data) => {
+                              if(data.type==0){
+                                this.initData(true)
 
-          if(item.stage==2&&item.title!='检修'&&item.type<'5'){//服务节点
-            // alert(item.ownerID)
-            console.log( item,item.ownerID )
-            url = '/workOrderServiceView?id='+item.dependid+'&ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&subProcessID='+item.id+'&inTheEnd='+inTheEnd+'&index='+index
-            title = item.title
-            height = '450'
-            this.skipEvent(url,title,height)
+                                // this.$dialog.alert({
+                                //   tipValue: '',
+                                //   closeCallBack: () => {
+                                //     // this.$dialog.close()
+                                //   }
+                                // })
+                              }else{
+                                this.$dialog.alert({
+                                  alertImg: 'error',
+                                  tipValue: data.message,
+                                  closeCallBack: () => {
+                                  }
+                                })
+                              }
+                            }
+                          })
+
+                        }
+                      }
+                    })
+                  }
+                }
+              }
+            })
+            return
           }
-          if(item.type=='7'){//待结账节点
-            url = '/workOrderSettleAccountsForm?ownerID='+this.ownerID+'&flowPathID='+this.flowPathID+'&inTheEnd='+inTheEnd+'&index='+item.index+'&upDateStateID='+item.id
-            title = item.title
-            height = '800'
-            this.skipEvent(url,title,height)
+          if(item.type=='4'&&item.title=='质检确认'){
+            url = '/workOrderCheckoutAffirmManager?ownerID='+this.ownerID+'' +
+              '&inTheEnd='+inTheEnd+'&flowPathID='+this.flowPathID+'&index='+index
+              +'&upDateStateID='+item.id+'&state='+item.state+'&dependid='+item.dependid,
+            this.skipEvent(url,'确认返修工序','700')
+            return
+          }
+          if(item.type=='6'&&item.title=='交车待确认'){//交车待确认
+            url = '/workOrderToBeConfirmedView?id='+this.ownerID+'&subProcessID='+item.id
+              +'&flowPathID='+this.flowPathID+'&index='+item.index+'&inTheEnd='+inTheEnd
+            title = '交车待确认'
+            this.skipEvent(url,title)
           }
         }
       },
-      initData () {
+      initData (beginClickSwitch) {
         let params = {
           ownerID:this.ownerID,
         }
@@ -694,192 +981,184 @@
           call: (data) => {
             if(data){
               this.$dialog.setReturnValue(this.id) //向父级页面id值
-
               let stageArr = []//保存所有stage等于0的状态的索引值
               let stageArr2 = []//保存所有stage状态的索引值
+              this.immobilizationList[0].list = []
               this.flowPathID = data.id
+              this.worktype = data.order.worktype
+              this.list = data.list
+              this.list2 = data.list2
               this.list3 = data.list3
               this.stage = data.stage
               this.state = data.state
-
-
-
-              // if(!this.list2){//当list2等于空
-              //   this.indexs = this.stage
-              //   this.nodeDiagramState()
-              //   return
-              // }
-
-              if(!this.list3){//当list3等于空时不执行节点的判断
-                console.log( 'list3',this.list3 )
-                this.indexs = this.stage
-                this.nodeDiagramState()
-                return
-                // for(let k in this.list3){
-                //   this.list2.push(this.list3[k])
-                // }
+              this.indexs = data.stage
+              this.stateStrList = data.stateStrPsd
+              this.materCount = data.materCount
+              this.fixreveCount = data.fixreveCount
+              this.fixdetailCount = data.fixdetailCount
+              let selectionProcessObject2 = {
+                id:'AAAAA',
+                ownerID:'',
+                dependid:'',
+                title:'选择工序',
+                nameStr:'选择工序',
+                stage:this.list.length+1,
+                state:'1',
+                type:'1',
+                index:this.list.length,
+                orderStr:this.list.length,
+                direction:this.list.length=='4'?'1':'0',
+                color:'#49a9ea',
+                startDateStr:''
+              }
+              if(this.worktype=='1'&&this.list2.length==0){
+                this.list2.push(selectionProcessObject2)
+                this.immobilizationList[0].list.push(selectionProcessObject2)
               }
 
 
-              if(data.stage>=4){//进入服务节点
-                for(let q in this.list3){
-                  stageArr2.push(this.list3[q].state)
-                  if(this.list3[q].state==0){//将所有未完成服务的索引值添加到数组汇总
-                    stageArr.push(this.list3[q].orderStr)
-                    console.log( 'stageArr',stageArr )
-                  }
-                  if(q==this.list3.length-1){//拿取第一个未完成节点的索引值
-                    this.indexs = stageArr[0]
-                    console.log( this.indexs,'------------' )
-                  }
-                  if(stageArr2.indexOf('0')==-1){//如果找不到0 表示服务节点已全部走完
-                    this.indexs = this.list3.length+4
-                    console.log( this.indexs,'服务节点全部走完' )
-                  }
-                }
-              }else{
-                for(let y = 0; y<=data.stage; y++){//循环为了选中的蓝色圆形产生过渡效果
-                  this.indexs = y
-                }
-              }
-
-              // if(this.state=='1'){
-              //   this.indexs=99999
-              // }
-              this.nodeDiagramState()
-
-              this.modelShow = false //隐藏假节点
-              this.content = [] //每次渲染时清空之前的数组
-              let quantity = this.list3.length/5 //需要生成几组数据（每组五个）
-              let num = 0 //添加检验节点后需要生成几组
-              //先向固定准备阶段补一个服务节点 凑满一组5个
-              // let list2 = this.list2.splice(0,1)[0]
-              // this.immobilizationList[0].list[4].title = list2.nameStr
-              // this.immobilizationList[0].list[4].dependid = list2.dependid
-              // this.immobilizationList[0].list[4].id = list2.id
-              // this.immobilizationList[0].list[4].state = list2.state
-
-              if(Number(quantity)%1==0){//计算总数除以5是否可以整除
-                num = quantity + 1
-                // console.log( quantity,'整数' )
-              }else{//无法整除时截取小数点前的数据 并加一
-                num = parseInt(quantity.toString().substring(0,quantity.toString().indexOf('.')))+1
-                if(num==0){//如果不满足5条时 改变为1 下边生成一组数据
-                  num==1
-                }
-                // console.log( num,"不是整数" )
-              }
-              for(let i=0; i<num; i++){//先根据数据条数生成每个组
-                // console.log( 'i',i )
-                this.content.push({
-                  direction:i%2==0?2:1,
-                  list:[]
+              // this.list.push(selectionProcessObject2)
+              for(let m=0; m<data.list.length; m++){
+                this.immobilizationList[0].list.push({
+                  id:data.list[m].id,
+                  ownerID:data.list[m].ownerID,
+                  dependid:data.list[m].dependid,
+                  teamName:data.list[m].teamName,
+                  title:data.list[m].nameStr,
+                  stage:data.list[m].stage,
+                  state:data.list[m].state,
+                  type:data.list[m].type,
+                  index:data.list[m].orderStr,
+                  direction:m=='4'?'1':'0',
+                  color:data.list[m].color,
+                  endDateStr:data.list[m]==null?'':data.list[m].endDateStr,
+                  startDateStr:data.list[m].startDateStr,
                 })
               }
-
-              let a = 0
-              this.list3.unshift('11')
-              console.log( 'this.list3',this.list3 )
-              for(let j=1; j<this.list3.length; j++){
-                if(j!=0&&j%5==0){//判断除以4==0时 表示是当前数组的最后一条
-                  this.content[a].list.push({
-                    'title':this.list3[j].nameStr,
-                    'id':this.list3[j].id,
-                    'dependid':this.list3[j].dependid,
-                    'type':this.list3[j].type,
-                    'stage':'2',
-                    'state':this.list3[j].state,
-                    'stageColor':this.list3[j].stage==4?'#d618ab':'#a60cde',
-                    'circleIcon':'',
-                    'ownerID':this.list3[j].ownerID,
-                    'direction':a%2==0?2:1,//判断方向来添加相应的样式
-                    'index':Number(this.list3[j].orderStr)
-                  })
-                  a++
-                  console.log( '整除',j )
-                }else{
-                    this.content[a].list.push({
-                      'title':this.list3[j].nameStr,
-                      'id':this.list3[j].id,
-                      'dependid':this.list3[j].dependid,
-                      'type':this.list3[j].type,
-                      'stage':'2',
-                      'state':this.list3[j].state,
-                      'stageColor':this.list3[j].stage==4?'#d618ab':'#a60cde',
-                      'circleIcon':'',
-                      'direction':'',
-                      'ownerID':this.list3[j].ownerID,
-                      'index':Number(this.list3[j].orderStr)
-                    })
-                    console.log( '1111',j )
+              this.selectionProcess('0')
+              this.generatingProcess()
+              setTimeout(()=>{
+                if(this.initiative == '0'&&this.closeInitiative == '0'){
+                  this.closeInitiative = ''
+                  // sessionStorage.setItem('initiative',this.ownerID)
+                  this.beginClick()
                 }
-              }
-              console.log(this.content )
-
+                if(beginClickSwitch){
+                  this.beginClick()
+                }
+              },0)
             }
           }
         })
       }
     },
-    computed:{
-
-    },
+    // beforeRouteEnter (to, from, next) {
+    //   next(vm => {
+    //     if(vm) {
+    //       vm.$nextTick(() => {
+    //         if(vm.ownerID==sessionStorage.initiative){
+    //           vm.closeInitiative = ''
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
     created () {
+      this.setQuery2Value('initiative')//为0的时候自动打开当前节点页面
+      this.closeInitiative = this.initiative.concat()
       this.setQuery2Value('cid')
-      let  state =  JSON.parse(sessionStorage.processState||0)
       this.setQuery2Value('ownerID')
-
-      if(state.id==this.ownerID){
-        this.proState = state.proState
-      }else{
-        this.setQuery2Value('proState')
-      }
-      setTimeout(()=>{
-        if(this.proState==1){
-          this.initData()
-        }else{
-          this.init({
-            url: '/fix/fixProcess/save',
-            data: {
-              ownerID:this.ownerID,
-              id: this.id,
-              nameStr:'定损单录制',
-              state:0,
-              stage:0,
-            },
-            all: (data) => {
-              if(data.type==0){
-                this.proState = 1
-                let list = {'proState':this.proState,'id':this.ownerID}
-                try {
-                  sessionStorage.processState = JSON.stringify(list)
-                }catch (e) {}
-                this.initData()
-              }
-
-            }
-          })
-        }
-      },0)
+      this.initData()
     }
 
   }
 </script>
 
 <style lang="less" scoped>
+.shade{
+  position: fixed;
+  top:0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  flex: 1;
+  z-index: 9;
+  opacity: 0;
+}
+.leftMenu{
+  width: 190px;
+  height: 100%;
+  background-color: #ededed;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: -190px;
+  bottom: 0;
+  transition: all .5s;
+}
+.leftMenuShow{
+  width: 190px;
+  height: 100%;
+  background-color: #ededed;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  transition: all .5s;
+}
+.leftMenuTitle{
+  width: 100%;
+  text-align: center;
+  height: 66px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid #ccc;
+  background-color: #ededed;
+}
+.leftMenuBtn{
+  width: 100%;
+  font-size: 14px;
+  /*padding-left: 34px;*/
+  /*box-sizing: border-box;*/
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 40px;
+  cursor: pointer;
+}
+.leftMenuBtn:hover{
+  color: #fff;
+  background-color: #49a9ea;
+}
+.leftMenuArrows{
+  width: 30px;
+  height: 88px;
+  line-height: 88px;
+  text-align: center;
+  background-color: #49a9ea;
+  color: #fff;
+  border-radius:0 5px 5px 0;
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+/*.leftMenuArrows:hover::after{*/
+/*  transform:rotate(90deg);*/
+/*  -webkit-transform:rotate(90deg);*/
+/*}*/
 .atPresent{
   background-color: #49a9ea !important;
+
 }
-.circleTetRight{
-  position: relative;
-  top: -50px;
-  left: 50px;
-}
-.circleTetLeft{
-  position: relative;
-  top: -50px;
-  right: 50px;
-}
+
+
 /*.circleRight{*/
 /*  margin-top: 136px;*/
 
@@ -945,10 +1224,15 @@
     z-index: 99;
     position: relative;
     .circleTitle2{
+      height: 75px;
       .circle{
-        width: 30px;
-        height: 30px;
+        width: 35px;
+        height: 35px;
         cursor: pointer;
+        line-height: 35px;
+        text-align: center;
+        color: #fff;
+        font-size: 12px;
         z-index: 99;
         border-radius: 50%;
         margin-top: -15px;
@@ -996,23 +1280,33 @@
     left: 208px;
   }
   .borLeft{
-    left: 50px;
+    left: 18px;
     top:-164px;
     transform:rotate(180deg);
   }
   .circleTitle_center_right{
     position: relative;
     top:-50px;
-    left:50px;
+    left:60px;
+  }
+  .circleTetRight{
+    position: relative;
+    top: -50px;
+    left: 60px;
   }
   .circleTitle_center_left{
     position: relative;
     top: -50px;
-    right: 50px;
+    right: 80px;
+  }
+  .circleTetLeft{
+    position: relative;
+    top: -50px;
+    right: 80px;
   }
   .circleTitle_circle{
     position: absolute !important;
-    left: 50px !important;
+    left: 20px !important;
   }
 
 

@@ -15,7 +15,7 @@
         <yhm-form-radio title="政治面貌" :show="isThisUnit" :select-list="politicsStatusList" :value="politicsStatus" id="politicsStatus"></yhm-form-radio>
 <!--        <yhm-form-text title="姓名" :value="name" id="name" ref="name" @repeatverify="repeatVerifyEvent" rule="R0000"></yhm-form-text>-->
 
-        <yhm-form-zh-text-checkbox ref="name" @clickCheckBox="clickLoginNameReset" @repeatverify="repeatVerifyEvent" title="姓名" check-title="外籍"  :value="name" id="name"  rule="R0000" :check-value="expatriate" check-value-id="expatriate"></yhm-form-zh-text-checkbox>
+        <yhm-form-zh-text-checkbox ref="name" @clickCheckBox="clickLoginNameReset" @repeatverify="repeatVerifyEvent" title="姓名" check-title="外籍"  :value="name" id="name" @blur="nameBlur" rule="R0000" :check-value="expatriate" check-value-id="expatriate"></yhm-form-zh-text-checkbox>
 
         <yhm-form-text title="手机号码" :value="phone" id="phone" ref="phone" tip="value" @repeatverify="repeatVerifyEvent" rule="R4000">
           <div v-show="variable" class="formBoxIcon" @click="shareClick(phone)">
@@ -31,20 +31,15 @@
         <yhm-form-text title="所属部门" :show="isThisUnit" :value="department" id="department" placeholder="请在部门管理中调整所属部门" no-edit="1"></yhm-form-text>
 
         <yhm-form-text v-if="isPortNo" title="身份证号" @input="isNoEvent" @repeatverify="isRepeatVerifyEvent" ref="idNo" tip="value" :value="idNo" id="idNo" :rule="idnoRule">
-
-
           <div v-show="variable" class="formBoxIcon" @click="copyEvent" title="点击共用手机号">
             <span class="i-copy"></span>
           </div>
         </yhm-form-text>
-
         <yhm-form-text v-if="!isPortNo" title="护照号" @input="isNoEvent" @repeatverify="isRepeatVerifyEvent" ref="idNo" tip="value" :value="idNo" id="idNo" :rule="idnoRule">
           <div v-show="variable" class="formBoxIcon" @click="copyEvent" title="点击共用手机号">
             <span class="i-copy"></span>
           </div>
         </yhm-form-text>
-
-
         <yhm-form-text title="籍贯" style="position: relative;" :no-edit="noedit" :value="nativePlace" @focus="nativePlaceFocus" id="nativePlace" tip="value">
 <!--          <div :class="{'shade':cityShow}" @click="shadeClick"></div>-->
           <div class="nativePlaceBox"
@@ -63,7 +58,11 @@
           </div>
 
         </yhm-form-text>
+        <yhm-form-textarea title="详情地址" :value="address" id="address" width="1"></yhm-form-textarea>
+
         <yhm-form-radio title="生日历法" @call="calendarEvent" :select-list="calendarList" :value="calendar" id="calendar"></yhm-form-radio>
+
+        <yhm-form-text title="邮箱" :value="email" id="email" :rule="email ==''?'':'R2300'"></yhm-form-text>
 
         <yhm-form-text title="公历生日" :value="birthday" id="birthday" :no-edit="isExpatriate"></yhm-form-text>
         <yhm-form-text title="农历生日" :value="birthdayLunar" id="birthdayLunar" :no-edit="isExpatriate"></yhm-form-text>
@@ -130,7 +129,10 @@
     mixins: [formmixin],
     data() {
       return {
+
+
         cityList:city,
+        email:'',
         phoneReserve:'',//手机号2
         cities:[],
         noedit:'0',
@@ -181,6 +183,7 @@
         tagList: [],
         tag: [],
         tagSubmit:[],
+        address:'',
         isThisUnit: true,
         isCopyTip: false,
 
@@ -192,6 +195,28 @@
       }
     },
     methods: {
+      nameBlur(){
+        if(this.name.indexOf('公司')!=-1){
+          this.$dialog.confirm({
+              alertImg: 'warn',
+              width: '430',
+              tipValue: '检测到您添加的是公司,是否跳转至添加公司页面?',
+              btnValueOk:'添加公司',
+              btnValueCancel:'暂不前往',
+              okCallBack: () => {
+                this.$dialog.OpenWindow({
+                  width: '1050',
+                  height: '750',
+                  url: '/addUnitForm?skip=0&name='+this.name+'&tel='+this.phone,
+                  title: '添加公司信息',
+                  closeCallBack: (data)=>{
+                  }
+                })
+                // addUnitForm
+              }
+          })
+        }
+      },
       verifyPersonVuePhone(){
         if(this.phoneReserve!==''){
           this.ajaxJson({
@@ -498,7 +523,6 @@
 
             arr.push("'" + this.cutOutBack(data.html) + "'")
             this.$refs.name.errorEvent(name)
-            // }
           }
           if(data.message!==''){
             if(this.category==='0'){//本单位时
@@ -657,6 +681,7 @@
               id: this.id,
               category: this.category,
               sex: this.sex,
+              email:this.email,
               important: this.important,
               politicsStatus: this.politicsStatus,
               name: this.name,
@@ -679,22 +704,23 @@
               bloodTypeID: this.bloodTypeID,
               nation: this.nation,
               nationID: this.nationID,
-              expatriate:this.expatriate
+              expatriate:this.expatriate,
+              address:this.address,
             }
             if(this.flatType===false&&this.flatTypes===false&&a){
               this.ajaxJson({
                 url: '/Basic/personSaveVue',
                 data: params,
-                call: (data)=>{
-                  if(data.type === 0){
+                call: (data) => {
+                  if (data.type === 0) {
                     this.$dialog.setReturnValue(this.id)
                     this.$dialog.alert({
                       tipValue: data.message,
-                      closeCallBack: ()=>{
+                      closeCallBack: () => {
                         this.$dialog.close()
                       }
                     })
-                  }else{
+                  } else {
                     this.$dialog.alert({
                       alertImg: 'warn',
                       tipValue: data.message
@@ -702,8 +728,7 @@
                   }
                 }
               })
-            }
-            if(this.flatType === true){//外单位姓名重复时
+            }else{//外单位姓名重复时
               this.$dialog.confirm({
                 tipValue: '是否是同一个人?',
                 btnValueOk:'否',
@@ -763,6 +788,7 @@
                   id: this.id,
                   category: this.category,
                   sex: this.sex,
+                  email:this.email,
                   important: this.important,
                   politicsStatus: this.politicsStatus,
                   name: this.name,
@@ -785,7 +811,8 @@
                   bloodTypeID: this.bloodTypeID,
                   nation: this.nation,
                   nationID: this.nationID,
-                  expatriate:this.expatriate
+                  expatriate:this.expatriate,
+                  address:this.address,
                 }
                 if(datas.html==''&&datas.val==''||this.flatTypes == true){
                   this.ajaxJson({
@@ -859,6 +886,7 @@
             this.category = data.categoryPsd.value
             this.sexList = data.sexPsd.list   //性别
             this.sex = data.sexPsd.value
+            this.email = data.email
             this.importantList = data.importantPsd.list  //重要联系人
             this.important = data.importantPsd.value
             this.politicsStatusList = data.politicsStatusPsd.list  //政治面貌
@@ -900,7 +928,7 @@
             this.bloodTypeID = data.bloodTypeID
             this.name = data.name   //姓名
             this.expatriate=data.expatriate
-
+            this.address=data.address // 地址
             if(this.expatriate==0){
               this.isPortNo=true
               this.isExpatriate='1'

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <yhm-managerpage category="1" mainWidth="1050" mainHeight="690" menu-tab-width="1014"  :total-table="true">
+    <yhm-managerpage category="1" mainWidth="1050" mainHeight="690" menu-tab-width="1014" :total-width="true"  :total-table="true">
       <!--导航条-->
       <template #navigation>基本信息</template>
       <template #choose>
@@ -37,27 +37,48 @@
           <yhm-manager-td :value="item.subject"></yhm-manager-td>
           <yhm-manager-td-money :value="item.money+''"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.useMoney+''"></yhm-manager-td-money>
-<!--          <yhm-manager-td :value="item.remark" :tip="true"></yhm-manager-td>-->
-        </tr>
-      </template>
-      <template #listTotalHead >
 
-        <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="应收账款金额" ></yhm-managerth>
-        <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="待对账金额" ></yhm-managerth>
-      </template>
-      <template #listTotalBody>
-        <tr>
-          <yhm-manager-td-money  style="text-align: center;" :value="bankMoney"></yhm-manager-td-money>
-          <yhm-manager-td-money style="text-align: center;" :value="money"></yhm-manager-td-money>
         </tr>
+      </template>
+
+      <template #total>
+        <div class="listTotalCrente m_list" style="width: 600px">
+          <div>
+            <div class="listTotalLeft">
+              <span class="test"></span>
+              <span class="test">金额</span>
+            </div>
+          </div>
+          <div style="width: 400px">
+            <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table" >
+              <thead>
+              <tr>
+                <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="应收账款金额" ></yhm-managerth>
+                <yhm-managerth before-color="black" style="width: 60px" width="60px" title="" before-title="待对账金额" ></yhm-managerth>
+
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr>
+                <yhm-manager-td-money  style="text-align: center;" :value="bankMoney"></yhm-manager-td-money>
+                <yhm-manager-td-money style="text-align: center;" :value="money"></yhm-manager-td-money>
+              </tr>
+
+              </tbody>
+            </table>
+          </div>
+          <div style="width: 100px;display: flex;justify-content: center;align-items: center;">
+            <yhm-commonbutton   value="保存" icon="btnSave" @call="save" :flicker="true"></yhm-commonbutton>
+
+          </div>
+        </div>
       </template>
       <!--数据空提示-->
       <template #empty>
         <span class="m_listNoData" v-show="content.length!='0'?false:true">暂时没有数据</span>
       </template>
-      <template #listTotalRight>
-        <yhm-commonbutton  style="margin-top: 40px; margin-left: 40px;"  value="保存" icon="btnSave" @call="save" :flicker="true"></yhm-commonbutton>
-      </template>
+
       <!--分页控件-->
       <template #pager>
         <yhm-pagination :pager="pager" isPageSize="false" @initData="initPageData(false)"></yhm-pagination>
@@ -85,22 +106,11 @@
           }
         ],
         bankMoney:'0',
+        pageSize:10
       }
     },
     methods:{
       save(){
-
-       /* let param = {
-          ownerID : this.unitID,
-          category : '3'
-        }
-        this.ajaxJson({
-          url: '/finance/receivableDetail/getWriteOffBalanceOther',
-          data: param,
-          call: (balance) => {
-              console.log(  balance)
-          }
-        })*/
         let params;
         if (this.id==''){
           let id = []
@@ -179,11 +189,19 @@
         let params = {}
         if (initValue) {
           params = {
-            unitID:this.unitID
+            unitID:this.unitID,
+            money:this.money,
+            pageSize:this.pageSize,
+            orderColumn:'cccurDate',
+            order:'desc'
           }
         } else {
           params = {
-            unitID:this.unitID
+            unitID:this.unitID,
+            money:this.money,
+            pageSize:this.pageSize,
+            orderColumn:'cccurDate',
+            order:'desc'
           }
         }
         this.init({

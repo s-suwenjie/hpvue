@@ -13,7 +13,7 @@
         <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add" category="one"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
         <yhm-radiofilter :before="isFinishBefore" @initData="initChoose('isFinish')" title="状态"  :content="isFinishList"></yhm-radiofilter>
-
+        <yhm-radiofilter :before="expressCompanyBefore" @initData="initChoose('viewLevels')" title="查看下属" all="0" :content="listViewLevels"></yhm-radiofilter>
       </template>
 
       <!--筛选区-->
@@ -26,6 +26,7 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
+        <yhm-managerth v-if="listViewLevels.value==1"  style="width: 80px" title="申请人" ></yhm-managerth>
         <yhm-managerth style="width: 160px" title="申请日期" value="workDate"></yhm-managerth>
         <yhm-managerth style="width: 160px" title="采购分类" value="categoryPurchase"></yhm-managerth>
         <yhm-managerth style="width: 160px;" title="采购类型" value="model"></yhm-managerth>
@@ -34,12 +35,13 @@
         <yhm-managerth style="width: 160px" title="预计金额" value="money"></yhm-managerth>
         <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
         <yhm-managerth title="状态" value="state"></yhm-managerth>
-        <yhm-managerth style="width: 240px" title="操作"></yhm-managerth>
+        <yhm-managerth v-if="listViewLevels.value==0"  style="width: 240px" title="操作"></yhm-managerth>
       </template>
       <template #listBody>
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
+          <yhm-manager-td v-if="listViewLevels.value==1" :value="item.person"></yhm-manager-td>
           <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
           <yhm-manager-td-psd :list="categoryPurchaseItems" :value="item.categoryPurchase"></yhm-manager-td-psd>
           <yhm-manager-td-psd :list="modelItems" :value="item.model"></yhm-manager-td-psd>
@@ -48,7 +50,7 @@
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
           <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
           <yhm-manager-td-psd :is-left="true" :list="stateItems" fsb="fs20b" :value="item.state"></yhm-manager-td-psd>
-          <yhm-manager-td-operate>
+          <yhm-manager-td-operate v-if="listViewLevels.value==0" >
             <yhm-manager-td-operate-button @click="submit(item)" :no-click="item.state !== '0'" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="urge(item)" :no-click="item.state === '0'" value="催促" icon="i-btn-urge" color="#2AA70B"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button v-show="item.state=='1'" :no-click="item.state == '1'?false:true" @click="revocationClick(item)" icon="i-btn-applicationSm" value="撤销申请" color="#fd6802"></yhm-manager-td-operate-button>
@@ -92,7 +94,13 @@
           {id:'5', name: '备用金',path:'/home/prettyCashsManager'},
           {id:'6', name: '补签字',path:'/home/myManager/signatureManager'},
           {id:'7', name: '开票申请',path:'/home/openInvoiceManager'},
+          {id:'8', name: '我的快递',path:'/home/myExpressManager'},
         ],
+        listViewLevels:{
+          value:"0",
+          list:[]
+        },
+
       }
     },
     methods:{
@@ -186,12 +194,15 @@
         if (initValue) {
           // 页面初始化是需要的参数
           params = {
-            isFinish: this.isFinishList.value
+            isFinish: this.isFinishList.value,
+            viewLevels:this.listViewLevels.value
+
           }
         } else {
           // 页面非初始化时需要的参数
           params = {
-            isFinish: this.isFinishList.value
+            isFinish: this.isFinishList.value,
+            viewLevels:this.listViewLevels.value
           }
         }
         this.init({
@@ -209,6 +220,7 @@
             this.categoryPurchaseItems = data.categoryPurchaseItems
             this.modelItems = data.modelItems
             this.stateItems = data.stateItems
+            this.listViewLevels=data.viewLevelsPsd
           }
         })
       },

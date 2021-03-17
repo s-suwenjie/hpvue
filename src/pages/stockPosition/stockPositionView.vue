@@ -14,7 +14,7 @@
         <yhm-view-tab>
           <template #tab>
             <yhm-view-tab-button :list="tabState" @click="mc" :index="0">库存明细</yhm-view-tab-button>
-            <yhm-view-tab-button :list="tabState"  @click="jl" :index="1">入库记录</yhm-view-tab-button>
+            <yhm-view-tab-button :list="tabState" @click="jl" :index="1">入库记录</yhm-view-tab-button>
           </template>
           <template #content>
 
@@ -34,7 +34,7 @@
                   <yhm-manager-td :value="item.product"></yhm-manager-td>
                   <yhm-manager-td :value="item.model"></yhm-manager-td>
                   <yhm-manager-td-rgt :value="item.quantity+item.uuStr+''"></yhm-manager-td-rgt>
-                  <yhm-manager-td-center :value="item.spilt"></yhm-manager-td-center>
+                  <yhm-manager-td-center :value="item.split"></yhm-manager-td-center>
                   <yhm-manager-td-rgt :value="item.sumStr+item.mdoStr"></yhm-manager-td-rgt>
                 </tr>
               </template>
@@ -52,11 +52,11 @@
                 <yhm-managerth title="商品名称"></yhm-managerth>
                 <yhm-managerth title="商品规格"></yhm-managerth>
                 <yhm-managerth title="入库日期"></yhm-managerth>
-                <yhm-managerth style="width: 125px" title="商品数量"></yhm-managerth>
-                <yhm-managerth style="width: 125px" title="单价"></yhm-managerth>
-                <yhm-managerth style="width: 125px" title="总价"></yhm-managerth>
-                <yhm-managerth style="width: 125px" title="含税单价"></yhm-managerth>
-                <yhm-managerth title="含税总价"></yhm-managerth>
+                <yhm-managerth style="width: 80px" title="商品数量"></yhm-managerth>
+                <yhm-managerth style="width: 120px" title="单价"></yhm-managerth>
+                <yhm-managerth style="width: 120px" title="总价"></yhm-managerth>
+                <yhm-managerth style="width: 120px" title="含税单价"></yhm-managerth>
+                <yhm-managerth style="width: 120px" title="含税总价"></yhm-managerth>
               </template>
               <template #listBody>
                 <tr v-for="(item,index) in list" :class="{InterlacBg:index%2!=0}" :key="index">
@@ -172,11 +172,11 @@
             }
 
             for (let i in data.content) {
-              if( data.content[i].spilt=='0' ){
-                this.lists[i].spilt='是'
+              if( data.content[i].split=='0' ){
+                this.lists[i].split='是'
 
               }else{
-                this.lists[i].spilt='否'
+                this.lists[i].split='否'
                 this.lists[i].sumStr='---'
                 this.lists[i].mdoStr='---'
               }

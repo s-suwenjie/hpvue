@@ -24,6 +24,15 @@
         <router-link class="menuTabDiv" :to="{path:'/home/approvalOpenInvoiceManager'}">开票审批
           <i class="noticeNum" v-if="openInvoiceNum!='0'">{{openInvoiceNum}}</i>
         </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/promotions/promotionsAppManager'}">活动审批
+          <i class="noticeNum" v-if="promotions!='0'">{{promotions}}</i>
+        </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/approvalInvoiceRiseManager'}">发票抬头
+                    <i class="noticeNum" v-if="invoiceRiseNum!='0'">{{invoiceRiseNum}}</i>
+        </router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/expressApprovalManager'}">快递审批
+          <!--<i class="noticeNum" v-if="paymentNum!=0">{{paymentNum}}</i>-->
+        </router-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -44,14 +53,15 @@
       <template #listHead>
         <yhm-managerth-check style="width: 50px;" :check="allCheck"></yhm-managerth-check>
         <yhm-managerth style="width: 50px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 110px;" title="申请人" value="personID"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="申请人" value="personID"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="批次号" value="code"></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="申请时间" value="workDate"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="申请金额" value="money"></yhm-managerth>
+        <yhm-managerth style="width: 95px;" title="申请金额" value="money"></yhm-managerth>
+        <yhm-managerth style="width: 95px;" title="退回金额" value="refundMoney"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="预计核销日期" value="estimateDate"></yhm-managerth>
         <yhm-managerth style="width: 70px;" title="倒计时" value="day"></yhm-managerth>
 
-        <yhm-managerth style="width: 100px;" title="发票类型"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="发票类型"></yhm-managerth>
 
         <yhm-managerth title="事由" value="subjectID"></yhm-managerth>
         <yhm-managerth style="width: 60px;" title="审批留言"></yhm-managerth>
@@ -66,6 +76,7 @@
           <yhm-manager-td :value="item.code"></yhm-manager-td>
           <yhm-manager-td-date :value="item.workDate"></yhm-manager-td-date>
           <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.refundMoney"></yhm-manager-td-money>
           <yhm-manager-td-date :value="item.estimateDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.day+'天'" v-if="item.day<=2" style="color:#2c920b;font-weight: bold"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.day+'天'" v-else-if="item.day>2&&item.day<=5" style="color:#0511a5;font-weight: bold"></yhm-manager-td-center>
@@ -162,7 +173,8 @@
         purchaseNum: '',
         insuranceNum:'',
         openInvoiceNum:'',
-
+        promotions:'',
+        invoiceRiseNum:'',
         total:'',
         invoiceCategoryList: [],
         contentTotal: []
@@ -420,6 +432,13 @@
             this.purchaseNum = data.purchase
             this.insuranceNum=data.insurance
             this.openInvoiceNum=data.openInvoice
+            this.promotions=data.promotions
+          }
+        })
+        this.ajaxJson({
+          url: '/finance/invoiceRise/getApprovalPendingCount',
+          call: (data)=>{
+            this.invoiceRiseNum = data
           }
         })
       },

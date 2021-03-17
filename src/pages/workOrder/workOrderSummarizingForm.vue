@@ -190,28 +190,31 @@
           },
           call: (data) => {
             if(data){
-              for(let i in data.list){
-                if(data.list[i].type=='0'){
-                  this.bankDetailList = []
-                  this.bankDetailList.push({
-                    id: data.list[i].id,
-                    type:'0',
-                    insertDate: data.list[i].cccurDate,
-                    num:this.bankDetailList.length+1+'',
-                    selfAccount:data.list[i].bankName + data.list[i].account,
-                    cccurDate:data.list[i].cccurDate,//交易日期
-                    otherName:data.list[i].otherName,//对方账户
-                    subject:data.list[i].subject,
-                    money:data.list[i].actualMoney,
-                    // useMoney:datas.useMoney,
-                    remark:data.list[i].remark,
-                    dependid:data.list[i].dependid,
-                  })
-                }
-              }
+              // for(let i in data.reslist0){
+              //   if(data.reslist0[i].type=='0'){
+              //     this.bankDetailList = []
+              //     this.bankDetailList.push({
+              //       id: data.reslist0[i].id,
+              //       type:'0',
+              //       insertDate: data.reslist0[i].cccurDate,
+              //       num:this.bankDetailList.length+1+'',
+              //       selfAccount:data.reslist0[i].bankName + data.reslist0[i].account,
+              //       cccurDate:data.reslist0[i].cccurDate,//交易日期
+              //       otherName:data.reslist0[i].otherName,//对方账户
+              //       subject:data.reslist0[i].subject,
+              //       money:data.reslist0[i].actualMoney,
+              //       // useMoney:datas.useMoney,
+              //       remark:data.reslist0[i].remark,
+              //       dependid:data.reslist0[i].dependid,
+              //     })
+              //   }
+              // }
+              this.cost = data.cost//成本
+              this.profit = data.profit//盈利
+              this.revenue = data.revenue//总收入
               this.id = data.id
-              this.fixOrderDetail = data.reslist1//工单详情信息
-              this.fixOrderMaterial = data.reslist2//材料详情信息
+              // this.fixOrderDetail = data.reslist1//工单详情信息
+              // this.fixOrderMaterial = data.reslist2//材料详情信息
             }
 
           }
@@ -224,7 +227,6 @@
           this.fixOrderDetail.splice(index,1)
         }else if(type=='材料支出'){//材料表的删除
           this.fixOrderMaterial.splice(index,1)
-          console.log('删除成功',this.fixOrderMaterial)
         }
         item.isDel = '1'
         this.deleteList.push(item)
@@ -237,8 +239,6 @@
             }
           }
         })
-        console.log(this.deleteList)
-
       },
       // selectServe(item){//跳到选择页面
       //   console.log(item)
@@ -295,7 +295,7 @@
           this.$dialog.OpenWindow({
             width: '1050',
             height: '700',
-            url:'/workOrderAddDetailsForm?id='+item.dependid,
+            url:'/workOrderAddDetailsForm?id='+item.id,
             title:'编辑工单详情',
             closeCallBack:(data) =>{
               if(data){
@@ -307,7 +307,7 @@
           this.$dialog.OpenWindow({
             width: '1050',
             height: '700',
-            url:'/workOrderMateriaListForm?ownerID='+this.materialsID+'&id='+item.dependid,
+            url:'/workOrderMateriaListForm?ownerID='+this.materialsID+'&id='+item.id,
             title:'编辑材料详情',
             closeCallBack:(data) =>{
               if(data){
@@ -322,7 +322,8 @@
         this.$dialog.OpenWindow({
           width: '1050',
           height: '700',
-          url:'/selectBankDetail?direction=0&categoryBefore=1&selectType=1&type=1&otherID='+this.contactPersonID,
+          url:'/selectBankDetail?direction=0&categoryBefore=1&selectType=1&type=1&otherID='+this.contactPersonID
+            +'&annotation=注:该交易明细与工单里车主联系人有关,如果联系人与车主交易记录为空,则当前为空。',
           title:'绑定流水',
           closeCallBack:(data) =>{
             if(data){
@@ -357,7 +358,6 @@
                 otherID:datas.otherID,//对方账户
                 otherName:datas.otherName,//对方姓名
               }
-              console.log( 'params' , params )
               this.ajaxJson({
                 url: '/fix/summarydetail/save',
                 data: params,
@@ -367,7 +367,6 @@
                   }
                 }
               })
-              console.log( 'data' , data )
             }
           }
         })
@@ -380,7 +379,6 @@
           title:'服务列表',
           closeCallBack:(data) =>{
             if(data){
-              console.log(data)
               let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.fixOrderDetail.length, 1000)))
               let num = accAdd(this.fixOrderDetail.length,1) + ''
               this.fixOrderDetail.push({
@@ -408,7 +406,6 @@
                 otherID:'',//对方账户
                 otherName:'',//对方姓名
               }
-              console.log( 'params' , params )
               this.ajaxJson({
                 url: '/fix/summarydetail/save',
                 data: params,
@@ -431,7 +428,7 @@
           title:'工单材料',
           closeCallBack:(data) =>{
             if(data){
-              console.log( data )
+
               let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.fixOrderMaterial.length, 1000)))
               let num = accAdd(this.fixOrderMaterial.length,1) + ''
               // for(let i in data){
@@ -471,7 +468,6 @@
                 otherID:'',//对方账户
                 otherName:'',//对方姓名
               }
-              console.log( 'params' , params )
               this.ajaxJson({
                 url: '/fix/summarydetail/save',
                 data: params,
@@ -520,24 +516,27 @@
           data: params,
           call: (data) => {
             if(data){
-              for(let i in data.list){
-                if(data.list[i].type=='0'){
+              for(let i in data.reslist0){
+                if(data.reslist0[i].type=='0'){
                   this.bankDetailList.push({
-                    id: data.list[i].id,
+                    id: data.reslist0[i].id,
                     type:'0',
-                    insertDate: data.list[i].cccurDate,
+                    insertDate: data.reslist0[i].cccurDate,
                     num:this.bankDetailList.length+1+'',
-                    selfAccount:data.list[i].bankName + data.list[i].account,
-                    cccurDate:data.list[i].cccurDate,//交易日期
-                    otherName:data.list[i].otherName,//对方账户
-                    subject:data.list[i].subject,
-                    money:data.list[i].actualMoney,
+                    selfAccount:data.reslist0[i].bankName + data.list[i].account,
+                    cccurDate:data.reslist0[i].cccurDate,//交易日期
+                    otherName:data.reslist0[i].otherName,//对方账户
+                    subject:data.reslist0[i].subject,
+                    money:data.reslist0[i].actualMoney,
                     // useMoney:datas.useMoney,
-                    remark:data.list[i].remark,
-                    dependid:data.list[i].dependid,
+                    remark:data.reslist0[i].remark,
+                    dependid:data.reslist0[i].dependid,
                   })
                 }
               }
+              this.cost = data.cost//成本
+              this.profit = data.profit//盈利
+              this.revenue = data.revenue//总收入
               this.id = data.id
               this.fixOrderDetail = data.reslist1//工单详情信息
               this.fixOrderMaterial = data.reslist2//材料详情信息

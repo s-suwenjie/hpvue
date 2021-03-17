@@ -417,26 +417,21 @@
               category: item.category,
               quantity: item.quantity
             }
-            let result = this.ajaxAsync({
+            this.ajaxJson({
               url: '/PersonOffice/verifyReimbursementDetailInvoiceCode',
               data: params,
+              call: (result) => {
+                if (result.type === 0) {
+                  let width = 250
+                  width = accAdd(width, accMul(result.val.length, 15))
+                  this.$dialog.alert({
+                    tipValue: result.message + '：<b class="red">（' + result.val + '）</b>',
+                    alertImg: 'error',
+                    width: width
+                  })
+                }
+              }
             })
-
-            if(result.type === 0){
-              let width = 250
-              width = accAdd(width, accMul(result.val.length, 15))
-              this.$dialog.alert({
-                tipValue: result.message + '：<b class="red">（' + result.val + '）</b>',
-                alertImg: 'error',
-                width: width
-              })
-            }else if(result.type === 2){
-              this.$dialog.alert({
-                alertImg: 'error',
-                // tipValue: result.message,
-                tipValue:'重复发票号<b class="red">（' + result.message + '）</b>！！！',
-              })
-            }
           }
         }
       },
@@ -531,15 +526,10 @@
           aa = false
         }
         let bb = this.isRepeatInvoice()
-        let cc = this.invoiceMoney > this.money
-        if (this.invoiceMoney > this.money){
-          cc = false
-        }else{
-          cc = true
-        }
+        let cc = this.invoiceMoney >0
         if(!cc){
           this.$dialog.alert({
-            tipValue: '发票金额和付款金额不一致!',
+            tipValue: '添加发票信息!',
             width:300,
             alertImg: 'warn',
           })
@@ -597,7 +587,7 @@
           aa = false
         }
         let bb = this.isRepeatInvoice()
-        let cc = this.invoiceMoney === this.money
+        let cc = this.invoiceMoney == this.money
         if(!cc){
           this.$dialog.alert({
             tipValue: '发票金额和付款金额不一致!',

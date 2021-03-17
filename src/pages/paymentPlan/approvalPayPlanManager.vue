@@ -23,6 +23,15 @@
         <router-link class="menuTabDiv" :to="{path:'/home/approvalOpenInvoiceManager'}">开票审批
           <i class="noticeNum" v-if="openInvoiceNum!='0'">{{openInvoiceNum}}</i>
         </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/promotions/promotionsAppManager'}">活动审批
+          <i class="noticeNum" v-if="promotions!='0'">{{promotions}}</i>
+        </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/approvalInvoiceRiseManager'}">发票抬头
+          <i class="noticeNum" v-if="invoiceRiseNum!='0'">{{invoiceRiseNum}}</i>
+        </router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/expressApprovalManager'}">快递审批
+        <!--<i class="noticeNum" v-if="paymentNum!=0">{{paymentNum}}</i>-->
+      </router-link>
       </template>
 
       <!--操作区-->
@@ -158,7 +167,8 @@
         prettyCashsNum:'',
         insuranceNum:'',
         openInvoiceNum:'',
-
+        promotions:'',
+        invoiceRiseNum:'',
         tableTip:false,         //记录表格是否显示
         tableTipControl:{},
         tableTipColumnInfo:[
@@ -279,6 +289,13 @@
             this.prettyCashsNum = data.prettyCashs
             this.insuranceNum=data.insurance
             this.openInvoiceNum=data.openInvoice
+            this.promotions=data.promotions
+          }
+        })
+        this.ajaxJson({
+          url: '/finance/invoiceRise/getApprovalPendingCount',
+          call: (data)=>{
+            this.invoiceRiseNum = data
           }
         })
 

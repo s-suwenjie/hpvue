@@ -3,8 +3,12 @@
     <yhm-select-body>
       <template #operate>
         <div v-show="showTipDbSelect" class="s_db_select" :style="{left:getLeft,top:getTop}">双击选择</div>
-        <yhm-commonbutton value="添加" icon="btnAdd" @call="selectAddEvent()"></yhm-commonbutton>
+        <yhm-commonbutton v-if="parameter!=1" value="添加" icon="btnAdd" @call="selectAddEvent()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" id="searchStr" @call="initData"></yhm-managersearch>
+        <div style="font-size: 16px;" v-if="parameter==1">姓名:
+          <span style="color: #FF0000;font-size: 18px"> {{personName}}</span>
+          <span style="font-size: 12px;color: #BFBFC5;margin-left: 10px"@click="cickOnAdd()">(如未找到想要的联系人,点击我一键添加)</span>
+        </div>
       </template>
 
       <template #choose>
@@ -55,7 +59,7 @@
   </div>
 </template>
 <script>
-
+  import {formatPhone, guid } from '@/assets/common.js'
   import { selectmixin } from '@/assets/select.js'
   export default {
     name: 'selectPerson',
@@ -77,10 +81,43 @@
           list: []
         },
         simplify: '0',   // 0 代表添加完整联系人页面,1 代表添加简版联系人界面
-        commonClientUse: '0'
+        commonClientUse: '0',
+        parameter:'0'
       }
     },
     methods: {
+      cickOnAdd(){
+        let iid=guid()
+        let params={
+          id :iid,
+          isLeader:'0',
+          important:'1',
+          sex:'1',
+          category:'1',
+          name:this.personName,
+          tagList:[]
+        }
+        this.ajaxJson({
+          url: '/Basic/personSaveVue',
+          data: params,
+          call: (data)=>{
+            if(data.type === 0){
+              this.$dialog.setReturnValue({id:iid,name:this.personName})
+              this.$dialog.alert({
+                tipValue: data.message,
+                closeCallBack: ()=>{
+                  this.$dialog.close()
+                }
+              })
+            }else{
+              this.$dialog.alert({
+                alertImg: 'warn',
+                tipValue: data.message
+              })
+            }
+          }
+        })
+      },
       setCommonUse(item){
         let params = {
           ownerID: item.id,
@@ -127,9 +164,9 @@
             if(data){
               this.commonUsePsd.value = '1'
               this.searchStr = data
-              this.initPageData(false)
-              this.$dialog.setReturnValue(data)
-              this.$dialog.close()
+              this.initPageData()
+              // this.$dialog.setReturnValue(data)
+              // this.$dialog.close()
             }
           }
         })
@@ -145,7 +182,8 @@
               category: this.listCategory.value,
               prefixLetter: this.prefixLetter.value,
               commonUse: '1',
-              personName:this.personName
+              personName:this.personName,
+              searchStr:this.searchStr
             }
           }
           else{
@@ -153,7 +191,8 @@
               category: this.listCategory.value,
               prefixLetter: this.prefixLetter.value,
               commonUse:0,
-              personName:this.personName
+              personName:this.personName,
+              searchStr:this.searchStr
             }
 
           }
@@ -184,10 +223,12 @@
     },
     created () {
       this.listCategory.value = this.getQueryParam('category')
+      this.setQuery2Value('searchStr')
       this.setQuery2Value('categoryBefore')
       this.setQuery2Value('simplify')
       this.setQuery2Value('commonClientUse')
       this.setQuery2Value('personName')
+      this.setQuery2Value('parameter') //快递模块传的参数默认为0
       setTimeout(()=>{
         this.commonUsePsd.value = this.commonClientUse
 

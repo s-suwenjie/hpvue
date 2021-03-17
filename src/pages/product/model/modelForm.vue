@@ -5,8 +5,11 @@
       <template #control>
         <yhm-form-text title="规格型号"  @repeatverify="nameVerifyEvent" ref="name"  :value="name" id="name" rule="R0000"></yhm-form-text>
 <!--        <yhm-form-text title="规格型号"  subtitle="(英文)" :value="englishName" id="englishName" ></yhm-form-text>-->
-        <yhm-form-text title="参考单价" :value="price" id="price" before-icon="rmb" rule="R3000"></yhm-form-text>
+        <yhm-form-text title="销售价" :value="price" id="price" before-icon="rmb" rule="R3000"></yhm-form-text>
         <yhm-form-text title="物品编号" :value="productNumber" id="productNumber"  ></yhm-form-text>
+
+        <yhm-form-radio ref="stockTypeRadio" rule="#" title="适用品牌" @call="stockTypeCall()" :select-list="stockTypeList" :value="stockType" id="stockType" ></yhm-form-radio>
+        <yhm-form-select v-if="isModel" title="适用车型" @click="stockModelClick()"  :value="stockModel" id="stockModel"></yhm-form-select>
       </template>
     </yhm-formbody>
     <div class="f_split"></div>
@@ -55,13 +58,44 @@
         price:'',
         productNumber:'',  //物品编号
         englishName:'',    //英文名称
-
         supplierDetails:[],        //供应商明细
-
-        empty: true       //规格型号为空
+        stockTypeList:[],
+        stockType:'',
+        empty: true,       //规格型号为空
+        stockModel:'',
+        stockModelID:'',
+        isModel:false,
+        code:''
       }
     },
     methods:{
+      stockTypeCall(){
+        if (this.stockType==4){
+          this.isModel=false
+        } else {
+          this.isModel=true
+        }
+        for(let i in this.stockTypeList){
+          if(this.stockTypeList[i].num==this.stockType){
+            this.code = this.stockTypeList[i].id
+          }
+        }
+      },
+      stockModelClick(){
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 603,
+          url: '/selectDic?name=91&value12=' + this.code,
+          title: '选择适用车型',
+          closeCallBack: (data) => {
+            if (data) {
+              this.stockModel = data.showName
+              this.stockModelID=data.id
+
+            }
+          }
+        })
+      },
       //添加供应商
       addSupplier(){
         this.$dialog.OpenWindow({
@@ -146,7 +180,8 @@
       async save(){
         let a = await this.isNameVerifyEvent()
         let b = this.validator()
-        if(a && b){
+        this.$refs.stockTypeRadio.$emit('verify')
+        if(a && b && this.stockType!=''){
           var params = {
             id: this.id,
             ownerID:this.ownerID,
@@ -154,7 +189,10 @@
             price:this.price,
             supplierDetails:this.supplierDetails,
             productNumber:this.productNumber,
-            englishName:this.englishName
+            englishName:this.englishName,
+            stockModelID:this.stockModelID,
+            stockType:this.stockType,
+
           }
           this.ajaxJson({
             url: '/Basic/saveModel',
@@ -180,6 +218,8 @@
         url: '/Basic/initModelFrom',
         all: (data) => {
           //添加查看的时候都需要的代码
+          this.stockTypeList = data.stockTypePsd.list
+          this.stockType = data.stockTypePsd.value
         },
         add: (data) => {
           //添加时独有的代码
@@ -193,6 +233,9 @@
           this.supplierDetails = data.supplierDetails
           this.productNumber=data.productNumber
           this.englishName=data.englishName
+          this.stockModel=data.stockModel
+          this.stockModelID=data.stockModelID
+
           this.empty = this.supplierDetails.length === 0
         }
       })

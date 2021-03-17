@@ -8,7 +8,7 @@
               :class="[{choice: index==onMonthChoice},{dp_no:!getIsMonthRange(item)},{dp_no:edit}]">{{item}}月</button>
     </div>
     <div>
-      <button class="allBtn" @click="clickMonthAllEvent" :class="{choice: onMonthAllChoice}">整年</button>
+      <button class="allBtn" @click="clickMonthAllEvent" :class="{choice: onMonthAllChoice}" v-if="allyear">整年</button>
     </div>
   </div>
 </template>
@@ -55,6 +55,10 @@
         type:String,
         default:''
       },
+      allyear:{
+        type:Boolean,
+        default:true
+      }
 
     },
     methods: {
@@ -71,13 +75,17 @@
         this.clickMonthAllEvent()
       },
       clickMonthEvent(item,index){
+        if(this.edit){
+          return
+        }
         let yearMonth = '';
-
+        // console.log(item,index,'item||index')
         if(this.getIsMonthRange(item)){
           this.onMonthChoice = index;
           this.onMonthAllChoice = false;
           let month = parseInt(index) + 1;
           yearMonth = this.yearTxt + '-' + month;
+          // console.log(yearMonth,'yearMonth')
           // this.$nextTick(()=>{
           //   this.$emit('initData',yearMonth);
           // })
@@ -85,10 +93,14 @@
 
         if(!this.onMonthAllChoice){
 
-          let month = index;
-          let lastMonthDay = getDayNumByYearMonth(parseInt(this.year),parseInt(month));
+          let month = index=='0'?'12':index;
+          // console.log(this.yearTxt,month,'yearTxt||month')
+
+          let lastMonthDay = getDayNumByYearMonth(parseInt(this.yearTxt),parseInt(month));
+          // console.log(lastMonthDay,'lastMonthDay')
 
           let nowDate = new Date();
+          let newYear = nowDate.getFullYear() + '';
           let newMonth = nowDate.getMonth() + 1;
           let newDate = nowDate.getDate();
           let newHours = nowDate.getHours();
@@ -98,22 +110,45 @@
 
           let endDate = '';
           let startDate = '';
-          if(newMonth === thisMonth){
-            startDate = this.yearTxt +'-' + zero(month) + '-' + zero(lastMonthDay) + ' ' + '23:59:59';
-            endDate = this.yearTxt + '-' + zero(thisMonth) + '-' + zero(newDate) +  ' ' + zero(newHours) + ':' + zero(newMin) + ':' + zero(newSec);
+          if(thisMonth == '1'){
+            startDate = (Number(this.yearTxt)-1) +'-' + zero(month) + '-' + zero(lastMonthDay) + ' ' + '23:59:59';
+            // console.log(this.yearTxt,newYear,thisMonth,newMonth)
+            if(Number(thisMonth)<Number(newMonth)){
+              // console.log('执行了')
+              endDate = this.yearTxt + '-' + zero(thisMonth) + '-' + getDayNumByYearMonth(parseInt(this.yearTxt),parseInt(thisMonth)) +  ' ' + '23:59:59';
+            }else{
+              endDate = this.yearTxt + '-' + zero(thisMonth) + '-' + getDayNumByYearMonth(parseInt(this.yearTxt),parseInt(thisMonth)) +  ' ' + zero(newHours) + ':' + zero(newMin) + ':' + zero(newSec);
+            }
+            // console.log(thisMonth,newDate,newHours,newMin)
+            // console.log(zero(thisMonth),zero(newDate),zero(newHours),zero(newMin))
+            // console.log(startDate,endDate,'11111111')
           }else{
-            let newLastMonthDay = getDayNumByYearMonth(parseInt(this.yearTxt),parseInt(index));
-            let thisMonthDay = getDayNumByYearMonth(parseInt(this.yearTxt),parseInt(index) + 1);
-            startDate = this.yearTxt + '-' + month + '-' + newLastMonthDay +  ' ' + '23:59:59';
-            endDate = this.yearTxt + '-' + zero(thisMonth) + '-' + thisMonthDay +  ' ' + '23:59:59';
-            if(index === 0){
-              let year = this.yearTxt - 1;
-              let month = '12';
-              let newLastMonthYearDay = getDayNumByYearMonth(parseInt(this.yearTxt),parseInt(month));
-              startDate = year + '-' + month + '-' + newLastMonthYearDay +  ' ' + '23:59:59';
+            if(newMonth === thisMonth){
+              startDate = this.yearTxt +'-' + zero(month) + '-' + zero(lastMonthDay) + ' ' + '23:59:59';
+              if(Number(this.yearTxt)==Number(newYear)){
+                endDate = this.yearTxt + '-' + zero(thisMonth) + '-' + zero(newDate) +  ' ' + zero(newHours) + ':' + zero(newMin) + ':' + zero(newSec);
+              }else{
+                endDate = this.yearTxt + '-' + zero(thisMonth) + '-' + getDayNumByYearMonth(parseInt(this.yearTxt),parseInt(thisMonth)) +  ' ' + '23:59:59';
+              }
+              // console.log(startDate,endDate,'11111111')
+              // console.log(this.yearTxt,newYear,'22222222')
+            }else{
+              let newLastMonthDay = getDayNumByYearMonth(parseInt(this.yearTxt),parseInt(index));
+              let thisMonthDay = getDayNumByYearMonth(parseInt(this.yearTxt),parseInt(index) + 1);
+              startDate = this.yearTxt + '-' + zero(month) + '-' + newLastMonthDay +  ' ' + '23:59:59';
               endDate = this.yearTxt + '-' + zero(thisMonth) + '-' + thisMonthDay +  ' ' + '23:59:59';
+
+              if(index === 0){
+                let year = this.yearTxt - 1;
+                let month = '12';
+                let newLastMonthYearDay = getDayNumByYearMonth(parseInt(this.yearTxt),parseInt(month));
+                startDate = year + '-' + zero(month) + '-' + newLastMonthYearDay +  ' ' + '23:59:59';
+                endDate = this.yearTxt + '-' + zero(thisMonth) + '-' + thisMonthDay +  ' ' + '23:59:59';
+              }
+              // console.log(startDate,endDate)
             }
           }
+
 
           let timeParams = {
             startDate: startDate,
@@ -201,6 +236,7 @@
           if(this.customTime=='12'){
             this.onMonthChoice = '-1'
             this.onMonthAllChoice = true
+            this.clickMonthAllEvent()
           }else{
             this.onMonthAllChoice = false
           }

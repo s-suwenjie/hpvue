@@ -1,6 +1,8 @@
 <template>
   <td class="fd_in_txt" :style="getWidth">
-    <div @click="clickEvent" class="delete red fd_center fontSize18" :class="{mt_button_disabled:noClick}"></div>
+    <div @click="clickEvent" style="float: left;" :class="[buttonDisabled,iconName]" class="fd_center fontSize18" :style="{float:float,padding:padding,color:iconColor}"></div>
+<!--    disabled-->
+<!--    mt_button_disabled:noClick-->
   </td>
 </template>
 
@@ -16,6 +18,26 @@
       delClick:{
         type: Boolean,
         default: false
+      },
+      float:{
+        type: String,
+        default: "center"
+      },
+      iconName:{
+        type: String,
+        default: "delete"
+      },
+      iconColor:{
+        type: String,
+        default: "red"
+      },
+      tipValue:{
+        type: String,
+        default: "是否删除当前列?"
+      },
+      padding:{
+        type: String,
+        default: ""
       },
       must:{
         type: Number,
@@ -44,7 +66,7 @@
           if (this.list.length > this.must) {
             this.$dialog.confirm({
               alertImg: 'warn',
-              tipValue: '是否删除当前列?',
+              tipValue: this.tipValue,
               okCallBack: () => {
                 if (this.delClick) {
                   this.$nextTick(() => {
@@ -69,6 +91,11 @@
       }
     },
     computed:{
+      buttonDisabled(){
+        if(this.noClick){
+          return 'mt_button_disabled'
+        }
+      },
       getWidth(){
         if(this.width !== '') {
           return 'width:' + this.width + 'px !important;'

@@ -8,6 +8,7 @@
         <router-link class="menuTabDiv " :to="{path:'/home/customerRebates/customerRebatesManager'}">客户直接优惠/返利</router-link>
         <router-link class="menuTabDiv menuTabActive"  :to="{path:'/home/paymentInsurance/payInsuranceFeeManager'}">付保险费</router-link>
         <router-link class="menuTabDiv "  :to="{path:'/home/receiveInsurance/receiveInsuranceManager'}">收保险费</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/insuranceInvoice/insuranceInvoiceManager'}">保险开票</router-link>
       </template>
       <!--操作区-->
       <template #operate>
@@ -25,12 +26,13 @@
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="投保日期" value="insuredDate"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="车牌号" value="plate"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="被保险人" value="beinsuredName"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="联系人" value="contactName"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="车牌号" value="plate"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="被保险人" value="beinsuredName"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="联系人" value="contactName"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="保险公司" value="insuredUnit"></yhm-managerth>
         <yhm-managerth title="收款账户明细" value="otherAccount"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="支付金额" value="actualProfitLoss"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" title="支付金额" value="otherMoney"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="发票:公司抬头" value="publicUrl"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="申请编号" value="numbering"></yhm-managerth>
         <yhm-managerth style="width: 170px;" title="状态"></yhm-managerth>
       </template>
@@ -40,15 +42,18 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td-date :value="item.insuredDate"></yhm-manager-td-date>
+          <yhm-manager-td-date @click="listView(item)" :value="item.insuredDate"></yhm-manager-td-date>
           <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
           <yhm-manager-td @click="contactView(item)" :value="item.contactName" ></yhm-manager-td>
           <yhm-manager-td  :value="item.beinsuredName" ></yhm-manager-td>
           <yhm-manager-td-psd  @click="insuredUnitView(item)" :list="insuredUnitList" :value="item.insuredUnit" ></yhm-manager-td-psd>
           <yhm-manager-td @click="unitDetail(item)" :tip="true" :value="item.listothAccount.length>0?'分批拨付': item.otherAccount" :after-icon="item.listothAccount.length > 0?'i-btn-prompt':''" @mouseover="tableTipShowEvent" @mouseout="tableTipHideEvent" :value-object="item" :color="item.listothAccount.length > 0?'#1111EE':''"></yhm-manager-td>
-          <yhm-manager-td-money :value="item.invoicingMoney"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.otherMoney+''"></yhm-manager-td-money>
+          <yhm-manager-td-center value="-----" v-if="item.publicUrl==''||item.publicUrl==undefined"></yhm-manager-td-center>
+          <yhm-manager-td-image :tip="true" v-else left="-340" width="900" height="550" :value="item.publicUrl===''?'------':item.publicUrl" tag="ElectronicInvoice"></yhm-manager-td-image>
+
           <yhm-manager-td :value="item.numbering"></yhm-manager-td>
-          <yhm-manager-td-state :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
+          <yhm-manager-td-state @click="listFiles(item)" :value="item.statusVal" :state-color="item.statusColor" :state-img="item.statusImg"></yhm-manager-td-state>
         </tr>
       </template>
 
@@ -126,6 +131,18 @@
       }
     },
     methods:{
+      listFiles(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '550',
+          title: '收款凭证',
+          url: '/receiveInsuranceFiles?id='+item.id+'&ownerID=1',
+          closeCallBack: (data)=>{
+
+          }
+        })
+      },
+
       statisticalClick(){
         this.$dialog.OpenWindow({
           width: '1300',

@@ -7,9 +7,9 @@
       </div>
       <div class="content">
         <div @mouseout="mouseoutEvent" @mouseover="mouseoverEvent" class="box" :class="{error:error,hover:mouseStyle,focus:focusStyle}" v-click-control-outside="triggerVerification">
-          <input class="txtPaddingLeft10" v-model="txt" type="text" @focus="focusEvent" @blur="blurEvent" :placeholder="valueTip"/>
+          <input class="txtPaddingLeft10 disabled" readonly v-model="txt" type="text" @focus="focusEvent" @blur="blurEvent" :placeholder="valueTip"/>
           <div class="split"></div>
-          <input class="makeupTxt txtCenter" v-model="numValue" type="text" @focus="focusEvent" @blur="blurEvent" :placeholder="numTip"/>
+          <input class="makeupTxt txtCenter disabled" readonly v-model="numValue" type="text" @focus="focusEvent" @blur="blurEvent" :placeholder="numTip"/>
           <div class="split"></div>
           <div class="makeupIcon disabled" :class="iconValue" :style="getColor"></div>
           <div class="split"></div>
@@ -118,6 +118,10 @@
         type:String,
         default:""
       },
+      isSelectColor:{
+        type:Boolean,
+        default:false
+      },
       show:{
         type:Boolean,
         default:true
@@ -125,16 +129,16 @@
     },
     methods:{
       colorEvent(){
-
-        if(this.colorValue  == 'undefined'){
-          this.colors=this.uncolor
-        }else{
-          this.uncolor =this.colors
-          this.colors = this.colorValue
+        if(this.isSelectColor){
+          if(this.colorValue  == 'undefined'){
+            this.colors=this.uncolor
+          }else{
+            this.uncolor =this.colors
+            this.colors = this.colorValue
+          }
+          this.colorShow = true
         }
-        this.colorShow = true
         // this.colors.hex=this.colorValue
-
       },
       // 颜色选择器
       outsideClick () {

@@ -1,8 +1,15 @@
 <template>
   <div>
-    <yhm-managerpage :total-table="true">
+    <yhm-managerpage category="1" :total-table="true">
       <!--导航条-->
-      <template #navigation>财务管理&nbsp;&gt;&nbsp;票据&nbsp;&gt;&nbsp;发票管理</template>
+      <!--<template #navigation>财务管理&nbsp;&gt;&nbsp;票据&nbsp;&gt;&nbsp;发票管理</template>-->
+      <!--导航条-->
+
+      <template #navigationTab>
+        <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/invoiceTilingManager'}">库存发票</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/openInvoiceFinManager'}">开票通知</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/openInvoiceManagerAll'}">开票审批中</router-link>
+      </template>
 
       <template #navigationLft>
         <div @mouseover="tipChange(index)" @mouseout="tipOut" style="margin: 0;position: relative;"  v-for="(item,index) in routerList" :key="index">
@@ -21,23 +28,30 @@
         <yhm-commonbutton value="批量作废" icon="btnAdd" :flicker="true" @call="toVoidMore()" category="one"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'"  :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="发票状态" :content="statePsd"></yhm-radiofilter>
+        <yhm-radiofilter :before="isReceivablesBefore" @initData="initChoose('maxValue')" title="款项状态" :content="isReceivablesPsd"></yhm-radiofilter>
       </template>
       <!--筛选区-->
       <template #choose>
         <div v-show="choose" class="buttonBody mptZero">
           <yhm-radiofilter :before="invoiceCategoryBefore" @initData="initChoose('state')" title="发票类型" :content="invoiceCategoryPsd"></yhm-radiofilter>
-          <yhm-radiofilter :before="stateBefore" @initData="initChoose('state')" title="发票状态" :content="statePsd"></yhm-radiofilter>
           <yhm-radiofilter :before="maxValueBefore" @initData="initChoose('maxValue')" title="发票面值" :content="maxValuePsd"></yhm-radiofilter>
         </div>
       </template>
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 50px;" title="查看"></yhm-managerth>
-        <yhm-managerth style="width: 170px;" title="发票种类" value="invoiceCategory"></yhm-managerth>
-        <yhm-managerth style="width: 170px;" title="所属单位" value="unit"></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="最大开具金额" value="maxValue"></yhm-managerth>
-        <yhm-managerth style="width: 180px;" title="发票号码" value="code"></yhm-managerth>
-        <yhm-managerth style="width: 80px;" title="状态" value="state"></yhm-managerth>
+        <yhm-managerth style="width: 130px;" title="发票种类" value="invoiceCategory"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="发票号码" value="code"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="发票状态" value="state"></yhm-managerth>
+        <yhm-managerth style="width: 110px;" title="开票日期" value="applyDate"></yhm-managerth>
+        <yhm-managerth style="width: 170px;" title="发票抬头" value="unit"></yhm-managerth>
+        <!--<yhm-managerth style="width: 120px;" title="开票事由" value="maxValue"></yhm-managerth>-->
+        <yhm-managerth style="width: 120px;" title="开票金额" value="maxValue"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="税率（%）"></yhm-managerth>
+        <yhm-managerth style="width: 70px;" title="税额"></yhm-managerth>
+        <yhm-managerth style="width: 70px;" title="款项状态" value=""></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="开票状态" value=""></yhm-managerth>
         <yhm-managerth  title="操作" value=""></yhm-managerth>
       </template>
       <template #listBody>
@@ -45,10 +59,16 @@
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
           <yhm-manager-td-psd :value="item.invoiceCategory" :list="invoiceCategoryList" ></yhm-manager-td-psd>
-          <yhm-manager-td :value="item.unit"></yhm-manager-td>
-          <yhm-manager-td-psd :value="item.maxValue" :list="maxValueList" ></yhm-manager-td-psd>
-          <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
+          <yhm-manager-td :value="item.code"></yhm-manager-td>
           <yhm-manager-td-psd :value="item.state" :list="stateList" ></yhm-manager-td-psd>
+          <yhm-manager-td-date :value="item.applyDate"></yhm-manager-td-date>
+          <yhm-manager-td :tip="true" :value="item.purchaser"></yhm-manager-td>
+          <!--<yhm-manager-td-psd :value="item.category" :list="categoryList"></yhm-manager-td-psd>-->
+          <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.taxRate"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.taxAmount"></yhm-manager-td-money>
+          <yhm-manager-td-psd :value="item.isReceivables" @click="clickSelect(item)" :list="isReceivablesList"></yhm-manager-td-psd>
+          <yhm-manager-td-state :value="item.stateVal"></yhm-manager-td-state>
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button :no-click="item.state === '0'||item.state === '2'" @click="invoiceTrial(item)" value="查看发票信息" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button :no-click="item.state === '1'||item.state === '2'" @click="toVoid(item,0)" value="作废" color="#49a9ea"></yhm-manager-td-operate-button>
@@ -61,7 +81,7 @@
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>
       <template #listTotalHead>
-        <yhm-managerth style="width: 100px;" before-color="#a40b81" before-title="总 " title="张数"></yhm-managerth>
+        <yhm-managerth style="width: 100px;" before-color="#a40b81" before-title="入库总" title="张数"></yhm-managerth>
         <yhm-managerth style="width: 100px;" before-color="#009788" before-title="可用 " title="张数"></yhm-managerth>
         <yhm-managerth style="width: 100px;" before-color="#999" before-title="作废 " title="张数"></yhm-managerth>
         <yhm-managerth style="width: 100px;" before-color="#d45702" before-title="已开具 " title="张数"></yhm-managerth>
@@ -69,9 +89,9 @@
       <template #listTotalBody>
         <tr v-for="(item,index) in contentTotal" :key="index">
           <yhm-manager-td-rgt :value="item.sumCount"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.countState0"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.countState2"></yhm-manager-td-rgt>
-          <yhm-manager-td-rgt :value="item.countState1"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.countState0" @click="stateClick('0')"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.countState2" @click="stateClick('2')"></yhm-manager-td-rgt>
+          <yhm-manager-td-rgt :value="item.countState1" @click="stateClick('1')"></yhm-manager-td-rgt>
         </tr>
       </template>
       <!--分页控件-->
@@ -103,6 +123,8 @@
         stateBefore:'0',
         listID: '',
         tipValue:'',
+        isReceivablesList:[],
+        categoryList:[],
         routerList:[
           {
             class:'i-homeCheck',
@@ -135,9 +157,17 @@
           value: '',
           list: []
         },
+        isReceivablesPsd:{
+          value: '',
+          list: []
+        }
       }
     },
     methods:{
+      stateClick(state){
+        this.listState.value=state
+        this.initPageData (false)
+      },
       invoiceTrial(item){
         this.$dialog.OpenWindow({
           width: '1025',
@@ -225,12 +255,17 @@
         let params = {}
 
         if (initValue) {
-          params = {}
+          params = {
+            orderColumn:'code',
+            order:'asc'
+          }
         } else {
           params = {
             invoiceCategory:this.invoiceCategoryPsd.value,
             maxValue:this.maxValuePsd.value,
-            state: this.statePsd.value
+            state: this.statePsd.value,
+            orderColumn:'code',
+            order:'asc'
           }
         }
         this.init({
@@ -250,6 +285,9 @@
             this.invoiceCategoryPsd=data.invoiceCategoryPsd
             this.statePsd=data.statePsd
             this.maxValuePsd=data.maxValuePsd
+            this.isReceivablesList=data.isReceivablesPsd.list
+            this.isReceivablesPsd=data.isReceivablesPsd
+            this.categoryList=data.categoryPsd.list
           }
         })
       },
@@ -262,4 +300,10 @@
 
 <style scoped>
   .tipShow{display: none;width: 100px;}
+  .tip::before{
+    font-size: 24px;
+  }
+  .tip{
+    padding: 0 5px;
+  }
 </style>

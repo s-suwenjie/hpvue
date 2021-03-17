@@ -47,10 +47,11 @@
 
           <yhm-manager-td :value="item.interbank"></yhm-manager-td>
           <yhm-manager-td-operate>
-            <yhm-manager-td-operate-button  @click="sendWxmessageEvent(item)" value="发送微信" icon="i-sendwx" color="#fd6802"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button  @click="clickCopy(item)" value="一键复制" icon="i-copy" color="#49a9ea"></yhm-manager-td-operate-button>
-            <yhm-manager-td-operate-button  @click="sendSelf(item)" value="发给本人" icon="i-sendwx" color="#2f54eb"></yhm-manager-td-operate-button>
-
+            <yhm-manager-td-operate-button v-show="item.state !=='2'&&item.categoryUnit==='0'" @click="accountCancellation(item)" value="销户" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button v-show="item.state !=='2'&&item.categoryUnit==='1'" @click="toVoid(item)" value="作废" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="sendWxmessageEvent(item)" value="发送微信" icon="i-sendwx" color="#fd6802"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="clickCopy(item)" value="一键复制" icon="i-copy" color="#49a9ea"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="sendSelf(item)" value="发给本人" icon="i-sendwx" color="#2f54eb"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -103,6 +104,52 @@
       }
     },
     methods:{
+      toVoid(item){
+        if(item.id){
+          this.$dialog.confirm({
+            width: '250',
+            alertImg: 'warn',
+            tipValue: '是否作废？',
+            okCallBack: (data)=>{
+              let params = {
+                id: item.id
+              }
+              this.ajaxJson({
+                url: '/Fin/publicAccountDel',
+                data: params,
+                call: (data)=>{
+                  if (data.type === 0) {
+                    this.$dialog.alert({
+                      tipValue: data.message,
+                      closeCallBack: () => {
+                        this.initPageData(false);
+                      }
+                    })
+                  }else if(data.type === 1){
+                    this.$dialog.alert({
+                      alertImg:'warn',
+                      tipValue: data.message
+                    })
+                  }
+                }
+              })
+            }
+          })
+        }
+      },
+      accountCancellation(item){
+        this.$dialog.OpenWindow({
+          width: "1050",
+          height: "700",
+          title: "销户",
+          url: '/accountCancellation?ownerID='+item.id,
+          closeCallBack: (data) => {
+            if(data){
+              this.initPageData(false)
+            }
+          }
+        })
+      },
       sendSelf(item){
         let personID = sessionStorage.getItem('____currentUserID')
         let params = {

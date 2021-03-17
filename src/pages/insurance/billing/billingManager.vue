@@ -11,6 +11,7 @@
         <yhm-commonbutton  value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
         <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData(false)"></yhm-managersearch>
+
       </template>
       <!--筛选区-->
 
@@ -41,7 +42,7 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"  ></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td @click="plateView(item)" :value="item.plate"></yhm-manager-td>
+          <yhm-manager-td vehicle-text-align="left" type="vehicle" @click="plateView(item)" :value="item.plate"></yhm-manager-td>
           <yhm-manager-td  @click="contactView(item)" :value="item.contactName" ></yhm-manager-td>
           <yhm-manager-td  :tip="item.notEqual==='0'?false:true" :tip-show="true" tip-value="被保险人与车主不一致" @click="personView(item)" :value="item.beinsuredName" >
             <span v-if="item.notEqual==='0'?false:true" style=" color: #0b7cca;font-size: 18px;" class="uniE9A8 managerIcon"></span>
@@ -95,6 +96,7 @@
       }
     },
     methods:{
+
       listDetailsView(item){
         this.$dialog.OpenWindow({
           width: '650',
@@ -175,20 +177,54 @@
         })
       },
       editPayment(item){
-        this.$dialog.OpenWindow({
-          width: '1050',
-          height: '750',
-          url: '/billingApprovalApplyForm?discountMoney='+item.discountMoney+'&billingID='+item.id+'&cashierSubject=支付客户返利 ------ 售后业务 ------ 其他业务&cashierSubjectID=D65A9EF9-DCB2-47B8-918B-F8DD9342B2CB'
-          +'&numbering='+item.numbering+'&plate='+item.plate+'&cashName='+item.cashName+'&cashNameID='+item.cashNameID+'&publicPrivate='+item.publicPrivate+'&Billingnature=6',
-          title: '添加返利付款申请',
-          closeCallBack: (data)=>{
-            if(data){
-              this.initPageData(false)
+        if (item.prove==1){
+          this.$dialog.confirm({
+            tipValue: '此返利  需要开证明',
+            btnValueOk:'下载证明',
+            btnValueCancel:'上传证明',
+            width: 350,
+            okCallBack: () => {
+              let param = {
+                id: item.id
+              }
+              this.ajaxJson({
+                url: '/Insurance/downloadProve',
+                data: param,
+                call: (data) => {
+                  window.open("/UploadFile/" + data.val)
+                }
+              })
+            },
+            cancelCallBack:() => {
+              this.$dialog.OpenWindow({
+                width: '950',
+                height: '550',
+                url: '/billingFile?ownerID='+item.id,
+                title: '上传返利证明',
+                closeCallBack: (data) => {
+                  this.initPageData(false)
+                }
+              })
             }
-          }
-        })
+          })
+        } else{
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '750',
+            url: '/billingApprovalApplyForm?discountMoney='+item.discountMoney+'&billingID='+item.id+'&cashierSubject=支付客户返利 ------ 售后业务 ------ 其他业务&cashierSubjectID=D65A9EF9-DCB2-47B8-918B-F8DD9342B2CB'
+              +'&numbering='+item.numbering+'&plate='+item.plate+'&cashName='+item.cashName+'&cashNameID='+item.cashNameID+'&publicPrivate='+item.publicPrivate+'&Billingnature='+item.nature+'&cashObject='+item.cashObject,
+            title: '添加返利付款申请',
+            closeCallBack: (data)=>{
+              if(data){
+                this.initPageData(false)
+              }
+            }
+          })
+        }
+
       },
        editBtn(item){ //提交申请
+
          this.$dialog.confirm({
            width: 300,
            tipValue: '确定提交申请?',

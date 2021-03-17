@@ -1,9 +1,9 @@
 <template>
   <div class="f_main f_main_customize mb16">
-    <yhm-select-body :choose="false" :operatergt-show="false" :choose-bg="false">
+    <yhm-select-body :choose="false" >
       <template #operate>
         <div v-show="showTipDbSelect" class="s_db_select" :style="{left:getLeft,top:getTop}">双击选择</div>
-<!--        <yhm-commonbutton value="添加" icon="btnAdd" @call="selectAddEvent()"></yhm-commonbutton>-->
+        <yhm-commonbutton value="添加" icon="btnAdd" @call="selectAddEvent()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" id="searchStr" @call="initData"></yhm-managersearch>
       </template>
 
@@ -45,6 +45,7 @@
 </template>
 
 <script>
+  import { guid } from '@/assets/common.js'
   import { selectmixin } from '@/assets/select.js'
   export default {
     name: 'selectMaterials',
@@ -54,40 +55,77 @@
         value:'',
         storageType:'',
         stockType:'',
+        orderid:guid()
       }
     },
     methods:{
-      // selectAddEvent () {
-      //   this.$dialog.OpenWindow({
-      //     width: 1072,
-      //     height: 650,
-      //     url:'/processManagementForm?type=1',
-      //     title:'添加检修服务',
-      //     closeCallBack: (data)=>{
-      //       this.initPageData(false)
-      //     }
-      //   })
-      // },
+      selectAddEvent () {
+        this.$dialog.OpenWindow({
+          width: 1072,
+          height: 650,
+          url:'/workOrderMateriaListForm?type=1&offLine='+this.offLine+'&ownerID='+this.ownerID+'&orderid='+this.orderid,
+          title:'添加材料详情',
+          closeCallBack: (data)=>{
+            this.initPageData(false)
+          }
+        })
+      },
       initPageData(initValue){
+        let url = ''
         let params = {}
         if (initValue) {
           // 页面初始化是需要的参数
-          params = {
-            ownerID:this.ownerID
+          if(this.offLine=='1'){
+            params = {
+              category: "1",
+              number: ""
+            }
+            url = '/stock/stockPosition/queryForProduct'
+          }else{
+            params = {
+              ownerID:this.ownerID
+            }
+            url = '/fix/fixOrderMaterial/initForm'
           }
         } else {
           // 页面非初始化时需要的参数
-          params = {
-            ownerID:this.ownerID
+          if(this.offLine=='1'){
+            params = {
+              category: "1",
+              number: ""
+            }
+            url = '/stock/stockPosition/queryForProduct'
+          }else{
+            params = {
+              ownerID:this.ownerID
+            }
+            url = '/fix/fixOrderMaterial/initForm'
           }
         }
         this.init({
           initValue: initValue,
-          url: '/fix/fixOrderMaterial/initForm',
+          url: url,
           data: params,
           all: (data) => {
             // 不管是不是初始化都需要执行的代码
-            this.content = data.list
+            if(this.offLine=='1'){
+              this.content = data.content
+            }else{
+              this.content = data.list
+            }
+            if(data.list==null){
+              this.ajaxJson({
+                url: '/fix/fixOrderMaterial/save',
+                data: {
+                  id:this.orderid,
+                  ownerID:this.ownerID,
+                },
+                call: (datas) => {
+                }
+              })
+            }else{
+              this.orderid = data.id
+            }
             if(this.allCheck){
               for(let i in this.content){
                 let id = this.content[i].id
@@ -133,7 +171,11 @@
       }
     },
     created () {
+      this.setQuery2Value('offLine')
       this.setQuery2Value('ownerID')
+      if(this.offLine=='1'){
+        this.ownerID = ''
+      }
       this.setQuery2Value('selectType')
       if(this.selectType === '1'){
         this.allCheck = true
