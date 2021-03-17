@@ -29,8 +29,9 @@
           <yhm-managerth title="货币代码"></yhm-managerth>
         </template>
         <template v-if="getName(['49'])">
-          <yhm-managerth width="520" title="银行名称"></yhm-managerth>
-          <yhm-managerth title="所属银行"></yhm-managerth>
+          <yhm-managerth width="390" title="银行名称"></yhm-managerth>
+          <yhm-managerth width="130" title="联行号"></yhm-managerth>
+          <yhm-managerth width="130" title="所属银行"></yhm-managerth>
           <yhm-managerth title="银行代码"></yhm-managerth>
         </template>
         <template v-if="getName(['11','63','65','64','62'])">
@@ -106,6 +107,7 @@
 <!--              <span>{{item.showName}}</span>-->
 <!--            </td>-->
             <yhm-manager-td-logo :value="item.showName" tag="BankLogo" :logo="item.value5"></yhm-manager-td-logo>
+            <yhm-manager-td :value="item.value6"></yhm-manager-td>
             <yhm-manager-td :value="item.value2"></yhm-manager-td>
             <yhm-manager-td :value="item.value3"></yhm-manager-td>
           </template>
