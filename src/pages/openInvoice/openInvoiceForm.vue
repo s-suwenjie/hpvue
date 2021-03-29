@@ -703,7 +703,7 @@
           }
           this.invoiceCategory='0'
           this.isWordOrder=false
-          if(this.category === '2'||this.category === '8'){
+          if(this.category === '2'){
             this.isWordOrder=true
           }
           if(this.category === '1' || this.category === '6'){
@@ -759,7 +759,7 @@
             return
           }
         }
-        if(this.category === '2'||this.category === '8'){
+        if(this.category === '2'){
           if(parseFloat(this.oldInvoiceMoney) < parseFloat(this.invoiceMoney)){
             d = false
             this.$dialog.alert({

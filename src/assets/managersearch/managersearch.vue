@@ -132,7 +132,7 @@
           this.commonIcon = "searchDelete"
         }
         if(this.blankShow){
-          this.txt = newVal.replace(/\ +/g, "")
+          this.txt = newVal.replace(/^(\s|\xA0)+|(\s|\xA0)+$/g, '')
         }
       },
       value(newVal,oldVal){

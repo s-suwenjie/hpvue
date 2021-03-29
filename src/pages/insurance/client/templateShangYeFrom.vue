@@ -71,7 +71,7 @@
         plate:'', //车牌号
         personID:'',//联系人还是车主
         businessMoney:'', //商业险金额
-        businessCategory:'车险，三责',//商业险种
+        businessCategory:'车损，三者',//商业险种
         jiaoqiangMoney:'',//交强险金额
         totalMoney:'',//合计金额
         insuranceUnit:'',//投保公司

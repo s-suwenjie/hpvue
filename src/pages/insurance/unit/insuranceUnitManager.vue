@@ -104,7 +104,7 @@
           width: '1050',
           height: '750',
           title: '上传合同',
-          url: '/contractForm?ownerID=' + item.id,
+          url: '/contractForm?type=0&ownerID=' + item.id+'&unitID='+item.unitID+'&unit='+item.unit,
           closeCallBack: (data)=>{
             if(data){
               this.initPageData(false)

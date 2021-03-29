@@ -61,34 +61,34 @@
       </template>
       <template #listHead>
         <yhm-managerth style="width: 36px" title="序号"></yhm-managerth>
-        <yhm-managerth style="width: 140px" title="商品名称"></yhm-managerth>
-        <yhm-managerth style="width: 140px" title="规格型号"></yhm-managerth>
+        <yhm-managerth title="商品名称"></yhm-managerth>
+        <yhm-managerth title="规格型号"></yhm-managerth>
         <yhm-managerth style="width: 60px" title="数量"></yhm-managerth>
         <yhm-managerth style="width: 50px" title="单位"></yhm-managerth>
         <yhm-managerth style="width: 65px" title="拆分数量"></yhm-managerth>
         <yhm-managerth style="width: 65px" title="拆分单位"></yhm-managerth>
 
-        <yhm-managerth style="width: 90px" title="不含税单价"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="不含税总价"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="含税单价"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="含税总价"></yhm-managerth>
+<!--        <yhm-managerth style="width: 90px" title="不含税单价"></yhm-managerth>-->
+<!--        <yhm-managerth style="width: 90px" title="不含税总价"></yhm-managerth>-->
+        <yhm-managerth style="width: 110px" title="采购单价"></yhm-managerth>
+        <yhm-managerth style="width: 110px" title="采购总价"></yhm-managerth>
         <yhm-managerth style="width: 40px" title="删除"></yhm-managerth>
       </template>
       <template #listBody>
         <tr v-for="(item,index) in productDetails" :key="index" :class="{InterlacBg:index%2!==0}">
           <div style="display: flex;justify-content: center;text-align: center">{{Number(index)+1}}</div>
 <!--          <yhm-form-td-textbox width="36"  no-edit="1" id="num" :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>-->
-          <yhm-form-td-select-dialog width="140" tip="value" @call="selectProduct(item,index)" id="product" :list="productDetails" listid="productDetails" :value="item" rule="#"></yhm-form-td-select-dialog>
-          <yhm-form-td-select-dialog width="140" tip="value" @call="selectModel(item,index)" id="model" :list="productDetails" listid="productDetails" :value="item" rule="#"></yhm-form-td-select-dialog>
+          <yhm-form-td-select-dialog width="210" tip="value" @call="selectProduct(item,index)" id="product" :list="productDetails" listid="productDetails" :value="item" rule="#"></yhm-form-td-select-dialog>
+          <yhm-form-td-select-dialog width="210" tip="value" @call="selectModel(item,index)" id="model" :list="productDetails" listid="productDetails" :value="item" rule="#"></yhm-form-td-select-dialog>
           <yhm-form-td-textbox width="60" min-number="1" @input="toprice(item)" @blur="toprice(item)" :list="productDetails" listid="productDetails" :value="item" id="quantity"></yhm-form-td-textbox>
           <yhm-form-td-textbox width="50" tip="value" id="uuStr" :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>
           <yhm-form-td-textbox width="65" min-number="1" tip="value" @input="toprice(item)" @blur="toprice(item)" :no-edit="item.noEdit" id="mdo" :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>
           <yhm-form-td-textbox width="65" tip="value" :no-edit="item.noEdit" id="mdoStr" :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>
 
-          <yhm-form-td-textbox width="90" no-edit="1" tip="money" before-icon="rmb" :list="productDetails" listid="productDetails" :value="item" id="price"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="90" no-edit="1" tip="money" tip-left="-53" tip-arrow-left="70" before-icon="rmb" id="totalPrice"  :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="90" @input="toprice(item)" tip="money" tip-arrow-left="170" tip-left="-153"  id="priceTax" before-icon="rmb" :list="productDetails" listid="productDetails" :value="item"  ></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="90" no-edit="1" tip="money" tip-arrow-left="245" tip-left="-230"  id="totalPriceTax" before-icon="rmb" :list="productDetails" listid="productDetails" :value="item"  ></yhm-form-td-textbox>
+<!--          <yhm-form-td-textbox width="90" no-edit="1" tip="money" before-icon="rmb" :list="productDetails" listid="productDetails" :value="item" id="price"></yhm-form-td-textbox>-->
+<!--          <yhm-form-td-textbox width="90" no-edit="1" tip="money" tip-left="-53" tip-arrow-left="70" before-icon="rmb" id="totalPrice"  :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>-->
+          <yhm-form-td-textbox width="110" @input="toprice(item)" tip="money" tip-arrow-left="170" tip-left="-153"  id="priceTax" before-icon="rmb" :list="productDetails" listid="productDetails" :value="item"  rule="R0000" ></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="110" no-edit="1" tip="money" tip-arrow-left="245" tip-left="-230"  id="totalPriceTax" before-icon="rmb" :list="productDetails" listid="productDetails" :value="item"  rule="R0000" ></yhm-form-td-textbox>
           <yhm-form-td-delete width="40" :list="productDetails" :value="item" :del-click="false" @click="delFromList(item.id,index)"></yhm-form-td-delete>
         </tr>
       </template>
@@ -296,7 +296,7 @@
             closeCallBack: (data) => {
               if (data) {
                 let item,insertDate
-                console.log(data)
+                // console.log(data,'执行了')
                 for(let i in data){
                   item = {}
                   insertDate = new Date(accAdd(new Date().getTime(), accMul(this.productDetails.length, 1000)))
@@ -321,14 +321,14 @@
                   item.price = data[i].price+''//单价
                   item.uuStr = data[i].unit//整件单位
                   item.show = '0'// 0拆分  1不拆分
-                  item.priceTax = data[i].price//含税单价
-                  item.price = (Number(data[i].price)-Number(data[i].price*(this.taxPrice/100))).toFixed(2)//不含税单价 taxPrice
+                  // item.priceTax = data[i].price//含税单价
+                  // item.price = (Number(data[i].price)-Number(data[i].price*(this.taxPrice/100))).toFixed(2)//不含税单价 taxPrice
                   if(item.splitVal=='0'){
                     item.totalPrice = Number(item.price)*(Number(item.quantity)*Number(item.mdo))//不含税总价
-                    item.totalPriceTax = Number(item.priceTax)*(Number(item.quantity)*Number(item.mdo))//含税总价
+                    // item.totalPriceTax = Number(item.priceTax)*(Number(item.quantity)*Number(item.mdo))//含税总价
                   }else{
                     item.totalPrice = Number(item.price)*Number(item.quantity)//不含税总价
-                    item.totalPriceTax = Number(item.priceTax)*Number(item.quantity)//含税总价
+                    // item.totalPriceTax = Number(item.priceTax)*Number(item.quantity)//含税总价
                   }
 
                   this.productDetails.push(item)
@@ -346,7 +346,7 @@
           title: '选择商品信息',
           closeCallBack: (data) => {
             if (data) {
-              console.log(data,'选择商品')
+              // console.log(data,'选择商品')
               item.product = data.product//商品名称
               item.productID = data.productID//商品id
               item.splitVal = data.split//是否拆分 0拆分 1不拆分
@@ -361,14 +361,15 @@
               item.mdo = item.splitVal=='1'?'0':'1'//拆分数量
               item.price = data.price+''//单价
               item.uuStr = data.unit//整件单位
-              item.priceTax = data.price//含税单价
-              item.price = (Number(data.price)-Number(data.price*(this.taxPrice/100))).toFixed(2)//不含税单价 taxPrice
+              // item.priceTax = data.price//含税单价
+              item.price = data.price//不含税单价
+              // item.price = (Number(data.price)-Number(data.price*(this.taxPrice/100))).toFixed(2)//不含税单价 taxPrice
               if(item.splitVal=='0'){
                 item.totalPrice = Number(item.price)*(Number(item.quantity)*Number(item.mdo))//不含税总价
-                item.totalPriceTax = Number(item.priceTax)*(Number(item.quantity)*Number(item.mdo))//含税总价
+                // item.totalPriceTax = Number(item.priceTax)*(Number(item.quantity)*Number(item.mdo))//含税总价
               }else{
                 item.totalPrice = Number(item.price)*Number(item.quantity)//不含税总价
-                item.totalPriceTax = Number(item.priceTax)*Number(item.quantity)//含税总价
+                // item.totalPriceTax = Number(item.priceTax)*Number(item.quantity)//含税总价
               }
             }
           }
@@ -391,7 +392,16 @@
                 item.supplierId = data.supplierId//供货商ID
                 // this.price = (Number(data.price)).toFixed(2)
                 // this.price = (Number(this.priceTax)-Number(this.priceTax*(this.taxPrice/100))).toFixed(2)
-                item.priceTax = data.price+''
+                // item.priceTax = data.price+''
+                item.price = data.price//不含税单价
+                // console.log(item,'----------------')
+                if(item.splitVal=='0'){
+                  item.totalPrice = Number(item.price)*(Number(item.quantity)*Number(item.mdo))//不含税总价
+                  // item.totalPriceTax = Number(item.priceTax)*(Number(item.quantity)*Number(item.mdo))//含税总价
+                }else{
+                  item.totalPrice = Number(item.price)*Number(item.quantity)//不含税总价
+                  // item.totalPriceTax = Number(item.priceTax)*Number(item.quantity)//含税总价
+                }
                 item = this.toprice(item)
                 // this.toprice()
               }
@@ -405,9 +415,9 @@
       //确定单价明细
       toprice(item){
         let price
-
-        price = (Number(item.priceTax)-Number(item.priceTax*(this.taxPrice/100)))
-        item.price = price.toFixed(2)
+        // console.log(item)
+        // price = (Number(item.priceTax)-Number(item.priceTax*(this.taxPrice/100)))
+        // item.price = price.toFixed(2)
 
         // totalPrice = Number(item.price) * Number(item.quantity)
         // item.totalPrice = totalPrice.toFixed(2)

@@ -26,7 +26,7 @@
 
           <yhm-manager-td-checkbox :no-click="false" :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td  value=" " @click="downloadEvent(item)">
-            <img  style="margin: auto;" width="30" height="30" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1594275457602&di=5ebf487929ced264a201d33766b21f42&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180920%2F2397b5b7b5024319bf98035b72c2ca47.png" alt="">
+            <img  style="margin: auto;" width="50" height="30" src="https://hp.yhm.hk/UploadFile/excel.jpg" alt="">
           </yhm-manager-td>
           <yhm-manager-td-center :value="item.startDate.slice(5,7)+'月'"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.startDate"></yhm-manager-td-center>

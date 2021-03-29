@@ -45,7 +45,7 @@
 <!--          <yhm-manager-td-psd :value="item.category" :list="categoryList"></yhm-manager-td-psd>-->
 <!--          <yhm-manager-td-center :value="item.applicableModelsVal"></yhm-manager-td-center>-->
 
-          <yhm-manager-td-psd :value="item.applicableModels" :list="applicableModelsList"></yhm-manager-td-psd>
+          <yhm-manager-td-center :value="item.applicableModelsVal"></yhm-manager-td-center>
 <!--          <yhm-manager-td-rgt :value="item.quantity+item.uuStr+''" :color="item.quantity == 0 ? 'red' : '#333333'"></yhm-manager-td-rgt>-->
           <yhm-manager-td-center :value="item.splitVal"></yhm-manager-td-center>
 <!--          <yhm-manager-td-rgt :value="item.sumStr+(item.mdoStr==null?'':item.mdoStr)"></yhm-manager-td-rgt>-->

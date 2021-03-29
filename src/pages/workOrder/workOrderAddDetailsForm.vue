@@ -42,6 +42,7 @@
         modelid:'',//规格型号ID
         // product:'',//商品类型
         productid:'',//商品类型ID
+        baseprice:'0',//成本价
         departid:'',//维修部门
         teamid:[],//维修班组
         requiredList:['0','3'],//多选框的必选项
@@ -282,6 +283,7 @@
             // product:this.product,//商品类型
             productid:this.productid,//商品类型ID
             processid:this.flowPathID,//主流程ID
+            baseprice:this.baseprice,//成本价
             departid:this.departid,//维修部门
             teamid:arrTeamid.join(','),//维修班组
             name:this.name,//商品名称
@@ -379,8 +381,12 @@
           title: '选择工序服务',
           closeCallBack: (data) => {
             if (data) {
+              console.log(data)
               this.productid = data.id
               this.name = data.proName
+              this.money = data.hours
+              this.discount = data.hours
+              this.baseprice = data.baseprice
             }
           }
         })
@@ -438,6 +444,9 @@
                 }
                 if(data.teamid.indexOf('4')!=-1){
                   teamNameList.push('抛光')
+                }
+                if(data.teamid.indexOf('6')!=-1){
+                  teamNameList.push('保养')
                 }
                 this.teamName = teamNameList.join(',')
               }

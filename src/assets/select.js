@@ -80,6 +80,7 @@ const selectmixin = {
       }
       let initVal = options && options.initValue
       var params = {}
+      this.searchStr = this.searchStr.replace(/^(\s|\xA0)+|(\s|\xA0)+$/g, '')
       if (initVal) {
         params = {
           init: initVal

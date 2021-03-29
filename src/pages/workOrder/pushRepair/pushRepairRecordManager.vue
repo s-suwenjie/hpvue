@@ -9,45 +9,59 @@
         <template #operate>
           <!-- 操作区-->
           <!--<yhm-commonbutton value="添加推修公司"  icon="btnAdd" :flicker="true" @call="add" category="one"></yhm-commonbutton>-->
-          <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initChoose"></yhm-managersearch>
+          <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initDate"></yhm-managersearch>
           <yhm-radiofilter @initData="initDate()" title="品牌" :content="applicableModelsPsd"></yhm-radiofilter>
+          <yhm-radiofilter style="margin-top: 6px" @initData="initChoose('dateType')" title="时间" :content="dateTypeList"></yhm-radiofilter>
           <yhm-radiofilter @initData="initDate()" title="结算类型" :content="typePsd"></yhm-radiofilter>
           <yhm-radiofilter @initData="initDate()" title="状态" :content="statePsd"></yhm-radiofilter>
           <yhm-radiofilter style="margin-top: 6px;" @initData="initDate()" title="推修公司" :content="companyPsd"></yhm-radiofilter>
         </template>
-
+        <template #operateMore>
+          <div :class="{customTimeShow:timeShow,customTimeHide:!timeShow}" >
+            <yhm-form-date v-show="dateShow" title="开始时间" @call="dateSelection(startDateStr,endDateStr)" style="width: 350px;" :value="startDateStr" id="startDateStr" position="t"></yhm-form-date>
+            <yhm-form-date v-show="dateShow" title="结束时间" @call="dateSelection(startDateStr,endDateStr)" style="width: 350px;margin-left: 30px;" :value="endDateStr" id="endDateStr" position="t"></yhm-form-date>
+          </div>
+        </template>
         <template #listHead>
           <yhm-managerth style="width: 40px;" title="选择" ></yhm-managerth>
           <yhm-managerth style="width: 40px;" title="查看" ></yhm-managerth>
+          <yhm-managerth width="110" title="推送日期"></yhm-managerth>
           <yhm-managerth title="推修公司"></yhm-managerth>
-          <yhm-managerth width="90" title="公司简称"></yhm-managerth>
-          <yhm-managerth width="80" title="自保费率" ></yhm-managerth>
-          <yhm-managerth width="80" title="非自保费率" ></yhm-managerth>
-          <yhm-managerth width="70" title="结算类型" ></yhm-managerth>
-          <yhm-managerth width="70" title="状态" ></yhm-managerth>
+          <yhm-managerth width="90" title="简称"></yhm-managerth>
+<!--          <yhm-managerth width="90" title="自保费率" prompt="自保(当年在乙方承保的车辆)" after-title="?" after-size="18px" tooltip-left="-34px" after-color="#f00"></yhm-managerth>-->
+<!--          <yhm-managerth width="90" title="非自保费率" prompt="非自保(一年没有进场记录或当年不在乙方承保的车辆)" after-title="?" after-size="18px" tooltip-left="-112px" after-color="#f00"></yhm-managerth>-->
+<!--          <yhm-managerth width="70" title="结算类型" ></yhm-managerth>-->
+          <yhm-managerth width="55" title="状态" ></yhm-managerth>
           <yhm-managerth width="180" title="工单号" ></yhm-managerth>
-          <yhm-managerth width="90" title="车牌号" ></yhm-managerth>
-          <yhm-managerth width="110" title="车辆品牌" ></yhm-managerth>
-          <yhm-managerth width="90" title="车主姓名" ></yhm-managerth>
-          <yhm-managerth width="90" title="联系人姓名" ></yhm-managerth>
-          <yhm-managerth width="100" title="工单合计金额" ></yhm-managerth>
-          <yhm-managerth width="160" title="操作"></yhm-managerth>
+          <yhm-managerth width="85" title="车牌号" ></yhm-managerth>
+          <yhm-managerth width="85" title="车辆品牌" ></yhm-managerth>
+<!--          <yhm-managerth width="90" title="车主姓名" ></yhm-managerth>-->
+<!--          <yhm-managerth width="90" title="联系人姓名" ></yhm-managerth>-->
+
+          <yhm-managerth width="100" title="已生效营业额" ></yhm-managerth>
+          <yhm-managerth width="100" title="推送费" ></yhm-managerth>
+<!--          <yhm-managerth width="100" title="工单合计金额" ></yhm-managerth>-->
+          <yhm-managerth width="70" title="结账状态" ></yhm-managerth>
+          <yhm-managerth width="105" title="是否生成工单"  prompt="有效：车辆已进厂修理 / 无效：车辆未进厂" after-title="?" after-size="18px" tooltip-left="-76px" after-color="#f00"></yhm-managerth>
+          <yhm-managerth width="210" title="操作"></yhm-managerth>
         </template>
         <template #listBody >
           <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
             <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
+            <yhm-manager-td-date :value="item.insertDate"></yhm-manager-td-date>
+
             <yhm-manager-td @click="maintain(item)" color="#49a9ea" v-if="item.companyName==''||item.companyName==null" value="点击维护推修公司"></yhm-manager-td>
-            <yhm-manager-td :tip="true" v-else :value="item.companyName"></yhm-manager-td>
+            <yhm-manager-td :tip="true" v-else @click="lookOverUnit(item)" :value="item.companyName"></yhm-manager-td>
 
             <yhm-manager-td v-if="item.unitshort==''||item.unitshort==null"  value="-----"></yhm-manager-td>
-            <yhm-manager-td :tip="true" v-else  :value="item.unitshort"></yhm-manager-td>
+            <yhm-manager-td :tip="true" v-else :value="item.unitshort"></yhm-manager-td>
 
-            <yhm-manager-td-center :value="item.selfrate==''?'-----':item.selfrate + '%'"></yhm-manager-td-center>
-            <yhm-manager-td-center :value="item.noselfrate==''?'-----':item.noselfrate + '%'"></yhm-manager-td-center>
+<!--            <yhm-manager-td-center :value="item.selfrate==''?'-&#45;&#45;&#45;&#45;':item.selfrate + '%'"></yhm-manager-td-center>-->
+<!--            <yhm-manager-td-center :value="item.noselfrate==''?'-&#45;&#45;&#45;&#45;':item.noselfrate + '%'"></yhm-manager-td-center>-->
 
-            <yhm-manager-td-center v-if="item.type==''" value="------"></yhm-manager-td-center>
-            <yhm-manager-td-psd v-else :value="item.type" :list="typeList"></yhm-manager-td-psd>
+<!--            <yhm-manager-td-center v-if="item.type==''" value="&#45;&#45;&#45;&#45;&#45;&#45;"></yhm-manager-td-center>-->
+<!--            <yhm-manager-td-psd v-else :value="item.type" :list="typeList"></yhm-manager-td-psd>-->
 
             <yhm-manager-td-center v-if="item.state==''||item.state==null" value="------"></yhm-manager-td-center>
             <yhm-manager-td-psd v-else :value="item.state" :list="stateList"></yhm-manager-td-psd>
@@ -60,13 +74,16 @@
             <yhm-manager-td-center v-if="item.applicableModels==''" value="------"></yhm-manager-td-center>
             <yhm-manager-td-psd v-else :value="item.applicableModels" :list="applicableModelsList"></yhm-manager-td-psd>
 
-            <yhm-manager-td-center  @click="lookOverCarOwner(item)" :value="item.carOwner"></yhm-manager-td-center>
-            <yhm-manager-td-center  @click="lookOverPerson(item)" :value="item.contactPerson"></yhm-manager-td-center>
+<!--            <yhm-manager-td-center  @click="lookOverCarOwner(item)" :value="item.carOwner"></yhm-manager-td-center>-->
+<!--            <yhm-manager-td-center  @click="lookOverPerson(item)" :value="item.contactPerson"></yhm-manager-td-center>-->
 
-            <yhm-manager-td-money :value="item.expend==''?'0':item.expend"></yhm-manager-td-money>
-
-
+            <yhm-manager-td-money style="color: #2a599e;" :value="item.pendingmoney==''?'0':item.pendingmoney"></yhm-manager-td-money>
+            <yhm-manager-td-money style="color: #2193B0;" :value="item.pending==''?'0':item.pending"></yhm-manager-td-money>
+<!--            <yhm-manager-td-money style="color: #fd6802;" :value="item.expend==''?'0':item.expend"></yhm-manager-td-money>-->
+            <yhm-manager-td-center  :value="item.pendingstate=='1'?'已结账':'未结账'" :color="item.pendingstate=='1'?'#00b300':'#f00'"></yhm-manager-td-center>
+            <yhm-manager-td-center  :value="item.orderstate"></yhm-manager-td-center>
             <yhm-manager-td-operate>
+              <yhm-manager-td-operate-button v-if="item.type=='2'" @click="rateSwitchover(item)" value="自保费率切换" icon="i-btn-applicationSm" color="#2193b0"></yhm-manager-td-operate-button>
               <yhm-manager-td-operate-button v-if="item.companyName==''||item.companyName==null" @click="maintain(item)" value="维护推修公司" icon="i-btn-applicationSm" color="#be08e3"></yhm-manager-td-operate-button>
               <yhm-manager-td-operate-button v-if="item.state=='0'" @click="settleAccounts(item)" value="确认完成" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
             </yhm-manager-td-operate>
@@ -77,18 +94,27 @@
           <span class="m_listNoData" v-show="content.length=='0'?true:false">暂时没有数据</span>
         </template>
         <template #total>
-          <div class="listTotalCrente m_list" style="width: 402px;margin: auto;">
+          <div class="listTotalCrente m_list" style="width: 602px;margin: auto;">
             <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
               <thead>
               <tr>
                 <yhm-managerth style="width: 100px;" before-color="#000" title="" before-title="总条数" ></yhm-managerth>
-                <yhm-managerth style="width: 100px;" before-color="#f00" title="" before-title="总金额"></yhm-managerth>
+                <yhm-managerth style="width: 100px;" before-color="#fd6802" title="" before-title="已生效营业额"></yhm-managerth>
+                <yhm-managerth style="width: 100px;" before-color="#2193b0" title="" before-title="推修费"></yhm-managerth>
+                <yhm-managerth style="width: 100px;" before-color="#2a599e" title="" before-title="已结推修费"></yhm-managerth>
+                <yhm-managerth style="width: 100px;" before-color="#f00" title="" before-title="未结推修费"></yhm-managerth>
+
               </tr>
               </thead>
               <tbody>
               <tr>
                 <yhm-manager-td-rgt style="color: #000;" :value="pager.total+''"></yhm-manager-td-rgt>
-                <yhm-manager-td-money  :value="totalList[0].money"></yhm-manager-td-money>
+                <yhm-manager-td-money style="color: #fd6802;" :value="totalList[0].money"></yhm-manager-td-money>
+                <yhm-manager-td-money style="color: #2193b0;"  :value="totalList[1].money"></yhm-manager-td-money>
+                <yhm-manager-td-money style="color: #2a599e;"  :value="totalList[2].money"></yhm-manager-td-money>
+                <yhm-manager-td-money style="color: #f00;"  :value="totalList[3].money"></yhm-manager-td-money>
+
+
               </tr>
               </tbody>
             </table>
@@ -120,8 +146,38 @@
         totalList:[
           {
             money:'0'
+          },
+          {
+            money:'0'
+          },
+          {
+            money:'0'
+          },
+          {
+            money:'0'
           }
-        ]
+        ],
+        startDateStr:'',//开始时间
+        endDateStr:'',//结束时间
+        timeShow:false,//自定义时间选择 显示隐藏
+        dateShow:false,//时间组件 显示隐藏
+        dateTypeList:{
+          value: '', //默认为空
+          list: [
+            {showName:"本日", num: "0", code: "", img: ""},
+            {showName:"昨日", num: "1", code: "", img: ""},
+            {showName:"本周", num: "2", code: "", img: ""},
+            {showName:"上周", num: "3", code: "", img: ""},
+            {showName:"本月", num: "4", code: "", img: ""},
+            {showName:"上月", num: "5", code: "", img: ""},
+            {showName:"本季度", num: "6", code: "", img: ""},
+            {showName:"上季度", num: "7", code: "", img: ""},
+            {showName:"本年", num: "8", code: "", img: ""},
+            // {showName:"上年", num: "9", code: "", img: ""},
+            {showName:"选择时间", num: "9", code: "", img: ""},
+          ]
+        },
+        dateType:'',
       }
     },
     methods:{
@@ -135,6 +191,50 @@
             this.initDate()
           }
         })
+      },
+      lookOverUnit(item){
+        if(item.companyID!=''){
+          this.$dialog.OpenWindow({
+            width: '1070',
+            height: '750',
+            url:'/unitView?id='+item.companyID,
+            title:'查看公司信息',
+            closeCallBack:(data) =>{
+              this.initPageData(false)
+            }
+          })
+        }
+
+      },
+      dateSelection(start,finish){//选择时间段
+        if(start!=''&&finish!=''){
+          this.initDate(false)
+        }
+      },
+      // 筛选事件
+      initChoose (op) {
+        this.pager.pageIndex = 1
+        if(op === 'dateType'&&this.dateTypeList.value!=9){
+          this.startDateStr=''//开始时间
+          this.endDateStr=''//结束时间
+        }
+        if (this.dateTypeList.value==9&&op === 'dateType'){
+          this.timeShow = true
+          setTimeout(()=>{
+            this.dateShow = true
+          },300)
+          return
+        }else{
+          if (op === 'dateType') {
+            this.workDateMenu = ['筛选当前日期']
+            this.timeShow = false
+            setTimeout(()=>{
+              this.dateShow = false
+            },300)
+            this.selectValue = []
+          }
+        }
+        this.initDate(false)
       },
       settleAccounts(item){
         this.$dialog.confirm({
@@ -230,13 +330,52 @@
           }
         })
       },
+      rateSwitchover(item){
+        this.$dialog.confirm({
+            tipValue: '该工单的保险返费金额将会由非自保变为自保费率,是否确认？',
+            btnValueOk:'确认',
+            btnValueCancel:'取消',
+            width:'550',
+            okCallBack: () => {
+              this.ajaxJson({
+                url: '/fix/fixCompanyOrder/save',
+                data:{
+                  id:item.id,
+                  type:'0'
+                },
+                call: (data) => {
+                  if(data.type=='0'){
+                    // this.$dialog.alert({
+                    //   tipValue:data.message,
+                    //   closeCallBack: () => {
+                    //     this.initDate()
+                    //   }
+                    // })
+                  }else{
+                    this.$dialog.alert({
+                      width:'350',
+                      alertImg: 'error',
+                      tipValue:data.message,
+                      closeCallBack: () => {
+                      }
+                    })
+                  }
+                }
+              })
+            }
+        })
+      },
       initDate(init){
         let params = {
           pageIndex:this.pager.pageIndex,
           pageSize:this.pager.pageSize,
           companyID:this.companyPsd.value,
+          searchStr:this.searchStr,
           type:this.typePsd.value,
           state:this.statePsd.value,
+          dateType:this.dateTypeList.value=='9'?'':this.dateTypeList.value,
+          startDateStr:this.startDateStr,//开始时间
+          endDateStr:this.endDateStr,//结束时间
           applicableModels:this.applicableModelsPsd.value
         }
         this.ajaxJson({

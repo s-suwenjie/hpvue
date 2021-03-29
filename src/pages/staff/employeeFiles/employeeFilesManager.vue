@@ -5,7 +5,12 @@
 
       <template #navigationTab>
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/employeeFilesManager'}">档案</router-link>
-        <router-link class="menuTabDiv" :to="{path:'/home/outPutTaxManager'}">工资</router-link>
+        <!--<router-link class="menuTabDiv" :to="{path:'/home/outPutTaxManager'}">工资</router-link>-->
+        <router-link class="menuTabDiv" :to="{path:'/home/basicWageManager'}">设置基础工资</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/wagePostManager'}">设置岗位工资</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/fiveinsurancesManager'}">设置五险缴纳百分比</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/fiveInsurancesBaseManager'}">设置五险基数</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/telephoneSubsidyManager'}">设置话费补助</router-link>
       </template>
       <template #operate>
         <!-- 操作区-->
@@ -71,7 +76,12 @@
     name: 'employeeFilesManager',
     mixins: [managermixin],
     data () {
-      return {}
+      return {
+        statePsd:{
+          list:[],
+          value:''
+        },
+      }
     },
     created () {
     },

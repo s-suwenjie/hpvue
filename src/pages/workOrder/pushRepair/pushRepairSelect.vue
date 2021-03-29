@@ -2,6 +2,7 @@
   <div class="f_main f_main_customize mb16">
     <yhm-select-body :choose="false">
       <template #operate>
+        <yhm-commonbutton value="添加"  icon="btnAdd" :flicker="true" @call="add" category="one"></yhm-commonbutton>
         <div v-show="showTipDbSelect" class="s_db_select" :style="{left:getLeft,top:getTop}">双击选择</div>
         <yhm-managersearch :value="searchStr" id="searchStr" @call="initData"></yhm-managersearch>
       </template>
@@ -35,11 +36,13 @@
 
 <script>
   import { selectmixin } from '@/assets/select.js'
+  import { guid } from '@/assets/common.js'
   export default {
     name: 'pushRepairSelect',
     mixins: [selectmixin],
     data(){
       return{
+        list:{},//接待单页面全部数据
         typeList:[],//结算类型
         pager: {
           total: 0, // 总条数
@@ -50,6 +53,53 @@
       }
     },
     methods: {
+      add(){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 720,
+          url:'/pushCorporationSelect',
+          title:'添加推修关系',
+          closeCallBack:(data) =>{
+            if (data) {
+              // this.initPageData(false)
+              // console.log(data)
+              // return
+              let params = {
+                id:guid(),
+                state:'1', //0,信息未完善，1，绑定工单，2，结账,3,结账完以后的状态
+                carID:this.list.carid,//车辆id
+                // orderID:this.list.id,//接待单id
+                personID:this.list.personID,//推修人id
+                companyID:data.unitID,//推修公司id
+                customerphone:this.list.contactPersonPhone,//联系人手机号
+              }
+              this.ajaxJson({
+                  url: '/fix/fixCompanyOrder/savePC',
+                  data:params,
+                  call: (data) => {
+                    if (data.type === 0) {
+                      // this.$dialog.setReturnValue(this.id) //向父级页面id值
+                      // this.$dialog.alert({
+                      //   tipValue: data.message,
+                      //   closeCallBack: () => {
+                          // this.$dialog.close()
+                          this.initPageData(false)
+                      //   }
+                      // })
+                    } else {
+                      this.$dialog.alert({
+                        alertImg: 'error',
+                        tipValue: data.message,
+                        closeCallBack: () => {
+                        }
+                      })
+                    }
+                  }
+              })
+            }
+          }
+        })
+      },
       initPageData (initValue) {
         this.setQuery2Value('id')
         let params = {}
@@ -82,6 +132,8 @@
       },
     },
     created () {
+      this.list = JSON.parse(sessionStorage.receptionFormList)
+      console.log(this.list)
     }
   }
 </script>

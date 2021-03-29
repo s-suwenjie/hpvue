@@ -69,12 +69,13 @@
             <yhm-managerth style="width: 120px" title="状态"></yhm-managerth>
 
             <yhm-managerth style="width: 100px" title="操作"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="打印费用明细单"></yhm-managerth>
 
           </template>
           <template #listBody>
             <tr v-for="(item,index) in listBill" :key="index" :class="{InterlacBg:index%2!==0}">
               <yhm-manager-td  value=" " @click="downloadEvent(item)">
-                <img  style="margin: auto;" width="30" height="30" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1594275457602&di=5ebf487929ced264a201d33766b21f42&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180920%2F2397b5b7b5024319bf98035b72c2ca47.png" alt="">
+                <img  style="margin: auto;" width="50" height="30" src="https://hp.yhm.hk/UploadFile/excel.jpg" alt="">
               </yhm-manager-td>
 
               <yhm-manager-td-date  :value="item.startDate"></yhm-manager-td-date>
@@ -90,6 +91,10 @@
                 <yhm-manager-td-operate-button v-if="item.state==0" @click="storedCarGo(item)" value="去开付款申请" icon="im_go" color="#ff0000"></yhm-manager-td-operate-button>
                 <yhm-manager-td-operate-button v-if="item.state==1" @click="storedView(item)" value="付款申请审批中" icon="i-departmentApprovalOK" color="#49a9ea"></yhm-manager-td-operate-button>
                 <yhm-manager-td-operate-button v-if="item.state==2"  @click="storedView(item)" value="付款申请已完成" icon="i-finishApprovalOK" color="#2c920b"></yhm-manager-td-operate-button>
+              </yhm-manager-td-operate>
+              <yhm-manager-td-operate >
+                <yhm-manager-td-operate-button  @click="printing(item)" value="打印" icon="i-btn-print" color="#56B3F3"></yhm-manager-td-operate-button>
+
               </yhm-manager-td-operate>
             </tr>
           </template>
@@ -179,6 +184,21 @@
       }
     },
     methods:{
+      printing(item){
+        let params = {
+          ownerID:this.id,
+          startDate: item.startDate+' 00:00:00',
+          endDate:item.endDate+' 00:00:00'
+
+        }
+        this.ajaxJson({
+          url: '/dailyoffice/print/expressDelivery',
+          data: params,
+          call: (data) => {
+            window.open('/UploadFile/'+data.content)
+          }
+        })
+      },
       countViewClick(item){
         this.$dialog.OpenWindow({
           width: '1050',

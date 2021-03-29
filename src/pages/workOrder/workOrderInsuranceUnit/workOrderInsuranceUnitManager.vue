@@ -28,6 +28,7 @@
         <template #empty>
           <span class="m_listNoData" v-show="empty">暂时没有数据</span>
         </template>
+
         <!--分页控件-->
         <template #pager>
           <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
@@ -43,6 +44,8 @@
     mixins: [managermixin],
     data(){
       return{
+        content:[],
+        list:[],
 
       }
     },
@@ -103,6 +106,22 @@
           all: (data) => {
             // 不管是不是初始化都需要执行的代码
             this.content = data.content
+
+
+            // this.ajaxJson({
+            //   url: '/Basic/getUnitInsuranceManager',
+            //   data:params,
+            //   call: (da) => {
+                // this.content = da.content
+                // for(let i in this.content){
+                //   for(let j in this.list){
+                //    if(this.content[i].unitID==this.list[j].unitID){
+                //
+                //    }
+                //   }
+                // }
+              // }
+            // })
           },
           init: (data) => {
           }

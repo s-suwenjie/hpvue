@@ -5,8 +5,8 @@
         <span>基本信息</span>
       </template>
       <template #control>
-        <yhm-form-select placeholder="" title="推修单位" subtitle="名称" :value="unit" id="unit" rule="R0000" @click="unitSelect"></yhm-form-select>
-        <yhm-form-text title="单位简称" :value="unitshort" id="unitshort"></yhm-form-text>
+        <yhm-form-select placeholder="" title="推修公司" :value="unit" id="unit" rule="R0000" @click="unitSelect"></yhm-form-select>
+        <yhm-form-text title="简称" :value="unitshort" id="unitshort"></yhm-form-text>
 
         <!--        <yhm-form-select placeholder="" title="联系人" subtitle="" :value="person" id="person" rule="R0000" @click="personSelect"></yhm-form-select>-->
         <!--        <yhm-form-text title="推修费率" :value="rate" id="rate" rule="R0000" after-icon="icon-percentage"></yhm-form-text>-->
@@ -29,8 +29,8 @@
         <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
         <yhm-managerth title="开始时间"></yhm-managerth>
         <yhm-managerth title="结束时间"></yhm-managerth>
-        <yhm-managerth title="自保/基盘" prompt="自保客户(当年在乙方承保的车辆) / 基盘客户(一年之内有进厂记录)" after-title="?" after-size="18px" tooltip-left="-148px" after-color="#f00"></yhm-managerth>
-        <yhm-managerth title="首推" prompt="首推车辆(一年没有进场记录或当年不在乙方承保的车辆,即非自保非基盘)" after-title="?" after-size="18px" tooltip-left="-170px" after-color="#f00"></yhm-managerth>
+        <yhm-managerth width="110" title="自保费率" prompt="自保(当年在乙方承保的车辆)" after-title="?" after-size="18px" tooltip-left="-34px" after-color="#f00"></yhm-managerth>
+        <yhm-managerth width="110" title="非自保费率" prompt="非自保(一年没有进场记录或当年不在乙方承保的车辆)" after-title="?" after-size="18px" tooltip-left="-112px" after-color="#f00"></yhm-managerth>
         <yhm-managerth title="结算类型"></yhm-managerth>
         <yhm-managerth title="状态"></yhm-managerth>
         <!--        <yhm-managerth style="width: 38px" title="删除"></yhm-managerth>-->
@@ -196,7 +196,7 @@
             width: '1050',
             height: '750',
             url:  '/pushRepairDetailForm?companyID='+this.id
-              +'&unit='+this.unit+'&unitID='+this.unitID,
+              +'&unit='+this.unit+'&unitID='+this.unitID+'&unitshort='+this.unitshort,
             // +'&person='+this.person+'&personID='+this.personID
             title: '添加推修合作',
             closeCallBack:(data) =>{
@@ -251,7 +251,7 @@
             width: '1050',
             height: '750',
             url:  '/pushRepairDetailForm?companyID='+item.id+'&id='+this.id+'&redact=1'
-              +'&unit='+this.unit+'&unitID='+this.unitID,
+              +'&unit='+this.unit+'&unitID='+this.unitID+'&unitshort='+this.unitshort,
             title: '编辑推修合作',
             closeCallBack:(data) =>{
               if (data) {

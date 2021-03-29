@@ -4,8 +4,8 @@
       <template #title >基本信息</template>
       <template #control>
 <!--        <yhm-form-radio title="费率类型" ref="paytypeRadio" :select-list="paytypeList" :value="paytype" id="paytype" rule="#"></yhm-form-radio>-->
-        <yhm-form-date title="开始时间" :value="startDate" id="startDate" rule="R0000"></yhm-form-date>
-        <yhm-form-date title="结束时间" :value="endDate" id="endDate" :min="startDate" rule="R0000"></yhm-form-date>
+        <yhm-form-date title="签约时间" :value="startDate" id="startDate" rule="R0000"></yhm-form-date>
+        <yhm-form-date title="到期时间" :value="endDate" id="endDate" :min="startDate" rule="R0000"></yhm-form-date>
         <yhm-form-text title="自保费率" :min-number="0" :max-number="100" :value="rate" id="rate" rule="R0000" after-icon="icon-percentage"></yhm-form-text>
         <yhm-form-text title="非自保费率" :min-number="0" :max-number="100" :value="norate" id="norate" rule="R0000" after-icon="icon-percentage"></yhm-form-text>
         <yhm-form-radio title="结算类型" ref="typeRadio" :select-list="typeList" :value="type" id="type" rule="#"></yhm-form-radio>
@@ -53,6 +53,7 @@
           unitID:this.unitID,//推修公司id
           person:this.person,//联系人名称
           personID:this.personID,//联系人id
+          unitshort:this.unitshort,//单位缩写
           fixCompanyContract:{
             param:{
               id:this.detailid,//定损单主表id
@@ -143,6 +144,7 @@
       this.setQuery2Value('person')
       this.setQuery2Value('personID')
       this.setQuery2Value('companyID')//redact为1时是编辑 companyID为子表数据id  redact为空时companyID是主表id
+      this.setQuery2Value('unitshort')//单位缩写
       this.initData()
     }
   }

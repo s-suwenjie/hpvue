@@ -8,7 +8,7 @@
         <yhm-form-drop-down-select :no-before-click="isNoBeforeClick" title="收款方" width="1" @select="selectUnit" :select-list="personOrUnitList"  :selectValue="personOrUnit" selectid="personOrUnit" :value="otherUnit" id="otherUnit" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>
         <!--        <yhm-form-drop-down-select title="付款事由" width="1" @select="selectCause" :select-list="ownerSysPsd" :selectValue="ownerSys" selectid="ownerSys" :value="subject" id="subject" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>-->
         <!--        <yhm-form-select title="收款单位" tip="value" rule="R0000" @click="selectUnit" :value="otherUnit" id="otherUnit"></yhm-form-select>-->
-        <yhm-form-radio title="是否关联" :select-list="isRelevanceList" @call="SelectIsRelevance" :value="isRelevance" id="isRelevance" rule="R0000"></yhm-form-radio>
+        <yhm-form-radio title="是否关联" :select-list="isRelevanceList" @call="SelectIsRelevance" :no-show-item="nature=='10'?'0':''" :value="isRelevance" id="isRelevance" rule="R0000"></yhm-form-radio>
         <yhm-form-select title="计划事件" :show="eventShowA" @click="selectPage" :value="name" id="name" tip="value" rule="R0000"></yhm-form-select>
         <yhm-form-textarea :show="eventShowB" title="款项用途" :value="useName" id="useName" rule="R0000"></yhm-form-textarea>
         <yhm-form-select title="收款账号" :tips="accountString" :value="otherAccount" id="otherAccount" rule="R0000" @click="selectaccount" :no-click="isOtherAccount"></yhm-form-select>
@@ -43,6 +43,9 @@
               <yhm-form-td-upload-image  width="90" :no-upload="isElectronicInvoice" tag="Invoice" @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="invoiceDetails" listid="invoiceDetails" :value="item" id="url" rule="#"></yhm-form-td-upload-image>
               <yhm-form-td-delete width="40" :list="invoiceDetails" :value="item" :del-click="true" @click="delApplyInvoice(index,item)"></yhm-form-td-delete>
             </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="invoiceDetails.length === 0">暂时没有数据</span>
           </template>
         </yhm-form-list-edit>
         <yhm-form-list-edit v-if="nature === '9'" style="border: none;width: 998px">
@@ -156,6 +159,38 @@
           </template>
           <template #empty>
             <span class="m_listNoData" v-show="payDepositList.length ===0">暂时没有数据</span>
+          </template>
+        </yhm-form-list-edit>
+        <yhm-form-list-edit :show="nature === '10'" style="border: none;width: 998px">
+          <template #title>工单信息</template>
+          <template #operate>
+            <yhm-commonbutton value="添加推修工单" icon="btnAdd" @call="addWorkOrder"></yhm-commonbutton>
+          </template>
+          <template #listHead>
+            <yhm-managerth width="120" title="接待日期"></yhm-managerth>
+            <yhm-managerth width="240" title="工单号"></yhm-managerth>
+            <yhm-managerth width="110" title="车牌号"></yhm-managerth>
+            <!--            <yhm-managerth title="送修人"></yhm-managerth>-->
+            <yhm-managerth width="80" title="费率类型"></yhm-managerth>
+            <yhm-managerth width="80" title="待结状态"></yhm-managerth>
+            <yhm-managerth title="预计推送费"></yhm-managerth>
+            <yhm-managerth title="已产生营业额"></yhm-managerth>
+            <yhm-managerth style="width: 40px" title="操作"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in workOrderList2" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-form-td-textbox width="120" no-edit="1" :list="workOrderList2" listid="workOrderList2" :value="item" id="insertDate" rule="R0000"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="240" tip="value" no-edit="1" :list="workOrderList2" listid="workOrderList2" :value="item" id="code"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="110" no-edit="1" :list="workOrderList2" listid="workOrderList2" :value="item" id="vehicle" rule="R0000"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="80" no-edit="1" :list="workOrderList2" listid="workOrderList2" :value="item" id="typeValue" rule="R0000"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="80" no-edit="1" :list="workOrderList2" listid="workOrderList2" :value="item" id="pendingstateValue"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="145" no-edit="1" :list="workOrderList2" listid="workOrderList2" :value="item" id="pending"></yhm-form-td-textbox>
+              <yhm-form-td-textbox width="145" no-edit="1" :list="workOrderList2" listid="workOrderList2" :value="item" id="pendingmoney"></yhm-form-td-textbox>
+              <yhm-form-td-delete width="40" :list="workOrderList2" :value="item" :del-click="true" @click="delWorkOrder(index,item)"></yhm-form-td-delete>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="workOrderList2.length ===0">暂时没有数据</span>
           </template>
         </yhm-form-list-edit>
         <div class="invoiceImgView" v-show="viewImgShow">
@@ -306,6 +341,8 @@ export default {
       depositList:[],
       payDepositList:[],
       expressList:[],//快递信息对账单信息
+      workOrderList:[],//工单数据 上传数据
+      workOrderList2:[],//工单数据 页面展示字段
     }
   },
   created () {
@@ -357,6 +394,51 @@ export default {
             sumMoney = accAdd( money,sumMoney)
           }
           this.money = sumMoney + ''
+        }else if(this.nature == '10'){
+          let list = []
+          for(let i in data.bankDetailList){
+            list.push(data.bankDetailList[i].bankDetailID)
+          }
+          this.ajaxJson({
+            url: '/fix/fixCompanyOrder/queryByCompanyIDForFixreception',
+            data:{
+              list:list,
+              stateStr:'123'//是否过滤接待单 不为空时过滤
+            },
+            call: (da) => {
+              if(da){
+                let item,item2 = {}
+                let money = 0
+                for(let i in da.content){
+                  item = {}
+                  item2 = {}
+                  item.id = da.content[i].id
+                  item.insertDate = da.content[i].visitDate
+                  item.ownerID = da.content[i].ownerID
+                  item.bankDetailID = da.content[i].orderid
+                  item.money = da.content[i].pending
+                  this.workOrderList.push(item)
+
+
+                  item2.id = da.content[i].id
+                  item2.insertDate = da.content[i].visitDate
+                  item2.ownerID = da.content[i].ownerID
+                  item2.bankDetailID = da.content[i].orderid
+                  item2.code = da.content[i].code
+                  item2.vehicle = da.content[i].carName
+                  item2.typeValue = da.content[i].type=='0'?'自保':'非自保'
+                  item2.pendingstateValue = da.content[i].pendingstate=='0'?'待结账':'已结账'
+                  item2.pending = da.content[i].pending
+                  item2.pendingmoney = da.content[i].pendingmoney
+                  this.workOrderList2.push(item2)
+                  money += Number(item.money)
+                }
+                this.money = money
+              }
+            }
+          })
+
+          this.PrepaidHidden = true
         }
 
         if(this.isAllocation === '0'){
@@ -672,6 +754,54 @@ export default {
     })
   },
   methods: {
+    addWorkOrder(){
+      this.$dialog.OpenWindow({
+        width: '1050',
+        height: '750',
+        title: '选择工单',
+        url: '/selectPushRepair',
+        closeCallBack: (data) => {
+          if (data) {
+            // let arrId = []
+            // for(let i in data){
+            //   arrId.push(data[i].orderid)
+            // }
+            let item = {}
+            let item2 = {}
+            let money = 0
+            setTimeout(()=>{
+              for(let i in data){
+                // if(arrId.indexOf(data[i].orderid)==-1){
+                  item = {}
+                  item2 = {}
+                  item.id = guid()
+                  item.insertDate = data[i].visitDate
+                  item.ownerID = this.id
+                  item.bankDetailID = data[i].orderid
+                  item.money = data[i].pending
+                  this.workOrderList.push(item)
+
+                  item2.id = guid()
+                  item2.insertDate = data[i].visitDate
+                  item2.ownerID = this.id
+                  item2.bankDetailID = data[i].orderid
+                  item2.code = data[i].code
+                  item2.vehicle = data[i].carName
+                  item2.typeValue = data[i].type=='0'?'自保':'非自保'
+                  item2.pendingstateValue = data[i].pendingstate=='0'?'待结账':'已结账'
+                  item2.pending = data[i].pending
+                  item2.pendingmoney = data[i].pendingmoney
+                  this.workOrderList2.push(item2)
+                  money += Number(item.money)
+                // }
+              }
+              this.money = money
+            },0)
+
+          }
+        }
+      })
+    },
     addExpress(){
       if(this.otherUnitID!=''){
         this.$dialog.OpenWindow({
@@ -714,6 +844,41 @@ export default {
       }else{
         this.selectUnit()
       }
+    },
+    delWorkOrder(index,item){
+      // this.$dialog.alert({
+      //   tipValue: '删除成功！！！',
+      //   closeCallBack: ()=>{
+
+          this.ajaxJson({
+              url: '/fix/fixOrder/doBill',
+              data: {
+                list:[
+                  item.bankDetailID
+                ],
+                pendingstate:'0'//推修结账状态 0，未结账，1，结账审批中，2，已结账
+              },
+              loading:'0',
+              call: (data) => {
+                if(data.type=='0'){
+                  this.money = Number(this.money)-Number(item.pending)
+                  this.workOrderList.splice(index,1)
+                  this.workOrderList2.splice(index,1)
+                  this.ajaxJson({
+                    url: '/PersonOffice/delPaymentBankDetail',
+                    data: {
+                      id:this.id,
+                      ownerID:item.bankDetailID
+                    },
+                    loading:'0',
+                    call: (data) => {
+                    }
+                  })
+                }
+              }
+          })
+      //   }
+      // })
     },
     delExpressList(index,item){
       this.$dialog.alert({
@@ -1585,6 +1750,8 @@ export default {
           this.invoiceDetails.length = 1    //清空发票列表并保留一行
           this.invoiceDetails = []
           this.addApplyInvoice()
+        }else if(this.nature == '10'){
+          this.PrepaidHidden = true
         }
       }
     },
@@ -2051,6 +2218,8 @@ export default {
       let bankList = true
       let aa = true
       let depositList = true
+      let workOrderVerify = true
+
       if(parseFloat(this.beforeMoney) < parseFloat(this.money)){
         aa = false
       }
@@ -2069,6 +2238,8 @@ export default {
         depositList = false
       }else if(this.payDepositList.length===0&&this.nature==='7'){
         depositList = false
+      }else if(this.workOrderList.length===0&&this.nature==='10'){
+        workOrderVerify = false
       }
       if(!depositList){
         this.$dialog.alert({
@@ -2082,6 +2253,13 @@ export default {
           width: '300',
           alertImg: 'error',
           tipValue: '请选择收支明细信息！！！！'
+        })
+      }
+      if(!workOrderVerify){
+        this.$dialog.alert({
+          width: '300',
+          alertImg: 'error',
+          tipValue: '工单推修信息不能为空！！！'
         })
       }
       let bb=true
@@ -2104,7 +2282,7 @@ export default {
           tipValue: '收支明细总金额有误！！！'
         })
       }
-      if (this.validator() && aa&&bankList&&bb&&depositList) {
+      if (this.validator() && aa&&bankList&&bb&&depositList&&workOrderVerify) {
         let params = {
           id: this.id,
           unitID: this.unitID,
@@ -2280,6 +2458,7 @@ export default {
       let aa = true
       let bankList = true
       let depositList= true
+      let workOrderVerify = true
       if(parseFloat(this.beforeMoney) < parseFloat(this.money)){
         aa = false
       }
@@ -2291,6 +2470,8 @@ export default {
         depositList = false
       }else if(this.payDepositList.length===0&&this.nature==='8'){
         depositList = false
+      }else if(this.workOrderList.length===0&&this.nature==='10'){
+        workOrderVerify = false
       }
       if(!depositList){
         this.$dialog.alert({
@@ -2313,6 +2494,13 @@ export default {
           tipValue: '退款金额必须小于收款金额！！！'
         })
       }
+      if(!workOrderVerify){
+        this.$dialog.alert({
+          width: '300',
+          alertImg: 'error',
+          tipValue: '工单推修信息不能为空！！！'
+        })
+      }
       let bb=true
       if(this.bankDetailList.length>0){
         this.bankDetailMoney()
@@ -2333,7 +2521,7 @@ export default {
           tipValue: '收支明细总金额有误！！！'
         })
       }
-      if (this.validator() && aa&&bankList&&bb&&depositList) {
+      if (this.validator() && aa&&bankList&&bb&&depositList&&workOrderVerify) {
         let params = {
           id: this.id,
           unitID: this.unitID,
@@ -2371,6 +2559,7 @@ export default {
           depositList:this.depositList,
           payDepositList:this.payDepositList,
           expressList:this.expressList,
+          workOrderList:this.workOrderList,//工单推修信息
           // state:0,
         }
         this.ajaxJson({

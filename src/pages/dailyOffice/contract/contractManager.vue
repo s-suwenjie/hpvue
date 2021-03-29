@@ -21,19 +21,21 @@
       <template #listHead>
         <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 38px;" title="查看"></yhm-managerth>
-        <yhm-managerth title="合同名字" ></yhm-managerth>
-        <yhm-managerth title="负责人" ></yhm-managerth>
-        <yhm-managerth title="所属客户" ></yhm-managerth>
-        <yhm-managerth title="合同格式" ></yhm-managerth>
-        <yhm-managerth title="签署类型" ></yhm-managerth>
-        <yhm-managerth title="合同状态"></yhm-managerth>
-        <yhm-managerth title="合同所属类型"></yhm-managerth>
-        <yhm-managerth title="合同收付款"></yhm-managerth>
-        <yhm-managerth title="累计" subtitle="已付金额"></yhm-managerth>
-        <yhm-managerth title="总金额"></yhm-managerth>
-        <yhm-managerth title="开始日期"></yhm-managerth>
-        <yhm-managerth title="结束日期"></yhm-managerth>
-
+        <yhm-managerth style="width: 150px;" title="合同名称" ></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="我方负责人" ></yhm-managerth>
+        <yhm-managerth title="对方合约单位" ></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="对方负责人" ></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="合同文本" ></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="签署类型" ></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="合同状态"></yhm-managerth>
+        <!--<yhm-managerth style="width: 80px;" title="合同所属类型"></yhm-managerth>-->
+        <yhm-managerth style="width: 120px;" title="合同收付款"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="合同" subtitle="关联业务"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="累计" subtitle="已付金额"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="总金额"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="签约日期"></yhm-managerth>
+        <yhm-managerth v-if="isEnd" @call="endClick()"  style="width: 120px;" title="结束日期" subtitle="(点击查看剩余天数)"></yhm-managerth>
+        <yhm-managerth v-if="isDay" @call="dayClick()" style="width: 120px;" title="剩余天数" subtitle="(可点击)"></yhm-managerth>
         <yhm-managerth style="width: 200px;" title="操作"></yhm-managerth>
       </template>
 
@@ -43,18 +45,28 @@
             :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-          <yhm-manager-td :value="item.name"></yhm-manager-td>
+          <yhm-manager-td :tip="true" :value="item.name"></yhm-manager-td>
           <yhm-manager-td :value="item.chargePerson"></yhm-manager-td>
-          <yhm-manager-td :value="item.customers"></yhm-manager-td>
+          <yhm-manager-td :tip="true" :value="item.customers"></yhm-manager-td>
+          <yhm-manager-td  :value="item.otherPartyPerson"></yhm-manager-td>
           <yhm-manager-td-psd :value="item.format" :list="listFormat.list"></yhm-manager-td-psd>
           <yhm-manager-td-psd :value="item.signatureType" :list="listSignatureType.list"></yhm-manager-td-psd>
           <yhm-manager-td-psd :value="item.state" :list="listState.list"></yhm-manager-td-psd>
-          <yhm-manager-td-psd :value="item.type" :list="listType.list"></yhm-manager-td-psd>
+          <!--<yhm-manager-td-psd :value="item.type" :list="listType.list"></yhm-manager-td-psd>-->
           <yhm-manager-td-psd :value="item.paymentItems" :list="listPaymentItems.list"></yhm-manager-td-psd>
-          <yhm-manager-td-money :value="item.paidMoney"></yhm-manager-td-money>
-          <yhm-manager-td-money :value="item.totalMoney"></yhm-manager-td-money>
+          <yhm-manager-td-psd :value="item.category" :list="listCategory.list"></yhm-manager-td-psd>
+          <yhm-manager-td-money v-if="item.totalMoney!=0" :value="item.paidMoney"></yhm-manager-td-money>
+          <yhm-manager-td-center v-else value="------"></yhm-manager-td-center>
+          <yhm-manager-td-money v-if="item.totalMoney!=0" :value="item.totalMoney"></yhm-manager-td-money>
+          <yhm-manager-td-center v-else value="------"></yhm-manager-td-center>
           <yhm-manager-td-date :value="item.startTime"></yhm-manager-td-date>
-          <yhm-manager-td-date :value="item.endTime"></yhm-manager-td-date>
+          <yhm-manager-td-date v-if="isEnd" :value="item.endTime"></yhm-manager-td-date>
+
+          <yhm-manager-td-img v-if="isDay" :value="item.day+'天'" width="20" height="30" position="right" v-show="item.day>60" num="1"></yhm-manager-td-img>
+          <yhm-manager-td-img v-if="isDay" :value="item.day+'天'" width="20" height="30" position="right" v-show="item.day<=60& item.day>30" num="2"></yhm-manager-td-img>
+          <yhm-manager-td-img v-if="isDay" :value="item.day+'天'" width="20" height="30" position="right" v-show="item.day<=30& item.day>15" num="3"></yhm-manager-td-img>
+          <yhm-manager-td-img v-if="isDay" :value="item.day+'天'" width="20" height="30" position="right" v-show="item.day<=15" num="4"></yhm-manager-td-img>
+
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button @click="editBtn(item)" value="编辑" icon="btnSave" color="#49a9ea"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button style="margin-left: 10px; color: #2C9040" @click="approFund(item)" v-if="item.paymentItems==0" value="收款" icon="btnSave" color="#49a9ea"></yhm-manager-td-operate-button>
@@ -84,7 +96,7 @@
       return{
         contractBefore:'0',
         listState:{
-          value:"",
+          value:"0",
           list:[]
         },
         listSignatureType:{
@@ -103,9 +115,23 @@
           value:"",
           list:[]
         },
+        listCategory:{
+          value:"",
+          list:[]
+        },
+        isEnd:true,
+        isDay:false
       }
     },
     methods:{
+      endClick(){
+        this.isEnd=false
+        this.isDay=true
+      },
+      dayClick(){
+        this.isEnd=true
+        this.isDay=false
+      },
       add3(){
         this.$dialog.OpenWindow({
           width: '1050',
@@ -136,11 +162,18 @@
         })
       },
       approFund(item){
+        let url=''
+        if(item.custState==0){
+          url='/cashierBankDetailPrivateForm?bankMoney='+item.totalMoney+'&ownerID='+item.id+'&cashierDirection=0&surrenderCashier=1&otherID='+item.customersID+'&publicandPrivateAccount=1'
+        }else{
+          url='/cashierBankDetailPrivateForm?bankMoney='+item.totalMoney+'&ownerID='+item.id+'&cashierDirection=0&surrenderCashier=1&otherID='+item.customersID+'&publicandPrivateAccount=0'
+        }
+
         this.$dialog.OpenWindow({
           width: '1050',
           height: '690',
           title: '添加收款记录',
-          url: '/cashierBankDetailPrivateForm?bankMoney='+item.totalMoney+'&ownerID='+item.id+'&cashierDirection=0&surrenderCashier=1' ,
+          url: url,
           closeCallBack: (data)=>{
             this.initPageData(false)
           }
@@ -205,14 +238,12 @@
           }
         })
       },
-      // 筛选事件
+      //筛选事件
       // initChoose (op) {
-      //   if (op === 'signatureType') {
-      //     this.selectValue = []
-      //   }
       //   if (op === 'state') {
       //     this.selectValue = []
       //   }
+      //  this.initPageData(false)
       //
       // },
       initPageData (initValue) {
@@ -249,6 +280,7 @@
             this.listType=data.typePsd
             this.listPaymentItems=data.paymentItemsPsd
             this.listFormat=data.formatPsd
+            this.listCategory=data.categoryPsd
           }
         })
       },

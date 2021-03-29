@@ -119,6 +119,9 @@
             this.txt=this.maxNumber
           }
         }
+        this.$nextTick(() =>{
+          this.$emit("input")
+        })
       },
       //初始化验证事件
       validatorEvent(category){

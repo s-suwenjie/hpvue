@@ -39,6 +39,7 @@
         <yhm-form-radio title="工单来源" :select-list="businessList" :value="business" id="business"></yhm-form-radio>
         <yhm-form-radio title="状态" :select-list="stateList" @call="stateChange(state)" :value="state" id="state"></yhm-form-radio>
         <yhm-form-radio title="业务来源" width="1" :select-list="worksourceList" :value="worksource" id="worksource"></yhm-form-radio>
+        <yhm-form-radio title="保险公司" v-show="worksource=='4'?true:false" width="1" ref="collectionRadio" :select-list="insuranceCompanyList" :value="insuranceCompany" id="insuranceCompany" rule="#"></yhm-form-radio>
 
         <yhm-form-select title="推修公司" width="1" v-if="worksource=='3'&&carName!=''" @click="pushRepairClick" :value="companyName" id="companyName" rule="R0000"></yhm-form-select>
 <!--        &&workOrderlist.length=='0'&&guaranteeSlipList.length=='0'-->
@@ -179,6 +180,8 @@
     data(){
       return{
         tabState:[{select:true},{select:false}],
+        insuranceCompanyList:[],//保险公司
+        insuranceCompany:'',//选中的保险公司
         workOrderlist:[],//推修关联的工单
         guaranteeSlipList:[],//保单数据
         pushRepairID:'',//关联推修公司的id
@@ -305,6 +308,7 @@
         })
       },
       pushRepairClick(){
+        sessionStorage.receptionFormList = JSON.stringify(this.$data)//当前页面数据
         this.$dialog.OpenWindow({
           width: '1050',
           height: '750',
@@ -446,7 +450,12 @@
           })
           return
         }
-        // return
+        if(this.worksource == '4'){
+          this.$refs.collectionRadio.$emit('verify')//维修类型
+          if(this.insuranceCompany == ''){
+            return
+          }
+        }
         this.$refs.applicableModelsRadio.$emit('verify')//车辆品牌
         let a = this.validator()
         if(a&&this.applicableModels!=''){
@@ -473,6 +482,10 @@
             brandVal:this.brandVal,//品牌名称
             modelID:this.modelID,//车辆型号id
             modelVal:this.modelVal,//车辆型号
+
+            ordertype:'0',//工单类型（保险理赔专用）
+            ordernum:this.insuranceCompany,//工单类型下保险公司序号
+            ordernumid:this.insuranceCompany,//工单类型下保险公司id
 
             visitDate:this.visitDate,//到访日期
             business:this.business,//业务来源
@@ -862,7 +875,7 @@
               this.personName = data.personName
               this.personid = data.personid
             }
-
+            this.insuranceCompanyList = data.mapList
             this.applicableModels = data.applicableModels
             this.worksource = data.worksource//工单来源
             this.business = data.business//业务来源

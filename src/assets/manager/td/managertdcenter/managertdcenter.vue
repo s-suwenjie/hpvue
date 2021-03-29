@@ -1,5 +1,5 @@
 <template>
-    <td v-show="show" @click="clickEvent" class="menuTd" :class="{'overflow':menuShow}" @contextmenu.prevent="contextMenuEvent($event)"  @dblclick="dblclickEvent">
+    <td v-show="show" @click="clickEvent" class="menuTd" :class="{'overflow':menuShow}"  @mouseover="$emit('mouseover')" @mouseout="$emit('mouseout')" @contextmenu.prevent="contextMenuEvent($event)"  @dblclick="dblclickEvent">
       <div class="md_center md_relative" :style="{color: color}">
         <div v-if="afterIcon !== ''" class="md_afterIcon" :style="{color:afterIconColor}" :class="[afterIcon,afterIconFontSize]"></div>
         {{value|formats(format,emptyValue,isEmpty)}}

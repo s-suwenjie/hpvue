@@ -4,23 +4,26 @@
       <template #title>添加信息</template>
       <template #control>
         <yhm-form-text placeholder=""  title="合同名称" subtitle=""  :value="name" id="name" rule="R0000"  ></yhm-form-text>
-        <yhm-form-radio title="合同格式" subtitle=""   :select-list="formatList" :value="format" id="format" rule="R0000" ></yhm-form-radio>
-        <yhm-form-select  title="负责人"  :value="chargePerson" id="chargePerson" @click="chargePersonEvent" rule="R0000"></yhm-form-select>
-        <yhm-form-select  title="所属客户"  :value="customers" id="customers" @click="customersEvent" rule="R0000">
+        <yhm-form-radio title="合同文本" subtitle=""   :select-list="formatList" :value="format" id="format" rule="R0000" ></yhm-form-radio>
+        <yhm-form-select  title="我方负责人"  :value="chargePerson" id="chargePerson" @click="chargePersonEvent" rule="R0000"></yhm-form-select>
+        <yhm-form-select  title="对方" subtitle="合约单位" :value="customers" id="customers" @click="customersEvent" rule="R0000">
           <span class="formBoxIcon beinSpan" :class="'i-uniE9b0'+insuredState" @click="iconClick"></span>
         </yhm-form-select>
+        <yhm-form-select  title="对方" v-if="insuredState==0?false:true" subtitle="负责人" :value="otherPartyPerson" id="otherPartyPerson" @click="otherPartyPersonEvent" rule="R0000"></yhm-form-select>
+        <yhm-form-radio title="合同" subtitle="关联业务" @call="cateCall"  :select-list="categoryList" :value="category" id="category" rule="R0000" ></yhm-form-radio>
+        <yhm-form-select  v-if="isOwner" title="选择" subtitle="业务单" width="1"  :value="owner" id="owner" @click="ownerEvent" rule="R0000"></yhm-form-select>
         <yhm-form-radio title="签署类型" subtitle="" @call="sigCall" width="1" :select-list="signatureTypeList" :value="signatureType" id="signatureType" rule="R0000" ></yhm-form-radio>
         <yhm-form-radio title="合同状态" subtitle=""  width="1" :select-list="stateList" :value="state" id="state" rule="R0000" ></yhm-form-radio>
-        <yhm-form-radio title="合同" subtitle="收付款项" :select-list="paymentItemsList" :value="paymentItems" id="paymentItems" rule="R0000" ></yhm-form-radio>
-        <yhm-form-text placeholder=""  title="总金额" subtitle=""  :value="totalMoney" id="totalMoney" :rule="totalMoney==''?'':'R1501'" ></yhm-form-text>
+        <yhm-form-radio  @call="payCall()" title="合同" subtitle="收付款项" :select-list="paymentItemsList" :value="paymentItems" id="paymentItems" rule="R0000" ></yhm-form-radio>
+        <yhm-form-text v-if="isMoney" placeholder=""  title="总金额" subtitle=""  :value="totalMoney" id="totalMoney" :rule="totalMoney==''?'':'R1501'" ></yhm-form-text>
 
-        <yhm-form-date title="开始日期"  :value="startTime" id="startTime " position="t" rule="R0000"></yhm-form-date>
+        <yhm-form-date title="签约日期"  :value="startTime" id="startTime " position="t" rule="R0000"></yhm-form-date>
         <yhm-form-date title="结束日期" :min="startTime" :value="endTime" id="endTime " position="t"></yhm-form-date>
         <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="合同文件" tag="contract" multiple="multiple" category="3" ></yhm-formupload>
       </template>
     </yhm-formbody>
-    <div class="f_split"></div>
-    <yhm-form-list-edit >
+    <div class="f_split" v-if="isdet"></div>
+    <yhm-form-list-edit v-if="isdet">
       <template #title>产品详情信息</template>
       <template #operate>
         <yhm-commonbutton value="选择商品" color="#9F0B9F" icon="btnAdd" @call="selectProduct"></yhm-commonbutton>
@@ -74,11 +77,16 @@
       return {
         id:'',
         name:'',//合同名称
+        owner:'',
+        ownerID:'',
         chargePerson:'',
         chargePersonID:'',//负责人
+        otherPartyPerson:'',
+        otherPartyPersonID:'',//对方负责人
         startTime:'',//签署时间
         endTime:'',//结束时间
-        insuredState:'0',//0联系人
+        endDate:' 23:59:59',
+        insuredState:'1',//0联系人
         customers:'',
         customersID:'',//签署客户
         signatureType:'',
@@ -99,15 +107,73 @@
         formatList:[], //合同格式
         paymentItems:'',
         paymentItemsList:[],//合同收付款
-        isCarWash:false
+        categoryList:[],
+        category:'',
+        isCarWash:false,
+        isPay:true,
+        isdet:true,
+        isOwner:false,
+        isMoney:true
       }
     },
     methods: {
+      otherPartyPersonEvent(){
+        this.$dialog.OpenWindow({
+          width: 950,
+          height: 692,
+          url: '/selectPerson?category=1',
+          title: '选择对方负责人',
+          closeCallBack: (data) => {
+            if (data) {
+              this.otherPartyPersonID=data.id
+              this.otherPartyPerson = data.name
+
+            }
+          }
+        })
+      },
+      ownerEvent(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/selectWorkOrderInsurance',
+          title: '选择业务单',
+          closeCallBack: (data) => {
+            if (data) {
+             this.ownerID=data.id
+              this.owner=data.showName
+            }
+          }
+        })
+      },
+      cateCall(){
+        if(this.category==0){
+          this.isOwner=false
+        }else{
+          this.isOwner=true
+        }
+      },
       sigCall(val,item){
           // console.log(item)
-        // if (item.code==0){
-        //   this.isCarWash=true
-        // }
+        if (item.num==0){
+          this.isdet=true
+        }else{
+          this.isdet=false
+        }
+      },
+      payCall(){
+        if (this.paymentItems==2){
+          this.isMoney=false
+        } else{
+          this.isMoney=true
+        }
+      },
+      cateType(){
+        if (this.signatureType==0){
+          this.isdet=true
+        } else{
+          this.isdet=false
+        }
       },
       selectProduct(){
         this.$dialog.OpenWindow({
@@ -211,6 +277,10 @@
         if (this.totalMoney==''){
           this.totalMoney=0
         }
+        if(this.category==1){
+          this.paymentItems='2'
+
+        }
         if (this.validator()) {
           if (this.detailsList.length>0){
 
@@ -224,12 +294,15 @@
             if (useMoney==this.totalMoney) {
               let params = {
                 id: this.id,
+                ownerID:this.ownerID,
+                category:this.category,
                 name: this.name,
                 format:this.format,
                 paymentItems:this.paymentItems,
                 startTime: this.startTime,
-                endTime: this.endTime,
+                endTime: this.endTime+this.endDate,
                 custState:this.insuredState,
+                otherPartyPersonID:this.otherPartyPersonID,
                 chargePersonID:this.chargePersonID,
                 customersID: this.customersID,
                 signatureType: this.signatureType,
@@ -274,12 +347,15 @@
                 cancelCallBack:() => {
                   let params = {
                     id: this.id,
+                    ownerID:this.ownerID,
+                    category:this.category,
                     name: this.name,
                     format:this.format,
                     paymentItems:this.paymentItems,
                     startTime: this.startTime,
-                    endTime: this.endTime,
+                    endTime: this.endTime+this.endDate,
                     custState:this.insuredState,
+                    otherPartyPersonID:this.otherPartyPersonID,
                     chargePersonID:this.chargePersonID,
                     customersID: this.customersID,
                     signatureType: this.signatureType,
@@ -317,12 +393,15 @@
           }else{
             let params = {
               id: this.id,
+              ownerID:this.ownerID,
+              category:this.category,
               name: this.name,
               startTime: this.startTime,
-              endTime: this.endTime,
+              endTime: this.endTime+this.endDate,
               format:this.format,
               paymentItems:this.paymentItems,
               custState:this.insuredState,
+              otherPartyPersonID:this.otherPartyPersonID,
               chargePersonID:this.chargePersonID,
               customersID: this.customersID,
               signatureType: this.signatureType,
@@ -410,15 +489,19 @@
           this.signatureTypeList = data.signatureTypePsd.list
           this.formatList = data.formatPsd.list
           this.paymentItemsList = data.paymentItemsPsd.list
+          this.categoryList = data.categoryPsd.list
+          this.category = data.categoryPsd.value
         },
         add: (data) => {
           /* 需要添加的数据 */
           /* 获取session的登录用户和登陆用户ID */
-
-
+          
         },
         look: (data) => {
           /* 需要查看的数据 */
+            this.ownerID=data.ownerID,
+            this.owner=data.owner,
+            this.category=data.category,
             this.name=data.name,
             this.type=data.type,
             this.startTime=data.startTime,
@@ -434,6 +517,11 @@
             this.totalMoney=data.totalMoney,
             this.fileList=data.files
             this.detailsList=data.detailsList
+            this.otherPartyPerson=data.otherPartyPerson
+            this.otherPartyPersonID=data.otherPartyPersonID
+            this.cateCall()
+            this.cateType()
+            this.payCall()
         }
       })
     },

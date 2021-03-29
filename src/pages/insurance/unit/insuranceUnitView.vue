@@ -80,7 +80,7 @@
           <template #listBody>
             <tr v-for="(item,index) in excelList" :key="index" :class="{InterlacBg:index%2!==0}">
               <yhm-manager-td  value=" " @click="downloadEvent(item)">
-                <img  style="margin: auto;" width="30" height="30" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1594275457602&di=5ebf487929ced264a201d33766b21f42&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180920%2F2397b5b7b5024319bf98035b72c2ca47.png" alt="">
+                <img  style="margin: auto;" width="50" height="30" src="https://hp.yhm.hk/UploadFile/excel.jpg" alt="">
               </yhm-manager-td>
 
               <yhm-manager-td-date  :value="item.monthsDate"></yhm-manager-td-date>
@@ -115,32 +115,32 @@
         </yhm-view-tab-list>
         <yhm-view-tab-list :customize="true" :pager="true" v-show="tabState[3].select">
           <template #listHead>
-            <yhm-managerth  title="合同文件"></yhm-managerth>
-            <yhm-managerth  title="合同名称" ></yhm-managerth>
-            <yhm-managerth  title="签订日期"></yhm-managerth>
-            <yhm-managerth  title="合同到期日"></yhm-managerth>
-            <yhm-managerth  title="对方名称"></yhm-managerth>
+            <yhm-managerth style="width: 38px;" title="选择"></yhm-managerth>
+            <yhm-managerth title="合同名字" ></yhm-managerth>
+            <yhm-managerth title="负责人" ></yhm-managerth>
+            <yhm-managerth title="所属客户" ></yhm-managerth>
+            <yhm-managerth title="开始日期"></yhm-managerth>
+            <yhm-managerth title="结束日期"></yhm-managerth>
             <yhm-managerth  title="剩余天数"></yhm-managerth>
 
           </template>
           <template #listBody>
             <tr v-for="(item,index) in contractList" :key="index" :class="{InterlacBg:index%2!==0}">
-              <yhm-manager-td  value=" " @click="contractEvent(item)">
-                <svg  t="1597803685080" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2270" width="30" height="30" style="margin: auto;"><path d="M804 573.928C773.76 547.213 734.023 531 690.5 531c-34.53 0-66.677 10.205-93.588 27.763h-303.22c-6.627 0-12 5.373-12 12v77.52h246.054C522.072 665.325 519 683.554 519 702.5c0 44.49 16.94 85.022 44.723 115.5H222V165c0-13.255 10.745-24 24-24h558v432.928zM326.462 349.882c24.725 0 44.769-20.04 44.769-44.76 0-24.721-20.044-44.761-44.77-44.761-24.725 0-44.769 20.04-44.769 44.76s20.044 44.76 44.77 44.76z m86.615-89.521c-6.627 0-12 5.372-12 12v77.52h331.23c6.628 0 12-5.372 12-12v-77.52h-331.23zM293.692 409.562c-6.627 0-12 5.373-12 12v77.52h450.616c6.627 0 12-5.372 12-12v-77.52H293.692zM690 859c-86.709 0-157-70.067-157-156.5S603.291 546 690 546s157 70.067 157 156.5S776.709 859 690 859z m-72-88a8 8 0 0 0-8 8h152a8 8 0 0 0 8-8H618z m80-56v-32.8c18.258-3.706 32-19.848 32-39.2 0-22.091-17.909-40-40-40s-40 17.909-40 40c0 19.352 13.742 35.494 32 39.2V715h-40c-8.837 0-16 7.163-16 16v32h112c8.837 0 16-7.163 16-16v-32h-56z" p-id="2271" fill="#1296db"></path></svg>
-              </yhm-manager-td>
-              <yhm-manager-td  :value="item.contractName"></yhm-manager-td>
-              <yhm-manager-td-date :value="item.signedDate"></yhm-manager-td-date>
-              <yhm-manager-td-date :value="item.maturityDate" ></yhm-manager-td-date>
-              <yhm-manager-td :value="item.otherSideName" ></yhm-manager-td>
-              <yhm-manager-td-img :value="item.maturityDay+'天'" width="20" height="30" position="right" v-show="item.maturityDay>60" num="1"></yhm-manager-td-img>
-              <yhm-manager-td-img :value="item.maturityDay+'天'" width="20" height="30" position="right" v-show="item.maturityDay<=60& item.maturityDay>30" num="2"></yhm-manager-td-img>
-              <yhm-manager-td-img :value="item.maturityDay+'天'" width="20" height="30" position="right" v-show="item.maturityDay<=30& item.maturityDay>15" num="3"></yhm-manager-td-img>
-              <yhm-manager-td-img :value="item.maturityDay+'天'" width="20" height="30" position="right" v-show="item.maturityDay<=15" num="4"></yhm-manager-td-img>
+              <yhm-manager-td-look @click="listcontractView(item)"></yhm-manager-td-look>
+              <yhm-manager-td  :value="item.name"></yhm-manager-td>
+              <yhm-manager-td :value="item.chargePerson"></yhm-manager-td>
+              <yhm-manager-td :value="item.customers" ></yhm-manager-td>
+              <yhm-manager-td-date :value="item.startTime" ></yhm-manager-td-date>
+              <yhm-manager-td-date :value="item.endTime" ></yhm-manager-td-date>
+              <yhm-manager-td-img :value="item.day+'天'" width="20" height="30" position="right" v-show="item.day>60" num="1"></yhm-manager-td-img>
+              <yhm-manager-td-img :value="item.day+'天'" width="20" height="30" position="right" v-show="item.day<=60& item.day>30" num="2"></yhm-manager-td-img>
+              <yhm-manager-td-img :value="item.day+'天'" width="20" height="30" position="right" v-show="item.day<=30& item.day>15" num="3"></yhm-manager-td-img>
+              <yhm-manager-td-img :value="item.day+'天'" width="20" height="30" position="right" v-show="item.day<=15" num="4"></yhm-manager-td-img>
 
             </tr>
           </template>
           <template #empty>
-            <span class="m_listNoData" v-show="empty">暂时没有数据</span>
+            <span class="m_listNoData" v-show="contractList.length!=0?false:true">暂时没有数据</span>
           </template>
           <template #pager>
             <yhm-pagination :pager="pager"  :is-select-info="false" @initData="contractView(false)"></yhm-pagination>
@@ -189,6 +189,18 @@
       }
     },
     methods:{
+      listcontractView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '750',
+          url: '/contractsignView?id='+item.id,
+          title: '详情信息',
+          closeCallBack: (data) => {
+            if (data) {
+            }
+          }
+        })
+      },
       afterClick(item){
         if(item.money==item.useMoney){
           this.$dialog.OpenWindow({
@@ -259,14 +271,13 @@
       },
       contractView(){
         let params={
-          id:this.id,
+          ownerID:this.id,
           pageSize: this.pager.pageSize, // 单页数据条数
           pageIndex: this.pager.pageIndex, // 当前页码
-          orderColumn:'maturityDay',
           order:'desc'
         }
         this.ajaxJson({
-          url: '/Basic/getContract',
+          url: '/dailyoffice/contractSign/getUnitManager',
           data: params,
           call: (data) => {
             this.contractList=data.content

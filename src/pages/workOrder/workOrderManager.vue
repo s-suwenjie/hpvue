@@ -100,12 +100,10 @@
             <yhm-manager-td-money  :show="columnShow[13]" @click="lookOverMoney('0','查看项目详情',item)" style="color:#008f8d" :value="item.productMoney==''?'0':item.productMoney"></yhm-manager-td-money>
             <yhm-manager-td-money  :show="columnShow[14]" @click="lookOverMoney('1','查看材料详情',item)" style="color:#2193b0" :value="item.mailMoney==''?'0':item.mailMoney"></yhm-manager-td-money>
             <yhm-manager-td-money  :show="columnShow[15]" @click="lookOverMoney('0','查看合计金额',item)" style="color:#fd6802" :value="item.expend==''?'0':item.expend"></yhm-manager-td-money>
-
             <yhm-manager-td-money  :show="columnShow[16]" style="color:#00b300" :value="item.receivedMoney==null?'0':item.receivedMoney"></yhm-manager-td-money>
             <yhm-manager-td-money  :show="columnShow[17]" style="color:#f00" :value="item.remreceivedMoney==null?'0':item.remreceivedMoney"></yhm-manager-td-money>
             <yhm-manager-td-money  :show="columnShow[18]" style="color:#2193b0" :value="item.amountOpened==null?'0':item.amountOpened"></yhm-manager-td-money>
             <yhm-manager-td-money  :show="columnShow[19]" style="color:#49a9ea" :value="item.remamountOpened==null?'0':item.remamountOpened"></yhm-manager-td-money>
-
             <yhm-manager-td-psd   @click="stateClick(item)"  :show="columnShow[20]" :value="item.state" :list="stateList"></yhm-manager-td-psd>
             <yhm-manager-td-center :show="columnShow[21]"
                  v-if="item.worker==null||item.worker==''||item.state=='0'||item.state=='14'
@@ -115,17 +113,13 @@
 
             <yhm-manager-td-operate :show="columnShow[22]" >
 <!--              :no-click="item.state=='5'||item.state=='24'?true:false"-->
-
               <yhm-manager-td-operate-button @click="operation(item)" icon="i-btn-applicationSm" value="流程管理" :no-click="item.state=='5'||item.state=='24'?true:false" color="#8e08e3"></yhm-manager-td-operate-button>
               <yhm-manager-td-operate-button @click="allocation(item)" v-show="item.state=='0'&&item.method=='0'&&item.proccessDetailCount=='0'" icon="i-btn-applicationSm" value="分配" :no-click="item.state=='5'?true:false" color="#49a9ea"></yhm-manager-td-operate-button>
 <!--              <yhm-manager-td-operate-button title="添加工单项目配件" @click="lookOverWorkOrder(item)" icon="i-btn-applicationSm" value="工单"-->
 <!--                                             v-show="prohibitStateList.indexOf(item.state)!='-1'?false:true"-->
 <!--                                             :color="prohibitStateList.indexOf(item.state)=='-1'?'#c700df':'#333'"></yhm-manager-td-operate-button>-->
-
               <yhm-manager-td-operate-button @click="voluntarilyDispatching(item)" v-show="item.state=='0'&&item.method=='1'" icon="i-btn-applicationSm" value="自动派工" title="自动派工" color="#00bb6b"></yhm-manager-td-operate-button>
-
               <yhm-manager-td-operate-button @click="stateClick(item)" icon="i-btn-applicationSm" value="派工" title="手动派工" v-show="item.state=='0'&&item.method=='0'" color="#7F7FD5"></yhm-manager-td-operate-button>
-
             </yhm-manager-td-operate>
           </tr>
         </template>

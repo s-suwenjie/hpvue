@@ -7,7 +7,7 @@
     <span :style="{color:beforeColor}">{{beforeTitle}}</span>
     <span :style="{fontSize:subtitle!=''?'12px':''}">{{title}}</span>
     <p v-if="subtitle!=''" style="font-size: 12px;margin-top: 2px;">{{subtitle}}</p>
-    <span :style="{color:afterColor,fontSize:afterSize}" style="margin-left: 5px;" class="tooltip">{{afterTitle}}<span v-show="prompt!=''" :style="{left:tooltipLeft}" class="tooltiptext">{{prompt}}</span></span>
+    <span v-show="prompt!=''" :style="{color:afterColor,fontSize:afterSize}" style="margin-left: 5px;" class="tooltip">{{afterTitle}}<span :style="{left:tooltipLeft}" class="tooltiptext">{{prompt}}</span></span>
     <span v-show="afterIcon!=''" :style="{color:afterIconColor}" style="margin-left: 5px;" class="tooltip" :class="getIcon"><span v-show="prompt!=''" :style="{left:tooltipLeft}" class="tooltiptext">{{prompt}}</span></span>
 
     <template v-if="value !== ''">

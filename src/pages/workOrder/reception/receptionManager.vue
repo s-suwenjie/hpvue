@@ -14,7 +14,9 @@
         <yhm-radiofilter  @initData="initChoose('applicableModels')" title="品牌" :content="applicableModelsPsd"></yhm-radiofilter>
         <yhm-radiofilter style="margin-top: 6px;" @initData="initChoose('dateType')" title="时间" :content="dateTypeList"></yhm-radiofilter>
         <yhm-radiofilter  @initData="initChoose('worktype')" title="工单类型" :content="worktypePsd"></yhm-radiofilter>
-<!--        <yhm-commonbutton v-show="selectValue.length=='1'" value="删除" icon=" " @call="deleteReception()"></yhm-commonbutton>-->
+        <yhm-radiofilter  @initData="initChoose('category')" title="业务来源" :content="categoryPsd"></yhm-radiofilter>
+
+        <!--        <yhm-commonbutton v-show="selectValue.length=='1'" value="删除" icon=" " @call="deleteReception()"></yhm-commonbutton>-->
 
       </template>
       <!--      筛选区-->
@@ -45,7 +47,7 @@
         <yhm-managerth :show="columnShow[8]" width="65" title="车主"></yhm-managerth>
         <yhm-managerth :show="columnShow[9]" width="170" title="OA项目号"></yhm-managerth>
         <yhm-managerth :show="columnShow[10]" width="140" title="传奇及DMS工单号"></yhm-managerth>
-        <yhm-managerth :show="columnShow[11]" width="65" title="维修类型"></yhm-managerth>
+        <yhm-managerth :show="columnShow[11]" width="70" title="维修类型"></yhm-managerth>
         <yhm-managerth :show="columnShow[12]" width="66" title="保险公司"></yhm-managerth>
         <yhm-managerth :show="columnShow[13]" width="83" title="项目金额"></yhm-managerth>
         <yhm-managerth :show="columnShow[14]" width="83" title="材料金额"></yhm-managerth>
@@ -58,7 +60,11 @@
         <yhm-managerth :show="columnShow[21]" width="65" title="客户意向"></yhm-managerth>
         <yhm-managerth :show="columnShow[22]" width="130" title="工单状态"></yhm-managerth>
         <yhm-managerth :show="columnShow[23]" width="65" title="工单类型"></yhm-managerth>
-        <yhm-managerth :show="columnShow[24]" width="383" title="操作"></yhm-managerth>
+
+        <yhm-managerth :show="columnShow[24]" width="70" title="业务来源"></yhm-managerth>
+
+<!--        workSourcePsd-->
+        <yhm-managerth :show="columnShow[25]" width="383" title="操作"></yhm-managerth>
       </template>
       <!--数据明细-->
       <template #listBody>
@@ -104,13 +110,14 @@
           <yhm-manager-td-center :show="columnShow[21]" :value="stateList[item.state].showName" ></yhm-manager-td-center>
 
           <yhm-manager-td-center :show="columnShow[22]" v-if="item.fixorder.state==null||item.fixorder.state==''" value="-----"></yhm-manager-td-center>
-          <yhm-manager-td-psd    :show="columnShow[22]" v-else :value="item.fixorder.state" :list="fixorderStateList"></yhm-manager-td-psd>
+          <yhm-manager-td-psd  :show="columnShow[22]" v-else :value="item.fixorder.state" :list="fixorderStateList"></yhm-manager-td-psd>
 
           <yhm-manager-td-center :show="columnShow[23]" v-if="item.fixorder.worktype==null||item.fixorder.worktype==''" value="-----"></yhm-manager-td-center>
-          <yhm-manager-td-psd    :show="columnShow[23]" v-else :value="item.fixorder.worktype" :list="worktypePsd.list"></yhm-manager-td-psd>
+          <yhm-manager-td-psd  :show="columnShow[23]" v-else :value="item.fixorder.worktype" :list="worktypePsd.list"></yhm-manager-td-psd>
 
+          <yhm-manager-td-psd :show="columnShow[24]" :value="item.worksource" :list="workSourcePsd.list"></yhm-manager-td-psd>
 
-          <yhm-manager-td-operate :show="columnShow[24]">
+          <yhm-manager-td-operate :show="columnShow[25]">
             <yhm-manager-td-operate-button @click="lookOver(item,item.fixorder.state)" icon="i-btn-applicationSm" :value="item.fixorder.state=='5'?'编辑':'查看'" v-show="item.fixorder.id!=''&&item.state=='0'?true:false" :no-click="item.fixorder.id!=''&&item.state=='0'?false:true" :color="item.fixorder.id!=''&&item.state=='0'?'#7307dc':'#333'"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="transferworkOrder(item)" icon="i-btn-applicationSm" value="补录工单"  v-show="item.fixorder.id==''&&item.state=='0'?true:false"  :no-click="item.fixorder.id==''&&item.state=='0'?false:true" :color="item.fixorder.id==''&&item.state=='0'?'#49a9ea':'#333'"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="affirmClick(item)" icon="i-btn-applicationSm" value="转为工单" v-show="item.fixorder.id!=''&&item.fixorder.state=='5'?true:false" :no-click="item.fixorder.id!=''&&item.fixorder.state=='5'?false:true" :color="item.fixorder.id!=''&&item.fixorder.state=='5'?'#4bb414':'#333'"></yhm-manager-td-operate-button>
@@ -163,6 +170,9 @@
         timeShow:false,//自定义时间选择 显示隐藏
         worktypePsd:{},//工单类型
         orderstatePsd:{},//工单状态
+        categoryPsd:{},//维修类型
+        workSourcePsd:{},//业务来源
+        workSource:{},//业务来源
         dateShow:false,//时间组件 显示隐藏
         dateTypeList:{
           value: '', //默认为空
@@ -216,8 +226,8 @@
         },//状态筛选
         applicableModelsList:[],//品牌
         applicableModelsPsd:{},//筛选 品牌
-        optionsList:['选择','查看','接待日期','接待人','车牌号','品牌','联系人','联系人电话','车主','OA项目号','传奇及DMS工单号','维修类型','保险公司','项目金额','材料金额','合计金额','实际金额','已收金额','未收金额','已开金额','未开金额','客户意向','工单状态','工单类型','操作'],
-        columnShow:[true,true,true,true,true,true,true,true,true,true,false,true,true,false,false,true,false,false,false,false,false,false,true,false,true],
+        optionsList:['选择','查看','接待日期','接待人','车牌号','品牌','联系人','联系人电话','车主','OA项目号','传奇及DMS工单号','维修类型','保险公司','项目金额','材料金额','合计金额','实际金额','已收金额','未收金额','已开金额','未开金额','客户意向','工单状态','工单类型','业务来源','操作'],
+        columnShow:[true,true,true,true,true,true,true,true,true,true,false,true,true,false,false,true,false,false,false,false,false,false,true,false,true,true],
         checkboxID:'',//选中数据的id
       }
     },
@@ -994,7 +1004,9 @@
             startDateStr:this.startDateStr,//开始时间
             endDateStr:this.endDateStr,//结束时间
             state:this.statePsd.value,
+            category:this.categoryPsd.value,//维修类型
             worktype:this.worktypePsd.value,//工单类型
+            workSource:this.workSourcePsd.value,//业务来源
             orderstate:this.orderstatePsd.value,//工单状态
             dateType:this.dateTypeList.value=='9'?'':this.dateTypeList.value,
             applicableModels:this.applicableModelsPsd.value
@@ -1012,6 +1024,8 @@
           },
           init:(data)=>{
             this.categoryList = data.categoryPsd.list
+            this.categoryPsd = data.categoryPsd
+            this.workSourcePsd = data.workSourcePsd
             this.applicableModelsPsd = data.applicableModelsPsd
             this.applicableModelsList = data.applicableModelsPsd.list
             this.fixorderStateList = data.statePsd.list

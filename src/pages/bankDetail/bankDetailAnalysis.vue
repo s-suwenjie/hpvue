@@ -6,7 +6,7 @@
         <!-- 操作区-->
         <yhm-commonbutton style="margin-left: 10px" value="导出年报表" icon="i-edit"  @call="importEvent()"></yhm-commonbutton>
         <yhm-radiofilterdate title="时间" @initData="selectMonthEvent"></yhm-radiofilterdate>
-        <yhm-radiofilter @initData="initChoose('direction')" title="收支方向" :content="directionPsd" all="0"></yhm-radiofilter>
+<!--        <yhm-radiofilter @initData="initChoose('direction')" title="收支方向" :content="directionPsd" all="0"></yhm-radiofilter>-->
         <yhm-commonbutton style="margin-left: 10px" value="上一级" icon="icon-income" @call="getout"></yhm-commonbutton>
       </template>
       <template #listBody >
@@ -18,9 +18,9 @@
               <div class="top_litter">{{item.showName}}</div>
               <div class="btom_num" v-html="getTxt(item.money)"></div>
             </div>
-            <div :style="{width:WbtomDiv,height:HtopDiv}" v-if="content.length!=0" style="background-color: #1FDBEA" class="block_div">
+            <div :style="{width:WbtomDiv,height:HtopDiv}" v-if="content.length!=0" style="background-color: #71C6CB" class="block_div">
 <!--              backgroundColor:BcColor(-1)}-->
-              <div class="top_litter">合计</div>
+              <div class="top_litter" style="font-size: 36px">合计</div>
               <div v-html="getTxt(total.money)" class="btom_num"></div>
             </div>
           </div>
@@ -40,7 +40,7 @@
       return {
         directionPsd:{
           list:[],
-          value:'1'
+          value:''
         },
         // page
         showName:'',
@@ -52,7 +52,7 @@
         total:'',
         topDiv:'',
         btomDiv:'',
-        colorList:['#C33531','#EFE42A','#64BD3D','#EE9201','#62BCFC', '#CE86ED','#0AAF9F','#E89589','#16A085','#6A347E','#C39BD3','#F9E79F','#BA4A00','#616A6B','#3498DB' ],
+        colorList:['#E3A2A2','#B2B286','#98CB86','#E0B97C','#95C1E0','#C6A7D1','#B4AD4B','#74C9B9','#A57C62','#8E7EB2','#A56467'],
       }
     },
     computed:{
@@ -91,16 +91,17 @@
         }
       },
       WbtomDiv(){
-        if(this.content.length<=4){
-          let width=(2-(this.content.length%2))*600-6
-          return width+'px'
-        }else if(this.content.length<=9){
-          let width=(3-(this.content.length%3))*400-6
-          return width+'px'
-        }else{
-          let width=(4-(this.content.length%4))*300-6
-          return width+'px'
-        }
+        // if(this.content.length<=4){
+        //   let width=(2-(this.content.length%2))*600-6
+        //   return width+'px'
+        // }else if(this.content.length<=9){
+        //   let width=(3-(this.content.length%3))*400-6
+        //   return width+'px'
+        // }else{
+        //   let width=(4-(this.content.length%4))*300-6
+        //   return width+'px'
+        // }
+        return '1194px'
       }
     },
     methods:{
@@ -267,7 +268,7 @@
     height: 50%;
     text-align: center;
     color: #ffffff;
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 700;
     box-sizing: border-box;
     /*line-height: 110%;*/

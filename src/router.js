@@ -6,11 +6,39 @@ import desktop from './components/desktop'
 import login from './pages/login'
 
 Vue.use(Router)
+/*设置岗位工资*/
+import wagePostManager from './pages/staff/wagePost/wagePostManager.vue'
+import wagePostView from './pages/staff/wagePost/wagePostView.vue'
+import wagePostForm from './pages/staff/wagePost/wagePostForm.vue'
+/*设置花费补助*/
+import telephoneSubsidyManager from './pages/staff/telephoneSubsidy/telephoneSubsidyManager.vue'
+import telephoneSubsidyView from './pages/staff/telephoneSubsidy/telephoneSubsidyView.vue'
+import telephoneSubsidyForm from './pages/staff/telephoneSubsidy/telephoneSubsidyForm.vue'
+/*设置基本工资*/
+import basicWageManager from './pages/staff/basicWage/basicWageManager.vue'
+import basicWageView from './pages/staff/basicWage/basicWageView.vue'
+import basicWageForm from './pages/staff/basicWage/basicWageForm.vue'
+
+/*设定业绩*/
+import repairTargerManager from './pages/repairTarger/repairTargerManager.vue'
+import repairTargerView from './pages/repairTarger/repairTargerView.vue'
+import repairTargerForm from './pages/repairTarger/repairTargerForm.vue'
+
+
+
 
 /*员工档案*/
 import employeeFilesManager from './pages/staff/employeeFiles/employeeFilesManager.vue'
 import employeeFilesView from './pages/staff/employeeFiles/employeeFilesView.vue'
 import employeeFilesForm from './pages/staff/employeeFiles/employeeFilesForm.vue'
+/*设置五险百分比*/
+import fiveInsurancesManager from './pages/staff/fiveInsurances/fiveInsurancesManager.vue'
+import fiveInsurancesView from './pages/staff/fiveInsurances/fiveInsurancesView.vue'
+import fiveInsurancesForm from './pages/staff/fiveInsurances/fiveInsurancesForm.vue'
+/*设置养老基数*/
+import fiveInsurancesBaseManager from './pages/staff/fiveInsurancesBase/fiveInsurancesBaseManager.vue'
+import fiveInsurancesBaseForm from './pages/staff/fiveInsurancesBase/fiveInsurancesBaseForm.vue'
+import fiveInsurancesBaseView from './pages/staff/fiveInsurancesBase/fiveInsurancesBaseView.vue'
 
 /*短信模板*/
 import smsTemplateForm from './pages/sms/template/smsTemplateForm.vue'
@@ -898,10 +926,13 @@ import  pushRepairForm from './pages/workOrder/pushRepair/pushRepairForm'
 import  pushRepairDetailForm from './pages/workOrder/pushRepair/pushRepairDetailForm'
 import  pushRepairAddPersonForm from './pages/workOrder/pushRepair/pushRepairAddPersonForm'
 import  pushRepairSelect from './pages/workOrder/pushRepair/pushRepairSelect'
+import  pushRepairAddForm from './pages/workOrder/pushRepair/pushRepairAddForm'
 import  pushPersonSelect from './pages/workOrder/pushRepair/pushPersonSelect'
 import  pushCorporationSelect from './pages/workOrder/pushRepair/pushCorporationSelect'
 import  addPushCorporationForm from './pages/workOrder/pushRepair/addPushCorporationForm'
 import  settleAccountsForm from './pages/workOrder/pushRepair/settleAccountsForm'
+import  selectPushRepair from './pages/workOrder/select/selectPushRepair'
+
 
 /*工单保险公司管理*/
 import workOrderInsuranceUnitManager from './pages/workOrder/workOrderInsuranceUnit/workOrderInsuranceUnitManager'
@@ -1179,6 +1210,12 @@ export default new Router({
         { path: '/home/prewarningValueManager', name: 'prewarningValueManager.vue', component: prewarningValueManager},
         { path: '/home/bankDetailAnalysis', name: 'bankDetailAnalysis.vue', component: bankDetailAnalysis, meta: {title: '财务分析'}},
         { path: '/home/employeeFilesManager', name: 'employeeFilesManager.vue', component: employeeFilesManager, meta: {title: '员工档案'}},
+        { path: '/home/fiveInsurancesManager', name: 'fiveInsurancesManager.vue', component: fiveInsurancesManager, meta: {title: '设置五险百分比'}},
+        { path: '/home/fiveInsurancesBaseManager', name: 'fiveInsurancesBaseManager.vue', component: fiveInsurancesBaseManager, meta: {title: '设置五险基数'}},
+        { path: '/home/basicWageManager', name: 'basicWageManager.vue', component: basicWageManager, meta: {title: '设置基本工资'}},
+        { path: '/home/wagePostManager', name: 'wagePostManager.vue', component: wagePostManager, meta: {title: '设置岗位工资'}},
+        { path: '/home/telephoneSubsidyManager', name: 'telephoneSubsidyManager.vue', component: telephoneSubsidyManager, meta: {title: '设置花费补助'}},
+        { path: '/home/repairTargerManager', name: 'repairTargerManager.vue', component: repairTargerManager, meta: {title: '设置业绩'}},
 
         { path: '/home/BankDetailRebateManager', name: 'BankDetailRebateManager.vue', component: BankDetailRebateManager ,meta: {title: '支付客户返利'}},
         { path: '/home/bankDetailRenewalManager', name: 'bankDetailRenewalManager.vue', component: bankDetailRenewalManager ,meta: {title: '续保管理'}},
@@ -1281,10 +1318,13 @@ export default new Router({
     { path: '/addPushCorporationForm', name: 'addPushCorporationForm', component: addPushCorporationForm},
     { path: '/pushRepairSelect', name: 'pushRepairSelect', component: pushRepairSelect},
     { path: '/pushPersonSelect', name: 'pushPersonSelect', component: pushPersonSelect},
+    { path: '/pushRepairAddForm', name: 'pushRepairAddForm', component: pushRepairAddForm},
+
     { path: '/pushCorporationSelect', name: 'pushCorporationSelect', component: pushCorporationSelect},
 
 
     { path: '/settleAccountsForm', name: 'settleAccountsForm', component: settleAccountsForm},
+    { path: '/selectPushRepair', name: 'selectPushRepair', component: selectPushRepair},
     { path: '/workOrderInsuranceUnitForm', name: 'workOrderInsuranceUnitForm', component: workOrderInsuranceUnitForm},
 
     { path: '/workOrderSettleAccountsForm', name: 'workOrderSettleAccountsForm', component: workOrderSettleAccountsForm},
@@ -1342,6 +1382,21 @@ export default new Router({
     { path: '/bankDetailAnalysisExecl', name: 'bankDetailAnalysisExecl', component: bankDetailAnalysisExecl},
     { path: '/employeeFilesForm', name: 'employeeFilesForm', component: employeeFilesForm},
     { path: '/employeeFilesView', name: 'employeeFilesView', component: employeeFilesView},
+    { path: '/fiveInsurancesForm', name: 'fiveInsurancesForm', component: fiveInsurancesForm},
+    { path: '/fiveInsurancesView', name: 'fiveInsurancesView', component: fiveInsurancesView},
+    { path: '/fiveInsurancesBaseForm', name: 'fiveInsurancesBaseForm', component: fiveInsurancesBaseForm},
+    { path: '/fiveInsurancesBaseView', name: 'fiveInsurancesBaseView', component: fiveInsurancesBaseView},
+    { path: '/basicWageForm', name: 'basicWageForm', component: basicWageForm},
+    { path: '/basicWageView', name: 'basicWageView', component: basicWageView},
+    { path: '/wagePostForm', name: 'wagePostForm', component: wagePostForm},
+    { path: '/wagePostView', name: 'wagePostView', component: wagePostView},
+    { path: '/telephoneSubsidyForm', name: 'telephoneSubsidyForm', component: telephoneSubsidyForm},
+    { path: '/telephoneSubsidyView', name: 'telephoneSubsidyView', component: telephoneSubsidyView},
+
+
+    { path: '/repairTargerView', name: 'repairTargerView', component: repairTargerView},
+    { path: '/repairTargerForm', name: 'repairTargerForm', component: repairTargerForm},
+
 
     { path: '/selectDic', name: 'selectDic', component: selectDic},
     { path: '/selectCoupon', name: 'selectCoupon', component: selectCoupon},
@@ -1821,6 +1876,3 @@ export default new Router({
 
   ]
 })
-
-
-

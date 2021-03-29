@@ -59,7 +59,7 @@
           <div style="margin-right: 32px;">
             <span style="font-weight: bold;color: #666666;margin-right: 5px;">预计收入:</span>
             <span style="color: #4BB414;">￥</span>
-            <span style="color: #4BB414;" v-html="moneySegmentation"></span>
+            <span style="color: #4BB414;" v-html="getTxt(money)"></span>
           </div>
         </div>
       </template>
@@ -117,12 +117,22 @@
         <span class="m_listNoData" v-show="fixOrderMaterial.length=='0'?true:false">暂时没有数据</span>
       </template>
       <template #customize>
-        <div class="aggregateMoney">
-          <span></span>
-          <div style="margin-right: 32px;">
-            <span style="font-weight: bold;color: #666666;margin-right: 5px;">总计金额:</span>
+        <div class="aggregateMoney" style="display: flex;justify-content: space-between;box-sizing: border-box;padding: 0 33px;">
+          <div>
+            <span style="font-weight: bold;color: #666666;margin-right: 5px;">优惠金额:</span>
+            <span style="color: #f00;">￥</span>
+            <span style="color: #f00;" v-html="getTxt(Number(amount)-Number(mailact)+'')"></span>
+          </div>
+          <div>
+            <span style="font-weight: bold;color: #666666;margin-right: 5px;" @click="$refs.mailactFocus.focus()">客户实际付款金额(点击输入):</span>
             <span style="color: #4BB414;">￥</span>
-            <span style="color: #4BB414;" v-html="amountMoneySegmentation"></span>
+            <!--            <span style="color: #4BB414;" v-html="getTxt(actualmoney)"></span>-->
+            <input type="text" style="color: #4BB414;" placeholder="不能为空" ref="mailactFocus" @input="mailactInput" @blur="mailactBlur" v-model="mailact">
+          </div>
+          <div style="margin-right: 5px;">
+            <span style="font-weight: bold;color: #666666;margin-right: 5px;">总计金额:</span>
+            <span style="color: #FD6802;">￥</span>
+            <span style="color: #FD6802;" v-html="getTxt(amount+'')"></span>
           </div>
         </div>
       </template>
@@ -218,18 +228,19 @@
         <div class="aggregateMoney" style="display: flex;justify-content: space-between;box-sizing: border-box;padding: 0 33px;">
           <div>
             <span style="font-weight: bold;color: #666666;margin-right: 5px;">优惠金额:</span>
-            <span style="color: #4BB414;">￥</span>
-            <span style="color: #4BB414;" v-html="getTxt(discountmoney)"></span>
+            <span style="color: #f00;">￥</span>
+            <span style="color: #f00;" v-html="getTxt(Number(productMoney)-Number(productact)+'')"></span>
           </div>
           <div>
-            <span style="font-weight: bold;color: #666666;margin-right: 5px;">客户实际付款金额:</span>
+            <span style="font-weight: bold;color: #666666;margin-right: 5px;" @click="$refs.actualmoneyFocus.focus()">客户实际付款金额(点击输入):</span>
             <span style="color: #4BB414;">￥</span>
-            <span style="color: #4BB414;" v-html="getTxt(actualmoney)"></span>
+<!--            <span style="color: #4BB414;" v-html="getTxt(actualmoney)"></span>-->
+            <input type="text" style="color: #4BB414;" placeholder="不能为空" ref="actualmoneyFocus" @input="actualmoneyInput" @blur="actualmoneyBlur" v-model="productact">
           </div>
           <div>
-            <span style="font-weight: bold;color: #666666;margin-right: 5px;">实际支出:</span>
-            <span style="color: #4BB414;">￥</span>
-            <span style="color: #4BB414;" v-html="expendMoneySegmentation"></span>
+            <span style="font-weight: bold;color: #666666;margin-right: 5px;">合计金额:</span>
+            <span style="color: #FD6802;">￥</span>
+            <span style="color: #FD6802;" v-html="getTxt(productMoney+'')"></span>
           </div>
         </div>
       </template>
@@ -333,6 +344,10 @@
         applicableModels:'',//适用车型
         content:{},
         money:'0',//定损单详情 总计金额
+        mailact:'0',//配件实际金额
+        maildis:'0',//配件优惠金额
+        productact:'0',//工单详情实际金额
+        productdis:'0',//工单详情优惠金额
         partsMoney:[],//
         stockListID:guid(),//材料总表
         orderID:guid(),//
@@ -345,6 +360,7 @@
         list2:[],//工单详情
         formTypeList:[],//定损单详情类型
         fixOrderMaterial:[],//材料详情信息列表
+        fixOrderMaterial2:[],//材料详情信息列表 用来计算客户实际金额
         processDetailList:[],//新增节点数据
       }
     },
@@ -354,15 +370,6 @@
           return tenThousandFormatHtml(value+'')
         }
       },
-      moneySegmentation(){//配件金额 定损单金额总计
-        return tenThousandFormatHtml(this.money+'')
-      },
-      amountMoneySegmentation(){//配件金额
-        return tenThousandFormatHtml(this.amount+'')
-      },
-      expendMoneySegmentation(){//实际支出 工单详情金额总计
-        return tenThousandFormatHtml(this.productMoney+'')
-      }
     },
     methods:{
       customerQuotation(item){
@@ -374,7 +381,42 @@
         }else{
           item.price =  item.discount+''
           item.money = item.splitVal=='1'?(accMul(Number(item.price),Number(item.quantity))+''):(accMul(Number(item.price),Number(item.mdo))+'')// 金额
-
+        }
+      },
+      actualmoneyInput(){
+        let containSpecial = RegExp(/[(\ )(\~)(\~)(\!)(\！)(\@)(\#)(\$)(\￥)(\%)(\^)(\……)(\&)(\*)(\()(\（)(\))(\）)(\-)(\_))(\——)(\+)(\=)(\[)(\【)(\])(\】)(\{)(\})(\|))(\、))(\)(\\)(\;)(\；)(\:)(\：)(\')(\‘)(\’)(\")(\“)(\”)(\,)(\，)(\.)(\。)(\/)(\《)(\<)(\>)(\》)(\?)(\？)(\)]+/);
+        if(Number(this.productact)<0||this.productact==''){//输入为负数时变为0
+          this.productact = '0'
+        }else if(Number(this.productact)>Number(this.productMoney)){
+          this.productact = this.productMoney
+        }else if(containSpecial.test(this.productact)){//输入特殊符号时变为0
+          this.productact = '0'
+        }else if(this.productact.length>=8){
+          this.productact = this.productact.slice(0,8)
+        }
+        console.log(this.productact/this.productMoney*10 ,'折')
+      },
+      actualmoneyBlur(){//工单详情 客户实际付款金额 折扣计算
+        if(Number(this.productact/this.productMoney*10)<5){
+          this.productact = this.productMoney
+          console.log('222222222')
+        }
+      },
+      mailactInput(){//配件详情
+        let containSpecial = RegExp(/[(\ )(\~)(\~)(\!)(\！)(\@)(\#)(\$)(\￥)(\%)(\^)(\……)(\&)(\*)(\()(\（)(\))(\）)(\-)(\_))(\——)(\+)(\=)(\[)(\【)(\])(\】)(\{)(\})(\|))(\、))(\)(\\)(\;)(\；)(\:)(\：)(\')(\‘)(\’)(\")(\“)(\”)(\,)(\，)(\.)(\。)(\/)(\《)(\<)(\>)(\》)(\?)(\？)(\)]+/);
+        if(Number(this.mailact)<0||this.mailact==''){//输入为负数时变为0
+          this.mailact = '0'
+        }else if(Number(this.mailact)>Number(this.amount)){
+          this.mailact = this.amount
+        }else if(containSpecial.test(this.mailact)){//输入特殊符号时变为0
+          this.mailact = '0'
+        }else if(this.mailact.length>=8){
+          this.mailact = this.mailact.slice(0,8)
+        }
+      },
+      mailactBlur(){//配件详情 客户实际付款金额 折扣计算
+        if(Number(this.mailact/this.amount*10)<8){
+          this.mailact = this.amount
         }
       },
       clickCheckBoxEvent(){
@@ -495,6 +537,7 @@
           closeCallBack: (data) => {
             if (data) {
               console.log(data)
+              this.fixOrderMaterial2 = []
               let insertDate
               let item
               for(let i in data){
@@ -527,6 +570,7 @@
                 item.noEdit = item.splitVal=='1'?'1':''//散件拆分单位是否可以编辑
                 item.stateVal = item.commit=='0'?'未提交':'已提交至车间'
                 this.fixOrderMaterial.unshift(item)
+                this.fixOrderMaterial2.push(item)
               }
               for(let a in this.fixOrderMaterial){
                 this.fixOrderMaterial[a].index = (Number(a)+1)
@@ -607,10 +651,12 @@
           })
         }
       },
-      amountOfAccessories(){//计算维修配件
+      amountOfAccessories(type,value){//计算维修配件
         setTimeout(()=>{
           this.partsMoney = []
+          let partsMoney = []
           let money = 0
+          let money2 = 0
           for(let o in this.fixOrderMaterial){
             let item = this.fixOrderMaterial[o]
             this.partsMoney.push(item.splitVal=='1'?accMul(Number(item.price),Number(item.quantity))+'':accMul(Number(item.price),Number(item.mdo))+'')
@@ -623,7 +669,20 @@
           }else{
             this.isDelMater = ''
           }
+
           this.amount = money.toFixed(2)
+          if(type!='1'){
+            for(let i in this.fixOrderMaterial2){
+              let item = this.fixOrderMaterial[i]
+              partsMoney.push(item.splitVal=='1'?accMul(Number(item.price),Number(item.quantity))+'':accMul(Number(item.price),Number(item.mdo))+'')
+            }
+            for(let p in partsMoney){
+              money2 += Number(partsMoney[p])
+            }
+            this.mailact = (Number(money2)+Number(this.mailact)).toFixed(2)
+          }else{
+            this.mailact = (Number(this.mailact)-Number(value)).toFixed(2)
+          }
         },0)
       },
       lookOverMaterials(item,name){
@@ -673,21 +732,22 @@
               isDel:'1'
             },
             call: (data) => {
+              this.list.splice(index,1)
+              let money = 0
+              let num = 0
+              for(let i in this.list){
+                money = Number(this.list[i].quantity)*Number(this.list[i].price)
+                num+=money
+              }
+              this.money = num
               // if(data.type==0){
-                this.$dialog.alert({
-                  tipValue: '删除成功',
-                  closeCallBack: ()=>{
-                    this.list.splice(index,1)
-                    let money = 0
-                    let num = 0
-                    for(let i in this.list){
-                      money = Number(this.list[i].quantity)*Number(this.list[i].price)
-                      num+=money
-                    }
-                    this.money = num
-                    // this.initData()
-                  }
-                })
+              //   this.$dialog.alert({
+              //     tipValue: '删除成功',
+              //     closeCallBack: ()=>{
+              //
+              //       // this.initData()
+              //     }
+              //   })
               // }
             }
           })
@@ -699,19 +759,23 @@
               isDel:'1'
             },
             call: (data) => {
+              this.list2.splice(index,1)
+              let money = 0
+              let money2 = 0
+              for(let i in this.list2){
+                money+=Number(this.list2[i].money)
+                money2+=Number(this.list2[i].discount)
+              }
+              this.productMoney = money
+              this.productact = money2
               // if(data.type==0){
-                this.$dialog.alert({
-                  tipValue: '删除成功',
-                  closeCallBack: ()=>{
-                    this.list2.splice(index,1)
-                    let money = 0
-                    for(let i in this.list2){
-                      money+=Number(this.list2[i].money)
-                    }
-                    this.productMoney = money
-                    // this.initData()
-                  }
-                })
+              //   this.$dialog.alert({
+              //     tipValue: '删除成功',
+              //     closeCallBack: ()=>{
+              //
+              //       // this.initData()
+              //     }
+              //   })
               // }else if(data.type=='2'){
               //   this.list2.splice(index,1)
               // }
@@ -725,23 +789,24 @@
               },
               call: (data) => {
                 if(data.type=='0'){
-                  this.$dialog.alert({
-                    tipValue: '删除成功',
-                    closeCallBack: ()=>{
-                      this.fixOrderMaterial.splice(index,1)
-                      setTimeout(()=>{
-                        for(let i in this.fixOrderMaterial){
-                          this.fixOrderMaterial[i].index = (Number(i)+1)+''
-                        }
-                      },0)
-                      if(this.fixOrderMaterial.length==0){
-                        this.isDelMater = '1'
-                      }else{
-                        this.isDelMater = ''
-                      }
-                      this.amountOfAccessories()
+                  this.amountOfAccessories('1',this.fixOrderMaterial[index].money)
+                  this.fixOrderMaterial.splice(index,1)
+                  setTimeout(()=>{
+                    for(let i in this.fixOrderMaterial){
+                      this.fixOrderMaterial[i].index = (Number(i)+1)+''
                     }
-                  })
+                  },0)
+                  if(this.fixOrderMaterial.length==0){
+                    this.isDelMater = '1'
+                  }else{
+                    this.isDelMater = ''
+                  }
+                  // this.$dialog.alert({
+                  //   tipValue: '删除成功',
+                  //   closeCallBack: ()=>{
+                  //
+                  //   }
+                  // })
                 }
               }
           })
@@ -873,6 +938,7 @@
             title:'添加工单详情',
             closeCallBack:(data) =>{
               if (data) {
+                console.log(data)
                 let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.fixOrderMaterial.length, 1000)))
                 this.list2.unshift({
                   id:data.id,
@@ -883,6 +949,7 @@
                   discount:data.discount,//折扣价
                   money:data.money,
                   category:data.category,
+                  productbase:data.baseprice,//成本价
                   departid:data.departid,
                   direction:data.direction,
                   orderid:this.ownerID,
@@ -897,11 +964,13 @@
                 })
 
                 let money = 0
+                let money2 = 0
                 for(let i in this.list2){
                   money+=Number(this.list2[i].money)
+                  money2+=Number(this.list2[i].discount)
                 }
                 this.productMoney = money
-
+                this.productact = money2
               }
             }
           })
@@ -952,14 +1021,20 @@
                 title:'编辑工单详情',
                 closeCallBack:(data) =>{
                   if (data) {
+                    console.log(data)
                     item.remark = data.remark
                     item.money = data.money
                     item.teamid = data.teamid
+                    item.discount = data.discount
                     let money = 0
+                    let money2 = 0
                     for(let i in this.list2){
                       money+=Number(this.list2[i].money)
+                      money2+=Number(this.list2[i].discount)
                     }
                     this.productMoney = money
+                    this.productact = money2
+
                     // this.initData(false)
                   }
                 }
@@ -1175,15 +1250,23 @@
               incomePlan:this.money,//计划收入
               productMoney:this.productMoney,//项目金额 = 实际支出(当前)
 
+              mailact:this.mailact,//配件实际金额
+              maildis:(Number(this.amount)-Number(this.mailact)),//配件优惠金额
+              mailshen:this.mailact,//配件申请优惠金额
+              productact:this.productact,//项目实际金额
+              productdis:(Number(this.productMoney)-Number(this.productact)),//项目优惠金额
+              productshen:this.productact,//工项申请优惠金额
+
               workDate:this.workDate,//发生日期
               endDate:this.endDate,//预计交车时间
               category:this.category,//维修类型
               remark:this.remark,//备注
               state:this.workOrderState,//状态
               receptionid:this.id,//接待单id
-              // discountstate:'0',//优惠金额申请状态 ：0，优惠金额申请初始状态，1优惠金额申请完成状态
+              discountstate:'1',//优惠金额申请状态 ：0，优惠金额申请初始状态，1优惠金额申请完成状态
+              maildiscountstate:'1', //配件优惠金额申请状态
               // discountmoney:this.discountmoney,//折扣优惠金额（合计金额-客户实际付款金额）
-              // actualmoney:this.actualmoney,//客户实际付款金额
+              actualmoney:Number(this.productact)+Number(this.mailact),//客户实际付款金额
               fix:{//定损单
                 category:this.category,//维修类型
                 id:this.fixID,
@@ -1258,15 +1341,23 @@
               incomePlan:this.money,//计划收入
               productMoney:this.productMoney,//项目金额 = 实际支出(当前)
 
+              mailact:this.mailact,//配件实际金额
+              maildis:(Number(this.amount)-Number(this.mailact)),//配件优惠金额
+              mailshen:this.mailact,//配件申请优惠金额
+              productact:this.productact,//项目实际金额
+              productdis:(Number(this.productMoney)-Number(this.productact)),//项目优惠金额
+              productshen:this.productact,//工项申请优惠金额
+
               workDate:this.workDate,//发生日期
               endDate:this.endDate,//预计交车时间
               category:this.category,//维修类型
               remark:this.remark,//备注
               state:this.workOrderState,//状态
               receptionid:this.id,//接待单id
-              // discountstate:'0',//优惠金额申请状态 ：0，优惠金额申请初始状态，1优惠金额申请完成状态
+              discountstate:'1',//优惠金额申请状态 ：0，优惠金额申请初始状态，1优惠金额申请完成状态
+              maildiscountstate:'1', //配件优惠金额申请状态
               // discountmoney:this.discountmoney,//折扣优惠金额（合计金额-客户实际付款金额）
-              // actualmoney:this.actualmoney,//客户实际付款金额
+              actualmoney:Number(this.productact)+Number(this.mailact),//客户实际付款金额
               fix:{//定损单
                 category:this.category,//维修类型
                 id:this.fixID,
@@ -1453,6 +1544,26 @@
               this.formTypeList = data.formTypePsd.list//定损单详情的类型
               this.actualmoney = data.fixorder.actualmoney
               this.discountmoney = data.fixorder.discountmoney
+
+              console.log(data.fixorder.mailact,data.fixorder.maildis)
+
+
+              this.$nextTick(()=>{
+                console.log(this.$refs.actualmoneyFocus.value,this.$refs.mailactFocus.value)
+                setTimeout(()=>{
+                  this.mailact = data.fixorder.mailact//配件实际金额
+                },0)
+                // alert(this.mailact)
+                this.maildis = data.fixorder.maildis//配件优惠金额
+                // alert(this.maildis)
+                this.productact = data.fixorder.productact//项目实际金额
+                // alert(this.productact)
+                this.productdis = data.fixorder.productdis//项目优惠金额
+                // alert(this.productdis)
+                this.actualmoneyInput()
+                this.mailactInput()
+              })
+
               this.content = data
 
               if(data.fixorder.expend!=''){
@@ -1505,6 +1616,7 @@
               }else{
                 this.summaryid = data.fixorder.summary.id//工单id
               }
+
               if(this.state=='5'){
 
                 this.ownerID = data.fixorder.id
@@ -1520,6 +1632,14 @@
 
                 this.list = data.fixorder.fixedForm.list//定损单
                 this.list2 = data.fixorder.fixOrderDetail.list//工单详情
+                let money = 0
+                let money2 = 0
+                for(let i in this.list2){
+                  money+=Number(this.list2[i].money)
+                  money2+=Number(this.list2[i].discount)
+                }
+                this.productMoney = money
+                this.productact = money2
                 this.category = data.fixorder.fixedForm.category//维修类型
                 if(this.category=='1'||this.category=='2'){
                   this.sub = ''
@@ -1559,6 +1679,16 @@
                 }
               ]
             }
+            if(data.ordertype!=''&&data.ordernum!=''&&data.ordernumid!=''){
+              this.category = data.fixorder.fixedForm.category//维修类型
+              // this.sub = data.fixorder.sub//保险公司
+              for(let i in this.subList){
+                if(this.subList[i].id == data.fixorder.sub){
+                  this.sub = i
+                }
+              }
+            }
+
             this.unitType = data.unitType
             this.createName = data.fixorder.createName
             this.insertDate = data.fixorder.insertDate

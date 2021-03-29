@@ -24,8 +24,11 @@
             <div class=""  :style="{color:colors}">
               <span style="font-weight: bold">合计: </span>
               <span v-html="segmentationss"></span>
-              <span></span>
-              <span></span>
+              <span v-if="month!=13" style="color: #7EE07E;margin-left: 5px;"> 目标: </span>
+              <span v-html="tenThousand(targetlist[0])" style="color: #7EE07E;" v-if="month!=13"></span>
+
+              <span v-if="month!=13" style="color: #F26A5D;margin-left: 5px;"> 完成度: </span>
+              <span v-html="tenThousand(completionlist[0])" style="color: #F26A5D;" v-if="month!=13"></span>
             </div>
           </div>
         </div>
@@ -82,7 +85,8 @@
         unitOrPersonList:'',
         text:'',
         colorList:['#8e9eab','#eeef20','#00f5d4','#C4E0E5','#00bbf9','#ffd194', '#90e0ef','#9b5de5','#f3ffbd','#70d6ff','#deaaff','#f7d9c4'],//颜色数组
-
+        targetlist:[],
+        completionlist:[],
       }
     },
     computed:{
@@ -103,6 +107,13 @@
           this.allMoney=Number(this.allMoney)+Number(this.moneyList[i].money)
         }
         return "  ¥"+tenThousandFormatHtml(parseFloat(this.allMoney).toFixed(2)+'')
+      },
+      tenThousand(){
+        return function (e) {
+          // console.log(e)
+          // console.log(" ¥"+tenThousandFormatHtml(e+''))
+          return " ¥"+tenThousandFormatHtml(e+'')
+        }
       }
     },
     methods: {
@@ -132,7 +143,6 @@
           this.vehicleBrand = ''
           this.unitOrPersonList = ''
         }
-
       },
       selectMonthEvent(data,item){
         this.day = []
@@ -168,11 +178,15 @@
         }
         that.day = []
         that.money = []
+        that.completionlist=[]
+        that.targetlist=[]
         if(that.month!='13'){//不是整年时
           that.title = that.year + '年' + that.month + '月'
           for (let i = 0; i < list.length; i++) {
             that.day.push(list[i].day)
             that.money.push(list[i].money)
+            that.targetlist.push(list[i].target)
+            that.completionlist.push(list[i].completion)
           }
 
         }else{//整年时
@@ -180,6 +194,8 @@
           for (let i = 0; i < list.length; i++) {
             that.day.push(that.year + '年' + list[i].day + '月')
             that.money.push(list[i].money)
+            that.targetlist.push(list[i].target)
+            that.completionlist.push(list[i].completion)
           }
         }
       },
@@ -199,7 +215,14 @@
             },
             formatter(params){
               let day = params[0].axisValue.indexOf('年')==-1?that.title +params[0].axisValue+'日':params[0].axisValue
-              let label = '日期 ' +  day +'</br>' + '金额 ' + tenThousandFormatHtml(params[0].data+'')
+              let label
+              if(that.month==13){
+                label = '日期 ' +  day +'</br>' + '金额 ' + tenThousandFormatHtml(params[0].data+'')
+                      +'</br>' + '目标:' +' '+ tenThousandFormatHtml(that.targetlist[params[0].dataIndex]+'')
+                      +'</br>' + '完成度:' +' '+ tenThousandFormatHtml(that.completionlist[params[0].dataIndex]+'')
+              }else{
+                label = '日期 ' +  day +'</br>' + '金额 ' + tenThousandFormatHtml(params[0].data+'')
+              }
               return label
             }
           },
@@ -208,7 +231,7 @@
           // },
           title: {
             text: that.title,
-            x:560,
+            x:420,
             y:20,
           },
           toolbox: {
@@ -416,6 +439,8 @@
             this.backupsList = this.moneyList.concat()//将数据集合赋给备份的集合中 深拷贝
             let money = []
             let day  = []
+            this.targetlist=[]
+            this.completionlist=[]
             let maxSchedule = ''
             let minSchedule = ''
             if(this.month!=='13'){
@@ -460,6 +485,9 @@
               for(let i in data){
                 this.day.push(this.year + '年' + data[i].day + '月')
                 this.money.push(data[i].money)
+                this.targetlist.push(data[i].target)
+                this.completionlist.push(data[i].completion)
+
                 if(data[i].money!='0'){
                   money.push(data[i].money)
                   day.push(data[i].day)
@@ -615,7 +643,7 @@
     position: absolute;
     z-index: 999;
     top: 112px;
-    left: 670px;
+    left: 540px;
   }
   .posit span{
     font-size: 16px;

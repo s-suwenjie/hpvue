@@ -24,8 +24,11 @@
           <div class=""  :style="{color:colors}">
             <span style="font-weight: bold">合计: </span>
             <span v-html="totalMoney"></span>
-            <span></span>
-            <span></span>
+            <span v-if="month!=13" style="color: #7EE07E;margin-left: 5px;"> 目标: </span>
+            <span v-html="tenThousand(targetlist[0])" style="color: #7EE07E;" v-if="month!=13"></span>
+
+            <span v-if="month!=13" style="color: #F26A5D;margin-left: 5px;"> 完成度: </span>
+            <span v-html="tenThousand(completionlist[0])" style="color: #F26A5D;" v-if="month!=13"></span>
           </div>
         </div>
       </div>
@@ -89,6 +92,9 @@
         num:0,
 
         MoneyOne:0,
+
+        targetlist:[],
+        completionlist:[],
       }
     },
     computed:{
@@ -127,6 +133,13 @@
         this.num++
 
         return "  ¥"+tenThousandFormatHtml(num.toFixed(2)+'')
+      },
+      tenThousand(){
+        return function (e) {
+          // console.log(e)
+          // console.log(" ¥"+tenThousandFormatHtml(e+''))
+          return " ¥"+tenThousandFormatHtml(e+'')
+        }
       }
     },
     methods: {
@@ -199,11 +212,15 @@
 
         that.day = []
         that.money = []
+        that.completionlist=[]
+        that.targetlist=[]
         if(that.month!='13'){//不是整年时
           that.title = that.year + '年' + that.month + '月'
           for (let i = 0; i < list.length; i++) {
             that.day.push(list[i].day)
             that.money.push(list[i].money)
+            that.targetlist.push(list[i].target)
+            that.completionlist.push(list[i].completion)
           }
           // console.log(that.day)
           // console.log(that.money)
@@ -213,6 +230,8 @@
           for (let i = 0; i < list.length; i++) {
             that.day.push(that.year + '年' + list[i].day + '月')
             that.money.push(list[i].money)
+            that.targetlist.push(list[i].target)
+            that.completionlist.push(list[i].completion)
           }
         }
       },
@@ -233,6 +252,8 @@
         // console.log( list )
         that.day = []
         that.money1 = []
+        that.completionlist=[]
+        that.targetlist=[]
 
 
         if(that.month!='13'){//不是整年时
@@ -240,6 +261,8 @@
           for (let i = 0; i < list.length; i++) {
             that.day.push(list[i].day)
             that.money1.push(list[i].money1)
+            that.targetlist.push(list[i].target)
+            that.completionlist.push(list[i].completion)
           }
           // console.log(that.day)
           // console.log(that.money)
@@ -249,6 +272,8 @@
           for (let i = 0; i < list.length; i++) {
             that.day.push(that.year + '年' + list[i].day + '月')
             that.money1.push(list[i].money1)
+            that.targetlist.push(list[i].target)
+            that.completionlist.push(list[i].completion)
           }
         }
 
@@ -272,6 +297,8 @@
         that.day = []
         that.money1 = []
         that.money = []
+        that.completionlist=[]
+        that.targetlist=[]
 
         if(that.month!='13'){//不是整年时
           that.title = that.year + '年' + that.month + '月'
@@ -279,6 +306,8 @@
             that.day.push(list[i].day)
             that.money1.push(list[i].money1)
             that.money.push(list[i].money)
+            that.targetlist.push(list[i].target)
+            that.completionlist.push(list[i].completion)
           }
           // console.log(that.day)
           // console.log(that.money)
@@ -289,6 +318,8 @@
             that.day.push(that.year + '年' + list[i].day + '月')
             that.money1.push(list[i].money1)
             that.money.push(list[i].money)
+            that.targetlist.push(list[i].target)
+            that.completionlist.push(list[i].completion)
           }
         }
 
@@ -361,26 +392,34 @@
               let day = params[0].axisValue.indexOf('年')==-1?that.title +params[0].axisValue+'日':params[0].axisValue
               let label = '日期 ' +  day
               let main = ''
-              // console.log(params[0].data)
+
               if(params.length=='2'){
+                if(that.month=='13'){
+                  main = label
+                    +'</br>' + params[0].seriesName+': '+tenThousandFormatHtml(params[0].data+'')
+                    +'</br>' + params[1].seriesName+': '+tenThousandFormatHtml(params[1].data+'')
+                    +'</br>' + '总计金额:' +' '+ tenThousandFormatHtml((Number(params[0].data)+Number(params[1].data)).toFixed(2))
+                    +'</br>' + '目标:' +' '+ tenThousandFormatHtml(that.targetlist[params[0].dataIndex]+'')
+                    +'</br>' + '完成度:' +' '+ tenThousandFormatHtml(that.completionlist[params[0].dataIndex]+'')
+                }else{
+                  main = label
+                    +'</br>' + params[0].seriesName+': '+tenThousandFormatHtml(params[0].data+'')
+                    +'</br>' + params[1].seriesName+': '+tenThousandFormatHtml(params[1].data+'')
+                    +'</br>' + '总计金额:' +' '+ tenThousandFormatHtml((Number(params[0].data)+Number(params[1].data)).toFixed(2))
+                }
                 // console.log('00')
-                main = label
-                  +'</br>' + params[0].seriesName+': '+tenThousandFormatHtml(params[0].data+'')
-                  +'</br>' + params[1].seriesName+': '+tenThousandFormatHtml(params[1].data+'')
-                  +'</br>' + '总计金额:' +' '+ tenThousandFormatHtml((Number(params[0].data)+Number(params[1].data)).toFixed(2))
+
 
               }else if(params.length=='1'){
-                // console.log('11')
+
                 main = label+'</br>' + params[0].seriesName+': '+tenThousandFormatHtml(params[0].data+'')
               }
 
-              // console.log(params)
+
               return main
             }
           },
-          // legend: {
-          //   data: that.legendList
-          // },
+
           color:['#74ebd5','#ACB6E5'],
           legend: {
             data: ['保险理赔', '自费维修'],
@@ -389,7 +428,7 @@
           },
           title: {
             text: that.title,
-            x:560,
+            x:420,
             y:20,
           },
           toolbox: {
@@ -832,7 +871,8 @@
 
             for(let i in this.moneyList){
               this.moneyList[i].totalMoney =  (Number(this.moneyList[i].money)+Number(this.moneyList[i].money1)).toFixed(2)
-
+              this.completionlist.push(data[i].completion)
+              this.targetlist.push(data[i].target)
               if(this.moneyList[i].money+this.moneyList[i].money1 != 0){
                 num+=Number(this.moneyList[i].totalMoney)
                 key++
@@ -1027,6 +1067,7 @@
   .flex{
     display: flex;
     justify-content: space-between;
+    z-index: 10;
   }
   .insuranceCartogram{
     width: 95%;
@@ -1043,13 +1084,14 @@
     position: fixed;
     bottom: -4px;
     left: 50%;
+    z-index: 10;
     transform: translate(-50%,-50%);
   }
   .posit {
     /*font-weight: bold;*/
     position: absolute;
     top: 112px;
-    left: 670px;
+    left: 540px;
   }
   .posit span{
     font-size: 16px;
