@@ -8,7 +8,7 @@
           <div style="width: 3px;height: 20px;background-color: #49A9EA;margin-right: 5px;"></div>
           <div style="color: #999999;"> 年份：</div>
           <yhm-datebox type="year" :value="year" :isSm="true" @call="initPageData(false)" width="120" height="20"  position="b" id="year" style="margin-right: 10px"></yhm-datebox>
-          <yhm-radiofilter @initData="initPageData(false)" title="状态" :content="categoryPsd" all="0" id="categoryPsd"></yhm-radiofilter>
+          <yhm-radiofilter @initData="initPageData(false)" title="状态" :content="categoryPsd" all="1" id="categoryPsd"></yhm-radiofilter>
         </template>
 
         <template #choose>
@@ -65,7 +65,7 @@
         year:'',
         categoryPsd:{
           list:[],
-          value:'0',
+          value:'',
         }
       }
     },

@@ -4,8 +4,8 @@
       <template #title>基本信息</template>
       <template #control>
         <yhm-form-radio title="类型" width="1" ref="storageTypeRadio" rule="#" @call="storageTypeClick" :select-list="storageTypeList" :value="storageType" id="storageType" ></yhm-form-radio>
-        <yhm-form-text title="商品名称" @repeatverify="nameVerifyEvent" ref="name" :value="name" id="name"></yhm-form-text>
-<!--        <yhm-form-text title="商品名称" subtitle="(英文)" :value="englishName" id="englishName"></yhm-form-text>-->
+        <yhm-form-text title="品名" @repeatverify="nameVerifyEvent" ref="name" :value="name" id="name"></yhm-form-text>
+        <yhm-form-text title="品名" subtitle="(英文)" :value="englishName" id="englishName"></yhm-form-text>
         <yhm-form-select title="计量单位" :value="unit" id="unit" @clear="clearUnit" @click="selectUnit" rule="R0000"></yhm-form-select>
 
         <!--<yhm-form-radio v-if="isSorck" title="适用车型" :select-list="stockTypeList" :value="stockType" id="stockType" ></yhm-form-radio>-->
@@ -23,8 +23,8 @@
       </template>
       <template #listHead>
         <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
-        <yhm-managerth title="规格型号"></yhm-managerth>
-        <yhm-managerth title="规格型号(英文)"></yhm-managerth>
+        <yhm-managerth title="料号"></yhm-managerth>
+        <yhm-managerth title="料号(英文)"></yhm-managerth>
         <yhm-managerth title="物品编号"></yhm-managerth>
         <yhm-managerth title="适用品牌"></yhm-managerth>
         <yhm-managerth title="适用车型"></yhm-managerth>
@@ -38,7 +38,8 @@
           <yhm-manager-td :value="item.englishName"></yhm-manager-td>
           <yhm-manager-td :value="item.productNumber"></yhm-manager-td>
 
-          <yhm-manager-td-psd :value="item.stockType" :list="stockTypeList"></yhm-manager-td-psd>
+          <yhm-manager-td-psd v-if="storageType==3" :value="item.stockType" :list="fixedAssetsList"></yhm-manager-td-psd>
+          <yhm-manager-td-psd v-else :value="item.stockType" :list="stockTypeList"></yhm-manager-td-psd>
           <yhm-manager-td :value="item.stockModel"></yhm-manager-td>
           <yhm-manager-td-money :value="item.price"></yhm-manager-td-money>
           <yhm-manager-td-operate>
@@ -66,7 +67,7 @@
     mixins: [formmixin],
     data(){
       return{
-        name:'',          //商品名称
+        name:'',          //商品名称(品名)
         unitID:'',        //计量单位ID
         unit:'',          //计量单位
         englishName:'',   //商品名称英文
@@ -83,6 +84,7 @@
 
 
         modelDetails:[],  //规格型号数据
+        fixedAssetsList:[],
 
         showModel:false,  //是否显示规格型号信息
         empty: true,       //规格型号为空
@@ -194,7 +196,7 @@
         this.$dialog.OpenWindow({
           width: 1050,
           height: 600,
-          url:'/modelForm?id=' + id + "&ownerID=" + this.id,
+          url:'/modelForm?id=' + id + "&ownerID=" + this.id+'&state='+this.storageType,
           title:title,
           closeCallBack:(data) =>{
             if (data) {
@@ -265,8 +267,10 @@
         url: '/Basic/initProductFrom',
         all: (data) => {
           //添加查看的时候都需要的代码
+
           this.storageTypeList = data.storageTypePsd.list
-          this.storageType = data.storageTypePsd.value
+          // this.storageType = data.storageTypePsd.value
+          this.fixedAssetsList = data.fixedAssetsPsd.list
           this.stockTypeList = data.stockTypePsd.list
 
 
@@ -282,6 +286,7 @@
           this.name = data.name
           this.unitID = data.unitID
           this.unit = data.unit
+          this.storageType=data.storageType
           this.englishName=data.englishName
           this.splitDeliveryUnitID=data.splitDeliveryUnitID
           this.splitDeliveryUnit=data.splitDeliveryUnit

@@ -38,6 +38,7 @@
           <!--          <yhm-managerth width="220" title="结束时间"></yhm-managerth>-->
           <yhm-managerth width="110" title="预计推送费"></yhm-managerth>
           <yhm-managerth width="110" title="已结推送费"></yhm-managerth>
+          <yhm-managerth width="110" title="审批中的推送费"></yhm-managerth>
           <yhm-managerth width="110" title="未结推送费"></yhm-managerth>
           <yhm-managerth width="180" title="操作"></yhm-managerth>
         </template>
@@ -50,22 +51,21 @@
             <yhm-manager-td v-else :value="item.unitshort"></yhm-manager-td>
             <!--            <yhm-manager-td-date :value="item.startDate"></yhm-manager-td-date>-->
             <!--            <yhm-manager-td-date :value="item.endDate"></yhm-manager-td-date>-->
-            <yhm-manager-td-center @mouseover="invoiceImg(item,'2')" @mouseout="invoiceImgHide(item,'2')" :value="item.selfrate==''?'-----':item.selfrate + '%'"></yhm-manager-td-center>
-            <yhm-manager-td-center @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :value="item.noselfrate==''?'-----':item.noselfrate + '%'"></yhm-manager-td-center>
+            <yhm-manager-td-center @click="viewTheimage(item)" :value="item.selfrate==''?'-----':item.selfrate + '%'"></yhm-manager-td-center>
+            <yhm-manager-td-center @click="viewTheimage(item)" :value="item.noselfrate==''?'-----':item.noselfrate + '%'"></yhm-manager-td-center>
 
             <yhm-manager-td-center v-if="item.type==''" value="------"></yhm-manager-td-center>
             <yhm-manager-td-psd v-else :value="item.type" :list="typeList"></yhm-manager-td-psd>
             <yhm-manager-td-center :value="item.sum" @click="settleAccounts(item)"></yhm-manager-td-center>
-
-            <yhm-manager-td-money style="color:#fd6802" @click="settleAccounts(item)" :value="item.expend==''?'0':item.expend"></yhm-manager-td-money>
+            <yhm-manager-td-money style="color:#fd6802" @click="settleAccounts(item)" :value="item.pendingmoney==''?'0':item.pendingmoney"></yhm-manager-td-money>
 
             <!--            <yhm-manager-td-center :value="item.rate+'%'"></yhm-manager-td-center>-->
             <!--            <yhm-manager-td-date :value="item.startDate"></yhm-manager-td-date>-->
             <!--            <yhm-manager-td-date :value="item.endDate"></yhm-manager-td-date>-->
-            <yhm-manager-td-money style="color:#2193B0" :value="item.pending==''?'0':item.pending"></yhm-manager-td-money>
-
-            <yhm-manager-td-money style="color:#2a599e" :value="item.pending3==''?'0':item.pending3"></yhm-manager-td-money>
-            <yhm-manager-td-money style="color:#f00" :value="item.pending2==''?'0':item.pending2"></yhm-manager-td-money>
+            <yhm-manager-td-money @click="settleAccounts(item,'3')" style="color:#2193B0" :value="item.pending==''?'0':item.pending"></yhm-manager-td-money>
+            <yhm-manager-td-money @click="settleAccounts(item,'2')" style="color:#2a599e" :value="item.pending3==''?'0':item.pending3"></yhm-manager-td-money>
+            <yhm-manager-td-money @click="settleAccounts(item,'1')" style="color:#49a9ea" :value="item.pending4==''?'0':item.pending4"></yhm-manager-td-money>
+            <yhm-manager-td-money @click="settleAccounts(item)" style="color:#f00" :value="item.pending2==''?'0':item.pending2"></yhm-manager-td-money>
             <yhm-manager-td-operate>
               <yhm-manager-td-operate-button @click="listView(item)" value="编辑" icon="i-btn-applicationSm" color="#be08e3"></yhm-manager-td-operate-button>
               <yhm-manager-td-operate-button @click="settleAccounts(item)" value="结账" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
@@ -77,23 +77,25 @@
           <span class="m_listNoData" v-show="empty">暂时没有数据</span>
         </template>
         <template #total>
-          <div class="listTotalCrente m_list" style="width: 602px;margin: auto;">
+          <div class="listTotalCrente m_list" style="width: 720px;margin: auto;">
             <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
               <thead>
               <tr>
-                <yhm-managerth style="width: 100px;" before-color="#000" title="" before-title="有效工单条目" ></yhm-managerth>
-                <yhm-managerth style="width: 100px;" before-color="#fd6802" title="" before-title="已产生营业额"></yhm-managerth>
-                <yhm-managerth style="width: 100px;" before-color="#2193B0" title="" before-title="预计推送费"></yhm-managerth>
-                <yhm-managerth style="width: 100px;" before-color="#2a599e" title="" before-title="已结推送费"></yhm-managerth>
-                <yhm-managerth style="width: 100px;" before-color="#f00" title="" before-title="未结推送费"></yhm-managerth>
+                <yhm-managerth style="width: 120px;" before-color="#000" title="" before-title="有效工单条目" ></yhm-managerth>
+                <yhm-managerth style="width: 120px;" before-color="#fd6802" title="" before-title="已产生营业额"></yhm-managerth>
+                <yhm-managerth style="width: 120px;" before-color="#2193B0" title="" before-title="预计推送费"></yhm-managerth>
+                <yhm-managerth style="width: 120px;" before-color="#2a599e" title="" before-title="已结推送费"></yhm-managerth>
+                <yhm-managerth style="width: 120px;" before-color="#49a9ea" title="" before-title="审批中的推送费"></yhm-managerth>
+                <yhm-managerth style="width: 120px;" before-color="#f00" title="" before-title="未结推送费"></yhm-managerth>
               </tr>
               </thead>
               <tbody>
               <tr>
                 <yhm-manager-td-rgt style="color: #000;" :value="sum+''"></yhm-manager-td-rgt>
-                <yhm-manager-td-money style="color: #fd6802;" :value="sumexpend"></yhm-manager-td-money>
+                <yhm-manager-td-money style="color: #fd6802;" :value="sumpendingmoney"></yhm-manager-td-money>
                 <yhm-manager-td-money style="color: #2193B0;" :value="sumpending"></yhm-manager-td-money>
                 <yhm-manager-td-money style="color: #2a599e;" :value="sumpending2"></yhm-manager-td-money>
+                <yhm-manager-td-money style="color: #49a9ea;" :value="sumpending4"></yhm-manager-td-money>
                 <yhm-manager-td-money style="color: #f00;" :value="sumpending3"></yhm-manager-td-money>
               </tr>
               </tbody>
@@ -105,9 +107,9 @@
           <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
         </template>
       </yhm-managerpage>
-      <div class="invoiceImgView" :class="{'invoiceImgView2':viewImgShow2}" v-show="viewImgShow">
-        <img :src="viewImg" alt="">
-      </div>
+<!--      <div class="invoiceImgView" :class="{'invoiceImgView2':viewImgShow2}" v-show="viewImgShow">-->
+<!--        <img :src="viewImg" alt="">-->
+<!--      </div>-->
     </div>
 </template>
 
@@ -118,9 +120,9 @@
     mixins: [managermixin],
     data(){
       return{
-        viewImg:'',
-        viewImgShow:false,
-        viewImgShow2:false,
+        // viewImg:'',
+        // viewImgShow:false,
+        // viewImgShow2:false,
         typeList:[],//有效日期
         startDateStr:'',//开始时间
         endDateStr:'',//结束时间
@@ -148,6 +150,7 @@
         sumpending:"0",
         sumpending2:'0',
         sumpending3:'0',
+        sumpending4:'0',
         sumpendingmoney:"0"
       }
     },
@@ -168,20 +171,22 @@
           this.initPageData(false)
         }
       },
+      viewTheimage(item){
+        window.open('/UploadFile/'+ item.photoList[0].tag +'/' + item.photoList[0].storeName)
+      },
       //显示发票图片
       invoiceImg(item,type){
-        console.log(item)
-        if(type=='2'){
-          this.viewImgShow2 = true
-        }else{
-          this.viewImgShow2 = false
-        }
-        if(item.photoList.length >= '1') {
-          if(/\.(gif|jpg|jpeg|png|GIF|JPG|PNG|svg)$/.test(item.photoList[0].storeName)){
-            this.viewImgShow = true
-            this.viewImg =  '/UploadFile/'+ item.photoList[0].tag +'/' + item.photoList[0].storeName
-          }
-        }
+        // if(type=='2'){
+        //   this.viewImgShow2 = true
+        // }else{
+        //   this.viewImgShow2 = false
+        // }
+        // if(item.photoList.length >= '1') {
+        //   if(/\.(gif|jpg|jpeg|png|GIF|JPG|PNG|svg)$/.test(item.photoList[0].storeName)){
+        //     this.viewImgShow = true
+        //     this.viewImg =  '/UploadFile/'+ item.photoList[0].tag +'/' + item.photoList[0].storeName
+        //   }
+        // }
       },
       //隐藏发票图片
       invoiceImgHide(item){
@@ -228,12 +233,18 @@
         }
 
       },
-      settleAccounts(item){
+      settleAccounts(item,type){
+        let url = '/settleAccountsForm?id=' + item.unitID
+        let title = '结账信息'
+        if(type=='1'||type=='2'||type=='3'){
+          url = '/settleAccountsForm?paymentType='+type+'&id=' + item.unitID
+          title = '付款明细'
+        }
         this.$dialog.OpenWindow({
           width: 1050,
           height: 720,
-          url:'/settleAccountsForm?id=' + item.unitID,
-          title:'结账信息',
+          url:url,
+          title:title,
           closeCallBack:(data) =>{
             // if (data) {
             this.initPageData(false)
@@ -260,10 +271,12 @@
           // 页面初始化是需要的参数
           params = {
             init:true,
+            stateStr:100,
           }
         } else {
           // 页面非初始化时需要的参数
           params = {
+            stateStr:100,
             dateType:this.dateTypeList.value=='9'?'':this.dateTypeList.value,
             startDateStr:this.startDateStr,//开始时间
             endDateStr:this.endDateStr,//结束时间
@@ -281,6 +294,7 @@
             this.sumpending = data.sumpending
             this.sumpending2 = data.sumpending2
             this.sumpending3 = data.sumpending3
+            this.sumpending4 = data.sumpending4
             this.sumpendingmoney = data.sumpendingmoney
           },
           init: (data) => {
@@ -302,7 +316,7 @@
     top: 0;
     right: 0;
     bottom: 0;
-    left: -540px;
+    left: -420px;
     margin: auto;
     box-shadow: 0 0 15px #333;
     border-radius: 8px;
@@ -311,6 +325,6 @@
     /*overflow: hidden;*/
   }
   .invoiceImgView2{
-    left: -710px;
+    left: -600px;
   }
 </style>

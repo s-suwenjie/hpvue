@@ -11,24 +11,23 @@
         <template #listHead>
           <yhm-managerth style="width: 40px;" title="选择" ></yhm-managerth>
           <yhm-managerth style="width: 40px;" title="查看" ></yhm-managerth>
-          <yhm-managerth title="单位名称"></yhm-managerth>
-<!--          <yhm-managerth width="160" title="单位缩写"></yhm-managerth>-->
+          <yhm-managerth  style="width: 100px;"  title="别名" value="shortName"></yhm-managerth>
+          <yhm-managerth  title="汇款公司名称" value="unit"></yhm-managerth>
+          <yhm-managerth  title="回款公司名称" value="incomeUnit"></yhm-managerth>
         </template>
         <template #listBody >
           <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
             <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-            <yhm-manager-td @click="lookOverUnit(item)"  :value="item.unitname"></yhm-manager-td>
-
-<!--            <yhm-manager-td v-if="item.unitshort==''||item.unitshort==null" value="-&#45;&#45;&#45;&#45;"></yhm-manager-td>-->
-<!--            <yhm-manager-td v-else :value="item.unitshort"></yhm-manager-td>-->
+            <yhm-manager-td :value="item.shortName" :color="item.deputyColor" ></yhm-manager-td>
+            <yhm-manager-td :value="item.unit"></yhm-manager-td>
+            <yhm-manager-td :value="item.incomeUnit"></yhm-manager-td>
           </tr>
         </template>
         <!--数据空提示-->
         <template #empty>
           <span class="m_listNoData" v-show="empty">暂时没有数据</span>
         </template>
-
         <!--分页控件-->
         <template #pager>
           <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
@@ -44,8 +43,6 @@
     mixins: [managermixin],
     data(){
       return{
-        content:[],
-        list:[],
 
       }
     },
@@ -106,22 +103,6 @@
           all: (data) => {
             // 不管是不是初始化都需要执行的代码
             this.content = data.content
-
-
-            // this.ajaxJson({
-            //   url: '/Basic/getUnitInsuranceManager',
-            //   data:params,
-            //   call: (da) => {
-                // this.content = da.content
-                // for(let i in this.content){
-                //   for(let j in this.list){
-                //    if(this.content[i].unitID==this.list[j].unitID){
-                //
-                //    }
-                //   }
-                // }
-              // }
-            // })
           },
           init: (data) => {
           }

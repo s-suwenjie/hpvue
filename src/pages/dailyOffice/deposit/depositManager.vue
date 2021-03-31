@@ -63,7 +63,7 @@
               <yhm-manager-td-operate-button  v-show="isMain==='1'" @click="printFund(item)" value="打印单据" icon="i-btn-print" color="#333"></yhm-manager-td-operate-button>
               <yhm-manager-td-operate-button v-show="item.state === '0'&&isMain==='1'" @click="bankDetailSave(item)" value="入账" color="#49a9ea"></yhm-manager-td-operate-button>
               <yhm-manager-td-operate-button v-show="item.state === '1'&&item.useMoney!=='0.00'&&isMain==='0'" @click="clickRefundMoney(item)" icon="i-redeem" value="退款" icon-color="#f00" color="red" ></yhm-manager-td-operate-button>
-              <yhm-manager-td-operate-button v-show="item.state === '1'&&item.useMoney!=='0.00'&&isMain==='0'" @click="isFinish(item)" icon="i-check" value="完成" color="#49a9ea" ></yhm-manager-td-operate-button>
+              <yhm-manager-td-operate-button v-show="item.state === '1'&&item.useMoney!=='0.00'&&isMain==='1'" @click="isFinish(item)" icon="i-check" value="完成" color="#49a9ea" ></yhm-manager-td-operate-button>
             </yhm-manager-td-operate>
           </tr>
         </template>

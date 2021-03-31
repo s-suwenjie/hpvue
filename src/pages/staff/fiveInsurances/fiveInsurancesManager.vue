@@ -11,6 +11,7 @@
         <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/fiveinsurancesManager'}">设置五险缴纳百分比</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/fiveInsurancesBaseManager'}">设置五险基数</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/telephoneSubsidyManager'}">设置话费补助</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/wageWorkingManager'}">设置工龄工资基数</router-link>
       </template>
       <template #operate>
         <!-- 操作区-->

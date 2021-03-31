@@ -3,9 +3,9 @@
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
-        <yhm-form-radio title="商品类型" ref="stockOutFormRadio" :no-edit="list.length>0?true:false" rule="#" :select-list="categoryList" @call="motorcycleTypeRadio" :value="category" id="category"></yhm-form-radio>
+        <yhm-form-radio title="商品类型" ref="stockOutFormRadio" :no-edit="list.length>0?true:false" rule="#" :select-list="categoryList" @call="number" :value="category" id="category"></yhm-form-radio>
         <yhm-form-text title="出库编号" no-edit="1" :value="code" id="code"></yhm-form-text>
-        <yhm-form-radio title="适用车型" ref="stockOutFormRadio2" width="1" @call="motorcycleTypeRadio"  rule="#" :select-list="applicableModelsList" :value="applicableModels" id="applicableModels" :no-edit="list.length>0?true:false"></yhm-form-radio>
+        <yhm-form-radio :title="category=='3'?'固定资产':'适用车型'" ref="stockOutFormRadio2" width="1" @call="number"  rule="#" :select-list="category=='3'?templeList:applicableModelsList" :value="applicableModels" id="applicableModels" :no-edit="list.length>0?true:false"></yhm-form-radio>
         <yhm-form-date title="出库日期" :min="minWorkDate" :value="workDate" id="workDate" rule="R0000"></yhm-form-date>
         <!--<yhm-form-select title="出库人员" @click="selectWareHouser" @clear="clearWareHouser()" :value="wareHouser" id="wareHouser" rule="R0000"></yhm-form-select>-->
         <yhm-form-text title="出库人员" no-edit="1" :value="wareHouser" id="wareHouser"></yhm-form-text>
@@ -105,6 +105,7 @@
         categoryList:[],
         applicableModels: '',
         applicableModelsList: [],
+        templeList:[],//行政
         minWorkDate: '',
         workDate: '',            //出库日期
         wareHouserId: '',        //出库人ID
@@ -396,6 +397,7 @@
             this.category=data.categoryPsd.value
             this.applicableModelsList=data.applicableModelsPsd.list
             this.applicableModels=data.applicableModelsPsd.value
+            this.templeList = data.templePsd.list
             this.wareHouser = sessionStorage.getItem('____currentUser')
             this.wareHouserId = sessionStorage.getItem('____currentUserID')
             if(data.updateName){
@@ -434,10 +436,6 @@
             }
           }
         })
-      },
-      clearWareHouser(){},
-      motorcycleTypeRadio(){
-        this.number()
       },
       //----------------------
       selectWareHouser(){
@@ -595,6 +593,7 @@
         this.ajaxJson({
           url:'/stock/stockout/initFormCode',
           data:params,
+          loading:'0',
           call: (data) => {
             this.code=data.message
           }

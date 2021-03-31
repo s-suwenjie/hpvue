@@ -3,12 +3,13 @@
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
-        <yhm-form-radio title="付款性质" @call="showPayment" :select-list="natureList" :value="nature" id="nature" width="1"></yhm-form-radio>
+        <yhm-form-radio title="付款性质" @call="showPayment" :select-list="natureList" :value="nature" id="nature" :no-edit="natureNoEdit" width="1"></yhm-form-radio>
         <yhm-form-radio title="支付方式" v-show="isChecksHidden" :select-list="isChecksList" :value="isChecks" id="isChecks" @call="checkEvent"></yhm-form-radio>
-        <yhm-form-drop-down-select :no-before-click="isNoBeforeClick" title="收款方" width="1" @select="selectUnit" :select-list="personOrUnitList"  :selectValue="personOrUnit" selectid="personOrUnit" :value="otherUnit" id="otherUnit" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>
+        <yhm-form-text title="收款方" v-if="nature=='10'&&workOrderSkip=='true'" :value="otherUnit" id="otherUnit" no-edit="1"></yhm-form-text>
+        <yhm-form-drop-down-select v-else :no-before-click="isNoBeforeClick" title="收款方" width="1" @select="selectUnit" :select-list="personOrUnitList"  :selectValue="personOrUnit" selectid="personOrUnit" :value="otherUnit" id="otherUnit" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>
         <!--        <yhm-form-drop-down-select title="付款事由" width="1" @select="selectCause" :select-list="ownerSysPsd" :selectValue="ownerSys" selectid="ownerSys" :value="subject" id="subject" rule="R0000" :no-edit="disable"></yhm-form-drop-down-select>-->
         <!--        <yhm-form-select title="收款单位" tip="value" rule="R0000" @click="selectUnit" :value="otherUnit" id="otherUnit"></yhm-form-select>-->
-        <yhm-form-radio title="是否关联" :select-list="isRelevanceList" @call="SelectIsRelevance" :no-show-item="nature=='10'?'0':''" :value="isRelevance" id="isRelevance" rule="R0000"></yhm-form-radio>
+        <yhm-form-radio title="是否关联" :select-list="isRelevanceList" @call="SelectIsRelevance" :no-edit="nature=='10'?true:false" :value="isRelevance" id="isRelevance" rule="R0000"></yhm-form-radio>
         <yhm-form-select title="计划事件" :show="eventShowA" @click="selectPage" :value="name" id="name" tip="value" rule="R0000"></yhm-form-select>
         <yhm-form-textarea :show="eventShowB" title="款项用途" :value="useName" id="useName" rule="R0000"></yhm-form-textarea>
         <yhm-form-select title="收款账号" :tips="accountString" :value="otherAccount" id="otherAccount" rule="R0000" @click="selectaccount" :no-click="isOtherAccount"></yhm-form-select>
@@ -236,6 +237,7 @@ export default {
     return {
       id: '',
       disable: '1',
+      natureNoEdit:false,
       eventShowA: true,
       eventShowB: false,
       remark: '',
@@ -348,6 +350,7 @@ export default {
   created () {
     this.setQuery2Value('ownerID')
     this.setQuery2Value('nature')
+    this.setQuery2Value('workOrderSkip')
     if(this.nature!=''){
       this.showPayment()
     }
@@ -395,9 +398,18 @@ export default {
           }
           this.money = sumMoney + ''
         }else if(this.nature == '10'){
+          this.setQuery2Value('otherUnit')
+          this.setQuery2Value('otherUnitID')
           let list = []
           for(let i in data.bankDetailList){
             list.push(data.bankDetailList[i].bankDetailID)
+          }
+          this.selectPage()
+          this.allocationEvent()
+          this.PrepaidHidden = true
+          this.natureNoEdit = true
+          if(list.length=='0'){
+            return
           }
           this.ajaxJson({
             url: '/fix/fixCompanyOrder/queryByCompanyIDForFixreception',
@@ -414,7 +426,7 @@ export default {
                   item2 = {}
                   item.id = da.content[i].id
                   item.insertDate = da.content[i].visitDate
-                  item.ownerID = da.content[i].ownerID
+                  item.ownerID = this.id
                   item.bankDetailID = da.content[i].orderid
                   item.money = da.content[i].pending
                   this.workOrderList.push(item)
@@ -422,7 +434,7 @@ export default {
 
                   item2.id = da.content[i].id
                   item2.insertDate = da.content[i].visitDate
-                  item2.ownerID = da.content[i].ownerID
+                  item2.ownerID = this.id
                   item2.bankDetailID = da.content[i].orderid
                   item2.code = da.content[i].code
                   item2.vehicle = da.content[i].carName
@@ -437,8 +449,6 @@ export default {
               }
             }
           })
-
-          this.PrepaidHidden = true
         }
 
         if(this.isAllocation === '0'){
@@ -535,6 +545,9 @@ export default {
                 this.otherAccountID = data.otherAccountID
                 this.money = data.money
                 this.fileList = data.fileList
+                for (let i = 0; i < this.fileList.length; i++) {
+                  this.fileList[i].id=guid()
+                }
                 this.isInvoice = '1'
                 if (data.subjectID) {
                   this.ajaxJson({
@@ -759,19 +772,19 @@ export default {
         width: '1050',
         height: '750',
         title: '选择工单',
-        url: '/selectPushRepair',
+        url: '/selectPushRepair?companyID='+this.otherUnitID,
         closeCallBack: (data) => {
           if (data) {
-            // let arrId = []
-            // for(let i in data){
-            //   arrId.push(data[i].orderid)
-            // }
+            let arrId = []
+            for(let i in this.workOrderList){
+              arrId.push(this.workOrderList[i].bankDetailID)
+            }
             let item = {}
             let item2 = {}
             let money = 0
             setTimeout(()=>{
               for(let i in data){
-                // if(arrId.indexOf(data[i].orderid)==-1){
+                if(arrId.indexOf(data[i].orderid)==-1){
                   item = {}
                   item2 = {}
                   item.id = guid()
@@ -792,10 +805,14 @@ export default {
                   item2.pending = data[i].pending
                   item2.pendingmoney = data[i].pendingmoney
                   this.workOrderList2.push(item2)
-                  money += Number(item.money)
-                // }
+                }
               }
-              this.money = money
+              for(let i in this.workOrderList){
+                money += Number(this.workOrderList[i].money)
+              }
+              if(money!=0){
+                this.money = money
+              }
             },0)
 
           }
@@ -856,12 +873,14 @@ export default {
                 list:[
                   item.bankDetailID
                 ],
-                pendingstate:'0'//推修结账状态 0，未结账，1，结账审批中，2，已结账
+                state:'0'//推修结账状态 0，未结账，1，结账审批中，2，已结账
               },
               loading:'0',
               call: (data) => {
                 if(data.type=='0'){
-                  this.money = Number(this.money)-Number(item.pending)
+                  if(this.money!=0){
+                    this.money = Number(this.money)-Number(item.pending)
+                  }
                   this.workOrderList.splice(index,1)
                   this.workOrderList2.splice(index,1)
                   this.ajaxJson({
@@ -1930,6 +1949,10 @@ export default {
           title  = '选择单位信息'
         }
       }
+      if(this.nature == '10'){
+        url = '/selectPushRepairUnit'
+        title  = '选择推修公司'
+      }
       this.name = ''
       this.otherAccount = ''
       this.subject = ''
@@ -1965,6 +1988,10 @@ export default {
                 this.otherUnit = data.name
                 this.otherUnitID = data.id
               }
+            }
+            if(this.nature == '10'){
+              this.otherUnit = data.unit
+              this.otherUnitID = data.unitID
             }
             if(this.isChecks==='1'){
               let params = {

@@ -5,7 +5,7 @@
 <!--        <yhm-commonbutton value="添加" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>-->
         <div v-show="showTipDbSelect" class="s_db_select" :style="{left:getLeft,top:getTop}">双击选择</div>
         <yhm-managersearch :value="searchStr" id="searchStr" @call="initData"></yhm-managersearch>
-        <yhm-radiofilter  @initData="initPageData(false)" title="状态" style="margin: 5px 0;" :content="pendingstateList"></yhm-radiofilter>
+<!--        <yhm-radiofilter  @initData="initPageData(false)" title="状态" style="margin: 5px 0;" :content="pendingstateList"></yhm-radiofilter>-->
 
       </template>
       <template #listHead>
@@ -75,7 +75,7 @@
           list:[
 
           ],
-          value:''
+          value:'0'
         }
       }
     },
@@ -84,7 +84,7 @@
         let params = {}
         if(initialize){
           params = {
-            // companyID:this.id,
+            companyID:this.companyID,
             pageSize:this.pager.pageSize,
             pageIndex:this.pager.pageIndex,
             pendingstate:this.pendingstateList.value,
@@ -92,7 +92,7 @@
           }
         }else{
           params = {
-            // companyID:this.id,
+            companyID:this.companyID,
             pageSize:this.pager.pageSize,
             pageIndex:this.pager.pageIndex,
             // startDateStr:this.startDateCustom,
@@ -111,7 +111,9 @@
             this.type = data.fixCompany.type//结算类型
             this.typeList = data.fixCompany.typePsd.list//计算类型
 
-            this.pendingstateList = data.pendingstatePsd
+            if(initialize){
+              this.pendingstateList = data.pendingstatePsd
+            }
 
             this.createName = data.fixCompany.createName
             this.insertDate = data.fixCompany.insertDate
@@ -122,6 +124,9 @@
           }
         })
       }
+    },
+    created () {
+      this.setQuery2Value('companyID')
     }
   }
 </script>

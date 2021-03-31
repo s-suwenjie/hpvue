@@ -3,12 +3,13 @@
     <yhm-formbody>
       <template #title>基本信息</template>
       <template #control>
-        <yhm-form-text title="规格型号"  @repeatverify="nameVerifyEvent" ref="name"  :value="name" id="name" rule="R0000"></yhm-form-text>
-<!--        <yhm-form-text title="规格型号"  subtitle="(英文)" :value="englishName" id="englishName" ></yhm-form-text>-->
+        <yhm-form-text title="料号"  @repeatverify="nameVerifyEvent" ref="name"  :value="name" id="name" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="料号"  subtitle="(英文)" :value="englishName" id="englishName" ></yhm-form-text>
         <yhm-form-text title="销售价" :value="price" id="price" before-icon="rmb" rule="R3000"></yhm-form-text>
         <yhm-form-text title="物品编号" :value="productNumber" id="productNumber"  ></yhm-form-text>
 
-        <yhm-form-radio ref="stockTypeRadio" rule="#" title="适用品牌" @call="stockTypeCall()" :select-list="stockTypeList" :value="stockType" id="stockType" ></yhm-form-radio>
+        <yhm-form-radio v-if="state==3?false:true" ref="stockTypeRadio" rule="#" title="适用品牌" @call="stockTypeCall()" :select-list="stockTypeList" :value="stockType" id="stockType" ></yhm-form-radio>
+        <yhm-form-radio v-else title="固定资产"  :select-list="fixedAssetsList" :value="stockType" id="stockType" ></yhm-form-radio>
         <yhm-form-select v-if="isModel" title="适用车型" @click="stockModelClick()"  :value="stockModel" id="stockModel"></yhm-form-select>
       </template>
     </yhm-formbody>
@@ -65,7 +66,9 @@
         stockModel:'',
         stockModelID:'',
         isModel:false,
-        code:''
+        code:'',
+        state:'',
+        fixedAssetsList:[],
       }
     },
     methods:{
@@ -180,8 +183,8 @@
       async save(){
         let a = await this.isNameVerifyEvent()
         let b = this.validator()
-        this.$refs.stockTypeRadio.$emit('verify')
-        if(a && b && this.stockType!=''){
+        // this.$refs.stockTypeRadio.$emit('verify')
+        if(a && b ){
           var params = {
             id: this.id,
             ownerID:this.ownerID,
@@ -214,12 +217,18 @@
     },
     created(){
       this.setQuery2Value('ownerID')
+      this.setQuery2Value('state')
       this.init({
         url: '/Basic/initModelFrom',
         all: (data) => {
           //添加查看的时候都需要的代码
-          this.stockTypeList = data.stockTypePsd.list
-          this.stockType = data.stockTypePsd.value
+
+            this.fixedAssetsList = data.fixedAssetsPsd.list
+
+            this.stockTypeList = data.stockTypePsd.list
+
+
+          // this.stockType = data.stockTypePsd.value
         },
         add: (data) => {
           //添加时独有的代码
@@ -235,7 +244,8 @@
           this.englishName=data.englishName
           this.stockModel=data.stockModel
           this.stockModelID=data.stockModelID
-
+          this.stockType=data.stockType
+          this.state=data.state
           this.empty = this.supplierDetails.length === 0
         }
       })

@@ -17,7 +17,7 @@
         <yhm-view-control title="出单流程" :content="aisleVal"></yhm-view-control>
 
       </template>
-    </yhm-view-body> 
+    </yhm-view-body>
     <div class="f_split"></div>
     <yhm-view-tab>
       <template #tab>

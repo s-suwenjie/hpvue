@@ -24,11 +24,12 @@
             <div class=""  :style="{color:colors}">
               <span style="font-weight: bold">合计: </span>
               <span v-html="segmentationss"></span>
-              <span v-if="month!=13" style="color: #7EE07E;margin-left: 5px;"> 目标: </span>
+              <span style="color: #7EE07E;margin-left: 5px;"> 目标: </span>
               <span v-html="tenThousand(targetlist[0])" style="color: #7EE07E;" v-if="month!=13"></span>
-
-              <span v-if="month!=13" style="color: #F26A5D;margin-left: 5px;"> 完成度: </span>
+              <span v-html="tenThousand(moneyList[0].yearTarget)" style="color: #7EE07E;" v-if="month==13"></span>
+              <span style="color: #F26A5D;margin-left: 5px;"> 完成度: </span>
               <span v-html="tenThousand(completionlist[0])" style="color: #F26A5D;" v-if="month!=13"></span>
+              <span v-html="tenThousand(moneyList[0].yearCompletion)" style="color: #F26A5D;" v-if="month==13"></span>
             </div>
           </div>
         </div>

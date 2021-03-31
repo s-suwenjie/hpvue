@@ -75,8 +75,8 @@
       </template>
       <template #listHead>
         <yhm-managerth style="width: 36px" title="序号"></yhm-managerth>
-        <yhm-managerth style="width: 125px" title="商品名称"></yhm-managerth>
-        <yhm-managerth style="width: 125px" title="规格型号"></yhm-managerth>
+        <yhm-managerth style="width: 170px" title="商品名称"></yhm-managerth>
+        <yhm-managerth style="width: 150px" title="规格型号"></yhm-managerth>
         <yhm-managerth style="width: 60px" title="整件数量"></yhm-managerth>
         <yhm-managerth style="width: 60px" title="整件单位"></yhm-managerth>
         <yhm-managerth style="width: 65px" title="拆分数量"></yhm-managerth>
@@ -93,13 +93,13 @@
         <tr v-for="(item,index) in fixOrderMaterial" :key="index" :class="{InterlacBg:index%2!==0}">
           <div style="display: flex;justify-content: center;text-align: center">{{Number(index)+1}}</div>
 <!--          <yhm-form-td-textbox width="36" :key="key" no-edit="1" id="index" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item"></yhm-form-td-textbox>-->
-          <yhm-form-td-select-dialog :no-edit="item.commit=='0'?'':'1'" width="125" tip="value" @call="selectProduct(item,index)" id="product" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" rule="#"></yhm-form-td-select-dialog>
-          <yhm-form-td-select-dialog :no-edit="item.commit=='0'?'':'1'" width="125" tip="value" @call="selectModel(item,index)" id="model" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" rule="#"></yhm-form-td-select-dialog>
-          <yhm-form-td-textbox :no-edit="item.commit=='0'&&item.splitVal!='0'?'':'1'" width="60" @input="accessoriesChange(item)" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" id="quantity"></yhm-form-td-textbox>
+          <yhm-form-td-select-dialog :no-edit="item.commit=='0'?'':'1'" width="180" tip="value" @call="selectProduct(item,index)" id="product" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" rule="#"></yhm-form-td-select-dialog>
+          <yhm-form-td-select-dialog :no-edit="item.commit=='0'?'':'1'" width="150" tip="value" @call="selectModel(item,index)" id="model" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" rule="#"></yhm-form-td-select-dialog>
+          <yhm-form-td-textbox :no-edit="item.commit=='0'&&item.splitVal!='0'?'':'1'" width="60" @input="accessoriesChange(item,'1')" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" id="quantity" rule="R0000"></yhm-form-td-textbox>
 
 
           <yhm-form-td-textbox :no-edit="item.commit=='0'&&item.splitVal!='0'?'':'1'" style="text-align: center;" width="65" tip="value" id="uuStr" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="65" :no-edit="item.commit=='0'&&item.noEdit==''?'':'1'" @input="accessoriesChange(item)" tip="value" id="mdo" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="65" :no-edit="item.commit=='0'&&item.noEdit==''?'':'1'" @input="accessoriesChange(item,'2')" tip="value" id="mdo" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" rule="R0000"></yhm-form-td-textbox>
 
           <yhm-form-td-textbox width="65" tip="value" :no-edit="item.commit=='0'&&item.noEdit==''?'':'1'" id="mdoStr" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item"></yhm-form-td-textbox>
           <yhm-form-td-textbox no-edit="1" width="90" @input="accessoriesChange(item)" tip="money" before-icon="rmb" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" id="originalmoney"></yhm-form-td-textbox>
@@ -276,6 +276,7 @@
         insertDate:'',
         updateName:'',
         updateDate:'',
+        //validationRule:"/[(\ )(\~)(\~)(\!)(\！)(\@)(\#)(\$)(\￥)(\%)(\^)(\……)(\&)(\*)(\()(\（)(\))(\）)(\-)(\_))(\——)(\+)(\=)(\[)(\【)(\])(\】)(\{)(\})(\|))(\、))(\)(\\)(\;)(\；)(\:)(\：)(\')(\‘)(\’)(\")(\“)(\”)(\,)(\，)(\.)(\。)(\/)(\《)(\<)(\>)(\》)(\?)(\？)(\)]+/",//验证规则
         key:0,
         partsList:[],
         actualmoney:'0',//客户实际付款金额
@@ -394,12 +395,12 @@
         }else if(this.productact.length>=8){
           this.productact = this.productact.slice(0,8)
         }
-        console.log(this.productact/this.productMoney*10 ,'折')
+        // console.log(this.productact/this.productMoney*10 ,'折')
       },
       actualmoneyBlur(){//工单详情 客户实际付款金额 折扣计算
         if(Number(this.productact/this.productMoney*10)<5){
           this.productact = this.productMoney
-          console.log('222222222')
+          // console.log('222222222')
         }
       },
       mailactInput(){//配件详情
@@ -536,7 +537,7 @@
           title: '选择维修配件',
           closeCallBack: (data) => {
             if (data) {
-              console.log(data)
+              // console.log(data)
               this.fixOrderMaterial2 = []
               let insertDate
               let item
@@ -607,7 +608,7 @@
           }
         })
       },
-      accessoriesChange(item){//修改单条配件金额或数量时计算
+      accessoriesChange(item,type){//修改单条配件金额或数量时计算
         item.money = (item.splitVal=='1'?accMul(Number(item.price),Number(item.quantity)):accMul(Number(item.price),Number(item.mdo)))
         item.money = item.money+''
         this.amountOfAccessories()
@@ -673,13 +674,15 @@
           this.amount = money.toFixed(2)
           if(type!='1'){
             for(let i in this.fixOrderMaterial2){
-              let item = this.fixOrderMaterial[i]
+              let item = this.fixOrderMaterial2[i]
               partsMoney.push(item.splitVal=='1'?accMul(Number(item.price),Number(item.quantity))+'':accMul(Number(item.price),Number(item.mdo))+'')
             }
             for(let p in partsMoney){
               money2 += Number(partsMoney[p])
             }
-            this.mailact = (Number(money2)+Number(this.mailact)).toFixed(2)
+            // console.log(partsMoney,money2,'-------------')
+            // console.log(money2 ,this.mailact)
+            this.mailact = Number(this.amount).toFixed(2)
           }else{
             this.mailact = (Number(this.mailact)-Number(value)).toFixed(2)
           }
@@ -789,14 +792,21 @@
               },
               call: (data) => {
                 if(data.type=='0'){
-                  this.amountOfAccessories('1',this.fixOrderMaterial[index].money)
+                  if(this.fixOrderMaterial.length=='1'){
+                    this.mailact = 0
+                    this.amount = 0
+                  }else{
+                    this.amountOfAccessories('1',this.fixOrderMaterial[index].money)
+                  }
                   this.fixOrderMaterial.splice(index,1)
+                  // console.log(this.fixOrderMaterial)
                   setTimeout(()=>{
                     for(let i in this.fixOrderMaterial){
                       this.fixOrderMaterial[i].index = (Number(i)+1)+''
                     }
                   },0)
                   if(this.fixOrderMaterial.length==0){
+                    this.mailact = 0
                     this.isDelMater = '1'
                   }else{
                     this.isDelMater = ''
@@ -938,7 +948,7 @@
             title:'添加工单详情',
             closeCallBack:(data) =>{
               if (data) {
-                console.log(data)
+                // console.log(data)
                 let insertDate = new Date(accAdd(new Date().getTime(), accMul(this.fixOrderMaterial.length, 1000)))
                 this.list2.unshift({
                   id:data.id,
@@ -1021,7 +1031,7 @@
                 title:'编辑工单详情',
                 closeCallBack:(data) =>{
                   if (data) {
-                    console.log(data)
+                    // console.log(data)
                     item.remark = data.remark
                     item.money = data.money
                     item.teamid = data.teamid
@@ -1545,11 +1555,11 @@
               this.actualmoney = data.fixorder.actualmoney
               this.discountmoney = data.fixorder.discountmoney
 
-              console.log(data.fixorder.mailact,data.fixorder.maildis)
+              // console.log(data.fixorder.mailact,data.fixorder.maildis)
 
 
               this.$nextTick(()=>{
-                console.log(this.$refs.actualmoneyFocus.value,this.$refs.mailactFocus.value)
+                // console.log(this.$refs.actualmoneyFocus.value,this.$refs.mailactFocus.value)
                 setTimeout(()=>{
                   this.mailact = data.fixorder.mailact//配件实际金额
                 },0)

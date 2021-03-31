@@ -5,7 +5,7 @@
       <template #control>
         <yhm-form-radio title="商品类型" :no-edit="productDetails.length>0?true:false" ref="stockOutFormRadio" rule="#" :select-list="categoryList" @call="motorcycleTypeRadio" :value="category" id="category"></yhm-form-radio>
         <yhm-form-text title="入库编号" no-edit="1" :value="code" id="code"></yhm-form-text>
-        <yhm-form-radio title="适用车型" width="1" ref="stockOutFormRadio2" rule="#" :no-edit="productDetails.length>0?true:false" @call="motorcycleTypeRadio" :select-list="applicableModelsList" :value="applicableModels" id="applicableModels"></yhm-form-radio>
+        <yhm-form-radio :title="category=='3'?'固定资产':'适用车型'" width="1" ref="stockOutFormRadio2" rule="#" :no-edit="productDetails.length>0?true:false" @call="motorcycleTypeRadio" :select-list="category=='3'?templeList:applicableModelsList" :value="applicableModels" id="applicableModels"></yhm-form-radio>
         <yhm-form-date title="入库日期" :max="maxWorkDate" :value="workDate" id="workDate" @call="motorcycleTypeRadio" :no-edit="categoryNoEdit" rule="R0000" ></yhm-form-date>
         <yhm-form-select title="入库人员" @click="selectWareHouser" @clear="clearWareHouser()" :value="wareHouser" id="wareHouser" :no-click="true" rule="R0000"></yhm-form-select>
       </template>
@@ -121,6 +121,7 @@
         categoryList: [],
         applicableModels:'',
         applicableModelsList:[],
+        templeList:[],//行政
         maxWorkDate:'',
         workDate:'',            //入库日期
         wareHouserId:'',        //入库人ID
@@ -215,6 +216,7 @@
         this.ajaxJson({
           url: '/stock/stockIn/initFormCode',
           data: params,
+          loading:'0',
           call: (data) => {
             this.code = data.message
 
@@ -603,6 +605,7 @@
               this.category = data.categoryPsd.value
               this.applicableModelsList = data.applicableModelsPsd.list
               this.applicableModels = data.applicableModelsPsd.value
+              this.templeList = data.templePsd.list
               this.code = data.code
               this.workDate = data.workDate
               this.wareHouserId = data.wareHouserId

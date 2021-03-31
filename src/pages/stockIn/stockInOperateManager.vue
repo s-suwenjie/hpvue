@@ -43,7 +43,7 @@
           <yhm-manager-td-center :value="item.wareHouser"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.category"></yhm-manager-td-center>
 
-          <yhm-manager-td-psd :value="item.applicableModels" :list="applicableModelsList"></yhm-manager-td-psd>
+          <yhm-manager-td-psd :value="item.applicableModels+''" :list="item.category=='3'?templeList:applicableModelsPsd.list"></yhm-manager-td-psd>
 
 <!--          <yhm-manager-td-date :value="item.workDate.slice(0,10)"></yhm-manager-td-date>-->
           <yhm-manager-td-center title="右键可筛选" :value="item.workDate.slice(0,10)" :menu-list="workDateMenu.indexOf('取消当前筛选')!='-1'?['取消当前筛选']:['筛选当前日期']" @rightClick="workOrderItem = item" @menuClick="workDateMenuClick"></yhm-manager-td-center>
@@ -77,6 +77,7 @@
     data () {
       return{
         workDateMenu:[],
+        templeList:[],//行政
         startDateStr:'',//开始时间
         endDateStr:'',//结束时间
         timeShow:false,//自定义时间选择 显示隐藏
@@ -291,6 +292,7 @@
             this.applicableModelsList = data.applicableModels.list
             this.listCategory.list=data.categoryPsd.list
             this.listCategory.value=data.categoryPsd.value
+            this.templeList = data.templePsd.list
           }
         })
       }

@@ -256,7 +256,7 @@
                   if(data.type === 0){
                     if(item.ownerID!==null&&item.ownerID!==''){
                       let param = {
-                        id : this.ownerID,
+                        id : item.ownerID,
                         state:'0'
                       }
                       this.ajaxJson({

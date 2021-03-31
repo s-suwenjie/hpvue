@@ -4,7 +4,7 @@
       <template #title>基本信息</template>
 
       <template #control>
-        <yhm-form-text no-edit="1" title="姓名" ref="person" :value="person" id="person" rule="R0000"></yhm-form-text>
+        <!--<yhm-form-text no-edit="1" title="添加人" ref="person" :value="person" id="person" rule="R0000"></yhm-form-text>-->
         <yhm-form-date title="启用时间" :min="maxApplyDate" :value="startDate" id="startDate" rule="R0000"></yhm-form-date>
         <yhm-form-radio title="社保级别" :select-list="categoryPsd" :value="category" id="category" rule="R0000" width="1"></yhm-form-radio>
         <yhm-form-text title="养老基数" :value="pension" id="pension" rule="R1500"></yhm-form-text>

@@ -35,6 +35,7 @@
         <yhm-view-tab-button :list="tabState" :index="5" v-if="nature === '7'">押金信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="6" v-if="nature === '8'">付押金信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="7" v-if="nature === '9'">快递对账单</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="8" v-if="nature === '10'">工单推修记录</yhm-view-tab-button>
       </template>
       <template #content>
         <yhm-view-tab-content v-show="tabState[0].select">
@@ -208,6 +209,33 @@
             </tr>
           </template>
         </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true"  v-show="tabState[8].select" v-if="nature == '10'">
+          <template #listHead>
+            <yhm-managerth width="34" title="查看"></yhm-managerth>
+            <yhm-managerth width="120" title="接待日期"></yhm-managerth>
+            <yhm-managerth width="240" title="工单号"></yhm-managerth>
+            <yhm-managerth width="110" title="车牌号"></yhm-managerth>
+            <yhm-managerth width="80" title="费率类型"></yhm-managerth>
+            <yhm-managerth width="80" title="待结状态"></yhm-managerth>
+            <yhm-managerth title="预计推送费"></yhm-managerth>
+            <yhm-managerth title="已产生营业额"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in workOrderList" :key="index" :class="{InterlacBg:index%2!==0}">
+              <yhm-manager-td-look @click="listViewWorkOrder(item)"></yhm-manager-td-look>
+              <yhm-manager-td-date  :value="item.insertDate"></yhm-manager-td-date>
+              <yhm-manager-td  :value="item.code"></yhm-manager-td>
+              <yhm-manager-td type="vehicle" :value="item.vehicle"></yhm-manager-td>
+              <yhm-manager-td-center  :value="item.typeValue"></yhm-manager-td-center>
+              <yhm-manager-td-center  :value="item.pendingstateValue" :color="item.pendingstateValue=='已结账'?'#00bb68':''"></yhm-manager-td-center>
+              <yhm-manager-td-money  :value="item.pending" style="color:#2193b0;"></yhm-manager-td-money>
+              <yhm-manager-td-money  :value="item.pendingmoney" style="color:#fd6802;"></yhm-manager-td-money>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData"  v-show="workOrderList.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
       </template>
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -240,7 +268,7 @@ export default {
   mixins: [formmixin],
   data () {
     return {
-      tabState:[{select:true},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false}],
+      tabState:[{select:true},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false}],
       eventShowA: true,
       branchShow:true,
       eventShowB: false,
@@ -333,6 +361,7 @@ export default {
       depositList:[],
       payDepositList:[],
       expressList:[],
+      workOrderList:[],//工单数据
 
       isLeftID:false,//延长按钮
       leftID:'',//上一条ID
@@ -341,7 +370,19 @@ export default {
     }
   },
   methods: {
-
+    listViewWorkOrder(item){
+      this.$dialog.OpenWindow({
+        width: '1050',
+        height: '750',
+        url: '/collectionOfDataView?id='+item.id,
+        title: '查看工单信息',
+        closeCallBack:(data) =>{
+          // if (data) {
+          // this.initData()
+          // }
+        }
+      })
+    },
     selectPayDeposit(item){
       this.$dialog.OpenWindow({
         width: 1050,
@@ -763,6 +804,40 @@ export default {
           }else {
             this.isElInvoice = false
           }
+          if(this.nature == '10'){
+            let list = []
+            for(let i in data.bankDetailList){
+              list.push(data.bankDetailList[i].bankDetailID)
+            }
+            if(list.length=='0'){
+              return
+            }
+            this.ajaxJson({
+              url: '/fix/fixCompanyOrder/queryByCompanyIDForFixreception',
+              data:{
+                list:list,
+                stateStr:'123'//是否过滤接待单 不为空时过滤
+              },
+              call: (da) => {
+                if(da){
+                  let item = {}
+                  for(let i in da.content){
+                    item.id = da.content[i].id
+                    item.insertDate = da.content[i].visitDate
+                    item.ownerID = this.id
+                    item.bankDetailID = da.content[i].orderid
+                    item.code = da.content[i].code
+                    item.vehicle = da.content[i].carName
+                    item.typeValue = da.content[i].type=='0'?'自保':'非自保'
+                    item.pendingstateValue = da.content[i].pendingstate=='0'?'待结账':'已结账'
+                    item.pending = da.content[i].pending
+                    item.pendingmoney = da.content[i].pendingmoney
+                    this.workOrderList.push(item)
+                  }
+                }
+              }
+            })
+          }
           if(data.appropriationMoney.length>0){
             this.appropriationMoney=data.appropriationMoney
             this.isAppropriationMoney=true
@@ -787,7 +862,7 @@ export default {
           this.elInvoice = data.paymentInvoice.length !== 0;
           this.empty = this.paymentInvoice.length === 0
           if(this.nature === '7'){
-            this.tabState=[{select:true},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false}]
+            this.tabState=[{select:true},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false}]
             let id=''
             for (let i = 0; i < this.bankDetailList.length; i++) {
               if(this.bankDetailList.length===1){

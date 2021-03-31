@@ -19,15 +19,15 @@
           <yhm-view-control title="地址" :content="address" category="2"></yhm-view-control>
         </template>
       </yhm-view-body>
-      <div class="f_split" v-show="cont==''||cont==null?false:true"></div>
-      <yhm-view-body v-show="cont==''||cont==null?false:true">
+      <div class="f_split" v-show="companyName!=''||companyName!=null?true:false"></div>
+      <yhm-view-body v-show="companyName!=''||companyName!=null?true:false">
         <template #title>推修信息</template>
         <template #body>
           <yhm-view-control title="推修公司" :content="companyName"></yhm-view-control>
-          <yhm-view-control title="推修联系人" :content="pushPersonName"></yhm-view-control>
-          <yhm-view-control title="结算类型" :content="companyType" :psd="typeList"></yhm-view-control>
+<!--          <yhm-view-control title="推修联系人" :content="pushPersonName"></yhm-view-control>-->
           <yhm-view-control title="自保费率" :content="selfrate+' %'"></yhm-view-control>
           <yhm-view-control title="非自保费率" :content="noselfrate+' %'" ></yhm-view-control>
+          <yhm-view-control title="结算类型" :content="companyType" :psd="typeList"></yhm-view-control>
         </template>
       </yhm-view-body>
       <div class="f_split"></div>
@@ -369,7 +369,6 @@
               this.category = data.fixorder.category//维修类型
               this.orderid = data.fixorder.id//工单id
               this.typeList = data.typePsd.list//结算类型
-              this.companyType = data.companyType//结算类型
               this.milage = data.fixorder.milage//里程数
               this.list = data.fixorder.fixedForm.list
               this.list2 = data.fixorder.fixOrderDetail.list
@@ -388,13 +387,14 @@
                 this.list3[n].index = Number(n)+1
               }
               this.content = data
-              this.cont = data.cont
+              // this.cont = data.cont
 
-              if(this.cont!=null){
-                this.selfrate = data.cont.selfrate
-                this.noselfrate = data.cont.noselfrate
-                this.companyName = data.cont.companyName
-                this.pushPersonName = data.cont.personName
+              if(data.fixCompanyOrder.companyName!=null&&data.fixCompanyOrder.companyName!=''){
+                this.selfrate = data.fixCompanyOrder.selfrate
+                this.noselfrate = data.fixCompanyOrder.noselfrate
+                this.companyName = data.fixCompanyOrder.companyName
+                this.companyType = data.fixCompanyOrder.type//结算类型
+                // this.pushPersonName = data.fixCompanyOrder.personName
               }
               this.sub = data.fixorder.sub//保险公司
               this.subid =  data.fixorder.subid//保险公司id

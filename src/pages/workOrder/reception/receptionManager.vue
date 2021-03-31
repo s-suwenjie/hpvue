@@ -101,7 +101,7 @@
           <yhm-manager-td-money  :show="columnShow[14]" style="color:#2193b0" :value="item.fixorder.mailMoney==''?'0':item.fixorder.mailMoney"></yhm-manager-td-money>
           <yhm-manager-td-money  :show="columnShow[15]" style="color:#fd6802" :value="item.fixorder.expend==''?'0':item.fixorder.expend"></yhm-manager-td-money>
 
-          <yhm-manager-td-money  :show="columnShow[16]" style="color:#49a9ea" :value="item.fixorder.actual==''?'0':item.fixorder.actual"></yhm-manager-td-money>
+          <yhm-manager-td-money  :show="columnShow[16]" style="color:#49a9ea" :value="item.fixorder.actualmoney==''?'0':item.fixorder.actualmoney"></yhm-manager-td-money>
 
           <yhm-manager-td-money  :show="columnShow[17]" style="color:#00b300" :value="item.fixorder.receivedMoney==null?'0':item.fixorder.receivedMoney"></yhm-manager-td-money>
           <yhm-manager-td-money  :show="columnShow[18]" style="color:#f00" :value="item.fixorder.remreceivedMoney==null?'0':item.fixorder.remreceivedMoney"></yhm-manager-td-money>

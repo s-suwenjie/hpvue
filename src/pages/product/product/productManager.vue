@@ -15,8 +15,8 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth title="商品名称"></yhm-managerth>
-        <yhm-managerth title="商品名称(英文)"></yhm-managerth>
+        <yhm-managerth title="品名(Description)"></yhm-managerth>
+        <!--<yhm-managerth title="商品名称(英文)"></yhm-managerth>-->
         <yhm-managerth title="类型"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="计量单位"></yhm-managerth>
         <yhm-managerth style="width: 180px;" title="是否拆分出库"></yhm-managerth>
@@ -28,13 +28,12 @@
         <tr v-for="(item,index) in content" :key="index" :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="add(item.id)"></yhm-manager-td-look>
-          <yhm-manager-td :value="item.name"></yhm-manager-td>
-          <yhm-manager-td :value="item.englishName"></yhm-manager-td>
+          <yhm-manager-td v-if="item.englishName!=''" :value="item.name+'('+item.englishName+')'"></yhm-manager-td>
+          <yhm-manager-td v-else :value="item.name"></yhm-manager-td>
           <yhm-manager-td :value="item.storageTypeVal"></yhm-manager-td>
           <yhm-manager-td :value="item.unit"></yhm-manager-td>
           <yhm-manager-td :value="item.splitVal"></yhm-manager-td>
           <yhm-manager-td :value="item.splitDeliveryUnit"></yhm-manager-td>
-
           <yhm-manager-td-operate>
             <yhm-manager-td-operate-button  @click="del(item.id)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>

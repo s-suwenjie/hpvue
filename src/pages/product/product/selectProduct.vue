@@ -10,7 +10,7 @@
       <template #listHead>
         <yhm-managerth-check v-if="selectType === '1'" is-select :check="allCheck" style="width: 40px;"></yhm-managerth-check>
         <yhm-managerth v-if="selectType === '0'" width="40" title="选择"></yhm-managerth>
-        <yhm-managerth title="商品名称"></yhm-managerth>
+        <yhm-managerth title="品名(Description)"></yhm-managerth>
 <!--        <yhm-managerth title="商品名称(英文)"></yhm-managerth>-->
         <yhm-managerth title="类型"></yhm-managerth>
         <!--<yhm-managerth title="适用车型"></yhm-managerth>-->

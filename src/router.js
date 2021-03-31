@@ -18,6 +18,10 @@ import telephoneSubsidyForm from './pages/staff/telephoneSubsidy/telephoneSubsid
 import basicWageManager from './pages/staff/basicWage/basicWageManager.vue'
 import basicWageView from './pages/staff/basicWage/basicWageView.vue'
 import basicWageForm from './pages/staff/basicWage/basicWageForm.vue'
+/*设置工龄工资*/
+import wageWorkingManager from './pages/staff/wageWorking/wageWorkingManager.vue'
+import wageWorkingView from './pages/staff/wageWorking/wageWorkingView.vue'
+import wageWorkingForm from './pages/staff/wageWorking/wageWorkingForm.vue'
 
 /*设定业绩*/
 import repairTargerManager from './pages/repairTarger/repairTargerManager.vue'
@@ -932,7 +936,7 @@ import  pushCorporationSelect from './pages/workOrder/pushRepair/pushCorporation
 import  addPushCorporationForm from './pages/workOrder/pushRepair/addPushCorporationForm'
 import  settleAccountsForm from './pages/workOrder/pushRepair/settleAccountsForm'
 import  selectPushRepair from './pages/workOrder/select/selectPushRepair'
-
+import  selectPushRepairUnit from './pages/workOrder/select/selectPushRepairUnit'
 
 /*工单保险公司管理*/
 import workOrderInsuranceUnitManager from './pages/workOrder/workOrderInsuranceUnit/workOrderInsuranceUnitManager'
@@ -1216,6 +1220,7 @@ export default new Router({
         { path: '/home/wagePostManager', name: 'wagePostManager.vue', component: wagePostManager, meta: {title: '设置岗位工资'}},
         { path: '/home/telephoneSubsidyManager', name: 'telephoneSubsidyManager.vue', component: telephoneSubsidyManager, meta: {title: '设置花费补助'}},
         { path: '/home/repairTargerManager', name: 'repairTargerManager.vue', component: repairTargerManager, meta: {title: '设置业绩'}},
+        { path: '/home/wageWorkingManager', name: 'wageWorkingManager.vue', component: wageWorkingManager, meta: {title: '设置工龄工资'}},
 
         { path: '/home/BankDetailRebateManager', name: 'BankDetailRebateManager.vue', component: BankDetailRebateManager ,meta: {title: '支付客户返利'}},
         { path: '/home/bankDetailRenewalManager', name: 'bankDetailRenewalManager.vue', component: bankDetailRenewalManager ,meta: {title: '续保管理'}},
@@ -1325,6 +1330,8 @@ export default new Router({
 
     { path: '/settleAccountsForm', name: 'settleAccountsForm', component: settleAccountsForm},
     { path: '/selectPushRepair', name: 'selectPushRepair', component: selectPushRepair},
+    { path: '/selectPushRepairUnit', name: 'selectPushRepairUnit', component: selectPushRepairUnit},
+
     { path: '/workOrderInsuranceUnitForm', name: 'workOrderInsuranceUnitForm', component: workOrderInsuranceUnitForm},
 
     { path: '/workOrderSettleAccountsForm', name: 'workOrderSettleAccountsForm', component: workOrderSettleAccountsForm},
@@ -1392,6 +1399,8 @@ export default new Router({
     { path: '/wagePostView', name: 'wagePostView', component: wagePostView},
     { path: '/telephoneSubsidyForm', name: 'telephoneSubsidyForm', component: telephoneSubsidyForm},
     { path: '/telephoneSubsidyView', name: 'telephoneSubsidyView', component: telephoneSubsidyView},
+    { path: '/wageWorkingForm', name: 'wageWorkingForm', component: wageWorkingForm},
+    { path: '/wageWorkingView', name: 'wageWorkingView', component: wageWorkingView},
 
 
     { path: '/repairTargerView', name: 'repairTargerView', component: repairTargerView},

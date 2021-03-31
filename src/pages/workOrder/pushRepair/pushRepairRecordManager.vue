@@ -15,6 +15,7 @@
           <yhm-radiofilter @initData="initDate()" title="结算类型" :content="typePsd"></yhm-radiofilter>
           <yhm-radiofilter @initData="initDate()" title="状态" :content="statePsd"></yhm-radiofilter>
           <yhm-radiofilter style="margin-top: 6px;" @initData="initDate()" title="推修公司" :content="companyPsd"></yhm-radiofilter>
+          <yhm-radiofilter @initData="initDate()" title="工单状态" :content="effectivenessPsd"></yhm-radiofilter>
         </template>
         <template #operateMore>
           <div :class="{customTimeShow:timeShow,customTimeHide:!timeShow}" >
@@ -81,7 +82,7 @@
             <yhm-manager-td-money style="color: #2193B0;" :value="item.pending==''?'0':item.pending"></yhm-manager-td-money>
 <!--            <yhm-manager-td-money style="color: #fd6802;" :value="item.expend==''?'0':item.expend"></yhm-manager-td-money>-->
             <yhm-manager-td-center  :value="item.pendingstate=='1'?'已结账':'未结账'" :color="item.pendingstate=='1'?'#00b300':'#f00'"></yhm-manager-td-center>
-            <yhm-manager-td-center  :value="item.orderstate"></yhm-manager-td-center>
+            <yhm-manager-td-psd  :value="item.orderstate" :list="effectivenessPsd.list"></yhm-manager-td-psd>
             <yhm-manager-td-operate>
               <yhm-manager-td-operate-button v-if="item.type=='2'" @click="rateSwitchover(item)" value="自保费率切换" icon="i-btn-applicationSm" color="#2193b0"></yhm-manager-td-operate-button>
               <yhm-manager-td-operate-button v-if="item.companyName==''||item.companyName==null" @click="maintain(item)" value="维护推修公司" icon="i-btn-applicationSm" color="#be08e3"></yhm-manager-td-operate-button>
@@ -143,6 +144,7 @@
         typePsd:[],//结算类型 筛选
         stateList:[],//状态
         statePsd:[],//状态 筛选
+        effectivenessPsd:[],//是否有效  筛选
         totalList:[
           {
             money:'0'
@@ -376,7 +378,8 @@
           dateType:this.dateTypeList.value=='9'?'':this.dateTypeList.value,
           startDateStr:this.startDateStr,//开始时间
           endDateStr:this.endDateStr,//结束时间
-          applicableModels:this.applicableModelsPsd.value
+          applicableModels:this.applicableModelsPsd.value,
+          stateStr:this.effectivenessPsd.value
         }
         this.ajaxJson({
             url: '/fix/fixCompanyOrder/queryForCompanyOrderManager',
@@ -394,6 +397,7 @@
                 this.applicableModelsPsd = data.applicableModelsPsd//车辆品牌 筛选
                 this.statePsd = data.statePsd//状态 筛选
                 this.typePsd = data.typePsd//结算类型 筛选
+                this.effectivenessPsd = data.effectivenessPsd//有效无效筛选
               }
               console.log(data)
             }

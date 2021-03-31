@@ -7,11 +7,11 @@
         <router-link class="menuTabDiv" :to="{path:'/home/employeeFilesManager'}">档案</router-link>
         <!--<router-link class="menuTabDiv" :to="{path:'/home/outPutTaxManager'}">工资</router-link>-->
         <router-link class="menuTabDiv" :to="{path:'/home/basicWageManager'}">设置基础工资</router-link>
-        <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/wagePostManager'}">设置岗位工资</router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/wagePostManager'}">设置岗位工资</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/fiveinsurancesManager'}">设置五险缴纳百分比</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/fiveInsurancesBaseManager'}">设置五险基数</router-link>
         <router-link class="menuTabDiv" :to="{path:'/home/telephoneSubsidyManager'}">设置话费补助</router-link>
-        <router-link class="menuTabDiv" :to="{path:'/home/wageWorkingManager'}">设置工龄工资基数</router-link>
+        <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/wageWorkingManager'}">设置工龄工资基数</router-link>
       </template>
       <template #operate>
         <!-- 操作区-->
@@ -31,7 +31,7 @@
         <yhm-managerth style="width: 40px;" title="查看" ></yhm-managerth>
         <yhm-managerth title="添加人" style="width: 100px;"></yhm-managerth>
         <yhm-managerth style="width: 120px;"  title="启用时间" ></yhm-managerth>
-        <yhm-managerth style="width: 120px;" title="岗位工资级别"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="工龄工资基数级别"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="金额" ></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="状态"></yhm-managerth>
         <yhm-managerth title="操作"></yhm-managerth>
@@ -65,7 +65,7 @@
 <script>
   import {managermixin} from '@/assets/manager.js'
   export default {
-    name: 'wagePost',
+    name: 'wageWorkingManager',
     mixins: [managermixin],
     data () {
       return {
@@ -87,8 +87,8 @@
         this.$dialog.OpenWindow({
           width: 1050,
           height: 420,
-          url:'/wagePostView?id='+item.id,
-          title:'查看岗位工资信息',
+          url:'/wageWorkingView?id='+item.id,
+          title:'查看工龄工资基数信息',
           closeCallBack:(data) =>{
             if(data){
               this.initPageData(false)
@@ -100,8 +100,8 @@
         this.$dialog.OpenWindow({
           width: 1050,
           height: 420,
-          url:'/wagePostForm',
-          title:'添加岗位工资信息',
+          url:'/wageWorkingForm',
+          title:'添加工龄工资基数信息',
           closeCallBack:(data) =>{
             if(data){
               this.initPageData(false)
@@ -125,7 +125,7 @@
         }
         this.init({
           initValue: initValue,
-          url:'/finance/wagePost/getManager',
+          url:'/finance/wageWorking/getManager',
           data: params,
           all: (data) => {
             // 不管是不是初始化都需要执行的代码

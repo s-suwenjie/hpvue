@@ -4,7 +4,7 @@
       <template #title>基本信息</template>
 
       <template #control>
-        <yhm-form-text no-edit="1" title="姓名" ref="person" :value="person" id="person" rule="R0000"></yhm-form-text>
+        <!--<yhm-form-text no-edit="1" title="添加人" ref="person" :value="person" id="person" rule="R0000"></yhm-form-text>-->
         <yhm-form-date title="启用时间" :min="maxApplyDate" @call="verifyEnableDate" :value="enableDate" id="enableDate" rule="R0000"></yhm-form-date>
         <yhm-form-text title="单位养老" subtitle="（%）" :value="unitPension" id="unitPension" rule="R1400"></yhm-form-text>
         <yhm-form-text title="个人养老" subtitle="（%）" :value="personalPension" id="personalPension" rule="R1400"></yhm-form-text>

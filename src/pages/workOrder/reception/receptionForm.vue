@@ -861,8 +861,8 @@
             if(data.id!=''){
               this.id = data.id
             }
-            this.companyName = data.companyName//推修公司名称
-            this.companyID = data.companyID//推修公司ID
+            this.companyName = data.fixCompanyOrder.companyName//推修公司名称
+            this.companyID = data.fixCompanyOrder.companyID//推修公司ID
             this.address = data.address//地址
             this.emailaddress = data.emailaddress//邮箱
             this.applicableModelsList = data.applicableModelsPsd.list

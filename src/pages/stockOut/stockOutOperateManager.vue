@@ -44,7 +44,7 @@
           <yhm-manager-td-center title="右键可筛选" :value="item.insertDate.slice(0,10)" :menu-list="insertDateMenu.indexOf('取消当前筛选')!='-1'?['取消当前筛选']:['筛选当前日期']" @rightClick="workOrderItem = item" @menuClick="insertDateMenuClick"></yhm-manager-td-center>
           <!--          <yhm-manager-td-date :value="item.insertDate.slice(0,10)  "></yhm-manager-td-date>-->
           <yhm-manager-td-psd :value="item.category+''" :list="listCategory.list"></yhm-manager-td-psd>
-          <yhm-manager-td-psd :value="item.applicableModels+''" :list="applicableModelsPsd.list"></yhm-manager-td-psd>
+          <yhm-manager-td-psd :value="item.applicableModels+''" :list="item.category=='3'?templeList:applicableModelsPsd.list"></yhm-manager-td-psd>
           <yhm-manager-td :value="item.code"></yhm-manager-td>
           <yhm-manager-td-money :value="item.totalStr+''"></yhm-manager-td-money>
 <!--          <yhm-manager-td :value="'出库'" @click="ku(item)" :color="item.state == 2 ? 'rgba(0,0,0,0.4)' : '#333333'"></yhm-manager-td>-->
@@ -79,6 +79,7 @@
       return{
         workOrderItem:[],
         insertDateMenu:[],
+        templeList:[],//行政
         startDateStr:'',//开始时间
         endDateStr:'',//结束时间
         timeShow:false,//自定义时间选择 显示隐藏
@@ -314,6 +315,7 @@
             this.applicableModelsPsd.value = data.applicableModels.value
             this.listCategory.list=data.categoryPsd.list
             this.listCategory.value=data.categoryPsd.value
+            this.templeList = data.templePsd.list
           }
         })
       },

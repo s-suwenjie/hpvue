@@ -48,7 +48,7 @@
             <yhm-manager-td-money v-if="isinAndOut" :value="item.saletotal+''"></yhm-manager-td-money><!--销售总价-->
             <yhm-manager-td-money v-else :value="item.total"></yhm-manager-td-money>
             <yhm-manager-td-psd :value="item.category" :list="categoryPsd.list"></yhm-manager-td-psd>
-            <yhm-manager-td-psd :value="item.applicableModels" :list="applicableModelsPsd.list"></yhm-manager-td-psd>
+            <yhm-manager-td-psd :value="item.applicableModels" :list="item.category=='3'?templeList:applicableModelsPsd.list"></yhm-manager-td-psd>
 
             <yhm-manager-td-center :value="item.split"></yhm-manager-td-center>
             <yhm-manager-td-rgt :value="item.sumStr+item.mdoStr"></yhm-manager-td-rgt>
@@ -110,6 +110,7 @@
         lastData:'',
         categoryPsd:[],
         applicableModelsPsd:[],
+        templeList:[],//行政
         isinAndOut:false,
         inAndOut:{
           value:'0',
@@ -248,6 +249,7 @@
             this.content=data.content
             this.categoryPsd=data.categoryPsd
             this.applicableModelsPsd=data.applicableModelsPsd
+            this.templeList = data.templePsd.list
           }
         })
       },

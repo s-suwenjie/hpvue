@@ -9,7 +9,7 @@
 
       <template #listHead>
         <yhm-managerth width="40" title="选择"></yhm-managerth>
-        <yhm-managerth title="商品规格型号"></yhm-managerth>
+        <yhm-managerth title="料号(Part No)"></yhm-managerth>
         <yhm-managerth title="适用品牌"></yhm-managerth>
         <yhm-managerth title="适用车型"></yhm-managerth>
 <!--        <yhm-managerth title="商品规格型号(英文)"></yhm-managerth>-->

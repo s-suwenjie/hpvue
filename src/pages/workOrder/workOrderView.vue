@@ -248,7 +248,6 @@
     },
     methods:{
       lookOver(item){
-        console.log(item)
         this.$dialog.OpenWindow({
           width: '1050',
           height: '650',
