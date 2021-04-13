@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="padding-top: 100px;">
       <div id="workOrderCartogram" class="workOrderCartogram"></div>
     </div>
 </template>

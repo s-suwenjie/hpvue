@@ -7,6 +7,7 @@
       <template #control>
         <yhm-form-select placeholder="" title="推修公司" :value="unit" id="unit" rule="R0000" @click="unitSelect"></yhm-form-select>
         <yhm-form-text title="简称" :value="unitshort" id="unitshort"></yhm-form-text>
+        <yhm-form-radio title="推修模式" width="1" :select-list="tuixiuList" :value="settlementtype" id="settlementtype"></yhm-form-radio>
 
         <!--        <yhm-form-select placeholder="" title="联系人" subtitle="" :value="person" id="person" rule="R0000" @click="personSelect"></yhm-form-select>-->
         <!--        <yhm-form-text title="推修费率" :value="rate" id="rate" rule="R0000" after-icon="icon-percentage"></yhm-form-text>-->
@@ -15,6 +16,7 @@
         <!--        <yhm-form-date title="结束时间" :value="endDate" id="endDate" :min="startDate" rule="R0000"></yhm-form-date>-->
         <!--        &lt;!&ndash;<yhm-form-text title="合同" width="1" :value="companyID" id="companyID" ></yhm-form-text>&ndash;&gt;-->
         <!--        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传合同" tag="fixCompany" rule="#"></yhm-formupload>-->
+<!--        tuixiuPsd-->
       </template>
     </yhm-formbody>
     <div class="f_split"></div>
@@ -27,13 +29,17 @@
       </template>
       <template #listHead>
         <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
-        <yhm-managerth title="开始时间"></yhm-managerth>
-        <yhm-managerth title="结束时间"></yhm-managerth>
+        <yhm-managerth width="110" title="开始时间"></yhm-managerth>
+        <yhm-managerth width="110" title="结束时间"></yhm-managerth>
         <yhm-managerth width="110" title="自保费率" prompt="自保(当年在乙方承保的车辆)" after-title="?" after-size="18px" tooltip-left="-34px" after-color="#f00"></yhm-managerth>
         <yhm-managerth width="110" title="非自保费率" prompt="非自保(一年没有进场记录或当年不在乙方承保的车辆)" after-title="?" after-size="18px" tooltip-left="-112px" after-color="#f00"></yhm-managerth>
+        <yhm-managerth title="起始条约金额"></yhm-managerth>
+        <yhm-managerth title="结束条约金额"></yhm-managerth>
+        <yhm-managerth title="条约类型"></yhm-managerth>
+
         <yhm-managerth title="结算类型"></yhm-managerth>
-        <yhm-managerth title="状态"></yhm-managerth>
-        <!--        <yhm-managerth style="width: 38px" title="删除"></yhm-managerth>-->
+        <yhm-managerth width="70" title="状态"></yhm-managerth>
+                <yhm-managerth style="width: 38px" title="删除"></yhm-managerth>
       </template>
       <template #listBody >
         <tr v-for="(item,index) in content" :key="index" :class="{InterlacBg:index%2!==0}" >
@@ -42,11 +48,17 @@
           <yhm-manager-td-date class="solidYhm" :value="item.endDate"></yhm-manager-td-date>
           <yhm-manager-td-center class="solidYhm" :value="item.rate+' %'"></yhm-manager-td-center>
           <yhm-manager-td-center class="solidYhm" :value="item.norate+' %'"></yhm-manager-td-center>
+          <yhm-manager-td-money class="solidYhm" v-if="item.contracttype!='0'" :value="item.startmoney"></yhm-manager-td-money>
+          <yhm-manager-td-center class="solidYhm" v-else value="-----"></yhm-manager-td-center>
+
+          <yhm-manager-td-money class="solidYhm" v-if="item.contracttype!='0'" :value="item.endmoney"></yhm-manager-td-money>
+          <yhm-manager-td-center class="solidYhm" v-else value="-----"></yhm-manager-td-center>
+          <yhm-manager-td-center class="solidYhm" style="font-weight: bold;" :value="item.contracttype=='0'?'普通条约':'累加条约'"></yhm-manager-td-center>
+
           <yhm-manager-td-psd class="solidYhm" :value="item.type" :list="typeList"></yhm-manager-td-psd>
-          <yhm-manager-td-center class="solidYhm" :value="item.stateStr" :color="item.stateStr=='启用'?'#00bb6b':'#f00'"></yhm-manager-td-center>
-          <!--          <yhm-manager-td-operate>-->
-          <!--            <yhm-manager-td-operate-button @click="del(item)" value="删除" icon="delete" color="#FF0000"></yhm-manager-td-operate-button>-->
-          <!--          </yhm-manager-td-operate>-->
+          <yhm-manager-td-psd class="solidYhm" :value="item.state" :list="stateList"></yhm-manager-td-psd>
+          <yhm-form-td-delete class="solidYhm" width="40" :list="content" :value="item" :del-click="true" @click="del(item,index)" ></yhm-form-td-delete>
+
         </tr>
       </template>
       <template #empty>
@@ -117,6 +129,7 @@
         person:'',//联系人名称
         personID:'',//联系人id
         unitshort:'',//单位缩写
+        settlementtype:'0',//
         startDate:'',//有效开始时间
         endDate:'',//有效结束时间
         fileID:'',//合同id
@@ -126,6 +139,8 @@
         content:[],
         manager2:[],
         personList:[],
+        stateList:[],
+        tuixiuList:[],
         pager: {
           total: 0, // 总条数
           pageSize: 5, // 每页条数
@@ -190,13 +205,15 @@
         })
       },
       add(){
+        let settlementtype = this.settlementtype=='0'?'0':'1'
         let a = this.validator()
         if(a){
           this.$dialog.OpenWindow({
             width: '1050',
             height: '750',
             url:  '/pushRepairDetailForm?companyID='+this.id
-              +'&unit='+this.unit+'&unitID='+this.unitID+'&unitshort='+this.unitshort,
+              +'&unit='+this.unit+'&unitID='+this.unitID+'&unitshort='+this.unitshort
+              +'&contracttype='+settlementtype,
             // +'&person='+this.person+'&personID='+this.personID
             title: '添加推修合作',
             closeCallBack:(data) =>{
@@ -216,6 +233,20 @@
             }
           })
         }
+      },
+      del(item,index){
+        this.ajaxJson({
+            url: '/fix/fixCompanyContract/deleteByID',
+            data: {
+              id:item.id
+            },
+            call: (data) => {
+              if(data.type=='0'){
+                this.content.splice(index,1)
+
+              }
+            }
+        })
       },
       initUpdate(id){
         this.ajaxJson({
@@ -245,13 +276,16 @@
         })
       },
       listView(item){
+        let settlementtype = this.settlementtype=='0'?'0':'1'
         let a = this.validator()
         if(a){
           this.$dialog.OpenWindow({
             width: '1050',
             height: '750',
             url:  '/pushRepairDetailForm?companyID='+item.id+'&id='+this.id+'&redact=1'
-              +'&unit='+this.unit+'&unitID='+this.unitID+'&unitshort='+this.unitshort,
+              +'&unit='+this.unit+'&unitID='+this.unitID+'&unitshort='+this.unitshort+'' +
+              '&contracttype='+item.contracttype+'&startmoney='+item.startmoney+'&endmoney='+item.endmoney
+              +'&contracttype'+settlementtype,//
             title: '编辑推修合作',
             closeCallBack:(data) =>{
               if (data) {
@@ -285,6 +319,7 @@
           unitshort:this.unitshort,//单位缩写
           startDate:this.startDate,//有效开始时间
           endDate:this.endDate,//有效结束时间
+          settlementtype:this.settlementtype,//推修模式
           fileID:this.id,//合同id
           param:{
             id:this.id,//定损单主表id
@@ -371,6 +406,8 @@
           },
           all: (data) => {
             this.typeList = data.typePsd.list
+            this.tuixiuList = data.tuixiuPsd.list
+            this.stateList = data.statePsd.list
           },
           add: (data) => {
             /* 需要添加的数据 */
@@ -388,6 +425,7 @@
             this.fileID = data.fileID//合同id
             this.type = data.type//结算类型
             this.fileList = data.photoList//合同文件
+            this.settlementtype = data.settlementtype
 
             this.content = data.list2
             this.manager2 = data.manager2
@@ -407,4 +445,7 @@
   .solidYhm{
     border: 1px solid #ccc;
   }
+.deleteIcon::before{
+  font-size: 18px;
+}
 </style>

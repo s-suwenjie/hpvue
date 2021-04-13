@@ -6,7 +6,7 @@
         <!-- 操作区-->
         <yhm-commonbutton style="margin-left: 10px" value="导出年报表" icon="i-edit"  @call="importEvent()"></yhm-commonbutton>
         <yhm-radiofilterdate title="时间" @initData="selectMonthEvent"></yhm-radiofilterdate>
-<!--        <yhm-radiofilter @initData="initChoose('direction')" title="收支方向" :content="directionPsd" all="0"></yhm-radiofilter>-->
+        <yhm-radiofilter @initData="initChoose('direction')" title="收支方向" :content="directionPsd" all="0"></yhm-radiofilter>
         <yhm-commonbutton style="margin-left: 10px" value="上一级" icon="icon-income" @call="getout"></yhm-commonbutton>
       </template>
       <template #listBody >
@@ -205,6 +205,7 @@
           this.endDate = newYear + '-' + newMonth + '-' + newDate + ' ' + newHours + ':' + newMin + ':' + newSec;
 
           params = {
+            direction:'1',
             startDate: this.startDate,
             endDate: this.endDate,
           }
@@ -223,12 +224,11 @@
           data: params,
           call: (data) => {
             this.animation(1)
-
-              let res = JSON.parse(JSON.stringify(data));
-              this.content=res.content
-              this.total=res.total[0]
-
+            let res = JSON.parse(JSON.stringify(data));
+            this.content=res.content
+            this.total=res.total[0]
             this.directionPsd.list=data.directionPsd.list
+            this.directionPsd.value=data.directionPsd.value
           }
         })
       },

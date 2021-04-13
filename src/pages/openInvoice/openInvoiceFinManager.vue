@@ -88,7 +88,7 @@
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>
       <template #total>
-        <div class="listTotalCrente m_list" style="width: 900px">
+        <div class="listTotalCrente m_list" style="width: 1420px;">
           <!--<div style="width: 280px; margin-right: 10px;">-->
             <!--<table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">-->
               <!--<thead>-->
@@ -105,7 +105,7 @@
               <!--</tbody>-->
             <!--</table>-->
           <!--</div>-->
-          <div style="width: 1050px;">
+          <div style="width: 1420px;">
             <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
               <thead>
               <tr>
@@ -117,20 +117,28 @@
                 <yhm-managerth style="width: 70px;" before-color="#ff0000" title="" before-title="剩余张数"></yhm-managerth>
                 <yhm-managerth style="width: 100px;" before-color="#002AFF" title="" before-title="已开票总金额"></yhm-managerth>
                 <yhm-managerth style="width: 140px;" before-color="#9e2c66" title="" before-title="待收款已开票总金额"></yhm-managerth>
-                <yhm-managerth style="" before-color="#c150e6" title="" before-title="待开票总金额"></yhm-managerth>
+                <yhm-managerth style="width: 100px;" before-color="#c150e6" title="" before-title="待开票总金额"></yhm-managerth>
+                <yhm-managerth style="width: 120px;" before-color="#ff0000" title="" before-title="待开红字发票张数"></yhm-managerth>
+                <yhm-managerth style="" before-color="#ff0000" title="" before-title="待开红字发票总金额"></yhm-managerth>
+                <yhm-managerth style="width: 120px;" before-color="#ff0000" title="" before-title="已开红字发票张数"></yhm-managerth>
+                <yhm-managerth style="width: 130px;" before-color="#ff0000" title="" before-title="已开红字发票总金额"></yhm-managerth>
               </tr>
               </thead>
               <tbody>
               <tr v-for="(item,index) in stockTotal" :key="index">
                 <yhm-manager-td-rgt :value="item.categoryName"></yhm-manager-td-rgt>
                 <yhm-manager-td-rgt style="color:#002AFF" :value="item.openedNum"></yhm-manager-td-rgt>
-                <yhm-manager-td-rgt style="color:#9e2c66" @click="uncollected" :value="item.uncollectedNum"></yhm-manager-td-rgt>
+                <yhm-manager-td-rgt style="color:#9e2c66" :value="item.uncollectedNum"></yhm-manager-td-rgt>
                 <yhm-manager-td-rgt style="color:#c150e6" :value="item.num"></yhm-manager-td-rgt>
                 <yhm-manager-td-rgt style="color:#9113a0" :value="item.stockNum"></yhm-manager-td-rgt>
                 <yhm-manager-td-rgt style="color:#ff0000" :value="item.surplus"></yhm-manager-td-rgt>
                 <yhm-manager-td-money style="color:#002AFF" :value="item.openedMoney"></yhm-manager-td-money>
                 <yhm-manager-td-money style="color:#9e2c66" :value="item.uncollectedMoney"></yhm-manager-td-money>
                 <yhm-manager-td-money style="color:#c150e6" :value="item.numMoney"></yhm-manager-td-money>
+                <yhm-manager-td-rgt style="color:#ff0000" :value="item.redNum"></yhm-manager-td-rgt>
+                <yhm-manager-td-money style="color:#ff0000" :value="item.redNumMoney"></yhm-manager-td-money>
+                <yhm-manager-td-money style="color:#ff0000" :value="item.redOpenedMoney"></yhm-manager-td-money>
+                <yhm-manager-td-rgt style="color:#ff0000" :value="item.redOpenedNum"></yhm-manager-td-rgt>
               </tr>
               </tbody>
             </table>
@@ -311,9 +319,6 @@
             }
           }
         })
-      },
-      uncollected(){
-
       },
       addOpenInvoice(item){
         this.$dialog.OpenWindow({

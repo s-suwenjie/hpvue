@@ -15,6 +15,7 @@
           </div>
         </div>
       </div>
+      <slot></slot>
     </div>
     <div class="error"><span v-if="error">{{errorTipMessage}}</span></div>
   </div>

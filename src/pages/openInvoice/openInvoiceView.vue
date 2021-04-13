@@ -40,6 +40,7 @@
         <yhm-view-tab-button :list="tabState" :index="1" v-if="isBankList">收支信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="2" v-if="isWorkOrder">工单信息</yhm-view-tab-button>
         <yhm-view-tab-button :list="tabState" :index="3" v-if="invoiceList.length>0">对账单信息</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="4" v-if="invoiceInformationList.length>0">发票信息</yhm-view-tab-button>
       </template>
       <template #content>
         <yhm-view-tab-list :customize="true" v-if="isProductDetail" v-show="tabState[0].select">
@@ -70,11 +71,11 @@
         <yhm-view-tab-list :customize="true"  v-show="tabState[1].select" v-if="isBankList">
           <template #listHead>
             <yhm-managerth style="width: 150px" title="账号"></yhm-managerth>
-            <yhm-managerth style="width: 150px" title="对方账号"></yhm-managerth>
+            <yhm-managerth style="width: 130px" title="对方账号"></yhm-managerth>
             <yhm-managerth style="width: 140px" title="交易日期"></yhm-managerth>
             <yhm-managerth style="width: 80px" title="收支方向"></yhm-managerth>
             <yhm-managerth style="width: 110px" title="事由"></yhm-managerth>
-            <yhm-managerth style="width: 120px" title="交易金额"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="交易金额"></yhm-managerth>
             <yhm-managerth style="width: 120px" title="开票金额"></yhm-managerth>
             <yhm-managerth style="width: 110px" title="备注"></yhm-managerth>
             <yhm-managerth style="width: 100px" title="凭证"></yhm-managerth>
@@ -159,6 +160,27 @@
           </template>
           <template #empty>
             <span class="m_listNoData"  v-show="invoiceList.length>=1?false:true">暂时没有数据</span>
+          </template>
+        </yhm-view-tab-list>
+        <yhm-view-tab-list :customize="true" v-show="tabState[4].select">
+          <template #listHead>
+            <yhm-managerth style="width: 120px" title="发票号码"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="价税合计"></yhm-managerth>
+            <yhm-managerth style="width: 100px" title="税率"></yhm-managerth>
+            <yhm-managerth style="width: 120px" title="税额"></yhm-managerth>
+            <yhm-managerth style="width: 140px" title="发票照片"></yhm-managerth>
+          </template>
+          <template #listBody>
+            <tr v-for="(item,index) in invoiceInformationList" :class="{InterlacBg:index%2!=0}" :key="index">
+              <yhm-manager-td :value="item.code"></yhm-manager-td>
+              <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
+              <yhm-manager-td-money :value="item.taxRate"></yhm-manager-td-money>
+              <yhm-manager-td-money :value="item.taxAmount"></yhm-manager-td-money>
+              <yhm-manager-td-image @click="showInvoicePdfEvent(item)" :tip="true" width="850" height="600" left="50" type="files" :value="item.url" tag="Invoice" :pdf-url="item.url"></yhm-manager-td-image>
+            </tr>
+          </template>
+          <template #empty>
+            <span class="m_listNoData" v-show="invoiceInformationList.length>=1?false:true">暂时没有数据</span>
           </template>
         </yhm-view-tab-list>
       </template>
@@ -250,6 +272,7 @@
         mailTitle:'',
         mailTitleAddress:'',
         isApprovalRise:'0',//0 发票抬头已审批    1发票抬头未审批完成
+        invoiceInformationList:[],//发票信息
       }
     },
     methods: {
@@ -456,7 +479,7 @@
             this.$dialog.OpenWindow({
               width: '1050',
               height: '750',
-              url:  '/claimsForm?id=' + item.ownerID,
+              url:  '/claimsForm?id=' + item.workOrderID,
               title: '查看工单信息',
               closeCallBack: (data) => {
                 if (data) {
@@ -640,13 +663,13 @@
             this.bankDetailList=data.bankDetailList
             if(this.bankDetailList.length>0){
               this.isBankList=true
-              this.tabState=[{select:false},{select:true},{select:true},{select:false}]
+              this.tabState=[{select:false},{select:true},{select:false},{select:false},{select:false}]
             }
             this.workOrderList=data.workOrderList
             if(this.workOrderList.length>0){
               this.isWorkOrder=true
               this.isProductDetail=false
-              this.tabState=[{select:false},{select:false},{select:true},{select:false}]
+              this.tabState=[{select:false},{select:false},{select:true},{select:false},{select:false}]
             }
             if(data.isFinish !== '2'&&data.ownerCategory === '4'){
               let list=[]
@@ -695,8 +718,8 @@
                 call: (dt) => {
                   for(let i in this.workOrderList){
                     for(let j in dt){
-                      if(this.workOrderList[i].ownerID==dt[j].id){
-                        this.workOrderList[i].workOrderID = this.workOrderList[j].ownerID
+                      if(this.workOrderList[i].ownerID===dt[j].id){
+                        this.workOrderList[i].workOrderID = this.workOrderList[i].ownerID
                         this.workOrderList[i].workOrder = dt[j].code
                         this.workOrderList[i].licensePlateNumber = dt[j].vehicle
                         this.workOrderList[i].vehicleID = dt[j].vehicleID
@@ -744,7 +767,17 @@
             this.invoiceList=data.invoiceList
             if(this.invoiceList.length>0){
               this.isProductDetail=false
-              this.tabState=[{select:false},{select:false},{select:false},{select:true}]
+              this.tabState=[{select:false},{select:false},{select:false},{select:true},{select:false}]
+            }
+            this.invoiceInformationList=data.invoiceInformationList
+            let count=0
+            for (let i = 0; i < this.tabState.length; i++) {
+              if(this.tabState[i].select==true){
+                count=1
+              }
+            }
+            if(count==0){
+              this.tabState[4].select=true
             }
           }
         })

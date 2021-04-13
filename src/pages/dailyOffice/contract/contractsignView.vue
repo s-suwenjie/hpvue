@@ -144,8 +144,8 @@
               this.paymentItems=data.paymentItems
               this.ownerID=data.ownerID,
               this.category=data.category
-            this.otherPartyPerson=data.otherPartyPerson
-            this.otherPartyPersonID=data.otherPartyPersonID
+              this.otherPartyPerson=data.otherPartyPerson
+              this.otherPartyPersonID=data.otherPartyPersonID
           }
         })
       }

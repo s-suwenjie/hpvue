@@ -206,10 +206,19 @@
           this.ajaxJson({
             url: '/fix/fixOrderUnitConcat/verification',
             data: {
-              orderid:this.orderid,
+              orderID:this.orderid,
             },
             call: (data) => {
               if(data.type=='2'){
+                this.$dialog.OpenWindow({
+                  width: 1050,
+                  height: 720,
+                  url:'/workOrderInsuranceUnitForm?id='+data.unitID+'&unitname='+data.unitname+'&unitID='+data.unitID,
+                  title:'维护保险公司资料',
+                  closeCallBack:(data)=>{
+                    window.location.href = window.location.origin+'/home/receptionManager'
+                  }
+                })
                 // this.$dialog.confirm({
                 //   tipValue: '保险理赔需要上传保险资料进行结账,是否前往？',
                 //   btnValueOk: '确认',
@@ -217,21 +226,45 @@
                 //   width:'450',
                 //   okCallBack: () => {
                 //     document.querySelector('body').setAttribute('style','overflow:auto;')
-                    this.$dialog.OpenWindow({
-                      width: 1050,
-                      height: 720,
-                      url:'/workOrderClaimDataForm?isFlag=1&id='+this.subid+'&type='+data.type+'&orderID='+this.orderid,
-                      title:'创建保险公司并上传保险公司资料',
-                      closeCallBack:(data)=>{
-                        if(data){
-                          window.location.href = window.location.origin+'/home/receptionManager'
-
-                        }
-                      }
-                    })
+                //     this.$dialog.OpenWindow({
+                //       width: 1050,
+                //       height: 720,
+                //       url:'/workOrderClaimDataForm?isFlag=1&id='+this.subid+'&type='+data.type+'&orderID='+this.orderid,
+                //       title:'创建保险公司并上传保险公司资料',
+                //       closeCallBack:(data)=>{
+                //         if(data){
+                //           window.location.href = window.location.origin+'/home/receptionManager'
+                //
+                //         }
+                //       }
+                //     })
                 //   }
                 // })
               }else{
+                this.$dialog.OpenWindow({
+                  width: 1050,
+                  height: 720,
+                  url:'/workOrderClaimDataForm?type=2&id='+data.unitID+'&orderID='+this.orderid,
+                  title:'上传保险公司资料',
+                  closeCallBack:(data)=>{
+                    if(data){
+                      this.ajaxJson({
+                        url: '/fix/fixOrder/save',
+                        data:{
+                          id:this.orderid,
+                          state:'19',
+                          isbill:'1'
+                        },
+                        loading:'0',
+                        call: (data) => {
+                          if(data){
+                            window.location.href = window.location.origin+'/home/receptionManager'
+                          }
+                        }
+                      })
+                    }
+                  }
+                })
                 // this.$dialog.confirm({
                 //   tipValue: '保险理赔需要上传保险资料进行结账,是否前往？',
                 //   btnValueOk: '确认',
@@ -239,18 +272,18 @@
                 //   width:'450',
                 //   okCallBack: () => {
                 //     document.querySelector('body').setAttribute('style','overflow:auto;')
-                    this.$dialog.OpenWindow({
-                      width: 1050,
-                      height: 720,
-                      url:'/workOrderClaimDataForm?isFlag=1&type=1&id='+this.subid+'&orderID='+this.orderid,
-                      title:'上传保险公司资料',
-                      closeCallBack:(data)=>{
-                        if(data){
-                          window.location.href = window.location.origin+'/home/receptionManager'
-
-                        }
-                      }
-                    })
+                //     this.$dialog.OpenWindow({
+                //       width: 1050,
+                //       height: 720,
+                //       url:'/workOrderClaimDataForm?isFlag=1&type=1&id='+this.subid+'&orderID='+this.orderid,
+                //       title:'上传保险公司资料',
+                //       closeCallBack:(data)=>{
+                //         if(data){
+                //           window.location.href = window.location.origin+'/home/receptionManager'
+                //
+                //         }
+                //       }
+                //     })
                 //   }
                 // })
               }

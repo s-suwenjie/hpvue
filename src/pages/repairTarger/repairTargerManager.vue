@@ -8,7 +8,7 @@
           <div style="width: 3px;height: 20px;background-color: #49A9EA;margin-right: 5px;"></div>
           <div style="color: #999999;"> 年份：</div>
           <yhm-datebox type="year" :value="year" :isSm="true" @call="initPageData(false)" width="120" height="20"  position="b" id="year" style="margin-right: 10px"></yhm-datebox>
-          <yhm-radiofilter @initData="initPageData(false)" title="状态" :content="categoryPsd" all="1" id="categoryPsd"></yhm-radiofilter>
+          <!--<yhm-radiofilter @initData="initPageData(false)" title="月份" :content="categoryPsd" all="1" id="categoryPsd"></yhm-radiofilter>-->
         </template>
 
         <template #choose>
@@ -23,7 +23,9 @@
           <yhm-managerth title="添加人"></yhm-managerth>
           <yhm-managerth title="启用时间" ></yhm-managerth>
           <yhm-managerth title="日期"></yhm-managerth>
-          <yhm-managerth title="金额" ></yhm-managerth>
+          <yhm-managerth title="目标金额" ></yhm-managerth>
+          <yhm-managerth title="营业额" ></yhm-managerth>
+          <yhm-managerth title="完成度（%）" ></yhm-managerth>
           <yhm-managerth title="操作"></yhm-managerth>
         </template>
         <!--      数据表单       -->
@@ -35,6 +37,8 @@
             <yhm-manager-td-date :value="item.year+'年'"></yhm-manager-td-date>
             <yhm-manager-td-psd :value="item.category" :list="categoryPsd.list"></yhm-manager-td-psd>
             <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
+            <yhm-manager-td-money :value="item.turnover"></yhm-manager-td-money>
+            <yhm-manager-td-money :value="item.completion"></yhm-manager-td-money>
             <yhm-manager-td-operate>
             </yhm-manager-td-operate>
           </tr>
@@ -47,7 +51,21 @@
         <template #pager>
           <yhm-pagination :pager="pager" @initData="initPageData(false)"></yhm-pagination>
         </template>
+        <template #listTotalHead>
+          <yhm-managerth before-color="black" title="" before-title="年度目标营业额" ></yhm-managerth>
+          <yhm-managerth before-color="black" title="" before-title="当年累计营业额" ></yhm-managerth>
+          <yhm-managerth before-color="black" title="" before-title="完成度" ></yhm-managerth>
+        </template>
+        <template #listTotalBody>
+          <tr>
+            <yhm-manager-td-money v-for="(item,index) in contentTotal" :key="index + 1" :value="item.money"></yhm-manager-td-money>
+            <yhm-manager-td-money v-for="(item,index) in contentTotal" :key="index" :value="item.turnover"></yhm-manager-td-money>
+            <yhm-manager-td-money v-for="(item,index) in contentTotal" :key="index" :value="item.completion"></yhm-manager-td-money>
+          </tr>
+          <tr>
 
+          </tr>
+        </template>
       </yhm-managerpage>
     </div>
 </template>
@@ -59,10 +77,11 @@
     mixins: [managermixin],
     data () {
       return {
+        contentTotal:[],
         content:[],
         searchStr:'',
         shortcutSearchContent:[],
-        year:'',
+        year:(new Date()).getFullYear(),
         categoryPsd:{
           list:[],
           value:'',
@@ -98,6 +117,7 @@
             // 不管是不是初始化都需要执行的代码
             this.shortcutSearchContent=data.shortcutSearchContent
             this.content=data.content
+            this.contentTotal=data.total
           },
           init: (data) => {
             this.categoryPsd=data.categoryPsd
@@ -109,12 +129,12 @@
         this.$dialog.OpenWindow({
           width: '1050',
           height: '600',
-          url: '/repairTargerForm',
+          url: '/repairTargerForm?isMain=0',
           title: '添加',
           closeCallBack: (data) => {
-            // if (data) {
+            if (data) {
               this.initPageData(false)
-            // }
+            }
           }
         })
       },

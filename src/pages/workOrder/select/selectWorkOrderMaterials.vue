@@ -110,7 +110,7 @@
         if (initValue) {
           // 页面初始化是需要的参数
           params = {
-            storageType:this.category,
+            // storageType:this.category,
             stockType:this.applicableModels,
             // number:'',
             productID:this.productid,
@@ -120,7 +120,7 @@
         } else {
           // 页面非初始化时需要的参数
           params = {
-            storageType:this.category,
+            // storageType:this.category,
             stockType:this.applicableModels,
             // number:'',
             productID:this.productid,
@@ -133,6 +133,8 @@
           url: '/Basic/getProductFrom',
           data: params,
           all: (data) => {
+            this.selectValue = []
+
             // 不管是不是初始化都需要执行的代码
             this.content = data.content
             // this.categoryList = data.categoryPsd.list

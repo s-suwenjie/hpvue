@@ -245,15 +245,14 @@
         }
       },
       gathering(item){
+        // +'&brandVal='+item.brandVal +'&moneyMax='+item.remreceivedMoney+'&workOrderID='+item.orderid+'&unitOrPerson='+item.unitType
+        // +'&workOrder='+item.code+'&vehicleBrandID='+item.brand+'&customer='+item.carOwner+'&customerName='+item.carOwnerID
+        // +'&licensePlateNumber='+item.vehicle+'&operator='+item.client+'&operatorID='+item.clientID +'&vehicleType='+item.modelVal+'&vehicleTypeID='+item.modelID+'&vehicleBrand='+item.brandVal
         this.$dialog.OpenWindow({
           width: '1050',
           height: '690',
           title: '收款(客户)',
-          url: '/workOrderCashierDeskForm?money='+item.remreceivedMoney+'&brandVal='+item.brandVal
-            +'&moneyMax='+item.remreceivedMoney+'&workOrderID='+item.orderid+'&unitOrPerson='+item.unitType
-            +'&workOrder='+item.code+'&vehicleBrandID='+item.brand+'&customer='+item.carOwner+'&customerName='+item.carOwnerID
-            +'&licensePlateNumber='+item.vehicle+'&operator='+item.client+'&operatorID='+item.clientID
-            +'&vehicleType='+item.modelVal+'&vehicleTypeID='+item.modelID+'&vehicleBrand='+item.brandVal
+          url: '/workOrderCashierDeskForm?money='+item.remreceivedMoney+'&receptionid='+item.receptionid
           ,
           closeCallBack: (data)=>{
             this.initPageData(false)

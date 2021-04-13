@@ -11,9 +11,12 @@
         <template #listHead>
           <yhm-managerth style="width: 40px;" title="选择" ></yhm-managerth>
           <yhm-managerth style="width: 40px;" title="查看" ></yhm-managerth>
-          <yhm-managerth  style="width: 100px;"  title="别名" value="shortName"></yhm-managerth>
+          <yhm-managerth width="150"  title="别名" value="shortName"></yhm-managerth>
           <yhm-managerth  title="汇款公司名称" value="unit"></yhm-managerth>
           <yhm-managerth  title="回款公司名称" value="incomeUnit"></yhm-managerth>
+          <yhm-managerth width="100"  title="总数"></yhm-managerth>
+          <yhm-managerth width="130"  title="利润"></yhm-managerth>
+          <yhm-managerth width="130"  title="合计金额"></yhm-managerth>
         </template>
         <template #listBody >
           <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
@@ -22,6 +25,9 @@
             <yhm-manager-td :value="item.shortName" :color="item.deputyColor" ></yhm-manager-td>
             <yhm-manager-td :value="item.unit"></yhm-manager-td>
             <yhm-manager-td :value="item.incomeUnit"></yhm-manager-td>
+            <yhm-manager-td-center :value="item.sum"></yhm-manager-td-center>
+            <yhm-manager-td-money style="color: #00b300;" :value="item.sumprofit"></yhm-manager-td-money>
+            <yhm-manager-td-money style="color: #fd6802;" :value="item.sumexpend"></yhm-manager-td-money>
           </tr>
         </template>
         <!--数据空提示-->
@@ -62,8 +68,8 @@
         this.$dialog.OpenWindow({
           width: 1050,
           height: 720,
-          url:'/workOrderInsuranceUnitForm?id='+item.id,
-          title:'编辑保险公司',
+          url:'/workOrderInsuranceUnitForm?id='+item.id+'&unitname='+item.shortName+'&unitID='+item.id+'&fixorderunitID='+item.fixorderunitID,
+          title:'编辑保险公司资料',
           closeCallBack:(data)=>{
             this.initPageData()
           }

@@ -39,14 +39,17 @@
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
         <yhm-managerth style="width: 80px;"  title="业务员" value="salsesman"></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="投保日期" value="insuredDate"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="车牌号" value="plate"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="联系人" value="contactName"></yhm-managerth>
-        <yhm-managerth style="width: 100px;" title="被保险人" value="beinsuredName"></yhm-managerth>
-        <yhm-managerth style="width: 90px;" title="保险公司" value="insuredUnit"></yhm-managerth>
-        <yhm-managerth style="width: 90px;" title="投保类型"></yhm-managerth>
-        <yhm-managerth title="优惠券金额" ></yhm-managerth>
-        <yhm-managerth @call="actualEvent" v-if="isActual" style="width: 100px ;" title="预计盈亏" subtitle="(可点击)"></yhm-managerth>
-        <yhm-managerth @call="realEvent" v-if="isReal" style="width: 100px; " title="实时盈亏" subtitle="(可点击)"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="车牌号" value="plate"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="联系人" value="contactName"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="被保险人" value="beinsuredName"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="保险公司" value="insuredUnit"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="投保类型"></yhm-managerth>
+        <!--<yhm-managerth title="优惠券金额" ></yhm-managerth>-->
+        <yhm-managerth @call="actualEvent" v-if="isActual" style="width: 90px ;" title="预计盈亏" subtitle="(可点击)"></yhm-managerth>
+        <yhm-managerth @call="realEvent" v-if="isReal" style="width: 90px; " title="实时盈亏" subtitle="(可点击)"></yhm-managerth>
+        <yhm-managerth style="color: #972CB1" title="商业险" subtitle="金额" value="premiumsTotal"></yhm-managerth>
+        <yhm-managerth style="color: #0c8484" title="交强险" subtitle="金额" value="premiumsTotal"></yhm-managerth>
+        <yhm-managerth style="color: #0808D6" title="车船税" subtitle="金额" value="premiumsTotal"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="保费合计" subtitle="(优惠前)" value="premiumsTotal"></yhm-managerth>
         <yhm-managerth style="width: 100px;" title="实收金额"  subtitle="(优惠后)" value="receivedMoney"></yhm-managerth>
         <yhm-managerth title="发票" subtitle="客户抬头" ></yhm-managerth>
@@ -70,12 +73,15 @@
           </yhm-manager-td>
           <yhm-manager-td-psd :list="insuredUnitList" :value="item.insuredUnit"></yhm-manager-td-psd>
           <yhm-manager-td-center :value="item.insuredTypeVal"></yhm-manager-td-center>
-          <yhm-manager-td-money v-if="item.couponMoney!=0" style="color: #FF0000" :value="item.couponMoney"></yhm-manager-td-money>
-          <yhm-manager-td-money v-else :value="item.couponMoney"></yhm-manager-td-money>
+          <!--<yhm-manager-td-money v-if="item.couponMoney!=0" style="color: #FF0000" :value="item.couponMoney"></yhm-manager-td-money>-->
+          <!--<yhm-manager-td-money v-else :value="item.couponMoney"></yhm-manager-td-money>-->
 
           <yhm-manager-td-money v-if="isActual" @click="listExpectedView(item)" :value="item.actualProfitLoss" :style="{'color':item.actualProfitLoss>=0?'#2c9208':'#f00'}" style=" font-weight:bold;"></yhm-manager-td-money>
           <yhm-manager-td-money v-if="isReal"  @click="listExpectedView(item)" :value="item.realTimeProfitLoss" :style="{'color':item.realTimeProfitLoss>=0?'#2c9208':'#f00'}" style=" font-weight:bold;"></yhm-manager-td-money>
 
+          <yhm-manager-td-money :value="item.businessMoney"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.forceMoney"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.vehicleMoney"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.premiumsTotal"></yhm-manager-td-money>
           <yhm-manager-td-money :value="item.receivedMoney" style="color: #0909F7" ></yhm-manager-td-money>
 
@@ -103,8 +109,8 @@
       <template #empty >
         <span class="m_listNoData" v-show="empty">暂时没有数据</span>
       </template>
-      <template #total v-if="this.listAccountsReceivableDate.value==''||this.listAccountsReceivableDate.value==9?true:false">
-        <div class="listTotalCrente m_list w620">
+      <template #total v-if="listAccountsReceivableDate.value==''||listAccountsReceivableDate.value==9">
+        <div class="listTotalCrente m_list" style="width: 1200px">
           <div class="listTotalLeft">
             <span class="test"></span>
             <span class="test">金额</span>
@@ -113,7 +119,10 @@
           <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
             <thead>
             <tr>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="优惠券金额" ></yhm-managerth>
+              <!--<yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="优惠券金额" ></yhm-managerth>-->
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="商业险金额" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="交强险金额" ></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="车船税金额" ></yhm-managerth>
               <yhm-managerth v-if="isActual" style="width: 100px;" before-color="#49a9ea" title="" before-title="预计盈亏总额"></yhm-managerth>
               <yhm-managerth v-if="isReal" style="width: 100px;" before-color="#49a9ea" title="" before-title="实时盈亏总额"></yhm-managerth>
               <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="保费合计(优惠前)" ></yhm-managerth>
@@ -123,7 +132,10 @@
             </thead>
             <tbody>
             <tr>
-              <yhm-manager-td-money  style="color: #FF0000" :value="contentTotal[0].money"  ></yhm-manager-td-money>
+              <!--<yhm-manager-td-money  style="color: #FF0000" :value="contentTotal[0].money"  ></yhm-manager-td-money>-->
+              <yhm-manager-td-money  :value="contentTotal[5].money"  ></yhm-manager-td-money>
+              <yhm-manager-td-money  :value="contentTotal[6].money"  ></yhm-manager-td-money>
+              <yhm-manager-td-money  :value="contentTotal[7].money"  ></yhm-manager-td-money>
               <yhm-manager-td-money v-if="isActual"  :value="contentTotal[1].money"  :style="{'color':contentTotal[0].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
               <yhm-manager-td-money v-if="isReal" :value="contentTotal[2].money"  :style="{'color':contentTotal[1].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
               <yhm-manager-td-money  :value="contentTotal[3].money"  ></yhm-manager-td-money>
@@ -131,7 +143,10 @@
 <!--              <yhm-manager-td-money    :value="oldMoney"></yhm-manager-td-money>-->
             </tr>
             <tr>
-              <yhm-manager-td-rgt  style="color: #FF0000" :value="contentTotal[0].count"></yhm-manager-td-rgt>
+              <!--<yhm-manager-td-rgt  style="color: #FF0000" :value="contentTotal[0].count"></yhm-manager-td-rgt>-->
+              <yhm-manager-td-rgt  :value="contentTotal[5].count"  ></yhm-manager-td-rgt>
+              <yhm-manager-td-rgt  :value="contentTotal[6].count"  ></yhm-manager-td-rgt>
+              <yhm-manager-td-rgt  :value="contentTotal[7].count"  ></yhm-manager-td-rgt>
               <yhm-manager-td-rgt v-if="isActual" :value="contentTotal[1].count" :style="{'color':contentTotal[0].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-rgt>
               <yhm-manager-td-rgt v-if="isReal" :value="contentTotal[2].count" :style="{'color':contentTotal[1].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-rgt>
               <yhm-manager-td-rgt  :value="contentTotal[3].count"></yhm-manager-td-rgt>
@@ -141,11 +156,9 @@
             </tbody>
           </table>
         </div>
-
       </template>
-
       <template #total v-else>
-        <div class="listTotalCrente m_list w620">
+        <div class="listTotalCrente m_list" style="width: 1200px">
           <div class="listTotalLeft">
             <span class="test"></span>
             <span class="test">金额</span>
@@ -154,19 +167,25 @@
           <table width="100%" cellpadding="0" cellspacing="0" class="m_content_table m_content_total_table">
             <thead>
             <tr>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="优惠券金额" ></yhm-managerth>
-              <yhm-managerth v-if="isActual" style="width: 100px;" before-color="#49a9ea" title="" before-title="预计盈亏总额"></yhm-managerth>
-              <yhm-managerth v-if="isReal" style="width: 100px;" before-color="#49a9ea" title="" before-title="实时盈亏总额"></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="保费合计(优惠前)" ></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="实收金额(优惠后)" ></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" :before-title="'比'+comparisonTitleList[listAccountsReceivableDate.value]+'(环比)'" ></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="同比" ></yhm-managerth>
+              <!--<yhm-managerth style="width: 100px;" before-color="#49a9ea" title="" before-title="优惠券金额" ></yhm-managerth>-->
+              <yhm-managerth before-color="#49a9ea" title="" before-title="商业险金额" ></yhm-managerth>
+              <yhm-managerth before-color="#49a9ea" title="" before-title="交强险金额" ></yhm-managerth>
+              <yhm-managerth before-color="#49a9ea" title="" before-title="车船税金额" ></yhm-managerth>
+              <yhm-managerth v-if="isActual"  before-color="#49a9ea" title="" before-title="预计盈亏总额"></yhm-managerth>
+              <yhm-managerth v-if="isReal"  before-color="#49a9ea" title="" before-title="实时盈亏总额"></yhm-managerth>
+              <yhm-managerth  before-color="#49a9ea" title="" before-title="保费合计(优惠前)" ></yhm-managerth>
+              <yhm-managerth  before-color="#49a9ea" title="" before-title="实收金额(优惠后)" ></yhm-managerth>
+              <yhm-managerth  before-color="#49a9ea" title="" :before-title="'比'+comparisonTitleList[listAccountsReceivableDate.value]+'(环比)'" ></yhm-managerth>
+              <yhm-managerth  before-color="#49a9ea" title="" before-title="同比" ></yhm-managerth>
               <!--              <yhm-managerth  style="width: 100px;" width="100px" title="" :before-title="oldTotal"></yhm-managerth>-->
             </tr>
             </thead>
             <tbody>
             <tr>
-              <yhm-manager-td-money  style="color: #FF0000" :value="contentTotal[0].money"  ></yhm-manager-td-money>
+              <!--<yhm-manager-td-money  style="color: #FF0000" :value="contentTotal[0].money"  ></yhm-manager-td-money>-->
+              <yhm-manager-td-money  :value="contentTotal[7].money"  ></yhm-manager-td-money>
+              <yhm-manager-td-money  :value="contentTotal[8].money"  ></yhm-manager-td-money>
+              <yhm-manager-td-money  :value="contentTotal[9].money"  ></yhm-manager-td-money>
               <yhm-manager-td-money v-if="isActual"  :value="contentTotal[1].money"  :style="{'color':contentTotal[0].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
               <yhm-manager-td-money v-if="isReal" :value="contentTotal[2].money"  :style="{'color':contentTotal[1].money>=0?'#2c9208':'#f00'}"></yhm-manager-td-money>
               <yhm-manager-td-money  :value="contentTotal[3].money"  ></yhm-manager-td-money>
@@ -176,7 +195,10 @@
               <!--              <yhm-manager-td-money    :value="oldMoney"></yhm-manager-td-money>-->
             </tr>
             <tr>
-              <yhm-manager-td-rgt  style="color: #FF0000" :value="contentTotal[0].count"></yhm-manager-td-rgt>
+              <!--<yhm-manager-td-rgt  style="color: #FF0000" :value="contentTotal[0].count"></yhm-manager-td-rgt>-->
+              <yhm-manager-td-rgt  :value="contentTotal[7].count"  ></yhm-manager-td-rgt>
+              <yhm-manager-td-rgt  :value="contentTotal[8].count"  ></yhm-manager-td-rgt>
+              <yhm-manager-td-rgt  :value="contentTotal[9].count"  ></yhm-manager-td-rgt>
               <yhm-manager-td-rgt v-if="isActual" :value="contentTotal[1].count" :style="{'color':contentTotal[0].money>=0?'#0909F7':'#f00'}"></yhm-manager-td-rgt>
               <yhm-manager-td-rgt v-if="isReal" :value="contentTotal[2].count" :style="{'color':contentTotal[1].money>=0?'#0909F7':'#f00'}"></yhm-manager-td-rgt>
               <yhm-manager-td-rgt  :value="contentTotal[3].count"></yhm-manager-td-rgt>

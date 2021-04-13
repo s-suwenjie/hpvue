@@ -67,7 +67,6 @@
         <yhm-managerth style="width: 50px" title="单位"></yhm-managerth>
         <yhm-managerth style="width: 65px" title="拆分数量"></yhm-managerth>
         <yhm-managerth style="width: 65px" title="拆分单位"></yhm-managerth>
-
 <!--        <yhm-managerth style="width: 90px" title="不含税单价"></yhm-managerth>-->
 <!--        <yhm-managerth style="width: 90px" title="不含税总价"></yhm-managerth>-->
         <yhm-managerth style="width: 110px" title="采购单价"></yhm-managerth>
@@ -80,14 +79,14 @@
 <!--          <yhm-form-td-textbox width="36"  no-edit="1" id="num" :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>-->
           <yhm-form-td-select-dialog width="210" tip="value" @call="selectProduct(item,index)" id="product" :list="productDetails" listid="productDetails" :value="item" rule="#"></yhm-form-td-select-dialog>
           <yhm-form-td-select-dialog width="210" tip="value" @call="selectModel(item,index)" id="model" :list="productDetails" listid="productDetails" :value="item" rule="#"></yhm-form-td-select-dialog>
-          <yhm-form-td-textbox width="60" min-number="1" @input="toprice(item)" @blur="toprice(item)" :list="productDetails" listid="productDetails" :value="item" id="quantity"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="60" min-number="1" @input="toprice(item,item.quantity,'quantity')" @blur="toprice(item,item.quantity,'quantity')" :list="productDetails" listid="productDetails" :value="item" id="quantity"></yhm-form-td-textbox>
           <yhm-form-td-textbox width="50" tip="value" id="uuStr" :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="65" min-number="1" tip="value" @input="toprice(item)" @blur="toprice(item)" :no-edit="item.noEdit" id="mdo" :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="65" min-number="1" tip="value" @input="toprice(item,item.mdo,'mdo')" @blur="toprice(item,item.mdo,'mdo')" :no-edit="item.noEdit" id="mdo" :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>
           <yhm-form-td-textbox width="65" tip="value" :no-edit="item.noEdit" id="mdoStr" :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>
 
 <!--          <yhm-form-td-textbox width="90" no-edit="1" tip="money" before-icon="rmb" :list="productDetails" listid="productDetails" :value="item" id="price"></yhm-form-td-textbox>-->
 <!--          <yhm-form-td-textbox width="90" no-edit="1" tip="money" tip-left="-53" tip-arrow-left="70" before-icon="rmb" id="totalPrice"  :list="productDetails" listid="productDetails" :value="item"></yhm-form-td-textbox>-->
-          <yhm-form-td-textbox width="110" @input="toprice(item)" tip="money" tip-arrow-left="170" tip-left="-153"  id="priceTax" before-icon="rmb" :list="productDetails" listid="productDetails" :value="item"  rule="R0000" ></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="110" @input="toprice(item,item.priceTax,'priceTax')" @blur="priceTaxBlur(item)" tip="money" tip-arrow-left="170" tip-left="-153"  id="priceTax" before-icon="rmb" :list="productDetails" listid="productDetails" :value="item"  rule="R0000" ></yhm-form-td-textbox>
           <yhm-form-td-textbox width="110" no-edit="1" tip="money" tip-arrow-left="245" tip-left="-230"  id="totalPriceTax" before-icon="rmb" :list="productDetails" listid="productDetails" :value="item"  rule="R0000" ></yhm-form-td-textbox>
           <yhm-form-td-delete width="40" :list="productDetails" :value="item" :del-click="false" @click="delFromList(item.id,index)"></yhm-form-td-delete>
         </tr>
@@ -153,6 +152,19 @@
       }
     },
     methods:{
+      priceTaxBlur(item){
+        // if(Number(item.priceTax)<=0){
+        //   item.priceTax = 1
+        // }
+        let containSpecial = RegExp(/[(\ )(\~)(\~)(\!)(\！)(\@)(\#)(\$)(\￥)(\%)(\^)(\……)(\&)(\*)(\()(\（)(\))(\）)(\-)(\_))(\——)(\+)(\=)(\[)(\【)(\])(\】)(\{)(\})(\|))(\、))(\)(\\)(\;)(\；)(\:)(\：)(\')(\‘)(\’)(\")(\“)(\”)(\,)(\，)(\.)(\。)(\/)(\《)(\<)(\>)(\》)(\?)(\？)(\)]+/);
+        if(Number(item.priceTax)<0||item.priceTax==''){//输入为负数时变为0
+          item.priceTax = '0'
+        }else if(containSpecial.test(item.priceTax)){//输入特殊符号时变为0
+          item.priceTax = '0'
+        }else if(item.priceTax.length>=9){
+          item.priceTax = item.priceTax.slice(0,9)
+        }
+      },
       //from内保存
       printFund(idm,state){
         let tipValue = ''
@@ -415,8 +427,27 @@
 
       },
       //确定单价明细
-      toprice(item){
-        let price
+      toprice(item,money,valueName){
+        // console.log(item,money,valueName)
+        let js
+        let containSpecial = RegExp(/[(\ )(\~)(\~)(\!)(\！)(\@)(\#)(\$)(\￥)(\%)(\^)(\……)(\&)(\*)(\()(\（)(\))(\）)(\-)(\_))(\——)(\+)(\=)(\[)(\【)(\])(\】)(\{)(\})(\|))(\、))(\)(\\)(\;)(\；)(\:)(\：)(\')(\‘)(\’)(\")(\“)(\”)(\,)(\，)(\.)(\。)(\/)(\《)(\<)(\>)(\》)(\?)(\？)(\)]+/);
+        if(Number(money)<0||money==''){//输入为负数时变为0
+          js = 'item.'+valueName + '=0'
+          // console.log('111111111')
+        }else if(containSpecial.test(money)){//输入特殊符号时变为0
+
+          js = 'item.'+valueName + '=0'
+          // console.log('22222222')
+        }else if(money.length>=9){
+          js = 'item.'+valueName + '=' + money.slice(0,9)
+          // console.log('33333333')
+        }
+        // setTimeout(()=>{
+        //   console.log(js)
+          eval(js)
+        // },0)
+
+        // let price
         // console.log(item)
         // price = (Number(item.priceTax)-Number(item.priceTax*(this.taxPrice/100)))
         // item.price = price.toFixed(2)

@@ -1781,6 +1781,11 @@ export default {
       } else if(this.ownerSys === '3'){
         name = '93'
       }
+      if(this.nature=='7'){
+        name=name+'&value9=1'
+      }else if(this.nature=='8'){
+        name=name+'&value9=2'
+      }
       this.$dialog.OpenWindow({
         width: 950,
         height: 603,

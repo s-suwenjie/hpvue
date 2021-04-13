@@ -16,7 +16,7 @@
         <yhm-form-radio title="合同状态" subtitle=""  width="1" :select-list="stateList" :value="state" id="state" rule="R0000" ></yhm-form-radio>
         <yhm-form-radio  @call="payCall()" title="合同" subtitle="收付款项" :select-list="paymentItemsList" :value="paymentItems" id="paymentItems" rule="R0000" ></yhm-form-radio>
         <yhm-form-text v-if="isMoney" placeholder=""  title="总金额" subtitle=""  :value="totalMoney" id="totalMoney" :rule="totalMoney==''?'':'R1501'" ></yhm-form-text>
-
+        <yhm-form-radio v-if="isApply" title="开票类型" subtitle=""  width="1" :select-list="applyopenInvoiceList" :value="applyopenInvoice" id="applyopenInvoice" rule="R0000" ></yhm-form-radio>
         <yhm-form-date title="签约日期"  :value="startTime" id="startTime " position="t" rule="R0000"></yhm-form-date>
         <yhm-form-date title="结束日期" :min="startTime" :value="endTime" id="endTime " position="t"></yhm-form-date>
         <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="合同文件" tag="contract" multiple="multiple" category="3" ></yhm-formupload>
@@ -109,11 +109,16 @@
         paymentItemsList:[],//合同收付款
         categoryList:[],
         category:'',
+        applyopenInvoiceList:[],
+        applyopenInvoice:'',//发票类型
+        billingStatus:'',//开票状态
+        remainingAmount:'',//开票总金额
         isCarWash:false,
         isPay:true,
         isdet:true,
         isOwner:false,
-        isMoney:true
+        isMoney:true,
+        isApply:false
       }
     },
     methods: {
@@ -166,6 +171,12 @@
           this.isMoney=false
         } else{
           this.isMoney=true
+        }
+        if (this.paymentItems==0){
+            this.isApply=true
+        }else {
+          this.isApply=false
+          this.applyopenInvoice='-1'
         }
       },
       cateType(){
@@ -281,6 +292,15 @@
           this.paymentItems='2'
 
         }
+        if (this.paymentItems==0){
+          this.billingStatus=1
+          this.remainingAmount=this.totalMoney
+        }else{
+          this.billingStatus=0
+          this.remainingAmount='0'
+          this.applyopenInvoice='-1'
+        }
+
         if (this.validator()) {
           if (this.detailsList.length>0){
 
@@ -309,6 +329,9 @@
                 state:this.state,
                 totalMoney: this.totalMoney,
                 type:this.type,
+                billingStatus:this.billingStatus,
+                remainingAmount:this.remainingAmount,
+                applyopenInvoice:this.applyopenInvoice,
                 files: this.fileList,
                 detailsList:this.detailsList,
               }
@@ -362,6 +385,9 @@
                     state:this.state,
                     totalMoney: this.totalMoney,
                     type:this.type,
+                    billingStatus:this.billingStatus,
+                    remainingAmount:this.remainingAmount,
+                    applyopenInvoice:this.applyopenInvoice,
                     files: this.fileList,
                     detailsList:this.detailsList,
                   }
@@ -408,6 +434,9 @@
               state:this.state,
               totalMoney: this.totalMoney,
               type:this.type,
+              billingStatus:this.billingStatus,
+              remainingAmount:this.remainingAmount,
+              applyopenInvoice:this.applyopenInvoice,
               files: this.fileList,
               detailsList:this.detailsList,
             }
@@ -491,6 +520,7 @@
           this.paymentItemsList = data.paymentItemsPsd.list
           this.categoryList = data.categoryPsd.list
           this.category = data.categoryPsd.value
+          this.applyopenInvoiceList=data.applyopenInvoicePsd.list
         },
         add: (data) => {
           /* 需要添加的数据 */
@@ -519,6 +549,7 @@
             this.detailsList=data.detailsList
             this.otherPartyPerson=data.otherPartyPerson
             this.otherPartyPersonID=data.otherPartyPersonID
+            this.applyopenInvoice=data.applyopenInvoice
             this.cateCall()
             this.cateType()
             this.payCall()

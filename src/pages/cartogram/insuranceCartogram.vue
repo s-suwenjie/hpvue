@@ -26,10 +26,10 @@
               <span v-html="segmentationss"></span>
               <span style="color: #7EE07E;margin-left: 5px;"> 目标: </span>
               <span v-html="tenThousand(targetlist[0])" style="color: #7EE07E;" v-if="month!=13"></span>
-              <span v-html="tenThousand(moneyList[0].yearTarget)" style="color: #7EE07E;" v-if="month==13"></span>
+              <span v-html="tenThousand(yearTarget)" style="color: #7EE07E;" v-if="month==13"></span>
               <span style="color: #F26A5D;margin-left: 5px;"> 完成度: </span>
-              <span v-html="tenThousand(completionlist[0])" style="color: #F26A5D;" v-if="month!=13"></span>
-              <span v-html="tenThousand(moneyList[0].yearCompletion)" style="color: #F26A5D;" v-if="month==13"></span>
+              <span style="color: #F26A5D;" v-if="month!=13">{{(completionlist[0]*100).toFixed(2)}} %</span>
+              <span style="color: #F26A5D;" v-if="month==13"> {{(yearCompletion*100).toFixed(2)}} %</span>
             </div>
           </div>
         </div>
@@ -88,6 +88,8 @@
         colorList:['#8e9eab','#eeef20','#00f5d4','#C4E0E5','#00bbf9','#ffd194', '#90e0ef','#9b5de5','#f3ffbd','#70d6ff','#deaaff','#f7d9c4'],//颜色数组
         targetlist:[],
         completionlist:[],
+        yearTarget:0,
+        yearCompletion:0,
       }
     },
     computed:{
@@ -220,7 +222,7 @@
               if(that.month==13){
                 label = '日期 ' +  day +'</br>' + '金额 ' + tenThousandFormatHtml(params[0].data+'')
                       +'</br>' + '目标:' +' '+ tenThousandFormatHtml(that.targetlist[params[0].dataIndex]+'')
-                      +'</br>' + '完成度:' +' '+ tenThousandFormatHtml(that.completionlist[params[0].dataIndex]+'')
+                      +'</br>' + '完成度:' +' '+ (that.completionlist[params[0].dataIndex]*100).toFixed(2)+'%'
               }else{
                 label = '日期 ' +  day +'</br>' + '金额 ' + tenThousandFormatHtml(params[0].data+'')
               }
@@ -366,18 +368,39 @@
                 normal:{
                   //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
                   color: function (params){
-                    let j = 0
-                    let colorList = []
-                    for(let i in that.money){
-                      if(colorList.length%12==0==true){
-                        j=0
-                        colorList.push(that.colorList[j])
+                    // console.log(params)
+                    if(that.month!=13){
+                      let j = 0
+                      let colorList = []
+                      for(let i in that.money){
+                        if(colorList.length%12==0==true){
+                          j=0
+                          colorList.push(that.colorList[j])
+                        }else{
+                          j++
+                          colorList.push(that.colorList[j])
+                        }
+                      }
+                      return colorList[params.dataIndex];
+                    }else{
+                      if(params.data>= that.targetlist[params.dataIndex]){
+                          return '#FF1A20'
+
                       }else{
-                        j++
-                        colorList.push(that.colorList[j])
+                        let j = 0
+                        let colorList = []
+                        for(let i in that.money){
+                          if(colorList.length%12==0==true){
+                            j=0
+                            colorList.push(that.colorList[j])
+                          }else{
+                            j++
+                            colorList.push(that.colorList[j])
+                          }
+                        }
+                        return colorList[params.dataIndex];
                       }
                     }
-                    return colorList[params.dataIndex];
                   }
                 },
                 //鼠标悬停时：
@@ -483,6 +506,10 @@
               this.dateMax = this.year + '年' + month + '月' + newDay + '日'
               this.dateMin = this.year + '年' + month + '月' + newDayMin + '日'
             }else{
+              this.yearTarget=data[0].yearTarget
+              this.yearCompletion=data[0].yearCompletion
+              console.log(this.yearTarget)
+              console.log(this.yearCompletion)
               for(let i in data){
                 this.day.push(this.year + '年' + data[i].day + '月')
                 this.money.push(data[i].money)

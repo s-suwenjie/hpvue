@@ -60,6 +60,7 @@
         maxYear: parseInt(formatDate(new Date()).substr(0, 4)),
         yearTxt: new Date().getFullYear() + '',
         year:'',//年份
+        month:'',//月份
         day:[],
         money:[],
         sequence:true,//true的是从大到小序,false是从小到大排序
@@ -224,7 +225,7 @@
               type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
             },
             formatter(params){
-              let day = params[0].axisValue.indexOf('年')==-1?params[0].axisValue+'日':params[0].axisValue
+              let day = params[0].axisValue.indexOf('月')==-1?that.year+'年'+that.month+'月' + params[0].axisValue+'日':that.year+'年'+params[0].axisValue
               let label = '日期 ' +  day +'</br>' + '金额 ' + tenThousandFormatHtml(params[0].data+'')
               return label
             }
@@ -369,7 +370,7 @@
               type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
             },
             formatter(params){
-              let day = params[0].axisValue.indexOf('年')==-1?params[0].axisValue+'日':params[0].axisValue
+              let day = params[0].axisValue.indexOf('月')==-1?that.year+'年'+that.month+'月' + params[0].axisValue+'日':that.year+'年'+params[0].axisValue
               let label = '日期 ' +  day +'</br>' + '金额 ' + tenThousandFormatHtml(params[0].data+'')
               return label
             }
@@ -702,12 +703,12 @@
 
                   }
                 },
-                //鼠标悬停时：
-                emphasis: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
+                // //鼠标悬停时：
+                // emphasis: {
+                //   shadowBlur: 10,
+                //   shadowOffsetX: 0,
+                //   shadowColor: 'rgba(0, 0, 0, 0.5)'
+                // }
               },
               // markLine : {
               //   data : [
@@ -850,15 +851,15 @@
               },
               itemStyle: {
                 //通常情况下：
-                normal:{
-                  color:'#74ebd5'
-                },
+                // normal:{
+                //   color:'#74ebd5'
+                // },
                 //鼠标悬停时：
-                emphasis: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
+                // emphasis: {
+                //   shadowBlur: 10,
+                //   shadowOffsetX: 0,
+                //   shadowColor: 'rgba(0, 0, 0, 0.5)'
+                // }
               },
 
             },
@@ -882,9 +883,9 @@
               },
               itemStyle: {
                 //通常情况下：
-                normal:{
-                  color:'#ACB6E5'
-                },
+                // normal:{
+                //   color:'#ACB6E5'
+                // },
                 //鼠标悬停时：
                 emphasis: {
                   shadowBlur: 10,

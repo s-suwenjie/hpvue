@@ -26,11 +26,11 @@
             <span v-html="totalMoney"></span>
             <span style="color: #7EE07E;margin-left: 5px;"> 目标: </span>
             <span v-html="tenThousand(targetlist[0])" style="color: #7EE07E;" v-if="month!=13"></span>
-            <span v-html="tenThousand(moneyList[0].yearTarget)" style="color: #7EE07E;" v-if="month==13"></span>
-
+            <span v-if="month==13" v-html="tenThousand(yearTarget)" style="color: #7EE07E;" ></span>
+<!--            {{moneyList[0].yearTarget}}-->
             <span style="color: #F26A5D;margin-left: 5px;"> 完成度: </span>
-            <span v-html="tenThousand(completionlist[0])" style="color: #F26A5D;" v-if="month!=13"></span>
-            <span v-html="tenThousand(moneyList[0].yearCompletion)" style="color: #F26A5D;" v-if="month==13"></span>
+            <span style="color: #F26A5D;" v-if="month!=13">{{(completionlist[0]*100).toFixed(2)}} %</span>
+            <span style="color: #F26A5D;" v-if="month==13">{{(yearCompletion*100).toFixed(2)}} %</span>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
 
 <script>
   import { formmixin } from '@/assets/form.js'
-  import { formatDate,getDayNumByYearMonth,tenThousandFormatHtml } from '@/assets/common.js'
+  import { formatDate,getDayNumByYearMonth,tenThousandFormatHtml,accAdd } from '@/assets/common.js'
   export default {
     name: 'allMaintenanceCartogram.vue',
     mixins: [formmixin],
@@ -97,6 +97,8 @@
 
         targetlist:[],
         completionlist:[],
+        yearTarget:'',
+        yearCompletion:'',
       }
     },
     computed:{
@@ -138,8 +140,7 @@
       },
       tenThousand(){
         return function (e) {
-          // console.log(e)
-          // console.log(" ¥"+tenThousandFormatHtml(e+''))
+          e=Number(e)
           return " ¥"+tenThousandFormatHtml(e+'')
         }
       }
@@ -208,9 +209,6 @@
         }else{
           list = this.moneyList
         }
-
-        // console.log(list)
-
 
         that.day = []
         that.money = []
@@ -402,15 +400,13 @@
                     +'</br>' + params[1].seriesName+': '+tenThousandFormatHtml(params[1].data+'')
                     +'</br>' + '总计金额:' +' '+ tenThousandFormatHtml((Number(params[0].data)+Number(params[1].data)).toFixed(2))
                     +'</br>' + '目标:' +' '+ tenThousandFormatHtml(that.targetlist[params[0].dataIndex]+'')
-                    +'</br>' + '完成度:' +' '+ tenThousandFormatHtml(that.completionlist[params[0].dataIndex]+'')
+                    +'</br>' + '完成度:' +' '+ (that.completionlist[params[0].dataIndex]*100).toFixed(2)+'%'
                 }else{
                   main = label
                     +'</br>' + params[0].seriesName+': '+tenThousandFormatHtml(params[0].data+'')
                     +'</br>' + params[1].seriesName+': '+tenThousandFormatHtml(params[1].data+'')
                     +'</br>' + '总计金额:' +' '+ tenThousandFormatHtml((Number(params[0].data)+Number(params[1].data)).toFixed(2))
                 }
-                // console.log('00')
-
 
               }else if(params.length=='1'){
 
@@ -566,7 +562,20 @@
                 //通常情况下：
                 normal:{
                   //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
-                  color:'#74ebd5'
+                  // color:'#74ebd5'
+                  color:function (params){
+
+                    if(that.month==13){
+                      let num=Number(that.money[params.dataIndex])+Number(that.money1[params.dataIndex])
+                      if(num>= that.targetlist[params.dataIndex]){
+                        return '#FF1A20'
+                      }else {
+                        return '#74ebd5'
+                      }
+                    }else{
+                      return '#74ebd5'
+                    }
+                  }
                 },
                 //鼠标悬停时：
                 emphasis: {
@@ -597,7 +606,20 @@
                 //通常情况下：
                 normal:{
                   //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
-                  color:'#ACB6E5'
+                  // color:'#ACB6E5'
+                  color:function (params){
+
+                    if(that.month==13){
+                      let num=Number(that.money[params.dataIndex])+Number(that.money1[params.dataIndex])
+                      if(num>= that.targetlist[params.dataIndex]){
+                        return '#FF1A20'
+                      }else {
+                        return '#ACB6E5'
+                      }
+                    }else{
+                      return '#ACB6E5'
+                    }
+                  }
                 },
                 //鼠标悬停时：
                 emphasis: {
@@ -956,16 +978,14 @@
 
 
             }else{
-
-
+              this.yearTarget=data[0].yearTarget
+              this.yearCompletion=data[0].yearCompletion
               for(let i in data){
                 this.day.push(this.year + '年' + data[i].day + '月')
                 this.money.push(data[i].money)
-                // if(data[i].money+data[i].money1 !='0'){
                   this.money1.push(data[i].money1)
-                  money.push((data[i].money+data[i].money1))
+                  money.push(accAdd(data[i].money,data[i].money1))
                   day.push(data[i].day)
-                // }
               }
               let moneyBackups = []
               for(let i in money){
@@ -976,6 +996,7 @@
 
               maxSchedule = Math.max.apply(null,moneyBackups);//最大值
               minSchedule = Math.min.apply(null,moneyBackups);//最小值
+
               this.elementCountInArray(this.money)
               let month = day[money.indexOf(Number(maxSchedule.toFixed(2)))]
               let monthMin = day[money.indexOf(Number(minSchedule.toFixed(2)))]

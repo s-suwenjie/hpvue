@@ -7,7 +7,13 @@
         <yhm-form-date :no-edit="showType=='1'?true:false" title="预计" subtitle="交车时间" :min="currentDate" :min-year="Number(currentDate.slice(0,4))" :value="endDate" id="endDate" rule="R0000"></yhm-form-date>
         <yhm-form-text title="里程数" :value="milage" id="milage"></yhm-form-text>
         <yhm-form-radio title="维修类型" width="1" :no-edit="state=='5'?true:false" ref="collectionRadio" :select-list="categoryList" @call="callCategory(category)" :value="category+''" id="category" rule="#"></yhm-form-radio>
-        <yhm-form-radio title="保险公司" :no-edit="state=='5'?true:false" width="1" ref="collectionRadio1" :select-list="subList" :value="sub" v-show="subShow" @call="subCall" id="sub" rule="#"></yhm-form-radio>
+        <yhm-form-radio title="保险公司" :no-edit="state=='5'?true:false" width="1" ref="collectionRadio1" :select-list="subList" :value="sub" v-show="subShow" @call="subCall" id="sub" rule="#">
+          <div style="width: 30px;display: flex;align-items: center;justify-content:center;cursor: pointer;" title="添加第二个保险公司" @click="subClick">
+            <span style="font-size: 20px;color: #49a9ea;" class="i-copy" v-if="!sub2Show&&state!='5'"></span>
+            <span style="font-size: 20px;color: #49a9ea;" class="icon-delete2" v-else-if="sub2Show&&state!='5'"></span>
+          </div>
+        </yhm-form-radio>
+        <yhm-form-radio title="保险公司2" :no-edit="state=='5'?true:false" width="1" :select-list="subList" :value="sub2" v-show="sub2Show&&subShow" @call="sub2Call" id="sub2"></yhm-form-radio>
         <!--        <yhm-form-text title="其它" subtitle="系统编号" :value="otherCode" id="otherCode"></yhm-form-text>-->
         <!--        <yhm-form-radio title="工单来源"  :select-list="orderSourceList" :value="orderSource" id="orderSource"></yhm-form-radio>-->
         <!--        <yhm-form-radio title="状态" :select-list="stateList" :value="state" id="state"></yhm-form-radio>-->
@@ -23,6 +29,10 @@
         <yhm-form-zh-text-more-checkbox :no-edit="true" @clickCheckBox="clickCheckBoxEvent" title="合计金额" :value="expend" id="expend" :check-value="moneyCheck" check-value-id="moneyCheck" :check-list="moneyCheckList"></yhm-form-zh-text-more-checkbox>
 
         <!--        <yhm-form-radio title="适用车型" width="1" :no-edit="true" :select-list="applicableModelsList.list" @call="accessNumber" :value="applicableModels" id="applicableModels"></yhm-form-radio>-->
+        <yhm-form-radio width="1" :no-edit="state=='5'?true:false" v-show="worktype=='0'||worktype=='2'" title="事故类型" :select-list="miantypeList" :value="miantype" id="miantype"></yhm-form-radio>
+        <yhm-form-text title="主车费率" :no-edit="state=='5'?'1':''" v-if="miantype=='1'" v-show="worktype=='0'||worktype=='2'" :value="zhurate" id="zhurate" :min-number="0" :max-number="100" after-icon="icon-percentage"></yhm-form-text>
+        <yhm-form-text title="三者车费率" :no-edit="state=='5'?'1':''" v-if="miantype=='1'" v-show="worktype=='0'||worktype=='2'" :value="sanrate" id="sanrate" :min-number="0" :max-number="100" after-icon="icon-percentage"></yhm-form-text>
+
         <yhm-form-textarea title="备注" before-icon=" " :value="remark" id="remark"></yhm-form-textarea>
         <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="支持单据" tag="fixPhoto" subtitle=""></yhm-formupload>
       </template>
@@ -102,7 +112,7 @@
           <yhm-form-td-textbox width="65" :no-edit="item.commit=='0'&&item.noEdit==''?'':'1'" @input="accessoriesChange(item,'2')" tip="value" id="mdo" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" rule="R0000"></yhm-form-td-textbox>
 
           <yhm-form-td-textbox width="65" tip="value" :no-edit="item.commit=='0'&&item.noEdit==''?'':'1'" id="mdoStr" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item"></yhm-form-td-textbox>
-          <yhm-form-td-textbox no-edit="1" width="90" @input="accessoriesChange(item)" tip="money" before-icon="rmb" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" id="originalmoney"></yhm-form-td-textbox>
+          <yhm-form-td-textbox no-edit="1" width="90" @input="accessoriesChange(item)" tip="money" before-icon="rmb" tip-left="-10" tip-arrow-left="30" :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item" id="originalmoney"></yhm-form-td-textbox>
 <!--          <yhm-form-td-textbox width="90" @input="customerQuotation(item)" tip="money" tip-left="-160" tip-arrow-left="180" before-icon="rmb" id="discount"  :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item"></yhm-form-td-textbox>-->
 
           <yhm-form-td-textbox no-edit="1" width="90" @input="accessoriesChange(item)" tip="money" tip-left="-160" tip-arrow-left="180" before-icon="rmb" id="money"  :list="fixOrderMaterial" listid="fixOrderMaterial" :value="item"></yhm-form-td-textbox>
@@ -279,6 +289,25 @@
         //validationRule:"/[(\ )(\~)(\~)(\!)(\！)(\@)(\#)(\$)(\￥)(\%)(\^)(\……)(\&)(\*)(\()(\（)(\))(\）)(\-)(\_))(\——)(\+)(\=)(\[)(\【)(\])(\】)(\{)(\})(\|))(\、))(\)(\\)(\;)(\；)(\:)(\：)(\')(\‘)(\’)(\")(\“)(\”)(\,)(\，)(\.)(\。)(\/)(\《)(\<)(\>)(\》)(\?)(\？)(\)]+/",//验证规则
         key:0,
         partsList:[],
+        miantypeList:[
+          {
+            num:'0',
+            img:'',
+            code:'',
+            showName:'单方事故',
+
+          },
+          {
+            num:'1',
+            img:'',
+            code:'',
+            showName:'双方事故',
+
+          }
+        ],//事故类型
+        miantype:'',//单双方类型  0单方，1双方
+        zhurate:'',//主车费率
+        sanrate:'',//三者车费率
         actualmoney:'0',//客户实际付款金额
         discountmoney:'0',//折扣优惠金额（合计金额-客户实际付款金额）
         moneyCheck:"",
@@ -324,6 +353,7 @@
         expend:'0',//实际支出
         productMoney:'0',//工单详情金额
         subShow:true,//保险公司显示隐藏
+        sub2Show:false,//保险公司2显示隐藏
         source:'',//业务来源
         sourceList:[],//业务来源素材
         orderSourceList:[],//工单来源
@@ -338,6 +368,9 @@
         sub:'',//保险公司
         subid:'',//保险公司id
         subName:'',//保险公司名称
+        sub2:'',//保险公司2
+        subid2:'',//保险公司2 id
+        sub2Name:'',//保险公司2 name
         insurance:'',//保险公司选中的 备份
         subList:[],//保险公司
         remark:'',//备注
@@ -432,6 +465,13 @@
           if(this.partsList[m].commit!=''){
             this.pushWorkshopList.push(this.partsList[m].commit)//推送按钮是否可以显示
           }
+        }
+      },
+      dutyRateBlur(value,value2,type){
+        if(type=='0'){
+          this.sanrate = 100-Number(this.zhurate)
+        }else{
+          this.zhurate= 100-Number(this.sanrate)
         }
       },
       pushWorkshop(){//推送到车间
@@ -1168,6 +1208,21 @@
           this.accessNumber()
         }
       },
+      sub2Call(){
+        // if(this.sub2==''){
+        //   return
+        // }
+        this.subid2 = this.subList[this.sub2].id
+        this.sub2Name = this.subList[this.sub2].showName
+      },
+      subClick(){
+        this.sub2Show=!this.sub2Show
+        if(this.state!='5'){
+          this.sub2 = ''
+          this.subid2 = ''
+          this.sub2Name = ''
+        }
+      },
       callCategory(category){//定损单类型
         if(category=='1'||category=='2'||category=='3'){
           this.subShow = false
@@ -1237,6 +1292,8 @@
               isDelMater:this.isDelMater,//维修配件表需要全部删除时传值
               sub:this.sub,//保险公司
               subid:this.subid,//保险公司ID
+              subName:this.subName,//保险公司名称
+
               applicableModels:this.content.applicableModels,//适用车型
               proState:'0',//是否创建主流程表的字段
               principal:'',//负责人
@@ -1256,6 +1313,13 @@
               code:this.code,//编号
               otherCode:this.content.otherNode,//其它系统编号
 
+              sub2:this.sub2,//保险公司2
+              subid2:this.subid2,//保险公司2 id
+              sub2Name:this.sub2Name,//保险公司2 name
+              zhurate:this.zhurate,//主车费率
+              sanrate:this.sanrate,//三者车费率
+              miantype:this.miantype,//单双方区别  0单方，1双方
+
               expend:this.expend,//实际支出 已变为 合计金额
               incomePlan:this.money,//计划收入
               productMoney:this.productMoney,//项目金额 = 实际支出(当前)
@@ -1266,6 +1330,7 @@
               productact:this.productact,//项目实际金额
               productdis:(Number(this.productMoney)-Number(this.productact)),//项目优惠金额
               productshen:this.productact,//工项申请优惠金额
+              settlement:Number(this.productact)+Number(this.mailact),//最终结算字段
 
               workDate:this.workDate,//发生日期
               endDate:this.endDate,//预计交车时间
@@ -1328,6 +1393,8 @@
               worktype:this.worktype,//工单类型 0维修 1保养
               sub:this.sub,//保险公司
               subid:this.subid,//保险公司ID
+              subName:this.subName,//保险公司名称
+
               applicableModels:this.content.applicableModels,//适用车型
               proState:'0',//是否创建主流程表的字段
               principal:'',//负责人
@@ -1347,7 +1414,15 @@
               code:this.code,//编号
               otherCode:this.content.otherNode,//其它系统编号
 
+              sub2:this.sub2,//保险公司2
+              subid2:this.subid2,//保险公司2 id
+              sub2Name:this.sub2Name,//保险公司2 name
+              zhurate:this.zhurate,//主车费率
+              sanrate:this.sanrate,//三者车费率
+              miantype:this.miantype,//单双方区别  0单方，1双方
+
               expend:this.expend,//实际支出 已变为 合计金额
+              settlement:Number(this.productact)+Number(this.mailact),//最终结算字段
               incomePlan:this.money,//计划收入
               productMoney:this.productMoney,//项目金额 = 实际支出(当前)
 
@@ -1436,7 +1511,7 @@
                     closeCallBack: () => {
                       this.state = '5'
                       this.initData()
-                      // this.$dialog.close()
+                      this.$dialog.close()
                     }
                   })
                 }else{
@@ -1567,10 +1642,10 @@
                 this.maildis = data.fixorder.maildis//配件优惠金额
                 // alert(this.maildis)
                 this.productact = data.fixorder.productact//项目实际金额
-                // alert(this.productact)
+                // console.log(this.productact)
                 this.productdis = data.fixorder.productdis//项目优惠金额
-                // alert(this.productdis)
-                this.actualmoneyInput()
+                // console.log(this.productdis)
+                // this.actualmoneyInput()
                 this.mailactInput()
               })
 
@@ -1636,9 +1711,22 @@
                 this.remark = data.fixorder.remark//备注
                 this.fileList = data.fixorder.fixedForm.photoList//文件
                 this.fixID = data.fixorder.fixedForm.id//定损单主表id
+
+                this.sanrate = data.fixorder.sanrate//
+                this.zhurate = data.fixorder.zhurate//
+                this.miantype = data.fixorder.miantype
+                this.sub2 = data.fixorder.sub2
+                this.subid2 = data.fixorder.subid2
+                this.sub2Name = data.fixorder.sub2Name
+
+
                 this.fixOrder = data.fixorder.fixOrderDetail.id
                 this.productMoney = data.fixorder.productMoney//工单详情总金额
                 this.money = data.fixorder.incomePlan//定损单总金额
+                if(this.sub2!=''){
+                  this.sub2Show = true
+                this.sub2Call()
+                }
 
                 this.list = data.fixorder.fixedForm.list//定损单
                 this.list2 = data.fixorder.fixOrderDetail.list//工单详情

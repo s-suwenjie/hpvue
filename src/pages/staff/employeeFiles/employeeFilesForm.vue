@@ -8,8 +8,8 @@
         <yhm-form-select title="部门" @click="selectDepartment" :value="department" id="department" rule="R0000"></yhm-form-select>
         <yhm-form-select title="职位" @click="selectPosition" :value="position" id="position" rule="R0000"></yhm-form-select>
         <!--<yhm-form-select title="岗位" @click="selectPost" :value="post" id="post" rule="R0000"></yhm-form-select>-->
-        <yhm-form-text title="手机号码" :value="phone" id="phone" ref="phone" tip="value" @repeatverify="verifyPhone" rule="R4000"></yhm-form-text>
-        <yhm-form-text title="微信" :value="weChat" id="weChat" ref="weChat" tip="value" @repeatverify="verifyWeChat" rule="R0000"></yhm-form-text>
+        <yhm-form-text title="手机号码" :value="phone" id="phone" ref="phone" tip="value" @change="verifyPhone" rule="R4000"></yhm-form-text>
+        <yhm-form-text title="微信" :value="weChat" id="weChat" ref="weChat" tip="value" @change="verifyWeChat" rule="R0000"></yhm-form-text>
         <yhm-form-radio title="性别" :no-edit="isSex" :select-list="sexPsd" :value="sex" id="sex" rule="R0000"></yhm-form-radio>
         <yhm-form-radio title="户口类型" :select-list="residenceTypePsd" :value="residenceType" id="residenceType" rule="R0000"></yhm-form-radio>
         <yhm-form-text title="身份证号" :value="idNo" id="idNo" ref="idNo" tip="value" rule="R5000" no-edit="1"></yhm-form-text>
@@ -29,12 +29,12 @@
         <yhm-form-date title="离职时间" v-if="state==1" :max="maxApplyDate" :value="quitDate" id="quitDate" rule="R0000"></yhm-form-date>
         <yhm-form-radio title="工资级别" @call="selectBasicWageTypePsd" :select-list="basicWageTypePsd" :value="basicWageType" id="basicWageType" rule="R0000" width="1"></yhm-form-radio>
         <yhm-form-text no-edit="1" title="基础工资" :value="basicWage" id="basicWage" rule="R0000"></yhm-form-text>
-        <yhm-form-radio title="工龄级别" @call="selectSeniorityPayType" :select-list="seniorityPayTypePsd" :value="seniorityPayType" id="seniorityPayType" rule="R0000"></yhm-form-radio>
+        <yhm-form-radio title="工龄级别" @call="selectSeniorityPayType" :select-list="seniorityPayTypePsd" :value="seniorityPayType" id="seniorityPayType" rule="R0000" width="1"></yhm-form-radio>
         <yhm-form-text no-edit="1" title="工龄工资" :value="seniorityPay" id="seniorityPay" rule="R0000"></yhm-form-text>
         <yhm-form-radio title="岗位级别" @call="selectPostSalaryType" :select-list="postSalaryTypePsd" :value="postSalaryType" id="postSalaryType" rule="R0000" width="1"></yhm-form-radio>
-        <yhm-form-text no-edit="1" title="岗位工资" :value="postSalary" id="postSubsidy" rule="R0000"></yhm-form-text>
+        <yhm-form-text no-edit="1" title="岗位工资" :value="postSalary" id="postSalary" rule="R0000"></yhm-form-text>
         <!--<yhm-form-select title="岗位补助" @click="selectpostSubsidy" :value="postSubsidy" id="postSubsidy" rule="R0000"></yhm-form-select>-->
-        <yhm-form-radio title="花费级别" @call="selectExpenseSubsidyType" :select-list="expenseSubsidyTypePsd" :value="expenseSubsidyType" id="expenseSubsidyType" rule="R0000"></yhm-form-radio>
+        <yhm-form-radio title="花费级别" @call="selectExpenseSubsidyType" :select-list="expenseSubsidyTypePsd" :value="expenseSubsidyType" id="expenseSubsidyType" rule="R0000" width="1"></yhm-form-radio>
         <yhm-form-text no-edit="1" title="花费补助" :value="expenseSubsidy" id="expenseSubsidy" rule="R0000"></yhm-form-text>
         <yhm-form-radio title="社保级别" @call="selectFiveInsurances" :select-list="fiveInsurancesTypePsd" :value="fiveInsurancesType" id="fiveInsurancesType" rule="R0000" width="1"></yhm-form-radio>
         <yhm-form-text title="养老基数" no-edit="1" :value="pensionBase" id="pensionBase" rule="R0000"></yhm-form-text>
@@ -52,7 +52,7 @@
         <!--<yhm-form-text title="单位医疗" subtitle="（%）" :value="unitMedical" id="unitMedical" rule="R0000"></yhm-form-text>-->
         <!--<yhm-form-text title="个人公积金" subtitle="（%）" :value="personalProvident" id="personalProvident" rule="R0000"></yhm-form-text>-->
         <!--<yhm-form-text title="单位公积金" subtitle="（%）" :value="unitProvident" id="unitProvident" rule="R0000"></yhm-form-text>-->
-        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传文件" tag="employee" subtitle="" multiple="multiple" rule=""></yhm-formupload>
+        <yhm-formupload :ownerID="id" :value="fileList" id="fileList" title="上传文件" tag="employee" subtitle="" multiple="multiple" rule="#"></yhm-formupload>
       </template>
     </yhm-formbody>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -112,7 +112,7 @@
         basicWageTypePsd:[],
         basicWageList:'',
         seniorityPay:'',
-        seniorityPayPsd:'',
+        seniorityPayType:'',
         seniorityPayList:'',
         seniorityPayTypePsd:[],
         postSalary:'',
@@ -128,7 +128,7 @@
         injuryBase:'',
         medicalBase:'',
         providentBase:'',
-        fiveInsurancesPsd:[],
+        fiveInsurancesTypePsd:[],
         fiveInsurancesType:'',
         fiveInsurancesBaseList:[],
         fileList:[],
@@ -136,6 +136,7 @@
         sexPsd:[],
         calendarPsd:[],
         educationTypePsd:[],
+        postSubsidyType:'0',
         statePsd:[],
       }
     },
@@ -157,15 +158,15 @@
           this.state=data.statePsd.value
           this.residenceTypePsd=data.residenceTypePsd.list
           this.residenceType=data.residenceTypePsd.value
-          this.fiveInsurances=data.fiveInsurancesPsd.value
-          this.fiveInsurancesPsd=data.fiveInsurancesPsd.list
+          this.fiveInsurancesType=data.fiveInsurancesTypePsd.value
+          this.fiveInsurancesTypePsd=data.fiveInsurancesTypePsd.list
           this.fiveInsurancesBaseList=data.fiveInsurancesBaseList
           if(this.fiveInsurancesBaseList.length>0){
-            this.pensionBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurances)].pension
-            this.unemploymentBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurances)].unemployment
-            this.injuryBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurances)].injury
-            this.medicalBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurances)].medical
-            this.providentBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurances)].provident
+            this.pensionBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurancesType)].pension
+            this.unemploymentBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurancesType)].unemployment
+            this.injuryBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurancesType)].injury
+            this.medicalBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurancesType)].medical
+            this.providentBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurancesType)].provident
           }
           this.basicWageTypePsd=data.basicWageTypePsd.list
           this.basicWageType=data.basicWageTypePsd.value
@@ -196,7 +197,39 @@
 
         },
         look: (data) => {
-
+          this.id=data.id
+          this.personID=data.personID
+          this.person=data.person
+          this.entryDate=data.entryDate
+          this.departmentID=data.departmentID
+          this.department=data.department
+          this.positionID=data.positionID
+          this.position=data.position
+          this.postID=data.postID
+          this.post=data.post
+          this.phone=data.phone
+          this.weChat=data.weChat
+          this.residenceType=data.residenceType
+          this.idNo=data.idNo
+          this.nativePlace=data.nativePlace
+          this.calendar=data.calendar
+          this.birthday=data.birthday
+          this.birthdayLunar=data.birthdayLunar
+          this.zodiac=data.zodiac
+          this.zodiacID=data.zodiacID
+          this.constellation=data.constellation
+          this.constellationID=data.constellationID
+          this.nation=data.nation
+          this.nationID=data.nationID
+          this.bloodType=data.bloodType
+          this.bloodTypeID=data.bloodTypeID
+          this.educationType=data.educationType
+          this.major=data.major
+          this.homeAddress=data.homeAddress
+          this.residentialAddress=data.residentialAddress
+          this.statePsd=data.statePsd.list
+          this.state=data.statePsd.value
+          this.fileList=data.fileList
         }
       })
     },
@@ -246,21 +279,17 @@
         this.basicWage=this.basicWageList[this.basicWageType].money
       },
       selectFiveInsurances(){
-        this.pensionBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurances)].pension
-        this.unemploymentBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurances)].unemployment
-        this.injuryBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurances)].injury
-        this.medicalBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurances)].medical
-        this.providentBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurances)].provident
+        this.pensionBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurancesType)].pension
+        this.unemploymentBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurancesType)].unemployment
+        this.injuryBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurancesType)].injury
+        this.medicalBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurancesType)].medical
+        this.providentBase=this.fiveInsurancesBaseList[parseInt(this.fiveInsurancesType)].provident
       },
       verifyPhone(){//验证手机号
-        if(!this.phone){
-          this.verifyCommon('phone',this.phone)
-        }
+        this.verifyCommon('phone',this.phone)
       },
       verifyWeChat(){//验证微信
-        if(!this.weChat) {
-          this.verifyCommon('weChat', this.weChat)
-        }
+        this.verifyCommon('weChat', this.weChat)
       },
       // verifyidNo(){//验证身份证
       //   if(!this.idNo) {
@@ -280,8 +309,10 @@
           call: (isData) => {
             if (isData.type != 0) {
               if(obj=='weChat'){
+                this.weChat=''
                 this.$refs.weChat.errorEvent('微信信息已存在')
               }else if(obj=='phone'){
+                this.phone=''
                 this.$refs.phone.errorEvent('电话信息已存在')
               }
             }
@@ -331,7 +362,7 @@
               let params={
                 id:this.id,
                 columnName:'personID',
-                personID:this.personID
+                columnValue:data.id
               }
               this.ajaxJson({
                 url: '/finance/employeeFiles/isExist',
@@ -461,7 +492,7 @@
             injuryBase:this.injuryBase,
             medicalBase:this.medicalBase,
             providentBase:this.providentBase,
-            fiveInsurances:this.fiveInsurances,
+            fiveInsurancesType:this.fiveInsurancesType,
             seniorityPayType:this.seniorityPayType,
             postSubsidyType:this.postSubsidyType,
             fileList:this.fileList,

@@ -10,21 +10,23 @@
       <!--操作区-->
       <template #operate>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initPageData(false)"></yhm-managersearch>
+        <yhm-radiofilter :before="stateBefore" @initData="initChoose('insuredType')" title="客户投保状态" :content="ListInsuredType"></yhm-radiofilter>
       </template>
       <!--数据表头-->
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
-        <yhm-managerth  title="车牌号" value="plate"></yhm-managerth>
-        <yhm-managerth  title="品牌（车型）" value="brandVal"></yhm-managerth>
-        <yhm-managerth  title="联系人" value="name"></yhm-managerth>
-        <yhm-managerth  title="联系方式" value="phone"></yhm-managerth>
+        <yhm-managerth style="width: 100px" title="车牌号" value="plate"></yhm-managerth>
+        <yhm-managerth style="width: 100px" title="品牌（车型）" value="brandVal"></yhm-managerth>
+        <yhm-managerth style="width: 80px" title="联系人" value="name"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="联系方式" value="phone"></yhm-managerth>
         <yhm-managerth style="width: 100px" title="去年投保公司" value="lastYearUnitVal"></yhm-managerth>
-        <yhm-managerth  title="交强险到期日" value="forceEndDate"></yhm-managerth>
-        <yhm-managerth  title="剩余天数" value="forceDay"></yhm-managerth>
-        <yhm-managerth  title="商业险到期日" value="businessEndDate"></yhm-managerth>
-        <yhm-managerth  title="剩余天数" value="businessDay"></yhm-managerth>
-        <yhm-managerth  title="最后跟踪时间" value="currentDate"></yhm-managerth>
+        <yhm-managerth style="width: 100px" title="客户投保类型" value="insuredType"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="交强险到期日" value="forceEndDate"></yhm-managerth>
+        <yhm-managerth style="width: 80px" title="剩余天数" value="forceDay"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="商业险到期日" value="businessEndDate"></yhm-managerth>
+        <yhm-managerth style="width: 80px" title="剩余天数" value="businessDay"></yhm-managerth>
+        <yhm-managerth style="width: 120px" title="最后跟踪时间" value="currentDate"></yhm-managerth>
         <yhm-managerth  title="最后跟踪内容" value="remark"></yhm-managerth>
 <!--        <yhm-managerth  title="行驶证" ></yhm-managerth>-->
         <yhm-managerth style="width: 200px;" title="操作"></yhm-managerth>
@@ -41,6 +43,7 @@
           <yhm-manager-td :value="item.name"></yhm-manager-td>
           <yhm-manager-td :value="item.phone"></yhm-manager-td>
           <yhm-manager-td :value="item.lastYearUnitVal"></yhm-manager-td>
+          <yhm-manager-td :value="item.insuredTypeVal"></yhm-manager-td>
           <yhm-manager-td-date :value="item.forceEndDate"></yhm-manager-td-date>
           <yhm-manager-td-center :value="item.forceDay+'  天'"></yhm-manager-td-center>
           <yhm-manager-td-date :value="item.businessEndDate"></yhm-manager-td-date>
@@ -77,7 +80,25 @@
       return{
         id:'',
         orderColumn:'forceDay,businessDay',
-        order:'asc'
+        order:'asc',
+        stateBefore:'0',// 默认选择状态为可以选择，1为不可以选择
+        ListInsuredType:{
+          list:[
+            {
+              num: '0', //默认为空
+              showName: '首次'
+            },
+            {
+              num: '1', //默认为空
+              showName: '间转续'
+            },
+            {
+              num: '2', //默认为空
+              showName: '续转续'
+            },
+          ],
+          value:'',
+        },
       }
     },
     methods:{
@@ -130,6 +151,14 @@
           }
         })
       },
+      // 筛选事件
+      initChoose (op) {
+         if (op === 'insuredType') {
+          this.selectValue = []
+        }
+        this.pager.pageIndex = 1
+        this.initPageData(false)
+      },
       //搜索
       initPageData (initValue) {
         let params = {}
@@ -137,10 +166,15 @@
         if (initValue) {
           params = {
             orderColumn:this.orderColumn,
-            order:this.order
+            order:this.order,
+            insuredType:this.ListInsuredType.value,
           }
         } else {
-          params = {}
+          params = {
+            orderColumn:this.orderColumn,
+            order:this.order,
+            insuredType:this.ListInsuredType.value,
+          }
         }
         this.init({
           initValue:initValue,

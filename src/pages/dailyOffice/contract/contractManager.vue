@@ -9,13 +9,14 @@
       <template #operate>
         <yhm-commonbutton  value="合同登记" icon="btnAdd" :flicker="true" @call="add()"></yhm-commonbutton>
         <yhm-commonbutton  value="合同签署" icon="btnAdd" :flicker="true" @call="add2()"></yhm-commonbutton>
-        <!--<yhm-commonbutton  value="合同选择列表" icon="btnAdd" :flicker="true" @call="add3()"></yhm-commonbutton>-->
+        <yhm-commonbutton  value="合同选择列表" icon="btnAdd" :flicker="true" @call="add3()"></yhm-commonbutton>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initData"></yhm-managersearch>
         <yhm-radiofilter :before="contractBefore" @initData="initChoose('signatureType')" title="签署类型" :content="listSignatureType"></yhm-radiofilter>
         <yhm-radiofilter :before="contractBefore" @initData="initChoose('state')" title="合同状态" :content="listState"></yhm-radiofilter>
         <yhm-radiofilter :before="contractBefore" @initData="initChoose('type')" title="合同所属类型" :content="listType"></yhm-radiofilter>
         <yhm-radiofilter :before="contractBefore" @initData="initChoose('type')" title="合同收付款" :content="listPaymentItems"></yhm-radiofilter>
         <yhm-radiofilter :before="contractBefore" @initData="initChoose('type')" title="合同格式" :content="listFormat"></yhm-radiofilter>
+        <yhm-radiofilter :before="contractBefore" @initData="initChoose('billingStatus')" title="开票状态" :content="listBillingStatus"></yhm-radiofilter>
       </template>
       <!--数据表头-->
       <template #listHead>
@@ -24,19 +25,22 @@
         <yhm-managerth style="width: 150px;" title="合同名称" ></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="我方负责人" ></yhm-managerth>
         <yhm-managerth title="对方合约单位" ></yhm-managerth>
-        <yhm-managerth style="width: 80px;" title="对方负责人" ></yhm-managerth>
-        <yhm-managerth style="width: 80px;" title="合同文本" ></yhm-managerth>
-        <yhm-managerth style="width: 80px;" title="签署类型" ></yhm-managerth>
-        <yhm-managerth style="width: 80px;" title="合同状态"></yhm-managerth>
+        <yhm-managerth title="对方负责人" ></yhm-managerth>
+        <yhm-managerth title="合同文本" ></yhm-managerth>
+        <yhm-managerth title="签署类型" ></yhm-managerth>
+        <yhm-managerth title="合同状态"></yhm-managerth>
         <!--<yhm-managerth style="width: 80px;" title="合同所属类型"></yhm-managerth>-->
-        <yhm-managerth style="width: 120px;" title="合同收付款"></yhm-managerth>
+        <yhm-managerth title="合同收付款"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="合同" subtitle="关联业务"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="累计" subtitle="已付金额"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="总金额"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="已开票金额"></yhm-managerth>
+        <yhm-managerth style="width: 60px;" title="剩余" subtitle="开票金额"></yhm-managerth>
+        <yhm-managerth title="开票状态" ></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="签约日期"></yhm-managerth>
         <yhm-managerth v-if="isEnd" @call="endClick()"  style="width: 120px;" title="结束日期" subtitle="(点击查看剩余天数)"></yhm-managerth>
         <yhm-managerth v-if="isDay" @call="dayClick()" style="width: 120px;" title="剩余天数" subtitle="(可点击)"></yhm-managerth>
-        <yhm-managerth style="width: 200px;" title="操作"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="操作"></yhm-managerth>
       </template>
 
       <!--数据明细-->
@@ -59,6 +63,9 @@
           <yhm-manager-td-center v-else value="------"></yhm-manager-td-center>
           <yhm-manager-td-money v-if="item.totalMoney!=0" :value="item.totalMoney"></yhm-manager-td-money>
           <yhm-manager-td-center v-else value="------"></yhm-manager-td-center>
+          <yhm-manager-td-money :value="item.invoicedAmount"></yhm-manager-td-money>
+          <yhm-manager-td-money @click="billingClick(item)" :value="item.remainingAmount"></yhm-manager-td-money>
+          <yhm-manager-td-psd :value="item.billingStatus" :list="listBillingStatus.list"></yhm-manager-td-psd>
           <yhm-manager-td-date :value="item.startTime"></yhm-manager-td-date>
           <yhm-manager-td-date v-if="isEnd" :value="item.endTime"></yhm-manager-td-date>
 
@@ -119,11 +126,30 @@
           value:"",
           list:[]
         },
+        listBillingStatus:{
+          value:"",
+          list:[]
+        },
         isEnd:true,
         isDay:false
       }
     },
     methods:{
+      billingClick(item){
+        if (item.billingStatus==1 || item.billingStatus==2|| item.billingStatus==3) {
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '790',
+            title: '添加开票信息',
+            url:'/openInvoiceForm?isAdd=true',
+            closeCallBack: (data)=>{
+              if(data){
+                this.initPageData(false)
+              }
+            }
+          })
+        }
+      },
       endClick(){
         this.isEnd=false
         this.isDay=true
@@ -136,7 +162,7 @@
         this.$dialog.OpenWindow({
           width: '1050',
           height: '750',
-          url: '/selectContract?paymentItems=0',
+          url: '/selectContract?paymentItems=0&applyopenInvoice=1',
           title: '选择合同',
           closeCallBack: (data) => {
             if (data) {
@@ -256,6 +282,7 @@
             type:this.listType.value,
             paymentItems:this.listPaymentItems.value,
             format:this.listFormat.value,
+            billingStatus:this.listBillingStatus.value,
           }
         } else {
           params = {
@@ -264,6 +291,7 @@
             type:this.listType.value,
             paymentItems:this.listPaymentItems.value,
             format:this.listFormat.value,
+            billingStatus:this.listBillingStatus.value,
           }
         }
         this.init({
@@ -281,6 +309,7 @@
             this.listPaymentItems=data.paymentItemsPsd
             this.listFormat=data.formatPsd
             this.listCategory=data.categoryPsd
+            this.listBillingStatus=data.billingStatusPsd
           }
         })
       },

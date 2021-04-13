@@ -88,7 +88,8 @@
             pageSize:this.pager.pageSize,
             pageIndex:this.pager.pageIndex,
             pendingstate:this.pendingstateList.value,
-            stateStr:'123'//是否过滤接待单 不为空时过滤
+            stateStr:'123',//是否过滤接待单 不为空时过滤
+            isbill:'1'
           }
         }else{
           params = {
@@ -98,7 +99,8 @@
             // startDateStr:this.startDateCustom,
             // endDateStr:this.endDateCustom,
             pendingstate:this.pendingstateList.value,
-            stateStr:'123'//是否过滤接待单 不为空时过滤
+            stateStr:'123',//是否过滤接待单 不为空时过滤
+            isbill:'1'
           }
         }
         this.ajaxJson({

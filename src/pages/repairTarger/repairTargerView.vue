@@ -11,7 +11,7 @@
     </yhm-view-body>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
-<!--        <yhm-commonbutton value="编辑" v-show="state=='0'" icon="btnSave" :flicker="true" @call="edit()"></yhm-commonbutton>-->
+        <yhm-commonbutton value="编辑" v-show="isShow" icon="btnSave" :flicker="true" @call="edit()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
   </div>
@@ -35,12 +35,26 @@
         createName:'',
         updateName:'',
         updateDate:'',
+        isShow:false,
       }
     },
     created(){
       this.init()
     },
     methods:{
+      edit(){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '600',
+          url: '/repairTargerForm?isMain=1&id='+this.id,
+          title: '修改',
+          closeCallBack: (data) => {
+            if (data) {
+              this.$dialog.setReturnValue(this.id)
+            }
+          }
+        })
+      },
       init(){
         let params = {
           id: this.id
@@ -57,7 +71,9 @@
               this.category=data.category
               this.money=data.money
               this.categoryPsd=data.categoryPsd.list
-
+              if((new Date()).getMonth()<parseInt(this.category)){
+                this.isShow=true;
+              }
               this.insertDate=data.insertDate
               this.createName=data.createName
               this.updateName=data.updateName

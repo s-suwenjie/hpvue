@@ -160,6 +160,7 @@
         categoryBefore: '0', // 单位按钮是否可以切换(0表示能切换,1表示不能切换)
         name: '',
         value12: '',
+        value9: '',
         brandOwnerID:'',
       }
     },
@@ -270,13 +271,15 @@
           // 页面初始化是需要的参数
           params = {
             name: this.name,
-            value12: this.value12
+            value12: this.value12,
+            value9: this.value9
           }
         } else {
           // 页面非初始化时需要的参数
           params = {
             name: this.name,
-            value12: this.value12
+            value12: this.value12,
+            value9: this.value9
           }
         }
         this.init({
@@ -299,6 +302,7 @@
       this.setQuery2Value('categoryBefore')
       this.setQuery2Value('name')
       this.setQuery2Value('value12')
+      this.setQuery2Value('value9')
       this.setQuery2Value('brandOwnerID')
 
     },

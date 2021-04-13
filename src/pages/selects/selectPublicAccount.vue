@@ -137,7 +137,8 @@
             otherUnitID: this.otherUnitID,
             unitID: this.unitID,
             categoryUnit: this.listCategoryUnit.value,
-            commonUse:'0'
+            commonUse:'0',
+            unitIDString:this.unitIDString
           }
         } else {
           // 页面非初始化时需要的参数
@@ -146,7 +147,8 @@
             state: this.state,
             commonUse: this.commonUsePsd.value,
             unitID: this.unitID,
-            categoryUnit: this.listCategoryUnit.value
+            categoryUnit: this.listCategoryUnit.value,
+            unitIDString:this.unitIDString
           }
         }
         this.init({
@@ -177,7 +179,12 @@
       this.setQuery2Value('unitID')
       this.setQuery2Value('categoryUnit')
       this.setQuery2Value('category')
-
+      this.setQuery2Value('unitIDString')
+      if(this.unitIDString==undefined){
+        this.unitIDString = ''
+      }else{
+        this.unitIDString = "'"+this.unitIDString+"'"
+      }
       if(this.isHide === '1'){
         this.isState = false
       }

@@ -7,6 +7,8 @@
         </template>
         <template #operate>
           <!-- 操作区-->
+<!--          <yhm-commonbutton value="测试" icon="btnAdd" :flicker="true" @call="ceshi()"></yhm-commonbutton>-->
+
           <yhm-commonbutton value="添加推修公司"  icon="btnAdd" :flicker="true" @call="add" category="one"></yhm-commonbutton>
           <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initChoose"></yhm-managersearch>
           <yhm-radiofilter style="margin-top: 6px" @initData="initChoose('dateType')" title="时间" :content="dateTypeList"></yhm-radiofilter>
@@ -155,6 +157,14 @@
       }
     },
     methods:{
+      ceshi(){
+        this.ajaxJson({
+          url:'/fix/fixCompany/fee',
+          data:[],
+          call: (data) => {
+          }
+        })
+      },
       add(){
         this.$dialog.OpenWindow({
           width: 1050,

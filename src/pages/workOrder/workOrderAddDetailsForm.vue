@@ -4,9 +4,9 @@
         <template #title>基本信息</template>
         <template #control>
           <yhm-form-select title="工序服务" :no-click="type=='1'?true:false" @click="selectProduct" :value="name" id="name" rule="R0000" ref="pros"></yhm-form-select>
-          <yhm-form-text title="标准价格" before-icon="rmb" tip="money" :value="money" id="money" rule="R2400"></yhm-form-text>
+          <yhm-form-text title="标准价格" before-icon="rmb" tip="money" :value="money" @input="discount = money" id="money" rule="R2400"></yhm-form-text>
           <yhm-form-date title="创建日期" :no-edit="type=='1'?true:false" :max="currentDate" :max-year="Number(currentDate.slice(0,4))" :value="workDate" id="workDate" rule="R0000"></yhm-form-date>
-          <yhm-form-text title="客户报价" before-icon="rmb" tip="money" :value="discount" id="discount" rule="R2400"></yhm-form-text>
+          <yhm-form-text title="客户报价" before-icon="rmb" tip="money" @blur="discountBlur" :value="discount" id="discount" rule="R2400"></yhm-form-text>
 
           <!--<yhm-form-radio title="状态" :select-list="stateList" :value="state" id="state"></yhm-form-radio>-->
           <yhm-form-select-insurance title="维修流程" width="0" @click="teamidClick" :psd="teamNameList" :required-list="requiredList" :value="teamid"  id="teamid" rule="#"></yhm-form-select-insurance>
@@ -130,6 +130,11 @@
       }
     },
     methods:{
+      discountBlur(){
+        if(this.discount=='0'||this.discount==''){
+          this.discount = this.money
+        }
+      },
       teamidClick(index){
         if(index=='3'&&this.worktype=='1'){
           setTimeout(()=>{

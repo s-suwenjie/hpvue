@@ -19,8 +19,8 @@
           <yhm-view-control title="地址" :content="address" category="2"></yhm-view-control>
         </template>
       </yhm-view-body>
-      <div class="f_split" v-show="companyName!=''||companyName!=null?true:false"></div>
-      <yhm-view-body v-show="companyName!=''||companyName!=null?true:false">
+      <div class="f_split" v-show="cont"></div>
+      <yhm-view-body v-show="cont">
         <template #title>推修信息</template>
         <template #body>
           <yhm-view-control title="推修公司" :content="companyName"></yhm-view-control>
@@ -242,7 +242,7 @@
     mixins: [viewmixin],
     data(){
       return{
-        cont:'',//推修信息
+        cont:false,//推修信息 显示隐藏
         content:{},
         typeList:{},//结算类型
         companyType:'',//结算类型
@@ -389,12 +389,15 @@
               this.content = data
               // this.cont = data.cont
 
-              if(data.fixCompanyOrder.companyName!=null&&data.fixCompanyOrder.companyName!=''){
-                this.selfrate = data.fixCompanyOrder.selfrate
-                this.noselfrate = data.fixCompanyOrder.noselfrate
-                this.companyName = data.fixCompanyOrder.companyName
-                this.companyType = data.fixCompanyOrder.type//结算类型
-                // this.pushPersonName = data.fixCompanyOrder.personName
+              if(data.fixCompanyOrder!=null){
+                if(data.fixCompanyOrder.companyName!=null&&data.fixCompanyOrder.companyName!=''){
+                  this.selfrate = data.fixCompanyOrder.selfrate
+                  this.noselfrate = data.fixCompanyOrder.noselfrate
+                  this.companyName = data.fixCompanyOrder.companyName
+                  this.companyType = data.fixCompanyOrder.companytype//结算类型
+                  this.cont = true
+                  // this.pushPersonName = data.fixCompanyOrder.personName
+                }
               }
               this.sub = data.fixorder.sub//保险公司
               this.subid =  data.fixorder.subid//保险公司id

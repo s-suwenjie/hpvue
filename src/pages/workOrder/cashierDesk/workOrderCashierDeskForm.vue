@@ -208,6 +208,10 @@
         getUrl:'',
         bankDetailImg:[],
         storeName: '',
+
+        incomeUnitID:'',
+        incomeUnitID2:'',
+        unitIDString:[],
       }
     },
     methods: {
@@ -496,10 +500,14 @@
       },
       selectaccountB () { //选择对方账户信息
         if (this.otherAccountType === '0') {
+          try {
+            this.unitIDString = this.unitIDString.join("','")
+          }catch (e) {
+          }
           this.$dialog.OpenWindow({
             width: 950,
             height: 690,
-            url: '/selectPublicAccount?categoryUnit=1&categoryUnitBefore=1&category=1&categoryInit=2' + '&unitID=' + this.otherID,
+            url: '/selectPublicAccount?categoryUnit=1&categoryUnitBefore=1&category=1&categoryInit=2' + '&unitID=' + this.otherID+'&unitIDString='+this.unitIDString,
             title: '选择公司账号',
             closeCallBack: (data) => {
               if (data) {
@@ -847,21 +855,22 @@
       // },
     },
     created () {
-      this.setQuery2Value('workOrderID')//工单id
-      this.setQuery2Value('workOrder')//工单号
-      this.setQuery2Value('unitOrPerson')//客户类型  0个人 1公司
-      this.setQuery2Value('message')//当前余额  工单未开金额
-      this.setQuery2Value('brandVal')//品牌
-      this.setQuery2Value('vehicleBrand')//车辆品牌
-      this.setQuery2Value('vehicleBrandID')//车辆品牌id
-      this.setQuery2Value('vehicleType')//车辆型号
-      this.setQuery2Value('vehicleTypeID')//车辆型号id
-      this.setQuery2Value('operator')//接待人姓名
-      this.setQuery2Value('operatorID')//接待人id
-      this.setQuery2Value('customer')//客户姓名
-      this.setQuery2Value('customerName')//客户id
-      this.setQuery2Value('licensePlateNumber')//车牌号
-      this.setQuery2Value('moneyMax')//最大金额
+      this.setQuery2Value('receptionid')//接待单id
+      // this.setQuery2Value('workOrderID')//工单id
+      // this.setQuery2Value('workOrder')//工单号
+      // this.setQuery2Value('unitOrPerson')//客户类型  0个人 1公司
+      // this.setQuery2Value('message')//当前余额  工单未开金额
+      // this.setQuery2Value('brandVal')//品牌
+      // this.setQuery2Value('vehicleBrand')//车辆品牌
+      // this.setQuery2Value('vehicleBrandID')//车辆品牌id
+      // this.setQuery2Value('vehicleType')//车辆型号
+      // this.setQuery2Value('vehicleTypeID')//车辆型号id
+      // this.setQuery2Value('operator')//接待人姓名
+      // this.setQuery2Value('operatorID')//接待人id
+      // this.setQuery2Value('customer')//客户姓名
+      // this.setQuery2Value('customerName')//客户id
+      // this.setQuery2Value('licensePlateNumber')//车牌号
+      // this.setQuery2Value('moneyMax')//最大金额
 
       this.setQuery2Value('money')
       this.setQuery2Value('ownerID')
@@ -879,6 +888,40 @@
       this.setQuery2Value('publicandPrivateAccount')
       this.setQuery2Value('cashierBankTag')
 
+      this.ajaxJson({
+        url: '/fix/fixreception/initForm',
+        data:{
+          id:this.receptionid
+        },
+        call: (data) => {
+          if (data.type == 0) {
+            this.workOrderID = data.fixorder.id//工单id
+            this.workOrder = data.fixorder.code//工单号
+            this.unitOrPerson = data.fixorder.unitType//客户类型  0个人 1公司
+            this.message = data.fixorder.remamountOpened//工单未开金额
+            this.moneyMax= data.fixorder.remreceivedMoney//最大金额
+            this.brandVal = data.brandVal//品牌
+            this.vehicleBrand = data.brandVal
+            this.vehicleBrandID = data.brand//车辆品牌id
+            this.vehicleType = data.fixorder.modelVal//车辆品牌型号
+            this.vehicleTypeID = data.fixorder.modelID//车辆品牌型号id
+            this.operator = data.fixorder.client//接待人姓名
+            this.operatorID = data.fixorder.clientID//接待人id
+            this.customer = data.carOwner//客户姓名
+            this.customerName = data.carOwnerID//客户姓名id
+            this.licensePlateNumber = data.carName//车牌号
+            this.incomeUnitID = data.fixorder.incomeUnitID
+            this.incomeUnitID2 = data.fixorder.incomeUnitID2
+            console.log(data.fixorder.incomeUnitID,this.incomeUnitID,this.incomeUnitID2)
+            if(this.incomeUnitID!=''){
+              this.unitIDString.push(this.incomeUnitID)
+            }
+            if(this.incomeUnitID2!=''){
+              this.unitIDString.push(this.incomeUnitID2)
+            }
+          }
+        }
+      })
       this.subjectList = JSON.parse(sessionStorage.workOrderCashierDesk)
 
       let params = {

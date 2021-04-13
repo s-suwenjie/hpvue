@@ -44,6 +44,7 @@
         <yhm-form-select title="推修公司" width="1" v-if="worksource=='3'&&carName!=''" @click="pushRepairClick" :value="companyName" id="companyName" rule="R0000"></yhm-form-select>
 <!--        &&workOrderlist.length=='0'&&guaranteeSlipList.length=='0'-->
         <yhm-form-radio title="适用车型" width="1" ref="applicableModelsRadio" rule="#" :no-edit="applicableModelsShow" :select-list="applicableModelsList" @call="accessNumber" :value="applicableModels" id="applicableModels"></yhm-form-radio>
+
       </template>
     </yhm-formbody>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -861,8 +862,10 @@
             if(data.id!=''){
               this.id = data.id
             }
-            this.companyName = data.fixCompanyOrder.companyName//推修公司名称
-            this.companyID = data.fixCompanyOrder.companyID//推修公司ID
+            if(data.fixCompanyOrder!=null){
+              this.companyName = data.fixCompanyOrder.companyName//推修公司名称
+              this.companyID = data.fixCompanyOrder.companyID//推修公司ID
+            }
             this.address = data.address//地址
             this.emailaddress = data.emailaddress//邮箱
             this.applicableModelsList = data.applicableModelsPsd.list

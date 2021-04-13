@@ -283,23 +283,41 @@
           },
           call: (data) => {
             if (data.type == 2) {
+              // this.$dialog.alert({
+              //   tipValue:'请先维护保险公司资料',
+              //   alertImg:'warn',
+              //   width:'330',
+              //   closeCallBack: () => {
+              //   }
+              // })
               this.$dialog.OpenWindow({
                 width: 1050,
                 height: 720,
-                url:'/workOrderClaimDataForm?id='+item.fixorder.subid+'&type='+data.type+'&orderID='+item.fixorder.id,
-                title:'创建保险公司并上传保险公司资料',
+                url:'/workOrderInsuranceUnitForm?id='+item.fixorder.subid+'&unitname='+item.fixorder.subName+'&unitID='+item.fixorder.subid,
+                title:'维护保险公司资料',
                 closeCallBack:(data)=>{
-                  if(data){
-                    window.location.href = 'http://t.yhm.hk/home/receptionManager'
-
-                  }
+                  this.initPageData(false)
+                  // +'&fixorderunitID='+item.fixorderunitID
                 }
               })
+              console.log(item.fixorder.subid)
+              // this.$dialog.OpenWindow({
+              //   width: 1050,
+              //   height: 720,
+              //   url:'/workOrderClaimDataForm?id='+item.fixorder.subid+'&type=2'+'&orderID='+item.fixorder.id,
+              //   title:'上传保险公司资料',
+              //   closeCallBack:(data)=>{
+              //     if(data){
+              //       // window.location.href = 'http://t.yhm.hk/home/receptionManager'
+              //
+              //     }
+              //   }
+              // })
             } else {
               this.$dialog.OpenWindow({
                 width: 1050,
                 height: 720,
-                url:'/workOrderClaimDataForm?type=1&id='+item.fixorder.subid+'&orderID='+item.fixorder.id,
+                url:'/workOrderClaimDataForm?type=2&id='+item.fixorder.subid+'&orderID='+item.fixorder.id,
                 title:'上传保险公司资料',
                 closeCallBack:(data)=>{
                   if(data){

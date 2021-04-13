@@ -35,6 +35,8 @@ import repairTargerForm from './pages/repairTarger/repairTargerForm.vue'
 import employeeFilesManager from './pages/staff/employeeFiles/employeeFilesManager.vue'
 import employeeFilesView from './pages/staff/employeeFiles/employeeFilesView.vue'
 import employeeFilesForm from './pages/staff/employeeFiles/employeeFilesForm.vue'
+import staffQuitForm from './pages/staff/employeeFiles/staffQuitForm.vue'
+import staffQuitView from './pages/staff/employeeFiles/staffQuitView.vue'
 /*设置五险百分比*/
 import fiveInsurancesManager from './pages/staff/fiveInsurances/fiveInsurancesManager.vue'
 import fiveInsurancesView from './pages/staff/fiveInsurances/fiveInsurancesView.vue'
@@ -646,7 +648,12 @@ import payDepositManager from './pages/dailyOffice/payDeposit/payDepositManager'
 import contractManager from './pages/dailyOffice/contract/contractManager'
 import contractsignForm from './pages/dailyOffice/contract/contractsignForm'
 import contractsignView from './pages/dailyOffice/contract/contractsignView'
-
+/*旧件回收*/
+import coreRecyclingManager from './pages/stockIn/coreRecycling/coreRecyclingManager.vue'
+import coreRecyclingFrom from './pages/stockIn/coreRecycling/coreRecyclingFrom.vue'
+import coreWarehouseManager from './pages/stockIn/coreWarehouse/coreWarehouseManager.vue'
+import coreWarehouseView from './pages/stockIn/coreWarehouse/coreWarehouseView.vue'
+import RecoveryApprovalManager from './pages/stockIn/coreRecyclingApproval/RecoveryApprovalManager'
 
 
 import warnForm from './pages/dailyOffice/warn/warnForm'
@@ -1074,6 +1081,9 @@ export default new Router({
         { path: '/home/stockInOperateManager', name: 'stockInOperateManager.vue', component: stockInOperateManager , meta: {title: '入库操作'}},
         { path: '/home/stockinInfoManager', name: 'stockinInfoManager.vue', component: stockinInfoManager , meta: {title: '库存信息'}},
         { path: '/home/stockInventoryManager', name: 'stockInventoryManager.vue', component: stockInventoryManager , meta: {title: '库存盘点'}},
+        { path: '/home/coreRecyclingManager', name: 'coreRecyclingManager.vue', component: coreRecyclingManager , meta: {title: '旧件回收'}},
+        { path: '/home/coreWarehouseManager', name: 'coreWarehouseManager.vue', component: coreWarehouseManager , meta: {title: '旧件仓库'}},
+        { path: '/home/RecoveryApprovalManager', name: 'RecoveryApprovalManager.vue', component: RecoveryApprovalManager , meta: {title: '旧件审批'}},
         { path: '/home/stockPositionManager', name: 'stockPositionManager.vue', component: stockPositionManager , meta: {title: '库位管理'}},
         { path: '/home/wxMessageTemplateManager', name: 'wxMessageTemplateManager.vue', component: wxMessageTemplateManager , meta: {title: '微信服务号消息模板管理'}},
         { path: '/home/wxMessageManager', name: 'wxMessageManager.vue', component: wxMessageManager , meta: {title: '微信服务号消息管理'}},
@@ -1389,6 +1399,8 @@ export default new Router({
     { path: '/bankDetailAnalysisExecl', name: 'bankDetailAnalysisExecl', component: bankDetailAnalysisExecl},
     { path: '/employeeFilesForm', name: 'employeeFilesForm', component: employeeFilesForm},
     { path: '/employeeFilesView', name: 'employeeFilesView', component: employeeFilesView},
+    { path: '/staffQuitForm', name: 'staffQuitForm', component: staffQuitForm},
+    { path: '/staffQuitView', name: 'staffQuitView', component: staffQuitView},
     { path: '/fiveInsurancesForm', name: 'fiveInsurancesForm', component: fiveInsurancesForm},
     { path: '/fiveInsurancesView', name: 'fiveInsurancesView', component: fiveInsurancesView},
     { path: '/fiveInsurancesBaseForm', name: 'fiveInsurancesBaseForm', component: fiveInsurancesBaseForm},
@@ -1506,6 +1518,7 @@ export default new Router({
 
     { path: '/unitView', name: 'unitView.vue', component: unitView},
     { path: '/unitDetailView', name: 'unitDetailView.vue', component: unitDetailView},
+    { path: '/coreRecyclingFrom', name: 'coreRecyclingFrom.vue', component: coreRecyclingFrom},
 
     { path: '/addPersonForm', name: 'addPersonForm', component: addPersonForm},
     { path: '/visitPersonForm', name: 'visitPersonForm', component: visitPersonForm},
@@ -1731,7 +1744,7 @@ export default new Router({
     { path: '/accountCancellation', name: 'accountCancellation.vue',component: accountCancellation },
 
     { path: '/receivableView', name: 'receivableView.vue',component: receivableView },
-
+    { path: '/coreWarehouseView', name: 'coreWarehouseView.vue',component: coreWarehouseView },
     { path: '/accountsReceivableView', name: 'accountsReceivableView.vue',component: accountsReceivableView },
     { path: '/accountExpectedView', name: 'accountExpectedView.vue',component: accountExpectedView },
     { path: '/unitDatailsView', name: 'unitDatailsView.vue',component: unitDatailsView },

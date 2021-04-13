@@ -5,8 +5,8 @@
 
       <template #control>
         <yhm-form-text no-edit="1" title="添加人" ref="person" :value="person" id="person" rule="R0000"></yhm-form-text>
-        <yhm-form-date title="启用时间" :minYear="maxApplyDate" type="year" :value="startDate" id="startDate" rule="R0000"></yhm-form-date>
-        <yhm-form-radio title="月份" :select-list="categoryPsd.list" :value="category" id="category" rule="R0000" width="1"></yhm-form-radio>
+        <yhm-form-date title="启用时间" :no-edit="isCategory" :minYear="maxApplyDate" type="year" :value="startDate" id="startDate" rule="R0000"></yhm-form-date>
+        <yhm-form-radio title="月份" :no-edit="isCategory" :select-list="categoryPsd.list" :value="category" id="category" rule="R0000" width="1"></yhm-form-radio>
         <yhm-form-text title="金额" :value="money" id="money" rule="R1500"></yhm-form-text>
       </template>
     </yhm-formbody>
@@ -27,6 +27,8 @@
     mixins: [formmixin],
     data(){
       return{
+        isMain:'',
+        isCategory:false,
         person:'',
         personID:'',
         maxApplyDate:'',
@@ -40,19 +42,37 @@
       }
     },
     created () {
+      this.setQuery2Value('isMain')
       this.maxApplyDate=(new Date()).getFullYear()
+      if(this.isMain=='1'){
+        this.isCategory=true
+      }
       this.init()
     },
     methods:{
       init(){
-        let params={}
+        let params={
+          id:this.id
+        }
         this.ajaxJson({
           url:'/Fin/bankDetailInsuranceTargetForm',
           data: params,
           call: (data) => {
-            this.categoryPsd.list=data.categoryPsd.list
-            this.person=sessionStorage.getItem('____currentUser')
-            this.personID=sessionStorage.getItem('____currentUserID')
+            if(data){
+              this.categoryPsd.list=data.categoryPsd.list
+              this.person=sessionStorage.getItem('____currentUser')
+              this.personID=sessionStorage.getItem('____currentUserID')
+              if(this.isMain=='1'){this.personID=data.personID
+                this.person=data.person
+                this.startDate=data.year
+                this.category=data.category
+                this.money=data.money
+                this.insertDate=data.insertDate
+                this.createName=data.createName
+                this.updateName=data.updateName
+                this.updateDate=data.updateDate
+              }
+            }
           }
         })
       },

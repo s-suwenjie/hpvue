@@ -30,10 +30,12 @@
         <yhm-managerth style="width: 50px;" title="查看"></yhm-managerth>
         <yhm-managerth v-if="listViewLevels.value==1"  style="width: 80px" title="申请人" ></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="申请时间" value="applyDate"></yhm-managerth>
-        <yhm-managerth style="width: 80px;" title="税额合计" value="invoiceMoney"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="开票事由" value="subujectID"></yhm-managerth>
         <yhm-managerth style="width: 190px;" title="发票抬头" value="purchaserID"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="发票类型" value="invoiceCategory"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="价税合计" value="invoiceMoney"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="税率"></yhm-managerth>
+        <yhm-managerth style="width: 80px;" title="税额"></yhm-managerth>
         <yhm-managerth style="width: 80px;" title="款项状态" value=""></yhm-managerth>
         <yhm-managerth style="width: 110px;" title="预计收款日期" value="personID"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="状态" value=""></yhm-managerth>
@@ -45,10 +47,12 @@
           <yhm-manager-td-look @click="view(item)"></yhm-manager-td-look>
           <yhm-manager-td v-if="listViewLevels.value==1" :value="item.person"></yhm-manager-td>
           <yhm-manager-td-date :value="item.applyDate"></yhm-manager-td-date>
-          <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
           <yhm-manager-td-psd  :value="item.category" :list="categoryList"></yhm-manager-td-psd>
           <yhm-manager-td :value="item.purchaser"></yhm-manager-td>
           <yhm-manager-td-psd :value="item.invoiceCategory" :list="invoiceCategoryList"></yhm-manager-td-psd>
+          <yhm-manager-td-money :value="item.invoiceMoney"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.taxRate"></yhm-manager-td-money>
+          <yhm-manager-td-money :value="item.taxAmount"></yhm-manager-td-money>
           <yhm-manager-td-psd :value="item.isReceivables" :list="isReceivablesList"></yhm-manager-td-psd>
           <yhm-manager-td-date :value="item.moneyBackDate"></yhm-manager-td-date>
           <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
@@ -71,13 +75,17 @@
             <thead>
             <tr>
               <yhm-managerth style="width: 100px;" before-color="black" title="" before-title="总数" ></yhm-managerth>
-              <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="总金额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#DD17D3" title="" before-title="总金额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#2A21DD" title="" before-title="普通发票总金额"></yhm-managerth>
+              <yhm-managerth style="width: 100px;" before-color="#ff0000" title="" before-title="红字发票总金额"></yhm-managerth>
             </tr>
             </thead>
             <tbody>
             <tr>
               <yhm-manager-td-rgt v-for="(item,index) in contentTotal" :key="index" :value="item.count"></yhm-manager-td-rgt>
-              <yhm-manager-td-money v-for="(item,index) in contentTotal" :key="index" :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td-money v-for="(item,index) in contentTotal" style="color:#DD17D3" :key="index" :value="item.money"></yhm-manager-td-money>
+              <yhm-manager-td-money v-for="(item,index) in contentTotal" style="color:#2A21DD" :key="index" :value="item.invoiceMoney"></yhm-manager-td-money>
+              <yhm-manager-td-money v-for="(item,index) in contentTotal" style="color:#ff0000" :key="index" :value="item.redInvoiceMoney"></yhm-manager-td-money>
             </tr>
             </tbody>
           </table>

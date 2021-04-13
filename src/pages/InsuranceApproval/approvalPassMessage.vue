@@ -93,6 +93,14 @@
             category:'4',
             remark:this.remark
           }
+        }else if(this.page==9){
+          this.url='/dailyoffice/corcRegistration/updateSubmit' //旧件模块审批驳回
+          this.tipValue='是否驳回'
+          params = {
+            id: this.id,
+            state:'-1',
+            remark:this.remark
+          }
         }
           this.$dialog.confirm({
             width: 300,
