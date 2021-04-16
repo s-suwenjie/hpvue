@@ -16,23 +16,27 @@
       <template #listHead>
         <yhm-managerth  title="配件名称"></yhm-managerth>
         <yhm-managerth  title="规格型号"></yhm-managerth>
-        <yhm-managerth title="出库数量"></yhm-managerth>
-        <yhm-managerth title="旧件回收以数量"></yhm-managerth>
-        <yhm-managerth title="旧件回收未数量"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="出库数量"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="客户" subtitle="(带走)数量"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="配件" subtitle="(遗失)数量"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="旧件(已)" subtitle="回收数量"></yhm-managerth>
+        <yhm-managerth style="width: 90px" title="旧件(未)" subtitle="回收数量"></yhm-managerth>
         <yhm-managerth title="备注"></yhm-managerth>
-        <yhm-managerth style="width: 90px" title="入场照片"></yhm-managerth>
+        <!--<yhm-managerth style="width: 90px" title="入场照片"></yhm-managerth>-->
         <yhm-managerth style="width: 40px" title="删除"></yhm-managerth>
 
       </template>
       <template #listBody>
         <tr v-for="(item,index) in detailsList" :key="index" :class="{InterlacBg:index%2!==0}">
-          <yhm-form-td-textbox width="145" no-edit="1" :list="detailsList" listid="detailsList" :value="item" id="parts" rule="R0000"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="145" no-edit="1" :list="detailsList" listid="detailsList" :value="item" id="specifications" rule="R0000"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="145" no-edit="1" :list="detailsList"  listid="detailsList" :value="item" id="deliveryQuantity"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="145" no-edit="1" :list="detailsList"  listid="detailsList" :value="item" id="numb"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="145" :list="detailsList"  listid="detailsList" :value="item" id="recoveryQuantity"></yhm-form-td-textbox>
-          <yhm-form-td-textbox width="145" :list="detailsList"  listid="detailsList" :value="item" id="reason"></yhm-form-td-textbox>
-          <yhm-form-td-upload-image  width="90"  tag="Invoice" @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="detailsList" listid="detailsList" :value="item" id="url" rule="#"></yhm-form-td-upload-image>
+          <yhm-form-td-textbox width="150" no-edit="1" :list="detailsList" listid="detailsList" :value="item" id="parts" rule="R0000"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="150" no-edit="1" :list="detailsList" listid="detailsList" :value="item" id="specifications" rule="R0000"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="90" no-edit="1" :list="detailsList"  listid="detailsList" :value="item" id="deliveryQuantity"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="90" no-edit="1" :list="detailsList"  listid="detailsList" :value="item" id="takeAway"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="90" no-edit="1" :list="detailsList"  listid="detailsList" :value="item" id="lostNumber"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="90" no-edit="1" :list="detailsList"  listid="detailsList" :value="item" id="numb"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="90" :list="detailsList"  listid="detailsList" :value="item" id="recoveryQuantity"></yhm-form-td-textbox>
+          <yhm-form-td-textbox width="150" :list="detailsList"  listid="detailsList" :value="item" id="reason"></yhm-form-td-textbox>
+          <!--<yhm-form-td-upload-image  width="90"  tag="Invoice" @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="detailsList" listid="detailsList" :value="item" id="url" rule="#"></yhm-form-td-upload-image>-->
           <yhm-form-td-delete :must="1" width="40" :list="detailsList"  listid="detailsList" :value="item" :del-click="true" @click="delDiscount(index,item)"></yhm-form-td-delete>
         </tr>
       </template>
@@ -42,6 +46,7 @@
     </div>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
       <template #btn>
+        <!--<yhm-commonbutton value="剩余配件不存在" style="color: #FF0000;margin-right: 100px" icon="btnSave"  ></yhm-commonbutton>-->
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="save()"></yhm-commonbutton>
       </template>
     </yhm-formoperate>
@@ -72,29 +77,26 @@
         detailsList:[],
         otherID:'',
         modelID:'',
-        viewImg:'',         //需要显示的发票路径
-        viewImgShow:false,  //显示发票图片
+        takeAway:'',
+        lostNumber:'',
+        // viewImg:'',         //需要显示的发票路径
+        // viewImgShow:false,  //显示发票图片
       }
     },
     methods:{
       //显示发票图片
-      invoiceImg(item){
-        if(item.url !== '') {
-          if(item.isPdf === '0'){
-            this.viewImg = '/UploadFile/Invoice/' + item.url
-          }
-          else{
-            this.viewImg = '/UploadFile/electronicInvoice/' + item.url
-          }
-          this.viewImgShow = true
-        }
-      },
-      //隐藏发票图片
-      invoiceImgHide(item){
-        if(item.url !== '') {
-          this.viewImgShow = false
-        }
-      },
+      // invoiceImg(item){
+      //   if(item.url !== '') {
+      //     this.viewImg = '/UploadFile/Invoice/' + item.url
+      //     this.viewImgShow = true
+      //   }
+      // },
+      // //隐藏发票图片
+      // invoiceImgHide(item){
+      //   if(item.url !== '') {
+      //     this.viewImgShow = false
+      //   }
+      // },
       delDiscount(index,item){
         this.$dialog.alert({
           tipValue: '删除成功！！！',
@@ -104,8 +106,7 @@
         })
       },
       save(){
-        console.log( this.detailsList)
-        return
+
         if(this.detailsList.length==0){
           this.$dialog.alert({
             tipValue: '配件不能为空！！！',
@@ -125,12 +126,14 @@
                 ownerID:this.detailsList[i].ownerID,
                 modelID:this.detailsList[i].modelID,
                 parts:this.detailsList[i].parts,
-                partsID:this.detailsList[i].productID,
-                specificationsID:this.detailsList[i].modelID,
-                specifications:this.detailsList[i].model,
+                partsID:this.detailsList[i].partsID,
+                specificationsID:this.detailsList[i].specificationsID,
+                specifications:this.detailsList[i].specifications,
                 numb:this.detailsList[i].numb,
-                deliveryQuantity:this.detailsList[i].quantity,
+                deliveryQuantity:this.detailsList[i].deliveryQuantity,
                 recoveryQuantity:this.detailsList[i].recoveryQuantity,
+                stockoutdetailid:this.detailsList[i].stockoutdetailid,
+                otherID:this.detailsList[i].otherID,
                 reason:this.detailsList[i].reason,
               })
             }
@@ -145,8 +148,8 @@
             remark:this.remark,
             detailsList:arr
           }
-          console.log(params)
-return
+//           console.log(params)
+// return
           this.ajaxJson({
             url: '/dailyoffice/corcRegistration/save',
             data: params,
@@ -178,10 +181,12 @@ return
       let params={
         orderid: this.otherID,
         category:'1',
-        state:'123'
+        state:'123',
+        price:'-1',
+        totalPrice:'-1',
       }
       this.ajaxJson({
-        url: '/fix/fixOrder/getListForStockOut',
+        url: '/fix/fixOrder/getListForStockOut2',
         data: params,
         call: (data) => {
           for (let i in data){
@@ -196,8 +201,13 @@ return
               specifications:data[i].model,
               numb:data[i].numb,
               deliveryQuantity:data[i].quantity,
-              recoveryQuantity:Number(data[i].quantity)-Number(data[i].numb)+'',
+              recoveryQuantity:Number(data[i].quantity)-Number(data[i].numb)-Number(data[i].deliveryQuantity)-Number(data[i].deliveryQuantity2)+'',
+              stockoutdetailid:data[i].stockoutdetailid,
+              otherID:this.otherID,
+              takeAway:data[i].deliveryQuantity,
+              lostNumber:data[i].deliveryQuantity2,
               reason:'',
+              url:'',
             })
           }
         }

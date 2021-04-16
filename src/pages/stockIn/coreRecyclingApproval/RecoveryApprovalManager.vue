@@ -1,8 +1,41 @@
 <template>
   <div>
-    <yhm-managerpage>
+    <yhm-managerpage  category="1">
       <!--导航条-->
-      <template #navigation>库存管理&nbsp;&gt;&nbsp;旧件审批</template>
+<!--      <template #navigation>库存管理&nbsp;&gt;&nbsp;旧件审批</template>-->
+      <template #navigationTab>
+        <router-link class="menuTabDiv" :to="{path:'/home/approvalPayPlanManager'}">付款计划</router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/approvalPayManager'}">付款申请
+          <i class="noticeNum" v-if="paymentNum!=0">{{paymentNum}}</i>
+        </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/approvalReimbursementManager'}">报销
+          <i class="noticeNum" v-if="reimburseNum!=0">{{reimburseNum}}</i>
+        </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/approvalPurchaseManager'}">采购计划
+          <i class="noticeNum" v-if="purchaseNum!=0">{{purchaseNum}}</i>
+        </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/approvalPrettyCashs'}">备用金
+          <i class="noticeNum" v-if="prettyCashsNum!=0">{{prettyCashsNum}}</i>
+        </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/approvalInsuranceManager'}">保险审批
+          <i class="noticeNum" v-if="insuranceNum!='0'">{{insuranceNum}}</i>
+        </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/approvalOpenInvoiceManager'}">开票审批
+          <i class="noticeNum" v-if="openInvoiceNum!='0'">{{openInvoiceNum}}</i>
+        </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/promotions/promotionsAppManager'}">活动审批
+          <i class="noticeNum" v-if="promotions!='0'">{{promotions}}</i>
+        </router-link>
+        <router-link class="menuTabDiv" :to="{path:'/home/invoicelookUp/invoicelookUpManager'}">发票抬头
+<!--          <i class="noticeNum" v-if="invoiceRiseNum!='0'">{{invoiceRiseNum}}</i>-->
+        </router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/expressApprovalManager'}">快递审批
+          <!--<i class="noticeNum" v-if="paymentNum!=0">{{paymentNum}}</i>-->
+        </router-link>
+        <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/RecoveryApprovalManager'}">旧件审批
+          <!--<i class="noticeNum" v-if="paymentNum!=0">{{paymentNum}}</i>-->
+        </router-link>
+      </template>
       <!--操作区-->
       <template #operate>
 <!--        <yhm-commonbutton :value="choose?'收起筛选':'展开筛选'" :icon="choose?'btnUp':'btnDown'" @call="switchChoose()"></yhm-commonbutton>-->
@@ -20,11 +53,12 @@
       <template #listHead>
         <yhm-managerth style="width: 40px;" title="选择"></yhm-managerth>
         <yhm-managerth style="width: 40px;" title="查看"></yhm-managerth>
+        <yhm-managerth style="width: 120px;" title="车牌号"></yhm-managerth>
         <yhm-managerth style="width: 120px;" title="申请人" ></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="申请日期"></yhm-managerth>
         <yhm-managerth style="width: 150px;" title="车牌号"></yhm-managerth>
         <yhm-managerth title="工单号(点击查看)"></yhm-managerth>
-        <yhm-managerth style="width: 150px;" title="规格型号"></yhm-managerth>
+        <yhm-managerth style="width: 150px;" title="所属类型"></yhm-managerth>
         <yhm-managerth title="备注"></yhm-managerth>
         <yhm-managerth style="width: 170px;" title="操作"></yhm-managerth>
 
@@ -33,6 +67,7 @@
         <tr :class="[{twinkleBg: item.id==lastData},{InterlacBg:index%2!=0}]" v-for="(item,index) in content" :key="index">
           <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
           <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
+          <yhm-manager-td :value="item.vehicle"></yhm-manager-td>
           <yhm-manager-td :value="item.operator"></yhm-manager-td>
           <yhm-manager-td-center :value="item.insertDate"></yhm-manager-td-center>
           <yhm-manager-td-center :value="item.vehicle"></yhm-manager-td-center>
@@ -65,6 +100,15 @@
     mixins: [managermixin],
     data(){
       return {
+        payPlanNum: '',
+        paymentNum: '',
+        reimburseNum: '',
+        purchaseNum: '',
+        prettyCashsNum:'',
+        insuranceNum:'',
+        openInvoiceNum:'',
+        promotions:'',
+        invoiceRiseNum:'',
         statePsd:{
           list:[
             {showName: "已驳回", num: "-1", code: "", img: ""},
@@ -79,7 +123,30 @@
 
     },
     methods:{
+      listView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '650',
+          url: '/lostRegistrationView?id='+item.id,
+          title: '查看详情信息',
+          closeCallBack:(data) =>{
+          }
+        })
+      },
       initPageData (initValue) {
+        this.ajaxJson({
+          url: '/PersonOffice/approvalManagerAllNumber',
+          call: (data)=>{
+            this.payPlanNum = data.payPlan
+            this.paymentNum = data.payment
+            this.reimburseNum = data.reimbursements
+            this.purchaseNum = data.purchase
+            this.prettyCashsNum = data.prettyCashs
+            this.insuranceNum=data.insurance
+            this.openInvoiceNum=data.openInvoice
+            this.promotions=data.promotions
+          }
+        })
         let params = {}
         if (initValue) {
           // 页面初始化是需要的参数

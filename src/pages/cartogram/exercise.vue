@@ -1404,7 +1404,7 @@
             endDate:this.endDate + this.finish,//结束时间
           },
           call: (data) => {
-            sessionStorage.setItem("ceshi", JSON.stringify(data));
+            // sessionStorage.setItem("ceshi", JSON.stringify(data));
             this.rectangleList = data.unitClassification
             this.marksData = []
             let list = []

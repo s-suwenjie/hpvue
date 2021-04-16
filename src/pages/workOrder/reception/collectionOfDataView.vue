@@ -52,6 +52,7 @@
           <yhm-view-tab-button :list="tabState" :index="3" @click="pager.pageIndex=1,listPage(deliveryRecord,'3')">出库记录</yhm-view-tab-button>
           <yhm-view-tab-button :list="tabState" :index="4" @click="pager.pageIndex=1,listPage(detailList,'4')">收入详情</yhm-view-tab-button>
           <yhm-view-tab-button :list="tabState" v-if="fixOrderUnitConcatList.length>0" :index="5" @click="pager.pageIndex=1,listPage(fixOrderUnitConcatList,'5')">保险公司条约</yhm-view-tab-button>
+          <yhm-view-tab-button :list="tabState" :index="6" @click="lostClick">配件遗失详情</yhm-view-tab-button>
 
         </template>
         <template #content>
@@ -208,15 +209,17 @@
             <template #listHead>
 <!--              <yhm-managerth title="查看" width="38"></yhm-managerth>-->
               <!--              <yhm-managerth width="38" title="序号"></yhm-managerth>-->
-              <yhm-managerth title="条约名称"></yhm-managerth>
+              <yhm-managerth title="资料名称"></yhm-managerth>
+              <yhm-managerth title="资料内容"></yhm-managerth>
               <yhm-managerth width="150" title="文件或图片"></yhm-managerth>
             </template>
             <template #listBody>
               <tr v-for="(item,index) in fixOrderUnitConcatList2" :class="[{InterlacBg:index%2!=0}]" :key="item.id">
 <!--                <yhm-manager-td-look @click="lookOver(item)"></yhm-manager-td-look>-->
                 <!--                <yhm-manager-td-center :value="index+1"></yhm-manager-td-center>-->
-                <yhm-manager-td :value="item.detailname"></yhm-manager-td>
-
+                <yhm-manager-td :value="item.claimname"></yhm-manager-td>
+                <yhm-manager-td v-if="item.remark!=null" :value="item.remark"></yhm-manager-td>
+                <yhm-manager-td-center v-else value="---------"></yhm-manager-td-center>
                 <yhm-manager-td-center v-if="!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG|svg)$/.test(item.filepath)" @click="checkFile(item.filepath)" color="#49a9ea" value="点击查看文件"></yhm-manager-td-center>
                 <yhm-manager-td-image v-else :tip="true" left="-130" width="900" height="550" :value="item.filepath" tag=""></yhm-manager-td-image>
 
@@ -226,9 +229,47 @@
               <span class="m_listNoData" v-show="fixOrderUnitConcatList2.length=='0'?true:false">暂时没有数据</span>
             </template>
             <template #pager>
-              <yhm-pagination :pager="pager" is-page-size="false" @initData="listPage(detailList,'4')"></yhm-pagination>
+              <yhm-pagination :pager="pager" is-page-size="false" @initData="listPage(fixOrderUnitConcatList,'5')"></yhm-pagination>
             </template>
           </yhm-view-tab-list>
+
+
+          <yhm-view-tab-list :customize="true" v-show="tabState[6].select">
+            <template #listHead>
+              <yhm-managerth style="width: 40px" title="查看"></yhm-managerth>
+              <yhm-managerth title="登记日期"></yhm-managerth>
+              <yhm-managerth title="登记人员"></yhm-managerth>
+              <yhm-managerth title="所属车型"></yhm-managerth>
+              <yhm-managerth title="备注"></yhm-managerth>
+              <yhm-managerth title="状态"></yhm-managerth>
+              <yhm-managerth title="操作"></yhm-managerth>
+            </template>
+            <template #listBody>
+              <tr v-for="(item,index) in lostList" :key="index" :class="{InterlacBg:index%2!==0}">
+                <yhm-manager-td-look  @click="lostView(item)"></yhm-manager-td-look>
+                <yhm-manager-td-date :value="item.dateTime"></yhm-manager-td-date>
+                <yhm-manager-td-center :value="item.operator"></yhm-manager-td-center>
+                <yhm-manager-td-center :value="item.model"></yhm-manager-td-center>
+                <yhm-manager-td-center :value="item.remark"></yhm-manager-td-center>
+                <yhm-manager-td-psd :value="item.state+''" :list="lostState.list"></yhm-manager-td-psd>
+                <yhm-manager-td-operate >
+                  <yhm-manager-td-operate-button v-if="item.state==0" @click="submitClick(item)" value="提交" icon="uniE99E" color="#56B4F4"></yhm-manager-td-operate-button>
+                  <yhm-manager-td-operate-button v-if="item.state==1"  value="审批中" icon="uniE99E" color="#56B4F4"></yhm-manager-td-operate-button>
+                  <yhm-manager-td-operate-button v-if="item.state==2"  value="完成" icon="uniE99E" color="#56B4F4"></yhm-manager-td-operate-button>
+                  <yhm-manager-td-operate-button v-if="item.state==-1"  value="已驳回" icon="uniE99E" color="#56B4F4"></yhm-manager-td-operate-button>
+                </yhm-manager-td-operate>
+              </tr>
+            </template>
+            <template #empty>
+              <span class="m_listNoData" v-show="lostList.length=='0'?true:false">暂时没有数据</span>
+            </template>
+            <template #pager>
+              <yhm-pagination :pager="pager" is-page-size="false" @initData="lostClick()"></yhm-pagination>
+            </template>
+
+          </yhm-view-tab-list>
+
+
         </template>
       </yhm-view-tab>
       <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate"></yhm-formoperate>
@@ -288,7 +329,7 @@
         details:[],//列表备份数据
         details2:[],//列表备份数据
         subList:[],//保险公司
-        tabState:[{select:true},{select:false},{select:false},{select:false},{select:false},{select:false}],
+        tabState:[{select:true},{select:false},{select:false},{select:false},{select:false},{select:false},{select:false}],
         fixOrderUnitConcatList:[],//上传的保险公司条约
         fixOrderUnitConcatList2:[],//保险公司条约分页数据
 
@@ -303,9 +344,65 @@
         sourceList:[],//业务来源
         categoryList:[],//维修类型
         formTypeList:[],//定损单详情的类型
+
+        lostList:[],//配件遗失
+        lostState:[],
       }
     },
     methods:{
+      submitClick(item){
+        let params={
+          id:item.id,
+          state:'1'
+        }
+        this.ajaxJson({
+          url: '/dailyoffice/corcRegistration/updateSubmit',
+          data: params,
+          call: (data) => {
+            if (data.type === 0) {
+              this.$dialog.setReturnValue(this.id)
+              this.$dialog.alert({
+                tipValue: data.message,
+                closeCallBack: () => {
+                  this.lostClick()
+                }
+              })
+            }else if(data.type === 1){
+              this.$dialog.alert({
+                alertImg:'warn',
+                tipValue: data.message
+              })
+            }
+          }
+        })
+      },
+      lostView(item){
+        this.$dialog.OpenWindow({
+          width: '1050',
+          height: '650',
+          url: '/lostRegistrationView?id='+item.id,
+          title: '查看详情信息',
+          closeCallBack:(data) =>{
+          }
+        })
+      },
+      lostClick(){
+        let params={
+          id:this.orderid,
+          pageSize: this.pager.pageSize, // 单页数据条数
+          pageIndex: this.pager.pageIndex, // 当前页码
+        }
+        this.ajaxJson({
+          url: '/dailyoffice/corcRegistration/getLostManager',
+          data: params,
+          call: (data) => {
+
+            this.lostList=data.content
+            this.lostState=data.statePsd
+            this.pager.total = data.count
+          }
+        })
+      },
       checkFile(value){
         window.open(value)
       },
@@ -375,7 +472,7 @@
               this.list3 = data.fixorder.fixOrderMater.list
               this.detailList = data.fixorder.summary.reslist0//收支明细 全部数据
               this.detailList2 = data.fixorder.summary.reslist0//收支明细 用来分页
-              this.fixOrderUnitConcatList = data.fixOrderUnitConcatList//上传的保险公司条约
+              this.fixOrderUnitConcatList = data.content//上传的保险公司条约
               console.log(this.detailList)
               for(let v in this.list){
                 this.list[v].index = Number(v)+1

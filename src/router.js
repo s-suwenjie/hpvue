@@ -377,6 +377,7 @@ import selectDeposit from './pages/selects/selectDeposit'
 import selectPayDeposit from './pages/selects/selectPayDeposit'
 import selectOfficialWorkOrder from './pages/selects/selectOfficialWorkOrder'
 import selectContract from './pages/selects/selectContract'
+import selectTakeAway from './pages/selects/selectTakeAway'
 /* 单位 - 联系人 */
 import unitManager from './pages/unit/unitManager'
 import addUnitForm from './pages/unit/addUnitForm'
@@ -651,6 +652,9 @@ import contractsignView from './pages/dailyOffice/contract/contractsignView'
 /*旧件回收*/
 import coreRecyclingManager from './pages/stockIn/coreRecycling/coreRecyclingManager.vue'
 import coreRecyclingFrom from './pages/stockIn/coreRecycling/coreRecyclingFrom.vue'
+import takeAwayFrom from './pages/stockIn/coreRecycling/takeAwayFrom.vue'
+import lostRegistrationForm from './pages/stockIn/coreRecycling/lostRegistrationForm.vue'
+import lostRegistrationView from './pages/stockIn/coreRecycling/lostRegistrationView.vue'
 import coreWarehouseManager from './pages/stockIn/coreWarehouse/coreWarehouseManager.vue'
 import coreWarehouseView from './pages/stockIn/coreWarehouse/coreWarehouseView.vue'
 import RecoveryApprovalManager from './pages/stockIn/coreRecyclingApproval/RecoveryApprovalManager'
@@ -826,7 +830,6 @@ import addTestForm from './pages/basic/vehicle/addTestForm'
 
 //车辆管理_售后业务
 import vehicleTwoManager from './pages/basic/vehicleTwo/vehicleTwoManager'
-
 import saveModelForm from './pages/basic/vehicle/saveModelForm'
 import saveVersionForm from './pages/basic/vehicle/saveVersionForm'
 
@@ -847,7 +850,6 @@ import billingForm from './pages/insurance/billing/billingForm'
 import billingFile from './pages/insurance/billing/billingFile'
 import billingView from './pages/insurance/billing/billingView'
 import billingApprovalApplyForm from './pages/insurance/billing/billingApprovalApplyForm'
-
 import finBillingManager from './pages/insurance/finBilling/finBillingManager'
 
 /* 保单管理 */
@@ -1456,6 +1458,7 @@ export default new Router({
     { path: '/selectUnitInvoice', name: 'selectUnitInvoice.vue',component: selectUnitInvoice },
     { path: '/selectNumber', name: 'selectNumber.vue',component: selectNumber },
     { path: '/selectContract', name: 'selectContract.vue',component: selectContract },
+    { path: '/selectTakeAway', name: 'selectTakeAway.vue',component: selectTakeAway },
     { path: '/selectPromotions', name: 'selectPromotions.vue',component: selectPromotions },
     { path: '/selectPerson', name: 'selectPerson', component: selectPerson},
     { path: '/selectStock', name: 'selectStock', component: selectStock},
@@ -1477,7 +1480,7 @@ export default new Router({
     { path: '/selectFormPlate', name: 'selectFormPlate.vue',component: selectFormPlate },
     { path: '/selectPrint', name: 'selectPrint.vue',component: selectPrint },
     { path: '/selectLocation', name: 'selectLocation.vue',component: selectLocation },
-    { path: '/selectAccount', name: 'selectAccount.vue',component: selectAccount },
+    { path: '/selectAccount', name: 'selectAccount.vue',component: selectAccount},
     { path: '/selectPart', name: 'selectPart.vue',component: selectPart },
     { path: '/selectProcessServices', name: 'selectProcessServices.vue',component: selectProcessServices },
     { path: '/selectPeopleManagement', name: 'selectPeopleManagement.vue',component: selectPeopleManagement },
@@ -1491,7 +1494,7 @@ export default new Router({
 
     { path: '/commissionFeeForm', name: 'commissionFeeForm.vue',component: commissionFeeForm },
 
-    { path: '/exercise', name: 'exercise.vue', component: exercise ,meta: {title: '测试页面'}},
+    { path: '/exercise', name: 'exercise.vue', component: exercise ,meta: {title: '波士顿矩阵图BCG Matrix'}},
     { path: '/demo', name: 'demo.vue', component: demo ,meta: {title: '组件测试'}},
 
     { path: '/checkForm', name: 'checkForm.vue', component: checkForm},
@@ -1519,6 +1522,9 @@ export default new Router({
     { path: '/unitView', name: 'unitView.vue', component: unitView},
     { path: '/unitDetailView', name: 'unitDetailView.vue', component: unitDetailView},
     { path: '/coreRecyclingFrom', name: 'coreRecyclingFrom.vue', component: coreRecyclingFrom},
+    { path: '/takeAwayFrom', name: 'takeAwayFrom.vue', component: takeAwayFrom},
+    { path: '/lostRegistrationForm', name: 'lostRegistrationForm.vue', component: lostRegistrationForm},
+    { path: '/lostRegistrationView', name: 'lostRegistrationView.vue', component: lostRegistrationView},
 
     { path: '/addPersonForm', name: 'addPersonForm', component: addPersonForm},
     { path: '/visitPersonForm', name: 'visitPersonForm', component: visitPersonForm},

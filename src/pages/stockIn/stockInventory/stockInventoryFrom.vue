@@ -91,7 +91,6 @@
     },
     methods: {
       keyupEnter(item){
-
         if (this.test!=''){
           if(item.keyCode=='13'||item.code=='Enter'){
           clearTimeout(this.time)//再次点击时关闭上次触发的定时器 防止多次执行

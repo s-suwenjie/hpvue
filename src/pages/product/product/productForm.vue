@@ -123,6 +123,36 @@
           call:(data) =>{
             if(data.type === 0){//说明存在，调用控件验证显示规则
               this.$refs.name.errorEvent("商品名称重复")
+              let p = {
+                id:this.name
+              }
+              this.ajaxJson({
+                url: '/Basic/initNameFrom',
+                data: p,
+                call: (data) => {
+                  this.id=data.id
+                  this.name = data.name
+                  this.unitID = data.unitID
+                  this.unit = data.unit
+                  this.storageType=data.storageType
+                  this.englishName=data.englishName
+                  this.splitDeliveryUnitID=data.splitDeliveryUnitID
+                  this.splitDeliveryUnit=data.splitDeliveryUnit
+                  this.modelDetails = data.modelDetails
+                  this.empty = this.modelDetails.length === 0
+                  this.showModel = true
+                  if (this.storageType==='0' ||this.storageType==='1'){
+                    this.isSorck=true
+                  }else {
+                    this.isSorck=false
+                  }
+                  if (this.split==0){
+                    this.isSplit=true
+                  }else {
+                    this.isSplit=false
+                  }
+                }
+              })
             }
           }
         })

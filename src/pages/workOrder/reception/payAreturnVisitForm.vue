@@ -7,6 +7,13 @@
 
       </template>
     </yhm-formbody>
+    <div class="f_split" v-if="returnVisitToRecordList.length>0?true:false"></div>
+    <yhm-formbody v-if="returnVisitToRecordList.length>0?true:false">
+      <template #title>回访记录</template>
+      <template #control>
+        <yhm-form-textarea :title="'第'+(index+1)+'次'" subtitle="回访记录" v-for="(item,index) in returnVisitToRecordList" :key="index" :value="item.remark" id="remark" no-edit="1" placeholder="请输入回访信息"> </yhm-form-textarea>
+      </template>
+    </yhm-formbody>
     <yhm-formoperate :createName="createName" :updateName="updateName">
       <template #btn>
         <yhm-commonbutton value="保存" icon="btnSave" :flicker="true" @call="affirm()"></yhm-commonbutton>
@@ -23,7 +30,8 @@
     mixins: [formmixin],
     data(){
       return{
-        remark:''
+        remark:'',
+        returnVisitToRecordList:[]
       }
     },
     methods:{
@@ -72,6 +80,17 @@
       this.setQuery2Value('personName')
       this.setQuery2Value('receptionistid')
       this.setQuery2Value('receptionistName')
+      this.setQuery2Value('contactPersonID')
+      this.ajaxJson({
+        url: '/fix/returnVisit/getManager',//查询回访记录
+        loading:'0',
+        data: {
+          personid:this.personid
+        },
+        call: (data) => {
+          this.returnVisitToRecordList = data.content
+        }
+      })
     }
   }
 </script>

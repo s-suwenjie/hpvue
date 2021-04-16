@@ -16,21 +16,23 @@
         <router-link class="menuTabDiv" :to="{path:'/home/approvalPrettyCashs'}">备用金
           <i class="noticeNum" v-if="prettyCashsNum!=0">{{prettyCashsNum}}</i>
         </router-link>
-        <router-link class="menuTabDiv  " :to="{path:'/home/approvalInsuranceManager'}">保险审批
-          <i class="noticeNum" v-if="insuranceNum!=='0'">{{insuranceNum}}</i>
-        </router-link>
+<!--        <router-link class="menuTabDiv  " :to="{path:'/home/approvalInsuranceManager'}">保险审批-->
+<!--          <i class="noticeNum" v-if="insuranceNum!=='0'">{{insuranceNum}}</i>-->
+<!--        </router-link>-->
         <router-link class="menuTabDiv  " :to="{path:'/home/approvalOpenInvoiceManager'}">开票审批
           <i class="noticeNum" v-if="openInvoiceNum!='0'">{{openInvoiceNum}}</i>
         </router-link>
-        <router-link class="menuTabDiv" :to="{path:'/home/promotions/promotionsAppManager'}">活动审批
-          <i class="noticeNum" v-if="promotions!='0'">{{promotions}}</i>
-        </router-link>
+<!--        <router-link class="menuTabDiv" :to="{path:'/home/promotions/promotionsAppManager'}">活动审批-->
+<!--          <i class="noticeNum" v-if="promotions!='0'">{{promotions}}</i>-->
+<!--        </router-link>-->
         <router-link class="menuTabDiv" :to="{path:'/home/approvalInvoiceRiseManager'}">发票抬头
                     <i class="noticeNum" v-if="invoiceRiseNum!='0'">{{invoiceRiseNum}}</i>
         </router-link>
-        <router-link class="menuTabDiv " :to="{path:'/home/expressApprovalManager'}">快递审批
-          <!--<i class="noticeNum" v-if="paymentNum!=0">{{paymentNum}}</i>-->
-        </router-link>
+<!--        <router-link class="menuTabDiv " :to="{path:'/home/expressApprovalManager'}">快递审批-->
+<!--          &lt;!&ndash;<i class="noticeNum" v-if="paymentNum!=0">{{paymentNum}}</i>&ndash;&gt;-->
+<!--        </router-link>-->
+        <router-link class="menuTabDiv " :to="{path:'/home/RecoveryApprovalManager'}">旧件审批</router-link>
+
       </template>
 
       <!--操作区-->

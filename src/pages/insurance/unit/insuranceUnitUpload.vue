@@ -97,7 +97,6 @@
         this.endDate=lastDay
       },
       elseClick(item){
-
         this.$dialog.OpenWindow({
           width: 650,
           height: 230,
@@ -126,22 +125,23 @@
                 })
               }
               let money=item.businessMoney==0.00?item.forceMoney:item.businessMoney
-              if ( accAdd(item.money,money*-1)<-10){
-                this.$dialog.alert({
-                  alertImg:'warn',
-                  tipValue:'请仔细核对此条数据是否异常',
-                  width:350
-                })
-              } else{
+              if (item.money < 0 &&Math.abs(item.money) < money) {
                 this.stateClick(item)
+              }else{
+                if ( accAdd(item.money,money*-1)<-10){
+                  this.$dialog.alert({
+                    alertImg:'warn',
+                    tipValue:'请仔细核对此条数据是否异常',
+                    width:350
+                  })
+                } else{
+                  this.stateClick(item)
+                }
               }
+
             }
           }
         })
-
-
-
-
       },
       stateClick(item){
         item.stateImg = 'i-finishApprovalOK'

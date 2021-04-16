@@ -213,10 +213,12 @@
                 this.$dialog.OpenWindow({
                   width: 1050,
                   height: 720,
-                  url:'/workOrderInsuranceUnitForm?id='+data.unitID+'&unitname='+data.unitname+'&unitID='+data.unitID,
+                  url:'/workOrderInsuranceUnitForm?id='+data.subID+'&unitname='+data.subName+'&unitID='+data.subID,
                   title:'维护保险公司资料',
                   closeCallBack:(data)=>{
-                    window.location.href = window.location.origin+'/home/receptionManager'
+                    if(data){
+                      window.location.href = window.location.origin+'/home/receptionManager'
+                    }
                   }
                 })
                 // this.$dialog.confirm({
@@ -244,7 +246,7 @@
                 this.$dialog.OpenWindow({
                   width: 1050,
                   height: 720,
-                  url:'/workOrderClaimDataForm?type=2&id='+data.unitID+'&orderID='+this.orderid,
+                  url:'/workOrderClaimDataForm?type=2&id='+data.subID+'&orderID='+this.orderid,
                   title:'上传保险公司资料',
                   closeCallBack:(data)=>{
                     if(data){
@@ -253,7 +255,7 @@
                         data:{
                           id:this.orderid,
                           state:'19',
-                          isbill:'1'
+                          isbill:'0'
                         },
                         loading:'0',
                         call: (data) => {

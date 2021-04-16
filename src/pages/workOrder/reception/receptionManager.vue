@@ -140,6 +140,8 @@
             <yhm-manager-td-operate-button @click="AdjustmentClick(item)" icon="i-btn-applicationSm" value="理算" v-show="item.fixorder.id!=''&&item.fixorder.state=='21'?true:false" :no-click="item.fixorder.id!=''&&item.fixorder.state=='21'?false:true" :color="item.fixorder.id!=''&&item.fixorder.state=='21'?'#00bb68':'#333'"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="settleAccountsClick(item)" icon="i-btn-applicationSm" value="结算" v-show="item.fixorder.id!=''&&item.fixorder.state=='22'?true:false" :no-click="item.fixorder.id!=''&&item.fixorder.state=='22'?false:true" :color="item.fixorder.id!=''&&item.fixorder.state=='22'?'#00bb68':'#333'"></yhm-manager-td-operate-button>
             <yhm-manager-td-operate-button @click="accomplishClick(item)" icon="i-btn-applicationSm" value="完成" v-show="item.fixorder.id!=''&&item.fixorder.state=='23'?true:false" :no-click="item.fixorder.id!=''&&item.fixorder.state=='23'?false:true" :color="item.fixorder.id!=''&&item.fixorder.state=='23'?'#00bb68':'#333'"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="takeAwayClick(item)" icon="i-btn-applicationSm" value="带走"  color="#F17D74"></yhm-manager-td-operate-button>
+            <yhm-manager-td-operate-button @click="lostRegistrationClick(item)" icon="i-btn-applicationSm" value="遗失"  color="#74E8F1"></yhm-manager-td-operate-button>
           </yhm-manager-td-operate>
         </tr>
       </template>
@@ -232,6 +234,32 @@
       }
     },
     methods:{
+      lostRegistrationClick(item){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 720,
+          url:'/lostRegistrationForm?otherID='+item.fixorder.id+'&modelID='+item.modelID,
+          title:'登记遗失的配件',
+          closeCallBack:(data)=>{
+            if(data){
+
+            }
+          }
+        })
+      },
+      takeAwayClick(item){
+        this.$dialog.OpenWindow({
+          width: 1050,
+          height: 720,
+          url:'/takeAwayFrom?otherID='+item.fixorder.id+'&modelID='+item.modelID,
+          title:'登记客户带走的配件',
+          closeCallBack:(data)=>{
+            if(data){
+
+            }
+          }
+        })
+      },
       printClick(){
         if(this.selectValue.length==1){
           this.ajaxJson({
@@ -293,7 +321,7 @@
               this.$dialog.OpenWindow({
                 width: 1050,
                 height: 720,
-                url:'/workOrderInsuranceUnitForm?id='+item.fixorder.subid+'&unitname='+item.fixorder.subName+'&unitID='+item.fixorder.subid,
+                url:'/workOrderInsuranceUnitForm?id='+data.subID+'&unitname='+data.subName+'&unitID='+data.subID,
                 title:'维护保险公司资料',
                 closeCallBack:(data)=>{
                   this.initPageData(false)
@@ -317,7 +345,7 @@
               this.$dialog.OpenWindow({
                 width: 1050,
                 height: 720,
-                url:'/workOrderClaimDataForm?type=2&id='+item.fixorder.subid+'&orderID='+item.fixorder.id,
+                url:'/workOrderClaimDataForm?type=2&id='+data.subID+'&orderID='+item.fixorder.id,
                 title:'上传保险公司资料',
                 closeCallBack:(data)=>{
                   if(data){

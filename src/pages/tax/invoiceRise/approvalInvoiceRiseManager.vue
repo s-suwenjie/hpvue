@@ -29,9 +29,11 @@
         <!--<router-link class="menuTabDiv" :to="{path:'/home/invoicelookUp/invoicelookUpManager'}">发票抬头-->
           <!--          <i class="noticeNum" v-if="promotions!='0'">{{promotions}}</i>-->
         </router-link>
-        <router-link class="menuTabDiv " :to="{path:'/home/expressApprovalManager'}">快递审批
+        <router-link class="menuTabDiv " :to="{path:'/home/expressApprovalManager'}"><快递审批></快递审批>
           <!--<i class="noticeNum" v-if="paymentNum!=0">{{paymentNum}}</i>-->
         </router-link>
+        <router-link class="menuTabDiv " :to="{path:'/home/RecoveryApprovalManager'}">旧件审批</router-link>
+
       </template>
       <template #operate>
         <!-- 操作区-->

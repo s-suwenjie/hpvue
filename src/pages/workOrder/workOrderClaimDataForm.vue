@@ -105,6 +105,9 @@
           <div class="tableMain2">
             <textarea v-model="item.claimStr" :readonly="type=='2'?'readonly':''" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
           </div>
+          <div class="tableMain2">
+            <textarea v-model="item.remark" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料内容"></textarea>
+          </div>
           <div class="tableMain3">
             <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content" listid="content" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
             <span style="color: #49a9ea;font-weight: bold;cursor: pointer;" v-show="item.detailpath!=''" @click="skip(item)">查看示例</span>
@@ -128,6 +131,9 @@
           </div>
           <div class="tableMain2">
             <textarea v-model="item.claimStr" :readonly="type=='2'?'readonly':''" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
+          </div>
+          <div class="tableMain2">
+            <textarea v-model="item.remark" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料内容"></textarea>
           </div>
           <div class="tableMain3">
             <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content1" listid="content1" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
@@ -159,6 +165,9 @@
               <div class="tableMain2">
                 <textarea v-model="item.claimStr" :readonly="type=='2'?'readonly':''" ref="textarea" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
               </div>
+              <div class="tableMain2">
+                <textarea v-model="item.remark" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料内容"></textarea>
+              </div>
               <div class="tableMain3">
                 <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content2" listid="content2" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
                 <span style="color: #49a9ea;font-weight: bold;cursor: pointer;" v-show="item.detailpath!=''" @click="skip(item)">查看示例</span>
@@ -182,6 +191,9 @@
               </div>
               <div class="tableMain2">
                 <textarea v-model="item.claimStr" :readonly="type=='2'?'readonly':''" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
+              </div>
+              <div class="tableMain2">
+                <textarea v-model="item.remark" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料内容"></textarea>
               </div>
               <div class="tableMain3">
                 <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content3" listid="content3" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
@@ -215,6 +227,9 @@
               <div class="tableMain2">
                 <textarea v-model="item.claimStr" :readonly="type=='2'?'readonly':''" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
               </div>
+              <div class="tableMain2">
+                <textarea v-model="item.remark" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料内容"></textarea>
+              </div>
               <div class="tableMain3">
                 <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content4" listid="content4" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
                 <span style="color: #49a9ea;font-weight: bold;cursor: pointer;" v-show="item.detailpath!=''" @click="skip(item)">查看示例</span>
@@ -238,6 +253,9 @@
               </div>
               <div class="tableMain2">
                 <textarea v-model="item.claimStr" :readonly="type=='2'?'readonly':''" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
+              </div>
+              <div class="tableMain2">
+                <textarea v-model="item.remark" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料内容"></textarea>
               </div>
               <div class="tableMain3">
                 <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content5" listid="content5" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
@@ -462,7 +480,7 @@
         }
       },
       skip(item){
-        window.open('/UploadFile/fixOrderUnitConcat/' + item.filepath)
+        window.open('/UploadFile/fixOrderUnitConcat/' + item.detailpath)
       },
       save(){
         let a = this.validator()
@@ -502,9 +520,11 @@
           manager.push(item)
 
           item2.id = guid()
+          item2.ordernum = i//排列字段
           item2.treaty = this.content[i].detailid//条约id
           item2.orderID = this.orderID//工单id
           item2.filepath = this.content[i].filepath//文件路径
+          item2.remark = this.content[i].remark//文件内容
           manager2.push(item2)
         }
         let params = {//创建保险公司的数据

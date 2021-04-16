@@ -438,7 +438,7 @@
         },
         add: (data) => {
           /* 需要添加的数据 */
-          this.registerDate=formatDate( new Date((new Date()).getTime()))
+          //this.registerDate=formatDate( new Date((new Date()).getTime()))
         },
         look: (data) => {
           /* 需要查看的数据 */

@@ -16,11 +16,11 @@
     <yhm-view-tab>
       <template #tab>
         <yhm-view-tab-button :list="tabState" :index="0" @click="initData">工单信息</yhm-view-tab-button>
-        <yhm-view-tab-button :list="tabState" :index="1" @click="paymentHistory">付款记录</yhm-view-tab-button>
+        <yhm-view-tab-button :list="tabState" :index="1" @click="paymentHistory">账单记录</yhm-view-tab-button>
       </template>
       <template #operate>
         <yhm-radiofilter  v-show="tabState[0].select" @initData="initData(false)" title="状态" style="margin: 5px 0;" :content="pendingstateList"></yhm-radiofilter>
-        <yhm-radiofilter  v-show="tabState[1].select" @initData="paymentHistory" title="状态" style="margin: 5px 0;" :content="stateList"></yhm-radiofilter>
+<!--        <yhm-radiofilter  v-show="tabState[1].select" @initData="paymentHistory" title="状态" style="margin: 5px 0;" :content="stateList"></yhm-radiofilter>-->
       </template>
       <template #tab_total>
         <div style="display:flex;align-items: center;" v-show="tabState[0].select">
@@ -90,35 +90,22 @@
         <yhm-view-tab-list :customize="true"  v-show="tabState[1].select">
           <template #listHead>
             <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>
-<!--            <yhm-managerth width="179" title="收款方"></yhm-managerth>-->
-            <yhm-managerth width="100" title="支付方式"></yhm-managerth>
-            <yhm-managerth width="120" title="事由"></yhm-managerth>
-            <yhm-managerth width="115" title="计划申请金额"></yhm-managerth>
-            <yhm-managerth width="220" title="编号"></yhm-managerth>
-            <yhm-managerth width="60" title="审批留言"></yhm-managerth>
-            <yhm-managerth width="115" title="状态"></yhm-managerth>
-            <yhm-managerth title="操作"></yhm-managerth>
-
-<!--            <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>-->
-<!--            <yhm-managerth width="179" title="收款方" value="id"></yhm-managerth>-->
-<!--            <yhm-managerth width="100" title="付款性质" value="nature"></yhm-managerth>-->
-<!--            <yhm-managerth width="100" title="支付方式" value="isChecks"></yhm-managerth>-->
-<!--            <yhm-managerth width="120" title="事由"></yhm-managerth>-->
-<!--            <yhm-managerth width="115" title="计划申请金额" value="money"></yhm-managerth>-->
-<!--            <yhm-managerth width="220" title="编号" value="code"></yhm-managerth>-->
-<!--            <yhm-managerth width="60" title="审批留言"></yhm-managerth>-->
-<!--            <yhm-managerth width="115" title="状态" value="state"></yhm-managerth>-->
+            <yhm-managerth title="编号"></yhm-managerth>
+            <yhm-managerth title="事由"></yhm-managerth>
+            <yhm-managerth width="70" title="审批留言"></yhm-managerth>
+            <yhm-managerth width="100" title="金额"></yhm-managerth>
+            <yhm-managerth width="120" title="状态"></yhm-managerth>
+            <yhm-managerth width="180" title="操作"></yhm-managerth>
           </template>
           <template #listBody>
-            <tr v-for="(item,index) in paymentInvoice" :class="{InterlacBg:index%2!=0}" :key="index">
+            <tr v-for="(item,index) in billingRecordsList" :class="{InterlacBg:index%2!=0}" :key="index">
               <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
-<!--              <yhm-manager-td :tip="true" :value="item.otherUnit"></yhm-manager-td>-->
-              <yhm-manager-td-psd :value="item.isChecks" :list="isChecksList"></yhm-manager-td-psd>
-              <yhm-manager-td-center :value="item.subject" @click="skipEvent(item)" :color="item.ownerID!=''&&item.ownerType=='1'?'#49a9ea':''"></yhm-manager-td-center>
-              <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" :value-object="item" :value="item.money"></yhm-manager-td-money>
-              <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>
+              <yhm-manager-td :value="item.code"></yhm-manager-td>
+              <yhm-manager-td :tip="true" node-class-name="f_main" :value="item.subject"></yhm-manager-td>
               <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>
+              <yhm-manager-td-money :value="item.money"></yhm-manager-td-money>
               <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>
+<!--              <yhm-manager-td-center style="font-weight: bold;" :value="item.paystateVal"></yhm-manager-td-center>-->
               <yhm-manager-td-operate>
                 <yhm-manager-td-operate-button v-show="item.isPrint !== '1' && item.track !== '-1' && item.track !== '0' && item.track !== '1'" :no-click="item.state!=='0' || item.isFinish === '1'" @click="submit(item)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>
                 <yhm-manager-td-operate-button v-show="item.state=='1'" :no-click="item.state == '1'?false:true" @click="revocationClick(item)" icon="i-btn-applicationSm" value="撤销申请" color="#fd6802"></yhm-manager-td-operate-button>
@@ -126,12 +113,57 @@
             </tr>
           </template>
           <template #empty>
-            <span class="m_listNoData" v-show="paymentInvoice.length>=1?false:true">暂时没有数据</span>
+            <span class="m_listNoData" v-show="billingRecordsList.length>=1?false:true">暂时没有数据</span>
           </template>
           <template #pager>
             <yhm-pagination :pager="pager2" @initData="paymentHistory"></yhm-pagination>
           </template>
         </yhm-view-tab-list>
+<!--        <yhm-view-tab-list :customize="true"  v-show="tabState[1].select">-->
+<!--          <template #listHead>-->
+<!--            <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>-->
+<!--&lt;!&ndash;            <yhm-managerth width="179" title="收款方"></yhm-managerth>&ndash;&gt;-->
+<!--            <yhm-managerth width="100" title="支付方式"></yhm-managerth>-->
+<!--            <yhm-managerth width="120" title="事由"></yhm-managerth>-->
+<!--            <yhm-managerth width="115" title="计划申请金额"></yhm-managerth>-->
+<!--            <yhm-managerth width="220" title="编号"></yhm-managerth>-->
+<!--            <yhm-managerth width="60" title="审批留言"></yhm-managerth>-->
+<!--            <yhm-managerth width="115" title="状态"></yhm-managerth>-->
+<!--            <yhm-managerth title="操作"></yhm-managerth>-->
+
+<!--&lt;!&ndash;            <yhm-managerth style="width: 38px" title="查看"></yhm-managerth>&ndash;&gt;-->
+<!--&lt;!&ndash;            <yhm-managerth width="179" title="收款方" value="id"></yhm-managerth>&ndash;&gt;-->
+<!--&lt;!&ndash;            <yhm-managerth width="100" title="付款性质" value="nature"></yhm-managerth>&ndash;&gt;-->
+<!--&lt;!&ndash;            <yhm-managerth width="100" title="支付方式" value="isChecks"></yhm-managerth>&ndash;&gt;-->
+<!--&lt;!&ndash;            <yhm-managerth width="120" title="事由"></yhm-managerth>&ndash;&gt;-->
+<!--&lt;!&ndash;            <yhm-managerth width="115" title="计划申请金额" value="money"></yhm-managerth>&ndash;&gt;-->
+<!--&lt;!&ndash;            <yhm-managerth width="220" title="编号" value="code"></yhm-managerth>&ndash;&gt;-->
+<!--&lt;!&ndash;            <yhm-managerth width="60" title="审批留言"></yhm-managerth>&ndash;&gt;-->
+<!--&lt;!&ndash;            <yhm-managerth width="115" title="状态" value="state"></yhm-managerth>&ndash;&gt;-->
+<!--          </template>-->
+<!--          <template #listBody>-->
+<!--            <tr v-for="(item,index) in paymentInvoice" :class="{InterlacBg:index%2!=0}" :key="index">-->
+<!--              <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>-->
+<!--&lt;!&ndash;              <yhm-manager-td :tip="true" :value="item.otherUnit"></yhm-manager-td>&ndash;&gt;-->
+<!--              <yhm-manager-td-psd :value="item.isChecks" :list="isChecksList"></yhm-manager-td-psd>-->
+<!--              <yhm-manager-td-center :value="item.subject" @click="skipEvent(item)" :color="item.ownerID!=''&&item.ownerType=='1'?'#49a9ea':''"></yhm-manager-td-center>-->
+<!--              <yhm-manager-td-money :tip-category="1" :before-icon="item.balanceList.length > 0?'i-btn-prompt':''" :value-object="item" :value="item.money"></yhm-manager-td-money>-->
+<!--              <yhm-manager-td-center :value="item.code"></yhm-manager-td-center>-->
+<!--              <yhm-manager-td-leaveword @iconClick="SelectApprovalMessage(item)" :leave-word-show="item.approvalMessage === '1'?true:false"></yhm-manager-td-leaveword>-->
+<!--              <yhm-manager-td-state :value="item.stateVal" :stateColor="item.stateColor" :stateImg="item.stateImg"></yhm-manager-td-state>-->
+<!--              <yhm-manager-td-operate>-->
+<!--                <yhm-manager-td-operate-button v-show="item.isPrint !== '1' && item.track !== '-1' && item.track !== '0' && item.track !== '1'" :no-click="item.state!=='0' || item.isFinish === '1'" @click="submit(item)" value="提交申请" icon="i-btn-applicationSm" color="#49a9ea"></yhm-manager-td-operate-button>-->
+<!--                <yhm-manager-td-operate-button v-show="item.state=='1'" :no-click="item.state == '1'?false:true" @click="revocationClick(item)" icon="i-btn-applicationSm" value="撤销申请" color="#fd6802"></yhm-manager-td-operate-button>-->
+<!--              </yhm-manager-td-operate>-->
+<!--            </tr>-->
+<!--          </template>-->
+<!--          <template #empty>-->
+<!--            <span class="m_listNoData" v-show="paymentInvoice.length>=1?false:true">暂时没有数据</span>-->
+<!--          </template>-->
+<!--          <template #pager>-->
+<!--            <yhm-pagination :pager="pager2" @initData="paymentHistory"></yhm-pagination>-->
+<!--          </template>-->
+<!--        </yhm-view-tab-list>-->
       </template>
     </yhm-view-tab>
     <yhm-formoperate :createName="createName" :insertDate="insertDate" :updateName="updateName" :updateDate="updateDate">
@@ -215,26 +247,55 @@
             }
           ],
           value:'1'
-        }
+        },
+        billingRecordsList:[]
       }
     },
     methods:{
+      lookOverPaymentRequest(item){
+        if(item.paymentid!==''){
+          this.$dialog.OpenWindow({
+            width: '1050',
+            height: '750',
+            title: '查看付款申请信息',
+            url:'/paymentApplyFormView?id='+item.paymentid+'&isState=1&isFinish=0',
+            closeCallBack: (data)=>{
+              if(data){
+              }
+            }
+          })
+        }
+      },
       paymentHistory(){
         this.ajaxJson({
-          url: '/PersonOffice/getPaymentNatureAndOtherUnitID',
-          data:{
-            otherUnitID:this.unitID,
-            nature:'10',
-            pageSize:this.pager2.pageSize,
-            pageIndex:this.pager2.pageIndex,
-            state:this.stateList.value
-          },
-          call: (data) => {
-            console.log(data)
-            this.paymentInvoice = data.content
-            this.isChecksList = data.isChecksPsd.list
-          }
+            url: '/fix/fixCompanyBill/getManager',
+            data:{
+              companyID:this.unitID,
+              pageSize:this.pager2.pageSize,
+              pageIndex:this.pager2.pageIndex,
+            },
+            call: (data) => {
+              if(data){
+                this.pager2.total = data.count
+                this.billingRecordsList = data.content
+              }
+            }
         })
+        // this.ajaxJson({
+        //   url: '/PersonOffice/getPaymentNatureAndOtherUnitID',
+        //   data:{
+        //     otherUnitID:this.unitID,
+        //     nature:'10',
+        //     pageSize:this.pager2.pageSize,
+        //     pageIndex:this.pager2.pageIndex,
+        //     state:this.stateList.value
+        //   },
+        //   call: (data) => {
+        //     console.log(data)
+        //     this.paymentInvoice = data.content
+        //     this.isChecksList = data.isChecksPsd.list
+        //   }
+        // })
       },
       SelectApprovalMessage(item){
         this.$dialog.OpenWindow({
@@ -252,7 +313,7 @@
         if (item.isFinish === '0' && item.state === '0') {
           if (item.id) {
             let params = {
-              id: item.id,
+              id: item.paymentid,
               tableName: 45
             }
             this.$dialog.confirm({
@@ -269,7 +330,7 @@
                     if (this.category) {
                       /* 判断是否拿到category */
                       let params = {
-                        id: item.id,
+                        id: item.paymentid,
                         category: this.category,
                         tableName: 45,
                         isDetail: 0,
@@ -278,28 +339,30 @@
                       this.ajaxJson({
                         url: '/PersonOffice/approvalSubmitVue',
                         data: params,
+                        // loading:'0',
                         call: (data) => {
                           if (data.type === 0) {
                             let params = {
-                              id: item.id,
+                              id: item.paymentid,
                               category: this.category,
                             }
                             this.ajaxJson({
                               url: '/PersonOffice/planSubmitAfterOperat',
                               data: params,
+                              // loading:'0',
                               call: (data) => {
                                 if (data.type === 2) {
-                                  // this.$dialog.alert({
-                                  //   error: data.message,
-                                  //   closeCallBack: () => {
-                                      this.paymentHistory()
-                                  //   }
-                                  // })
+                                  this.$dialog.alert({
+                                    error: data.message,
+                                    closeCallBack: () => {
+                                    }
+                                  })
                                 } else {
                                   this.$dialog.alert({
                                     width: 320,
                                     tipValue: data.message,
                                     closeCallBack: () => {
+                                  //     console.log('22')
                                       this.paymentHistory()
                                     }
                                   })
@@ -314,6 +377,7 @@
                               this.ajaxJson({
                                 url: '/dailyoffice/expressCompany/updateBillState',
                                 data: param,
+                                loading:'0',
                                 call: (data) => {
 
                                 }
@@ -350,7 +414,7 @@
           alertImg: 'warn',
           okCallBack: (data) => {
             let params = {
-              id: item.id,
+              id: item.paymentid,
               // category: this.category,
               tableName: 45,
               isDetail: 0,
@@ -361,12 +425,12 @@
               data: params,
               call: (data) => {
                 if(data.type === 0){
-                  // this.$dialog.alert({
-                  //   tipValue: data.message,
-                  //   closeCallBack: ()=>{
+                  this.$dialog.alert({
+                    tipValue: data.message,
+                    closeCallBack: ()=>{
                       this.paymentHistory()
-                  //   }
-                  // })
+                    }
+                  })
                 }else{
                   this.$dialog.alert({
                     alertImg: 'warn',
@@ -397,7 +461,7 @@
           this.$dialog.OpenWindow({
             width: '1050',
             height: '750',
-            url: '/paymentApplyForm?id=' + item.id +'&isState=' + item.state + '&isFinish=' + item.isFinish,
+            url: '/paymentApplyForm?id=' + item.paymentid +'&isState=' + item.state + '&isFinish=' + item.isFinish,
             title: "查看付款申请信息",
             closeCallBack: () => {
               this.initData(false)
@@ -407,7 +471,7 @@
           this.$dialog.OpenWindow({
             width: '1050',
             height: '750',
-            url: '/paymentApplyFormView?id=' + item.id +'&isState=' + item.state + '&isFinish=' + item.isFinish,
+            url: '/paymentApplyFormView?id=' + item.paymentid +'&isState=' + item.state + '&isFinish=' + item.isFinish,
             title: "查看付款申请信息",
             closeCallBack: () => {
               this.initData(false)

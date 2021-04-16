@@ -26,13 +26,15 @@
           <router-link class="menuTabDiv" :to="{path:'/home/promotions/promotionsAppManager'}">活动审批
             <i class="noticeNum" v-if="promotions!='0'">{{promotions}}</i>
           </router-link>
-          <router-link class="menuTabDiv" :to="{path:'/home/invoicelookUpManager'}">发票抬头
+          <router-link class="menuTabDiv" :to="{path:'/home/invoicelookUp/invoicelookUpManager'}">发票抬头
             <i class="noticeNum" v-if="invoiceRiseNum!='0'">{{invoiceRiseNum}}</i>
           </router-link>
           <router-link class="menuTabDiv menuTabActive" :to="{path:'/home/expressApprovalManager'}">快递审批
             <!--<i class="noticeNum" v-if="paymentNum!=0">{{paymentNum}}</i>-->
           </router-link>
-      </template>
+          <router-link class="menuTabDiv " :to="{path:'/home/RecoveryApprovalManager'}">旧件审批</router-link>
+
+        </template>
       <!--操作区-->
       <template #operate>
         <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initChoose()"></yhm-managersearch>

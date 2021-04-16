@@ -4,17 +4,17 @@
         <template #navigation>售后业务&gt;&nbsp;工单&nbsp;&gt;&nbsp;保险公司管理</template>
         <template #operate>
           <!-- 操作区-->
-          <yhm-commonbutton value="添加保险公司"  icon="btnAdd" :flicker="true" @call="add" category="one"></yhm-commonbutton>
+<!--          <yhm-commonbutton value="添加保险公司"  icon="btnAdd" :flicker="true" @call="add" category="one"></yhm-commonbutton>-->
           <yhm-managersearch :value="searchStr" :history="shortcutSearchContent" id="searchStr" @call="initChoose"></yhm-managersearch>
         </template>
 
         <template #listHead>
           <yhm-managerth style="width: 40px;" title="选择" ></yhm-managerth>
           <yhm-managerth style="width: 40px;" title="查看" ></yhm-managerth>
-          <yhm-managerth width="150"  title="别名" value="shortName"></yhm-managerth>
-          <yhm-managerth  title="汇款公司名称" value="unit"></yhm-managerth>
-          <yhm-managerth  title="回款公司名称" value="incomeUnit"></yhm-managerth>
-          <yhm-managerth width="100"  title="总数"></yhm-managerth>
+          <yhm-managerth width="220"  title="保险公司简称" value="shortName"></yhm-managerth>
+<!--          <yhm-managerth  title="汇款时公司名称" value="unit"></yhm-managerth>-->
+          <yhm-managerth  title="保险公司名称" value="incomeUnit"></yhm-managerth>
+          <yhm-managerth width="100"  title="工单总数"></yhm-managerth>
           <yhm-managerth width="130"  title="利润"></yhm-managerth>
           <yhm-managerth width="130"  title="合计金额"></yhm-managerth>
         </template>
@@ -23,7 +23,7 @@
             <yhm-manager-td-checkbox :value="item"></yhm-manager-td-checkbox>
             <yhm-manager-td-look @click="listView(item)"></yhm-manager-td-look>
             <yhm-manager-td :value="item.shortName" :color="item.deputyColor" ></yhm-manager-td>
-            <yhm-manager-td :value="item.unit"></yhm-manager-td>
+<!--            <yhm-manager-td :value="item.unit"></yhm-manager-td>-->
             <yhm-manager-td :value="item.incomeUnit"></yhm-manager-td>
             <yhm-manager-td-center :value="item.sum"></yhm-manager-td-center>
             <yhm-manager-td-money style="color: #00b300;" :value="item.sumprofit"></yhm-manager-td-money>

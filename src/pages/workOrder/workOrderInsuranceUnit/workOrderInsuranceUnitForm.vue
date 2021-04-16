@@ -51,8 +51,16 @@
             <div class="tableMain2">
               <textarea v-model="item.claimStr" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
             </div>
+<!--            <div style="width: 130px;border-right:1px solid #dcdfe6;">-->
+<!--              <p style="text-align: center;margin: 4px 0px;">是否需要上传文件</p>-->
+<!--              <div class="switch" style="margin: auto;" @click="switchClick(item)">-->
+<!--                <div class="switch-bg" :class="{on:item.updatefilestate==1}">-->
+<!--                  <div class="switch-btn" :class="{on:item.updatefilestate==1}" :style="{color:item.updatefilestate=='1'?'#409eff':''}">{{item.updatefilestate=='0'?'No':'Yes'}}</div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
             <div class="tableMain3">
-              <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content" listid="content" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
+              <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content" listid="content" :value="item" id="filepath"></yhm-form-td-upload-image>
               <span style="color: #49a9ea;font-weight: bold;cursor: pointer;" v-show="item.filepath!=''" @click="skip(item)">查看示例</span>
               <span class="icon-delete2 tableIconDelete" @click="delFromList(index,'0')"></span>
             </div>
@@ -75,8 +83,16 @@
             <div class="tableMain2">
               <textarea v-model="item.claimStr" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
             </div>
+<!--            <div style="width: 130px;border-right:1px solid #dcdfe6;">-->
+<!--              <p style="text-align: center;margin: 4px 0px;">是否需要上传文件</p>-->
+<!--              <div class="switch" style="margin: auto;" @click="switchClick(item)">-->
+<!--                <div class="switch-bg" :class="{on:item.updatefilestate==1}">-->
+<!--                  <div class="switch-btn" :class="{on:item.updatefilestate==1}" :style="{color:item.updatefilestate=='1'?'#409eff':''}">{{item.updatefilestate=='0'?'No':'Yes'}}</div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
             <div class="tableMain3">
-              <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content1" listid="content1" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
+              <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content1" listid="content1" :value="item" id="filepath"></yhm-form-td-upload-image>
               <span style="color: #49a9ea;font-weight: bold;cursor: pointer;" v-show="item.filepath!=''" @click="skip(item)">查看示例</span>
               <span class="icon-delete2 tableIconDelete" @click="delFromList(index,'1')"></span>
             </div>
@@ -105,8 +121,16 @@
                 <div class="tableMain2">
                   <textarea v-model="item.claimStr" ref="textarea" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
                 </div>
+<!--                <div style="width: 130px;border-right:1px solid #dcdfe6;">-->
+<!--                  <p style="text-align: center;margin: 4px 0px;">是否需要上传文件</p>-->
+<!--                  <div class="switch" style="margin: auto;" @click="switchClick(item)">-->
+<!--                    <div class="switch-bg" :class="{on:item.updatefilestate==1}">-->
+<!--                      <div class="switch-btn" :class="{on:item.updatefilestate==1}" :style="{color:item.updatefilestate=='1'?'#409eff':''}">{{item.updatefilestate=='0'?'No':'Yes'}}</div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
                 <div class="tableMain3">
-                  <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content2" listid="content2" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
+                  <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content2" listid="content2" :value="item" id="filepath"></yhm-form-td-upload-image>
                   <span style="color: #49a9ea;font-weight: bold;cursor: pointer;" v-show="item.filepath!=''" @click="skip(item)">查看示例</span>
                   <span class="icon-delete2 tableIconDelete" @click="delFromList(index,'2')"></span>
                 </div>
@@ -129,8 +153,16 @@
                 <div class="tableMain2">
                   <textarea v-model="item.claimStr" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
                 </div>
+<!--                <div style="width: 130px;border-right:1px solid #dcdfe6;">-->
+<!--                  <p style="text-align: center;margin: 4px 0px;">是否需要上传文件</p>-->
+<!--                  <div class="switch" style="margin: auto;" @click="switchClick(item)">-->
+<!--                    <div class="switch-bg" :class="{on:item.updatefilestate==1}">-->
+<!--                      <div class="switch-btn" :class="{on:item.updatefilestate==1}" :style="{color:item.updatefilestate=='1'?'#409eff':''}">{{item.updatefilestate=='0'?'No':'Yes'}}</div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
                 <div class="tableMain3">
-                  <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content3" listid="content3" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
+                  <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content3" listid="content3" :value="item" id="filepath"></yhm-form-td-upload-image>
                   <span style="color: #49a9ea;font-weight: bold;cursor: pointer;" v-show="item.filepath!=''" @click="skip(item)">查看示例</span>
                   <span class="icon-delete2 tableIconDelete" @click="delFromList(index,'3')"></span>
                 </div>
@@ -161,8 +193,16 @@
                 <div class="tableMain2">
                   <textarea v-model="item.claimStr" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
                 </div>
+<!--                <div style="width: 130px;border-right:1px solid #dcdfe6;">-->
+<!--                  <p style="text-align: center;margin: 4px 0px;">是否需要上传文件</p>-->
+<!--                  <div class="switch" style="margin: auto;" @click="switchClick(item)">-->
+<!--                    <div class="switch-bg" :class="{on:item.updatefilestate==1}">-->
+<!--                      <div class="switch-btn" :class="{on:item.updatefilestate==1}" :style="{color:item.updatefilestate=='1'?'#409eff':''}">{{item.updatefilestate=='0'?'No':'Yes'}}</div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
                 <div class="tableMain3">
-                  <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content4" listid="content4" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
+                  <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content4" listid="content4" :value="item" id="filepath"></yhm-form-td-upload-image>
                   <span style="color: #49a9ea;font-weight: bold;cursor: pointer;" v-show="item.filepath!=''" @click="skip(item)">查看示例</span>
                   <span class="icon-delete2 tableIconDelete" @click="delFromList(index,'4')"></span>
                 </div>
@@ -185,8 +225,16 @@
                 <div class="tableMain2">
                   <textarea v-model="item.claimStr" class="tableMainTextarea textareaFontWeight" style="width: 100%;height: 100%;box-sizing: border-box;" placeholder="请输入资料要求"></textarea>
                 </div>
+<!--                <div style="width: 130px;border-right:1px solid #dcdfe6;">-->
+<!--                  <p style="text-align: center;margin: 4px 0px;">是否需要上传文件</p>-->
+<!--                  <div class="switch" style="margin: auto;" @click="switchClick(item)">-->
+<!--                    <div class="switch-bg" :class="{on:item.updatefilestate==1}">-->
+<!--                      <div class="switch-btn" :class="{on:item.updatefilestate==1}" :style="{color:item.updatefilestate=='1'?'#409eff':''}">{{item.updatefilestate=='0'?'No':'Yes'}}</div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
                 <div class="tableMain3">
-                  <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content5" listid="content5" :value="item" id="filepath" rule="#"></yhm-form-td-upload-image>
+                  <yhm-form-td-upload-image width="130" class="titleNameRight" style="justify-content: left;" tag="fixOrderUnitConcat" accept=" " @mouseover="invoiceImg(item)" @mouseout="invoiceImgHide(item)" :list="content5" listid="content5" :value="item" id="filepath"></yhm-form-td-upload-image>
                   <span style="color: #49a9ea;font-weight: bold;cursor: pointer;" v-show="item.filepath!=''" @click="skip(item)">查看示例</span>
                   <span class="icon-delete2 tableIconDelete" @click="delFromList(index,'5')"></span>
                 </div>
@@ -245,9 +293,17 @@
           selectCount: 0 // 选中条数
         },
         viewImgShow:false,  //显示发票图片
+        imageKey:0,
       }
     },
     methods:{
+      switchClick(item){
+        if(item.updatefilestate=='0'){
+          item.updatefilestate='1'
+        }else{
+          item.updatefilestate='0'
+        }
+      },
       inputBlur(item,index){
         console.log(this.$refs.textarea[index].value)
         if(this.$refs.textarea[index].value==''){
@@ -257,7 +313,7 @@
         }
       },
       skip(item){
-        window.open('/UploadFile/fixOrderUnitConcat/' + item.detailpath)
+        window.open('/UploadFile/fixOrderUnitConcat/' + item.filepath)
       },
       //显示发票图片
       invoiceImg(item){
@@ -310,7 +366,9 @@
             claimStr:'',//资料要求
             unitstate:'0',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'0'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'0',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content.length
+            // updatefilestate:'0',//0不上传 1上传
           })
         }else if(type=='1'){
           this.content1.push({
@@ -321,7 +379,9 @@
             claimStr:'',//资料要求
             unitstate:'1',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'0'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'0',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content1.length
+            // updatefilestate:'0',//0不上传 1上传
           })
           this.$nextTick(()=>{
             window.scrollTo(0,document.body.scrollHeight)
@@ -335,7 +395,9 @@
             claimStr:'',//资料要求
             unitstate:'0',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'0'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'0',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content2.length
+            // updatefilestate:'0',//0不上传 1上传
           })
         }else if(type=='3'){
           this.content3.push({
@@ -346,7 +408,9 @@
             claimStr:'',//资料要求
             unitstate:'1',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'0'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'0',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content3.length
+            // updatefilestate:'0',//0不上传 1上传
           })
         }else if(type=='4'){
           this.content4.push({
@@ -357,7 +421,9 @@
             claimStr:'',//资料要求
             unitstate:'0',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'1'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'1',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content4.length
+            // updatefilestate:'0',//0不上传 1上传
           })
         }else if(type=='5'){
           this.content5.push({
@@ -368,7 +434,9 @@
             claimStr:'',//资料要求
             unitstate:'1',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'1'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'1',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content5.length
+            // updatefilestate:'0',//0不上传 1上传
           })
           this.$nextTick(()=>{
             window.scrollTo(0,document.body.scrollHeight)
@@ -382,7 +450,9 @@
             claimStr:'',//资料要求
             unitstate:'0',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'0'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'0',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content.length
+            // updatefilestate:'0',//0不上传 1上传
           })
           this.content1.push({
             id: guid(),
@@ -392,7 +462,9 @@
             claimStr:'',//资料要求
             unitstate:'1',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'0'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'0',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content1.length
+            // updatefilestate:'0',//0不上传 1上传
           })
           this.content2.push({
             id: guid(),
@@ -402,7 +474,9 @@
             claimStr:'',//资料要求
             unitstate:'0',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'0'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'0',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content2.length
+            // updatefilestate:'0',//0不上传 1上传
           })
           this.content3.push({
             id: guid(),
@@ -412,7 +486,9 @@
             claimStr:'',//资料要求
             unitstate:'1',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'0'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'0',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content3.length
+            // updatefilestate:'0',//0不上传 1上传
           })
           this.content4.push({
             id: guid(),
@@ -422,7 +498,9 @@
             claimStr:'',//资料要求
             unitstate:'0',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'1'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'1',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content4.length
+            // updatefilestate:'0',//0不上传 1上传
           })
           this.content5.push({
             id: guid(),
@@ -432,7 +510,9 @@
             claimStr:'',//资料要求
             unitstate:'1',//个人要求和单位车要求区别，0，个人车，1单位车
             oddstate:this.active,//单双事故区别字段： 0，单方事故，1，双方事故
-            mainstate:'1'//区分主车和三者车，0，主车，1，三者车
+            mainstate:'1',//区分主车和三者车，0，主车，1，三者车
+            ordernum:this.content5.length
+            // updatefilestate:'0',//0不上传 1上传
           })
         }
       },
@@ -444,19 +524,19 @@
         const arrNew = this.content.concat(this.content1,this.content2,this.content3,this.content4,this.content5)
         // console.log(arrNew)
         // return
-        try {
-          for(let i=0; i<this.$refs.textarea.length; i++){
-            if(this.$refs.textarea[i].value==''){
-              this.$refs.textarea[i].style.border = '2px solid rgba(255,0,0,0.6)'
-              this.placeholder = '不能为空'
-              arr.push('1')
-            }else{
-              arr.push('0')
-            }
-          }
-        }catch (e) {
-
-        }
+        // try {
+        //   for(let i=0; i<this.$refs.textarea.length; i++){
+        //     if(this.$refs.textarea[i].value==''){
+        //       this.$refs.textarea[i].style.border = '2px solid rgba(255,0,0,0.6)'
+        //       this.placeholder = '不能为空'
+        //       arr.push('1')
+        //     }else{
+        //       arr.push('0')
+        //     }
+        //   }
+        // }catch (e) {
+        //
+        // }
 
         let params = {
           id:this.ownerID,
@@ -466,7 +546,8 @@
         }
         // console.log(params)
         // return
-        if(a&&arr.indexOf('1')==-1){
+        //   &&arr.indexOf('1')==-1
+        if(a){
           if(this.content.length=='0'){
             this.$dialog.alert({
               tipValue:'至少需要添加一条保险公司条约',
@@ -553,13 +634,61 @@
       this.setQuery2Value('unitID')
       this.setQuery2Value('unitname')
       this.setQuery2Value('fixorderunitID')
-      this.ownerID = this.fixorderunitID
+      if(this.fixorderunitID=='null'){
+        this.ownerID = guid()
+      }else{
+      // alert(this.fixorderunitID)
+        this.ownerID = this.fixorderunitID
+      }
       this.initData()
 
     }
   }
 </script>
 <style lang="less" scoped>
+  .switch{
+    width: 54px;
+    /*height: 70px;*/
+    border-radius: 50px;
+    border: 1px solid #efefef;
+    background: #CCCCCC;
+    position: relative;
+    cursor: pointer;
+  }
+  .switch-btn{
+    width: 27px;
+    height: 27px;
+    user-select:none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 1px solid #efefef;
+    position: absolute;
+    background-color: #fff;
+    top: -1px;
+    left: -1px;
+    transition:left .5s;
+    -moz-transition:left .5s; /* Firefox 4 */
+    -webkit-transition:left .5s; /* Safari and Chrome */
+    -o-transition:left .5s; /* Opera */
+  }
+  .switch-bg{
+    background-color: #409eff;
+    width: 27px;
+    height: 27px;
+    border-radius: 50px;
+    transition: width .5s;
+    -moz-transition: width .5s; /* Firefox 4 */
+    -webkit-transition:  width .5s; /* Safari and Chrome */
+  }
+  .switch-btn.on{
+    left: 27px;
+  }
+  .switch-bg.on{
+    width: 54px;
+  }
+
 .buttonBox{
   width: 100%;
   height:42px;
